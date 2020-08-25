@@ -233,19 +233,6 @@ $this->params['breadcrumbs'][] = $this->title;
                     </div>
 
                     <div class="row">
-
-                        <div class="col-lg-4">
-                            <?= $form->field($model, 'xianqian_price')->textInput() ?>
-                        </div>
-                        <div class="col-lg-4">
-                            <?= $form->field($model, 'xiangqian_fee')->textInput() ?>
-                        </div>
-                        <div class="col-lg-4">
-                            <?= $form->field($model, 'gong_fee')->textInput() ?>
-                        </div>
-                    </div>
-
-                    <div class="row">
                         <div class="col-lg-4">
                             <?= $form->field($model, 'biaomiangongyi_fee')->textInput() ?>
                         </div>
@@ -291,7 +278,12 @@ $this->params['breadcrumbs'][] = $this->title;
                             <?= $form->field($model, 'company_total_price')->textInput() ?>
                         </div>
                     </div>
+                    <div class="row">
 
+                        <div class="col-lg-4">
+                            <?= $form->field($model, 'xianqian_price')->textInput() ?>
+                        </div>
+                    </div>
                     <div class="row">
                         <div class="col-lg-4">
                             <?= $form->field($model, 'stone_info')->textarea() ?>

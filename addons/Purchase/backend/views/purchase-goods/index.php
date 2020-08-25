@@ -223,6 +223,12 @@ $this->params['breadcrumbs'][] = $this->title;
                                     return $model->attr[AttrIdEnum::MATERIAL] ?? "";
                                 }
                             ],
+                            [
+                                'label'=>'金料颜色',
+                                'value'=> function($model){
+                                    return $model->attr[AttrIdEnum::MATERIAL_COLOR] ?? "";
+                                }
+                            ],
 
                             [
                                 'attribute'=>'goods_num',
@@ -363,14 +369,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 ]),
                                 'headerOptions' => [],
                             ],
-                            [
-                                'attribute'=>'main_stone_sn',
-                                'filter' => Html::activeTextInput($searchModel, 'main_stone_sn', [
-                                    'class' => 'form-control',
-                                    'style'=> 'width:60px;'
-                                ]),
-                                'headerOptions' => [],
-                            ],
+
                             [
                                 'attribute'=>'main_peishi_way',
                                 'value' => function($model){
@@ -388,6 +387,14 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'value'=> function($model){
                                     return $model->attr[AttrIdEnum::MAIN_STONE_TYPE] ?? "";
                                 }
+                            ],
+                            [
+                                'attribute'=>'main_stone_sn',
+                                'filter' => Html::activeTextInput($searchModel, 'main_stone_sn', [
+                                    'class' => 'form-control',
+                                    'style'=> 'width:60px;'
+                                ]),
+                                'headerOptions' => [],
                             ],
                             [
                                 'label'=>'主石粒数',
@@ -436,14 +443,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             ],
 
                             /***副石1开始**/
-                            [
-                                'attribute'=>'second_stone_sn1',
-                                'filter' => Html::activeTextInput($searchModel, 'second_stone_sn1', [
-                                    'class' => 'form-control',
-                                    'style'=> 'width:60px;'
-                                ]),
-                                'headerOptions' => [],
-                            ],
+
                             [
                                 'attribute'=>'second_peishi_way1',
                                 'value' => function($model){
@@ -461,6 +461,14 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'value'=> function($model){
                                     return $model->attr[AttrIdEnum::SIDE_STONE1_TYPE] ?? "";
                                 }
+                            ],
+                            [
+                                'attribute'=>'second_stone_sn1',
+                                'filter' => Html::activeTextInput($searchModel, 'second_stone_sn1', [
+                                    'class' => 'form-control',
+                                    'style'=> 'width:60px;'
+                                ]),
+                                'headerOptions' => [],
                             ],
                             [
                                 'label'=>'	副石1粒数',
@@ -520,6 +528,14 @@ $this->params['breadcrumbs'][] = $this->title;
                                 ]),
                                 'headerOptions' => [],
                             ],
+
+
+                            [
+                                'label'=>'	副石2类型',
+                                'value'=> function($model){
+                                    return $model->attr[AttrIdEnum::SIDE_STONE2_TYPE] ?? "";
+                                }
+                            ],
                             [
                                 'attribute'=>'second_stone_sn2',
                                 'filter' => Html::activeTextInput($searchModel, 'second_stone_sn2', [
@@ -527,13 +543,6 @@ $this->params['breadcrumbs'][] = $this->title;
                                     'style'=> 'width:60px;'
                                 ]),
                                 'headerOptions' => [],
-                            ],
-
-                            [
-                                'label'=>'	副石2类型',
-                                'value'=> function($model){
-                                    return $model->attr[AttrIdEnum::SIDE_STONE2_TYPE] ?? "";
-                                }
                             ],
                             [
                                 'label'=>'	副石2粒数',
@@ -580,6 +589,12 @@ $this->params['breadcrumbs'][] = $this->title;
                                 }
                             ],
                             /**副石2结束**/
+
+                            [
+                                'attribute'=>'stone_info',
+                                'filter' => false,
+                                'headerOptions' => [],
+                            ],
                             [
                                 'attribute'=>'peijian_way',
                                 'value' => function($model){
@@ -592,12 +607,6 @@ $this->params['breadcrumbs'][] = $this->title;
                                 ]),
                                 'headerOptions' => [],
                             ],
-                            [
-                                'attribute'=>'stone_info',
-                                'filter' => false,
-                                'headerOptions' => [],
-                            ],
-
                             [
                                 'attribute'=>'peijian_cate',
                                 'value' => function($model){
@@ -667,6 +676,11 @@ $this->params['breadcrumbs'][] = $this->title;
                             ],
                             [
                                 'attribute'=>'total_gong_fee',
+                                'filter' => false,
+                                'headerOptions' => [],
+                            ],
+                            [
+                                'attribute'=>'xianqian_price',
                                 'filter' => false,
                                 'headerOptions' => [],
                             ],

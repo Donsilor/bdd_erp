@@ -2,6 +2,7 @@
 
 namespace addons\Purchase\backend\controllers;
 
+use \addons\Style\common\enums\AttrIdEnum;
 use addons\Style\common\enums\InlayEnum;
 use addons\Style\common\forms\StyleAttrForm;
 use addons\Style\common\models\PartsStyle;
@@ -114,7 +115,20 @@ class PurchaseGoodsController extends BaseController
                 return ResultHelper::json(422, $this->getError($model));
             }
             try{                
-                $trans = Yii::$app->trans->beginTransaction();  
+                $trans = Yii::$app->trans->beginTransaction();
+
+                //【镶石费=镶石单价*总副石数量】
+                $second_stone_num = 0;
+                $atts = $model->getPostAttrs();
+                if(isset($atts[AttrIdEnum::SIDE_STONE1_NUM]) && !empty($atts[AttrIdEnum::SIDE_STONE1_NUM])){
+                    $second_stone_num += $atts[AttrIdEnum::SIDE_STONE1_NUM];
+                }
+                if(isset($atts[AttrIdEnum::SIDE_STONE2_NUM]) && !empty($atts[AttrIdEnum::SIDE_STONE2_NUM])){
+                    $second_stone_num += $atts[AttrIdEnum::SIDE_STONE2_NUM];
+                }
+                $model->xiangqian_fee = $model->xianqian_price * $second_stone_num;
+
+
                 if(false === $model->save()){
                     throw new \Exception($this->getError($model));
                 }     
@@ -214,7 +228,7 @@ class PurchaseGoodsController extends BaseController
         $model = $this->findModel($id);
         $model = $model ?? new PurchaseGoodsForm();
         //非镶切 配石类型默认不配石
-        $model->peishi_type = $model->is_inlay == InlayEnum::No ? PeishiTypeEnum::None : "";
+        $model->peishi_type = $model->is_inlay == InlayEnum::No ? PeishiTypeEnum::None : $model->peishi_type;
         
         if ($model->load(Yii::$app->request->post())) {
             if(!$model->validate()) {
@@ -285,6 +299,18 @@ class PurchaseGoodsController extends BaseController
                      $model->initApplyEdit();
                      $model->createAttrs();
                      $model->apply_info = json_encode($model->apply_info);
+
+
+                    //【镶石费=镶石单价*总副石数量】
+                    $second_stone_num = 0;
+                    $atts = $model->getPostAttrs();
+                    if(isset($atts[AttrIdEnum::SIDE_STONE1_NUM]) && !empty($atts[AttrIdEnum::SIDE_STONE1_NUM])){
+                        $second_stone_num += $atts[AttrIdEnum::SIDE_STONE1_NUM];
+                    }
+                    if(isset($atts[AttrIdEnum::SIDE_STONE2_NUM]) && !empty($atts[AttrIdEnum::SIDE_STONE2_NUM])){
+                        $second_stone_num += $atts[AttrIdEnum::SIDE_STONE2_NUM];
+                    }
+                    $model->xiangqian_fee = $model->xianqian_price * $second_stone_num;
                 }
                 $model->is_apply = 0;
                 $model->save(false);

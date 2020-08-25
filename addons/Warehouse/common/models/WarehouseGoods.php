@@ -230,7 +230,7 @@ class WarehouseGoods extends BaseModel
             'tax_fee' => '税费',
             'other_fee' => '其他费用',
             'biaomiangongyi_fee' => '表面工艺费',
-            'xianqian_fee' => '镶嵌工费',
+            'xianqian_fee' => '镶石费',
             'extra_stone_fee' => '超石费',
             'gong_fee' => '工费',
             'cert_fee' => '证书费',
