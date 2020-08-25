@@ -25,6 +25,7 @@ use addons\Sales\common\models\OrderInvoice;
 use addons\Sales\common\models\OrderAddress;
 use addons\Sales\common\models\Customer;
 use common\enums\LogTypeEnum;
+use common\helpers\Auth;
 
 /**
  * Default controller for the `order` module
@@ -40,6 +41,8 @@ class OrderController extends BaseController
 
     public function actionTest()
     {   
+        $res = Auth::verify('special:1001');
+        var_dump($res);exit;
         $order_no = '130311942049';
         Yii::$app->jdSdk->getOrderInfo($order_no);
         exit;
