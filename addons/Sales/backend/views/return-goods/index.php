@@ -75,7 +75,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             ],
                             [
                                 'attribute'=>'goods_num',
-                                'filter' => true,
+                                'filter' => false,
                                 'headerOptions' => ['class' => 'col-md-1'],
                             ],
 //                            [
@@ -90,7 +90,7 @@ $this->params['breadcrumbs'][] = $this->title;
 //                            ],
                             [
                                 'attribute' => 'real_amount',
-                                'filter' => true,
+                                'filter' => false,
                                 'headerOptions' => ['class' => 'col-md-1'],
                             ],
 //                            [
