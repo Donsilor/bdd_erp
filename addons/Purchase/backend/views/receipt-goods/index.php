@@ -166,19 +166,6 @@ $this->params['breadcrumbs'][] = $this->title;
                                 ]),
                             ],
                             [
-                                'attribute' => 'qiban_type',
-                                'format' => 'raw',
-                                'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#feeeed;'],
-                                'value' => function ($model) {
-                                    return \addons\Style\common\enums\QibanTypeEnum::getValue($model->qiban_type) ?? "";
-                                },
-                                'filter' => Html::activeDropDownList($searchModel, 'qiban_type', $model->getQibanTypeMap(), [
-                                    'prompt' => '全部',
-                                    'class' => 'form-control',
-                                    'style' => 'width:80px;'
-                                ]),
-                            ],
-                            [
                                 'attribute' => 'goods_name',
                                 'format' => 'raw',
                                 'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#feeeed;'],
@@ -862,7 +849,7 @@ $this->params['breadcrumbs'][] = $this->title;
 //                                    'style' => 'width:80px;'
 //                                ]),
                             ],
-                            [
+                            /*[
                                 'attribute' => 'second_pei_type3',
                                 'format' => 'raw',
                                 'value' => function ($model, $key, $index, $column) {
@@ -926,7 +913,7 @@ $this->params['breadcrumbs'][] = $this->title;
 //                                    'class' => 'form-control',
 //                                    'style' => 'width:80px;'
 //                                ]),
-                            ],
+                            ],*/
                             [
                                 'attribute' => 'stone_remark',
                                 'format' => 'raw',
@@ -1261,6 +1248,19 @@ $this->params['breadcrumbs'][] = $this->title;
                                     'style' => 'width:100px;'
                                 ]),
                                 'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#9b95c9;'],
+                            ],
+                            [
+                                'attribute' => 'qiban_type',
+                                'format' => 'raw',
+                                'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#9b95c9;'],
+                                'value' => function ($model) {
+                                    return \addons\Style\common\enums\QibanTypeEnum::getValue($model->qiban_type) ?? "";
+                                },
+                                'filter' => Html::activeDropDownList($searchModel, 'qiban_type', $model->getQibanTypeMap(), [
+                                    'prompt' => '全部',
+                                    'class' => 'form-control',
+                                    'style' => 'width:80px;'
+                                ]),
                             ],
                             [
                                 'attribute' => 'is_inlay',

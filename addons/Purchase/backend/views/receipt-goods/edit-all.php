@@ -156,14 +156,6 @@ $this->params['breadcrumbs'][] = $this->title;
                                 ]),
                             ],
                             [
-                                'attribute' => 'qiban_sn',
-                                'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#feeeed;'],
-                                'filter' => Html::activeTextInput($searchModel, 'qiban_sn', [
-                                    'class' => 'form-control',
-                                    'style' => 'width:100px;'
-                                ]),
-                            ],
-                            [
                                 'attribute' => 'qiban_type',
                                 'format' => 'raw',
                                 'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#feeeed;'],
@@ -999,7 +991,7 @@ $this->params['breadcrumbs'][] = $this->title;
 //                                    'style' => 'width:80px;'
 //                                ]),
                             ],
-                            [
+                            /*[
                                 'class' => 'yii\grid\CheckboxColumn',
                                 'name' => 'id',  //设置每行数据的复选框属性
                             ],
@@ -1064,7 +1056,7 @@ $this->params['breadcrumbs'][] = $this->title;
 //                                    'class' => 'form-control',
 //                                    'style' => 'width:80px;'
 //                                ]),
-                            ],
+                            ],*/
                             [
                                 'attribute' => 'stone_remark',
                                 'format' => 'raw',
@@ -1454,6 +1446,14 @@ $this->params['breadcrumbs'][] = $this->title;
                                     'style' => 'width:100px;'
                                 ]),
                                 'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#b7ba6b;'],
+                            ],
+                            [
+                                'attribute' => 'qiban_sn',
+                                'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#b7ba6b;'],
+                                'filter' => Html::activeTextInput($searchModel, 'qiban_sn', [
+                                    'class' => 'form-control',
+                                    'style' => 'width:100px;'
+                                ]),
                             ],
                             [
                                 'attribute' => 'is_inlay',

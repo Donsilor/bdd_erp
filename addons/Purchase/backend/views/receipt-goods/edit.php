@@ -255,23 +255,23 @@ $this->params['breadcrumbs'][] = $this->title;
                         <?= $form->field($model, 'second_stone_price2')->textInput() ?>
                     </div>
                 </div>
-                <div class="row">
-                    <div class="with-border">
-                        <h5 class="box-title" style="font-weight: bold">副石3信息</h5>
-                    </div>
-                    <div class="col-lg-4">
-                        <?= $form->field($model, 'second_stone3')->dropDownList($model->getSecondStoneType3Drop($model), ['prompt' => '请选择']) ?>
-                    </div>
-                    <div class="col-lg-4">
-                        <?= $form->field($model, 'second_stone_num3')->textInput() ?>
-                    </div>
-                    <div class="col-lg-4">
-                        <?= $form->field($model, 'second_stone_weight3')->textInput() ?>
-                    </div>
-                    <div class="col-lg-4">
-                        <?= $form->field($model, 'second_stone_price3')->textInput() ?>
-                    </div>
-                </div>
+<!--                <div class="row">-->
+<!--                    <div class="with-border">-->
+<!--                        <h5 class="box-title" style="font-weight: bold">副石3信息</h5>-->
+<!--                    </div>-->
+<!--                    <div class="col-lg-4">-->
+<!--                        --><?//= $form->field($model, 'second_stone3')->dropDownList($model->getSecondStoneType3Drop($model), ['prompt' => '请选择']) ?>
+<!--                    </div>-->
+<!--                    <div class="col-lg-4">-->
+<!--                        --><?//= $form->field($model, 'second_stone_num3')->textInput() ?>
+<!--                    </div>-->
+<!--                    <div class="col-lg-4">-->
+<!--                        --><?//= $form->field($model, 'second_stone_weight3')->textInput() ?>
+<!--                    </div>-->
+<!--                    <div class="col-lg-4">-->
+<!--                        --><?//= $form->field($model, 'second_stone_price3')->textInput() ?>
+<!--                    </div>-->
+<!--                </div>-->
                 <div class="row">
                     <div class="with-border">
                         <h5 class="box-title" style="font-weight: bold">配件信息</h5>
