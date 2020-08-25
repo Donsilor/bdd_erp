@@ -202,6 +202,8 @@ class OrderGoodsController extends BaseController
                     Yii::$app->salesService->orderGoods->toStock($model);
                 }
                 $trans->commit();
+                //更新采购汇总：总金额和总数量
+                \Yii::$app->salesService->order->orderSummary($model->order_id);
                 //前端提示
                 Yii::$app->getSession()->setFlash('success','保存成功');
                 return ResultHelper::json(200, '保存成功');

@@ -225,10 +225,12 @@ $this->params['breadcrumbs'][] = $this->title;
          </div>
         <div class="box-footer text-center">
             <?php
-                echo Html::edit(['ajax-edit','id' => $model->id,'returnUrl' => Url::getReturnUrl()], '编辑', [
-                    'data-toggle' => 'modal',
-                    'data-target' => '#ajaxModalLg',
-                ]);
+                if($model->audit_status == \common\enums\AuditStatusEnum::SAVE){
+                    echo Html::edit(['ajax-edit','id' => $model->id,'returnUrl' => Url::getReturnUrl()], '编辑', [
+                        'data-toggle' => 'modal',
+                        'data-target' => '#ajaxModalLg',
+                    ]);
+                }
                 if($model->audit_status == \common\enums\AuditStatusEnum::SAVE){
                     echo '&nbsp;';
                     echo Html::edit(['ajax-apply','id'=>$model->id], '提审', [
@@ -236,14 +238,14 @@ $this->params['breadcrumbs'][] = $this->title;
                         'onclick' => 'rfTwiceAffirm(this,"提交审核", "确定提交吗？");return false;',
                     ]);
                 }
-                if($model->audit_status == \common\enums\AuditStatusEnum::PENDING){
-                    echo '&nbsp;';
-                    echo Html::edit(['ajax-audit','id'=>$model->id], '审核', [
-                        'class'=>'btn btn-success btn-sm',
-                        'data-toggle' => 'modal',
-                        'data-target' => '#ajaxModal',
-                    ]);
-                }
+//                if($model->audit_status == \common\enums\AuditStatusEnum::PENDING){
+//                    echo '&nbsp;';
+//                    echo Html::edit(['ajax-audit','id'=>$model->id], '审核', [
+//                        'class'=>'btn btn-success btn-sm',
+//                        'data-toggle' => 'modal',
+//                        'data-target' => '#ajaxModal',
+//                    ]);
+//                }
                 echo '&nbsp;';
                 echo Html::a('返回列表', ['index'], ['class' => 'btn btn-default btn-sm']);
             ?>

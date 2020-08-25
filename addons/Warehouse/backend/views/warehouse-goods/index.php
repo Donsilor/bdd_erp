@@ -291,19 +291,17 @@ $this->params['breadcrumbs'][] = $this->title;
                             'headerOptions' => [],
                         ],
 
-
                         [
-                            'attribute'=>'gold_weight',
-                            'filter' => Html::activeTextInput($searchModel, 'gold_weight', [
+                            'attribute'=>'suttle_weight',
+                            'filter' => Html::activeTextInput($searchModel, 'suttle_weight', [
                                 'class' => 'form-control',
                                 'style'=> 'width:60px;'
                             ]),
                             'headerOptions' => [],
                         ],
-
                         [
-                            'attribute'=>'suttle_weight',
-                            'filter' => Html::activeTextInput($searchModel, 'suttle_weight', [
+                            'attribute'=>'gold_weight',
+                            'filter' => Html::activeTextInput($searchModel, 'gold_weight', [
                                 'class' => 'form-control',
                                 'style'=> 'width:60px;'
                             ]),
@@ -803,6 +801,11 @@ $this->params['breadcrumbs'][] = $this->title;
                             'headerOptions' => [],
                         ],
                         [
+                            'attribute'=>'gong_fee',
+                            'filter' => false,
+                            'headerOptions' => [],
+                        ],
+                        [
                             'attribute'=>'peishi_fee',
                             'filter' => false,
                             'headerOptions' => [],
@@ -812,11 +815,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             'filter' => false,
                             'headerOptions' => [],
                         ],
-                        [
-                            'attribute'=>'gong_fee',
-                            'filter' => false,
-                            'headerOptions' => [],
-                        ],
+
                         [
                             'attribute'=>'total_gong_fee',
                             'filter' => false,

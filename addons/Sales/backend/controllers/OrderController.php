@@ -558,6 +558,7 @@ class OrderController extends BaseController
             ]);
             $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
             $dataProvider->query->andWhere(['=', 'order_id', $id]);
+            $dataProvider->query->andWhere(['=', 'is_return', ConfirmEnum::NO]);
             $dataProvider->setSort(false);
         }
         $model->is_quick_refund = ConfirmEnum::NO;

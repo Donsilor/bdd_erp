@@ -330,7 +330,7 @@ class BillMController extends BaseController
      */
     public function actionExport($ids=null){
         $name = '调拨单明细';
-        if(!is_array($ids)){
+        if(!is_object($ids)){
             $ids = StringHelper::explodeIds($ids);
         }
         if(!$ids){
