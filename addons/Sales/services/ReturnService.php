@@ -13,6 +13,7 @@ use addons\Sales\common\enums\RefundStatusEnum;
 use addons\Sales\common\enums\ReturnByEnum;
 use addons\Sales\common\enums\CheckStatusEnum;
 use addons\Sales\common\enums\ReturnTypeEnum;
+use addons\Sales\common\forms\ReturnGoodsForm;
 use addons\Sales\common\models\OrderAccount;
 use addons\Sales\common\models\OrderAddress;
 use addons\Sales\common\models\OrderGoods;
@@ -63,44 +64,68 @@ class ReturnService
         if (empty($form->ids) && !is_array($form->ids)) {
             throw new \Exception("请选择需要退款的商品");
         }
+        if ($order->delivery_status == DeliveryStatusEnum::HAS_SEND) {
+            $form->return_by = ReturnByEnum::GOODS;
+        } else {
+            $form->return_by = ReturnByEnum::NO_GOODS;
+        }
+        $should_amount = $apply_amount = 0;
+        $rGoods = [];
         foreach ($form->ids as $id) {
             $goods = OrderGoods::findOne($id);
-            if ($order->delivery_status == DeliveryStatusEnum::HAS_SEND) {
-                $form->return_by = ReturnByEnum::GOODS;
-            } else {
-                $form->return_by = ReturnByEnum::NO_GOODS;
-            }
-            $return = [
-                'return_no' => SnHelper::createReturnSn(),
-                'order_id' => $order->id,
-                'order_sn' => $order->order_sn,
+            $rGoods[] = [
+                'return_id' =>rand(10000000000,99999999999),
+                'return_no' => (string) rand(10000000000,99999999999),
+                'goods_id' => $goods->goods_id,
+                'goods_name' => $goods->goods_name,
                 'order_detail_id' => $goods->id,
-                'channel_id' => $order->sale_channel_id,
                 'goods_num' => $goods->goods_num,
                 'should_amount' => $goods->goods_pay_price,
                 'apply_amount' => $goods->goods_pay_price,
-                'return_reason' => $form->return_reason,
-                'return_by' => $form->return_by,
-                'return_type' => $form->return_type,
-                'customer_id' => $order->customer_id,
-                'customer_name' => $order->customer_name,
-                'customer_mobile' => $order->customer_mobile,
-                'customer_email' => $order->customer_email,
-                'currency' => $order->currency,
-                //'bank_name' => '',
-                'bank_card' => $order->customer_account,
-                'is_quick_refund' => $form->is_quick_refund,
-                'check_status' => CheckStatusEnum::SAVE,
-                'remark' => $form->remark,
+                'status' => StatusEnum::ENABLED,
                 'creator_id' => \Yii::$app->user->identity->getId(),
                 'created_at' => time(),
             ];
-            $form->attributes = $return;
-            if (false === $form->save()) {
-                throw new \Exception($this->getError($form));
+            $should_amount = bcadd($should_amount, $goods->goods_pay_price, 3);
+            $apply_amount = bcadd($apply_amount, $goods->goods_pay_price, 3);
+        }
+        $return = [
+            'return_no' => SnHelper::createReturnSn(),
+            'order_id' => $order->id,
+            'order_sn' => $order->order_sn,
+            'channel_id' => $order->sale_channel_id,
+            'goods_num' =>count($rGoods),
+            'should_amount' => $should_amount,
+            'apply_amount' => $apply_amount,
+            'return_reason' => $form->return_reason,
+            'return_by' => $form->return_by,
+            'return_type' => $form->return_type,
+            'customer_id' => $order->customer_id,
+            'customer_name' => $order->customer_name,
+            'customer_mobile' => $order->customer_mobile,
+            'customer_email' => $order->customer_email,
+            'currency' => $order->currency,
+            //'bank_name' => '',
+            'bank_card' => $order->customer_account,
+            'is_quick_refund' => $form->is_quick_refund,
+            'check_status' => CheckStatusEnum::SAVE,
+            'remark' => $form->remark,
+            'creator_id' => \Yii::$app->user->identity->getId(),
+            'created_at' => time(),
+        ];
+        $form->attributes = $return;
+        if (false === $form->save()) {
+            throw new \Exception($this->getError($form));
+        }
+        foreach ($rGoods as $goods) {
+            $goodsM = new ReturnGoodsForm();
+            $goodsM->return_id = $form->id;
+            $goodsM->return_no = $form->return_no;
+            $goodsM->attributes = $goods;
+            if (false === $goodsM->save()) {
+                throw new \Exception($this->getError($goodsM));
             }
         }
-
         //同步订单信息
         $order->refund_status = RefundStatusEnum::APPLY;
         if (false === $order->save()) {
