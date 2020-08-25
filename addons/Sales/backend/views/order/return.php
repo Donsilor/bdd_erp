@@ -75,15 +75,15 @@ $this->params['breadcrumbs'][] = $this->title;
 <!--                    <div class="col-lg-6">-->
 <!--                        --><?//= $form->field($model, 'return_by')->radioList(\addons\Sales\common\enums\ReturnByEnum::getMap()) ?>
 <!--                    </div>-->
-                </div>
-                <div class="row">
-<!--                    <div class="col-lg-6">-->
-<!--                        --><?//= $form->field($model, 'is_finance_refund')->radioList(\common\enums\ConfirmEnum::getMap()) ?>
-<!--                    </div>-->
                     <div class="col-lg-6">
                         <?= $form->field($model, 'is_quick_refund')->radioList(\common\enums\ConfirmEnum::getMap()) ?>
                     </div>
                 </div>
+<!--                <div class="row">-->
+<!--                    <div class="col-lg-6">-->
+<!--                        --><?//= $form->field($model, 'is_finance_refund')->radioList(\common\enums\ConfirmEnum::getMap()) ?>
+<!--                    </div>-->
+<!--                </div>-->
 <!--                <div class="row">-->
 <!--                    <div class="col-lg-6">-->
 <!--                        --><?//= $form->field($model, 'bank_name')->textInput() ?>
