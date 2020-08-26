@@ -251,7 +251,7 @@ $params = $params ? "&".http_build_query($params) : '';
 //                                    }
 //                                },
                                 'audit' => function($url, $model, $key){
-                                    if($model->audit_status == \common\enums\AuditStatusEnum::PENDING) {
+                                    if($model->audit_status == \common\enums\AuditStatusEnum::PENDING && $model->check_status == \addons\Sales\common\enums\CheckStatusEnum::LEADER) {
                                         return Html::edit(['ajax-audit','id'=>$model->id], '审核', [
                                             'class'=>'btn btn-success btn-sm',
                                             'data-toggle' => 'modal',
