@@ -358,6 +358,13 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'format' => 'raw',
                             ],
                             [
+                                'attribute' => 'is_return',
+                                'value' => function ($model) {
+                                    return \addons\Sales\common\enums\IsReturnEnum::getValue($model->is_return) ?? '未操作';
+                                },
+                                'format' => 'raw',
+                            ],
+                            [
                                 'attribute' => 'is_stock',
                                 'value' => function ($model) {
                                     return IsStockEnum::getValue($model->is_stock);

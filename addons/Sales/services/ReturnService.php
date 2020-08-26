@@ -9,6 +9,7 @@
 namespace addons\Sales\services;
 
 use addons\Sales\common\enums\DeliveryStatusEnum;
+use addons\Sales\common\enums\IsReturnEnum;
 use addons\Sales\common\enums\RefundStatusEnum;
 use addons\Sales\common\enums\ReturnByEnum;
 use addons\Sales\common\enums\CheckStatusEnum;
@@ -74,7 +75,7 @@ class ReturnService
         foreach ($form->ids as $id) {
             $goods = OrderGoods::findOne($id);
             $rGoods[] = [
-                'return_id' =>rand(10000000000,99999999999),
+                'return_id' =>rand(10000,99999),
                 'return_no' => (string) rand(10000000000,99999999999),
                 'goods_id' => $goods->goods_id,
                 'goods_name' => $goods->goods_name,
@@ -88,6 +89,12 @@ class ReturnService
             ];
             $should_amount = bcadd($should_amount, $goods->goods_pay_price, 3);
             $apply_amount = bcadd($apply_amount, $goods->goods_pay_price, 3);
+
+            //同步订单明细信息
+            $goods->is_return = IsReturnEnum::APPLY;
+            if (false === $goods->save()) {
+                throw new \Exception($this->getError($goods));
+            }
         }
         $return = [
             'return_no' => SnHelper::createReturnSn(),
@@ -117,11 +124,11 @@ class ReturnService
         if (false === $form->save()) {
             throw new \Exception($this->getError($form));
         }
-        foreach ($rGoods as $goods) {
+        foreach ($rGoods as $good) {
             $goodsM = new ReturnGoodsForm();
             $goodsM->return_id = $form->id;
             $goodsM->return_no = $form->return_no;
-            $goodsM->attributes = $goods;
+            $goodsM->attributes = $good;
             if (false === $goodsM->save()) {
                 throw new \Exception($this->getError($goodsM));
             }
