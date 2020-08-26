@@ -19,7 +19,7 @@ class OrderFromEnum extends \common\enums\BaseEnum
         return [
                 self::FROM_HAND => "手动创建",
                 self::FROM_BDD => "BDD同步",
-                self::FROM_JD => "JD同步",
+                self::FROM_JD => "京东同步",
         ];
     }
     
