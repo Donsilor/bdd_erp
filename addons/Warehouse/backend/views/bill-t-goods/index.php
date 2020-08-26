@@ -778,36 +778,36 @@ $this->params['breadcrumbs'][] = $this->title;
                                 ]),
                                 'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#dec674;'],
                             ],
-                            [
-                                'attribute' => 'second_stone_size1',
-                                'format' => 'raw',
-                                'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#dec674;'],
-                                'filter' => Html::activeTextInput($searchModel, 'second_stone_size1', [
-                                    'class' => 'form-control',
-                                    'style' => 'width:100px;'
-                                ]),
-                            ],
-                            [
-                                'attribute' => 'second_cert_id1',
-                                'format' => 'raw',
-                                'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#dec674;'],
-                                'filter' => Html::activeTextInput($searchModel, 'second_cert_id1', [
-                                    'class' => 'form-control',
-                                    'style' => 'width:100px;'
-                                ]),
-                            ],
-                            [
-                                'attribute' => 'second_stone_type1',
-                                'value' => function ($model) {
-                                    return Yii::$app->attr->valueName($model->second_stone_type1) ?? "";
-                                },
-                                'filter' => Html::activeDropDownList($searchModel, 'second_stone_type1', $model->getSecondStoneType1Map(), [
-                                    'prompt' => '全部',
-                                    'class' => 'form-control',
-                                    'style' => 'width:80px;'
-                                ]),
-                                'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#dec674;'],
-                            ],
+//                            [
+//                                'attribute' => 'second_stone_size1',
+//                                'format' => 'raw',
+//                                'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#dec674;'],
+//                                'filter' => Html::activeTextInput($searchModel, 'second_stone_size1', [
+//                                    'class' => 'form-control',
+//                                    'style' => 'width:100px;'
+//                                ]),
+//                            ],
+//                            [
+//                                'attribute' => 'second_cert_id1',
+//                                'format' => 'raw',
+//                                'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#dec674;'],
+//                                'filter' => Html::activeTextInput($searchModel, 'second_cert_id1', [
+//                                    'class' => 'form-control',
+//                                    'style' => 'width:100px;'
+//                                ]),
+//                            ],
+//                            [
+//                                'attribute' => 'second_stone_type1',
+//                                'value' => function ($model) {
+//                                    return Yii::$app->attr->valueName($model->second_stone_type1) ?? "";
+//                                },
+//                                'filter' => Html::activeDropDownList($searchModel, 'second_stone_type1', $model->getSecondStoneType1Map(), [
+//                                    'prompt' => '全部',
+//                                    'class' => 'form-control',
+//                                    'style' => 'width:80px;'
+//                                ]),
+//                                'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#dec674;'],
+//                            ],
                             [
                                 'attribute' => 'second_pei_type2',
                                 'format' => 'raw',

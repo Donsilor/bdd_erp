@@ -236,15 +236,15 @@ $this->params['breadcrumbs'][] = $this->title;
                     <div class="col-lg-4">
                         <?= $form->field($model, 'second_stone_colour1')->dropDownList($model->getSecondStoneColour1Drop($model), ['prompt' => '请选择']) ?>
                     </div>
-                    <div class="col-lg-4">
-                        <?= $form->field($model, 'second_stone_size1')->textInput() ?>
-                    </div>
-                    <div class="col-lg-4">
-                        <?= $form->field($model, 'second_cert_id1')->textInput() ?>
-                    </div>
-                    <div class="col-lg-4">
-                        <?= $form->field($model, 'second_stone_type1')->dropDownList($model->getSecondStoneType1Drop($model), ['prompt' => '请选择']) ?>
-                    </div>
+<!--                    <div class="col-lg-4">-->
+<!--                        --><?//= $form->field($model, 'second_stone_size1')->textInput() ?>
+<!--                    </div>-->
+<!--                    <div class="col-lg-4">-->
+<!--                        --><?//= $form->field($model, 'second_cert_id1')->textInput() ?>
+<!--                    </div>-->
+<!--                    <div class="col-lg-4">-->
+<!--                        --><?//= $form->field($model, 'second_stone_type1')->dropDownList($model->getSecondStoneType1Drop($model), ['prompt' => '请选择']) ?>
+<!--                    </div>-->
                     <div class="col-lg-4">
                         <?= $form->field($model, 'peishi_fee')->textInput() ?>
                     </div>

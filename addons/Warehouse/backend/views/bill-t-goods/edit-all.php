@@ -929,31 +929,31 @@ $this->params['breadcrumbs'][] = $this->title;
                                     'style' => 'width:100px;'
                                 ]),
                             ],*/
-                            [
-                                'attribute' => 'second_cert_id1',
-                                'format' => 'raw',
-                                'value' => function ($model, $key, $index, $column) {
-                                    return Html::ajaxInput('second_cert_id1', $model->second_cert_id1, ['data-id' => $model->id]);
-                                },
-                                'headerOptions' => ['class' => 'col-md-1 batch_full', 'attr-name' => 'second_cert_id1', 'style' => 'background-color:#dec674;'],
-                                'filter' => Html::activeTextInput($searchModel, 'second_cert_id1', [
-                                    'class' => 'form-control',
-                                    'style' => 'width:100px;'
-                                ]),
-                            ],
-                            [
-                                'attribute' => 'second_stone_type1',
-                                'format' => 'raw',
-                                'value' => function ($model, $key, $index, $column) {
-                                    return Html::ajaxSelect($model, 'second_stone_type1', $model->getSecondStoneType1Drop($model), ['data-id' => $model->id, 'prompt' => '请选择']);
-                                },
-                                'filter' => Html::activeDropDownList($searchModel, 'second_stone_type1', $model->getSecondStoneType1Map(), [
-                                    'prompt' => '全部',
-                                    'class' => 'form-control',
-                                    'style' => 'width:80px;'
-                                ]),
-                                'headerOptions' => ['class' => 'col-md-1 batch_select_full', 'attr-name' => 'second_stone_type1', 'attr-id' => AttrIdEnum::SIDE_STONE1_TYPE, 'style' => 'background-color:#dec674;'],
-                            ],
+//                            [
+//                                'attribute' => 'second_cert_id1',
+//                                'format' => 'raw',
+//                                'value' => function ($model, $key, $index, $column) {
+//                                    return Html::ajaxInput('second_cert_id1', $model->second_cert_id1, ['data-id' => $model->id]);
+//                                },
+//                                'headerOptions' => ['class' => 'col-md-1 batch_full', 'attr-name' => 'second_cert_id1', 'style' => 'background-color:#dec674;'],
+//                                'filter' => Html::activeTextInput($searchModel, 'second_cert_id1', [
+//                                    'class' => 'form-control',
+//                                    'style' => 'width:100px;'
+//                                ]),
+//                            ],
+//                            [
+//                                'attribute' => 'second_stone_type1',
+//                                'format' => 'raw',
+//                                'value' => function ($model, $key, $index, $column) {
+//                                    return Html::ajaxSelect($model, 'second_stone_type1', $model->getSecondStoneType1Drop($model), ['data-id' => $model->id, 'prompt' => '请选择']);
+//                                },
+//                                'filter' => Html::activeDropDownList($searchModel, 'second_stone_type1', $model->getSecondStoneType1Map(), [
+//                                    'prompt' => '全部',
+//                                    'class' => 'form-control',
+//                                    'style' => 'width:80px;'
+//                                ]),
+//                                'headerOptions' => ['class' => 'col-md-1 batch_select_full', 'attr-name' => 'second_stone_type1', 'attr-id' => AttrIdEnum::SIDE_STONE1_TYPE, 'style' => 'background-color:#dec674;'],
+//                            ],
                             [
                                 'class' => 'yii\grid\CheckboxColumn',
                                 'name' => 'id',  //设置每行数据的复选框属性
