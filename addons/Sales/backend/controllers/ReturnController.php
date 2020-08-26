@@ -106,7 +106,7 @@ class ReturnController extends BaseController
         }
 
         //$dataProvider->query->andWhere(['=',ReturnForm::tableName().'.check_status',CheckStatusEnum::SAVE]);
-        //$dataProvider->query->andWhere(['=',ReturnForm::tableName().'.audit_status',AuditStatusEnum::PENDING]);
+        $dataProvider->query->andWhere(['>=',ReturnForm::tableName().'.audit_status',AuditStatusEnum::PENDING]);
 
         return $this->render($this->action->id, [
             'dataProvider' => $dataProvider,
@@ -149,8 +149,8 @@ class ReturnController extends BaseController
             $dataProvider->query->andFilterWhere(['<',ReturnForm::tableName().'.created_at', (strtotime(explode('/', $created_at)[1]) + 86400)] );//结束时间
         }
 
-        $dataProvider->query->andWhere(['=',ReturnForm::tableName().'.check_status',CheckStatusEnum::LEADER]);
-        $dataProvider->query->andWhere(['=',ReturnForm::tableName().'.audit_status',AuditStatusEnum::PENDING]);
+        //$dataProvider->query->andWhere(['=',ReturnForm::tableName().'.check_status',CheckStatusEnum::LEADER]);
+        $dataProvider->query->andWhere(['>=',ReturnForm::tableName().'.audit_status',AuditStatusEnum::PENDING]);
 
         return $this->render($this->action->id, [
             'dataProvider' => $dataProvider,
@@ -193,8 +193,8 @@ class ReturnController extends BaseController
             $dataProvider->query->andFilterWhere(['<',ReturnForm::tableName().'.created_at', (strtotime(explode('/', $created_at)[1]) + 86400)] );//结束时间
         }
 
-        $dataProvider->query->andWhere(['=',ReturnForm::tableName().'.check_status',CheckStatusEnum::STOREKEEPER]);
-        $dataProvider->query->andWhere(['=',ReturnForm::tableName().'.audit_status',AuditStatusEnum::PENDING]);
+        //$dataProvider->query->andWhere(['=',ReturnForm::tableName().'.check_status',CheckStatusEnum::STOREKEEPER]);
+        $dataProvider->query->andWhere(['>=',ReturnForm::tableName().'.audit_status',AuditStatusEnum::PENDING]);
 
         return $this->render($this->action->id, [
             'dataProvider' => $dataProvider,
