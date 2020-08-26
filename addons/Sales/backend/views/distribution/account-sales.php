@@ -1,5 +1,6 @@
 <?php
 
+use addons\Sales\common\enums\IsStockEnum;
 use common\helpers\Html;
 use addons\Sales\common\enums\OrderStatusEnum;
 use common\helpers\Url;
@@ -183,16 +184,16 @@ $this->params['breadcrumbs'][] = $this->title;
                                         }
                                 ],
                                 [
-                                        'attribute'=>'is_stock',
-                                        'value' => function($model){
-                                                return $model->is_stock;
-                                        }
+                                    'attribute' => 'is_stock',
+                                    'value' => function ($model) {
+                                        return IsStockEnum::getValue($model->is_stock);
+                                    }
                                 ],
                                 [
-                                        'attribute'=>'is_gift',
-                                        'value' => function($model){
-                                                return $model->is_gift;
-                                        }
+                                    'attribute' => 'is_gift',
+                                    'value' => function ($model) {
+                                        return \addons\Sales\common\enums\IsGiftEnum::getValue($model->is_gift);
+                                    }
                                 ],
                             ]
                         ]); ?>
