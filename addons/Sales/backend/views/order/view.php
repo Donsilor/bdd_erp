@@ -726,6 +726,16 @@ $this->params['breadcrumbs'][] = $this->title;
 
 </script>
 <script>
-    $("#flow").load("<?= \common\helpers\Url::to(['../common/flow/audit-view', 'flow_type_id' => $model->targetType, 'target_id' => $model->id])?>")
+    $("#flow").load("<?= \common\helpers\Url::to(['../common/flow/audit-view', 'flow_type_id' => $model->targetType, 'target_id' => $model->id])?>");
 
+    $('#order-goods table tbody tr').each(function () {
+        var id = Number($(this).attr('data-key'));
+        var arr = <?= $return ?? []?>;
+        if ($.inArray(id, arr) != -1) {
+            $(this).children().each(function () {
+                $(this).attr('style', "position:relative;");
+                $(this).append('<div style="width:100%;position:absolute;top:14px;left:-1px;border-bottom:solid 1px red;"></div><div style="width:100%;position:absolute;top:19px;left:-1px;border-bottom:solid 1px red;"></div>');
+            });
+        }
+    });
 </script>
