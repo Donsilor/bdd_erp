@@ -108,7 +108,7 @@ class JdSdk extends Component
             if($page <= $page_count) {
                 throw new \Exception($result->apiResult->chineseErrCode);
             }else{
-                return [];
+                return [[],$page_count];
             }            
         }
         $tde = TDEClient::getInstance($this->accessToken, $this->appKey, $this->appSecret);
@@ -119,7 +119,7 @@ class JdSdk extends Component
             $order->consigneeInfo->fullname= $tde->decrypt($order->consigneeInfo->fullname);
             $order->consigneeInfo->mobile= $tde->decrypt($order->consigneeInfo->mobile);
         }
-        return [$order_list,$page,$page_count,$order_count];
+        return [$order_list,$page_count];
     }
     
     

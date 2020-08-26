@@ -22,15 +22,17 @@ class OrderController extends Controller
  
     public function actionTest()
     {
-        Console::output("Begin Sync JD Order[".date('Y-m-d H:i:s')."]-------------------"); 
+        Console::output("Sync JD Order BEGIN[".date('Y-m-d H:i:s')."]-------------------"); 
         try{
-            list($order_list,$page,$page_count,$order_count) = \Yii::$app->jdSdk->getOrderList(null,null,1);        
+            $page = 1;
+            list($order_list,$page_count) = \Yii::$app->jdSdk->getOrderList(null,null,$page);    
         }catch (\Exception $e) {
             Console::output("Page[".$page."],Error:".$e->getMessage());
+            return;
         }
-        for ($page; $page < $page_count; $page ++) {
+        for ($page = 2 ; $page < $page_count; $page ++) {
             try{
-                list($order_list,$page,$page_count,$order_count) = \Yii::$app->jdSdk->getOrderList(null,null,++$page);
+                list($order_list) = \Yii::$app->jdSdk->getOrderList(null,null,$page);
             }catch (\Exception $e) {
                 Console::output("Page[".$page."],Error:".$e->getMessage());
             }                
@@ -46,7 +48,7 @@ class OrderController extends Controller
             }
             
         }
-        Console::output("End Sync JD Order[".date('Y-m-d H:i:s')."]-------------------"); 
+        Console::output("Sync JD Order END[".date('Y-m-d H:i:s')."]-------------------"); 
     }
     /**
      * 拉去官网订单
