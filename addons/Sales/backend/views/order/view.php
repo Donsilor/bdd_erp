@@ -167,7 +167,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             //'data-toggle' => 'modal',
                             'class' => 'btn btn-warning btn-ms openIframe',
                             //'data-target' => '#ajaxModalLg',
-                            'data-width'=>'90%','data-height'=>'90%','data-offset'=>'20px'
+                            'data-width' => '90%', 'data-height' => '90%', 'data-offset' => '20px'
                         ]);
                     }
                     ?>

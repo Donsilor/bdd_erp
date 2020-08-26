@@ -122,11 +122,16 @@ $this->params['breadcrumbs'][] = $this->title;
                                     'attribute' => 'goods_id',
                                     'format' => 'raw',
                                     'value' => function ($model, $key, $index, $column){
-                                        return  Html::input('text', 'goods_ids['.$model->id.']', $model->goods_id ,['class' => 'form-control','placeholder' => '请输入货号',]);
+                                         if($model->is_gift){
+                                             return "赠品无需销账";
+                                         }else{
+                                             return  Html::input('text', 'goods_ids['.$model->id.']', $model->goods_id ,['class' => 'form-control','placeholder' => '请输入货号',]);
+                                         }
                                     },
                                     'headerOptions' => ['width' => '160'],
                                 ],
                                 [
+                                    'label' => '款号/起版号/批次号',
                                     'attribute'=>'goods_sn',
                                     'value' => 'goods_sn'
                                 ],
