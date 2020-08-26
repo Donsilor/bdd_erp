@@ -211,10 +211,10 @@ class ReturnService
     }
 
     /**
+     * 退款-审核
      * @param ReturnForm $form
      * @return object $form
-     * 退款-审核
-     * @throws \Exception
+     * @throws
      */
     public function auditReturn($form)
     {
@@ -235,7 +235,8 @@ class ReturnService
                 $form->check_status = CheckStatusEnum::STOREKEEPER;
                 $form->finance_status = AuditStatusEnum::PENDING;
                 if ($form->return_by == ReturnByEnum::GOODS) {//退商品
-                    $this->createBillD($form);
+                    $billM = $this->createBillD($form);
+                    $form->bill_no = $billM->bill_no;
                 }
             } else {
                 //$form->check_status = CheckStatusEnum::SAVE;
@@ -262,11 +263,13 @@ class ReturnService
                 }
                 if ($form->return_by == ReturnByEnum::GOODS) {
                     //1.审核销售退货单
-                    $where = ['order_sn' => $form->order_sn, 'bill_status' => BillStatusEnum::PENDING, 'bill_type' => BillTypeEnum::BILL_TYPE_D];
-                    $bill = WarehouseBillDForm::find()->where($where)->one();
+                    $bill = WarehouseBillDForm::findOne(['bill_no'=>$form->bill_no]);
                     if (!empty($bill)) {
                         $bill->bill_status = BillStatusEnum::CONFIRM;
                         $bill->audit_status = AuditStatusEnum::PASS;
+                        if (false === $bill->save()) {
+                            throw new \Exception($this->getError($bill));
+                        }
                     } else {
                         throw new \Exception("销售退货单不存在");
                     }
@@ -298,7 +301,7 @@ class ReturnService
 
     /**
      * @param ReturnForm $form
-     * @return object $form
+     * @return object $billM
      * 创建销售退货单
      * @throws \Exception
      */
@@ -375,7 +378,7 @@ class ReturnService
         ];
 
         //1.创建销售退货单
-        \Yii::$app->warehouseService->billD->createBillD($bill, $bill_goods);
+        $billM = \Yii::$app->warehouseService->billD->createBillD($bill, $bill_goods);
 
         //2.更新商品库存状态
         $condition = ['goods_id' => $goods_ids, 'goods_status' => GoodsStatusEnum::HAS_SOLD];
@@ -383,6 +386,6 @@ class ReturnService
         if ($execute_num <> count($bill_goods)) {
             throw new \Exception("货品改变状态数量与明细数量不一致");
         }
-        return $form;
+        return $billM;
     }
 }
