@@ -8,6 +8,9 @@
 
 namespace addons\Sales\services;
 
+use addons\Sales\common\enums\DistributeStatusEnum;
+use addons\Sales\common\enums\PayStatusEnum;
+use addons\Sales\common\enums\ReturnTypeEnum;
 use addons\Sales\common\models\OrderAccount;
 use addons\Sales\common\models\OrderAddress;
 use addons\Sales\common\models\OrderGoods;
@@ -27,6 +30,7 @@ use addons\Warehouse\common\enums\BillStatusEnum;
 use addons\Warehouse\common\enums\BillTypeEnum;
 use addons\Warehouse\common\enums\GoodsStatusEnum;
 use addons\Warehouse\common\enums\OrderTypeEnum;
+use common\components\Service;
 use common\enums\AuditStatusEnum;
 use common\enums\ConfirmEnum;
 use common\enums\LogTypeEnum;
@@ -35,7 +39,7 @@ use common\helpers\ArrayHelper;
 use common\helpers\SnHelper;
 use common\helpers\Url;
 
-class ReturnService
+class ReturnService extends Service
 {
 
     /**
@@ -70,6 +74,10 @@ class ReturnService
         } else {
             $form->return_by = ReturnByEnum::NO_GOODS;
         }
+        $newOrder = null;
+        if($form->return_type == ReturnTypeEnum::TRANSFER){
+            $newOrder = $this->auditZhuandan($order, $form->ids);
+        }
         $should_amount = $apply_amount = 0;
         $rGoods = [];
         foreach ($form->ids as $id) {
@@ -100,6 +108,8 @@ class ReturnService
             'return_no' => SnHelper::createReturnSn(),
             'order_id' => $order->id,
             'order_sn' => $order->order_sn,
+            'new_order_id' => $newOrder?$newOrder->id:"",
+            'new_order_sn' => $newOrder?$newOrder->order_sn:"",
             'channel_id' => $order->sale_channel_id,
             'goods_num' =>count($rGoods),
             'should_amount' => $should_amount,
@@ -148,23 +158,35 @@ class ReturnService
      * @param Order $order
      * @param array $ids
      * @return object $form
-     * @throws \Exception
+     * @throws
      */
     public function auditZhuandan($order, $ids)
     {
         //1.创建新订单
-        $newOrder = clone $order;
+        $newOrder = new Order();
+        $newOrder->attributes = $order->toArray();
         $newOrder->id = null;
+        $newOrder->order_sn = (string) rand(10000000000,99999999999);
+        $newOrder->order_time = time();
+        $newOrder->express_id = "";
+        $newOrder->express_no = "";
+        $newOrder->pay_status = PayStatusEnum::NO_PAY;
+        $newOrder->distribute_status = DistributeStatusEnum::SAVE;
+        $newOrder->delivery_status = DeliveryStatusEnum::SAVE;
+        $newOrder->delivery_time = "";
+        $newOrder->finished_time = "";
+        $newOrder->pay_time = "";
         if (false == $newOrder->save()) {
             throw new \Exception($this->getError($newOrder));
         }
-        \Yii::$app->salesService->order->createOrderSn($newOrder);
+        \Yii::$app->salesService->order->createOrderSn($newOrder, true);
 
         $order_amount = $goods_amount = $discount_amount = 0;
         //2.添加商品
         foreach ($ids as $id) {
             $goods = OrderGoods::findOne($id);
-            $newGoods = clone $goods;
+            $newGoods = new OrderGoods();
+            $newGoods->attributes = $goods->toArray();
             $newGoods->id = null;
             $newGoods->order_id = $newOrder->id;
             if (false == $newGoods->save()) {
@@ -181,19 +203,21 @@ class ReturnService
         $account->order_amount = $order_amount;
         $account->goods_amount = $goods_amount;
         $account->discount_amount = $discount_amount;
-        $account->paid_amount = $order_amount;
+        $account->pay_amount = $order_amount;
+        $account->paid_amount = 0;
         //$account->pay_amount = $order_amount;
         if (false == $account->save()) {
             throw new \Exception($this->getError($account));
         }
 
         //4.创建订单地址信息
-        $address = OrderAddress::find()->where(['order_id' => $newOrder->id])->one();
-        if (!$address) {
-            $address = new OrderAddress();
-            $address->order_id = $newOrder->id;
-            if (false == $address->save()) {
-                throw new \Exception($this->getError($address));
+        $address = OrderAddress::find()->where(['order_id' => $order->id])->one();
+        if (!empty($address)) {
+            $newAddress = new OrderAddress();
+            $newAddress->attributes = $address->toArray();
+            $newAddress->order_id = $newOrder->id;
+            if (false == $newAddress->save()) {
+                throw new \Exception($this->getError($newAddress));
             }
         }
 
@@ -209,7 +233,7 @@ class ReturnService
         ];
         \Yii::$app->salesService->orderLog->createOrderLog($log);
 
-        return $order;
+        return $newOrder;
     }
 
     /**

@@ -22,6 +22,7 @@ use addons\Finance\common\models\OrderPay;
  * @property int $pay_time 支付(付款)时间
  * @property int $out_pay_time 外部支付时间
  * @property int $finished_time 订单完成时间
+ * @property int $order_time 下单时间
  * @property int $order_status 订单状态：0(已取消)10(默认):未付款;20:已付款;30:已发货;40:已完成;
  * @property int $refund_status 退款状态(0无退款,1部分退款,2全部退款)
  * @property int $express_id 快递方式
