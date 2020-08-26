@@ -51,7 +51,7 @@ class JdOrderService extends Service
     public function getErpOrderData($order)
     {
         return [
-            "language"=>'zh_CN',
+            "language"=>'zh-CN',
             "currency"=>'CNY',
             "pay_type"=>$this->getErpPayType($order),//京东（平台支付）
             "pay_status"=>$this->getErpPayStatus($order),//已支付
