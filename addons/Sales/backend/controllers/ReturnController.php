@@ -2,16 +2,14 @@
 
 namespace addons\Sales\backend\controllers;
 
-use addons\Sales\common\enums\ReturnStatusEnum;
 use Yii;
 use common\helpers\Url;
 use common\traits\Curd;
 use common\models\base\SearchModel;
-use addons\Sales\common\models\SalesReturn;
 use addons\Sales\common\forms\ReturnForm;
 use addons\Sales\common\enums\CheckStatusEnum;
+use addons\Sales\common\enums\ReturnStatusEnum;
 use common\enums\AuditStatusEnum;
-use common\enums\StatusEnum;
 
 /**
  * 退款单
@@ -38,7 +36,7 @@ class ReturnController extends BaseController
         $searchModel = new SearchModel([
             'model' => $this->modelClass,
             'scenario' => 'default',
-            'partialMatchAttributes' => [], // 模糊查询
+            'partialMatchAttributes' => ['customer_name'], // 模糊查询
             'defaultOrder' => [
                 'id' => SORT_DESC
             ],
@@ -81,7 +79,7 @@ class ReturnController extends BaseController
         $searchModel = new SearchModel([
             'model' => $this->modelClass,
             'scenario' => 'default',
-            'partialMatchAttributes' => [], // 模糊查询
+            'partialMatchAttributes' => ['customer_name'], // 模糊查询
             'defaultOrder' => [
                 'id' => SORT_DESC
             ],
@@ -125,7 +123,7 @@ class ReturnController extends BaseController
         $searchModel = new SearchModel([
             'model' => $this->modelClass,
             'scenario' => 'default',
-            'partialMatchAttributes' => [], // 模糊查询
+            'partialMatchAttributes' => ['customer_name'], // 模糊查询
             'defaultOrder' => [
                 'id' => SORT_DESC
             ],
@@ -169,7 +167,7 @@ class ReturnController extends BaseController
         $searchModel = new SearchModel([
             'model' => $this->modelClass,
             'scenario' => 'default',
-            'partialMatchAttributes' => [], // 模糊查询
+            'partialMatchAttributes' => ['customer_name'], // 模糊查询
             'defaultOrder' => [
                 'id' => SORT_DESC
             ],
