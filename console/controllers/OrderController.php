@@ -24,7 +24,7 @@ class OrderController extends Controller
     {
         //$order_no = '130311942049';
         //\Yii::$app->jdSdk->getOrderInfo($order_no);
-        $order_list = \Yii::$app->jdSdk->getOrderList(null,null,1,5);
+        list($order_list,$page,$page_count,$order_count) = \Yii::$app->jdSdk->getOrderList();        
         foreach ($order_list as $order) {
             \Yii::$app->salesService->jdOrder->syncOrder($order);
         }

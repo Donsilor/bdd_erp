@@ -102,21 +102,18 @@ class JdSdk extends Component
         }  
         $result = $responce->jingdong_pop_order_search_responce->searchorderinfo_result;
         
-        $order_total= $result->orderTotal;
-        $page_total = floor($order_total/$page_size);
+        $order_count = $result->orderTotal;
+        $page_count = floor($order_count/$page_size);
         
         $tde = TDEClient::getInstance($this->accessToken, $this->appKey, $this->appSecret);
         $order_list = $result->orderInfoList;
         foreach ($order_list as & $order) {
             $order->consigneeInfo->fullAddress = $tde->decrypt($order->consigneeInfo->fullAddress);
-            echo $order->consigneeInfo->fullAddress.'-'; continue;
             $order->consigneeInfo->telephone= $tde->decrypt($order->consigneeInfo->telephone);
             $order->consigneeInfo->fullname= $tde->decrypt($order->consigneeInfo->fullname);
             $order->consigneeInfo->mobile= $tde->decrypt($order->consigneeInfo->mobile);
-            
-            $order->consigneeInfo->mobile= $tde->decrypt($order->consigneeInfo->mobile);
         }
-        return [$order_list,$page_total,$order_total];
+        return [$order_list,$page,$page_count,$order_count];
     }
     
     
