@@ -40,7 +40,7 @@ class MemberWorks extends BaseModel
             [['date'], 'safe'],
             [['title'], 'string', 'max' => 255],
             [['files'], 'string', 'max' => 1000],
-            [['type','date','creator_id'],'unique','targetAttribute' => [ 'type','date','creator_id'],'comboNotUnique'=>'已经存在'],
+            [['type','date','creator_id'],'unique','targetAttribute' => [ 'type','date','creator_id'],'comboNotUnique'=>'当天总结已经存在'],
         ];
     }
 
@@ -55,14 +55,13 @@ class MemberWorks extends BaseModel
             'title' => '标题',
             'files' => '附件',
             'content' => '内容',
-            'date' => '总结日期',
-            'creator_id' => '创建人',
+            'date' => '日期',
+            'creator_id' => '添加人',
             'dept_id' => '部门',
-            'created_at' => 'Created At',
+            'created_at' => '创建时间',
             'updated_at' => 'Updated At',
         ];
     }
-
 
 
     /**
@@ -78,8 +77,8 @@ class MemberWorks extends BaseModel
      * 部门一对一
      * @return \yii\db\ActiveQuery
      */
-    public function getDept()
+    public function getDepartment()
     {
-        return $this->hasOne(Department::class, ['id'=>'dept_id'])->alias('dept');
+        return $this->hasOne(Department::class, ['id'=>'dept_id'])->alias('department');
     }
 }

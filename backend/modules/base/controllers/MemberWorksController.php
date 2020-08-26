@@ -7,26 +7,27 @@ use addons\Sales\common\models\OrderAccount;
 use addons\Sales\common\models\Payment;
 use addons\Sales\common\models\SaleChannel;
 use backend\controllers\BaseController;
+use common\enums\WorksTypeEnum;
 use common\helpers\AmountHelper;
 use common\helpers\ExcelHelper;
 use common\helpers\PageHelper;
 use common\helpers\StringHelper;
+use common\models\backend\Member;
 use common\models\backend\MemberWorks;
 use Yii;
 use common\models\base\SearchModel;
 use common\traits\Curd;
-use addons\Finance\common\forms\OrderPayForm;
 use addons\Sales\common\models\Order;
 use addons\Sales\common\enums\OrderStatusEnum;
 use addons\Sales\common\enums\PayStatusEnum;
 
 /**
  *
- * 财务订单点款
+ * 工作总结
  * Class OrderPayController
  * @package backend\modules\goods\controllers
  */
-class OrderPayController extends BaseController
+class MemberWorksController extends BaseController
 {
     use Curd;
 
@@ -34,12 +35,6 @@ class OrderPayController extends BaseController
      * @var BankPay
      */
     public $modelClass = MemberWorks::class;
-    /**
-     * @var int
-     */
-
-
-
     /**
      * 首页
      *
@@ -58,14 +53,26 @@ class OrderPayController extends BaseController
             'pageSize' => $this->getPageSize(),
             'relations' => [
                 'member' => ['username'],
-                'dept' => ['name']
+                'department' => ['name']
             ]
         ]);
 
-        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams,['date']);
+        $date = $searchModel->date;
+        if (!empty($date)) {
+            $dataProvider->query->andFilterWhere(['>=',MemberWorks::tableName().'.date', explode('/', $date)[0]]);//起始时间
+            $dataProvider->query->andFilterWhere(['<',MemberWorks::tableName().'.date', explode('/', $date)[1]]);//结束时间
+        }
 
         //导出
         if(Yii::$app->request->get('action') === 'export'){
+            if (empty($date)) {
+                return $this->message('导出必须选择日期，且选择时间必须是31日之内', $this->redirect(['index']), 'warning');
+            }
+            $day = (strtotime(explode('/', $date)[1])-strtotime(explode('/', $date)[0]))/3600/24;
+            if($day > 31){
+                return $this->message('选择时间必须是31日之内', $this->redirect(['index']), 'warning');
+            }
             $queryIds = $dataProvider->query->select(MemberWorks::tableName().'.id');
             $this->actionExport($queryIds);
         }
@@ -82,6 +89,7 @@ class OrderPayController extends BaseController
      */
     public function actionAjaxEdit()
     {
+        $this->layout = '@backend/views/layouts/iframe';
         $id = Yii::$app->request->get('id');
         $model = $this->findModel($id);
         $model = $model ?? new MemberWorks();
@@ -91,6 +99,8 @@ class OrderPayController extends BaseController
         if ($model->load(Yii::$app->request->post())) {
             try{
                 $trans = Yii::$app->db->beginTransaction();
+                $model->creator_id = Yii::$app->user->identity->getId();
+                $model->dept_id = $model->member->dept_id;
                 if(false === $model->save()) {
                     throw new \Exception($this->getError($model));
                 }
@@ -103,8 +113,43 @@ class OrderPayController extends BaseController
 
         }
 
-        return $this->renderAjax($this->action->id, [
+        return $this->render($this->action->id, [
             'model' => $model,
+        ]);
+    }
+
+
+    /**
+     * 详情展示页
+     * @return string
+     * @throws NotFoundHttpException
+     */
+    public function actionView()
+    {
+        $id = Yii::$app->request->get('id');
+        $model = $this->findModel($id);
+        $searchModel = new SearchModel([
+            'model' => $this->modelClass,
+            'scenario' => 'default',
+            'partialMatchAttributes' => [], // 模糊查询
+            'defaultOrder' => [
+                'date'=>SORT_DESC,
+                'id' => SORT_DESC
+            ],
+            'pageSize' => $this->getPageSize(),
+            'relations' => [
+                'member' => ['username'],
+                'department' => ['name']
+            ]
+        ]);
+
+        $dataProvider = $searchModel
+            ->search(Yii::$app->request->queryParams);
+        $dataProvider->query->andWhere([MemberWorks::tableName().'.creator_id'=>$model->creator_id ,MemberWorks::tableName().'.type'=>WorksTypeEnum::DAY_SUMMARY]);
+        return $this->render($this->action->id, [
+            'model' => $model,
+            'dataProvider'=>$dataProvider,
+            'searchModel' => $searchModel,
         ]);
     }
 
@@ -113,32 +158,25 @@ class OrderPayController extends BaseController
      * 导出Excel
      */
     public function actionExport($ids=null){
-        if(!is_array($ids)){
+        if(!is_object($ids)){
             $ids = StringHelper::explodeIds($ids);
         }
         if(!$ids){
             return $this->message('ID不为空', $this->redirect(['index']), 'warning');
         }
-        $list = $this->getData($ids);
+        list($list,$date_list) = $this->getData($ids);
         // [名称, 字段名, 类型, 类型规则]
         $header = [
-            ['订单时间', 'order_time', 'date','Y-m-d H:i:s'],
-            ['订单编号', 'order_sn', 'text'],
-            ['客户姓名', 'customer_name', 'text'],
-            ['销售渠道', 'channel_name', 'text'],
-            ['订单货币', 'currency', 'text'],
-            ['应付金额', 'pay_amount' , 'text'],
-            ['实际支付金额', 'paid_amount' , 'text'],
-            ['剩余尾款', 'unpay_amount' , 'text'],
-            ['订单状态', 'order_status' , 'text'],
-            ['支付方式', 'payment_name' , 'text'],
-            ['支付状态', 'pay_status' , 'text'],
-            ['支付单号', 'pay_sn' , 'text'],
-            ['点款人', 'pay_user' , 'text'],
-            ['点款时间', 'pay_time' , 'date','Y-m-d H:i:s'],
+            ['部门', 'dept', 'text'],
+            ['岗位', 'post', 'text'],
+            ['姓名', 'username', 'text'],
         ];
+        foreach ($date_list as $date){
+            $date_txt = date('m月d日',strtotime($date['date']));
+            $header[] = [$date_txt, $date['date'],'text'];
+        }
 
-        return ExcelHelper::exportData($list, $header, '订单点款_' . date('YmdHis',time()));
+        return ExcelHelper::exportData($list, $header, '工作日报' . date('YmdHis',time()));
 
     }
 
@@ -150,25 +188,25 @@ class OrderPayController extends BaseController
      */
     public function getData($ids)
     {
-        $select = ['o.*','p.name as payment_name','a.pay_amount','a.paid_amount','a.currency','c.name as channel_name','pay.creator as pay_user'];
-        $query = Order::find()->alias('o')
-            ->innerJoin(OrderPay::tableName().' pay','pay.order_id = o.id')
-            ->leftJoin(OrderAccount::tableName().' a','o.id = a.order_id')
-            ->leftJoin(Payment::tableName().' p','o.pay_type = p.id')
-            ->leftJoin(SaleChannel::tableName().' c','o.sale_channel_id=c.id')
-            ->where(['o.id' => $ids])
-            ->select($select);
-        $lists = PageHelper::findAll($query, 100);
-
-        foreach ($lists as &$list){
-            $unpay_amount = $list['pay_amount'] - $list['paid_amount'];
-            $list['unpay_amount'] = AmountHelper::outputAmount($unpay_amount,2,$list['currency']);
-            $list['pay_amount'] = AmountHelper::outputAmount($list['pay_amount'],2,$list['currency']);
-            $list['paid_amount'] = AmountHelper::outputAmount($list['paid_amount'],2,$list['currency']);
-            $list['order_status'] = OrderStatusEnum::getValue($list['order_status']);
-            $list['pay_status'] = PayStatusEnum::getValue($list['pay_status']);
+        $where = ['id' => $ids, 'type'=> WorksTypeEnum::DAY_SUMMARY];
+        $date_list = MemberWorks::find()->where($where)->groupBy('date')->select(['date'])->asArray()->all();
+        $creator_id_list = MemberWorks::find()->where($where)->groupBy('creator_id')->select(['creator_id'])->asArray()->all();
+        $lists = [];
+        foreach ($creator_id_list as $creator_id){
+            $list = [];
+            $member = Member::find()->where(['id'=>$creator_id])->one();
+            $list['username'] = $member->username;
+            $list['dept'] = $member->department->name ?? '';
+            $list['post'] = $member->department->name ?? '';
+            $member_works_list = MemberWorks::find() ->where($where)->andWhere(['creator_id'=>$creator_id])->select(['date','content'])->asArray()->all();
+            $member_works_list = array_column($member_works_list,'content','date');
+            foreach ($date_list as $date){
+                $list[$date['date']] = isset($member_works_list[$date['date']]) ? $member_works_list[$date['date']] : '';
+            }
+            $lists[] = $list;
         }
-        return $lists;
+
+        return [$lists, $date_list];
 
     }
 

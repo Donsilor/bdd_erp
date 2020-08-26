@@ -153,4 +153,5 @@ class Member extends User
     {
         return $this->hasOne(Department::class, ['id'=>'dept_id'])->alias('department');
     }
+
 }
