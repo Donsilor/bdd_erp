@@ -122,7 +122,11 @@ $params = $params ? "&".http_build_query($params) : '';
                             'attribute' => 'return_type',
                             'format' => 'raw',
                             'value' => function ($model){
-                                return \addons\Sales\common\enums\ReturnTypeEnum::getValue($model->return_type);
+                                $str = \addons\Sales\common\enums\ReturnTypeEnum::getValue($model->return_type);
+                                if($model->return_type == \addons\Sales\common\enums\ReturnTypeEnum::TRANSFER){
+                                    $str.="(".Html::a($model->new_order_sn, ['order/view', 'id' => $model->new_order_id,'returnUrl'=>Url::getReturnUrl()], ['style'=>"text-decoration:underline;color:#3c8dbc"]).")";
+                                }
+                                return $str??"";
                             },
                             'filter' => Html::activeDropDownList($searchModel, 'return_type',\addons\Sales\common\enums\ReturnTypeEnum::getMap(), [
                                 'prompt' => '全部',

@@ -74,10 +74,6 @@ class ReturnService extends Service
         } else {
             $form->return_by = ReturnByEnum::NO_GOODS;
         }
-        $newOrder = null;
-        if($form->return_type == ReturnTypeEnum::TRANSFER){
-            $newOrder = $this->auditZhuandan($order, $form->ids);
-        }
         $should_amount = $apply_amount = 0;
         $rGoods = [];
         foreach ($form->ids as $id) {
@@ -108,8 +104,8 @@ class ReturnService extends Service
             'return_no' => SnHelper::createReturnSn(),
             'order_id' => $order->id,
             'order_sn' => $order->order_sn,
-            'new_order_id' => $newOrder?$newOrder->id:"",
-            'new_order_sn' => $newOrder?$newOrder->order_sn:"",
+            //'new_order_id' => $newOrder?$newOrder->id:"",
+            //'new_order_sn' => $newOrder?$newOrder->order_sn:"",
             'channel_id' => $order->sale_channel_id,
             'goods_num' =>count($rGoods),
             'should_amount' => $should_amount,
@@ -170,12 +166,13 @@ class ReturnService extends Service
         $newOrder->order_time = time();
         $newOrder->express_id = "";
         $newOrder->express_no = "";
-        $newOrder->pay_status = PayStatusEnum::NO_PAY;
+        //$newOrder->pay_status = PayStatusEnum::NO_PAY;
         $newOrder->distribute_status = DistributeStatusEnum::SAVE;
         $newOrder->delivery_status = DeliveryStatusEnum::SAVE;
+        $newOrder->refund_status = RefundStatusEnum::SAVE;
         $newOrder->delivery_time = "";
         $newOrder->finished_time = "";
-        $newOrder->pay_time = "";
+        $newOrder->pay_time = time();
         if (false == $newOrder->save()) {
             throw new \Exception($this->getError($newOrder));
         }
@@ -189,6 +186,7 @@ class ReturnService extends Service
             $newGoods->attributes = $goods->toArray();
             $newGoods->id = null;
             $newGoods->order_id = $newOrder->id;
+            $newGoods->is_return = IsReturnEnum::SAVE;
             if (false == $newGoods->save()) {
                 throw new \Exception($this->getError($newGoods));
             }
@@ -204,7 +202,7 @@ class ReturnService extends Service
         $account->goods_amount = $goods_amount;
         $account->discount_amount = $discount_amount;
         $account->pay_amount = $order_amount;
-        $account->paid_amount = 0;
+        $account->paid_amount = $order_amount;
         //$account->pay_amount = $order_amount;
         if (false == $account->save()) {
             throw new \Exception($this->getError($account));
@@ -280,14 +278,20 @@ class ReturnService extends Service
                     throw new \Exception($this->getError($order));
                 }
                 $rGoods = ReturnGoodsForm::findAll(['return_id'=>$form->id]);
-                $goods_id = [];
+                $goods_id = $order_detail_ids = [];
                 foreach ($rGoods as $good) {
                     $goods = OrderGoods::findOne($good->order_detail_id);
                     $goods_id[] = $good->goods_id;
+                    $order_detail_ids[] = $good->order_detail_id;
                     $goods->is_return = IsReturnEnum::HAS_RETURN;
                     if (false === $goods->save()) {
                         throw new \Exception($this->getError($goods));
                     }
+                }
+                if($form->return_type == ReturnTypeEnum::TRANSFER){//转单
+                    $newOrder = $this->auditZhuandan($order, $order_detail_ids);
+                    $form->new_order_id = $newOrder?$newOrder->id:"";
+                    $form->new_order_sn = $newOrder?$newOrder->order_sn:"";
                 }
                 if ($form->return_by == ReturnByEnum::GOODS) {
                     //1.审核销售退货单
