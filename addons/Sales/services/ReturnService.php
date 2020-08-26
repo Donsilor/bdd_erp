@@ -224,12 +224,14 @@ class ReturnService
             $form->leader_time = time();
             if ($form->leader_status == AuditStatusEnum::PASS) {
                 $form->check_status = CheckStatusEnum::LEADER;
+                $form->storekeeper_status = AuditStatusEnum::PENDING;
             }
         } elseif ($check_status == CheckStatusEnum::LEADER) {
             $form->storekeeper_id = \Yii::$app->user->getId();
             $form->storekeeper_time = time();
             if ($form->storekeeper_status == AuditStatusEnum::PASS) {
                 $form->check_status = CheckStatusEnum::STOREKEEPER;
+                $form->finance_status = AuditStatusEnum::PENDING;
                 if ($form->return_by == ReturnByEnum::GOODS) {
                     $this->createBillD($form);
                 }

@@ -26,8 +26,11 @@ $form = ActiveForm::begin([
 <!--            <div class="col-lg-4">-->
 <!--                --><?//= $form->field($model, 'return_type')->radioList(\addons\Sales\common\enums\ReturnTypeEnum::getMap()) ?>
 <!--            </div>-->
+<!--            <div class="col-lg-6">-->
+<!--                --><?//= $form->field($model, 'is_quick_refund')->radioList(\common\enums\ConfirmEnum::getMap()) ?>
+<!--            </div>-->
             <div class="col-lg-6">
-                <?= $form->field($model, 'is_quick_refund')->radioList(\common\enums\ConfirmEnum::getMap()) ?>
+                <?= $form->field($model, 'return_by')->radioList(\addons\Sales\common\enums\ReturnByEnum::getMap()) ?>
             </div>
             <div class="col-lg-6">
                 <?= $form->field($model, 'return_reason')->dropDownList(\Yii::$app->salesService->returnConfig->getDropDown(),['prompt'=>'请选择']);?>
