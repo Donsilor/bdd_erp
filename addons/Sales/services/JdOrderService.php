@@ -116,9 +116,9 @@ class JdOrderService extends Service
     public function getErpOrderAddressData($order)
     {
         return [
-            //"country_id"=>$order->address->country_id,
-            //"province_id"=>$order->address->province_id,
-            //"city_id"=>$order->address->city_id,
+            "country_id"=>0,
+            "province_id"=>0,
+            "city_id"=>0,
             //"firstname"=>$order->address->firstname,
             //"lastname"=>$order->address->lastname,
             "realname"=>$order->consigneeInfo->fullname,
