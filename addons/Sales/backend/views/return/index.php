@@ -122,7 +122,7 @@ $params = $params ? "&".http_build_query($params) : '';
                             'format' => 'raw',
                             'value' => function ($model){
                                 $str = \addons\Sales\common\enums\ReturnTypeEnum::getValue($model->return_type);
-                                if($model->return_type == \addons\Sales\common\enums\ReturnTypeEnum::TRANSFER){
+                                if($model->return_type == \addons\Sales\common\enums\ReturnTypeEnum::TRANSFER && !empty($model->new_order_sn) && !empty($model->new_order_id)){
                                     $str.="(".Html::a($model->new_order_sn, ['order/view', 'id' => $model->new_order_id,'returnUrl'=>Url::getReturnUrl()], ['style'=>"text-decoration:underline;color:#3c8dbc"]).")";
                                 }
                                 return $str??"";
