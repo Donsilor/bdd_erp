@@ -79,9 +79,8 @@ class JdSdk extends Component
      * @param unknown $start_date
      * @param unknown $end_date
      */
-    public function getOrderList($page = 1 ,$start_date = null, $end_date = null)
+    public function getOrderList($start_date = null, $end_date ,$page = 1, $page_size = 20)
     {
-        $page_size = 20;
         $request = new PopOrderSearchRequest();
         //1）WAIT_SELLER_STOCK_OUT 等待出库 2）WAIT_GOODS_RECEIVE_CONFIRM 等待确认收货   5）FINISHED_L 完成 
         $order_state = 'WAIT_SELLER_STOCK_OUT,WAIT_GOODS_RECEIVE_CONFIRM,FINISHED_L';
@@ -101,11 +100,17 @@ class JdSdk extends Component
         if(isset($responce->error_response)){
             throw new \Exception($responce->error_response->zh_desc);
         }  
-        $result = $responce->jingdong_pop_order_search_responce->searchorderinfo_result;
         
+        $result = $responce->jingdong_pop_order_search_responce->searchorderinfo_result;        
         $order_count = $result->orderTotal;
         $page_count = floor($order_count/$page_size);
-        
+        if($result->orderTotal == 0) {
+            if($page <= $page_count) {
+                throw new \Exception($result->apiResult->chineseErrCode);
+            }else{
+                return [];
+            }            
+        }
         $tde = TDEClient::getInstance($this->accessToken, $this->appKey, $this->appSecret);
         $order_list = $result->orderInfoList;
         foreach ($order_list as & $order) {
