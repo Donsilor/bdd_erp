@@ -1,5 +1,6 @@
 <?php
 
+use addons\Sales\common\enums\PayStatusEnum;
 use common\helpers\Html;
 use addons\Sales\common\enums\OrderStatusEnum;
 use addons\Sales\common\enums\IsStockEnum;
@@ -63,8 +64,8 @@ $this->params['breadcrumbs'][] = $this->title;
                             <td><?= $model->customer_name ?></td>
                             <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('express_id') ?>：</td>
                             <td><?= $model->express->name ?? '' ?></td>
-                            <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('pay_sn') ?>：</td>
-                            <td><?= $model->pay_sn ?></td>
+                            <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('refund_status') ?>：</td>
+                            <td><?= addons\Sales\common\enums\RefundStatusEnum::getValue($model->refund_status) ?></td>
                         </tr>
                         <tr>
                             <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('customer_email') ?>：</td>
@@ -81,8 +82,8 @@ $this->params['breadcrumbs'][] = $this->title;
                                             'data-offset' => '20px',
                                         ]);
                                 } ?></td>
-                            <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('out_pay_no') ?>：</td>
-                            <td><?= $model->out_pay_no ?></td>
+                            <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('pay_sn') ?>：</td>
+                            <td><?= $model->pay_sn ?></td>
                         </tr>
                         <tr>
                             <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('customer_mobile') ?>：</td>
@@ -90,8 +91,8 @@ $this->params['breadcrumbs'][] = $this->title;
 
                             <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('out_trade_no') ?>：</td>
                             <td><?= $model->out_trade_no ?></td>
-                            <td class="col-xs-1 text-right"></td>
-                            <td></td>
+                            <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('out_pay_no') ?>：</td>
+                            <td><?= $model->out_pay_no ?></td>
                         </tr>
                         <tr>
                             <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('customer_account') ?>：</td>

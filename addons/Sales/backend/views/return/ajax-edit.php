@@ -23,39 +23,27 @@ $form = ActiveForm::begin([
     </div>
     <div class="modal-body">
         <div class="row">
-            <div class="col-lg-4">
-                <?= $form->field($model, 'name')->textInput(['maxlength' => true]); ?>
+<!--            <div class="col-lg-4">-->
+<!--                --><?//= $form->field($model, 'return_type')->radioList(\addons\Sales\common\enums\ReturnTypeEnum::getMap()) ?>
+<!--            </div>-->
+            <div class="col-lg-6">
+                <?= $form->field($model, 'is_quick_refund')->radioList(\common\enums\ConfirmEnum::getMap()) ?>
             </div>
-            <div class="col-lg-4">
-                <?= $form->field($model, 'express_man')->textInput(['maxlength' => true]); ?>
-            </div>
-            <div class="col-lg-4">
-                <?= $form->field($model, 'express_phone')->textInput(['maxlength' => true]); ?>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-lg-4">
-                <?= $form->field($model, 'company_man')->textInput(['maxlength' => true]); ?>
-            </div>
-            <div class="col-lg-4">
-                <?= $form->field($model, 'company_phone')->textInput(['maxlength' => true]); ?>
-            </div>
-            <div class="col-lg-4">
-                <?= $form->field($model, 'receive_time')->textInput(['maxlength' => true]); ?>
+            <div class="col-lg-6">
+                <?= $form->field($model, 'return_reason')->dropDownList(\Yii::$app->salesService->returnConfig->getDropDown(),['prompt'=>'请选择']);?>
             </div>
         </div>
         <div class="row">
-            <div class="col-lg-4">
-                <?php $model->settlement_way = !empty($model->settlement_way)?array_filter(explode(',', $model->settlement_way)):null;?>
-                <?= $form->field($model, 'settlement_way')->checkboxList(\addons\Sales\common\enums\SettlementWayEnum::getMap())?>
+            <div class="col-lg-6">
+                <?= $form->field($model, 'bank_name')->textInput(); ?>
             </div>
-            <div class="col-lg-4">
-                <?php $model->settlement_period = !empty($model->settlement_period)?array_filter(explode(',', $model->settlement_period)):null;?>
-                <?= $form->field($model, 'settlement_period')->checkboxList(\addons\Sales\common\enums\SettlementPeriodEnum::getMap())?>
+            <div class="col-lg-6">
+                <?= $form->field($model, 'bank_card')->textInput(); ?>
             </div>
-            <div class="col-lg-4">
-                <?php $model->delivery_scope = !empty($model->delivery_scope)?array_filter(explode(',', $model->delivery_scope)):null;?>
-                <?= $form->field($model, 'delivery_scope')->checkboxList(\addons\Sales\common\enums\DeliveryScopeEnum::getMap())?>
+        </div>
+        <div class="row">
+            <div class="col-lg-12">
+                <?= $form->field($model, 'remark')->textarea() ?>
             </div>
         </div>
     </div>
