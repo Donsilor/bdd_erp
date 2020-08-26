@@ -202,4 +202,13 @@ class SalesReturn extends BaseModel
     {
         return $this->hasOne(SaleChannel::class, ['id'=>'channel_id'])->alias('channel');
     }
+
+    /**
+     * 关联退款原因
+     * @return \yii\db\ActiveQuery
+     */
+    public function getConfig()
+    {
+        return $this->hasOne(ReturnConfig::class, ['id'=>'return_reason'])->alias('config');
+    }
 }

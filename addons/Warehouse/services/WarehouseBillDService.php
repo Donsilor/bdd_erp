@@ -58,6 +58,6 @@ class WarehouseBillDService extends WarehouseBillService
                 throw new \Exception("创建销售退货单据明细失败2");
             }
         }
-        return $bill;
+        return $billM;
     }
 }
