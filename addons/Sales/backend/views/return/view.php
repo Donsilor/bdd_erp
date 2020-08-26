@@ -57,7 +57,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                  </tr>
                                  <tr>
                                      <td class="col-xs-3 text-right"><?= $model->getAttributeLabel('return_reason') ?>：</td>
-                                     <td><?= $model->return_reason??""?></td>
+                                     <td><?= $model->config->name??""?></td>
                                  </tr>
                                  <tr>
                                      <td class="col-xs-3 text-right"><?= $model->getAttributeLabel('return_by') ?>：</td>
