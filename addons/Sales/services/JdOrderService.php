@@ -33,6 +33,8 @@ class JdOrderService extends Service
         $addressInfo = $this->getErpOrderAddressData($order);
         $accountInfo = $this->getErpOrderAccountData($order);
         $customerInfo = $this->getErpCustomerData($order);
+        print_r(['orderInfo'=>$orderInfo,'goodsList'=>$goodsList,'addressInfo'=>$addressInfo,'accountInfo'=>$addressInfo,'customerInfo'=>$customerInfo]);
+        exit;
         try{
             $trans = Yii::$app->trans->beginTransaction();
             Yii::$app->salesService->order->createSyncOrder($orderInfo, $accountInfo, $goodsList, $customerInfo, $addressInfo);            
@@ -231,22 +233,34 @@ class JdOrderService extends Service
     public function getErpOrderAccountData($order)
     {
         return  [
-            "order_amount"=>$order->account->order_amount,
-            "goods_amount"=>$order->account->goods_amount,
-            "discount_amount"=>$order->account->discount_amount,
-            "pay_amount"=>$order->account->pay_amount,
-            "refund_amount"=>$order->account->refund_amount,
-            "shipping_fee"=>$order->account->shipping_fee,
-            "tax_fee"=>$order->account->tax_fee,
-            "safe_fee"=>$order->account->safe_fee,
-            "other_fee"=>$order->account->other_fee,
-            "exchange_rate"=>$order->account->exchange_rate,
-            "currency"=>$order->account->currency,
-            "coupon_amount"=>$order->account->coupon_amount,
-            "card_amount"=>$order->account->card_amount,
-            "paid_amount"=>$order->account->paid_amount,
-            "paid_currency"=>$order->account->paid_currency,
+            "order_amount"=>$order->orderTotalPrice,
+            "goods_amount"=>$this->getErpGoodsAmount($order),
+            "discount_amount"=>$order->sellerDiscount,
+            "pay_amount"=>$order->orderPayment,
+            "refund_amount"=>0,
+            "shipping_fee"=>$order->freightPrice,
+            "tax_fee"=>0,
+            "safe_fee"=>0,
+            "other_fee"=>0,
+            "exchange_rate"=>1,
+            "currency"=>'CNY',
+            "coupon_amount"=>0,
+            "card_amount"=>0,
+            "paid_amount"=>$order->orderPayment,
+            "paid_currency"=>'CNY',
         ];
+    }
+    /**
+     * 获取商品总金额
+     * @param unknown $order
+     */
+    public static function getErpGoodsAmount($order)
+    {
+        $goods_amount = 0;
+        foreach ($order->itemInfoList as $goods){
+            $goods_amount += $goods->jdPrice * $goods->itemTotal;
+        }
+        return $goods_amount;
     }
     /**
      * ERP 订单支付状态
@@ -354,7 +368,6 @@ class JdOrderService extends Service
      */
     public static function getErpJintuoType($goods)
     {
-        $erp_jintuo_type = \addons\Style\common\enums\JintuoTypeEnum::Chengpin;       
-        return $erp_jintuo_type;
+        return \addons\Style\common\enums\JintuoTypeEnum::Chengpin;       
     }
 }

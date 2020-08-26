@@ -17,6 +17,31 @@ use addons\Style\common\models\StyleImages;
 class StyleImageController extends Controller
 {
     /**
+     *  导出图片
+     * @param string $params
+     */
+    public function actionExport()
+    {
+        $dir = dirname(dirname(dirname(__FILE__)));
+        $newDir = $dir.'/upload/style';
+        FileHelper::createDirectory($newDir);
+        $list = Style::find()->select(['style_sn','style_image'])->where(['status'=>1])->limit(10000)->all();
+        foreach ($list as $model) {
+            if(!$model->style_image) {
+                console::output($model->style_sn.': empty---------------------');
+                continue;
+            }
+            $data = file_get_contents($model->style_image);
+            if($data) {
+                $file = $newDir.'/'.$model->style_sn.'.'.end(explode('.', $model->style_image));
+                file_put_contents($file, $data);
+                echo $model->style_sn.',';
+            }else{
+                console::output($model->style_sn.': error---------------------');
+            }
+        }
+    }
+    /**
      * 导入款式
      * @param string $params
      */
