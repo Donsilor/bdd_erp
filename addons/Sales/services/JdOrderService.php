@@ -33,8 +33,8 @@ class JdOrderService extends Service
         $addressInfo = $this->getErpOrderAddressData($order);
         $accountInfo = $this->getErpOrderAccountData($order);
         $customerInfo = $this->getErpCustomerData($order);
-        print_r(['orderInfo'=>$orderInfo,'goodsList'=>$goodsList,'addressInfo'=>$addressInfo,'accountInfo'=>$addressInfo,'customerInfo'=>$customerInfo]);
-        exit;
+        //print_r(['orderInfo'=>$orderInfo,'goodsList'=>$goodsList,'addressInfo'=>$addressInfo,'accountInfo'=>$accountInfo,'customerInfo'=>$customerInfo]);
+        //exit;
         try{
             $trans = Yii::$app->trans->beginTransaction();
             Yii::$app->salesService->order->createSyncOrder($orderInfo, $accountInfo, $goodsList, $customerInfo, $addressInfo);            
@@ -140,6 +140,9 @@ class JdOrderService extends Service
     {
         $erpGoodsList = [];
         foreach ($order->itemInfoList ?? [] as $model) {
+            if(!$model->productNo) {
+                continue;
+            }
             $erpGoods = [
                 "goods_name" => $model->skuName,
                 //"goods_image"=> $model->goods_image,

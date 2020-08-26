@@ -22,12 +22,31 @@ class OrderController extends Controller
  
     public function actionTest()
     {
-        //$order_no = '130311942049';
-        //\Yii::$app->jdSdk->getOrderInfo($order_no);
-        list($order_list,$page,$page_count,$order_count) = \Yii::$app->jdSdk->getOrderList(null,null);        
-        foreach ($order_list as $order) {
-            \Yii::$app->salesService->jdOrder->syncOrder($order);
+        Console::output("Begin Sync JD Order[".date('Y-m-d H:i:s')."]-------------------"); 
+        try{
+            list($order_list,$page,$page_count,$order_count) = \Yii::$app->jdSdk->getOrderList(null,null,1);        
+        }catch (\Exception $e) {
+            Console::output("Page[".$page."],Error:".$e->getMessage());
         }
+        for ($page; $page < $page_count; $page ++) {
+            try{
+                list($order_list,$page,$page_count,$order_count) = \Yii::$app->jdSdk->getOrderList(null,null,++$page);
+            }catch (\Exception $e) {
+                Console::output("Page[".$page."],Error:".$e->getMessage());
+            }                
+            foreach ($order_list as $order) {
+                try{
+                    $trans = \Yii::$app->trans->beginTransaction();
+                    \Yii::$app->salesService->jdOrder->syncOrder($order);                    
+                    $trans->commit();
+                    Console::output($order->orderId." Success");
+                }catch (\Exception $e) {
+                    Console::output($order->orderId." Error:".$e->getMessage());
+                }  
+            }
+            
+        }
+        Console::output("End Sync JD Order[".date('Y-m-d H:i:s')."]-------------------"); 
     }
     /**
      * 拉去官网订单

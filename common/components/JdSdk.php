@@ -85,7 +85,7 @@ class JdSdk extends Component
         //1）WAIT_SELLER_STOCK_OUT 等待出库 2）WAIT_GOODS_RECEIVE_CONFIRM 等待确认收货   5）FINISHED_L 完成 
         $order_state = 'WAIT_SELLER_STOCK_OUT,WAIT_GOODS_RECEIVE_CONFIRM,FINISHED_L';
         $request->setOrderState($order_state);
-        $option_fields = 'orderId,orderTotalPrice,orderSellerPrice,orderPayment,freightPrice,sellerDiscount,orderState,deliveryType,invoiceEasyInfo,orderRemark,orderStartTime,orderEndTime,consigneeInfo,itemInfoList,orderExt,paymentConfirmTime,logisticsId,waybill';
+        $option_fields = 'orderId,orderTotalPrice,orderSellerPrice,orderPayment,freightPrice,sellerDiscount,orderState,deliveryType,invoiceEasyInfo,orderRemark,orderStartTime,orderEndTime,consigneeInfo,itemInfoList,orderExt,paymentConfirmTime,logisticsId,waybill,venderRemark';
         $request->setOptionalFields($option_fields);
         $request->setPage($page);
         $request->setPageSize($page_size);

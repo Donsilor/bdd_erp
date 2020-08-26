@@ -191,7 +191,7 @@ class OrderService extends Service
             }
         }
         $order->pay_sn = $orderPay->pay_sn;//点款单号
-        
+        $goods_num = 0;//商品总数
         //4.同步订单商品明细
         if($isNewOrder === true) {
             foreach ($goodsList as $goodsInfo) {
@@ -222,6 +222,8 @@ class OrderService extends Service
                         throw new \Exception("同步商品属性失败：".$this->getError($goodsAttr));
                     }
                 }
+                
+                $goods_num += $orderGoods->goods_num;
             }
         }
         //5.同步客户信息
@@ -245,6 +247,7 @@ class OrderService extends Service
                 throw new \Exception("更新用户失败：".$this->getError($customer));
             }
         }
+        $order->goods_num   = $goods_num;
         $order->customer_id = $customer->id;
         if($order->order_sn == ''){
             $order->order_sn = $this->createOrderSn($order);
