@@ -79,7 +79,7 @@ class JdSdk extends Component
      * @param unknown $start_date
      * @param unknown $end_date
      */
-    public function getOrderList($start_date = null, $end_date ,$page = 1, $page_size = 20)
+    public function getOrderList($start_date = null, $end_date = null ,$page = 1, $page_size = 20)
     {
         $request = new PopOrderSearchRequest();
         //1）WAIT_SELLER_STOCK_OUT 等待出库 2）WAIT_GOODS_RECEIVE_CONFIRM 等待确认收货   5）FINISHED_L 完成 
