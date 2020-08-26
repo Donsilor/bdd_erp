@@ -374,25 +374,36 @@ class ReturnService extends Service
         }
 
         if(!empty($form->new_order_id)){
+
             $oldAccount = OrderAccount::findOne(['order_id'=>$form->new_order_id]);
+
             $order_amount = bcadd($order_amount, $oldAccount->order_amount, 3);
             $goods_amount = bcadd($goods_amount, $oldAccount->goods_amount, 3);
             $discount_amount = bcadd($discount_amount, $oldAccount->discount_amount, 3);
-        }
 
-        //4.创建订单金额
-        $account = new OrderAccount();
-        $account->order_id = $newOrder->id;
-        $account->order_amount = $order_amount;
-        $account->goods_amount = $goods_amount;
-        $account->discount_amount = $discount_amount;
-        $account->pay_amount = $order_amount;
-        $account->paid_amount = $order_amount;
-        //$account->pay_amount = $order_amount;
-        if (false == $account->save()) {
-            throw new \Exception($this->getError($account));
-        }
-        if(empty($form->new_order_id)) {
+            $oldAccount->order_amount = $order_amount;
+            $oldAccount->goods_amount = $goods_amount;
+            $oldAccount->discount_amount = $discount_amount;
+            $oldAccount->pay_amount = $order_amount;
+            $oldAccount->paid_amount = $order_amount;
+            //$account->pay_amount = $order_amount;
+            if (false == $oldAccount->save()) {
+                throw new \Exception($this->getError($oldAccount));
+            }
+        }else{
+            //4.创建订单金额
+            $account = new OrderAccount();
+            $account->order_id = $newOrder->id;
+            $account->order_amount = $order_amount;
+            $account->goods_amount = $goods_amount;
+            $account->discount_amount = $discount_amount;
+            $account->pay_amount = $order_amount;
+            $account->paid_amount = $order_amount;
+            //$account->pay_amount = $order_amount;
+            if (false == $account->save()) {
+                throw new \Exception($this->getError($account));
+            }
+
             //5.创建订单地址信息
             $address = OrderAddress::find()->where(['order_id' => $order->id])->one();
             if (!empty($address)) {
