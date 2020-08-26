@@ -150,6 +150,79 @@ class OrderGoodsController extends BaseController
     /***
      * @return array|mixed|string
      * @throws \yii\db\Exception
+     *编辑现货
+     */
+    public function actionEditStock(){
+
+        $this->layout = '@backend/views/layouts/iframe';
+        $id = Yii::$app->request->get('id');
+        $model = $this->findModel($id);
+        $model = $model ?? new OrderGoodsForm();
+        if($model->isNewRecord){
+            $goods_id = Yii::$app->request->get('goods_id');
+            $search = Yii::$app->request->get('search');
+            $order_id = Yii::$app->request->get('order_id');
+            if($model->isNewRecord && $search && $goods_id) {
+                $wareshouse_goods = WarehouseGoods::find()->where(['goods_id'=>$goods_id, 'goods_status'=>GoodsStatusEnum::IN_STOCK])->one();
+                if(empty($wareshouse_goods)){
+                    $skiUrl = Url::buildUrl(\Yii::$app->request->url,[],['search']);
+                    return $this->message('此货号不存在或者不是库存状态', $this->redirect($skiUrl), 'error');
+                }
+
+                $model->jintuo_type = $wareshouse_goods->jintuo_type;
+                $model->qiban_type = $wareshouse_goods->qiban_type;
+                $model->style_sex = $wareshouse_goods->style_sex;
+                $model->style_cate_id = $wareshouse_goods->style_cate_id;
+                $model->product_type_id = $wareshouse_goods->product_type_id;
+                $model->goods_num = 1;
+                $model->goods_name = $wareshouse_goods->goods_name;
+                $model->style_sn = $wareshouse_goods->style_sn;
+                $model->qiban_sn = $wareshouse_goods->qiban_sn;
+
+                $model->order_id = $order_id;
+                $model->currency = $model->order->currency;
+                $model->goods_id = $goods_id;
+            }
+
+
+        }
+
+        if ($model->load(Yii::$app->request->post())) {
+            if(!$model->validate()) {
+                return ResultHelper::json(422, $this->getError($model));
+            }
+
+            try{
+                $trans = Yii::$app->trans->beginTransaction();
+                $model->goods_discount = $model->goods_price - $model->goods_pay_price;
+                if(false === $model->save()){
+                    throw new \Exception($this->getError($model));
+                }
+                if($model->isNewRecord) {
+                    Yii::$app->salesService->orderGoods->toStock($model);
+                }
+                $trans->commit();
+                //更新采购汇总：总金额和总数量
+                \Yii::$app->salesService->order->orderSummary($model->order_id);
+                //前端提示
+                Yii::$app->getSession()->setFlash('success','保存成功');
+                return ResultHelper::json(200, '保存成功');
+            }catch (\Exception $e){
+                $trans->rollBack();
+                return ResultHelper::json(422, $e->getMessage());
+            }
+        }
+
+        return $this->render($this->action->id, [
+            'model' => $model,
+        ]);
+
+    }
+
+
+    /***
+     * @return array|mixed|string
+     * @throws \yii\db\Exception
      *备份
      */
     public function actionEditStockBackups(){
@@ -218,7 +291,162 @@ class OrderGoodsController extends BaseController
     }
 
 
+
+    /****
+     * 选择裸钻
+     */
+    public function actionSelectDiamond(){
+        $order_id = Yii::$app->request->get('order_id');
+
+        $id = Yii::$app->request->get('id');
+        $model = $this->findModel($id);
+        $model = $model ?? new OrderGoodsForm();
+        if (Yii::$app->request->post()) {
+            $diamon_id = Yii::$app->request->post('diamon_id');
+            if($diamon_id == null){
+                return ResultHelper::json(422, '请选择');
+            }
+            $diamond_goods = Diamond::find()->where(['id'=>$diamon_id,'status'=>StatusEnum::ENABLED])->one();
+            $model->goods_num = 1;
+            $model->order_id = $order_id;
+            $model->goods_sn = $diamond_goods->goods_sn;
+            try{
+                $trans = Yii::$app->trans->beginTransaction();
+                $model->jintuo_type = JintuoTypeEnum::Chengpin;
+                $model->qiban_type = QibanTypeEnum::NON_VERSION;
+                $model->style_sex = StyleSexEnum::COMMON;
+                $model->style_cate_id = 15; //裸钻
+                $model->product_type_id = 1; //钻石
+                $model->goods_num = 1;
+                $model->goods_name = $diamond_goods->goods_name;
+                $model->is_stock = $diamond_goods->is_stock;
+                $model->goods_price = $diamond_goods->sale_price;
+                $model->goods_pay_price = $diamond_goods->sale_price;
+                $model->goods_discount = $model->goods_price - $model->goods_pay_price;
+                $model->style_sn = '';
+                $model->qiban_sn = '';
+                $model->goods_image = $diamond_goods->goods_image;
+                $model->cert_id = $diamond_goods->cert_id;
+                $model->order_id = $order_id;
+                $model->currency = $model->order->currency;
+                $model->goods_id = (string)$diamond_goods->goods_id;
+                if(false === $model->save()){
+                    throw new \Exception($this->getError($model));
+                }
+                Yii::$app->salesService->orderGoods->addDiamond($model);
+                $trans->commit();
+                //前端提示
+                Yii::$app->getSession()->setFlash('success','保存成功');
+                return ResultHelper::json(200, '保存成功');
+            }catch (\Exception $e){
+                $trans->rollBack();
+                return ResultHelper::json(422, $e->getMessage());
+            }
+        }
+
+        $searchModel = new SearchModel([
+            'model' => Diamond::class,
+            'scenario' => 'default',
+            'partialMatchAttributes' => [], // 模糊查询
+            'defaultOrder' => [
+                'id' => SORT_DESC
+            ],
+            'pageSize' => 5
+        ]);
+
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+        $dataProvider->query->andWhere(['=', 'status', StatusEnum::ENABLED]);
+        $dataProvider->query->andWhere(['=', 'audit_status', AuditStatusEnum::PASS]);
+        return $this->render($this->action->id, [
+            'dataProvider' => $dataProvider,
+            'searchModel' => $searchModel,
+            'order_id' => $order_id,
+            'model' =>$model
+
+        ]);
+    }
+
+    /***
+     * @return array|mixed|string
+     * @throws \yii\db\Exception
+     * 编辑裸钻
+     */
     public function actionEditDiamond(){
+
+        $this->layout = '@backend/views/layouts/iframe';
+        $id = Yii::$app->request->get('id');
+        $model = $this->findModel($id);
+        $model = $model ?? new OrderGoodsForm();
+        if($model->isNewRecord){
+            $cert_id = Yii::$app->request->get('cert_id');
+            $search = Yii::$app->request->get('search');
+            $order_id = Yii::$app->request->get('order_id');
+            if($search && $cert_id) {
+                $diamond_goods = Diamond::find()->where(['cert_id'=>$cert_id, 'audit_status'=>AuditStatusEnum::PASS])->one();
+                if(empty($diamond_goods)){
+                    $skiUrl = Url::buildUrl(\Yii::$app->request->url,[],['search']);
+                    return $this->message('此裸钻不存在或者审核没通过', $this->redirect($skiUrl), 'error');
+                }
+
+                $model->jintuo_type = JintuoTypeEnum::Chengpin;
+                $model->qiban_type = QibanTypeEnum::NON_VERSION;
+                $model->style_sex = StyleSexEnum::COMMON;
+                $model->style_cate_id = 15; //裸钻
+                $model->product_type_id = 1; //钻石
+                $model->goods_num = 1;
+                $model->goods_name = $diamond_goods->goods_name;
+                $model->is_stock = $diamond_goods->is_stock;
+                $model->goods_pay_price = $diamond_goods->sale_price;
+                //$model->goods_price = $diamond_goods->sale_price;
+                $model->style_sn = '';
+                $model->qiban_sn = '';
+                $model->goods_image = $diamond_goods->goods_image;
+                $model->cert_id = $cert_id;
+                $model->order_id = $order_id;
+                $model->currency = $model->order->currency;
+                $model->goods_id = (string)$diamond_goods->goods_id;
+            }
+
+        }else{
+            $order_goods_attr = OrderGoodsAttribute::find()->where(['id'=>$model->id,'attr_id'=>AttrIdEnum::DIA_CERT_NO])->one();
+            $model->cert_id = $order_goods_attr->attr_value;
+        }
+
+        if ($model->load(Yii::$app->request->post())) {
+            if(!$model->validate()) {
+                return ResultHelper::json(422, $this->getError($model));
+            }
+
+            try{
+                $trans = Yii::$app->trans->beginTransaction();
+                $model->goods_discount = $model->goods_price - $model->goods_pay_price;
+                if(false === $model->save()){
+                    throw new \Exception($this->getError($model));
+                }
+                Yii::$app->salesService->orderGoods->addDiamond($model);
+                $trans->commit();
+                //前端提示
+                Yii::$app->getSession()->setFlash('success','保存成功');
+                return ResultHelper::json(200, '保存成功');
+            }catch (\Exception $e){
+                $trans->rollBack();
+                return ResultHelper::json(422, $e->getMessage());
+            }
+        }
+
+        return $this->render($this->action->id, [
+            'model' => $model,
+        ]);
+
+    }
+
+
+    /***
+     * @return array|mixed|string
+     * @throws \yii\db\Exception
+     * 编辑裸钻(备份)
+     */
+    public function actionEditDiamondBackups(){
 
         $this->layout = '@backend/views/layouts/iframe';
         $id = Yii::$app->request->get('id');
@@ -506,12 +734,12 @@ class OrderGoodsController extends BaseController
                 $model->is_inlay = $style->is_inlay;
                 $model->goods_image = $style->style_image;
 
-                $styleForm = new StyleAttrForm();
-                $styleForm->style_id = $style->id;
-                $styleForm->initAttrs();
+//                $styleForm = new StyleAttrForm();
+//                $styleForm->style_id = $style->id;
+//                $styleForm->initAttrs();
 
-                $model->attr_custom = $styleForm->attr_custom;
-                $model->attr_require = [];
+//                $model->attr_custom = $styleForm->attr_custom;
+//                $model->attr_require = $styleForm->attr_require;
 
             }
         }
@@ -520,6 +748,12 @@ class OrderGoodsController extends BaseController
     }
 
 
+    /***
+     * @return mixed|string|\yii\web\Response
+     * @throws \yii\base\ExitException
+     * @throws \yii\db\Exception
+     * 绑定现货
+     */
     public function actionStock(){
         $this->layout = '@backend/views/layouts/iframe';
         $id = Yii::$app->request->get('id');
@@ -546,6 +780,12 @@ class OrderGoodsController extends BaseController
         ]);
     }
 
+
+    /***
+     * @return mixed|\yii\web\Response
+     * @throws \yii\db\Exception
+     * 解绑
+     */
     public function actionUntie(){
         $id = Yii::$app->request->get('id');
         $model = $this->findModel($id);
@@ -619,9 +859,9 @@ class OrderGoodsController extends BaseController
                 $goods = [
                     'goods_name' =>$model->goods_name,
                     'goods_num' =>$model->goods_num,
-                    'from_order_id'=>$model->order_id,
-                    'from_detail_id' => $model->id,
-                    'from_order_sn'=>$model->order->order_sn,
+                    'order_detail_id'=>$model->order_id,
+                    'order_detail_id' => $model->id,
+                    'order_sn'=>$model->order->order_sn,
                     'from_type' => FromTypeEnum::ORDER,
                     'style_sn' => $model->style_sn,
                     'bc_status' => BuChanEnum::INITIALIZATION,

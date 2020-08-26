@@ -44,7 +44,7 @@ $this->params['breadcrumbs'][] = ['label' => $this->title];
                             'value' => function ($model, $key, $index){
                                 return $model->name;
                             },
-                            'headerOptions' => ['class' => 'col-md-2'],
+                            'headerOptions' => ['class' => 'col-md-1'],
                         ],
 
                         [
@@ -53,7 +53,7 @@ $this->params['breadcrumbs'][] = ['label' => $this->title];
                             'value' => function ($model, $key, $index){
                                 return $model->code;
                             },
-                            'headerOptions' => ['class' => 'col-md-2'],
+                            'headerOptions' => ['class' => 'col-md-1'],
                         ],
                         [
                             'attribute' => 'price',
@@ -64,48 +64,74 @@ $this->params['breadcrumbs'][] = ['label' => $this->title];
                             'headerOptions' => ['class' => 'col-md-1'],
 
                         ],
-                        /* [
-                            'attribute' => 'usd_price',
+                        [
+                            'attribute' => 'refer_price',
                             'value' => function ($model, $key, $index){
-                                return AmountHelper::outputAmount($model->usd_price,2,'USD');
+                                return \Yii::$app->goldTool->getGoldRmbPrice($model->code);
                             },
                             'filter' => false,
                             'headerOptions' => ['class' => 'col-md-1'],
-
-                        ], 
-                        [
-                            'attribute' => 'rmb_rate',
-                            'value' => function ($model, $key, $index){
-                                return $model->rmb_rate;
-                            },
-                            'filter' => false,
-                            'headerOptions' => ['class' => 'col-md-1'],
-                        ],*/
-                        [
+                       ],
+                       [
                             'attribute' => 'notice_range',
                             'value' => function ($model, $key, $index){
                                 return $model->notice_range;
                             },
                             'filter' => false,
+                            'headerOptions' => ['class' => 'col-md-1'],                            
+                        ],
+                        [
+                            'attribute' => 'notice_status',
+                            'value' => function ($model, $key, $index){
+                                return common\enums\ConfirmEnum::getValue($model->notice_status);
+                            },
+                            'filter' => false,
                             'headerOptions' => ['class' => 'col-md-1'],
                         ],
                         [
-                            'attribute'=>'api_time',
-                            'value'=>function($model){
-                                return Yii::$app->formatter->asDatetime($model->api_time);
+                            'attribute' => 'notice_users',
+                            'value' => function ($model, $key, $index){
+                                if($model->notice_users) {
+                                    $model->notice_users = explode(',',$model->notice_users);
+                                    $users = Yii::$app->services->backendMember->findAllByIds($model->notice_users);
+                                    $str = '';
+                                    foreach ($users as $user) {
+                                        $str .= $user->username.'('.$user->mobile.')<br/>';
+                                    }
+                                    return $str;
+                                }
                             },
-                            'filter' => false,                       
+                            'filter' => false,
+                            'headerOptions' => ['class' => 'col-md-2'],
+                            'format' => 'raw',
+                       ],
+                        [
+                            'attribute'=>'sync_time',
+                            'value'=>function($model){
+                                $sync_type = common\enums\OperateTypeEnum::getValue($model->sync_type);
+                                $sync_time =  Yii::$app->formatter->asDatetime($model->sync_time);
+                                return $sync_type.'('.$model->sync_user.')<br/>'.$sync_time;
+                            },
+                            'filter' => false,   
+                            'format' => 'raw',
                         ],
 
                         [
                             'header' => "操作",
                             'class' => 'yii\grid\ActionColumn',
-                            'template'=> '{edit} {status}',
+                            'template'=> '{edit} {price} {status}',
                             'buttons' => [
                                 'edit' => function ($url, $model, $key) {
                                     return Html::edit(['ajax-edit','id' => $model->id], '编辑', [
                                         'data-toggle' => 'modal',
                                         'data-target' => '#ajaxModal',
+                                    ]);
+                                },
+                                'price' => function ($url, $model, $key) {
+                                    return Html::edit(['ajax-price','id' => $model->id], '更新金价', [
+                                            'class' => 'btn btn-success btn-sm',
+                                            'data-toggle' => 'modal',
+                                            'data-target' => '#ajaxModal',
                                     ]);
                                 },
                                 'status' => function ($url, $model, $key) {

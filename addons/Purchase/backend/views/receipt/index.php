@@ -120,6 +120,16 @@ $params = $params ? "&".http_build_query($params) : '';
                 'headerOptions' => [],
             ],
             [
+                'attribute' => 'delivery_no',
+                'value' => 'delivery_no',
+                'filter' => Html::activeTextInput($searchModel, 'delivery_no', [
+                    'class' => 'form-control',
+                    'style'=> 'width:100px;'
+                ]),
+                'format' => 'raw',
+                'headerOptions' => [],
+            ],
+            [
                 'attribute' => 'creator_id',
                 'value' => "creator.username",
                 'headerOptions' => ['class' => 'col-md-1'],

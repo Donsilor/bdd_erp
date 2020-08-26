@@ -6,6 +6,7 @@ use yii\console\Controller;
 use yii\helpers\Console;
 use common\models\common\GoldPrice;
 use common\enums\StatusEnum;
+use common\enums\OperateTypeEnum;
 
 
 /**
@@ -25,9 +26,11 @@ class GoldToolController extends Controller
         $models = GoldPrice::find()->where(['status'=>StatusEnum::ENABLED])->all();
         foreach ($models as $model) {
             $model->usd_price = \Yii::$app->goldTool->getGoldUsdPrice($model->code);
-            $model->price = \Yii::$app->goldTool->getGoldRmbPrice($model->code,-15.2);
+            $model->price = \Yii::$app->goldTool->getGoldRmbPrice($model->code);
             $model->rmb_rate = \Yii::$app->goldTool->getExchangeRate('USDCNY');
-            $model->api_time = time();
+            $model->sync_type = OperateTypeEnum::SYSTEM;
+            $model->sync_time = time();
+            $model->sync_user = 'system';
             if($model->usd_price && $model->price) {
                  if(false === $model->save()) {
                      console::output("[ERROR] Code: {$model->code} updated failed");

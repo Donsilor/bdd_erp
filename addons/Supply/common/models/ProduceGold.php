@@ -48,6 +48,7 @@ class ProduceGold extends BaseModel
                 [['from_order_sn','delivery_no', 'caigou_user', 'songliao_user', 'peiliao_user', 'creator_name'], 'string', 'max' => 30],
                 [['gold_type'], 'string', 'max' => 10],
                 [['gold_weight'], 'number'],
+                [['produce_sn'], 'string', 'max' => 30],
                 [['gold_spec','peiliao_remark','remark'], 'string', 'max' => 255],
         ];
     }

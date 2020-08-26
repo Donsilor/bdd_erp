@@ -53,7 +53,7 @@ class PurchaseApplyGoodsAttribute extends BaseModel
     public function attributeLabels()
     {
         return [
-            'id' => Yii::t('app', '商品ID'),
+            'id' => Yii::t('app', 'ID'),
             'attr_id' => Yii::t('app', '属性id'),
             'attr_value_id' => Yii::t('app', '属性值id'),
             'attr_value' => Yii::t('app', '属性值'),

@@ -13,6 +13,7 @@ use common\components\Service;
  * @property \addons\Supply\services\SupplierService $supplier 供应商
  * @property \addons\Supply\services\ProduceStoneService $produceStone 配石
  * @property \addons\Supply\services\ProduceGoldService $produceGold 配金
+ * @property \addons\Supply\services\ProducePartsService $produceParts 配金
  */
 class Application extends Service
 {
@@ -24,5 +25,6 @@ class Application extends Service
         'produce' => 'addons\Supply\services\ProduceService',
         'produceStone' => 'addons\Supply\services\ProduceStoneService',
         'produceGold' => 'addons\Supply\services\ProduceGoldService',
+        'produceParts' => 'addons\Supply\services\ProducePartsService',
     ];
 }

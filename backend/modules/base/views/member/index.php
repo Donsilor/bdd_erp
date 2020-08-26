@@ -29,7 +29,8 @@ $this->params['breadcrumbs'][] = ['label' => $this->title];
                     'columns' => [
                         [
                             'class' => 'yii\grid\SerialColumn',
-                        ],
+                        ],           
+                        'id',
                         [
                             'attribute' => 'head_portrait',
                             'value' => function ($model) {

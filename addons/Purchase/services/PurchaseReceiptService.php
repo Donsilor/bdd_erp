@@ -4,6 +4,9 @@ namespace addons\Purchase\services;
 
 use addons\Purchase\common\forms\PurchaseReceiptGoodsForm;
 use addons\Warehouse\common\enums\GiftStatusEnum;
+use addons\Warehouse\common\enums\PeiJianWayEnum;
+use addons\Warehouse\common\enums\PeiLiaoWayEnum;
+use addons\Warehouse\common\enums\PeiShiWayEnum;
 use addons\Warehouse\common\models\WarehouseGift;
 use Yii;
 use common\components\Service;
@@ -200,6 +203,7 @@ class PurchaseReceiptService extends Service
      * @param array $bill
      * @param array $detail
      * @throws
+     * @return object
      */
     public function createReceipt($bill, $detail)
     {
@@ -228,7 +232,11 @@ class PurchaseReceiptService extends Service
             }
             $purchase_detail_id = $good['purchase_detail_id']??"";
             if($purchase_detail_id){
-                $count = $goods::find()->where(['purchase_detail_id'=>$purchase_detail_id])->count(1);
+                $data = [ReceiptStatusEnum::SAVE, ReceiptStatusEnum::PENDING, ReceiptStatusEnum::CONFIRM];
+                $count = $goods::find()->alias('g')
+                    ->innerJoin(PurchaseReceipt::tableName()." as pr", "pr.id = g.receipt_id")
+                    ->where(['pr.receipt_status'=>$data, 'g.purchase_detail_id'=>$purchase_detail_id])
+                    ->count(1);
                 if($count){
                     throw new \Exception("【".$good['goods_name']."】采购单已收货，不能重复收货");
                 }
@@ -248,8 +256,9 @@ class PurchaseReceiptService extends Service
 
     /**
      * 布产单号批量查询可出货商品
-     * @param object $form
+     * @param PurchaseReceiptForm $form
      * @throws \Exception
+     * @return array
      */
     public function getGoodsByProduceSn($form)
     {
@@ -290,7 +299,7 @@ class PurchaseReceiptService extends Service
             if ($the_num<=0) {
                 throw new \Exception($message."没有可出货数量");
             }
-            $purchase = Purchase::findOne(['id' => $produce->from_order_id]);
+            $purchase = Purchase::findOne(['id' => $produce->purchase_detail_id]);
             if(!$purchase){
                 throw new \Exception($message."对应的采购单号不对");
             }
@@ -421,8 +430,8 @@ class PurchaseReceiptService extends Service
                 $goods = [
                     'receipt_id' => $form->id,
                     'produce_sn' => $produce_sn,
-                    'purchase_sn' => $produce->from_order_sn,
-                    'order_sn' => $produce->from_order_sn,
+                    'purchase_sn' => $produce->purchase_sn,
+                    'order_sn' => $produce->order_sn,
                     'goods_status' => ReceiptGoodsStatusEnum::SAVE,
                     'goods_name' => $produce->goods_name,
                     'goods_num' => 1,
@@ -594,7 +603,7 @@ class PurchaseReceiptService extends Service
         $goods = $ids = [];
         $total_cost= $market_price= $sale_price = 0;
         foreach ($models as $model){
-            //$model = new PurchaseReceiptGoods();
+            $model = new PurchaseReceiptGoods();
             $ids[] = $model->id;
             $goods[] = [
                 'goods_name' =>$model->goods_name,
@@ -608,11 +617,13 @@ class PurchaseReceiptService extends Service
                 'style_sex' => $model->style_sex,
                 'supplier_id' => $form->supplier_id,
                 'put_in_type' => $form->put_in_type,
+                'peiliao_way' => $model->peiliao_way,
                 'gold_weight' => $model->gold_weight?:0,
                 'gold_loss' => $model->gold_loss?:0,
                 'gold_price' => $model->gold_price,
                 'gold_amount' => $model->gold_amount,
                 'gross_weight' => (string)$model->gross_weight,
+                'lncl_loss_weight' => $model->lncl_loss_weight,
                 'finger' => (string)$model->finger?:'0',
                 'finger_hk' => (string)$model->finger_hk?:'0',
                 'product_size' => $model->product_size,
@@ -639,19 +650,30 @@ class PurchaseReceiptService extends Service
                 'xiangkou' => (string)$model->xiangkou?:'0',
                 'parts_gold_weight' => $model->parts_weight,
                 'parts_num' => 1,
+                'main_pei_type' => $model->main_pei_type,
                 'main_stone_sn' => $model->main_stone_sn,
+                'main_cert_id' => $model->main_cert_id,
                 'main_stone_type' => $model->main_stone,
                 'main_stone_num' => $model->main_stone_num,
+                'main_stone_shape' => $model->main_stone_shape,
+                'main_stone_color' => $model->main_stone_color,
+                'main_stone_clarity' => $model->main_stone_clarity,
+                'main_stone_cut' => $model->main_stone_cut,
                 'main_stone_colour' => $model->main_stone_colour,
                 'main_stone_size' => $model->main_stone_size,
                 'main_stone_price' => $model->main_stone_price,
+                'main_stone_amount' => $model->main_stone_amount,
+                'second_pei_type' => $model->second_pei_type,
                 'second_stone_type1' => (string)$model->second_stone1,
+                'second_stone_sn1' => $model->second_stone_sn1,
                 'second_stone_num1' => $model->second_stone_num1,
+                'second_cert_id1' => $model->second_cert_id1,
                 'second_stone_price1' => $model->second_stone_price1,
                 'second_stone_weight1' => $model->second_stone_weight1,
                 'second_stone_shape1' => $model->second_stone_shape1,
                 'second_stone_color1' => $model->second_stone_color1,
                 'second_stone_clarity1' => $model->second_stone_clarity1,
+                'second_stone_colour1' => $model->second_stone_colour1,
                 'second_stone_size1' => $model->second_stone_size1,
                 'second_stone_type2' => (string)$model->second_stone2,
                 'second_stone_num2' => $model->second_stone_num2,
@@ -660,7 +682,18 @@ class PurchaseReceiptService extends Service
                 'second_stone_shape2' => $model->second_stone_shape2,
                 'second_stone_color2' => $model->second_stone_color2,
                 'second_stone_clarity2' => $model->second_stone_clarity2,
+                'second_stone_colour2' => $model->second_stone_colour2,
                 'second_stone_size2' => $model->second_stone_size2,
+                'second_stone_amount2' => $model->second_stone_amount2,
+                'peishi_fee' => $model->peishi_fee,
+                'peishi_gong_fee' => $model->peishi_gong_fee,
+                'stone_remark' => $model->stone_remark,
+                'parts_type' => $model->parts_type,
+                'parts_material' => $model->parts_material,
+                'parts_way' => $model->parts_way,
+                'parts_price' => $model->parts_price,
+                'parts_amount' => $model->parts_amount,
+                'goods_color' => $model->goods_color,
                 'factory_cost' => $model->factory_cost,
                 'bukou_fee' => $model->bukou_fee,
                 'tax_fee' => $model->tax_fee,
@@ -678,6 +711,8 @@ class PurchaseReceiptService extends Service
                 'chain_long' => $model->chain_long,
                 'chain_type' => $model->chain_type,
                 'cramp_ring' => $model->cramp_ring,
+                'penlasha_fee' => $model->penlasha_fee,
+                'templet_fee' => $model->templet_fee,
                 'talon_head_type' => $model->talon_head_type,
                 'xiangqian_craft' => $model->xiangqian_craft,
                 'markup_rate' => $model->markup_rate,
@@ -1042,6 +1077,7 @@ class PurchaseReceiptService extends Service
                 'gold_weight' => $model->goods_weight,
                 'cost_price' => $model->cost_price,
                 'gold_price' => $model->gold_price,
+                'incl_tax_price' => $model->incl_tax_price,
                 'source_detail_id' =>$model->id,
                 'status' => StatusEnum::ENABLED,
                 'created_at' => time(),
@@ -1340,5 +1376,256 @@ class PurchaseReceiptService extends Service
                 throw new \Exception('更新采购收货单货品状态失败');
             }
         }
+    }
+
+    /**
+     *
+     * 同步更新全部商品价格
+     * @param PurchaseReceipt $form
+     * @return object
+     * @throws
+     */
+    public function syncUpdatePriceAll($form)
+    {
+        $goods = PurchaseReceiptGoods::findAll(['receipt_id'=>$form->id]);
+        if(!empty($goods)){
+            foreach ($goods as $good) {
+                $this->syncUpdatePrice($good);
+            }
+        }
+        return $goods;
+    }
+
+    /**
+     *
+     * 含耗重=(净重*(1+损耗))
+     * @param PurchaseReceiptGoods $form
+     * @return integer
+     * @throws
+     */
+    public function calculateLossWeight($form)
+    {
+        return bcmul($form->suttle_weight, $form->gold_loss, 3) ?? 0;
+    }
+
+    /**
+     *
+     * 金料额=(金价*净重*(1+损耗))
+     * @param PurchaseReceiptGoods $form
+     * @return integer
+     * @throws
+     */
+    public function calculateGoldAmount($form)
+    {
+        return bcmul($form->gold_price, $this->calculateLossWeight($form), 3) ?? 0;
+    }
+
+    /**
+     *
+     * 主石成本=(主石重*单价)
+     * @param PurchaseReceiptGoods $form
+     * @return integer
+     * @throws
+     */
+    public function calculateMainStoneCost($form)
+    {
+        return bcmul($form->main_stone_weight, $form->main_stone_price, 3) ?? 0;
+    }
+
+    /**
+     *
+     * 副石1成本=(副石1重*单价)
+     * @param PurchaseReceiptGoods $form
+     * @return integer
+     * @throws
+     */
+    public function calculateSecondStone1Cost($form)
+    {
+        return bcmul($form->second_stone_weight1, $form->second_stone_price1, 3) ?? 0;
+    }
+
+    /**
+     *
+     * 副石2成本=(副石2重*单价)
+     * @param PurchaseReceiptGoods $form
+     * @return integer
+     * @throws
+     */
+    public function calculateSecondStone2Cost($form)
+    {
+        return bcmul($form->second_stone_weight2, $form->second_stone_price2, 3) ?? 0;
+    }
+
+    /**
+     *
+     * 副石3成本=(副石3重*单价)
+     * @param PurchaseReceiptGoods $form
+     * @return integer
+     * @throws
+     */
+    public function calculateSecondStone3Cost($form)
+    {
+        return bcmul($form->second_stone_weight3, $form->second_stone_price3, 3) ?? 0;
+    }
+
+    /**
+     *
+     * 配件额=(配件重*配件金价)
+     * @param PurchaseReceiptGoods $form
+     * @return integer
+     * @throws
+     */
+    public function calculatePartsAmount($form)
+    {
+        return bcmul($form->parts_gold_weight, $form->parts_price, 3) ?? 0;
+    }
+
+    /**
+     *
+     * 配石费=((副石重/数量)小于0.03ct的，*数量*配石工费)
+     * @param PurchaseReceiptGoods $form
+     * @return integer
+     * @throws
+     */
+    public function calculatePeishiFee($form)
+    {
+        return bcmul($form->parts_gold_weight, $form->parts_price, 3) ?? 0;
+    }
+
+    /**
+     *
+     * 基本工费=(克工费*含耗重)
+     * @param PurchaseReceiptGoods $form
+     * @return integer
+     * @throws
+     */
+    public function calculateBasicGongFee($form)
+    {
+        return bcmul($form->gong_fee, $this->calculateLossWeight($form), 3) ?? 0;
+    }
+
+    /**
+     *
+     * 总副石数量=(副石1数量+副石2数量+副石3数量)
+     * @param PurchaseReceiptGoods $form
+     * @return integer
+     * @throws
+     */
+    public function calculateSecondStoneNum($form)
+    {
+        return bcadd(bcadd($form->second_stone_num1, $form->second_stone_num2, 3), $form->second_stone_num3, 3) ?? 0;
+    }
+
+    /**
+     *
+     * 镶石费=(镶石单价*总副石数量)
+     * @param PurchaseReceiptGoods $form
+     * @return integer
+     * @throws
+     */
+    public function calculateXiangshiFee($form)
+    {
+        return bcmul($form->xianqian_price, $this->calculateSecondStoneNum($form), 3) ?? 0;
+    }
+
+    /**
+     *
+     * 工厂成本=(基本工费+镶石费+补口费+超石费+配石费+配石工费+配件工费+税费+版费
+     *  +分色/分件费+表面工艺费+喷拉砂费+证书费+其他费用)
+     * @param PurchaseReceiptGoods $form
+     * @return integer
+     * @throws
+     */
+    public function calculateFactoryCost($form)
+    {
+        $factory_cost = 0;
+        if($form->peiliao_way == PeiLiaoWayEnum::FACTORY){
+            $factory_cost = bcadd($factory_cost, $this->calculateGoldAmount($form), 3);
+        }
+        if($form->main_pei_type == PeiShiWayEnum::FACTORY){
+            $factory_cost = bcadd($factory_cost, $this->calculateMainStoneCost($form), 3);
+        }
+        if($form->second_pei_type == PeiShiWayEnum::FACTORY){
+            $factory_cost = bcadd($factory_cost, $this->calculateSecondStone1Cost($form), 3);
+        }
+        if($form->second_pei_type2 == PeiShiWayEnum::FACTORY){
+            $factory_cost = bcadd($factory_cost, $this->calculateSecondStone2Cost($form), 3);
+        }
+        if($form->second_pei_type3 == PeiShiWayEnum::FACTORY){
+            $factory_cost = bcadd($factory_cost, $this->calculateSecondStone3Cost($form), 3);
+        }
+        if($form->parts_way == PeiJianWayEnum::FACTORY){
+            $factory_cost = bcadd($factory_cost, $this->calculatePartsAmount($form), 3);
+        }
+        $factory_cost = bcadd($factory_cost, $this->calculateBasicGongFee($form), 3);//基本工费
+        $factory_cost = bcadd($factory_cost, $form->peishi_gong_fee, 3);//配石工费
+        $factory_cost = bcadd($factory_cost, $form->parts_fee, 3);//配件工费
+        $factory_cost = bcadd($factory_cost, $form->templet_fee, 3);//样板工费
+        $factory_cost = bcadd($factory_cost, $form->cert_fee, 3);//证书费
+        $factory_cost = bcadd($factory_cost, $form->biaomiangongyi_fee, 3);//表面工艺费
+        $factory_cost = bcadd($factory_cost, $form->penlasha_fee, 3);//喷拉砂费
+        $factory_cost = bcadd($factory_cost, $form->fense_fee, 3);//分件/分色费
+        $factory_cost = bcadd($factory_cost, $form->bukou_fee, 3);//补口费
+        $factory_cost = bcadd($factory_cost, $form->xianqian_fee, 3);//镶嵌工费
+        $factory_cost = bcadd($factory_cost, $form->extra_stone_fee, 3);//超石费
+        $factory_cost = bcadd($factory_cost, $form->tax_fee, 3);//税费
+        $factory_cost = bcadd($factory_cost, $form->other_fee, 3);//其他补充费用
+
+        return sprintf("%.2f", $factory_cost) ?? 0;
+    }
+
+    /**
+     *
+     * 公司总成本(成本价)=(金料额+主石金额+副石1金额+副石2金额+配件额+工厂成本)
+     * @param PurchaseReceiptGoods $form
+     * @return integer
+     * @throws
+     */
+    public function calculateCostPrice($form)
+    {
+        return bcmul($form->xianqian_price, $this->calculateSecondStoneNum($form), 3) ?? 0;
+    }
+
+    /**
+     *
+     * 标签价(市场价)=(公司总成本*倍率)
+     * @param PurchaseReceiptGoods $form
+     * @return integer
+     * @throws
+     */
+    public function calculateMarketPrice($form)
+    {
+        return bcmul($form->markup_rate, $this->calculateCostPrice($form), 3) ?? 0;
+    }
+
+    /**
+     *
+     * 同步更新商品价格
+     * @param PurchaseReceiptGoods $form
+     * @return object
+     * @throws
+     */
+    public function syncUpdatePrice($form)
+    {
+        if (!$form->validate()) {
+            throw new \Exception($this->getError($form));
+        }
+        $form->lncl_loss_weight = $this->calculateLossWeight($form);
+        $form->gold_amount = $this->calculateGoldAmount($form);
+        $form->main_stone_amount = $this->calculateMainStoneCost($form);
+        $form->second_stone_amount1 = $this->calculateSecondStone1Cost($form);
+        $form->second_stone_amount2 = $this->calculateSecondStone2Cost($form);
+        $form->second_stone_amount3 = $this->calculateSecondStone3Cost($form);
+        $form->parts_amount = $this->calculatePartsAmount($form);
+        $form->peishi_fee = $this->calculatePeishiFee($form);
+        $form->basic_gong_fee = $this->calculateBasicGongFee($form);
+        $form->xianqian_fee = $this->calculateXiangshiFee($form);
+        $form->factory_cost = $this->calculateFactoryCost($form);
+        $form->cost_price = $this->calculateCostPrice($form);
+        $form->market_price = $this->calculateMarketPrice($form);
+        if (false === $form->save()) {
+            throw new \Exception($this->getError($form));
+        }
+        return $form;
     }
 }

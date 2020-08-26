@@ -1,8 +1,7 @@
 <?php
-use common\widgets\webuploader\Files;
 use yii\widgets\ActiveForm;
 use common\helpers\Url;
-use common\enums\StatusEnum;
+
 $form = ActiveForm::begin([
     'id' => $model->formName(),
     'enableAjaxValidation' => true,
@@ -11,6 +10,9 @@ $form = ActiveForm::begin([
         //'template' => "<div class='col-sm-2 text-right'>{label}</div><div class='col-sm-10'>{input}\n{hint}\n{error}</div>",
     ]
 ]);
+if(is_string($model->notice_users)) {
+    $model->notice_users = explode(',',$model->notice_users);
+}
 ?>
     <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
@@ -23,7 +25,13 @@ $form = ActiveForm::begin([
            <?= $form->field($model, 'name')->textInput(); ?>
            <?= $form->field($model, 'code')->textInput(); ?>
            <?= $form->field($model, 'notice_range')->textInput(); ?>
-           <?= $form->field($model, 'status')->radioList(StatusEnum::getMap()); ?>
+           <?= $form->field($model, 'notice_users')->widget(\kartik\select2\Select2::class, [
+                   'data' => Yii::$app->services->backendMember->getDropDown(),
+                   'options' => ['placeholder' => '请选择','multiple' => true],
+                    'pluginOptions' => [
+                        'allowClear' => true,                        
+                    ],
+                ]);?>
             <!-- /.tab-pane -->
         </div>
         <!-- /.tab-content -->

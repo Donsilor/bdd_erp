@@ -2,6 +2,7 @@
 
 use yii\widgets\ActiveForm;
 use common\helpers\Url;
+
 $form = ActiveForm::begin([
     'id' => $model->formName(),
     'enableAjaxValidation' => true,
@@ -12,19 +13,20 @@ $form = ActiveForm::begin([
 ]);
 ?>
 <div class="modal-header">
-    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span>
+    </button>
     <h4 class="modal-title">基本信息</h4>
 </div>
 <div class="modal-body">
     <div class="col-sm-12">
-        <?= $form->field($model, 'send_goods_sn')->textInput() ?>
+        <?= $form->field($model, 'bill_no')->textInput(['disabled' => true, "placeholder" => "系统自动生成"]) ?>
         <?= $form->field($model, 'supplier_id')->widget(\kartik\select2\Select2::class, [
             'data' => \Yii::$app->supplyService->supplier->getDropDown(),
             'options' => ['placeholder' => '请选择'],
             'pluginOptions' => [
                 'allowClear' => false
             ],
-        ]);?>
+        ]); ?>
         <div class="row">
             <div class="col-sm-6">
                 <?= $form->field($model, 'to_warehouse_id')->widget(\kartik\select2\Select2::class, [
@@ -33,7 +35,7 @@ $form = ActiveForm::begin([
                     'pluginOptions' => [
                         'allowClear' => false
                     ],
-                ]);?>
+                ]); ?>
             </div>
             <div class="col-sm-6">
                 <?= $form->field($model, 'put_in_type')->widget(\kartik\select2\Select2::class, [
@@ -42,10 +44,17 @@ $form = ActiveForm::begin([
                     'pluginOptions' => [
                         'allowClear' => false
                     ],
-                ]);?>
+                ]); ?>
             </div>
         </div>
-        <?= $form->field($model, 'is_settle_accounts')->radioList(\addons\Warehouse\common\enums\IsSettleAccountsEnum::getMap())?>
+        <div class="row">
+            <div class="col-sm-6">
+                <?= $form->field($model, 'send_goods_sn')->textInput() ?>
+            </div>
+            <div class="col-sm-6">
+                <?= $form->field($model, 'is_settle_accounts')->radioList(\addons\Warehouse\common\enums\IsSettleAccountsEnum::getMap()) ?>
+            </div>
+        </div>
         <?= $form->field($model, 'remark')->textArea(); ?>
     </div>
 </div>

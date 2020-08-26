@@ -133,6 +133,15 @@ $this->params['breadcrumbs'][] = $this->title;
                                 ]),
                             ],
                             [
+                                'attribute'=>'incl_tax_price',
+                                'format' => 'raw',
+                                'headerOptions' => ['class' => 'col-md-1'],
+                                'filter' => Html::activeTextInput($searchModel, 'incl_tax_price', [
+                                    'class' => 'form-control',
+                                    'style'=> 'width:80px;'
+                                ]),
+                            ],
+                            [
                                 'attribute' => 'goods_status',
                                 'value' => function ($model){
                                     return \addons\Purchase\common\enums\ReceiptGoodsStatusEnum::getValue($model->goods_status);

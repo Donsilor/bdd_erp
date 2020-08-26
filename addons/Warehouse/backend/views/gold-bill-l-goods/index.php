@@ -99,6 +99,11 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'filter' => true,
                                 'headerOptions' => ['class' => 'col-md-1'],
                             ],
+                            [
+                                'attribute' => 'incl_tax_price',
+                                'filter' => true,
+                                'headerOptions' => ['class' => 'col-md-1'],
+                            ],
                             /*[
                                 'attribute' => 'sale_price',
                                 'filter' => true,

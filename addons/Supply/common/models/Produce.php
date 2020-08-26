@@ -16,9 +16,8 @@ use common\models\backend\Member;
  * @property int $merchant_id 商户ID
  * @property string $produce_sn 布产单编号
  * @property int $from_type 订单来源(1订单，2采购单)
- * @property int $from_order_id 来源订单id
- * @property string $from_order_sn 来源订单编号
- * @property int $from_detail_id 订单明细ID
+ * @property string $purchase_sn 来源订单编号
+ * @property int $order_detail_id 订单明细ID
  * @property string $qiban_sn 起版编号
  * @property int $qiban_type 起版类型
  * @property string $style_sn 款号
@@ -68,8 +67,8 @@ class Produce extends BaseModel
     public function rules()
     {
         return [
-            [['merchant_id','is_inlay','peiliao_type','peishi_type','peijian_type','templet_type','peishi_status','peiliao_status','peijian_status', 'from_type', 'from_order_id', 'from_detail_id','apply_follower_id','audit_follower_status', 'qiban_type', 'goods_num', 'jintuo_type', 'style_sex', 'product_type_id', 'style_cate_id', 'bc_status', 'prc_status', 'follower_id', 'created_at', 'updated_at', 'supplier_id', 'factory_order_time', 'factory_distribute_time', 'factory_delivery_time', 'standard_delivery_time'], 'integer'],
-            [['produce_sn', 'from_order_sn', 'qiban_sn', 'style_sn'], 'string', 'max' => 30],
+            [['merchant_id','is_inlay','peiliao_type','peishi_type','peijian_type','templet_type','peishi_status','peiliao_status','peijian_status', 'from_type', 'from_detail_id','apply_follower_id','audit_follower_status', 'qiban_type', 'goods_num', 'jintuo_type', 'style_sex', 'product_type_id', 'style_cate_id', 'bc_status', 'prc_status', 'follower_id', 'created_at', 'updated_at', 'supplier_id', 'factory_order_time', 'factory_distribute_time', 'factory_delivery_time', 'standard_delivery_time','purchase_detail_id','order_detail_id'], 'integer'],
+            [['produce_sn', 'purchase_sn','order_sn', 'qiban_sn', 'style_sn'], 'string', 'max' => 30],
             [['goods_name','audit_followe_remark'], 'string', 'max' => 255],
             [['customer'], 'string', 'max' => 50],
             [['follower_name','factory_mo'], 'string', 'max' => 30],
@@ -88,9 +87,10 @@ class Produce extends BaseModel
             'merchant_id' => '商户ID',
             'produce_sn' => '布产单编号',
             'from_type' => '订单来源',
-            'from_order_id' => '来源订单ID',
-            'from_order_sn' => '来源订单编号',
-            'from_detail_id' => '商品名称',
+            'purchase_sn' => '采购单号',
+            'order_sn' => '订单号',
+            'purchase_detail_id' => '采购单明细ID',
+            'order_detail_id' => '订单明细ID',
             'qiban_sn' => '起版编号',
             'qiban_type' => '起版类型',
             'style_sn' => '款式编号',
@@ -136,7 +136,7 @@ class Produce extends BaseModel
      */
     public function getPurchaseGoods()
     {
-        return $this->hasOne(PurchaseGoods::class, ['id'=>'from_detail_id'])->alias('purchaseGoods');
+        return $this->hasOne(PurchaseGoods::class, ['id'=>'purchase_detail_id'])->alias('purchaseGoods');
     }
 
     /**
@@ -187,7 +187,7 @@ class Produce extends BaseModel
      */
     public function getProduceGolds()
     {
-        return $this->hasMany(ProduceGold::class, ['produce_id'=>'id'])->alias('gold');
+        return $this->hasMany(ProduceGold::class, ['produce_id'=>'id'])->alias('gold')->orderBy("id asc");
     }
     /**
      * 配石列表  一对多
@@ -195,7 +195,7 @@ class Produce extends BaseModel
      */
     public function getProduceStones()
     {
-        return $this->hasMany(ProduceStone::class, ['produce_id'=>'id'])->alias('stone');
+        return $this->hasMany(ProduceStone::class, ['produce_id'=>'id'])->alias('stone')->orderBy("id asc");
     }
     /**
      * 配件列表  一对多
@@ -203,6 +203,6 @@ class Produce extends BaseModel
      */
     public function getProduceParts()
     {
-        return $this->hasMany(ProduceParts::class, ['produce_id'=>'id'])->alias('gold');
+        return $this->hasMany(ProduceParts::class, ['produce_id'=>'id'])->alias('gold')->orderBy("id asc");
     }
 }

@@ -128,12 +128,12 @@ $this->params['breadcrumbs'][] = $this->title;
                                     
                             ],
                             [
-                                    'label' => '配件信息(配件编号/配件类型/配件重量)',
+                                    'label' => '配件信息(配件编号/配件类型/配件数量/配件重量)',
                                     'value' => function($model){
                                         $str = '';
                                         foreach ($model->partsGoods ?? [] as $partsGoods){
                                             $parts_type = Yii::$app->attr->valueName($partsGoods->parts->parts_type ??'');
-                                            $str .= $partsGoods->parts_sn.'/'.$parts_type.'/'.$partsGoods->parts_weight."g<br/>";
+                                            $str .= $partsGoods->parts_sn.'/'.$parts_type.'/'.$partsGoods->parts_weight.'/'.$partsGoods->parts_weight."g<br/>";
                                         }
                                         return $str;
                                     },

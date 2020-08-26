@@ -81,6 +81,9 @@ $this->params['breadcrumbs'][] = $this->title;
                          <div class="col-lg-4">
                              <?= $form->field($model, 'goods_pay_price')->textInput()->label('实际成交价（<font color="red">价格以：订单选择的货币类型为准</font>）') ?>
                          </div>
+                         <div class="col-lg-4">
+                             <?= $form->field($model, 'assess_cost')->textInput()->label('预估成本（<font color="red">价格以：订单选择的货币类型为准</font>）') ?>
+                         </div>
                      </div>
                      <div class="row">
                          <div class="col-lg-4">

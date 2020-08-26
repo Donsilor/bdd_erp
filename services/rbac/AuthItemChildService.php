@@ -129,7 +129,7 @@ class AuthItemChildService extends Service
     public function accredit(int $role_id, array $data, int $is_addon, string $app_id)
     {
         // 删除原先所有权限
-       AuthItemChild::deleteAll(['role_id' => $role_id]);
+        AuthItemChild::deleteAll(['role_id' => $role_id,'is_addon'=>$is_addon]);
 
         if (empty($data)) {
             return;
@@ -151,9 +151,9 @@ class AuthItemChildService extends Service
         }
         $field = ['role_id', 'item_id','item_key', 'name', 'app_id', 'is_addon', 'addons_name'];       
         if(!empty($rows)) {
-            $sql = Yii::$app->db->createCommand()->batchInsert(AuthItemChild::tableName(), $field, $rows)->getSql();
-            Yii::$app->db->createCommand(str_replace("INSERT", "REPLACE", $sql))->execute();
-            //Yii::$app->db->createCommand()->batchInsert(AuthItemChild::tableName(), $field, $rows)->execute();            
+            //$sql = Yii::$app->db->createCommand()->batchInsert(AuthItemChild::tableName(), $field, $rows)->getSql();
+            //Yii::$app->db->createCommand(str_replace("INSERT", "REPLACE", $sql))->execute();
+            Yii::$app->db->createCommand()->batchInsert(AuthItemChild::tableName(), $field, $rows)->execute();            
         }
     }
 

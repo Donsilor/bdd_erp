@@ -2,10 +2,18 @@
 
 namespace addons\Sales\backend\controllers;
 
+use addons\Sales\common\enums\IsReturnEnum;
 use addons\Sales\common\enums\OrderStatusEnum;
+use addons\Sales\common\enums\ReturnByEnum;
+use addons\Sales\common\enums\ReturnTypeEnum;
 use addons\Sales\common\forms\OrderForm;
 use addons\Sales\common\forms\OrderGoodsForm;
+use addons\Sales\common\forms\ReturnForm;
+use addons\Sales\common\models\OrderAccount;
+use addons\Sales\common\models\SalesReturn;
+use addons\Sales\common\models\SalesReturnLog;
 use common\enums\AuditStatusEnum;
+use common\enums\ConfirmEnum;
 use common\enums\FlowStatusEnum;
 use common\helpers\ArrayHelper;
 use Yii;
@@ -18,6 +26,7 @@ use addons\Sales\common\models\OrderInvoice;
 use addons\Sales\common\models\OrderAddress;
 use addons\Sales\common\models\Customer;
 use common\enums\LogTypeEnum;
+use common\helpers\Auth;
 
 /**
  * Default controller for the `order` module
@@ -32,13 +41,13 @@ class OrderController extends BaseController
     public $modelClass = OrderForm::class;
 
     public function actionTest()
-    {
-        echo $rmbPrice = Yii::$app->goldTool->getGoldRmbPrice(),'-';
-        echo $rmbPrice = Yii::$app->goldTool->getGoldUsdPrice();
-        
-        //Yii::$app->shopService->orderSync->syncOrder(1369);
+    {   
+        $res = Auth::verify('special:1001');
+        var_dump($res);exit;
+        $order_no = '130311942049';
+        Yii::$app->jdSdk->getOrderInfo($order_no);
         exit;
-    }
+    }    
     /**
      * Renders the index view for the module
      * @return string
@@ -52,7 +61,7 @@ class OrderController extends BaseController
                 'scenario' => 'default',
                 'partialMatchAttributes' => [], // 模糊查询
                 'defaultOrder' => [
-                        'order_time' => SORT_DESC,
+                        'id' => SORT_DESC,
                 ],
                 'pageSize' => $this->pageSize,
                 'relations' => [
@@ -175,6 +184,10 @@ class OrderController extends BaseController
             foreach ($models as & $goods){
                 $attrs = $goods->attrs ?? [];
                 $goods['attr'] = ArrayHelper::map($attrs,'attr_id','attr_value');
+
+                if ($goods->is_return == IsReturnEnum::HAS_RETURN){
+                    $return[] = $goods->id;
+                }
             }
         }
         return $this->render($this->action->id, [
@@ -183,9 +196,23 @@ class OrderController extends BaseController
                 'tab'=>Yii::$app->request->get('tab',1),
                 'tabList'=>Yii::$app->salesService->order->menuTabList($id,$this->returnUrl),
                 'returnUrl'=>$this->returnUrl,
+                'return'=>!empty($return)?json_encode($return):"",
         ]);
     }
-    
+    /**
+     * 物流轨迹日志
+     */
+    public function actionLogistics()
+    {
+        $this->layout = '@backend/views/layouts/iframe';
+        $id = Yii::$app->request->get('id');
+        $model = $this->findModel($id);
+        $logistics = \Yii::$app->logistics->kd100($model->express_no, $model->express->api_code ?? null, true);
+        return $this->render($this->action->id, [
+                'model' => $model,
+                'logistics'=>$logistics,
+        ]);
+    }
     /**
      * 取消订单
      * @throws Exception
@@ -348,7 +375,41 @@ class OrderController extends BaseController
     }
 
 
+    /**
+     * 修改费用
+     * @return \yii\web\Response|mixed|string|string
+     */
+    public function actionAjaxEditFee()
+    {
+        $id = Yii::$app->request->get('id');
+        $this->modelClass = OrderAccount::class;
+        $model = $this->findModel($id);
+        $isNewRecord = $model->isNewRecord;
+        if($isNewRecord) {
+            $model->order_id = $id;
+        }
+        // ajax 校验
+        $this->activeFormValidate($model);
+        if ($model->load(Yii::$app->request->post())) {
+            try{
+                $trans = Yii::$app->trans->beginTransaction();
+                if(false === $model->save()) {
+                    throw new \Exception($this->getError($model));
+                }
+                //更新采购汇总：总金额和总数量
+                \Yii::$app->salesService->order->orderSummary($model->order_id);
+                $trans->commit();
 
+                return $this->message("保存成功", $this->redirect(Yii::$app->request->referrer), 'success');
+            }catch (\Exception $e) {
+                $trans->rollback();
+                return $this->message($e->getMessage(), $this->redirect(Yii::$app->request->referrer), 'error');
+            }
+        }
+        return $this->renderAjax($this->action->id, [
+            'model' => $model,
+        ]);
+    }
 
     /**
      * 修改收货地址
@@ -463,7 +524,60 @@ class OrderController extends BaseController
             return $this->message($e->getMessage(), $this->redirect(Yii::$app->request->referrer), 'error');
         }       
     }
-        
-    
+
+    /**
+     * 退款
+     * @var SalesReturn $model
+     * @throws
+     * @return mixed
+     */
+    public function actionReturn()
+    {
+        $this->layout = '@backend/views/layouts/iframe';
+        $id = Yii::$app->request->get('id');
+        $ids = Yii::$app->request->post('ids');
+        $model = new ReturnForm();
+        $model->ids = $ids;
+        $order = $this->findModel($id) ?? new Order();
+        if ($model->load(Yii::$app->request->post())) {
+            if(!$model->validate()) {
+                //return ResultHelper::json(422, $this->getError($model));
+            }
+            try{
+                $trans = Yii::$app->trans->beginTransaction();
+
+                \Yii::$app->salesService->return->salesReturn($model, $order);
+                $trans->commit();
+                Yii::$app->getSession()->setFlash('success','保存成功');
+                return ResultHelper::json(200, '保存成功');
+            }catch (\Exception $e){
+                $trans->rollBack();
+                return ResultHelper::json(422, $e->getMessage());
+            }
+        }
+        $dataProvider = null;
+        if (!is_null($id)) {
+            $searchModel = new SearchModel([
+                'model' => OrderGoodsForm::class,
+                'scenario' => 'default',
+                'partialMatchAttributes' => [], // 模糊查询
+                'defaultOrder' => [
+                    'id' => SORT_DESC
+                ],
+                'pageSize' => 1000,
+            ]);
+            $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+            $dataProvider->query->andWhere(['=', 'order_id', $id]);
+            $dataProvider->query->andWhere(['=', 'is_return', IsReturnEnum::SAVE]);
+            $dataProvider->setSort(false);
+        }
+        $model->is_quick_refund = ConfirmEnum::NO;
+        $model->return_type = ReturnTypeEnum::CARD;
+        return $this->render($this->action->id, [
+            'model' => $model,
+            'order' => $order,
+            'dataProvider' => $dataProvider,
+        ]);
+    }
 }
 

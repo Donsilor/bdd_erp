@@ -9,7 +9,7 @@ use common\traits\Curd;
 use yii\data\ActiveDataProvider;
 
 /**
- * 商品分类
+ * 质检未过原因
  *
  * Class PurchaseFqcConfigController
  * @package addons\RfArticle\backend\controllers

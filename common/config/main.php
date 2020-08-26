@@ -21,7 +21,27 @@ return [
                 'username' => 'super',
                 'password' => 'Bdd123o123',
                 'charset' => 'utf8',
+                'tablePrefix' => '',
+                'attributes' => [
+                        // PDO::ATTR_STRINGIFY_FETCHES => false, // 提取的时候将数值转换为字符串
+                        // PDO::ATTR_EMULATE_PREPARES => false, // 启用或禁用预处理语句的模拟
+                ],
+                // 'enableSchemaCache' => true, // 是否开启缓存, 请了解其中机制在开启，不了解谨慎
+                // 'schemaCacheDuration' => 3600, // 缓存时间
+                // 'schemaCache' => 'cache', // 缓存名称
         ],
+        //BDD正式erp
+        'db2' => [
+                'class' => 'yii\db\Connection',
+                'dsn' => 'mysql:host=47.75.210.123;port=3306;dbname=bdd_erp;',
+                'username' => 'super',
+                'password' => 'Bdd123o123',
+                'charset' => 'utf8',
+                'tablePrefix'=>'',
+                'attributes' => [
+
+                ],
+        ], 
         //BDD官网
         'bddDb' => [
                 'class' => 'yii\db\Connection',
@@ -31,7 +51,7 @@ return [
                 'charset' => 'utf8',
                 'tablePrefix'=>'',
                 'attributes' => [
-
+                        
                 ],
         ],
         /** ------ 缓存 ------ **/
@@ -63,8 +83,7 @@ return [
             'class' => 'yii\redis\Connection',
             'hostname' => '127.0.0.1',            
             'port' => 6379,
-            'database' => 3
-            
+            'database' => 3            
         ],
         /** ------ 网站碎片管理 ------ **/
         'debris' => [
@@ -101,7 +120,7 @@ return [
             // ... 您可以在这里配置组件的更多属性
         ],
         /** ------ 微信SDK ------ **/
-        'wechat' => [
+        /* 'wechat' => [
             'class' => 'common\components\Wechat',
             'userOptions' => [],  // 用户身份类参数
             'sessionParam' => 'wechatUser', // 微信用户信息将存储在会话在这个密钥
@@ -109,7 +128,7 @@ return [
             'rebinds' => [
                 'cache' => 'common\components\WechatCache',
             ]
-        ],
+        ], */
         /** ------ i18n 国际化 ------ **/
         'i18n' => [
                 'translations' => [
@@ -124,8 +143,14 @@ return [
         ],
         'area' => ['class' => 'common\components\Area'],
 		'attr' => ['class' => 'common\components\Attribute'],
-        'trans'=>['class'=>'common\components\Transaction'],
-        'goldTool'=>['class'=>'common\components\GoldTool'],
-        'shopAttr'=>['class'=>'common\components\ShopAttribute']
+        'trans'=> ['class'=>'common\components\Transaction'],
+        'goldTool'=> ['class'=>'common\components\GoldTool'],
+        'shopAttr'=> ['class'=>'common\components\ShopAttribute'],
+        'jdSdk' => [
+                'class' => 'common\components\JdSdk',
+                'appKey' => '600FE385E066028D2A1B30C46C54E54C',
+                'appSecret' => '1a693572f25440d8905672fac4611a6a',
+                'refreshToken'=>'e5a3eb79e4b64dfd9efa4f42fd9883dfm2vi',
+        ],
     ],
 ];

@@ -224,6 +224,14 @@ $this->params['breadcrumbs'][] = $this->title;
 
             ],
             [
+                'attribute'=>'warranty_period',
+                'value'=>function($model){
+                    return Yii::$app->formatter->asDate($model->warranty_period);
+                },
+
+
+            ],
+            [
                 'class' => 'yii\grid\ActionColumn',
                 'header' => '操作',
                 'template' => '{view} {edit} {format-edit} {apply} {audit} {status}',

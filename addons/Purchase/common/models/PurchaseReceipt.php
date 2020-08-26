@@ -13,11 +13,12 @@ use common\models\backend\Member;
  * @property int $id ID
  * @property int $merchant_id
  * @property int $supplier_id 供应商
- * @property string $receipt_no 工厂出货单号
+ * @property string $receipt_no 收货单号
  * @property string $purchase_sn 采购单号
  * @property int $purchase_type 采购类型
  * @property int $receipt_status 单据状态
  * @property int $receipt_num 出货数量
+ * @property string $delivery_no 工厂出货单号
  * @property int $total_stone_num 总粒数
  * @property string $total_weight 总重量
  * @property string $total_cost 总金额（总成本）
@@ -52,9 +53,9 @@ class PurchaseReceipt extends BaseModel
     {
         return [
             [['id', 'merchant_id', 'supplier_id', 'purchase_type', 'receipt_status', 'receipt_num', 'total_stone_num', 'put_in_type', 'to_warehouse_id', 'is_to_warehouse', 'auditor_id', 'audit_status', 'audit_time', 'sort', 'status', 'creator_id', 'created_at', 'updated_at'], 'integer'],
-            [['supplier_id', 'receipt_no'], 'required'],
+            [['supplier_id'], 'required'],
             [['total_weight', 'total_cost'], 'number'],
-            [['receipt_no', 'purchase_sn'], 'string', 'max' => 30],
+            [['receipt_no', 'purchase_sn', 'delivery_no'], 'string', 'max' => 30],
             [['audit_remark', 'remark'], 'string', 'max' => 255],
             ['receipt_no', 'unique'],
         ];
@@ -69,11 +70,12 @@ class PurchaseReceipt extends BaseModel
             'id' => 'ID',
             'merchant_id' => '商户ID',
             'supplier_id' => '供应商',
-            'receipt_no' => '工厂出货单号',
+            'receipt_no' => '收货单号',
             'purchase_sn' => '采购单号',
             'purchase_type' => '采购类型',
             'receipt_status' => '单据状态',
             'receipt_num' => '出货数量',
+            'delivery_no' => '工厂出货单号',
             'total_stone_num' => '总粒数',
             'total_weight' => '总重量',
             'total_cost' => '总成本',

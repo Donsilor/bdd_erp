@@ -2,6 +2,7 @@
 
 namespace addons\Purchase\services;
 
+use addons\Sales\common\models\OrderGoods;
 use addons\Style\common\enums\LogTypeEnum;
 use addons\Supply\common\enums\PeijianTypeEnum;
 use common\helpers\SnHelper;
@@ -143,7 +144,7 @@ class PurchaseService extends Service
         }
         $models = $query->all();
         foreach ($models as $model){
-            
+            $order_goods = OrderGoods::find()->where(['id'=>$model->order_detail_id])->one();
             $peishi_status = PeishiTypeEnum::getPeishiStatus($model->peishi_type);
             $peiliao_status = PeiliaoTypeEnum::getPeiliaoStatus($model->peiliao_type);
             $peijian_status = PeijianTypeEnum::getPeijianStatus($model->peijian_type);
@@ -155,11 +156,12 @@ class PurchaseService extends Service
             //$model = new PurchaseGoods();
             $goods = [
                     'goods_name' =>$model->goods_name,
-                    'goods_num' =>$model->goods_num,                   
-                    'from_order_id'=>$model->purchase_id,
-                    'from_detail_id' => $model->id,
-                    'from_order_sn'=>$purchase->purchase_sn,
-                    'from_type' => FromTypeEnum::PURCHASE,
+                    'goods_num' =>$model->goods_num,
+                    'order_detail_id' =>$model->order_detail_id,
+                    'purchase_detail_id' => $model->id,
+                    'purchase_sn'=>$purchase->purchase_sn,
+                    'order_sn'=>$order_goods->order->order_sn ?? '',
+                    'from_type' => empty($model->order_detail_id) ? FromTypeEnum::PURCHASE : FromTypeEnum::ORDER,
                     'style_sn' => $model->style_sn,
                     'peiliao_type'=>$model->peiliao_type,
                     'peishi_type'=>$model->peishi_type,
@@ -181,7 +183,8 @@ class PurchaseService extends Service
                     'factory_mo'=>$model->factory_mo,
                     'parts_info'=>$model->parts_info,
                     'factory_distribute_time' => time()
-            ]; 
+            ];
+
             if($model->produce_id && $model->produce){
                 if($model->produce->bc_status > BuChanEnum::IN_PRODUCTION) {
                     //生产中之后的流程，禁止同步
@@ -202,7 +205,7 @@ class PurchaseService extends Service
             $produce = Yii::$app->supplyService->produce->createSyncProduce($goods ,$goods_attrs);
             if($produce) {
                 $model->produce_id = $produce->id;
-            }            
+            }
             if(false === $model->save()) {
                 throw new \Exception($this->getError($model),422);
             }
@@ -233,7 +236,7 @@ class PurchaseService extends Service
             foreach ($ids as $id) {
                 $goods = $model::findOne(['id'=>$id]);
                 if($goods->is_receipt){
-                    throw new Exception("商品【".$goods->goods_name."】已收货，不能重复收货");
+                    throw new Exception("[ID={$goods->id}]已收货，不能重复收货");
                 }
             }
         }
@@ -288,7 +291,7 @@ class PurchaseService extends Service
         $i=1;
         foreach ($models as $k => $model){
             if($model->is_receipt){
-                throw new \Exception("【".$model->goods_name."】已收货，不能重复收货");
+                throw new \Exception("[ID={$model->id}]已收货，不能重复收货");
             }
             $goods[$k] = [
                 'xuhao'=>$i++,
@@ -308,6 +311,7 @@ class PurchaseService extends Service
             if($purchase_type == PurchaseTypeEnum::MATERIAL_GOLD){
                 $goods[$k]['material_type'] = $model->material_type;
                 $goods[$k]['gold_price'] = $model->gold_price;
+                $goods[$k]['incl_tax_price'] = $model->incl_tax_price;
             }elseif($purchase_type == PurchaseTypeEnum::MATERIAL_STONE) {
                 $goods[$k]['material_type'] = $model->stone_type;
                 $goods[$k]['goods_shape'] = $model->stone_shape;

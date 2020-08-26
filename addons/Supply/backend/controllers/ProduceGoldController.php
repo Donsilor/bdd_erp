@@ -75,7 +75,7 @@ class ProduceGoldController extends BaseController
             return $this->message('布产单不是待领料状态,不能操作！', $this->redirect(Yii::$app->request->referrer), 'error');
         }          
         foreach($produce->produceGolds ?? [] as $produceGold) {
-            if($produceGold->peiliao_status != PeiliaoStatusEnum::TO_LINGLIAO){
+            if($produceGold->peiliao_status < PeiliaoStatusEnum::TO_LINGLIAO){
                 return $this->message("(ID={$produceGold->id})配料单不是待领料状态", $this->redirect(Yii::$app->request->referrer), 'error');
             }
         }        
@@ -88,8 +88,11 @@ class ProduceGoldController extends BaseController
               }
               //2
               $produce->peiliao_status = PeiliaoStatusEnum::HAS_LINGLIAO;
-              if($produce->peiliao_status == PeiliaoStatusEnum::HAS_LINGLIAO) {
-                  $produce->bc_status = BuChanEnum::TO_PRODUCTION;
+              //布产单状态未生产之前，确认配料 需要变动布产状态
+              if($produce->bc_status < BuChanEnum::TO_PRODUCTION) {
+                  if($produce->peiliao_status == PeiliaoStatusEnum::HAS_LINGLIAO) {
+                      $produce->bc_status = BuChanEnum::TO_PRODUCTION;
+                  }
               }
               if(false === $produce->save(true,['peiliao_status','bc_status','updated_at'])){
                   throw new \Exception("确认失败！code=2");
