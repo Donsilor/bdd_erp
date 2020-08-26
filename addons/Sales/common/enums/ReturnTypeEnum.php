@@ -17,7 +17,7 @@ class ReturnTypeEnum extends \common\enums\BaseEnum
     public static function getMap(): array
     {
         return [
-            self::CARD => '打卡',
+            self::CARD => '退款',
             self::TRANSFER => '转单'
         ];
     }

@@ -46,7 +46,9 @@ use common\models\backend\Member;
  * @property string $pay_remark 付款备注
  * @property string $pay_receipt 付款凭证
  * @property int $check_status 确认状态(0.未操作，1.主管确认通过，2.库管确认通过，3.财务确认通过)
+ * @property string $bill_no 仓储单据编号
  * @property string $remark 备注
+ * @property int $return_status 单据状态
  * @property int $audit_status 审核状态
  * @property string $audit_remark 审核备注
  * @property int $audit_time 审核时间
@@ -73,10 +75,10 @@ class SalesReturn extends BaseModel
     {
         return [
             [['return_no', 'order_id', 'order_sn'], 'required'],
-            [['order_id', 'channel_id', 'goods_num', 'return_by', 'return_type', 'customer_id', 'is_finance_refund', 'is_quick_refund', 'leader_id', 'leader_status', 'leader_time', 'storekeeper_id', 'storekeeper_status', 'storekeeper_time', 'finance_id', 'finance_status', 'finance_time', 'payer_id', 'pay_status', 'check_status', 'audit_status', 'audit_time', 'auditor_id', 'status', 'creator_id', 'created_at', 'updated_at'], 'integer'],
+            [['order_id', 'channel_id', 'goods_num', 'return_by', 'return_type', 'customer_id', 'is_finance_refund', 'is_quick_refund', 'leader_id', 'leader_status', 'leader_time', 'storekeeper_id', 'storekeeper_status', 'storekeeper_time', 'finance_id', 'finance_status', 'finance_time', 'payer_id', 'pay_status', 'check_status', 'return_status', 'audit_status', 'audit_time', 'auditor_id', 'status', 'creator_id', 'created_at', 'updated_at'], 'integer'],
             [['should_amount', 'apply_amount', 'real_amount'], 'number'],
             [['return_no', 'customer_mobile'], 'string', 'max' => 30],
-            [['order_sn'], 'string', 'max' => 50],
+            [['order_sn', 'bill_no'], 'string', 'max' => 50],
             [['return_reason'], 'string', 'max' => 10],
             [['customer_name'], 'string', 'max' => 60],
             [['customer_email'], 'string', 'max' => 120],
@@ -111,8 +113,8 @@ class SalesReturn extends BaseModel
             'currency' => '货币',
             'bank_name' => '开户银行',
             'bank_card' => '银行账户',
-            'is_finance_refund' => '是否财务退款',
-            'is_quick_refund' => '是否快速退款',
+            'is_finance_refund' => '是否财务线下退款',
+            'is_quick_refund' => '是否平台极速退款',
             'leader_id' => '部门主管',
             'leader_status' => '主管确认',
             'leader_remark' => '主管确认意见',
@@ -130,8 +132,10 @@ class SalesReturn extends BaseModel
             'pay_remark' => '付款备注',
             'pay_receipt' => '付款凭证',
             'check_status' => '确认状态',
-            'remark' => '备注',
-            'audit_status' => '单据状态',
+            'remark' => '退款备注',
+            'bill_no' => '仓储单据编号',
+            'return_status' => '退款单状态',
+            'audit_status' => '审核状态',
             'audit_remark' => '审核备注',
             'audit_time' => '审核时间',
             'auditor_id' => '审核人',

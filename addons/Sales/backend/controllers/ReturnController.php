@@ -6,11 +6,10 @@ use Yii;
 use common\helpers\Url;
 use common\traits\Curd;
 use common\models\base\SearchModel;
-use addons\Sales\common\models\SalesReturn;
 use addons\Sales\common\forms\ReturnForm;
 use addons\Sales\common\enums\CheckStatusEnum;
+use addons\Sales\common\enums\ReturnStatusEnum;
 use common\enums\AuditStatusEnum;
-use common\enums\StatusEnum;
 
 /**
  * 退款单
@@ -37,7 +36,7 @@ class ReturnController extends BaseController
         $searchModel = new SearchModel([
             'model' => $this->modelClass,
             'scenario' => 'default',
-            'partialMatchAttributes' => [], // 模糊查询
+            'partialMatchAttributes' => ['customer_name'], // 模糊查询
             'defaultOrder' => [
                 'id' => SORT_DESC
             ],
@@ -80,7 +79,7 @@ class ReturnController extends BaseController
         $searchModel = new SearchModel([
             'model' => $this->modelClass,
             'scenario' => 'default',
-            'partialMatchAttributes' => [], // 模糊查询
+            'partialMatchAttributes' => ['customer_name'], // 模糊查询
             'defaultOrder' => [
                 'id' => SORT_DESC
             ],
@@ -104,8 +103,9 @@ class ReturnController extends BaseController
             $dataProvider->query->andFilterWhere(['<',ReturnForm::tableName().'.created_at', (strtotime(explode('/', $created_at)[1]) + 86400)] );//结束时间
         }
 
-        $dataProvider->query->andWhere(['=',ReturnForm::tableName().'.check_status',CheckStatusEnum::SAVE]);
-        $dataProvider->query->andWhere(['=',ReturnForm::tableName().'.audit_status',AuditStatusEnum::PENDING]);
+        //$dataProvider->query->andWhere(['=',ReturnForm::tableName().'.check_status',CheckStatusEnum::SAVE]);
+        $dataProvider->query->andWhere(['>=',ReturnForm::tableName().'.audit_status',AuditStatusEnum::PENDING]);
+        $dataProvider->query->andWhere(['>',ReturnForm::tableName().'.leader_status',AuditStatusEnum::SAVE]);
 
         return $this->render($this->action->id, [
             'dataProvider' => $dataProvider,
@@ -124,7 +124,7 @@ class ReturnController extends BaseController
         $searchModel = new SearchModel([
             'model' => $this->modelClass,
             'scenario' => 'default',
-            'partialMatchAttributes' => [], // 模糊查询
+            'partialMatchAttributes' => ['customer_name'], // 模糊查询
             'defaultOrder' => [
                 'id' => SORT_DESC
             ],
@@ -148,8 +148,9 @@ class ReturnController extends BaseController
             $dataProvider->query->andFilterWhere(['<',ReturnForm::tableName().'.created_at', (strtotime(explode('/', $created_at)[1]) + 86400)] );//结束时间
         }
 
-        $dataProvider->query->andWhere(['=',ReturnForm::tableName().'.check_status',CheckStatusEnum::LEADER]);
-        $dataProvider->query->andWhere(['=',ReturnForm::tableName().'.audit_status',AuditStatusEnum::PENDING]);
+        //$dataProvider->query->andWhere(['=',ReturnForm::tableName().'.check_status',CheckStatusEnum::LEADER]);
+        $dataProvider->query->andWhere(['>=',ReturnForm::tableName().'.audit_status',AuditStatusEnum::PENDING]);
+        $dataProvider->query->andWhere(['>',ReturnForm::tableName().'.storekeeper_status',AuditStatusEnum::SAVE]);
 
         return $this->render($this->action->id, [
             'dataProvider' => $dataProvider,
@@ -168,7 +169,7 @@ class ReturnController extends BaseController
         $searchModel = new SearchModel([
             'model' => $this->modelClass,
             'scenario' => 'default',
-            'partialMatchAttributes' => [], // 模糊查询
+            'partialMatchAttributes' => ['customer_name'], // 模糊查询
             'defaultOrder' => [
                 'id' => SORT_DESC
             ],
@@ -192,8 +193,9 @@ class ReturnController extends BaseController
             $dataProvider->query->andFilterWhere(['<',ReturnForm::tableName().'.created_at', (strtotime(explode('/', $created_at)[1]) + 86400)] );//结束时间
         }
 
-        $dataProvider->query->andWhere(['=',ReturnForm::tableName().'.check_status',CheckStatusEnum::STOREKEEPER]);
-        $dataProvider->query->andWhere(['=',ReturnForm::tableName().'.audit_status',AuditStatusEnum::PENDING]);
+        //$dataProvider->query->andWhere(['=',ReturnForm::tableName().'.check_status',CheckStatusEnum::STOREKEEPER]);
+        $dataProvider->query->andWhere(['>=',ReturnForm::tableName().'.audit_status',AuditStatusEnum::PENDING]);
+        $dataProvider->query->andWhere(['>',ReturnForm::tableName().'.finance_status',AuditStatusEnum::SAVE]);
 
         return $this->render($this->action->id, [
             'dataProvider' => $dataProvider,
@@ -252,6 +254,7 @@ class ReturnController extends BaseController
 
             $model->audit_status = AuditStatusEnum::PENDING;
             $model->leader_status = AuditStatusEnum::PENDING;
+            $model->return_status = ReturnStatusEnum::PENDING;
             if(false === $model->save()){
                 throw new \Exception($this->getError($model));
             }

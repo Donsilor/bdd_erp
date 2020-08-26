@@ -204,13 +204,13 @@ $params = $params ? "&".http_build_query($params) : '';
                             ]),
                         ],
                         [
-                            'attribute' => 'audit_status',
+                            'attribute' => 'return_status',
                             'format' => 'raw',
                             'headerOptions' => ['class' => 'col-md-1'],
                             'value' => function ($model){
-                                return \common\enums\AuditStatusEnum::getValue($model->audit_status);
+                                return \addons\Sales\common\enums\ReturnStatusEnum::getValue($model->return_status);
                             },
-                            'filter' => Html::activeDropDownList($searchModel, 'audit_status',\common\enums\AuditStatusEnum::getMap(), [
+                            'filter' => Html::activeDropDownList($searchModel, 'return_status',\addons\Sales\common\enums\ReturnStatusEnum::getMap(), [
                                 'prompt' => '全部',
                                 'class' => 'form-control',
                                 'style'=> 'width:60px;',

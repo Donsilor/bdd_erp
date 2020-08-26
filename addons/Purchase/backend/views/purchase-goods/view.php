@@ -80,6 +80,9 @@ $this->params['breadcrumbs'][] = $this->title;
                                     <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('goods_num') ?>：</td>
                                     <td><?= $model->goods_num ?></td>
                                 </tr>
+                                <?php
+                                if(\common\helpers\Auth::verify(\common\enums\SpecialAuthEnum::VIEW_CAIGOU_PRICE)){
+                                ?>
                                 <tr>
                                     <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('cost_price') ?>：</td>
                                     <td><?= $model->cost_price ?></td>
@@ -88,6 +91,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                     <td class="col-xs-2 text-right">采购总额：</td>
                                     <td><?= AmountHelper::formatAmount($model->cost_price * $model->goods_num,2) ?></td>
                                 </tr>
+                                <?php } ?>
                                 <tr>
                                     <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('remark') ?>：</td>
                                     <td><?= $model->remark ?></td>

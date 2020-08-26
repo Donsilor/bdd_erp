@@ -490,31 +490,31 @@ $this->params['breadcrumbs'][] = $this->title;
                                     'style' => 'width:80px;'
                                 ]),
                             ],*/
-                            [
-                                'attribute' => 'cert_id',
-                                'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#afdfe4;'],
-                                'format' => 'raw',
-                                'value' => function ($model, $key, $index, $column) {
-                                    return Html::ajaxInput('cert_id', $model->cert_id, ['data-id' => $model->id]);
-                                },
-                                'filter' => Html::activeTextInput($searchModel, 'cert_id', [
-                                    'class' => 'form-control',
-                                    'style' => 'width:100px;'
-                                ]),
-                            ],
-                            [
-                                'attribute' => 'cert_type',
-                                'format' => 'raw',
-                                'value' => function ($model, $key, $index, $column) {
-                                    return Html::ajaxSelect($model, 'cert_type', $model->getCertTypeDrop($model), ['data-id' => $model->id, 'prompt' => '请选择']);
-                                },
-                                'filter' => Html::activeDropDownList($searchModel, 'cert_type', $model->getCertTypeMap(), [
-                                    'prompt' => '全部',
-                                    'class' => 'form-control',
-                                    'style' => 'width:100px;'
-                                ]),
-                                'headerOptions' => ['class' => 'col-md-1 batch_select_full', 'attr-name' => 'finger', 'attr-id' => AttrIdEnum::DIA_CERT_TYPE, 'style' => 'background-color:#afdfe4;'],
-                            ],
+//                            [
+//                                'attribute' => 'cert_id',
+//                                'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#afdfe4;'],
+//                                'format' => 'raw',
+//                                'value' => function ($model, $key, $index, $column) {
+//                                    return Html::ajaxInput('cert_id', $model->cert_id, ['data-id' => $model->id]);
+//                                },
+//                                'filter' => Html::activeTextInput($searchModel, 'cert_id', [
+//                                    'class' => 'form-control',
+//                                    'style' => 'width:100px;'
+//                                ]),
+//                            ],
+//                            [
+//                                'attribute' => 'cert_type',
+//                                'format' => 'raw',
+//                                'value' => function ($model, $key, $index, $column) {
+//                                    return Html::ajaxSelect($model, 'cert_type', $model->getCertTypeDrop($model), ['data-id' => $model->id, 'prompt' => '请选择']);
+//                                },
+//                                'filter' => Html::activeDropDownList($searchModel, 'cert_type', $model->getCertTypeMap(), [
+//                                    'prompt' => '全部',
+//                                    'class' => 'form-control',
+//                                    'style' => 'width:100px;'
+//                                ]),
+//                                'headerOptions' => ['class' => 'col-md-1 batch_select_full', 'attr-name' => 'finger', 'attr-id' => AttrIdEnum::DIA_CERT_TYPE, 'style' => 'background-color:#afdfe4;'],
+//                            ],
                             [
                                 'class' => 'yii\grid\CheckboxColumn',
                                 'name' => 'id',  //设置每行数据的复选框属性
@@ -719,18 +719,18 @@ $this->params['breadcrumbs'][] = $this->title;
                                 ]),
                                 'headerOptions' => ['class' => 'col-md-1 batch_select_full', 'attr-name' => 'second_stone1', 'attr-id' => AttrIdEnum::SIDE_STONE1_TYPE, 'style' => 'background-color:#dec674;'],
                             ],
-                            [
-                                'attribute' => 'second_cert_id1',
-                                'format' => 'raw',
-                                'value' => function ($model, $key, $index, $column) {
-                                    return Html::ajaxInput('second_cert_id1', $model->second_cert_id1, ['data-id' => $model->id]);
-                                },
-                                'headerOptions' => ['class' => 'col-md-1 batch_full', 'attr-name' => 'second_cert_id1', 'style' => 'background-color:#dec674;'],
-                                'filter' => Html::activeTextInput($searchModel, 'second_cert_id1', [
-                                    'class' => 'form-control',
-                                    'style' => 'width:100px;'
-                                ]),
-                            ],
+//                            [
+//                                'attribute' => 'second_cert_id1',
+//                                'format' => 'raw',
+//                                'value' => function ($model, $key, $index, $column) {
+//                                    return Html::ajaxInput('second_cert_id1', $model->second_cert_id1, ['data-id' => $model->id]);
+//                                },
+//                                'headerOptions' => ['class' => 'col-md-1 batch_full', 'attr-name' => 'second_cert_id1', 'style' => 'background-color:#dec674;'],
+//                                'filter' => Html::activeTextInput($searchModel, 'second_cert_id1', [
+//                                    'class' => 'form-control',
+//                                    'style' => 'width:100px;'
+//                                ]),
+//                            ],
                             [
                                 'attribute' => 'second_stone_num1',
                                 'format' => 'raw',
@@ -809,18 +809,18 @@ $this->params['breadcrumbs'][] = $this->title;
                                 ]),
                                 'headerOptions' => ['class' => 'col-md-1 batch_select_full', 'attr-name' => 'second_stone_colour1', 'attr-id' => AttrIdEnum::SIDE_STONE1_COLOUR, 'style' => 'background-color:#dec674;'],
                             ],
-                            [
-                                'attribute' => 'second_stone_size1',
-                                'format' => 'raw',
-                                'value' => function ($model, $key, $index, $column) {
-                                    return Html::ajaxInput('second_stone_size1', $model->second_stone_size1, ['data-id' => $model->id]);
-                                },
-                                'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#dec674;'],
-                                'filter' => Html::activeTextInput($searchModel, 'second_stone_size1', [
-                                    'class' => 'form-control',
-                                    'style' => 'width:100px;'
-                                ]),
-                            ],
+//                            [
+//                                'attribute' => 'second_stone_size1',
+//                                'format' => 'raw',
+//                                'value' => function ($model, $key, $index, $column) {
+//                                    return Html::ajaxInput('second_stone_size1', $model->second_stone_size1, ['data-id' => $model->id]);
+//                                },
+//                                'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#dec674;'],
+//                                'filter' => Html::activeTextInput($searchModel, 'second_stone_size1', [
+//                                    'class' => 'form-control',
+//                                    'style' => 'width:100px;'
+//                                ]),
+//                            ],
                             [
                                 'attribute' => 'second_stone_price1',
                                 'format' => 'raw',

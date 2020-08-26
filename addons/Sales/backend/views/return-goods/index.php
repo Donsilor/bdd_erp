@@ -60,7 +60,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             ],
                             [
                                 'attribute'=>'return_no',
-                                'filter' => true,
+                                'filter' => false,
                                 'headerOptions' => ['class' => 'col-md-2'],
                             ],
                             [
@@ -78,11 +78,11 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'filter' => false,
                                 'headerOptions' => ['class' => 'col-md-1'],
                             ],
-//                            [
-//                                'attribute' => 'should_amount',
-//                                'filter' => true,
-//                                'headerOptions' => ['class' => 'col-md-1'],
-//                            ],
+                            [
+                                'attribute' => 'should_amount',
+                                'filter' => false,
+                                'headerOptions' => ['class' => 'col-md-1'],
+                            ],
 //                            [
 //                                'attribute' => 'apply_amount',
 //                                'filter' => true,
@@ -119,7 +119,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                             return Html::edit(['ajax-edit', 'id' => $model->id, 'returnUrl' => Url::getReturnUrl()], '编辑', [
                                                 'class' => 'btn btn-info btn-xs',
                                                 'data-toggle' => 'modal',
-                                                'data-target' => '#ajaxModalLg',
+                                                'data-target' => '#ajaxModal',
                                             ]);
                                         }
                                     },

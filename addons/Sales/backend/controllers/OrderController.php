@@ -2,6 +2,7 @@
 
 namespace addons\Sales\backend\controllers;
 
+use addons\Sales\common\enums\IsReturnEnum;
 use addons\Sales\common\enums\OrderStatusEnum;
 use addons\Sales\common\enums\ReturnByEnum;
 use addons\Sales\common\enums\ReturnTypeEnum;
@@ -183,6 +184,10 @@ class OrderController extends BaseController
             foreach ($models as & $goods){
                 $attrs = $goods->attrs ?? [];
                 $goods['attr'] = ArrayHelper::map($attrs,'attr_id','attr_value');
+
+                if ($goods->is_return == IsReturnEnum::HAS_RETURN){
+                    $return[] = $goods->id;
+                }
             }
         }
         return $this->render($this->action->id, [
@@ -191,6 +196,7 @@ class OrderController extends BaseController
                 'tab'=>Yii::$app->request->get('tab',1),
                 'tabList'=>Yii::$app->salesService->order->menuTabList($id,$this->returnUrl),
                 'returnUrl'=>$this->returnUrl,
+                'return'=>!empty($return)?json_encode($return):"",
         ]);
     }
     /**
@@ -522,6 +528,7 @@ class OrderController extends BaseController
     /**
      * 退款
      * @var SalesReturn $model
+     * @throws
      * @return mixed
      */
     public function actionReturn()
@@ -561,7 +568,7 @@ class OrderController extends BaseController
             ]);
             $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
             $dataProvider->query->andWhere(['=', 'order_id', $id]);
-            $dataProvider->query->andWhere(['=', 'is_return', ConfirmEnum::NO]);
+            $dataProvider->query->andWhere(['=', 'is_return', IsReturnEnum::SAVE]);
             $dataProvider->setSort(false);
         }
         $model->is_quick_refund = ConfirmEnum::NO;

@@ -1,5 +1,6 @@
 <?php
 
+use addons\Sales\common\enums\PayStatusEnum;
 use common\helpers\Html;
 use addons\Sales\common\enums\OrderStatusEnum;
 use addons\Sales\common\enums\IsStockEnum;
@@ -63,8 +64,8 @@ $this->params['breadcrumbs'][] = $this->title;
                             <td><?= $model->customer_name ?></td>
                             <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('express_id') ?>：</td>
                             <td><?= $model->express->name ?? '' ?></td>
-                            <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('pay_sn') ?>：</td>
-                            <td><?= $model->pay_sn ?></td>
+                            <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('refund_status') ?>：</td>
+                            <td><?= addons\Sales\common\enums\RefundStatusEnum::getValue($model->refund_status) ?></td>
                         </tr>
                         <tr>
                             <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('customer_email') ?>：</td>
@@ -81,8 +82,8 @@ $this->params['breadcrumbs'][] = $this->title;
                                             'data-offset' => '20px',
                                         ]);
                                 } ?></td>
-                            <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('out_pay_no') ?>：</td>
-                            <td><?= $model->out_pay_no ?></td>
+                            <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('pay_sn') ?>：</td>
+                            <td><?= $model->pay_sn ?></td>
                         </tr>
                         <tr>
                             <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('customer_mobile') ?>：</td>
@@ -90,8 +91,8 @@ $this->params['breadcrumbs'][] = $this->title;
 
                             <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('out_trade_no') ?>：</td>
                             <td><?= $model->out_trade_no ?></td>
-                            <td class="col-xs-1 text-right"></td>
-                            <td></td>
+                            <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('out_pay_no') ?>：</td>
+                            <td><?= $model->out_pay_no ?></td>
                         </tr>
                         <tr>
                             <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('customer_account') ?>：</td>
@@ -166,7 +167,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             //'data-toggle' => 'modal',
                             'class' => 'btn btn-warning btn-ms openIframe',
                             //'data-target' => '#ajaxModalLg',
-                            'data-width'=>'90%','data-height'=>'90%','data-offset'=>'20px'
+                            'data-width' => '90%', 'data-height' => '90%', 'data-offset' => '20px'
                         ]);
                     }
                     ?>
@@ -354,6 +355,13 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'attribute' => 'bc_status',
                                 'value' => function ($model) {
                                     return \addons\Supply\common\enums\BuChanEnum::getValue($model->bc_status) ?? '未布产' . '<br/>' . $model->produce_sn;
+                                },
+                                'format' => 'raw',
+                            ],
+                            [
+                                'attribute' => 'is_return',
+                                'value' => function ($model) {
+                                    return \addons\Sales\common\enums\IsReturnEnum::getValue($model->is_return) ?? '未操作';
                                 },
                                 'format' => 'raw',
                             ],
@@ -571,6 +579,12 @@ $this->params['breadcrumbs'][] = $this->title;
                         </div>
                         <div class="row">
                             <div class="col-lg-8 text-right">
+                                <label><?= $model->getAttributeLabel('account.refund_amount') ?>：</label></div>
+                            <div class="col-lg-4"
+                                 style="color:red"><?= AmountHelper::outputAmount($model->account->refund_amount ?? 0, 2, $model->currency) ?></div>
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-8 text-right">
                                 <label><?= $model->getAttributeLabel('account.paid_amount') ?>：</label></div>
                             <div class="col-lg-4"
                                  style="color:red"><?= AmountHelper::outputAmount($model->account->paid_amount ?? 0, 2, $model->currency) ?></div>
@@ -712,6 +726,16 @@ $this->params['breadcrumbs'][] = $this->title;
 
 </script>
 <script>
-    $("#flow").load("<?= \common\helpers\Url::to(['../common/flow/audit-view', 'flow_type_id' => $model->targetType, 'target_id' => $model->id])?>")
+    $("#flow").load("<?= \common\helpers\Url::to(['../common/flow/audit-view', 'flow_type_id' => $model->targetType, 'target_id' => $model->id])?>");
 
+    $('#order-goods table tbody tr').each(function () {
+        var id = Number($(this).attr('data-key'));
+        var arr = <?= $return ?? []?>;
+        if ($.inArray(id, arr) != -1) {
+            $(this).children().each(function () {
+                $(this).attr('style', "position:relative;");
+                $(this).append('<div style="width:100%;position:absolute;top:14px;left:-1px;border-bottom:solid 1px red;"></div><div style="width:100%;position:absolute;top:19px;left:-1px;border-bottom:solid 1px red;"></div>');
+            });
+        }
+    });
 </script>

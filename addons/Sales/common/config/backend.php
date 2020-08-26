@@ -128,6 +128,10 @@ return [
                     'title' => '货币汇率',
                     'route' => 'currency/index',
                 ],
+                [
+                    'title' => '退款原因',
+                    'route' => 'return-config/index',
+                ],
             ],
 
         ],

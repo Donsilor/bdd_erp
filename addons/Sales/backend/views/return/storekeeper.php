@@ -166,19 +166,19 @@ $params = $params ? "&".http_build_query($params) : '';
                             'filter' => false,
                             'headerOptions' => ['class' => 'col-md-1'],
                         ],
-                        [
-                            'attribute' => 'audit_status',
-                            'format' => 'raw',
-                            'headerOptions' => ['class' => 'col-md-1'],
-                            'value' => function ($model){
-                                return \common\enums\AuditStatusEnum::getValue($model->audit_status);
-                            },
-                            'filter' => Html::activeDropDownList($searchModel, 'audit_status',\common\enums\AuditStatusEnum::getMap(), [
-                                'prompt' => '全部',
-                                'class' => 'form-control',
-                                'style'=> 'width:60px;',
-                            ]),
-                        ],
+//                        [
+//                            'attribute' => 'audit_status',
+//                            'format' => 'raw',
+//                            'headerOptions' => ['class' => 'col-md-1'],
+//                            'value' => function ($model){
+//                                return \common\enums\AuditStatusEnum::getValue($model->audit_status);
+//                            },
+//                            'filter' => Html::activeDropDownList($searchModel, 'audit_status',\common\enums\AuditStatusEnum::getMap(), [
+//                                'prompt' => '全部',
+//                                'class' => 'form-control',
+//                                'style'=> 'width:60px;',
+//                            ]),
+//                        ],
                         [
                             'attribute' => 'leader_status',
                             'format' => 'raw',
@@ -219,6 +219,19 @@ $params = $params ? "&".http_build_query($params) : '';
                             ]),
                         ],
                         [
+                            'attribute' => 'return_status',
+                            'format' => 'raw',
+                            'headerOptions' => ['class' => 'col-md-1'],
+                            'value' => function ($model){
+                                return \addons\Sales\common\enums\ReturnStatusEnum::getValue($model->return_status);
+                            },
+                            'filter' => Html::activeDropDownList($searchModel, 'return_status',\addons\Sales\common\enums\ReturnStatusEnum::getMap(), [
+                                'prompt' => '全部',
+                                'class' => 'form-control',
+                                'style'=> 'width:60px;',
+                            ]),
+                        ],
+                        [
                             'class' => 'yii\grid\ActionColumn',
                             'header' => '操作',
                             'template' => '{audit} {view}',
@@ -238,7 +251,7 @@ $params = $params ? "&".http_build_query($params) : '';
 //                                    }
 //                                },
                                 'audit' => function($url, $model, $key){
-                                    if($model->audit_status == \common\enums\AuditStatusEnum::PENDING) {
+                                    if($model->audit_status == \common\enums\AuditStatusEnum::PENDING && $model->check_status == \addons\Sales\common\enums\CheckStatusEnum::LEADER) {
                                         return Html::edit(['ajax-audit','id'=>$model->id], '审核', [
                                             'class'=>'btn btn-success btn-sm',
                                             'data-toggle' => 'modal',

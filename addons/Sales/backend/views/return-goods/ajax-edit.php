@@ -21,38 +21,6 @@ $form = ActiveForm::begin([
     <div class="modal-body"> 
        <div class="col-sm-12">
            <div class="row">
-               <div class="col-lg-6">
-                   <?= $form->field($model, 'gold_type')->dropDownList(Yii::$app->attr->valueMap(AttrIdEnum::MAT_GOLD_TYPE),['prompt'=>'请选择','disabled'=>true]) ?>
-               </div>
-               <div class="col-lg-6">
-                   <?= $form->field($model, 'style_sn')->textInput(['disabled'=>true]) ?>
-               </div>
-           </div>
-           <div class="row">
-               <div class="col-lg-6">
-                   <?= $form->field($model, 'gold_name')->textInput() ?>
-               </div>
-               <div class="col-lg-6">
-                   <?= $form->field($model, 'gold_sn')->textInput(['disabled'=>true]) ?>
-               </div>
-           </div>
-           <div class="row">
-               <div class="col-lg-6">
-                   <?= $form->field($model, 'gold_num')->textInput(['disabled'=>true]) ?>
-               </div>
-               <div class="col-lg-6">
-                   <?= $form->field($model, 'gold_weight')->textInput() ?>
-               </div>
-           </div>
-           <div class="row">
-               <div class="col-lg-6">
-                   <?= $form->field($model, 'gold_price')->textInput() ?>
-               </div>
-               <div class="col-lg-6">
-                   <?= $form->field($model, 'cost_price')->textInput(['disabled'=>true]) ?>
-               </div>
-           </div>
-           <div class="row">
                <div class="col-lg-12">
                    <?= $form->field($model, 'remark')->textarea() ?>
                </div>

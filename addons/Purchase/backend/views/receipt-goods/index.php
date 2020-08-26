@@ -601,15 +601,15 @@ $this->params['breadcrumbs'][] = $this->title;
                                 ]),
                                 'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#dec674;'],
                             ],
-                            [
-                                'attribute' => 'second_cert_id1',
-                                'format' => 'raw',
-                                'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#dec674;'],
-                                'filter' => Html::activeTextInput($searchModel, 'second_cert_id1', [
-                                    'class' => 'form-control',
-                                    'style' => 'width:100px;'
-                                ]),
-                            ],
+//                            [
+//                                'attribute' => 'second_cert_id1',
+//                                'format' => 'raw',
+//                                'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#dec674;'],
+//                                'filter' => Html::activeTextInput($searchModel, 'second_cert_id1', [
+//                                    'class' => 'form-control',
+//                                    'style' => 'width:100px;'
+//                                ]),
+//                            ],
                             [
                                 'attribute' => 'second_stone_num1',
                                 'format' => 'raw',
@@ -679,15 +679,15 @@ $this->params['breadcrumbs'][] = $this->title;
                                 ]),
                                 'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#dec674;'],
                             ],
-                            [
-                                'attribute' => 'second_stone_size1',
-                                'format' => 'raw',
-                                'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#dec674;'],
-                                'filter' => Html::activeTextInput($searchModel, 'second_stone_size1', [
-                                    'class' => 'form-control',
-                                    'style' => 'width:100px;'
-                                ]),
-                            ],
+//                            [
+//                                'attribute' => 'second_stone_size1',
+//                                'format' => 'raw',
+//                                'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#dec674;'],
+//                                'filter' => Html::activeTextInput($searchModel, 'second_stone_size1', [
+//                                    'class' => 'form-control',
+//                                    'style' => 'width:100px;'
+//                                ]),
+//                            ],
                             [
                                 'attribute' => 'second_stone_price1',
                                 'format' => 'raw',
@@ -1191,6 +1191,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'attribute' => 'cost_price',
                                 'format' => 'raw',
                                 'filter' => false,
+                                'visible' => \common\helpers\Auth::verify(\common\enums\SpecialAuthEnum::VIEW_CAIGOU_PRICE),
                                 'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#b7ba6b;'],
 //                                'filter' => Html::activeTextInput($searchModel, 'cost_price', [
 //                                    'class' => 'form-control',
