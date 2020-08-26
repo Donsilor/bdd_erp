@@ -17,6 +17,7 @@ use Yii;
  * @property string $should_amount 应退金额
  * @property string $apply_amount 申请退款金额
  * @property string $real_amount 实际退款金额
+ * @property string $remark 备注
  * @property int $status 状态 1启用 0禁用 -1删除
  * @property int $creator_id 创建人
  * @property int $created_at 创建时间
@@ -42,7 +43,7 @@ class SalesReturnGoods extends BaseModel
             [['return_id', 'order_detail_id', 'goods_num', 'status', 'creator_id', 'created_at', 'updated_at'], 'integer'],
             [['should_amount', 'apply_amount', 'real_amount'], 'number'],
             [['return_no', 'goods_id'], 'string', 'max' => 30],
-            [['goods_name'], 'string', 'max' => 255],
+            [['goods_name', 'remark'], 'string', 'max' => 255],
         ];
     }
 
@@ -62,6 +63,7 @@ class SalesReturnGoods extends BaseModel
             'should_amount' => '应退金额',
             'apply_amount' => '申请退款金额',
             'real_amount' => '实际退款金额',
+            'remark' => '备注',
             'status' => '状态',
             'creator_id' => '创建人',
             'created_at' => '创建时间',
