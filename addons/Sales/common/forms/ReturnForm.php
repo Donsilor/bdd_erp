@@ -13,6 +13,7 @@ use common\helpers\ArrayHelper;
 class ReturnForm extends SalesReturn
 {
     public $ids;
+    public $to_warehouse_id;
 
     /**
      * {@inheritdoc}
@@ -20,7 +21,7 @@ class ReturnForm extends SalesReturn
     public function rules()
     {
         $rules = [
-
+            [['to_warehouse_id'], 'integer'],
         ];
         return ArrayHelper::merge(parent::rules() , $rules);
     }
@@ -32,7 +33,7 @@ class ReturnForm extends SalesReturn
     {
         //合并
         return ArrayHelper::merge(parent::attributeLabels() , [
-
+            'to_warehouse_id' => '入库仓库',
         ]);
     }
 

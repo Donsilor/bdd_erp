@@ -2,6 +2,9 @@
 
 namespace addons\Sales\backend\controllers;
 
+use addons\Warehouse\common\enums\BillStatusEnum;
+use addons\Warehouse\common\enums\BillTypeEnum;
+use addons\Warehouse\common\models\WarehouseBill;
 use Yii;
 use common\helpers\Url;
 use common\traits\Curd;
@@ -308,6 +311,10 @@ class ReturnController extends BaseController
             $remark = "audit_remark";
         }
         $model->$status = AuditStatusEnum::PASS;
+        $bill = WarehouseBill::find()->where(['order_sn'=>$model->order_sn, 'bill_type'=> BillTypeEnum::BILL_TYPE_S, 'bill_status' => BillStatusEnum::CONFIRM])->one();
+        if(!empty($bill)){
+            $model->to_warehouse_id = $bill->from_warehouse_id;
+        }
         return $this->renderAjax($this->action->id, [
             'model' => $model,
             'status' => $status,

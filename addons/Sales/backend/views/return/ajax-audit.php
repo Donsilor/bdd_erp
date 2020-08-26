@@ -50,6 +50,22 @@ $form = ActiveForm::begin([
                     </div>
                 </div>
             <?php } ?>
+            <?php if($model->check_status == CheckStatusEnum::LEADER) {?>
+                <div class="row">
+                    <div class="col-lg-6">
+                        <?= $form->field($model, 'return_by')->radioList(\addons\Sales\common\enums\ReturnByEnum::getMap()) ?>
+                    </div>
+                    <div class="col-lg-6">
+                        <?= $form->field($model, 'to_warehouse_id')->widget(\kartik\select2\Select2::class, [
+                            'data' => Yii::$app->warehouseService->warehouse::getDropDown(),
+                            'options' => ['placeholder' => '请选择', 'disabled'=>true],
+                            'pluginOptions' => [
+                                'allowClear' => false
+                            ],
+                        ]);?>
+                    </div>
+                </div>
+            <?php } ?>
             <?= $form->field($model, $remark)->textArea(); ?>
             <!-- /.tab-pane -->
         </div>
