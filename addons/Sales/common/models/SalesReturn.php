@@ -130,7 +130,7 @@ class SalesReturn extends BaseModel
             'pay_remark' => '付款备注',
             'pay_receipt' => '付款凭证',
             'check_status' => '确认状态',
-            'remark' => '备注',
+            'remark' => '退款备注',
             'audit_status' => '单据状态',
             'audit_remark' => '审核备注',
             'audit_time' => '审核时间',
