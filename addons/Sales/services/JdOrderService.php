@@ -66,7 +66,7 @@ class JdOrderService extends Service
             "distribute_status"=>$this->getErpDistributeStatus($order),
             "delivery_status"=>$this->getErpDeliveryStatus($order),
             "delivery_time"=>null,
-            "receive_type"=>$order->deliveryType,//送货类型
+            "receive_type"=>$this->getErpReceiveType($order),//送货类型
             "sale_channel_id"=>$this->getErpSaleChannelId($order),
             "order_from"=>$this->getErpOrderFrom($order),
             "order_type"=>$this->getErpOrderType($order),
@@ -173,6 +173,20 @@ class JdOrderService extends Service
     public function getErpOrderGoodsAttrsData($model)
     {
         return [];
+    }
+    
+    /**
+     * 收货（时间）类型
+     * @param unknown $order
+     * @return number
+     */
+    public function getErpReceiveType($order) 
+    {
+        $receiveType = 1;
+        if($order->deliveryType == '任意时间') {
+            $receiveType = 1;
+        }
+        return $receiveType;
     }
     /**
      *
