@@ -17,7 +17,7 @@ return [
     'components' => [
         'db' => [
                 'class' => 'yii\db\Connection',
-                'dsn' => 'mysql:host=8.129.190.33;port=3306;dbname=bdd_erp;',
+                'dsn' => 'mysql:host=8.129.190.33;port=3389;dbname=bdd_erp;',
                 'username' => 'super',
                 'password' => 'Bdd123o123',
                 'charset' => 'utf8',
