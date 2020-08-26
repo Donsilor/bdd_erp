@@ -219,26 +219,28 @@ class ReturnService
     public function auditReturn($form)
     {
         $check_status = $form->check_status;
-        if ($check_status == CheckStatusEnum::SAVE) {
+        if ($check_status == CheckStatusEnum::SAVE) {//主管审核
             $form->leader_id = \Yii::$app->user->getId();
             $form->leader_time = time();
             if ($form->leader_status == AuditStatusEnum::PASS) {
                 $form->check_status = CheckStatusEnum::LEADER;
                 $form->storekeeper_status = AuditStatusEnum::PENDING;
+            }else{
+                //$form->check_status = CheckStatusEnum::SAVE;
             }
-        } elseif ($check_status == CheckStatusEnum::LEADER) {
+        } elseif ($check_status == CheckStatusEnum::LEADER) {//商品部审核
             $form->storekeeper_id = \Yii::$app->user->getId();
             $form->storekeeper_time = time();
             if ($form->storekeeper_status == AuditStatusEnum::PASS) {
                 $form->check_status = CheckStatusEnum::STOREKEEPER;
                 $form->finance_status = AuditStatusEnum::PENDING;
-                if ($form->return_by == ReturnByEnum::GOODS) {
+                if ($form->return_by == ReturnByEnum::GOODS) {//退商品
                     $this->createBillD($form);
                 }
             } else {
                 //$form->check_status = CheckStatusEnum::SAVE;
             }
-        } elseif ($check_status == CheckStatusEnum::STOREKEEPER) {
+        } elseif ($check_status == CheckStatusEnum::STOREKEEPER) {//财务审核
             $form->finance_id = \Yii::$app->user->getId();
             $form->finance_time = time();
             if ($form->finance_status == AuditStatusEnum::PASS) {
@@ -302,13 +304,14 @@ class ReturnService
      */
     public function createBillD($form)
     {
-        $goods_ids[$form->order_detail_id] = $form->goods_id;
+        $goods_ids = ReturnGoodsForm::findAll(['return_id'=>$form->id]);
         if (empty($goods_ids)) {
             throw new \Exception("货号[条码号]不能为空");
         }
         $bill_goods = [];
         $total_cost = $total_sale = $total_market = 0;
-        foreach ($goods_ids as $id => $goods_id) {
+        foreach ($goods_ids as $good) {
+            $goods_id = $good['goods_id']??"";
             if (!$goods_id) {
                 throw new \Exception("货号不能为空");
             }
@@ -319,7 +322,7 @@ class ReturnService
             if ($goods->goods_status != GoodsStatusEnum::HAS_SOLD) {
                 throw new \Exception("货号" . $goods_id . "不是已销售状态");
             }
-            $orderGoods = OrderGoods::findOne($id);
+            //$orderGoods = OrderGoods::findOne($id);
             //$goodsAccount = OrderAccount::findOne($id);
             //$goods = new WarehouseGoods();
             $bill_goods[] = [
@@ -327,8 +330,8 @@ class ReturnService
                 'goods_name' => $goods->goods_name,
                 'style_sn' => $goods->style_sn,
                 'goods_num' => $goods->goods_num,
-                'order_detail_id' => $id,
-                'source_detail_id' => $id,
+                'order_detail_id' => $good['order_detail_id']??"",
+                'source_detail_id' => $good['id']??"",
                 'put_in_type' => $goods->put_in_type,
                 'warehouse_id' => $goods->warehouse_id,
                 'material' => $goods->material,
@@ -342,7 +345,7 @@ class ReturnService
                 'diamond_cert_id' => $goods->diamond_cert_id,
                 'diamond_cert_type' => $goods->diamond_cert_type,
                 'cost_price' => $goods->cost_price,
-                'sale_price' => $form->real_amount,
+                'sale_price' => $form->should_amount,
                 'market_price' => $goods->market_price,
                 'markup_rate' => 1,
                 'status' => StatusEnum::ENABLED,
@@ -357,7 +360,7 @@ class ReturnService
         $bill = [
             'bill_type' => BillTypeEnum::BILL_TYPE_D,
             'bill_status' => BillStatusEnum::PENDING,
-            'channel_id' => $form->sale_channel_id,
+            'channel_id' => $form->channel_id,
             'order_sn' => $form->order_sn,
             'order_type' => OrderTypeEnum::ORDER_K,
             'goods_num' => count($bill_goods),
