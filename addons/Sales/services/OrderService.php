@@ -428,6 +428,8 @@ class OrderService extends Service
     /**
      * 创建订单编号
      * @param Style $model
+     * @throws
+     * @return string
      */
     public static function createOrderSn($model,$save = false)
     {
