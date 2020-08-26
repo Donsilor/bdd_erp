@@ -197,11 +197,11 @@ class MemberWorksController extends BaseController
             $member = Member::find()->where(['id'=>$creator_id])->one();
             $list['username'] = $member->username;
             $list['dept'] = $member->department->name ?? '';
-            $list['post'] = $member->department->name ?? '';
+            $list['post'] = $member->role->title ?? '';
             $member_works_list = MemberWorks::find() ->where($where)->andWhere(['creator_id'=>$creator_id])->select(['date','content'])->asArray()->all();
             $member_works_list = array_column($member_works_list,'content','date');
             foreach ($date_list as $date){
-                $list[$date['date']] = isset($member_works_list[$date['date']]) ? $member_works_list[$date['date']] : '';
+                $list[$date['date']] = str_replace('<br />','\n',nl2br($member_works_list[$date['date']] ?? ''));
             }
             $lists[] = $list;
         }

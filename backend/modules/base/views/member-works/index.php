@@ -87,7 +87,7 @@ $params = $params ? "&".http_build_query($params) : '';
                             [
                                 'attribute' => 'content',
                                 'value'=> function($model){
-                                    return $model->content;
+                                    return nl2br($model->content);
                                 },
                                 'format' => 'raw',
                                 'headerOptions' => ['class' => 'col-md-5'],

@@ -48,7 +48,7 @@ class ExcelHelper
             $sheet->setCellValue(Coordinate::stringFromColumnIndex($hk) . '1', $v[0]);
             $sheet->getStyle(Coordinate::stringFromColumnIndex($hk) . '1')->getFont()->setBold(true);
             $sheet->getDefaultColumnDimension()->setWidth(12); //设置默认列宽为12
-            //$sheet->getColumnDimension(Coordinate::stringFromColumnIndex($hk))->setAutoSize(true); //自动计算列宽
+            $sheet->getColumnDimension(Coordinate::stringFromColumnIndex($hk))->setAutoSize(true); //自动计算列宽
             $hk += 1;
         }
 
