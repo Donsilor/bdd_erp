@@ -219,6 +219,19 @@ $params = $params ? "&".http_build_query($params) : '';
                             ]),
                         ],
                         [
+                            'attribute' => 'return_status',
+                            'format' => 'raw',
+                            'headerOptions' => ['class' => 'col-md-1'],
+                            'value' => function ($model){
+                                return \addons\Sales\common\enums\ReturnStatusEnum::getValue($model->return_status);
+                            },
+                            'filter' => Html::activeDropDownList($searchModel, 'return_status',\addons\Sales\common\enums\ReturnStatusEnum::getMap(), [
+                                'prompt' => '全部',
+                                'class' => 'form-control',
+                                'style'=> 'width:60px;',
+                            ]),
+                        ],
+                        [
                             'class' => 'yii\grid\ActionColumn',
                             'header' => '操作',
                             'template' => '{audit} {view}',

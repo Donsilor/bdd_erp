@@ -60,7 +60,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             ],
                             [
                                 'attribute'=>'return_no',
-                                'filter' => true,
+                                'filter' => false,
                                 'headerOptions' => ['class' => 'col-md-2'],
                             ],
                             [

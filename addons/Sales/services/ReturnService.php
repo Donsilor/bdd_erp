@@ -8,32 +8,30 @@
 
 namespace addons\Sales\services;
 
+use addons\Sales\common\models\OrderAccount;
+use addons\Sales\common\models\OrderAddress;
+use addons\Sales\common\models\OrderGoods;
+use addons\Sales\common\forms\ReturnGoodsForm;
+use addons\Warehouse\common\forms\WarehouseBillDForm;
+use addons\Warehouse\common\models\WarehouseGoods;
+use addons\Sales\common\models\Order;
+use addons\Sales\common\forms\ReturnForm;
 use addons\Sales\common\enums\DeliveryStatusEnum;
 use addons\Sales\common\enums\IsReturnEnum;
 use addons\Sales\common\enums\RefundStatusEnum;
 use addons\Sales\common\enums\ReturnByEnum;
 use addons\Sales\common\enums\CheckStatusEnum;
-use addons\Sales\common\enums\ReturnTypeEnum;
-use addons\Sales\common\forms\ReturnGoodsForm;
-use addons\Sales\common\models\OrderAccount;
-use addons\Sales\common\models\OrderAddress;
-use addons\Sales\common\models\OrderGoods;
+use addons\Sales\common\enums\ReturnStatusEnum;
 use addons\Warehouse\common\enums\BillStatusEnum;
 use addons\Warehouse\common\enums\BillTypeEnum;
 use addons\Warehouse\common\enums\GoodsStatusEnum;
 use addons\Warehouse\common\enums\OrderTypeEnum;
-use addons\Warehouse\common\forms\WarehouseBillDForm;
-use addons\Warehouse\common\forms\WarehouseBillLForm;
-use addons\Warehouse\common\models\WarehouseBill;
-use addons\Warehouse\common\models\WarehouseGoods;
 use common\enums\AuditStatusEnum;
 use common\enums\ConfirmEnum;
 use common\enums\LogTypeEnum;
 use common\enums\StatusEnum;
 use common\helpers\SnHelper;
 use common\helpers\Url;
-use addons\Sales\common\forms\ReturnForm;
-use addons\Sales\common\models\Order;
 
 class ReturnService
 {
@@ -248,10 +246,15 @@ class ReturnService
                 if (false === $order->save()) {
                     throw new \Exception($this->getError($order));
                 }
-                $goods = OrderGoods::findOne($form->order_detail_id);
-                $goods->is_return = ConfirmEnum::YES;
-                if (false === $goods->save()) {
-                    throw new \Exception($this->getError($goods));
+                $rGoods = ReturnGoodsForm::findAll(['return_id'=>$form->id]);
+                $goods_id = [];
+                foreach ($rGoods as $good) {
+                    $goods = OrderGoods::findOne($good->order_detail_id);
+                    $goods_id[] = $good->goods_id;
+                    $goods->is_return = IsReturnEnum::HAS_RETURN;
+                    if (false === $goods->save()) {
+                        throw new \Exception($this->getError($goods));
+                    }
                 }
                 if ($form->return_by == ReturnByEnum::GOODS) {
                     //1.审核销售退货单
@@ -264,7 +267,7 @@ class ReturnService
                         throw new \Exception("销售退货单不存在");
                     }
                     //2.更新商品库存状态
-                    $condition = ['goods_id' => $form->goods_id, 'goods_status' => GoodsStatusEnum::IN_REFUND];
+                    $condition = ['goods_id' => $goods_id, 'goods_status' => GoodsStatusEnum::IN_REFUND];
                     WarehouseGoods::updateAll(['goods_status' => GoodsStatusEnum::IN_STOCK], $condition);
                 }
                 //3.更新订单金额
@@ -274,6 +277,9 @@ class ReturnService
                 if (false === $account->save()) {
                     throw new \Exception($this->getError($account));
                 }
+
+                $form->return_status = ReturnStatusEnum::CONFIRM;
+                $form->audit_status = AuditStatusEnum::PASS;
             } else {
                 //$form->check_status = CheckStatusEnum::LEADER;
             }

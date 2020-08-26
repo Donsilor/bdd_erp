@@ -1,6 +1,8 @@
 <?php
 
 use addons\Sales\common\enums\CheckStatusEnum;
+use common\enums\CurrencyEnum;
+use common\enums\LanguageEnum;
 use yii\widgets\ActiveForm;
 use common\helpers\Url;
 
@@ -21,7 +23,24 @@ $form = ActiveForm::begin([
 
     <div class="modal-body">
         <div class="tab-content">
+            <?= $form->field($model, 'check_status')->hiddenInput()->label(false); ?>
+            <div class="row">
+                <div class="col-lg-6">
+                    <?= $form->field($model, $status)->radioList(\common\enums\AuditStatusEnum::getAuditMap()) ?>
+                </div>
+                <div class="col-lg-6">
+                    <?= $form->field($model, 'should_amount')->textInput(['readonly'=>true])?>
+                </div>
+            </div>
             <?php if($model->check_status == CheckStatusEnum::STOREKEEPER) {?>
+                <div class="row">
+                    <div class="col-lg-6">
+                        <?= $form->field($model, 'currency')->dropDownList(common\enums\CurrencyEnum::getMap(),['prompt'=>'请选择', 'disabled'=>true]);?>
+                    </div>
+                    <div class="col-lg-6">
+                        <?= $form->field($model, 'real_amount')->textInput(['value'=>$model->should_amount])?>
+                    </div>
+                </div>
                 <div class="row">
                     <div class="col-lg-6">
                         <?= $form->field($model, 'is_finance_refund')->radioList(\common\enums\ConfirmEnum::getMap()) ?>
@@ -31,8 +50,6 @@ $form = ActiveForm::begin([
                     </div>
                 </div>
             <?php } ?>
-            <?= $form->field($model, 'check_status')->hiddenInput()->label(false); ?>
-            <?= $form->field($model, $status)->radioList(\common\enums\AuditStatusEnum::getAuditMap()) ?>
             <?= $form->field($model, $remark)->textArea(); ?>
             <!-- /.tab-pane -->
         </div>

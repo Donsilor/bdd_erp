@@ -2,6 +2,7 @@
 
 namespace addons\Sales\backend\controllers;
 
+use addons\Sales\common\enums\ReturnStatusEnum;
 use Yii;
 use common\helpers\Url;
 use common\traits\Curd;
@@ -252,6 +253,7 @@ class ReturnController extends BaseController
 
             $model->audit_status = AuditStatusEnum::PENDING;
             $model->leader_status = AuditStatusEnum::PENDING;
+            $model->return_status = ReturnStatusEnum::PENDING;
             if(false === $model->save()){
                 throw new \Exception($this->getError($model));
             }
