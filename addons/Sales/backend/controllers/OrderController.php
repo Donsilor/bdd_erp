@@ -2,6 +2,7 @@
 
 namespace addons\Sales\backend\controllers;
 
+use addons\Sales\common\enums\IsReturnEnum;
 use addons\Sales\common\enums\OrderStatusEnum;
 use addons\Sales\common\enums\ReturnByEnum;
 use addons\Sales\common\enums\ReturnTypeEnum;
@@ -522,6 +523,7 @@ class OrderController extends BaseController
     /**
      * 退款
      * @var SalesReturn $model
+     * @throws
      * @return mixed
      */
     public function actionReturn()
@@ -561,7 +563,7 @@ class OrderController extends BaseController
             ]);
             $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
             $dataProvider->query->andWhere(['=', 'order_id', $id]);
-            $dataProvider->query->andWhere(['=', 'is_return', ConfirmEnum::NO]);
+            $dataProvider->query->andWhere(['=', 'is_return', IsReturnEnum::SAVE]);
             $dataProvider->setSort(false);
         }
         $model->is_quick_refund = ConfirmEnum::NO;

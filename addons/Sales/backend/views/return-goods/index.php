@@ -78,11 +78,11 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'filter' => false,
                                 'headerOptions' => ['class' => 'col-md-1'],
                             ],
-//                            [
-//                                'attribute' => 'should_amount',
-//                                'filter' => true,
-//                                'headerOptions' => ['class' => 'col-md-1'],
-//                            ],
+                            [
+                                'attribute' => 'should_amount',
+                                'filter' => false,
+                                'headerOptions' => ['class' => 'col-md-1'],
+                            ],
 //                            [
 //                                'attribute' => 'apply_amount',
 //                                'filter' => true,

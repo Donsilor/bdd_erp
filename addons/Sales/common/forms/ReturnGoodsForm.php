@@ -32,7 +32,7 @@ class ReturnGoodsForm extends SalesReturnGoods
     {
         //合并
         return ArrayHelper::merge(parent::attributeLabels() , [
-
+            'should_amount' => '实际成交价',
         ]);
     }
 

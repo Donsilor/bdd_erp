@@ -3,26 +3,26 @@
 namespace addons\Sales\backend\controllers;
 
 use Yii;
-use addons\Sales\common\models\FqcConfig;
+use addons\Sales\common\models\ReturnConfig;
 use common\models\base\SearchModel;
 use common\traits\Curd;
 use yii\data\ActiveDataProvider;
 
 /**
- * 质检未过原因
+ * 退款原因
  *
- * Class PurchaseFqcConfigController
+ * Class ReturnConfigController
  * @package addons\RfArticle\backend\controllers
  * @author jianyan74 <751393839@qq.com>
  */
-class FqcConfigController extends BaseController
+class ReturnConfigController extends BaseController
 {
     use Curd;
 
     /**
      * @var FqcConfigController
      */
-    public $modelClass = FqcConfig::class;
+    public $modelClass = ReturnConfig::class;
 
     /**
      * Lists all Tree models.
@@ -41,7 +41,7 @@ class FqcConfigController extends BaseController
             ],
             'pageSize' => $this->pageSize
         ]);
-        $query = FqcConfig::find()
+        $query = ReturnConfig::find()
             ->orderBy('sort asc, created_at asc');
         if(!empty($title)){
             $query->andWhere(['or',['=','id',$title],['like','name',$title]]);
