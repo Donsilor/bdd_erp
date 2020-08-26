@@ -205,6 +205,9 @@ class OrderService extends Service
                 $orderGoods = new OrderGoods();
                 $orderGoods->attributes = $goodsInfo + $styleInfo;
                 $orderGoods->order_id = $order->id;
+                if(empty($goodsInfo['goods_image'])) {
+                    $orderGoods->goods_image = $style->style_image;
+                }
                 if(false === $orderGoods->save()) {
                     throw new \Exception("同步订单商品失败：".$this->getError($orderGoods));
                 }

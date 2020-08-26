@@ -31,7 +31,7 @@ return [
                 // 'schemaCache' => 'cache', // 缓存名称
         ],
         //BDD正式erp
-        /* 'db' => [
+        'db2' => [
                 'class' => 'yii\db\Connection',
                 'dsn' => 'mysql:host=47.75.210.123;port=3306;dbname=bdd_erp;',
                 'username' => 'super',
@@ -41,7 +41,7 @@ return [
                 'attributes' => [
 
                 ],
-        ], */
+        ], 
         //BDD官网
         'bddDb' => [
                 'class' => 'yii\db\Connection',
