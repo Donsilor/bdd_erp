@@ -126,9 +126,9 @@ class ReturnService
         }
         foreach ($rGoods as $good) {
             $goodsM = new ReturnGoodsForm();
+            $goodsM->attributes = $good;
             $goodsM->return_id = $form->id;
             $goodsM->return_no = $form->return_no;
-            $goodsM->attributes = $good;
             if (false === $goodsM->save()) {
                 throw new \Exception($this->getError($goodsM));
             }

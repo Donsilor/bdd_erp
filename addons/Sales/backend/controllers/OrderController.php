@@ -523,6 +523,7 @@ class OrderController extends BaseController
     /**
      * 退款
      * @var SalesReturn $model
+     * @throws
      * @return mixed
      */
     public function actionReturn()
