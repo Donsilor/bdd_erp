@@ -1,5 +1,6 @@
 <?php
 
+use addons\Warehouse\common\enums\BillStatusEnum;
 use common\helpers\Html;
 use common\helpers\ImageHelper;
 use common\helpers\Url;
@@ -219,7 +220,7 @@ $params = $params ? "&".http_build_query($params) : '';
                         [
                             'class' => 'yii\grid\ActionColumn',
                             'header' => '操作',
-                            'template' => '{edit} {apply} {audit} {view}',
+                            'template' => '{edit} {apply} {audit} {view} {cancel}',
                             'buttons' => [
                                 'edit' => function($url, $model, $key){
                                     if($model->audit_status == \common\enums\AuditStatusEnum::SAVE){
@@ -248,6 +249,14 @@ $params = $params ? "&".http_build_query($params) : '';
 //                                },
                                 'view' => function($url, $model, $key){
                                     return Html::a('查看', ['return-goods/index', 'return_id' => $model->id,'returnUrl'=>Url::getReturnUrl()], ['class' => 'btn btn-warning btn-sm']);
+                                },
+                                'cancel' => function($url, $model, $key){
+                                    if($model->audit_status == \common\enums\AuditStatusEnum::SAVE) {
+                                        return Html::delete(['cancel', 'id' => $model->id],'取消', [
+                                            //'class'=>'btn btn-info btn-sm',
+                                            'onclick' => 'rfTwiceAffirm(this,"取消退款", "确定取消吗？");return false;',
+                                        ]);
+                                    }
                                 },
 //                                'status' => function($url, $model, $key){
 //                                    if($model->audit_status == \common\enums\AuditStatusEnum::PASS) {

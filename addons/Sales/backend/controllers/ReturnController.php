@@ -237,10 +237,10 @@ class ReturnController extends BaseController
     }
 
     /**
-     * 提交审核
-     * @throws
-     * @return mixed
-     */
+ * 提交审核
+ * @throws
+ * @return mixed
+ */
     public function actionAjaxApply()
     {
         $id = \Yii::$app->request->get('id');
@@ -330,5 +330,33 @@ class ReturnController extends BaseController
             'tabList'=>\Yii::$app->salesService->return->menuTabList($id, $returnUrl),
             'returnUrl'=>$returnUrl,
         ]);
+    }
+
+    /**
+     * 取消退款
+     * @throws
+     * @return mixed
+     */
+    public function actionCancel()
+    {
+        $id = \Yii::$app->request->get('id');
+        $model = $this->findModel($id);
+        $model = $model ?? new ReturnForm();
+        if($model->audit_status != AuditStatusEnum::SAVE){
+            return $this->message('退款单不是保存状态', $this->redirect(\Yii::$app->request->referrer), 'error');
+        }
+        try{
+            $trans = Yii::$app->trans->beginTransaction();
+
+            \Yii::$app->salesService->return->cancelReturn($model);
+            if(false === $model->save()){
+                throw new \Exception($this->getError($model));
+            }
+            $trans->commit();
+            return $this->message('操作成功', $this->redirect(\Yii::$app->request->referrer), 'success');
+        }catch (\Exception $e){
+            $trans->rollBack();
+            return $this->message("操作失败:". $e->getMessage(),  $this->redirect(Yii::$app->request->referrer), 'error');
+        }
     }
 }

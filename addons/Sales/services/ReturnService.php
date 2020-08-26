@@ -30,6 +30,7 @@ use common\enums\AuditStatusEnum;
 use common\enums\ConfirmEnum;
 use common\enums\LogTypeEnum;
 use common\enums\StatusEnum;
+use common\helpers\ArrayHelper;
 use common\helpers\SnHelper;
 use common\helpers\Url;
 
@@ -293,6 +294,33 @@ class ReturnService
         } else {
             throw new \Exception("审核失败");
         }
+        if (false === $form->save()) {
+            throw new \Exception($this->getError($form));
+        }
+        return $form;
+    }
+
+    /**
+     * 退款-取消
+     * @param ReturnForm $form
+     * @return object $form
+     * @throws
+     */
+    public function cancelReturn($form)
+    {
+        //1.还原订单状态
+        $order = Order::findOne(['id'=>$form->order_id]);
+        $order->refund_status = RefundStatusEnum::SAVE;
+        if (false === $order->save()) {
+            throw new \Exception($this->getError($order));
+        }
+        //2.还原商品状态
+        $goods = ReturnGoodsForm::findAll(['return_id'=>$form->id]);
+        $ids = ArrayHelper::getColumn($goods, 'order_detail_id');
+        OrderGoods::updateAll(['is_return'=>IsReturnEnum::SAVE], ['id'=>$ids]);
+        //3.取消退款单状态
+        $form->return_status = ReturnStatusEnum::CANCEL;
+        $form->audit_status = AuditStatusEnum::UNPASS;
         if (false === $form->save()) {
             throw new \Exception($this->getError($form));
         }
