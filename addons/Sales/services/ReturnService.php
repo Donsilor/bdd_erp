@@ -347,12 +347,14 @@ class ReturnService extends Service
                 throw new \Exception($this->getError($newGoods));
             }
             //3.绑定货号
-            $wGoods = WarehouseGoods::findOne(['goods_id'=>$newGoods->goods_id]);
-            if(!empty($wGoods)){
-                $wGoods->order_sn = $newOrder->order_sn;
-                $wGoods->order_detail_id = (string) $newGoods->id;
-                if (false == $wGoods->save()) {
-                    throw new \Exception($this->getError($wGoods));
+            if($form->return_by == ReturnByEnum::GOODS){
+                $wGoods = WarehouseGoods::findOne(['goods_id'=>$newGoods->goods_id]);
+                if(!empty($wGoods)){
+                    $wGoods->order_sn = $newOrder->order_sn;
+                    $wGoods->order_detail_id = (string) $newGoods->id;
+                    if (false == $wGoods->save()) {
+                        throw new \Exception($this->getError($wGoods));
+                    }
                 }
             }
             $order_amount = bcadd($order_amount, $newGoods->goods_pay_price, 3);
