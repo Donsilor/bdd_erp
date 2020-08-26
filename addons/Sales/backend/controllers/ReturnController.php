@@ -150,6 +150,7 @@ class ReturnController extends BaseController
 
         //$dataProvider->query->andWhere(['=',ReturnForm::tableName().'.check_status',CheckStatusEnum::LEADER]);
         $dataProvider->query->andWhere(['>=',ReturnForm::tableName().'.audit_status',AuditStatusEnum::PENDING]);
+        $dataProvider->query->andWhere(['=',ReturnForm::tableName().'.leader_status',AuditStatusEnum::PASS]);
         $dataProvider->query->andWhere(['>',ReturnForm::tableName().'.storekeeper_status',AuditStatusEnum::SAVE]);
 
         return $this->render($this->action->id, [
@@ -195,6 +196,8 @@ class ReturnController extends BaseController
 
         //$dataProvider->query->andWhere(['=',ReturnForm::tableName().'.check_status',CheckStatusEnum::STOREKEEPER]);
         $dataProvider->query->andWhere(['>=',ReturnForm::tableName().'.audit_status',AuditStatusEnum::PENDING]);
+        $dataProvider->query->andWhere(['=',ReturnForm::tableName().'.leader_status',AuditStatusEnum::PASS]);
+        $dataProvider->query->andWhere(['=',ReturnForm::tableName().'.storekeeper_status',AuditStatusEnum::PASS]);
         $dataProvider->query->andWhere(['>',ReturnForm::tableName().'.finance_status',AuditStatusEnum::SAVE]);
 
         return $this->render($this->action->id, [

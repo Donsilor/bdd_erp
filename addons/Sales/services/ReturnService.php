@@ -13,6 +13,7 @@ use addons\Sales\common\models\OrderAddress;
 use addons\Sales\common\models\OrderGoods;
 use addons\Sales\common\forms\ReturnGoodsForm;
 use addons\Warehouse\common\forms\WarehouseBillDForm;
+use addons\Warehouse\common\models\WarehouseBillGoods;
 use addons\Warehouse\common\models\WarehouseGoods;
 use addons\Sales\common\models\Order;
 use addons\Sales\common\forms\ReturnForm;
@@ -227,7 +228,8 @@ class ReturnService
                 $form->check_status = CheckStatusEnum::LEADER;
                 $form->storekeeper_status = AuditStatusEnum::PENDING;
             }else{
-                //$form->check_status = CheckStatusEnum::SAVE;
+                $form->return_status = ReturnStatusEnum::SAVE;
+                $form->audit_status = AuditStatusEnum::SAVE;
             }
         } elseif ($check_status == CheckStatusEnum::LEADER) {//商品部审核
             $form->storekeeper_id = \Yii::$app->user->getId();
@@ -240,7 +242,8 @@ class ReturnService
                     $form->bill_no = $billM->bill_no;
                 }
             } else {
-                //$form->check_status = CheckStatusEnum::SAVE;
+                $form->check_status = CheckStatusEnum::SAVE;
+                $form->leader_status = AuditStatusEnum::PENDING;
             }
         } elseif ($check_status == CheckStatusEnum::STOREKEEPER) {//财务审核
             $form->finance_id = \Yii::$app->user->getId();
@@ -272,7 +275,7 @@ class ReturnService
                             throw new \Exception($this->getError($bill));
                         }
                     } else {
-                        throw new \Exception("销售退货单不存在");
+                        throw new \Exception("销售退货单不存在[code=1]");
                     }
                     //2.更新商品库存状态
                     $condition = ['goods_id' => $goods_id, 'goods_status' => GoodsStatusEnum::IN_REFUND];
@@ -289,7 +292,26 @@ class ReturnService
                 $form->return_status = ReturnStatusEnum::CONFIRM;
                 $form->audit_status = AuditStatusEnum::PASS;
             } else {
-                //$form->check_status = CheckStatusEnum::LEADER;
+                $form->check_status = CheckStatusEnum::LEADER;
+                $form->storekeeper_status = AuditStatusEnum::PENDING;
+                if ($form->return_by == ReturnByEnum::GOODS) {
+                    //1.取消销售退货单
+                    $bill = WarehouseBillDForm::findOne(['bill_no'=>$form->bill_no]);
+                    if (!empty($bill)) {
+                        $bill->bill_status = BillStatusEnum::CANCEL;
+                        $bill->audit_status = AuditStatusEnum::UNPASS;
+                        if (false === $bill->save()) {
+                            throw new \Exception($this->getError($bill));
+                        }
+                    } else {
+                        throw new \Exception("销售退货单不存在[code=2]");
+                    }
+                    //2.更新商品库存状态
+                    $bGoods = WarehouseBillGoods::findAll(['bill_id'=>$bill->id]);
+                    $goods_ids = ArrayHelper::getColumn($bGoods, 'goods_id');
+                    $condition = ['goods_id' => $goods_ids, 'goods_status' => GoodsStatusEnum::IN_REFUND];
+                    WarehouseGoods::updateAll(['goods_status' => GoodsStatusEnum::HAS_SOLD], $condition);
+                }
             }
         } else {
             throw new \Exception("审核失败");

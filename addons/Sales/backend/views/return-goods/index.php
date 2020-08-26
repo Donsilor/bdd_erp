@@ -103,11 +103,11 @@ $this->params['breadcrumbs'][] = $this->title;
 //                                'filter' => true,
 //                                'headerOptions' => ['class' => 'col-md-2'],
 //                            ],*/
-//                            [
-//                                'attribute' => 'remark',
-//                                'filter' => true,
-//                                'headerOptions' => ['class' => 'col-md-2'],
-//                            ],
+                            [
+                                'attribute' => 'remark',
+                                'filter' => true,
+                                'headerOptions' => ['class' => 'col-md-2'],
+                            ],
                             [
                                 'class' => 'yii\grid\ActionColumn',
                                 'header' => '操作',
