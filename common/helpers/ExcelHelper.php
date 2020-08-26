@@ -31,7 +31,7 @@ class ExcelHelper
      * @throws \PhpOffice\PhpSpreadsheet\Exception
      * @throws \PhpOffice\PhpSpreadsheet\Writer\Exception
      */
-    public static function exportData($list = [], $header = [], $filename = '', $suffix = 'xlsx')
+    public static function exportData($list = [], $header = [], $filename = '', $suffix = 'xlsx', $excelOptions = null)
     {
         if (!is_array($list) || !is_array($header)) {
             return false;
@@ -39,18 +39,26 @@ class ExcelHelper
 
         !$filename && $filename = time();
 
-        // 初始化
-        $spreadsheet = new Spreadsheet();
-        $sheet = $spreadsheet->getActiveSheet();
-        // 写入头部
-        $hk = 1;
-        foreach ($header as $k => $v) {
-            $sheet->setCellValue(Coordinate::stringFromColumnIndex($hk) . '1', $v[0]);
-            $sheet->getStyle(Coordinate::stringFromColumnIndex($hk) . '1')->getFont()->setBold(true);
-            $sheet->getDefaultColumnDimension()->setWidth(12); //设置默认列宽为12
-            $sheet->getColumnDimension(Coordinate::stringFromColumnIndex($hk))->setAutoSize(true); //自动计算列宽
-            $hk += 1;
+        if($excelOptions === null){
+            // 初始化
+            $spreadsheet = new Spreadsheet();
+            $sheet = $spreadsheet->getActiveSheet();
+            // 写入头部
+            $hk = 1;
+            foreach ($header as $k => $v) {
+                $sheet->setCellValue(Coordinate::stringFromColumnIndex($hk) . '1', $v[0]);
+                $sheet->getStyle(Coordinate::stringFromColumnIndex($hk) . '1')->getFont()->setBold(true);
+                // $sheet->getDefaultColumnDimension()->setWidth(12); //设置默认列宽为12
+                //$sheet->getDefaultRowDimension()->setRowHeight(24); //设置默认行高为24
+                $sheet->getStyle(Coordinate::stringFromColumnIndex($hk) . '1')->getAlignment()->setWrapText(true);
+                $sheet->getColumnDimension(Coordinate::stringFromColumnIndex($hk))->setAutoSize(true); //自动计算列宽
+                $hk += 1;
+            }
+        }else{
+            list($spreadsheet,$sheet) = $excelOptions;
         }
+
+
 
         // 开始写入内容
         $column = 2;

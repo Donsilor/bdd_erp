@@ -2,24 +2,18 @@
 
 namespace backend\modules\base\controllers;
 
-use addons\Finance\common\models\OrderPay;
-use addons\Sales\common\models\OrderAccount;
-use addons\Sales\common\models\Payment;
-use addons\Sales\common\models\SaleChannel;
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use backend\controllers\BaseController;
 use common\enums\WorksTypeEnum;
-use common\helpers\AmountHelper;
 use common\helpers\ExcelHelper;
-use common\helpers\PageHelper;
 use common\helpers\StringHelper;
 use common\models\backend\Member;
 use common\models\backend\MemberWorks;
+use PhpOffice\PhpSpreadsheet\Cell\Coordinate;
 use Yii;
 use common\models\base\SearchModel;
 use common\traits\Curd;
-use addons\Sales\common\models\Order;
-use addons\Sales\common\enums\OrderStatusEnum;
-use addons\Sales\common\enums\PayStatusEnum;
+
 
 /**
  *
@@ -176,7 +170,21 @@ class MemberWorksController extends BaseController
             $header[] = [$date_txt, $date['date'],'text'];
         }
 
-        return ExcelHelper::exportData($list, $header, '工作日报' . date('YmdHis',time()));
+
+        // 初始化
+        $spreadsheet = new Spreadsheet();
+        $sheet = $spreadsheet->getActiveSheet();
+        // 写入头部
+        $hk = 1;
+        foreach ($header as $k => $v) {
+            $sheet->setCellValue(Coordinate::stringFromColumnIndex($hk) . '1', $v[0]);
+            $sheet->getStyle(Coordinate::stringFromColumnIndex($hk) . '1')->getFont()->setBold(true);
+            $sheet->getDefaultRowDimension()->setRowHeight(24); //设置默认行高为24
+            $sheet->getStyle(Coordinate::stringFromColumnIndex($hk) . '1')->getAlignment()->setWrapText(true);
+            $sheet->getColumnDimension(Coordinate::stringFromColumnIndex($hk))->setAutoSize(true); //自动计算列宽
+            $hk += 1;
+        }
+        return ExcelHelper::exportData($list, $header, '工作日报' . date('YmdHis',time()),'xlsx', [$spreadsheet,$sheet]);
 
     }
 
@@ -201,7 +209,7 @@ class MemberWorksController extends BaseController
             $member_works_list = MemberWorks::find() ->where($where)->andWhere(['creator_id'=>$creator_id])->select(['date','content'])->asArray()->all();
             $member_works_list = array_column($member_works_list,'content','date');
             foreach ($date_list as $date){
-                $list[$date['date']] = str_replace('<br />','\n',nl2br($member_works_list[$date['date']] ?? ''));
+                $list[$date['date']] = $member_works_list[$date['date']] ?? '';
             }
             $lists[] = $list;
         }
