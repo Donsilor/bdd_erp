@@ -32,7 +32,7 @@ $this->params['breadcrumbs'][] = $this->title;
 <!--                        --><?//= $form->field($model, 'product_type_id')->dropDownList(Yii::$app->styleService->productType::getDropDown(),['disabled'=>true]) ?>
 <!--                    </div>-->
                     <div class="col-lg-3">
-                        <?= $form->field($model, 'style_cate_id')->dropDownList(Yii::$app->styleService->productType::getDropDown(),['disabled'=>true]) ?>
+                        <?= $form->field($model, 'style_cate_id')->dropDownList(Yii::$app->styleService->styleCate::getDropDown(),['disabled'=>true]) ?>
                     </div>
                     <div class="col-lg-3">
                         <?= $form->field($model, 'style_sex')->dropDownList(\addons\Style\common\enums\StyleSexEnum::getMap(),['disabled'=>true]) ?>
@@ -108,7 +108,15 @@ $this->params['breadcrumbs'][] = $this->title;
                     if (parseInt(data.code) == 200 && data.data) {
                         $("#" + formId + "-goods_name").val(data.data.gift_name);
                         $("#" + formId + "-style_cate_id").val(data.data.style_cate_id);
-                        $("#" + formId + "-product_type_id").val(data.data.product_type_id);
+                        //$("#" + formId + "-product_type_id").val(data.data.product_type_id);
+                        $("#" + formId + "-style_sex").val(data.data.style_sex);
+                        $("#" + formId + "-material_type").val(data.data.material_type);
+                        $("#" + formId + "-material_color").val(data.data.material_color);
+                        $("#" + formId + "-finger_hk").val(data.data.finger_hk);
+                        $("#" + formId + "-finger").val(data.data.finger);
+                        $("#" + formId + "-chain_length").val(data.data.chain_length);
+                        $("#" + formId + "-goods_size").val(data.data.goods_size);
+                        $("#" + formId + "-cost_price").val(data.data.cost_price);
                     }
                 }
             });

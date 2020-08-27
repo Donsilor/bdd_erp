@@ -318,13 +318,21 @@ class PurchaseGiftGoodsController extends BaseController
         \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
 
         $goods_sn = \Yii::$app->request->get('goods_sn');
-        $model = StyleGift::find()->select(['gift_name', 'sale_price', 'channel_id'])->where(['style_sn' => $goods_sn])->one();
+        $model = StyleGift::find()->where(['style_sn' => $goods_sn])->one();
         //$model = new StyleGift();
-        $style = Style::findOne(['style_sn' => $goods_sn]);
+        //$style = Style::findOne(['style_sn' => $goods_sn]);
         $data = [
             'gift_name' => $model->gift_name,
-            'style_cate_id' => $style->style_cate_id,
-            'product_type_id' => $style->product_type_id,
+            'style_cate_id' => $model->style_cate_id,
+            //'product_type_id' => $model->product_type_id,
+            'style_sex' => $model->style_sex,
+            'material_type' => $model->material_type,
+            'material_color' => $model->material_color,
+            'finger_hk' => $model->finger_hk,
+            'finger' => $model->finger,
+            'chain_length' => $model->chain_length,
+            'goods_size' => $model->goods_size,
+            'cost_price' => $model->cost_price,
         ];
         return ResultHelper::json(200, '查询成功', $data);
     }
