@@ -162,19 +162,29 @@ class JdOrderService extends Service
      * @param Order $order
      */
     public function getErpOrderInvoiceData($order)
-    {          
-        if($order->invoiceEasyInfo->invoiceTitle != '个人') {
-            $title_type = \addons\Sales\common\enums\InvoiceTitleTypeEnum::ENTERPRISE;
-        }else{
-            $title_type = \addons\Sales\common\enums\InvoiceTitleTypeEnum::PERSONAL;
-        }       
+    {   
+        
+        $title_type = null;
+        $invoice_type = null;
+        $is_invoice = 0;
+        
+        if($order->invoiceEasyInfo->invoiceType != 0) {
+            if($order->invoiceEasyInfo->invoiceTitle != '个人') {
+                $title_type = \addons\Sales\common\enums\InvoiceTitleTypeEnum::ENTERPRISE;
+            }else{
+                $title_type = \addons\Sales\common\enums\InvoiceTitleTypeEnum::PERSONAL;
+            } 
+            $invoice_type = $order->invoiceEasyInfo->invoiceType;
+            $is_invoice = 1;
+        }              
         return [
                 'title_type' =>$title_type,
-                'invoice_type'=>$order->invoiceEasyInfo->invoiceType,
-                'invoice_title'=>$order->invoiceEasyInfo->invoiceTitle,
+                'invoice_type'=>$invoice_type,
+                'invoice_title'=>$order->invoiceEasyInfo->invoiceTitle ?? '',
                 'tax_number'=>$order->invoiceEasyInfo->invoiceCode ?? '',
                 'email'=> $order->invoiceEasyInfo->invoiceConsigneeEmail ?? '',
-                'mobile'=> $order->invoiceEasyInfo->invoiceConsigneePhone ?? '',
+                'mobile'=> $order->invoiceEasyInfo->invoiceConsigneePhone ?? '',  
+                'is_invoice' =>$is_invoice,
         ];
     }
     /**
