@@ -100,7 +100,7 @@ class SiteController extends Controller
     public function actionLogin()
     {        
         if(preg_match("/:\/\/work/is",Yii::$app->getRequest()->absoluteUrl)) {
-            Yii::$app->params['adminTitle'] = '恒得利WORKS';
+            Yii::$app->params['adminTitle'] = '恒得利Work';
         }
         if (!Yii::$app->user->isGuest) {
             // 记录行为日志
