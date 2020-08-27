@@ -199,6 +199,7 @@ class StyleController extends BaseController
                         $model->auditor_id = \Yii::$app->user->id;
                         $model->audit_time = time();
                         $model->status = StatusEnum::ENABLED;
+                        \Yii::$app->styleService->style->createGiftStyle($model);
                     } else {
                         $model->status = StatusEnum::DISABLED;
                     }

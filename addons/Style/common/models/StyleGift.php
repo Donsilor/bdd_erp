@@ -23,6 +23,7 @@ use addons\Sales\common\models\SaleChannel;
  * @property string $finger_hk 手寸(港号)
  * @property string $chain_length 链长(cm)
  * @property string $cost_price 成本价
+ * @property string $market_price 市场价
  * @property string $sale_price 销售价
  * @property int $channel_id 销售渠道
  * @property int $auditor_id 审核人
@@ -54,7 +55,7 @@ class StyleGift extends BaseModel
         return [
             [['style_id', 'style_sex', 'channel_id', 'auditor_id', 'audit_status', 'audit_time', 'status', 'sort', 'creator_id', 'created_at', 'updated_at'], 'integer'],
             [['style_sn'], 'required'],
-            [['cost_price', 'sale_price'], 'number'],
+            [['cost_price', 'market_price', 'sale_price'], 'number'],
             [['style_sn'], 'string', 'max' => 30],
             [['gift_name', 'goods_size'], 'string', 'max' => 100],
             [['style_image', 'audit_remark', 'remark'], 'string', 'max' => 255],
@@ -82,6 +83,7 @@ class StyleGift extends BaseModel
             'finger_hk' => '手寸(港号)',
             'chain_length' => '链长(cm)',
             'cost_price' => '预估成本价',
+            'market_price' => '市场价',
             'sale_price' => '销售价',
             'channel_id' => '销售渠道',
             'auditor_id' => '审核人',
