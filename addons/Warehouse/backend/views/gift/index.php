@@ -177,17 +177,17 @@ $params = $params ? "&".http_build_query($params) : '';
                             ]),
                             'headerOptions' => [],
                         ],
-                        [
-                            'attribute'=>'chain_length',
-                            'format' => 'raw',
-                            'value' => function ($model) {
-                                return $model->chain_length ?? '';
-                            },
-                            'filter' => Html::activeTextInput($searchModel, 'chain_length', [
-                                'class' => 'form-control',
-                            ]),
-                            'headerOptions' => ['class' => 'col-md-1'],
-                        ],
+//                        [
+//                            'attribute'=>'chain_length',
+//                            'format' => 'raw',
+//                            'value' => function ($model) {
+//                                return $model->chain_length ?? '';
+//                            },
+//                            'filter' => Html::activeTextInput($searchModel, 'chain_length', [
+//                                'class' => 'form-control',
+//                            ]),
+//                            'headerOptions' => ['class' => 'col-md-1'],
+//                        ],
                         [
                             'attribute' => 'main_stone_type',
                             'value' => function($model){
@@ -242,13 +242,13 @@ $params = $params ? "&".http_build_query($params) : '';
                             ]),
                             'headerOptions' => ['width'=>'100'],
                         ],
-                        [
-                            'attribute'=>'gold_price',
-                            'filter' => Html::activeTextInput($searchModel, 'gold_price', [
-                                'class' => 'form-control',
-                            ]),
-                            'headerOptions' => ['width' => '120'],
-                        ],
+//                        [
+//                            'attribute'=>'gold_price',
+//                            'filter' => Html::activeTextInput($searchModel, 'gold_price', [
+//                                'class' => 'form-control',
+//                            ]),
+//                            'headerOptions' => ['width' => '120'],
+//                        ],
                         [
                             'attribute'=>'cost_price',
                             'filter' => Html::activeTextInput($searchModel, 'cost_price', [

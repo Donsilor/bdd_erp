@@ -29,6 +29,7 @@ use addons\Supply\common\models\Supplier;
  * @property string $is_autosn 是否自动编款
  * @property int $style_channel_id 款式渠道
  * @property int $is_lock 商品锁定 0未锁，1已锁
+ * @property int $is_gift 是否赠品
  * @property int $supplier_id 供应商id
  * @property int $status 款式状态 0下架，1正常，-1删除
  * @property int $audit_status 商品审核 1通过，0未通过，10审核中
@@ -55,7 +56,7 @@ class Style extends BaseModel
     public function rules()
     {
         return [
-                [['id','factory_id','style_material','product_type_id','style_cate_id','style_source_id','style_channel_id','style_sex','is_made', 'merchant_id','sale_volume','goods_num','is_inlay','is_autosn','status', 'audit_status','creator_id','auditor_id','audit_time','created_at', 'updated_at'], 'integer'],
+                [['id','factory_id','style_material','product_type_id','style_cate_id','style_source_id','style_channel_id','style_sex','is_made', 'merchant_id','sale_volume','goods_num','is_inlay','is_autosn', 'is_gift', 'status', 'audit_status','creator_id','auditor_id','audit_time','created_at', 'updated_at'], 'integer'],
                 [['style_material','product_type_id','style_channel_id','style_cate_id','style_sex','style_name'], 'required'],
                 [['sale_price', 'market_price', 'cost_price','cost_price_min','cost_price_max'], 'number'],
                 ['cost_price','compare','compareValue' => 0, 'operator' => '>'],
@@ -94,6 +95,7 @@ class Style extends BaseModel
             'is_inlay'=> "是否镶嵌",
             'is_autosn'=> "款号生成方式",
             'is_made' => '是否支持定制',
+            'is_gift' => '是否赠品',
             'audit_status' => "审核状态",
             'audit_remark' => "审核备注",
             'audit_time' => "审核时间",

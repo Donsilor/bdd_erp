@@ -2,16 +2,15 @@
 
 namespace addons\Style\services;
 
-use addons\Style\common\models\StyleImages;
-use common\enums\StatusEnum;
 use Yii;
+use common\helpers\Url;
 use common\components\Service;
 use addons\Style\common\models\Style;
-use common\helpers\Url;
 use addons\Style\common\models\StyleAttribute;
-use common\helpers\SnHelper;
+use addons\Style\common\models\StyleImages;
 use addons\Style\common\enums\StyleSexEnum;
-use addons\Style\common\enums\StyleMaterialEnum;
+use common\enums\ConfirmEnum;
+use common\enums\StatusEnum;
 use common\enums\AutoSnEnum;
 
 /**
@@ -40,9 +39,12 @@ class StyleService extends Service
                 8=>['name'=>'日志信息','url'=>Url::to(['style-log/index','style_id'=>$style_id,'tab'=>8,'returnUrl'=>$returnUrl])]
         ];
         
-        $model = Style::find()->select(['id','is_inlay'])->where(['id'=>$style_id])->one();        
-        if($model && $model->is_inlay==0) {
+        $model = Style::find()->select(['id','is_inlay'])->where(['id'=>$style_id])->one();
+        if($model && $model->is_inlay==ConfirmEnum::NO) {
             unset($menus[4]);
+        }
+        if($model && $model->is_gift==ConfirmEnum::YES) {
+            unset($menus[6]);
         }
         return $menus;
     }

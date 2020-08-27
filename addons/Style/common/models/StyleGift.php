@@ -81,7 +81,7 @@ class StyleGift extends BaseModel
             'finger' => '手寸(美号)',
             'finger_hk' => '手寸(港号)',
             'chain_length' => '链长(cm)',
-            'cost_price' => '成本价',
+            'cost_price' => '预估成本价',
             'sale_price' => '销售价',
             'channel_id' => '销售渠道',
             'auditor_id' => '审核人',
@@ -89,7 +89,7 @@ class StyleGift extends BaseModel
             'audit_time' => '审核时间',
             'audit_remark' => '审核备注',
             'remark' => '备注',
-            'status' => '状态 1启用 0禁用',
+            'status' => '状态',
             'sort' => '排序',
             'creator_id' => '创建人',
             'created_at' => '创建时间',
@@ -107,6 +107,14 @@ class StyleGift extends BaseModel
             $this->creator_id = Yii::$app->user->identity->getId();
         }
         return parent::beforeSave($insert);
+    }
+    /**
+     * 关联款式分类一对一
+     * @return \yii\db\ActiveQuery
+     */
+    public function getCate()
+    {
+        return $this->hasOne(StyleCate::class, ['id'=>'style_cate_id'])->alias('cate');
     }
     /**
      * 创建人
