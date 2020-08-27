@@ -23,7 +23,7 @@ $params = $params ? "&".http_build_query($params) : '';
                     <div class="box-tools">
                         <?= Html::create(['ajax-edit','returnUrl' => Url::getReturnUrl()], '创建', [
                             'data-toggle' => 'modal',
-                            'data-target' => '#ajaxModalLg',
+                            'data-target' => '#ajaxModal',
                         ]); ?>
                         <?= Html::button('导出', [
                             'class'=>'btn btn-success btn-xs',
