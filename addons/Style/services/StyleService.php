@@ -134,7 +134,7 @@ class StyleService extends Service
         $style = [
             'style_id' => $form->id,
             'style_sn' => $form->style_sn,
-            'style_name' => $form->style_name,
+            'gift_name' => $form->style_name,
             'style_image' => $form->style_image,
             'style_cate_id' => $form->style_cate_id,
             'style_sex' => $form->style_sex,

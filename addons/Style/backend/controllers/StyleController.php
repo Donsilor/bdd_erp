@@ -155,7 +155,6 @@ class StyleController extends BaseController
         if($model->audit_status != AuditStatusEnum::SAVE && $model->audit_status != AuditStatusEnum::UNPASS ){
             return $this->message('单据不是保存状态', $this->redirect(\Yii::$app->request->referrer), 'error');
         }
-
         //审批流程
         Yii::$app->services->flowType->createFlow($this->targetType,$id,$model->style_sn);
 
@@ -186,7 +185,6 @@ class StyleController extends BaseController
         if ($model->load(Yii::$app->request->post())) {
             try{
                 $trans = Yii::$app->trans->beginTransaction();
-
                 $audit = [
                     'audit_status' =>  $model->audit_status ,
                     'audit_time' => time(),
@@ -199,7 +197,7 @@ class StyleController extends BaseController
                         $model->auditor_id = \Yii::$app->user->id;
                         $model->audit_time = time();
                         $model->status = StatusEnum::ENABLED;
-                        \Yii::$app->styleService->style->createGiftStyle($model);
+                        //\Yii::$app->styleService->style->createGiftStyle($model);
                     } else {
                         $model->status = StatusEnum::DISABLED;
                     }
