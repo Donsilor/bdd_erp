@@ -34,7 +34,7 @@ class JdOrderService extends Service
         $accountInfo = $this->getErpOrderAccountData($order);
         $customerInfo = $this->getErpCustomerData($order);
         $invoiceInfo = $this->getErpOrderInvoiceData($order);
-        //print_r(['orderInfo'=>$orderInfo,'goodsList'=>$goodsList,'addressInfo'=>$addressInfo,'accountInfo'=>$accountInfo,'customerInfo'=>$customerInfo]);
+        print_r(['invoiceInfo'=>$invoiceInfo,'goodsList'=>$goodsList,'addressInfo'=>$addressInfo,'accountInfo'=>$accountInfo,'customerInfo'=>$customerInfo]);
         //exit;
         try{
             $trans = Yii::$app->trans->beginTransaction();
