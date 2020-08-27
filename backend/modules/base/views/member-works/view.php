@@ -10,13 +10,19 @@ use common\enums\AuditStatusEnum;
 
 ?>
 <style>
-    .modal-open .modal {
-        display: flex;
-        align-items: center;
-        justify-content: center;
+    .modal-open .modal{
+        margin: 0;padding: 0;
+    }
+    .modal.in .modal-dialog {
+        margin: 0;padding: 0;
+        top: 50%;left: 50%;
+        -webkit-transform: translate(-50%, -50%);
+        -moz-transform: translate(-50%, -50%);
+        -ms-transform: translate(-50%, -50%);
+        -o-transform: translate(-50%, -50%);
+        transform: translate(-50%, -50%);
     }
     .modal-content {
-        z-index: 99999;
     }
 </style>
 <div class="row">

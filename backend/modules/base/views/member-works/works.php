@@ -10,10 +10,19 @@ use common\enums\AuditStatusEnum;
 
 ?>
 <style>
+    .modal-open .modal{
+        margin: 0;padding: 0;
+    }
     .modal.in .modal-dialog {
-        display: flex;
-        align-items: center;
-        justify-content: center;
+        margin: 0;padding: 0;
+        top: 50%;left: 50%;
+        -webkit-transform: translate(-50%, -50%);
+        -moz-transform: translate(-50%, -50%);
+        -ms-transform: translate(-50%, -50%);
+        -o-transform: translate(-50%, -50%);
+        transform: translate(-50%, -50%);
+    }
+    .modal-content {
     }
 </style>
 <div class="row">
@@ -67,7 +76,6 @@ use common\enums\AuditStatusEnum;
                 <?php echo Html::batchButtons(false)?>
                 <?= \yii\grid\GridView::widget([
                     'dataProvider' => $dataProvider,
-                    'filterModel' => $searchModel,
                     'tableOptions' => ['class' => 'table table-hover'],
                     'options' => ['style'=>' width:100%;white-space:nowrap;' ],
                     'showFooter' => false,//显示footer行
@@ -90,43 +98,6 @@ use common\enums\AuditStatusEnum;
                             },
                             'headerOptions' => ['width'=>'80'],
                         ],
-//                        [
-//                            'label' => '添加人',
-//                            'attribute' => 'member.username',
-//                            'headerOptions' => ['class' => 'col-md-1'],
-//                            'filter' => Html::activeTextInput($searchModel, 'member.username', [
-//                                'class' => 'form-control',
-//                            ]),
-//
-//                        ],
-//                        [
-//                            'attribute' => 'dept_id',
-//                            'value'=>function($model) {
-//                                return $model->department->name ?? '';
-//                            },
-//                            'filter' => Html::activeDropDownList($searchModel, 'dept_id',Yii::$app->services->department->getDropDown(), [
-//                                'prompt' => '全部',
-//                                'class' => 'form-control',
-//                                'style'=> 'width:100px;'
-//                            ]),
-//                            'format' => 'raw',
-//                            //'headerOptions' => ['width'=>'150'],
-//                        ],
-                        [
-                            'attribute' => 'title',
-                            'format' => 'raw',
-                            'headerOptions' => ['class' => 'col-md-2'],
-                            'filter' =>false,
-                        ],
-                        [
-                            'attribute' => 'content',
-                            'format' => 'raw',
-                            'contentOptions' => ['style'=>'max-width:500px;max-height:80px;white-space:pre-wrap;'],
-                            'headerOptions' => ['class' => 'col-md-5'],
-                            'filter' =>false,
-                        ],
-
-
                         [
                             'attribute'=>'date',
                             'filter' => \kartik\daterange\DateRangePicker::widget([    // 日期组件
@@ -154,14 +125,7 @@ use common\enums\AuditStatusEnum;
                             }
 
                         ],
-                        [
-                            'attribute' => 'created_at',
-                            'value' => function($model){
-                                return Yii::$app->formatter->asDatetime($model->created_at);
-                            },
-                            'headerOptions' => ['class' => 'col-md-5'],
-                            'filter' =>false,
-                        ],
+
                         [
                             'class' => 'yii\grid\ActionColumn',
                             'header' => '操作',
