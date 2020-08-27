@@ -99,7 +99,7 @@ class PurchaseGiftGoodsController extends BaseController
                 $model->style_cate_id = $style->style_cate_id ?? "";
                 $model->style_sex = $style->style_sex ?? "";
                 $model->goods_image = $style->style_image ?? "";
-                $model->cost_price = bcmul($model->gold_price, $model->goods_weight, 3);
+                //$model->cost_price = bcmul($model->gold_price, $model->goods_weight, 3);
                 if (false === $model->save()) {
                     throw new \Exception($this->getError($model));
                 }

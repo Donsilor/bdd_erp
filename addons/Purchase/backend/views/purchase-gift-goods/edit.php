@@ -77,7 +77,8 @@ $this->params['breadcrumbs'][] = $this->title;
                         <?= $form->field($model, 'gold_price')->textInput() ?>
                     </div>
                     <div class="col-lg-3">
-                        <?= $form->field($model, 'cost_price')->textInput(['disabled'=>'disabled']) ?>
+<!--                        ['disabled'=>'disabled']-->
+                        <?= $form->field($model, 'cost_price')->textInput() ?>
                     </div>
                 </div>
                 <div class="row">
