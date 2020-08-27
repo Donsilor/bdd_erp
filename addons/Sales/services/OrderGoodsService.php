@@ -162,6 +162,15 @@ class OrderGoodsService extends Service
             }
         }
 
+
+
+        //现货裸钻同步数据到库存
+        if($diamond_goods->is_stock == IsStockEnum::YES){
+
+        }
+
+
+
         //修改裸钻状态
         $diamond_goods->status = StatusEnum::DISABLED;
         if(false === $diamond_goods->save(true,['status'])){

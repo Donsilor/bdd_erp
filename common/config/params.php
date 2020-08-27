@@ -24,6 +24,7 @@ return [
     'currencyBase' =>'CNY',//基础货币代号
     'currencySign' =>'CNY',//当前货币符号
     'cachePrefix'=>'erp',//缓存前缀
+    'workLogUrl' =>'https://work.bddco.cn/',
     //自定义配置 end
     
     // 是否在模块内

@@ -105,19 +105,19 @@ $params = $params ? "&".http_build_query($params) : '';
                             'format' => 'raw',
                             'headerOptions' => ['class' => 'col-md-1'],
                         ],
-                        [
-                            'attribute' => 'product_type_id',
-                            'value' => function($model){
-                                return $model->type->name ?? '';
-                            },
-                            'filter' => Html::activeDropDownList($searchModel, 'product_type_id',Yii::$app->styleService->productType->getDropDown(), [
-                                'prompt' => '全部',
-                                'class' => 'form-control',
-                                'style'=>'width:100px'
-                            ]),
-                            'format' => 'raw',
-                            'headerOptions' => ['class' => 'col-md-1'],
-                        ],
+//                        [
+//                            'attribute' => 'product_type_id',
+//                            'value' => function($model){
+//                                return $model->type->name ?? '';
+//                            },
+//                            'filter' => Html::activeDropDownList($searchModel, 'product_type_id',Yii::$app->styleService->productType->getDropDown(), [
+//                                'prompt' => '全部',
+//                                'class' => 'form-control',
+//                                'style'=>'width:100px'
+//                            ]),
+//                            'format' => 'raw',
+//                            'headerOptions' => ['class' => 'col-md-1'],
+//                        ],
                         [
                             'attribute' => 'style_sex',
                             'format' => 'raw',
@@ -177,17 +177,17 @@ $params = $params ? "&".http_build_query($params) : '';
                             ]),
                             'headerOptions' => [],
                         ],
-                        [
-                            'attribute'=>'chain_length',
-                            'format' => 'raw',
-                            'value' => function ($model) {
-                                return $model->chain_length ?? '';
-                            },
-                            'filter' => Html::activeTextInput($searchModel, 'chain_length', [
-                                'class' => 'form-control',
-                            ]),
-                            'headerOptions' => ['class' => 'col-md-1'],
-                        ],
+//                        [
+//                            'attribute'=>'chain_length',
+//                            'format' => 'raw',
+//                            'value' => function ($model) {
+//                                return $model->chain_length ?? '';
+//                            },
+//                            'filter' => Html::activeTextInput($searchModel, 'chain_length', [
+//                                'class' => 'form-control',
+//                            ]),
+//                            'headerOptions' => ['class' => 'col-md-1'],
+//                        ],
                         [
                             'attribute' => 'main_stone_type',
                             'value' => function($model){
@@ -227,6 +227,7 @@ $params = $params ? "&".http_build_query($params) : '';
                                 'class' => 'form-control',
                             ]),
                             'headerOptions' => ['width'=>'100'],
+                            'contentOptions' => ['style'=>'color:green'],
                         ],
                         [
                             'attribute'=>'gift_num',
@@ -234,6 +235,7 @@ $params = $params ? "&".http_build_query($params) : '';
                                 'class' => 'form-control',
                             ]),
                             'headerOptions' => ['width'=>'100'],
+                            'contentOptions' => ['style'=>'color:red'],
                         ],
                         [
                             'attribute'=>'gift_weight',
@@ -242,13 +244,13 @@ $params = $params ? "&".http_build_query($params) : '';
                             ]),
                             'headerOptions' => ['width'=>'100'],
                         ],
-                        [
-                            'attribute'=>'gold_price',
-                            'filter' => Html::activeTextInput($searchModel, 'gold_price', [
-                                'class' => 'form-control',
-                            ]),
-                            'headerOptions' => ['width' => '120'],
-                        ],
+//                        [
+//                            'attribute'=>'gold_price',
+//                            'filter' => Html::activeTextInput($searchModel, 'gold_price', [
+//                                'class' => 'form-control',
+//                            ]),
+//                            'headerOptions' => ['width' => '120'],
+//                        ],
                         [
                             'attribute'=>'cost_price',
                             'filter' => Html::activeTextInput($searchModel, 'cost_price', [

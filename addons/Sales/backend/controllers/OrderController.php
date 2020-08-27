@@ -546,7 +546,7 @@ class OrderController extends BaseController
             try{
                 $trans = Yii::$app->trans->beginTransaction();
 
-                \Yii::$app->salesService->return->salesReturn($model, $order);
+                \Yii::$app->salesService->return->createReturn($model, $order);
                 $trans->commit();
                 Yii::$app->getSession()->setFlash('success','保存成功');
                 return ResultHelper::json(200, '保存成功');

@@ -16,9 +16,9 @@ class IsInvoiceEnum extends \common\enums\BaseEnum
      */
     public static function getMap(): array
     {
-        return [
-                self::NO => '不开发票',
+        return [                
                 self::YES => '开发票',
+                self::NO => '不开发票',
         ];
     }
     
