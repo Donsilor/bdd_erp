@@ -57,6 +57,13 @@ $this->params['breadcrumbs'][] = $this->title;
         <div class="box">
             <div class="box-header">
                 <h3 class="box-title"><i class="fa fa-qrcode"></i> 日报总结</h3>
+                <div class="box-tools">
+                    <?= Html::create(['ajax-edit','returnUrl' => \common\helpers\Url::getReturnUrl()], '创建', [
+                        'data-toggle' => 'modal',
+                        'data-target' => '#ajaxModalLg',
+                    ]); ?>
+
+                </div>
             </div>
             <div class="box-body table-responsive">
                 <?php echo Html::batchButtons(false)?>
@@ -85,28 +92,28 @@ $this->params['breadcrumbs'][] = $this->title;
                             },
                             'headerOptions' => ['width'=>'80'],
                         ],
-                        [
-                            'label' => '添加人',
-                            'attribute' => 'member.username',
-                            'headerOptions' => ['class' => 'col-md-1'],
-                            'filter' => Html::activeTextInput($searchModel, 'member.username', [
-                                'class' => 'form-control',
-                            ]),
-
-                        ],
-                        [
-                            'attribute' => 'dept_id',
-                            'value'=>function($model) {
-                                return $model->department->name ?? '';
-                            },
-                            'filter' => Html::activeDropDownList($searchModel, 'dept_id',Yii::$app->services->department->getDropDown(), [
-                                'prompt' => '全部',
-                                'class' => 'form-control',
-                                'style'=> 'width:100px;'
-                            ]),
-                            'format' => 'raw',
-                            //'headerOptions' => ['width'=>'150'],
-                        ],
+//                        [
+//                            'label' => '添加人',
+//                            'attribute' => 'member.username',
+//                            'headerOptions' => ['class' => 'col-md-1'],
+//                            'filter' => Html::activeTextInput($searchModel, 'member.username', [
+//                                'class' => 'form-control',
+//                            ]),
+//
+//                        ],
+//                        [
+//                            'attribute' => 'dept_id',
+//                            'value'=>function($model) {
+//                                return $model->department->name ?? '';
+//                            },
+//                            'filter' => Html::activeDropDownList($searchModel, 'dept_id',Yii::$app->services->department->getDropDown(), [
+//                                'prompt' => '全部',
+//                                'class' => 'form-control',
+//                                'style'=> 'width:100px;'
+//                            ]),
+//                            'format' => 'raw',
+//                            //'headerOptions' => ['width'=>'150'],
+//                        ],
                         [
                             'attribute' => 'title',
                             'format' => 'raw',
@@ -148,7 +155,14 @@ $this->params['breadcrumbs'][] = $this->title;
                             }
 
                         ],
-                        'created_at:datetime',
+                        [
+                            'attribute' => 'created_at',
+                            'value' => function($model){
+                                return Yii::$app->formatter->asDatetime($model->created_at);
+                            },
+                            'headerOptions' => ['class' => 'col-md-5'],
+                            'filter' =>false,
+                        ],
                         [
                             'class' => 'yii\grid\ActionColumn',
                             'header' => '操作',
