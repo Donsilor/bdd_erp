@@ -98,7 +98,10 @@ class SiteController extends Controller
      * @throws \yii\base\InvalidConfigException
      */
     public function actionLogin()
-    {
+    {        
+        if(preg_match("/:\/\/work/is",Yii::$app->getRequest()->absoluteUrl)) {
+            Yii::$app->params['adminTitle'] = '恒得利WORKS';
+        }
         if (!Yii::$app->user->isGuest) {
             // 记录行为日志
             Yii::$app->services->actionLog->create('login', '自动登录', false);
