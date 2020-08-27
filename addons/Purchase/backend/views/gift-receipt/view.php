@@ -12,7 +12,7 @@ $this->params['breadcrumbs'][] = ['label' => $this->title, 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="box-body nav-tabs-custom">
-    <h2 class="page-header"><?php echo $this->title; ?> - <?php echo $model->receipt_no ?></h2>
+    <h2 class="page-header"><?php echo $this->title; ?> - <?php echo $model->receipt_no ?> - <?= ReceiptStatusEnum::getValue($model->receipt_status)??""; ?></h2>
     <?php echo Html::menuTab($tabList, $tab) ?>
     <div class="tab-content">
         <div class="col-xs-12" style="padding-left: 0px;padding-right: 0px;">
