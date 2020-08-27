@@ -61,7 +61,7 @@ use common\helpers\Html;
     <div class="col-xs-12">
         <div class="box">
             <div class="box-header">
-                <h3 class="box-title"><i class="fa fa-qrcode"></i> 日报总结</h3>
+                <h5 class="box-title"><i class="fa fa-qrcode"></i> 日报总结</h5>
                 <div class="box-tools">
                     <?= Html::create(['ajax-edit','returnUrl' => \common\helpers\Url::getReturnUrl()], '创建', [
                         'data-toggle' => 'modal',
@@ -88,7 +88,7 @@ use common\helpers\Html;
                             'name'=>'id',  //设置每行数据的复选框属性
                             'headerOptions' => ['width'=>'30'],
                         ],
-                        
+
                         [
                             'attribute'=>'date',
                             'filter' => \kartik\daterange\DateRangePicker::widget([    // 日期组件
@@ -111,23 +111,24 @@ use common\helpers\Html;
                                 ],
 
                             ]),
+                            'format' => 'raw',
                             'value'=>function($model){
-                                return $model->date;
+                                return Html::a($model->date, ['works-view', 'id' => $model->id,'returnUrl'=>\common\helpers\Url::getReturnUrl()], ['style'=>"text-decoration:underline;color:#3c8dbc"]);
                             }
 
                         ],
-                        [
-                            'attribute' => 'title',
-                            'value'=>function($model) {
-                                return Html::a($model->title, ['works-view', 'id' => $model->id,'returnUrl'=>\common\helpers\Url::getReturnUrl()], ['style'=>"text-decoration:underline;color:#3c8dbc"]);
-                            },
-                            'headerOptions' => ['class' => 'col-md-1'],
-                            'format' => 'raw',
-                            'filter' => Html::activeTextInput($searchModel, 'member.username', [
-                                'class' => 'form-control',
-                            ]),
-
-                        ],
+//                        [
+//                            'attribute' => 'title',
+//                            'value'=>function($model) {
+//                                return Html::a($model->title, ['works-view', 'id' => $model->id,'returnUrl'=>\common\helpers\Url::getReturnUrl()], ['style'=>"text-decoration:underline;color:#3c8dbc"]);
+//                            },
+//                            'headerOptions' => ['class' => 'col-md-1'],
+//                            'format' => 'raw',
+//                            'filter' => Html::activeTextInput($searchModel, 'member.username', [
+//                                'class' => 'form-control',
+//                            ]),
+//
+//                        ],
                         [
                             'class' => 'yii\grid\ActionColumn',
                             'header' => '操作',
