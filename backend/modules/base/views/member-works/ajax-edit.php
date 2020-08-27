@@ -13,7 +13,6 @@ $form = ActiveForm::begin([
     ]
 ]);
 ?>
-
     <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
         <h4 class="modal-title">基本信息</h4>
@@ -32,6 +31,7 @@ $form = ActiveForm::begin([
                 'format' => 'yyyy-mm-dd',
                 'todayHighlight' => true,//今日高亮
                 'autoclose' => true,//选择后自动关闭
+                'endDate' => date("yyyy-MM-dd H:i:s"),
                 'todayBtn' => true,//今日按钮显示
             ]
         ]);?>

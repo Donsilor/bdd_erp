@@ -10,13 +10,10 @@ use common\enums\AuditStatusEnum;
 
 ?>
 <style>
-    .modal-open .modal {
+    .modal.in .modal-dialog {
         display: flex;
         align-items: center;
         justify-content: center;
-    }
-    .modal-content {
-        z-index: 99999;
     }
 </style>
 <div class="row">
@@ -44,7 +41,6 @@ use common\enums\AuditStatusEnum;
                                 </tr>
                             </table>
                         </div>
-
 
                     </div>
                 </div>
