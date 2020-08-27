@@ -184,8 +184,8 @@ class JdOrderService extends Service
             }
             $goods_discount = 0;
             foreach ($order->couponDetailList ?? [] as $coupon) {
-                if($coupon['skuId'] == $model->skuId) {
-                    $goods_discount += $coupon['couponPrice'];
+                if($coupon->skuId == $model->skuId) {
+                    $goods_discount += $coupon->couponPrice;
                 }
             }
 
