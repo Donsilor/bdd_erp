@@ -54,7 +54,7 @@ class StyleGift extends BaseModel
     {
         return [
             [['style_id', 'style_sex', 'channel_id', 'auditor_id', 'audit_status', 'audit_time', 'status', 'sort', 'creator_id', 'created_at', 'updated_at'], 'integer'],
-            [['style_sn'], 'required'],
+            //[['style_sn'], 'required'],
             [['cost_price', 'market_price', 'sale_price'], 'number'],
             [['style_sn'], 'string', 'max' => 30],
             [['gift_name', 'goods_size'], 'string', 'max' => 100],
