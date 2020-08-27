@@ -2,6 +2,7 @@
 
 namespace addons\Warehouse\services;
 
+use addons\Style\common\enums\StyleSexEnum;
 use Yii;
 use common\helpers\Url;
 use common\components\Service;
@@ -51,8 +52,18 @@ class WarehouseGiftService extends Service
         //1.供应商
         //$gift_sn = $model->supplier->supplier_tag ?? '00';
         $gift_sn = 'ZP';
-        //2.款式类型
-        $gift_sn .= $model->cate->tag ?? '00';
+        //2.款式分类
+        $cate_tag = $model->cate->tag ?? '00';
+        $cate_tag_list = explode("-", $cate_tag);
+        if(count($cate_tag_list) < 2 ) {
+            throw new \Exception("编款失败：款式分类未配置编码规则");
+        }
+        list($cate_m, $cate_w) = $cate_tag_list;
+        if($model->style_sex == StyleSexEnum::MAN) {
+            $gift_sn .= $cate_m;
+        }else {
+            $gift_sn .= $cate_w;
+        }
         //3.数字编号
         $gift_sn .= str_pad($model->id, 6, '0', STR_PAD_LEFT);
         if ($save === true) {
