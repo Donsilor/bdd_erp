@@ -62,7 +62,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             'attribute' => 'style_sn',
                             'format' => 'raw',
                             'value'=>function($model) {
-                                return Html::a($model->style_sn, ['style/view', 'id' => $model->style_id,'returnUrl'=>Url::getReturnUrl()], ['style'=>"text-decoration:underline;color:#3c8dbc"]);
+                                return Html::a($model->style_sn, ['view', 'id' => $model->id,'returnUrl'=>Url::getReturnUrl()], ['style'=>"text-decoration:underline;color:#3c8dbc"]);
                             },
                             'headerOptions' => ['class' => 'col-md-1'],
                             'filter' => Html::activeTextInput($searchModel, 'style_sn', [
@@ -318,7 +318,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                     }
                                 },
                                 'view' => function($url, $model, $key){
-                                    return Html::a('查看', ['view', 'id' => $model->id,'returnUrl'=>Url::getReturnUrl()], ['class' => 'btn btn-warning btn-sm']);
+                                    return Html::a('查看', ['style/view', 'id' => $model->style_id,'returnUrl'=>Url::getReturnUrl()], ['class' => 'btn btn-warning btn-sm']);
                                 },
                                 'status' => function($url, $model, $key){
                                     if($model->audit_status == \common\enums\AuditStatusEnum::PASS) {
