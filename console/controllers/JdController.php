@@ -23,25 +23,26 @@ class JdController extends Controller
     {
         Console::output("Sync JD Order BEGIN[".date('Y-m-d H:i:s')."]-------------------");
         $change_type = $time_type == 1 ? "hour" : "minute";
-        $time_format = $time_type == 1 ? "YmdH" : "YmdHi";
+        $time_format = $time_type == 1 ? "Y-m-d H" : "Y-m-d H:i";
         $start_time = $start_time == 0 ? time() : strtotime(date('Y-m-d H:i:s', strtotime($start_time)));
         for ($val = $time_val - 1; $val >= 0; $val--) {
-            $end_time = date($time_format, strtotime(" -{$val} {$change_type}", $start_time));
-            $this->syncOrderByTime($start_time, $end_time,$order_type);
+            $end_date = date($time_format, strtotime(" -{$val} {$change_type}", $start_time));
+            $start_date = date($time_format, $start_time);
+            $this->syncOrderByDate($start_date, $end_date,$order_type);
         }
         Console::output("Sync JD Order END[".date('Y-m-d H:i:s')."]-------------------");
     }
     /**
      * 根据时间同步订单
-     * @param unknown $start_time
-     * @param unknown $end_time
+     * @param unknown $start_date
+     * @param unknown $end_date
      */
-    private function syncOrderByTime($start_time, $end_time, $order_type)
+    private function syncOrderByDate($start_date, $end_date, $order_type)
     {
-        Console::output("Pull Order By Time BEGIN : ".$start_time.' TO '.$end_time);
+        Console::output("Pull Order By Time BEGIN : ".$start_date.' TO '.$end_date);
         try{
             $page = 1;
-            list($order_list,$page_count) = \Yii::$app->jdSdk->getOrderList($start_time,$end_time,$page,$order_type);
+            list($order_list,$page_count) = \Yii::$app->jdSdk->getOrderList($start_date,$end_date,$page,$order_type);
             $this->syncOrders($order_list);
         }catch (\Exception $e) {
             Console::output("Page[".$page."],Error:".$e->getMessage());
@@ -50,14 +51,14 @@ class JdController extends Controller
         for ($page = 2 ; $page <= $page_count; $page ++) {
             Console::output("Page[".$page."] Start");
             try{
-                list($order_list) = \Yii::$app->jdSdk->getOrderList($start_time,$end_time,$page,$order_type);
+                list($order_list) = \Yii::$app->jdSdk->getOrderList($start_date,$end_date,$page,$order_type);
             }catch (\Exception $e) {
                 Console::output("Page[".$page."],Error:".$e->getMessage());
             }
-            $this->syncJdOrders($order_list);
+            $this->syncOrders($order_list);
             Console::output("Page[".$page."] END ");
         }
-        Console::output("Pull Order By Time END : ".$start_time.' TO '.$end_time);
+        Console::output("Pull Order By Time END : ".$start_date.' TO '.$end_date);
     }
     /**
      * 同步
