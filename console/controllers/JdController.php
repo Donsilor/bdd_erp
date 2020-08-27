@@ -22,12 +22,12 @@ class JdController extends Controller
     public function actionPullOrders($time_val = 1, $time_type = 1, $order_type = 1, $start_time = 0)
     {
         Console::output("Sync JD Order BEGIN[".date('Y-m-d H:i:s')."]-------------------");
-        $change_type = $time_type == 1 ? "day" : "hour";
-        $time_format = $time_type == 1 ? "Y-m-d 00:00:00" : "Y-m-d H:00:00";
+        $change_type = $time_type == 1 ? "day" : "month";
+        //$time_format = $time_type == 1 ? "Y-m-d 00:00:00" : "Y-m-d H:00:00";
         $start_time = $start_time == 0 ? time() : strtotime(date('Y-m-d H:i:s', strtotime($start_time)));
-        for ($val = $time_val-1; $val >= 0; $val--) {
+        for ($val = $time_val; $val > 0; $val = $val-1) {
             $start_date = date("Y-m-d 00:00:00", strtotime("-{$val} {$change_type}", $start_time));   
-            $end_date   = date("Y-m-d 23:59:59", strtotime("-{$val} {$change_type}", $start_time));    
+            $end_date   = date("Y-m-d 23:59:59", strtotime("-{$val}+1 {$change_type}", strtotime($start_date)));    
             Console::output("Date : [".$start_date.'] TO ['.$end_date.']');
             $this->syncOrderByDate($start_date, $end_date, $order_type);
         }
