@@ -21,7 +21,10 @@ $form = ActiveForm::begin([
 <div class="modal-body">
     <div class="row">
         <div class="col-lg-4">
-            <?= $form->field($model, 'style_sn')->textInput() ?>
+            <?= $form->field($model, 'style_sn')->textInput(['disabled' => $model->isNewRecord ? null : 'disabled', 'placeholder' => '编号为空时系统自动生成']) ?>
+        </div>
+        <div class="col-lg-4">
+            <?= $form->field($model, 'gift_name')->textInput() ?>
         </div>
         <div class="col-lg-4">
             <?= $form->field($model, 'style_cate_id')->widget(\kartik\select2\Select2::class, [
@@ -32,9 +35,6 @@ $form = ActiveForm::begin([
                     //'disabled'=>$model->isNewRecord?null:'disabled'
                 ],
             ]); ?>
-        </div>
-        <div class="col-lg-4">
-            <?= $form->field($model, 'gift_name')->textInput() ?>
         </div>
     </div>
     <div class="row">
