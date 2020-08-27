@@ -80,7 +80,8 @@ $form = ActiveForm::begin([
            </div>
            <div class="row">
                <div class="col-lg-4">
-                   <?= $form->field($model, 'cost_price')->textInput(['disabled'=>'disabled']) ?>
+<!--                   ['disabled'=>'disabled']-->
+                   <?= $form->field($model, 'cost_price')->textInput() ?>
                </div>
                <div class="col-lg-8">
                    <?= $form->field($model, 'goods_remark')->textarea() ?>
