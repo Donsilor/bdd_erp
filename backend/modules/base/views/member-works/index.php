@@ -45,57 +45,6 @@ $params = $params ? "&".http_build_query($params) : '';
                                 'class' => 'yii\grid\SerialColumn',
                                 'visible' => false,
                             ],
-
-                            [
-                                'attribute' => 'type',
-                                'filter' => false,
-                                'value'=>function($model){
-                                    return \common\enums\WorksTypeEnum::getValue($model->type);
-                                },
-                                'headerOptions' => ['width'=>'80'],
-                            ],
-                            [
-                                'attribute' => 'creator_id',
-                                'value'=>function($model) {
-                                    return Html::a($model->member->username, ['view', 'id' => $model->id,'returnUrl'=>Url::getReturnUrl()], ['style'=>"text-decoration:underline;color:#3c8dbc"]);
-                                },
-                                'headerOptions' => ['class' => 'col-md-1'],
-                                'format' => 'raw',
-                                'filter' => Html::activeTextInput($searchModel, 'member.username', [
-                                    'class' => 'form-control',
-                                ]),
-
-                            ],
-                            [
-                                'attribute' => 'dept_id',
-                                'value'=>function($model) {
-                                    return $model->department->name ?? '';
-                                },
-                                'filter' => Html::activeDropDownList($searchModel, 'dept_id',Yii::$app->services->department->getDropDown(), [
-                                    'prompt' => '全部',
-                                    'class' => 'form-control',
-                                    'style'=> 'width:100px;'
-                                ]),
-                                'format' => 'raw',
-                                //'headerOptions' => ['width'=>'150'],
-                            ],
-                            [
-                                'attribute' => 'title',
-                                'format' => 'raw',
-                                'headerOptions' => ['class' => 'col-md-2'],
-                                'filter' =>false,
-                            ],
-                            [
-                                'attribute' => 'content',
-                                'value'=> function($model){
-                                    return nl2br($model->content);
-                                },
-                                'format' => 'raw',
-                                'headerOptions' => ['class' => 'col-md-5'],
-                                'filter' =>false,
-                            ],
-
-
                             [
                                 'attribute'=>'date',
                                 'filter' => DateRangePicker::widget([    // 日期组件
@@ -124,6 +73,65 @@ $params = $params ? "&".http_build_query($params) : '';
                                 }
 
                             ],
+                            [
+                                'attribute' => 'type',
+                                'filter' => false,
+                                'value'=>function($model){
+                                    return \common\enums\WorksTypeEnum::getValue($model->type);
+                                },
+                                'headerOptions' => ['width'=>'80'],
+                            ],
+                            [
+                                'attribute' => 'creator_id',
+                                'value'=>function($model) {
+                                    return Html::a($model->member->username, ['view', 'creator_id' => $model->creator_id,'returnUrl'=>Url::getReturnUrl()], ['style'=>"text-decoration:underline;color:#3c8dbc"]);
+                                },
+                                'headerOptions' => ['class' => 'col-md-1'],
+                                'format' => 'raw',
+                                'filter' => Html::activeTextInput($searchModel, 'member.username', [
+                                    'class' => 'form-control',
+                                ]),
+
+                            ],
+                            [
+                                'attribute' => 'dept_id',
+                                'value'=>function($model) {
+                                    return $model->department->name ?? '';
+                                },
+                                'filter' => Html::activeDropDownList($searchModel, 'dept_id',Yii::$app->services->department->getDropDown(), [
+                                    'prompt' => '全部',
+                                    'class' => 'form-control',
+                                    'style'=> 'width:100px;'
+                                ]),
+                                'format' => 'raw',
+                                //'headerOptions' => ['width'=>'150'],
+                            ],
+                            [
+                                'label' => '岗位',
+                                'value'=>function($model) {
+                                    return $model->member->authRole->title ?? '';
+                                },
+                                'filter' => false,
+                                //'headerOptions' => ['width'=>'150'],
+                            ],
+                            [
+                                'attribute' => 'title',
+                                'format' => 'raw',
+                                'headerOptions' => ['class' => 'col-md-2'],
+                                'filter' =>false,
+                            ],
+                            [
+                                'attribute' => 'content',
+                                'value'=> function($model){
+                                    return nl2br($model->content);
+                                },
+                                'format' => 'raw',
+                                'contentOptions' => ['style'=>'max-width:500px;max-height:80px;word-break:break-all;overflow:auto;'],
+                                'filter' =>false,
+                            ],
+
+
+
                             [
                                 'attribute' => 'created_at',
                                 'value' => function($model){

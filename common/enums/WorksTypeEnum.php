@@ -20,9 +20,9 @@ class WorksTypeEnum extends BaseEnum
     public static function getMap(): array
     {
         return [
-            self::DAY_SUMMARY => '日总结',
-//            self::DAY_WEEK => '周总结',
-//            self::DAY_MONTH => '月总结',
+            self::DAY_SUMMARY => '日报',
+//            self::DAY_WEEK => '周报',
+//            self::DAY_MONTH => '月报',
         ];
     }
 }
