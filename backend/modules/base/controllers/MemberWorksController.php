@@ -249,7 +249,7 @@ class MemberWorksController extends BaseController
                 'date'=>SORT_DESC,
                 'id' => SORT_DESC
             ],
-            'pageSize' => $this->getPageSize(2),
+            'pageSize' => $this->getPageSize(5),
             'relations' => [
                 'member' => ['username'],
                 'department' => ['name']
