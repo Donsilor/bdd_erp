@@ -158,9 +158,9 @@ class Member extends User
      * 部门
      * @return \yii\db\ActiveQuery
      */
-    public function getRole()
+    public function getAuthRole()
     {
-        return $this->hasOne(AuthRole::class, ['id'=>'dept_id'])->alias('role');
+        return $this->hasOne(AuthRole::class, ['id'=>'role'])->alias('authRole');
     }
 
 }

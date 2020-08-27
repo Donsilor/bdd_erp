@@ -56,6 +56,8 @@ class MemberWorksController extends BaseController
         if (!empty($date)) {
             $dataProvider->query->andFilterWhere(['>=',MemberWorks::tableName().'.date', explode('/', $date)[0]]);//起始时间
             $dataProvider->query->andFilterWhere(['<',MemberWorks::tableName().'.date', explode('/', $date)[1]]);//结束时间
+        }else{
+            $searchModel->date = Yii::$app->formatter->asDate(time(),'Y-m-01')."/".Yii::$app->formatter->asDate(time(),'Y-m-d');
         }
 
         //导出
@@ -179,9 +181,13 @@ class MemberWorksController extends BaseController
         foreach ($header as $k => $v) {
             $sheet->setCellValue(Coordinate::stringFromColumnIndex($hk) . '1', $v[0]);
             $sheet->getStyle(Coordinate::stringFromColumnIndex($hk) . '1')->getFont()->setBold(true);
-            $sheet->getDefaultRowDimension()->setRowHeight(24); //设置默认行高为24
+            $sheet->getDefaultColumnDimension()->setWidth(45); //设置默认列宽为12
+            $sheet->getColumnDimension('A')->setWidth(15); //设置默认列宽为12
+            $sheet->getColumnDimension('B')->setWidth(15); //设置默认列宽为12
+            $sheet->getColumnDimension('C')->setWidth(15); //设置默认列宽为12
+            $sheet->getDefaultRowDimension()->setRowHeight(-1); //设置行高自动
             $sheet->getStyle(Coordinate::stringFromColumnIndex($hk) . '1')->getAlignment()->setWrapText(true);
-            $sheet->getColumnDimension(Coordinate::stringFromColumnIndex($hk))->setAutoSize(true); //自动计算列宽
+//            $sheet->getColumnDimension(Coordinate::stringFromColumnIndex($hk))->setAutoSize(true); //自动计算列宽
             $hk += 1;
         }
         return ExcelHelper::exportData($list, $header, '工作日报' . date('YmdHis',time()),'xlsx', [$spreadsheet,$sheet]);
@@ -205,7 +211,7 @@ class MemberWorksController extends BaseController
             $member = Member::find()->where(['id'=>$creator_id])->one();
             $list['username'] = $member->username;
             $list['dept'] = $member->department->name ?? '';
-            $list['post'] = $member->role->title ?? '';
+            $list['post'] = $member->authRole->title ?? '';
             $member_works_list = MemberWorks::find() ->where($where)->andWhere(['creator_id'=>$creator_id])->select(['date','content'])->asArray()->all();
             $member_works_list = array_column($member_works_list,'content','date');
             foreach ($date_list as $date){
