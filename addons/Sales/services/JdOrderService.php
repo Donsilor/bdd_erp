@@ -56,7 +56,7 @@ class JdOrderService extends Service
             "currency"=>'CNY',
             "pay_type"=>$this->getErpPayType($order),//京东（平台支付）
             "pay_status"=>$this->getErpPayStatus($order),//已支付
-            "pay_time"=>$order->paymentConfirmTime ? strtotime($order->paymentConfirmTime):null,
+            "pay_time"=> !empty($order->paymentConfirmTime) ? strtotime($order->paymentConfirmTime):null,
             //"out_pay_sn"=>$order->order_id,
             //"out_pay_time"=>$order->payment_time,
             'goods_num'=>1,
