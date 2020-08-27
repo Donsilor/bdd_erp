@@ -8,7 +8,7 @@ use common\helpers\Url;
 /* @var $model common\models\order\order */
 /* @var $form yii\widgets\ActiveForm */
 
-$this->title = '赠品详情';
+$this->title = '赠品款式详情';
 $this->params['breadcrumbs'][] = ['label' => $this->title, 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 //
