@@ -21,7 +21,9 @@ $form = ActiveForm::begin([
     <div class="modal-body">
 <!--        --><?//= $form->field($model, 'type')->dropDownList(Yii::$app->attr->valueMap(\common\enums\WorksTypeEnum::getMap()), ['prompt' => '请选择']); ?>
         <?= $form->field($model, 'title')->textInput() ?>
-        <?= $form->field($model, 'content')->textarea(['rows'=>5]) ?>
+        <?= $form->field($model, 'content')->textarea(['rows'=>5,'placeholder'=>'1.工作1........(已完成）
+2.工作2........(已完成）
+3.工作3........(进行中）']) ?>
         <?= $form->field($model, 'date')->widget(DatePicker::class, [
             'options' => [
                 'value' => $model->isNewRecord ? date('Y-m-d') : $model->date,

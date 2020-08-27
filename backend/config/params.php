@@ -32,6 +32,7 @@ return [
         '/main/member-between-count',
         '/main/member-credits-log-between-count',
         '/common/flow/audit-view',  //审批流程
-        '/base/member-works/works',  //工作日报
+        '/base/member-works/works',  //个人日报
+        '/base/member-works/ajax-edit',  //创建日报
     ],
 ];
