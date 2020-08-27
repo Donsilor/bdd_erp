@@ -237,9 +237,9 @@ $this->params['breadcrumbs'][] = $this->title;
                 'format' => 'raw',
                 'headerOptions' => ['class' => 'col-md-1'],
                 'value' => function ($model){
-                    return \common\enums\StatusEnum::getValue($model->status);
+                    return \common\enums\FrameEnum::getValue($model->status);
                 },
-                'filter' => Html::activeDropDownList($searchModel, 'status',\common\enums\StatusEnum::getMap(), [
+                'filter' => Html::activeDropDownList($searchModel, 'status',\common\enums\FrameEnum::getMap(), [
                     'prompt' => '全部',
                     'class' => 'form-control',
                 ]),
