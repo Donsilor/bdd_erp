@@ -14,23 +14,22 @@ $params = Yii::$app->request->queryParams;
 $params = $params ? "&".http_build_query($params) : '';
 
 ?>
-<div class="box-body nav-tabs-custom">
-    <div class="tab-content">
-        <div class="row col-xs-12">
-            <div class="box">
-                <div class="box-header">
-                    <h3 class="box-title"><?= Html::encode($this->title) ?></h3>
-                    <div class="box-tools">
-                        <?= Html::create(['ajax-edit','returnUrl' => Url::getReturnUrl()], '创建', [
-                            'data-toggle' => 'modal',
-                            'data-target' => '#ajaxModal',
-                        ]); ?>
-                        <?= Html::button('导出', [
-                            'class'=>'btn btn-success btn-xs',
-                            'onclick' => 'batchExport()',
-                        ]);?>
-                    </div>
+<div class="row">
+    <div class="col-sm-12">
+        <div class="box">
+            <div class="box-header">
+                <h3 class="box-title"><?= Html::encode($this->title) ?></h3>
+                <div class="box-tools">
+                    <?= Html::create(['ajax-edit','returnUrl' => Url::getReturnUrl()], '创建', [
+                        'data-toggle' => 'modal',
+                        'data-target' => '#ajaxModal',
+                    ]); ?>
+                    <?= Html::button('导出', [
+                        'class'=>'btn btn-success btn-xs',
+                        'onclick' => 'batchExport()',
+                    ]);?>
                 </div>
+            </div>
                 <div class="box-body table-responsive">
                     <?php echo Html::batchButtons(false)?>
                     <?= GridView::widget([
@@ -165,7 +164,6 @@ $params = $params ? "&".http_build_query($params) : '';
         <!-- box end -->
         </div>
     </div>
-</div>
 <script>
     function batchExport() {
         var ids = $("#grid").yiiGridView("getSelectedRows");
