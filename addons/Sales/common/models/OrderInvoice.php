@@ -10,6 +10,7 @@ use Yii;
  * @property int $id
  * @property int $order_id 订单ID
  * @property int $invoice_type 发票类型：1=企业，2=个人
+ * @property int $title_type 抬头类型：1=企业，2=个人
  * @property string $invoice_title 发票抬头
  * @property string $tax_number 纳税人识别号
  * @property int $is_electronic 是否电子发票：0=不是，1=是
@@ -36,7 +37,7 @@ class OrderInvoice extends BaseModel
     {
         return [
             [['order_id'], 'required'],
-            [['order_id', 'invoice_type', 'is_electronic', 'send_num', 'created_at', 'updated_at'], 'integer'],
+            [['order_id', 'invoice_type', 'title_type', 'send_num', 'created_at', 'updated_at'], 'integer'],
             [['invoice_title'], 'string', 'max' => 80],
             [['tax_number'], 'string', 'max' => 50],
             [['mobile'], 'string', 'max' => 30],
@@ -52,10 +53,10 @@ class OrderInvoice extends BaseModel
         return [
             'id' => 'ID',
             'order_id' => '订单ID',
-            'invoice_type' => '发票类型',
+            'title_type' => '抬头类型',
             'invoice_title' => '发票抬头',
             'tax_number' => '纳税人识别号',
-            'is_electronic' => '是否电子发票',
+            'invoice_type' => '发票类型',
             'email' => '邮箱',
             'mobile' => '手机',
             'send_num' => '发送次数',

@@ -21,7 +21,7 @@ class InvoiceTitleTypeEnum extends BaseEnum
     {
         return [
             self::ENTERPRISE => '企业',
-            self::PERSONAL => '个人或事业单位',
+            self::PERSONAL => '个人',
         ];
     }
 }

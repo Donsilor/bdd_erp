@@ -20,10 +20,10 @@ class InvoiceTypeEnum extends BaseEnum
      */
     public static function getMap(): array
     {
-        return [
-            self::NONE => '不开发票',
-            self::PAPER => '纸质发票',
+        return [           
             self::ELECTRONIC => '电子发票',
+            self::PAPER => '纸质发票',
+            self::NONE => '不开发票',            
         ];
     }
 }

@@ -34,7 +34,7 @@ class JdOrderService extends Service
         $accountInfo = $this->getErpOrderAccountData($order);
         $customerInfo = $this->getErpCustomerData($order);
         $invoiceInfo = $this->getErpOrderInvoiceData($order);
-        print_r(['invoiceInfo'=>$invoiceInfo,'goodsList'=>$goodsList,'addressInfo'=>$addressInfo,'accountInfo'=>$accountInfo,'customerInfo'=>$customerInfo]);
+        //print_r(['invoiceInfo'=>$invoiceInfo,'goodsList'=>$goodsList,'addressInfo'=>$addressInfo,'accountInfo'=>$accountInfo,'customerInfo'=>$customerInfo]);
         //exit;
         try{
             $trans = Yii::$app->trans->beginTransaction();
@@ -162,8 +162,14 @@ class JdOrderService extends Service
      * @param Order $order
      */
     public function getErpOrderInvoiceData($order)
-    {        
+    {          
+        if($order->invoiceEasyInfo->invoiceTitle != '个人') {
+            $title_type = \addons\Sales\common\enums\InvoiceTitleTypeEnum::ENTERPRISE;
+        }else{
+            $title_type = \addons\Sales\common\enums\InvoiceTitleTypeEnum::PERSONAL;
+        }       
         return [
+                'title_type' =>$title_type,
                 'invoice_type'=>$order->invoiceEasyInfo->invoiceType,
                 'invoice_title'=>$order->invoiceEasyInfo->invoiceTitle,
                 'tax_number'=>$order->invoiceEasyInfo->invoiceCode ?? '',
