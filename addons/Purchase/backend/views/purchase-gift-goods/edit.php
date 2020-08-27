@@ -28,11 +28,14 @@ $this->params['breadcrumbs'][] = $this->title;
                     <div class="col-lg-3">
                         <?= $form->field($model, 'goods_name')->textInput() ?>
                     </div>
-                    <div class="col-lg-3">
-                        <?= $form->field($model, 'product_type_id')->dropDownList(Yii::$app->styleService->productType::getDropDown(),['disabled'=>true]) ?>
-                    </div>
+<!--                    <div class="col-lg-3">-->
+<!--                        --><?//= $form->field($model, 'product_type_id')->dropDownList(Yii::$app->styleService->productType::getDropDown(),['disabled'=>true]) ?>
+<!--                    </div>-->
                     <div class="col-lg-3">
                         <?= $form->field($model, 'style_cate_id')->dropDownList(Yii::$app->styleService->productType::getDropDown(),['disabled'=>true]) ?>
+                    </div>
+                    <div class="col-lg-3">
+                        <?= $form->field($model, 'style_sex')->dropDownList(\addons\Style\common\enums\StyleSexEnum::getMap(),['disabled'=>true]) ?>
                     </div>
                 </div>
                 <div class="row">

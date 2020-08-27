@@ -108,19 +108,19 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'format' => 'raw',
                                 'headerOptions' => ['class' => 'col-md-1'],
                             ],
-                            [
-                                'attribute' => 'product_type_id',
-                                'value' => function($model){
-                                    return $model->type->name ?? '';
-                                },
-                                'filter' => Html::activeDropDownList($searchModel, 'product_type_id',Yii::$app->styleService->productType->getDropDown(), [
-                                    'prompt' => '全部',
-                                    'class' => 'form-control',
-                                    'style'=>'width:100px'
-                                ]),
-                                'format' => 'raw',
-                                'headerOptions' => ['class' => 'col-md-1'],
-                            ],
+//                            [
+//                                'attribute' => 'product_type_id',
+//                                'value' => function($model){
+//                                    return $model->type->name ?? '';
+//                                },
+//                                'filter' => Html::activeDropDownList($searchModel, 'product_type_id',Yii::$app->styleService->productType->getDropDown(), [
+//                                    'prompt' => '全部',
+//                                    'class' => 'form-control',
+//                                    'style'=>'width:100px'
+//                                ]),
+//                                'format' => 'raw',
+//                                'headerOptions' => ['class' => 'col-md-1'],
+//                            ],
                             [
                                 'attribute' => 'style_sex',
                                 'format' => 'raw',
