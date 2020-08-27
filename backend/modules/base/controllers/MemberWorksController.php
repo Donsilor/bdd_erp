@@ -44,7 +44,7 @@ class MemberWorksController extends BaseController
             'defaultOrder' => [
                 'id' => SORT_DESC
             ],
-            'pageSize' => $this->getPageSize(2),
+            'pageSize' => $this->getPageSize(),
             'relations' => [
                 'member' => ['username'],
                 'department' => ['name']
@@ -137,7 +137,7 @@ class MemberWorksController extends BaseController
                 'date'=>SORT_DESC,
                 'id' => SORT_DESC
             ],
-            'pageSize' => $this->getPageSize(2),
+            'pageSize' => $this->getPageSize(5),
             'relations' => [
                 'member' => ['username'],
                 'department' => ['name']
@@ -249,7 +249,7 @@ class MemberWorksController extends BaseController
                 'date'=>SORT_DESC,
                 'id' => SORT_DESC
             ],
-            'pageSize' => $this->getPageSize(2),
+            'pageSize' => $this->getPageSize(5),
             'relations' => [
                 'member' => ['username'],
                 'department' => ['name']

@@ -16,7 +16,7 @@ use common\enums\AuditStatusEnum;
     <div class="col-xs-12">
         <div class="box">
             <div class="box-header">
-                <h5 class="box-title"><i class="fa fa-bars"></i> <?= $model->title ?></h5>
+                <h5 class="box-title"><?= $model->title ?></h5>
             </div>
             <div class="box-body table-responsive" style="padding-left: 0px;padding-right: 0px;">
                 <div class="col-xs-12">
