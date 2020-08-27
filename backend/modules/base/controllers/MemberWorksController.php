@@ -108,7 +108,9 @@ class MemberWorksController extends BaseController
             }
 
         }
-
+        if($model->isNewRecord){
+            $model->title = Yii::$app->formatter->asDate(time(),'Y年m月d日').'工作日报';
+        }
         return $this->render($this->action->id, [
             'model' => $model,
         ]);
@@ -122,8 +124,8 @@ class MemberWorksController extends BaseController
      */
     public function actionView()
     {
-        $id = Yii::$app->request->get('id');
-        $model = $this->findModel($id);
+        $creator_id = Yii::$app->request->get('creator_id');
+        $model = Member::find()->where(['id'=>$creator_id])->one();
         $searchModel = new SearchModel([
             'model' => $this->modelClass,
             'scenario' => 'default',
@@ -141,7 +143,7 @@ class MemberWorksController extends BaseController
 
         $dataProvider = $searchModel
             ->search(Yii::$app->request->queryParams);
-        $dataProvider->query->andWhere([MemberWorks::tableName().'.creator_id'=>$model->creator_id ,MemberWorks::tableName().'.type'=>WorksTypeEnum::DAY_SUMMARY]);
+        $dataProvider->query->andWhere([MemberWorks::tableName().'.creator_id'=>$creator_id ,MemberWorks::tableName().'.type'=>WorksTypeEnum::DAY_SUMMARY]);
         return $this->render($this->action->id, [
             'model' => $model,
             'dataProvider'=>$dataProvider,
@@ -223,6 +225,46 @@ class MemberWorksController extends BaseController
         return [$lists, $date_list];
 
     }
+
+
+
+    /**
+     * 详情展示页
+     * @return string
+     * @throws NotFoundHttpException
+     */
+    public function actionWorks()
+    {
+        $this->layout = '@backend/views/layouts/iframe';
+        $creator_id = Yii::$app->user->identity->getId();
+        $model = Member::find()->where(['id'=>$creator_id])->one();
+        $searchModel = new SearchModel([
+            'model' => $this->modelClass,
+            'scenario' => 'default',
+            'partialMatchAttributes' => [], // 模糊查询
+            'defaultOrder' => [
+                'date'=>SORT_DESC,
+                'id' => SORT_DESC
+            ],
+            'pageSize' => $this->getPageSize(),
+            'relations' => [
+                'member' => ['username'],
+                'department' => ['name']
+            ]
+        ]);
+
+        $dataProvider = $searchModel
+            ->search(Yii::$app->request->queryParams);
+        $dataProvider->query->andWhere([MemberWorks::tableName().'.creator_id'=>$creator_id ,MemberWorks::tableName().'.type'=>WorksTypeEnum::DAY_SUMMARY]);
+        return $this->render('view.php', [
+            'model' => $model,
+            'dataProvider'=>$dataProvider,
+            'searchModel' => $searchModel,
+        ]);
+    }
+
+
+
 
 
 

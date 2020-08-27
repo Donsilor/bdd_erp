@@ -8,10 +8,6 @@ use common\enums\AuditStatusEnum;
 /* @var $model common\models\order\order */
 /* @var $form yii\widgets\ActiveForm */
 
-$this->title = '总结---'.$model->member->username;
-$this->params['breadcrumbs'][] = ['label' => $this->title, 'url' => ['index']];
-$this->params['breadcrumbs'][] = $this->title;
-//
 ?>
 <div class="row">
     <div class="col-xs-12">
@@ -26,7 +22,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             <table class="table table-hover">
                                 <tr>
                                     <td class="col-xs-2 text-right">姓名：</td>
-                                    <td><?= $model->member->username ?? '' ?></td>
+                                    <td><?= $model->username ?? '' ?></td>
                                 </tr>
                             </table>
                         </div>
