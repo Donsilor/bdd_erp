@@ -121,11 +121,9 @@ $params = $params ? "&".http_build_query($params) : '';
                             ],
                             [
                                 'attribute' => 'content',
-                                'value'=> function($model){
-                                    return nl2br($model->content);
-                                },
                                 'format' => 'raw',
-                                'contentOptions' => ['style'=>'max-width:500px;max-height:80px;word-break:break-all;overflow:auto;'],
+                                'contentOptions' => ['style'=>'max-width:500px;max-height:80px;white-space:pre-wrap;'],
+                                'headerOptions' => ['class' => 'col-md-5'],
                                 'filter' =>false,
                             ],
 

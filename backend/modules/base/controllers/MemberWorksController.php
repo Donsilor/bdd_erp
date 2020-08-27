@@ -57,7 +57,9 @@ class MemberWorksController extends BaseController
             $dataProvider->query->andFilterWhere(['>=',MemberWorks::tableName().'.date', explode('/', $date)[0]]);//起始时间
             $dataProvider->query->andFilterWhere(['<',MemberWorks::tableName().'.date', explode('/', $date)[1]]);//结束时间
         }else{
-            $searchModel->date = date('Y-m-01',time())."/".date('Y-m-d',time());
+            $date = $searchModel->date = date('Y-m-01',time())."/".date('Y-m-d',time());
+            $dataProvider->query->andFilterWhere(['>=',MemberWorks::tableName().'.date', explode('/', $date)[0]]);//起始时间
+            $dataProvider->query->andFilterWhere(['<',MemberWorks::tableName().'.date', explode('/', $date)[1]]);//结束时间
         }
 
         //导出
@@ -101,7 +103,7 @@ class MemberWorksController extends BaseController
                     throw new \Exception($this->getError($model));
                 }
                 $trans->commit();
-                return $this->message('操作成功', $this->redirect(['index']), 'success');
+                return $this->message('操作成功', $this->redirect(Yii::$app->request->referrer), 'success');
             }catch (\Exception $e){
                 $trans->rollBack();
                 return $this->message($e->getMessage(), $this->redirect(Yii::$app->request->referrer), 'error');
@@ -134,7 +136,7 @@ class MemberWorksController extends BaseController
                 'date'=>SORT_DESC,
                 'id' => SORT_DESC
             ],
-            'pageSize' => $this->getPageSize(),
+            'pageSize' => $this->getPageSize(2),
             'relations' => [
                 'member' => ['username'],
                 'department' => ['name']
@@ -246,7 +248,7 @@ class MemberWorksController extends BaseController
                 'date'=>SORT_DESC,
                 'id' => SORT_DESC
             ],
-            'pageSize' => $this->getPageSize(),
+            'pageSize' => $this->getPageSize(2),
             'relations' => [
                 'member' => ['username'],
                 'department' => ['name']
@@ -256,7 +258,7 @@ class MemberWorksController extends BaseController
         $dataProvider = $searchModel
             ->search(Yii::$app->request->queryParams);
         $dataProvider->query->andWhere([MemberWorks::tableName().'.creator_id'=>$creator_id ,MemberWorks::tableName().'.type'=>WorksTypeEnum::DAY_SUMMARY]);
-        return $this->render('view.php', [
+        return $this->render($this->action->id, [
             'model' => $model,
             'dataProvider'=>$dataProvider,
             'searchModel' => $searchModel,
