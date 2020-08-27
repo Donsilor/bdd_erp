@@ -12,6 +12,7 @@ $this->title = Yii::t('style_channel', '工作总结');
 $this->params['breadcrumbs'][] = $this->title;
 $params = Yii::$app->request->queryParams;
 $params = $params ? "&".http_build_query($params) : '';
+
 ?>
 <div class="box-body nav-tabs-custom">
     <div class="tab-content">
@@ -107,6 +108,7 @@ $params = $params ? "&".http_build_query($params) : '';
                                         'locale' => [
                                             'separator' => '/',
                                         ],
+                                        'startDate' => date('Y-m-01', strtotime(date("Y-m-d"))),
                                         'endDate' => date('Y-m-d',time()),
                                         'todayHighlight' => true,
                                         'autoclose' => true,
