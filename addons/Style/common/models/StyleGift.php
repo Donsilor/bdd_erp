@@ -89,7 +89,7 @@ class StyleGift extends BaseModel
             'audit_time' => '审核时间',
             'audit_remark' => '审核备注',
             'remark' => '备注',
-            'status' => '状态 1启用 0禁用',
+            'status' => '状态',
             'sort' => '排序',
             'creator_id' => '创建人',
             'created_at' => '创建时间',
