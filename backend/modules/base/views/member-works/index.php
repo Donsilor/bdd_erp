@@ -122,7 +122,14 @@ $params = $params ? "&".http_build_query($params) : '';
                                 }
 
                             ],
-                            'created_at:datetime',
+                            [
+                                'attribute' => 'created_at',
+                                'value' => function($model){
+                                    return Yii::$app->formatter->asDatetime($model->created_at);
+                                },
+                                'headerOptions' => ['class' => 'col-md-5'],
+                                'filter' =>false,
+                            ],
                             [
                                 'class' => 'yii\grid\ActionColumn',
                                 'header' => '操作',
