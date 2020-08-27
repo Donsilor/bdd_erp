@@ -74,7 +74,7 @@ class MemberForm extends Model
         } else {
             $this->member = new Member();
         }
-
+        $this->dept_id = $this->member->dept_id;
         $this->role_id = $this->member->assignment->role_id ?? '';
     }
 
@@ -117,12 +117,12 @@ class MemberForm extends Model
                 $member->last_time = time();
             }
             $member->username = $this->username;
+            $member->dept_id  = $this->dept_id;
             //$member->merchant_id = Yii::$app->services->merchant->getId();
             // 验证密码是否修改
             if ($this->member->password_hash != $this->password) {
                 $member->password_hash = Yii::$app->security->generatePasswordHash($this->password);;
             }
-
             if (!$member->save()) {
                 $this->addErrors($member->getErrors());
                 throw new NotFoundHttpException('用户编辑错误');
