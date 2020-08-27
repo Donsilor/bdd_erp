@@ -78,7 +78,19 @@ class SiteController extends Controller
             ]
         ];
     }
-
+    /**
+     * 跳转
+     * {@inheritDoc}
+     * @see \yii\web\Controller::goHome()
+     */
+    public function goHome()
+    {
+        if(preg_match("/:\/\/work/is",Yii::$app->getRequest()->absoluteUrl)) {
+            return Yii::$app->getResponse()->redirect('/base/member-works/works');
+        }else{
+            return Yii::$app->getResponse()->redirect(Yii::$app->getHomeUrl());
+        }
+    }
     /**
      * 登录
      *
