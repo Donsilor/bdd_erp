@@ -79,8 +79,9 @@ class JdSdk extends Component
      * @param unknown $start_date
      * @param unknown $end_date
      */
-    public function getOrderList($start_date = null, $end_date = null ,$page = 1, $page_size = 20)
+    public function getOrderList($start_date = null, $end_date = null ,$page = 1, $order_type = 1)
     {
+        $page_size = 20;
         $request = new PopOrderSearchRequest();
         //1）WAIT_SELLER_STOCK_OUT 等待出库 2）WAIT_GOODS_RECEIVE_CONFIRM 等待确认收货   5）FINISHED_L 完成 
         $order_state = 'WAIT_SELLER_STOCK_OUT,WAIT_GOODS_RECEIVE_CONFIRM,FINISHED_L';
@@ -88,13 +89,13 @@ class JdSdk extends Component
         $option_fields = 'orderId,orderTotalPrice,orderSellerPrice,orderPayment,freightPrice,sellerDiscount,orderState,deliveryType,invoiceEasyInfo,invoiceInfo,invoiceCode,salesPin,open_id_seller,orderRemark,orderStartTime,orderEndTime,consigneeInfo,itemInfoList,orderExt,paymentConfirmTime,logisticsId,waybill,venderRemark,vatInfo,couponDetailList';
         $request->setOptionalFields($option_fields);
         $request->setPage($page);
-        $request->setPageSize($page_size);
+        $request->setPageSize(20);
         $request->setStartDate($start_date);        
         $request->setEndDate($end_date);
         //排序方式，默认升序,1是降序,其它数字都是升序
         $request->setSortType(0);
         //查询时间类型，0按修改时间查询，1为按订单创建时间查询；其它数字同0，也按订单修改（订单状态、修改运单号）修改时间
-        $request->setDateType(1);// 1订单创建时间，0订单修改时间
+        $request->setDateType($order_type);// 1订单创建时间，0订单修改时间
         $responce = $this->client->execute($request, $this->accessToken);
 
         if(isset($responce->error_response)){
