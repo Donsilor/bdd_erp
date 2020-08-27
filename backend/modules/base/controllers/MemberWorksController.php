@@ -57,7 +57,7 @@ class MemberWorksController extends BaseController
             $dataProvider->query->andFilterWhere(['>=',MemberWorks::tableName().'.date', explode('/', $date)[0]]);//起始时间
             $dataProvider->query->andFilterWhere(['<',MemberWorks::tableName().'.date', explode('/', $date)[1]]);//结束时间
         }else{
-            $searchModel->date = Yii::$app->formatter->asDate(time(),'Y-m-01')."/".Yii::$app->formatter->asDate(time(),'Y-m-d');
+            $searchModel->date = date('Y-m-01',time())."/".date('Y-m-d',time());
         }
 
         //导出
@@ -109,7 +109,7 @@ class MemberWorksController extends BaseController
 
         }
         if($model->isNewRecord){
-            $model->title = Yii::$app->formatter->asDate(time(),'Y年m月d日').'工作日报';
+            $model->title = date('Y年m月d日').'工作日报';
         }
         return $this->render($this->action->id, [
             'model' => $model,
