@@ -23,12 +23,12 @@ class JdController extends Controller
     {
         Console::output("Sync JD Order BEGIN[".date('Y-m-d H:i:s')."]-------------------");
         $change_type = $time_type == 1 ? "hour" : "minute";
-        $time_format = $time_type == 1 ? "Y-m-d H" : "Y-m-d H:i";
+        $time_format = $time_type == 1 ? "Y-m-d H:00:00" : "Y-m-d H:i:00";
         $start_time = $start_time == 0 ? time() : strtotime(date('Y-m-d H:i:s', strtotime($start_time)));
         for ($val = $time_val - 1; $val >= 0; $val--) {
             $end_date = date($time_format, strtotime(" -{$val} {$change_type}", $start_time));
             $start_date = date($time_format, $start_time);
-            $this->syncOrderByDate($start_date, $end_date,$order_type);
+            $this->syncOrderByDate($start_date, $end_date, $order_type);
         }
         Console::output("Sync JD Order END[".date('Y-m-d H:i:s')."]-------------------");
     }
