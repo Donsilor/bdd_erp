@@ -69,7 +69,11 @@ $this->params['breadcrumbs'][] = $this->title;
                         <tr>
                             <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('is_made') ?>：</td>
                             <td><?= \common\enums\ConfirmEnum::getValue($model->is_made)?></td>
-                        </tr>                                       
+                        </tr>
+                        <tr>
+                            <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('is_gift') ?>：</td>
+                            <td><?= \common\enums\ConfirmEnum::getValue($model->is_gift)?></td>
+                        </tr>
                         <tr>
                             <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('factory_id') ?>：</td>
                             <td><?= $model->supplier->supplier_name ?? '' ?></td>
