@@ -31,7 +31,7 @@ class OrderController extends Controller
             Console::output("Page[".$page."],Error:".$e->getMessage());
             return;
         }
-        for ($page = 2 ; $page < $page_count; $page ++) {
+        for ($page = 2 ; $page <= $page_count; $page ++) {
             Console::output("Page[".$page."] Start");
             try{
                 list($order_list) = \Yii::$app->jdSdk->getOrderList(null,null,$page);
