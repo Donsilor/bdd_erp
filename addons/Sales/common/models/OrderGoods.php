@@ -61,7 +61,7 @@ class OrderGoods extends BaseModel
             [['goods_image'], 'string', 'max' => 100],
             [['goods_spec','remark'], 'string', 'max' => 255],
             [['currency'], 'string', 'max' => 5],
-            [['produce_sn'], 'string', 'max' => 30],
+            [['produce_sn','out_sku_id'], 'string', 'max' => 30],
             [['apply_info'], 'string'],
         ];
     }
@@ -108,6 +108,7 @@ class OrderGoods extends BaseModel
             'updated_at' => '更新时间',
             'is_apply' => '是否申请修改',
             'remark' => '备注',
+            'out_sku_id' => '外部SKU',
 
         ];
     }

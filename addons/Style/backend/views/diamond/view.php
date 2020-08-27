@@ -34,7 +34,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 </tr>
                                 <tr>
                                     <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('status') ?>：</td>
-                                    <td><?= \common\enums\StatusEnum::getValue($model->status) ?></td>
+                                    <td><?= \common\enums\FrameEnum::getValue($model->status) ?></td>
                                 </tr>
                                 <tr>
                                     <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('is_stock') ?>：</td>

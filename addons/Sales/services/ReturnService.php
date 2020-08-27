@@ -9,12 +9,12 @@
 namespace addons\Sales\services;
 
 use addons\Sales\common\enums\DistributeStatusEnum;
-use addons\Sales\common\enums\PayStatusEnum;
 use addons\Sales\common\enums\ReturnTypeEnum;
 use addons\Sales\common\models\OrderAccount;
 use addons\Sales\common\models\OrderAddress;
 use addons\Sales\common\models\OrderGoods;
 use addons\Sales\common\forms\ReturnGoodsForm;
+use addons\Sales\common\models\SalesReturn;
 use addons\Warehouse\common\forms\WarehouseBillDForm;
 use addons\Warehouse\common\models\WarehouseBillGoods;
 use addons\Warehouse\common\models\WarehouseGoods;
@@ -32,7 +32,6 @@ use addons\Warehouse\common\enums\GoodsStatusEnum;
 use addons\Warehouse\common\enums\OrderTypeEnum;
 use common\components\Service;
 use common\enums\AuditStatusEnum;
-use common\enums\ConfirmEnum;
 use common\enums\LogTypeEnum;
 use common\enums\StatusEnum;
 use common\helpers\ArrayHelper;
@@ -43,6 +42,7 @@ class ReturnService extends Service
 {
 
     /**
+     *
      * 退款单 tab
      * @param int $return_id 退款ID
      * @param string $returnUrl
@@ -58,16 +58,24 @@ class ReturnService extends Service
     }
 
     /**
+     *
+     *  创建退款单
      * @param ReturnForm $form
      * @param Order $order
-     * @return object $form
-     * 退款
      * @throws \Exception
+     * @return object $form
      */
-    public function salesReturn($form, $order)
+    public function createReturn($form, $order)
     {
         if (empty($form->ids) && !is_array($form->ids)) {
             throw new \Exception("请选择需要退款的商品");
+        }
+        $newOrder = null;
+        if($form->new_order_sn){
+            $newOrder = Order::findOne(['order_sn'=>$form->new_order_sn]);
+            if(empty($newOrder)){
+                throw new \Exception("新订单号不存在");
+            }
         }
         if ($order->delivery_status == DeliveryStatusEnum::HAS_SEND) {
             $form->return_by = ReturnByEnum::GOODS;
@@ -104,8 +112,8 @@ class ReturnService extends Service
             'return_no' => SnHelper::createReturnSn(),
             'order_id' => $order->id,
             'order_sn' => $order->order_sn,
-            //'new_order_id' => $newOrder?$newOrder->id:"",
-            //'new_order_sn' => $newOrder?$newOrder->order_sn:"",
+            'new_order_id' => $newOrder?$newOrder->id:"",
+            'new_order_sn' => $newOrder?$newOrder->order_sn:"",
             'channel_id' => $order->sale_channel_id,
             'goods_num' =>count($rGoods),
             'should_amount' => $should_amount,
@@ -146,92 +154,6 @@ class ReturnService extends Service
         }
 
         return $form;
-    }
-
-    /**
-     *
-     * 退款-转单
-     * @param Order $order
-     * @param array $ids
-     * @return object $form
-     * @throws
-     */
-    public function auditZhuandan($order, $ids)
-    {
-        //1.创建新订单
-        $newOrder = new Order();
-        $newOrder->attributes = $order->toArray();
-        $newOrder->id = null;
-        $newOrder->order_sn = (string) rand(10000000000,99999999999);
-        $newOrder->order_time = time();
-        $newOrder->express_id = "";
-        $newOrder->express_no = "";
-        //$newOrder->pay_status = PayStatusEnum::NO_PAY;
-        $newOrder->distribute_status = DistributeStatusEnum::SAVE;
-        $newOrder->delivery_status = DeliveryStatusEnum::SAVE;
-        $newOrder->refund_status = RefundStatusEnum::SAVE;
-        $newOrder->delivery_time = "";
-        $newOrder->finished_time = "";
-        $newOrder->pay_time = time();
-        if (false == $newOrder->save()) {
-            throw new \Exception($this->getError($newOrder));
-        }
-        \Yii::$app->salesService->order->createOrderSn($newOrder, true);
-
-        $order_amount = $goods_amount = $discount_amount = 0;
-        //2.添加商品
-        foreach ($ids as $id) {
-            $goods = OrderGoods::findOne($id);
-            $newGoods = new OrderGoods();
-            $newGoods->attributes = $goods->toArray();
-            $newGoods->id = null;
-            $newGoods->order_id = $newOrder->id;
-            $newGoods->is_return = IsReturnEnum::SAVE;
-            if (false == $newGoods->save()) {
-                throw new \Exception($this->getError($newGoods));
-            }
-            $order_amount = bcadd($order_amount, $newGoods->goods_pay_price, 3);
-            $goods_amount = bcadd($goods_amount, $newGoods->goods_price, 3);
-            $discount_amount = bcadd($discount_amount, $newGoods->goods_discount, 3);
-        }
-
-        //3.创建订单金额
-        $account = new OrderAccount();
-        $account->order_id = $newOrder->id;
-        $account->order_amount = $order_amount;
-        $account->goods_amount = $goods_amount;
-        $account->discount_amount = $discount_amount;
-        $account->pay_amount = $order_amount;
-        $account->paid_amount = $order_amount;
-        //$account->pay_amount = $order_amount;
-        if (false == $account->save()) {
-            throw new \Exception($this->getError($account));
-        }
-
-        //4.创建订单地址信息
-        $address = OrderAddress::find()->where(['order_id' => $order->id])->one();
-        if (!empty($address)) {
-            $newAddress = new OrderAddress();
-            $newAddress->attributes = $address->toArray();
-            $newAddress->order_id = $newOrder->id;
-            if (false == $newAddress->save()) {
-                throw new \Exception($this->getError($newAddress));
-            }
-        }
-
-        //5.创建订单日志
-        $log = [
-            'order_id' => $newOrder->id,
-            'order_sn' => $newOrder->order_sn,
-            'order_status' => $newOrder->order_status,
-            'log_type' => LogTypeEnum::ARTIFICIAL,
-            'log_time' => time(),
-            'log_module' => '创建订单',
-            'log_msg' => "创建订单, 订单号:" . $newOrder->order_sn,
-        ];
-        \Yii::$app->salesService->orderLog->createOrderLog($log);
-
-        return $newOrder;
     }
 
     /**
@@ -278,18 +200,17 @@ class ReturnService extends Service
                     throw new \Exception($this->getError($order));
                 }
                 $rGoods = ReturnGoodsForm::findAll(['return_id'=>$form->id]);
-                $goods_id = $order_detail_ids = [];
+                $goods_id = [];
                 foreach ($rGoods as $good) {
                     $goods = OrderGoods::findOne($good->order_detail_id);
                     $goods_id[] = $good->goods_id;
-                    $order_detail_ids[] = $good->order_detail_id;
                     $goods->is_return = IsReturnEnum::HAS_RETURN;
                     if (false === $goods->save()) {
                         throw new \Exception($this->getError($goods));
                     }
                 }
                 if($form->return_type == ReturnTypeEnum::TRANSFER){//转单
-                    $newOrder = $this->auditZhuandan($order, $order_detail_ids);
+                    $newOrder = $this->zhuandan($form);
                     $form->new_order_id = $newOrder?$newOrder->id:"";
                     $form->new_order_sn = $newOrder?$newOrder->order_sn:"";
                 }
@@ -307,7 +228,12 @@ class ReturnService extends Service
                     }
                     //2.更新商品库存状态
                     $condition = ['goods_id' => $goods_id, 'goods_status' => GoodsStatusEnum::IN_REFUND];
-                    WarehouseGoods::updateAll(['goods_status' => GoodsStatusEnum::IN_STOCK], $condition);
+                    if($form->return_type == ReturnTypeEnum::TRANSFER){
+                        $goods_status = GoodsStatusEnum::IN_SALE;
+                    }else{
+                        $goods_status = GoodsStatusEnum::IN_STOCK;
+                    }
+                    WarehouseGoods::updateAll(['goods_status' => $goods_status], $condition);
                 }
                 //3.更新订单金额
                 $account = OrderAccount::findOne($form->order_id);
@@ -375,6 +301,133 @@ class ReturnService extends Service
             throw new \Exception($this->getError($form));
         }
         return $form;
+    }
+
+    /**
+     *
+     * 退款-转单
+     * @param SalesReturn $form
+     * @return object $form
+     * @throws
+     */
+    public function zhuandan($form)
+    {
+        $order = Order::findOne(['id'=>$form->order_id]);
+        if(empty($order)){
+            throw new \Exception("未查到相关订单");
+        }
+        if(!empty($form->new_order_id)){
+            $newOrder = Order::findOne(['id'=>$form->new_order_id]);
+        }else{
+            //1.创建新订单
+            $newOrder = new Order();
+            $newOrder->attributes = $order->toArray();
+            $newOrder->id = null;
+            $newOrder->order_sn = (string) rand(10000000000,99999999999);
+            $newOrder->order_time = time();
+            $newOrder->express_id = "";
+            $newOrder->express_no = "";
+            //$newOrder->pay_status = PayStatusEnum::NO_PAY;
+            $newOrder->distribute_status = DistributeStatusEnum::SAVE;
+            $newOrder->delivery_status = DeliveryStatusEnum::SAVE;
+            $newOrder->refund_status = RefundStatusEnum::SAVE;
+            $newOrder->delivery_time = "";
+            $newOrder->finished_time = "";
+            $newOrder->pay_time = time();
+            if (false == $newOrder->save()) {
+                throw new \Exception($this->getError($newOrder));
+            }
+            \Yii::$app->salesService->order->createOrderSn($newOrder, true);
+        }
+
+        //2.添加商品
+        $rGoods = ReturnGoodsForm::findAll(['return_id'=>$form->id]);
+        $ids = ArrayHelper::getColumn($rGoods, 'order_detail_id');
+        if(empty($ids)){
+            throw new \Exception("订单明细ID不能为空");
+        }
+        $order_amount = $goods_amount = $discount_amount = 0;
+        foreach ($ids as $id) {
+            $goods = OrderGoods::findOne($id);
+            $newGoods = new OrderGoods();
+            $newGoods->attributes = $goods->toArray();
+            $newGoods->id = null;
+            $newGoods->order_id = $newOrder->id;
+            $newGoods->is_return = IsReturnEnum::SAVE;
+            if (false == $newGoods->save()) {
+                throw new \Exception($this->getError($newGoods));
+            }
+            //3.绑定货号
+            if($form->return_by == ReturnByEnum::GOODS){
+                $wGoods = WarehouseGoods::findOne(['goods_id'=>$newGoods->goods_id]);
+                if(!empty($wGoods)){
+                    $wGoods->order_sn = $newOrder->order_sn;
+                    $wGoods->order_detail_id = (string) $newGoods->id;
+                    if (false == $wGoods->save()) {
+                        throw new \Exception($this->getError($wGoods));
+                    }
+                }
+            }
+            $order_amount = bcadd($order_amount, $newGoods->goods_pay_price, 3);
+            $goods_amount = bcadd($goods_amount, $newGoods->goods_price, 3);
+            $discount_amount = bcadd($discount_amount, $newGoods->goods_discount, 3);
+        }
+
+        if(!empty($form->new_order_id)){
+
+            $oldAccount = OrderAccount::findOne(['order_id'=>$form->new_order_id]);
+
+            $order_amount = bcadd($order_amount, $oldAccount->order_amount, 3);
+            $goods_amount = bcadd($goods_amount, $oldAccount->goods_amount, 3);
+            $discount_amount = bcadd($discount_amount, $oldAccount->discount_amount, 3);
+
+            $oldAccount->order_amount = $order_amount;
+            $oldAccount->goods_amount = $goods_amount;
+            $oldAccount->discount_amount = $discount_amount;
+            $oldAccount->pay_amount = $order_amount;
+            $oldAccount->paid_amount = $order_amount;
+            //$account->pay_amount = $order_amount;
+            if (false == $oldAccount->save()) {
+                throw new \Exception($this->getError($oldAccount));
+            }
+        }else{
+            //4.创建订单金额
+            $account = new OrderAccount();
+            $account->order_id = $newOrder->id;
+            $account->order_amount = $order_amount;
+            $account->goods_amount = $goods_amount;
+            $account->discount_amount = $discount_amount;
+            $account->pay_amount = $order_amount;
+            $account->paid_amount = $order_amount;
+            //$account->pay_amount = $order_amount;
+            if (false == $account->save()) {
+                throw new \Exception($this->getError($account));
+            }
+
+            //5.创建订单地址信息
+            $address = OrderAddress::find()->where(['order_id' => $order->id])->one();
+            if (!empty($address)) {
+                $newAddress = new OrderAddress();
+                $newAddress->attributes = $address->toArray();
+                $newAddress->order_id = $newOrder->id;
+                if (false == $newAddress->save()) {
+                    throw new \Exception($this->getError($newAddress));
+                }
+            }
+
+            //6.创建订单日志
+            $log = [
+                'order_id' => $newOrder->id,
+                'order_sn' => $newOrder->order_sn,
+                'order_status' => $newOrder->order_status,
+                'log_type' => LogTypeEnum::ARTIFICIAL,
+                'log_time' => time(),
+                'log_module' => '创建订单',
+                'log_msg' => "创建订单, 订单号:" . $newOrder->order_sn,
+            ];
+            \Yii::$app->salesService->orderLog->createOrderLog($log);
+        }
+        return $newOrder;
     }
 
     /**

@@ -9,20 +9,20 @@ use common\enums\BaseEnum;
  * @package common\enums
  * @author jianyan74 <751393839@qq.com>
  */
-class InvoiceTitleTypeEnum extends BaseEnum
+class InvoiceStatusEnum extends BaseEnum
 {
-    const NONE = 0;
-    const ENTERPRISE = 1;
-    const PERSONAL = 2;
-
+    const NO = 0;
+    const YES = 1;
+    
     /**
      * @return array
      */
     public static function getMap(): array
     {
         return [
-            self::ENTERPRISE => '企业',
-            self::PERSONAL => '个人',
+                self::ENTERPRISE => '企业',
+                self::PERSONAL => '个人',
+                self::NONE => '不开发票',
         ];
     }
 }

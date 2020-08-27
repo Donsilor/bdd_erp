@@ -23,6 +23,7 @@ use common\helpers\SnHelper;
 use addons\Sales\common\enums\PayStatusEnum;
 use common\enums\LogTypeEnum;
 use addons\Sales\common\enums\OrderFromEnum;
+use addons\Sales\common\models\OrderInvoice;
 
 /**
  * Class SaleChannelService
@@ -146,7 +147,7 @@ class OrderService extends Service
      * @throws \Exception
      * @return \addons\Sales\common\models\Order
      */
-    public function createSyncOrder($orderInfo, $accountInfo, $goodsList, $customerInfo, $addressInfo, $noticeInfo = [])
+    public function createSyncOrder($orderInfo, $accountInfo, $goodsList, $customerInfo, $addressInfo, $invoiceInfo = [])
     {
         if(empty($orderInfo['out_trade_no'])) {
             throw new \Exception("orderInfo->out_trade_no 不能为空");
@@ -249,16 +250,7 @@ class OrderService extends Service
             if(false == $customer->save()) {
                 throw new \Exception("更新用户失败：".$this->getError($customer));
             }
-        }
-        $order->goods_num   = $goods_num;
-        $order->customer_id = $customer->id;
-        if($order->order_sn == ''){
-            $order->order_sn = $this->createOrderSn($order);
-        }
-        if(false == $order->save()) {
-            throw new \Exception($this->getError($order));
-        }
-        
+        }        
         //6.同步订单收货地址
         $address = OrderAddress::find()->where(['order_id'=>$order->id])->one();
         if(!$address) {
@@ -270,6 +262,24 @@ class OrderService extends Service
             throw new \Exception("同步收货地址失败：".$this->getError($address));
         }  
         //7.同步发票
+        $invoice = OrderInvoice::find()->where(['order_id'=>$order->id])->one();
+        if(!$invoice) {
+            $invoice = new OrderInvoice();
+            $invoice->order_id = $order->id;
+        }
+        $invoice->attributes = $invoiceInfo;
+        if(false == $invoice->save()) {
+            throw new \Exception("同步发票失败：".$this->getError($invoice));
+        }
+        $order->is_invoice   = $invoice->invoice_type ? 1: 0;
+        $order->goods_num   = $goods_num;
+        $order->customer_id = $customer->id;
+        if($order->order_sn == ''){
+            $order->order_sn = $this->createOrderSn($order);
+        }
+        if(false == $order->save()) {
+            throw new \Exception($this->getError($order));
+        }
         
         //创建订单日志
         if($isNewOrder === true) {

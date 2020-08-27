@@ -2,16 +2,17 @@
 
 namespace addons\Style\services;
 
-use addons\Style\common\models\StyleImages;
-use common\enums\StatusEnum;
+use addons\Style\common\enums\AttrIdEnum;
+use addons\Style\common\models\StyleGift;
 use Yii;
+use common\helpers\Url;
 use common\components\Service;
 use addons\Style\common\models\Style;
-use common\helpers\Url;
 use addons\Style\common\models\StyleAttribute;
-use common\helpers\SnHelper;
+use addons\Style\common\models\StyleImages;
 use addons\Style\common\enums\StyleSexEnum;
-use addons\Style\common\enums\StyleMaterialEnum;
+use common\enums\ConfirmEnum;
+use common\enums\StatusEnum;
 use common\enums\AutoSnEnum;
 
 /**
@@ -40,9 +41,12 @@ class StyleService extends Service
                 8=>['name'=>'日志信息','url'=>Url::to(['style-log/index','style_id'=>$style_id,'tab'=>8,'returnUrl'=>$returnUrl])]
         ];
         
-        $model = Style::find()->select(['id','is_inlay'])->where(['id'=>$style_id])->one();        
-        if($model && $model->is_inlay==0) {
+        $model = Style::find()->select(['id','is_inlay'])->where(['id'=>$style_id])->one();
+        if($model && $model->is_inlay==ConfirmEnum::NO) {
             unset($menus[4]);
+        }
+        if($model && $model->is_gift==ConfirmEnum::YES) {
+            unset($menus[3], $menus[6]);
         }
         return $menus;
     }
@@ -59,6 +63,7 @@ class StyleService extends Service
     /**
      * 创建款式编号
      * @param Style $model
+     * @throws
      */
     public static function createStyleSn($model,$save = true)
     {   
@@ -114,5 +119,39 @@ class StyleService extends Service
         $style = Style::find()->where(['style_sn'=>$style_sn])->select(['id'])->one();
         return $style;
     }
-   
+
+    /**
+     *
+     * 同步创建赠品款式
+     * @param Style $form
+     * @throws
+     */
+    public static function createGiftStyle($form)
+    {
+        $goods_size = \Yii::$app->styleService->styleAttribute->getAttrValueListByStyle($form->style_sn, AttrIdEnum::PRODUCT_SIZE);
+        $chain_length = \Yii::$app->styleService->styleAttribute->getAttrValueListByStyle($form->style_sn, AttrIdEnum::CHAIN_LENGTH);
+        $gift = new StyleGift();
+        $style = [
+            'style_id' => $form->id,
+            'style_sn' => $form->style_sn,
+            'gift_name' => $form->style_name,
+            'style_image' => $form->style_image,
+            'style_cate_id' => $form->style_cate_id,
+            'style_sex' => $form->style_sex,
+            //'material_type' => '',
+            //'material_color' => '',
+            //'goods_size' => $goods_size??"",
+            //'finger' => '',
+            //'finger_hk' => '',
+            //'chain_length' => $chain_length??"",
+            'cost_price' => $form->cost_price,
+            'market_price' => $form->market_price,
+            'creator_id' => \Yii::$app->user->identity->getId(),
+            'created_at' => time(),
+        ];
+        $gift->attributes = $style;
+        if (false === $gift->save()) {
+            throw new \Exception("创建赠品款式失败");
+        }
+    }
 }

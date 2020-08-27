@@ -85,7 +85,7 @@ class JdSdk extends Component
         //1）WAIT_SELLER_STOCK_OUT 等待出库 2）WAIT_GOODS_RECEIVE_CONFIRM 等待确认收货   5）FINISHED_L 完成 
         $order_state = 'WAIT_SELLER_STOCK_OUT,WAIT_GOODS_RECEIVE_CONFIRM,FINISHED_L';
         $request->setOrderState($order_state);
-        $option_fields = 'orderId,orderTotalPrice,orderSellerPrice,orderPayment,freightPrice,sellerDiscount,orderState,deliveryType,invoiceEasyInfo,orderRemark,orderStartTime,orderEndTime,consigneeInfo,itemInfoList,orderExt,paymentConfirmTime,logisticsId,waybill,venderRemark';
+        $option_fields = 'orderId,orderTotalPrice,orderSellerPrice,orderPayment,freightPrice,sellerDiscount,orderState,deliveryType,invoiceEasyInfo,invoiceInfo,invoiceCode,salesPin,open_id_seller,orderRemark,orderStartTime,orderEndTime,consigneeInfo,itemInfoList,orderExt,paymentConfirmTime,logisticsId,waybill,venderRemark,vatInfo,couponDetailList';
         $request->setOptionalFields($option_fields);
         $request->setPage($page);
         $request->setPageSize($page_size);
@@ -114,10 +114,23 @@ class JdSdk extends Component
         $tde = TDEClient::getInstance($this->accessToken, $this->appKey, $this->appSecret);
         $order_list = $result->orderInfoList;
         foreach ($order_list as & $order) {
-            $order->consigneeInfo->fullAddress = $tde->decrypt($order->consigneeInfo->fullAddress);
-            $order->consigneeInfo->telephone= $tde->decrypt($order->consigneeInfo->telephone);
-            $order->consigneeInfo->fullname= $tde->decrypt($order->consigneeInfo->fullname);
-            $order->consigneeInfo->mobile= $tde->decrypt($order->consigneeInfo->mobile);
+            if($order->consigneeInfo) {
+                $order->consigneeInfo->fullAddress = $tde->decrypt($order->consigneeInfo->fullAddress);
+                $order->consigneeInfo->telephone= $tde->decrypt($order->consigneeInfo->telephone);
+                $order->consigneeInfo->fullname= $tde->decrypt($order->consigneeInfo->fullname);
+                $order->consigneeInfo->mobile= $tde->decrypt($order->consigneeInfo->mobile);
+            }
+            if($order->invoiceEasyInfo) {
+                if(isset($order->invoiceEasyInfo->invoiceTitle)) {
+                    $order->invoiceEasyInfo->invoiceTitle = $tde->decrypt($order->invoiceEasyInfo->invoiceTitle);
+                }
+                if(isset($order->invoiceEasyInfo->invoiceConsigneePhone)) {
+                    $order->invoiceEasyInfo->invoiceConsigneePhone = $tde->decrypt($order->invoiceEasyInfo->invoiceConsigneePhone);
+                }
+                if(isset($order->invoiceEasyInfo->invoiceConsigneeEmail)) {
+                    $order->invoiceEasyInfo->invoiceConsigneeEmail = $tde->decrypt($order->invoiceEasyInfo->invoiceConsigneeEmail);
+                }
+            }
         }
         return [$order_list,$page_count];
     }

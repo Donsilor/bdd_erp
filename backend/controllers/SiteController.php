@@ -78,7 +78,19 @@ class SiteController extends Controller
             ]
         ];
     }
-
+    /**
+     * 跳转
+     * {@inheritDoc}
+     * @see \yii\web\Controller::goHome()
+     */
+    public function goHome()
+    {
+        if(preg_match("/:\/\/work/is",Yii::$app->getRequest()->absoluteUrl)) {
+            return Yii::$app->getResponse()->redirect('/base/member-works/works');
+        }else{
+            return Yii::$app->getResponse()->redirect(Yii::$app->getHomeUrl());
+        }
+    }
     /**
      * 登录
      *
@@ -86,7 +98,10 @@ class SiteController extends Controller
      * @throws \yii\base\InvalidConfigException
      */
     public function actionLogin()
-    {
+    {        
+        if(preg_match("/:\/\/work/is",Yii::$app->getRequest()->absoluteUrl)) {
+            Yii::$app->params['adminTitle'] = '恒得利Work';
+        }
         if (!Yii::$app->user->isGuest) {
             // 记录行为日志
             Yii::$app->services->actionLog->create('login', '自动登录', false);

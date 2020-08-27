@@ -49,7 +49,7 @@ return [
                                     'route' => 'diamond/index',
                             ],
                             [
-                                    'title' => '赠品列表',
+                                    'title' => '赠品款式',
                                     'route' => 'style-gift/index',
                             ],
                     ],

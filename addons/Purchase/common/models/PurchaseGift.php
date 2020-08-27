@@ -16,6 +16,8 @@ use addons\Supply\common\models\Supplier;
  * @property int $total_num 总数量
  * @property int $delivery_time 交货时间
  * @property int $purchase_status 采购单状态：1保存 2待审核 3已审核 9已取消
+ * @property int $purchase_cate 采购分类
+ * @property int $channel_id 渠道
  * @property int $auditor_id 审核人
  * @property int $audit_status 审核状态：0待审核 1通过 2不通过
  * @property int $audit_time 审核时间
@@ -43,7 +45,7 @@ class PurchaseGift extends BaseModel
     public function rules()
     {
         return [
-            [['supplier_id', 'total_num', 'purchase_status', 'auditor_id', 'audit_status', 'audit_time', 'status', 'follower_id', 'creator_id', 'created_at', 'updated_at'], 'integer'],
+            [['supplier_id', 'total_num', 'purchase_status', 'channel_id', 'purchase_cate', 'auditor_id', 'audit_status', 'audit_time', 'status', 'follower_id', 'creator_id', 'created_at', 'updated_at'], 'integer'],
             [['total_cost'], 'number'],
             [['purchase_sn'], 'string', 'max' => 30],
             [['audit_remark', 'remark'], 'string', 'max' => 255],
@@ -64,6 +66,8 @@ class PurchaseGift extends BaseModel
             'total_num' => '总数量',
             'delivery_time' => '交货时间',
             'purchase_status' => '采购单状态',
+            'channel_id' => '渠道',
+            'purchase_cate' => '采购分类',
             'auditor_id' => '审核人',
             'audit_status' => '审核状态',
             'audit_time' => '审核时间',

@@ -660,10 +660,10 @@ $this->params['breadcrumbs'][] = $this->title;
                     <table class="table table-hover">
                         <thead>
                         <tr>
-                            <th>发票类型</th>
+                            <th>是否开发票</th>
                             <th>发票抬头</th>
                             <th>纳税人识别号</th>
-                            <th>是否电子发票</th>
+                            <th>发票类型</th>
                             <th>发票邮箱</th>
                             <th>发送次数</th>
                             <th>操作</th>
@@ -671,10 +671,10 @@ $this->params['breadcrumbs'][] = $this->title;
                         </thead>
                         <tbody>
                         <tr>
-                            <td><?= addons\Sales\common\enums\InvoiceTitleTypeEnum::getValue($model->invoice->invoice_type ?? '') ?></td>
+                            <td><?= addons\Sales\common\enums\IsInvoiceEnum::getValue($model->invoice->status ?? '') ?></td>
                             <td><?= $model->invoice->invoice_title ?? '' ?></td>
                             <td><?= $model->invoice->tax_number ?? '' ?></td>
-                            <td><?= addons\Sales\common\enums\InvoiceElectronicEnum::getValue($model->invoice->is_electronic ?? '') ?></td>
+                             <td><?= addons\Sales\common\enums\InvoiceTypeEnum::getValue($model->invoice->invoice_type ?? '') ?></td>
                             <td><?= $model->invoice->email ?? '' ?></td>
                             <td><?= $model->invoice->send_num ?? '' ?></td>
                             <td><?= Html::edit(['ajax-edit-invoice', 'id' => $model->id, 'returnUrl' => $returnUrl], '编辑', [
