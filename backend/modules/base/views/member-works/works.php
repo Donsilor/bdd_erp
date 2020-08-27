@@ -88,14 +88,7 @@ use common\helpers\Html;
                             'name'=>'id',  //设置每行数据的复选框属性
                             'headerOptions' => ['width'=>'30'],
                         ],
-                        [
-                            'attribute' => 'type',
-                            'filter' => false,
-                            'value'=>function($model){
-                                return \common\enums\WorksTypeEnum::getValue($model->type);
-                            },
-                            'headerOptions' => ['width'=>'80'],
-                        ],
+                        
                         [
                             'attribute'=>'date',
                             'filter' => \kartik\daterange\DateRangePicker::widget([    // 日期组件
