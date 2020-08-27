@@ -61,6 +61,7 @@ class StyleService extends Service
     /**
      * 创建款式编号
      * @param Style $model
+     * @throws
      */
     public static function createStyleSn($model,$save = true)
     {   

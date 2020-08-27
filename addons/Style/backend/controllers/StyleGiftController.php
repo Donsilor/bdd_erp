@@ -71,24 +71,31 @@ class StyleGiftController extends BaseController
      */
     public function actionAjaxEdit()
     {
-        $id = Yii::$app->request->get('id');
+        $id = \Yii::$app->request->get('id');
         $model = $this->findModel($id) ?? new StyleGift();
-
+        $isNewRecord = $model->isNewRecord;
         // ajax 校验
         $this->activeFormValidate($model);
         if ($model->load(Yii::$app->request->post())) {
-            $style = Style::findOne(['style_sn'=>$model->style_sn]);
-            if(!$style){
-                return $this->message('款号不存在', $this->redirect(\Yii::$app->request->referrer), 'error');
+            //自动创建款号
+            if($isNewRecord) {
+                if(trim($model->style_sn) == ""){
+                    $style_sn = \Yii::$app->styleService->gift->createStyleSn($model, false);
+                    $model->style_sn = $style_sn;
+                }
+//                $style = Style::findOne(['style_sn'=>$model->style_sn]);
+//                if(!$style){
+//                    return $this->message('款号不存在', $this->redirect(\Yii::$app->request->referrer), 'error');
+//                }
+//                if(empty($style->is_gift)){
+//                    return $this->message('款号不是赠品', $this->redirect(\Yii::$app->request->referrer), 'error');
+//                }
+//                $model->style_id = $style->id;
             }
-            if(empty($style->is_gift)){
-                return $this->message('款号不是赠品', $this->redirect(\Yii::$app->request->referrer), 'error');
-            }
-            $model->style_id = $style->id;
             $model->status = StatusEnum::DISABLED;
             return $model->save()
-                ? $this->redirect(Yii::$app->request->referrer)
-                : $this->message($this->getError($model), $this->redirect(Yii::$app->request->referrer), 'error');
+                ? $this->redirect(\Yii::$app->request->referrer)
+                : $this->message($this->getError($model), $this->redirect(\Yii::$app->request->referrer), 'error');
         }
 
         return $this->renderAjax($this->action->id, [
