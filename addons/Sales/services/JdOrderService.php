@@ -194,7 +194,7 @@ class JdOrderService extends Service
                     $goods_discount += $coupon->couponPrice;
                 }
             }
-
+            print_r($order->couponDetailList);
             $erpGoods = [
                 "goods_name" => $model->skuName,
                 "goods_image"=> null,
