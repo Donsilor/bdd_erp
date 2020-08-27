@@ -19,7 +19,7 @@ class JdController extends Controller
      * @param number $order_type
      * @param number $start_time
      */
-    public function actionPullOrderList($time_val = 1, $time_type = 1, $order_type = 1, $start_time = 0)
+    public function actionPullOrders($time_val = 1, $time_type = 1, $order_type = 1, $start_time = 0)
     {
         Console::output("Sync JD Order BEGIN[".date('Y-m-d H:i:s')."]-------------------");
         $change_type = $time_type == 1 ? "hour" : "minute";
@@ -42,7 +42,7 @@ class JdController extends Controller
         try{
             $page = 1;
             list($order_list,$page_count) = \Yii::$app->jdSdk->getOrderList($start_time,$end_time,$page,$order_type);
-            $this->syncJdOrders($order_list);
+            $this->syncOrders($order_list);
         }catch (\Exception $e) {
             Console::output("Page[".$page."],Error:".$e->getMessage());
             return;
