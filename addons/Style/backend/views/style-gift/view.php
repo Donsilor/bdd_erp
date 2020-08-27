@@ -33,8 +33,28 @@ $this->params['breadcrumbs'][] = $this->title;
                                      <td><?= $model->style_sn ?></td>
                                  </tr>
                                  <tr>
-                                     <td class="col-xs-3 text-right"><?= $model->getAttributeLabel('channel_id') ?>：</td>
-                                     <td><?= $model->saleChannel->name ??'' ?></td>
+                                     <td class="col-xs-3 text-right"><?= $model->getAttributeLabel('style_cate_id') ?>：</td>
+                                     <td><?= $model->cate->name ??'' ?></td>
+                                 </tr>
+                                 <tr>
+                                     <td class="col-xs-3 text-right"><?= $model->getAttributeLabel('style_sex') ?>：</td>
+                                     <td><?= \addons\Style\common\enums\StyleSexEnum::getValue($model->style_sex)?></td>
+                                 </tr>
+                                 <tr>
+                                     <td class="col-xs-3 text-right"><?= $model->getAttributeLabel('material_type') ?>：</td>
+                                     <td><?= \Yii::$app->attr->valueName($model->material_type)??''?></td>
+                                 </tr>
+                                 <tr>
+                                     <td class="col-xs-3 text-right"><?= $model->getAttributeLabel('material_color') ?>：</td>
+                                     <td><?= \Yii::$app->attr->valueName($model->material_color)??''?></td>
+                                 </tr>
+                                 <tr>
+                                     <td class="col-xs-3 text-right"><?= $model->getAttributeLabel('finger') ?>：</td>
+                                     <td><?= \Yii::$app->attr->valueName($model->finger)??''?></td>
+                                 </tr>
+                                 <tr>
+                                     <td class="col-xs-3 text-right"><?= $model->getAttributeLabel('finger_hk') ?>：</td>
+                                     <td><?= \Yii::$app->attr->valueName($model->finger_hk)??''?></td>
                                  </tr>
                                  <tr>
                                      <td class="col-xs-3 text-right"><?= $model->getAttributeLabel('audit_status') ?>：</td>
@@ -61,6 +81,26 @@ $this->params['breadcrumbs'][] = $this->title;
                          <div class="box-body table-responsive" >
                              <table class="table table-hover">
                                  <tr>
+                                     <td class="col-xs-3 text-right"><?= $model->getAttributeLabel('goods_size') ?>：</td>
+                                     <td><?= $model->goods_size ?></td>
+                                 </tr>
+                                 <tr>
+                                     <td class="col-xs-3 text-right"><?= $model->getAttributeLabel('chain_length') ?>：</td>
+                                     <td><?= $model->chain_length ?></td>
+                                 </tr>
+                                 <tr>
+                                     <td class="col-xs-3 text-right"><?= $model->getAttributeLabel('cost_price') ?>：</td>
+                                     <td><?= $model->cost_price ?></td>
+                                 </tr>
+                                 <tr>
+                                     <td class="col-xs-3 text-right"><?= $model->getAttributeLabel('sale_price') ?>：</td>
+                                     <td><?= $model->sale_price ?></td>
+                                 </tr>
+                                 <tr>
+                                     <td class="col-xs-3 text-right"><?= $model->getAttributeLabel('channel_id') ?>：</td>
+                                     <td><?= $model->saleChannel->name ??'' ?></td>
+                                 </tr>
+                                 <tr>
                                      <td class="col-xs-3 text-right"><?= $model->getAttributeLabel('creator_id') ?>：</td>
                                      <td><?= $model->creator ? $model->creator->username:''  ?></td>
                                  </tr>
@@ -79,6 +119,10 @@ $this->params['breadcrumbs'][] = $this->title;
                                  <tr>
                                      <td class="col-xs-3 text-right"><?= $model->getAttributeLabel('status') ?>：</td>
                                      <td><?= \common\enums\StatusEnum::getValue($model->status)?></td>
+                                 </tr>
+                                 <tr>
+                                     <td class="col-xs-3 text-right"><?= $model->getAttributeLabel('style_id') ?>：</td>
+                                     <td><?= $model->style_id ?></td>
                                  </tr>
                                  <tr>
                                      <td class="col-xs-3 text-right"><?= $model->getAttributeLabel('remark') ?>：</td>
