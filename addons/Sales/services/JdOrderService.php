@@ -33,11 +33,12 @@ class JdOrderService extends Service
         $addressInfo = $this->getErpOrderAddressData($order);
         $accountInfo = $this->getErpOrderAccountData($order);
         $customerInfo = $this->getErpCustomerData($order);
+        $invoiceInfo = $this->getErpOrderInvoiceData($order);
         //print_r(['orderInfo'=>$orderInfo,'goodsList'=>$goodsList,'addressInfo'=>$addressInfo,'accountInfo'=>$accountInfo,'customerInfo'=>$customerInfo]);
         //exit;
         try{
             $trans = Yii::$app->trans->beginTransaction();
-            Yii::$app->salesService->order->createSyncOrder($orderInfo, $accountInfo, $goodsList, $customerInfo, $addressInfo);            
+            Yii::$app->salesService->order->createSyncOrder($orderInfo, $accountInfo, $goodsList, $customerInfo, $addressInfo, $invoiceInfo);            
             $trans->commit();
         }catch (\Exception $e){
             $trans->rollback();
@@ -82,6 +83,30 @@ class JdOrderService extends Service
         ];
     }
     /**
+     * ERP订单金额表单
+     * @param Order $order
+     */
+    public function getErpOrderAccountData($order)
+    {
+        return  [
+                "order_amount"=>$order->orderTotalPrice,
+                "goods_amount"=>$this->getErpGoodsAmount($order),
+                "discount_amount"=>$order->sellerDiscount,
+                "pay_amount"=>$order->orderPayment,
+                "refund_amount"=>0,
+                "shipping_fee"=>$order->freightPrice,
+                "tax_fee"=>0,
+                "safe_fee"=>0,
+                "other_fee"=>0,
+                "exchange_rate"=>1,
+                "currency"=>'CNY',
+                "coupon_amount"=>0,
+                "card_amount"=>0,
+                "paid_amount"=>$order->orderPayment,
+                "paid_currency"=>'CNY',
+        ];
+    }
+    /**
      * ERP 客户资料 表单
      * @param Order $order
      */
@@ -100,7 +125,7 @@ class JdOrderService extends Service
             //"facebook_account"=>$order->member->facebook_account,
             //"qq"=>$order->member->qq,
             "mobile"=>$this->getErpCustomerMobile($order),
-            //"email"=>$order->address->email,
+            "email"=>$order->invoiceEasyInfo->invoiceConsigneeEmail ?? '',
             //"birthday"=>$order->member->birthday,
             "home_phone"=>$order->consigneeInfo->telephone,
             //"country_id"=>$order->address->country_id,
@@ -133,6 +158,20 @@ class JdOrderService extends Service
         ];
     }
     /**
+     * ERP订单发票  表单
+     * @param Order $order
+     */
+    public function getErpOrderInvoiceData($order)
+    {        
+        return [
+                'invoice_type'=>$order->invoiceEasyInfo->invoiceType,
+                'invoice_title'=>$order->invoiceEasyInfo->invoiceTitle,
+                'tax_number'=>$order->invoiceEasyInfo->invoiceCode ?? '',
+                'email'=> $order->invoiceEasyInfo->invoiceConsigneeEmail ?? '',
+                'mobile'=> $order->invoiceEasyInfo->invoiceConsigneePhone ?? '',
+        ];
+    }
+    /**
      * ERP订单商品 表单
      * @param Order $order
      */
@@ -143,16 +182,23 @@ class JdOrderService extends Service
             if(!$model->productNo) {
                 continue;
             }
+            $goods_discount = 0;
+            foreach ($order->couponDetailList ?? [] as $coupon) {
+                if($coupon['skuId'] == $model->skuId) {
+                    $goods_discount += $coupon['couponPrice'];
+                }
+            }
+
             $erpGoods = [
                 "goods_name" => $model->skuName,
-                //"goods_image"=> $model->goods_image,
+                "goods_image"=> null,
                 "style_sn"=> $model->productNo,
                 "goods_sn"=> $model->skuId,
                 "jintuo_type"=> $this->getErpJintuoType($model),
                 "goods_num"=> $model->itemTotal,
                 "goods_price"=> $model->jdPrice,
                 "goods_pay_price"=> $model->jdPrice,
-                "goods_discount"=> 0,
+                "goods_discount"=> $goods_discount,
                 "currency"=> 'CNY',
                 "exchange_rate"=> 1,
                 "delivery_status"=> $this->getErpDeliveryStatus($order),
@@ -243,30 +289,7 @@ class JdOrderService extends Service
         }
         return [$material_type,$material_color];
     }
-    /**
-     * ERP订单金额表单
-     * @param Order $order
-     */
-    public function getErpOrderAccountData($order)
-    {
-        return  [
-            "order_amount"=>$order->orderTotalPrice,
-            "goods_amount"=>$this->getErpGoodsAmount($order),
-            "discount_amount"=>$order->sellerDiscount,
-            "pay_amount"=>$order->orderPayment,
-            "refund_amount"=>0,
-            "shipping_fee"=>$order->freightPrice,
-            "tax_fee"=>0,
-            "safe_fee"=>0,
-            "other_fee"=>0,
-            "exchange_rate"=>1,
-            "currency"=>'CNY',
-            "coupon_amount"=>0,
-            "card_amount"=>0,
-            "paid_amount"=>$order->orderPayment,
-            "paid_currency"=>'CNY',
-        ];
-    }
+    
     /**
      * 获取商品总金额
      * @param unknown $order
