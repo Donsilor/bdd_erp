@@ -70,6 +70,77 @@ $this->params['breadcrumbs'][] = $this->title;
                             ]),
                         ],
                         [
+                            'attribute' => 'style_cate_id',
+                            'value' => "cate.name",
+                            'filter' => Html::activeDropDownList($searchModel, 'style_cate_id', \Yii::$app->styleService->styleCate::getDropDown(), [
+                                'prompt' => '全部',
+                                'class' => 'form-control',
+                                'style' => 'width:150px;'
+                            ]),
+                            'format' => 'raw',
+                            'headerOptions' => ['class' => 'col-md-1'],
+                        ],
+                        [
+                            'attribute' => 'style_sex',
+                            'format' => 'raw',
+                            'value' => function ($model) {
+                                return \addons\Style\common\enums\StyleSexEnum::getValue($model->style_sex) ?? "";
+                            },
+                            'filter' => Html::activeDropDownList($searchModel, 'style_sex', \addons\Style\common\enums\StyleSexEnum::getMap(), [
+                                'prompt' => '全部',
+                                'class' => 'form-control',
+                            ]),
+                            'headerOptions' => ['class' => 'col-md-1'],
+                        ],
+                        [
+                            'attribute' => 'material_type',
+                            'value' => function ($model){
+                                return Yii::$app->attr->valueName($model->material_type);
+                            },
+                            'filter' => Html::activeDropDownList($searchModel, 'material_type',Yii::$app->attr->valueMap(AttrIdEnum::MATERIAL_TYPE), [
+                                'prompt' => '全部',
+                                'class' => 'form-control',
+                                'style'=> 'width:100px;'
+                            ]),
+                            'headerOptions' => ['class' => 'col-md-1'],
+                        ],
+                        [
+                            'attribute' => 'material_color',
+                            'value' => function ($model){
+                                return Yii::$app->attr->valueName($model->material_color);
+                            },
+                            'filter' => Html::activeDropDownList($searchModel, 'material_color',Yii::$app->attr->valueMap(AttrIdEnum::MATERIAL_COLOR), [
+                                'prompt' => '全部',
+                                'class' => 'form-control',
+                                'style'=> 'width:100px;'
+                            ]),
+                            'headerOptions' => ['class' => 'col-md-1'],
+                        ],
+                        [
+                            'attribute' => 'finger_hk',
+                            'value' => function ($model){
+                                return Yii::$app->attr->valueName($model->finger_hk);
+                            },
+                            'filter' => Html::activeDropDownList($searchModel, 'finger_hk',Yii::$app->attr->valueMap(AttrIdEnum::PORT_NO), [
+                                'prompt' => '全部',
+                                'class' => 'form-control',
+                                'style'=> 'width:100px;'
+                            ]),
+                            'headerOptions' => ['class' => 'col-md-1'],
+                        ],
+                        [
+                            'attribute' => 'finger',
+                            'value' => function ($model){
+                                return Yii::$app->attr->valueName($model->finger);
+                            },
+                            'filter' => Html::activeDropDownList($searchModel, 'finger',Yii::$app->attr->valueMap(AttrIdEnum::FINGER), [
+                                'prompt' => '全部',
+                                'class' => 'form-control',
+                                'style'=> 'width:100px;'
+                            ]),
+                            'headerOptions' => ['class' => 'col-md-1'],
+                        ],
+                        [
                             'attribute' => 'channel_id',
                             'value' => function ($model){
                                 return $model->saleChannel->name ?? '';
@@ -82,19 +153,30 @@ $this->params['breadcrumbs'][] = $this->title;
                             'format' => 'raw',
                             'headerOptions' => [],
                         ],
-                        /*[
-                            'label' => '金料类型',
-                            'attribute' => 'gold_type',
-                            'value' => function ($model){
-                                return Yii::$app->attr->valueName($model->gold_type);
-                            },
-                            'filter' => Html::activeDropDownList($searchModel, 'gold_type',Yii::$app->attr->valueMap(AttrIdEnum::MAT_GOLD_TYPE), [
-                                'prompt' => '全部',
+                        [
+                            'attribute' => 'goods_size',
+                            'value' => 'goods_size',
+                            'filter' => Html::activeTextInput($searchModel, 'goods_size', [
                                 'class' => 'form-control',
-                                'style'=> 'width:100px;'
                             ]),
                             'headerOptions' => ['class' => 'col-md-1'],
-                        ],*/
+                        ],
+                        [
+                            'attribute' => 'chain_length',
+                            'value' => 'chain_length',
+                            'filter' => Html::activeTextInput($searchModel, 'chain_length', [
+                                'class' => 'form-control',
+                            ]),
+                            'headerOptions' => ['class' => 'col-md-1'],
+                        ],
+                        [
+                            'attribute' => 'cost_price',
+                            'value' => 'cost_price',
+                            'filter' => Html::activeTextInput($searchModel, 'cost_price', [
+                                'class' => 'form-control',
+                            ]),
+                            'headerOptions' => ['class' => 'col-md-1'],
+                        ],
                         [
                             'attribute' => 'remark',
                             'value' => 'remark',
