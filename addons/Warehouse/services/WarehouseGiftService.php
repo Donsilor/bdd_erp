@@ -49,7 +49,8 @@ class WarehouseGiftService extends Service
     public function createGiftSn($model, $save = true)
     {
         //1.供应商
-        $gift_sn = $model->supplier->supplier_tag ?? '00';
+        //$gift_sn = $model->supplier->supplier_tag ?? '00';
+        $gift_sn = 'ZP';
         //2.款式类型
         $gift_sn .= $model->cate->tag ?? '00';
         //3.数字编号

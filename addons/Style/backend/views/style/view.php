@@ -37,15 +37,17 @@ $this->params['breadcrumbs'][] = $this->title;
                         <tr>
                             <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('style_sn') ?>：</td>
                             <td><?= $model->style_sn ?></td>
-                        </tr>                        
+                        </tr>
                         <tr>
                             <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('style_cate_id') ?>：</td>
                             <td><?= $model->cate->name ?? '' ?></td>
                         </tr>
-                        <tr>
-                            <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('product_type_id') ?>：</td>
-                            <td><?= $model->type->name ??'' ?></td>
-                        </tr>
+                        <?php if(empty($model->is_gift)){?>
+                            <tr>
+                                <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('product_type_id') ?>：</td>
+                                <td><?= $model->type->name ??'' ?></td>
+                            </tr>
+                        <?php }?>
                         <tr>
                             <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('style_material') ?>：</td>
                             <td> <?= addons\Style\common\enums\StyleMaterialEnum::getValue($model->style_material) ?></td>
@@ -55,21 +57,23 @@ $this->params['breadcrumbs'][] = $this->title;
                             <td><?= \addons\Style\common\enums\StyleSexEnum::getValue($model->style_sex) ?></td>
                         </tr>
                         <tr>
-                            <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('style_source_id') ?>：</td>
-                            <td><?= $model->source->name ??'' ?></td>
-                        </tr> 
-                        <tr>
                             <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('style_channel_id') ?>：</td>
                             <td> <?= $model->channel->name ?? '' ?></td>
-                        </tr> 
-                        <tr>
-                            <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('is_inlay') ?>：</td>
-                            <td><?= \addons\Style\common\enums\InlayEnum::getValue($model->is_inlay) ?></td>
-                        </tr> 
-                        <tr>
-                            <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('is_made') ?>：</td>
-                            <td><?= \common\enums\ConfirmEnum::getValue($model->is_made)?></td>
                         </tr>
+                        <?php if(empty($model->is_gift)){?>
+                            <tr>
+                                <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('style_source_id') ?>：</td>
+                                <td><?= $model->source->name ??'' ?></td>
+                            </tr>
+                            <tr>
+                                <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('is_inlay') ?>：</td>
+                                <td><?= \addons\Style\common\enums\InlayEnum::getValue($model->is_inlay) ?></td>
+                            </tr>
+                            <tr>
+                                <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('is_made') ?>：</td>
+                                <td><?= \common\enums\ConfirmEnum::getValue($model->is_made)?></td>
+                            </tr>
+                        <?php }?>
                         <tr>
                             <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('is_gift') ?>：</td>
                             <td><?= \common\enums\ConfirmEnum::getValue($model->is_gift)?></td>
@@ -77,11 +81,13 @@ $this->params['breadcrumbs'][] = $this->title;
                         <tr>
                             <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('factory_id') ?>：</td>
                             <td><?= $model->supplier->supplier_name ?? '' ?></td>
-                        </tr>    
-                        <tr>
-                            <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('factory_mo') ?>：</td>
-                            <td><?= $model->factory_mo ?? ''?></td>
                         </tr>
+                        <?php if(empty($model->is_gift)){?>
+                            <tr>
+                                <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('factory_mo') ?>：</td>
+                                <td><?= $model->factory_mo ?? ''?></td>
+                            </tr>
+                        <?php }?>
                         <tr>
                             <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('status') ?>：</td>
                             <td><?= \common\enums\StatusEnum::getValue($model->status)?></td>

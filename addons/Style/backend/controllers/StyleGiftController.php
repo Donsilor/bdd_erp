@@ -81,6 +81,9 @@ class StyleGiftController extends BaseController
             if(!$style){
                 return $this->message('款号不存在', $this->redirect(\Yii::$app->request->referrer), 'error');
             }
+            if(empty($style->is_gift)){
+                return $this->message('款号不是赠品', $this->redirect(\Yii::$app->request->referrer), 'error');
+            }
             $model->style_id = $style->id;
             $model->status = StatusEnum::DISABLED;
             return $model->save()
