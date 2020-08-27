@@ -107,8 +107,8 @@ class WarehouseGift extends BaseModel
             'gift_status' => '赠品状态',
             'remark' => '备注',
             'status' => '状态',
-            'creator_id' => '创建人',
-            'created_at' => '创建时间',
+            'creator_id' => '创建人(入库人)',
+            'created_at' => '创建时间(入库时间)',
             'updated_at' => '更新时间',
         ];
     }
