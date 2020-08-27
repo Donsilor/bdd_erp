@@ -46,7 +46,7 @@ class StyleService extends Service
             unset($menus[4]);
         }
         if($model && $model->is_gift==ConfirmEnum::YES) {
-            unset($menus[6]);
+            unset($menus[3], $menus[6]);
         }
         return $menus;
     }
