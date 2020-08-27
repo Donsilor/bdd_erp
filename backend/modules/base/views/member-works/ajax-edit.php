@@ -20,7 +20,7 @@ $form = ActiveForm::begin([
     <div class="modal-body">
 <!--        --><?//= $form->field($model, 'type')->dropDownList(Yii::$app->attr->valueMap(\common\enums\WorksTypeEnum::getMap()), ['prompt' => '请选择']); ?>
         <?= $form->field($model, 'title')->textInput() ?>
-        <?= $form->field($model, 'content')->textarea(['rows'=>5,'placeholder'=>'1.工作1........(已完成）&#10;2.工作2........(已完成）&#10;3.工作3........(进行中）']) ?>
+        <?= $form->field($model, 'content')->textarea(['id'=>'text1','rows'=>8,'placeholder'=>'']) ?>
         <?= $form->field($model, 'date')->widget(DatePicker::class, [
             'options' => [
                 'value' => $model->isNewRecord ? date('Y-m-d') : $model->date,
@@ -40,3 +40,23 @@ $form = ActiveForm::begin([
         <button class="btn btn-primary" type="submit">保存</button>
     </div>
 <?php ActiveForm::end(); ?>
+<script>
+    var placeholder = '1.工作1........(已完成）\n2.工作2........(已完成）\n3.工作3........(进行中）';
+    var text1 = $("#text1");
+    if(text1.val() == ''){
+        text1.val(placeholder);
+        text1.css('color','#dfe3e6')
+    }
+    $('#text1').focus(function() {
+        if ($(this).val() == placeholder) {
+            $(this).val('');
+            $(this).css('color','#76838f')
+        }
+    });
+    $('#text1').blur(function() {
+        if ($(this).val() == '') {
+            $(this).css('color','#dfe3e6')
+            $(this).val(placeholder);
+        }
+    });
+</script>

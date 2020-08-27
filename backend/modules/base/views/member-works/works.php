@@ -1,8 +1,6 @@
 <?php
 
 use common\helpers\Html;
-use addons\Warehouse\common\enums\BillStatusEnum;
-use common\enums\AuditStatusEnum;
 
 /* @var $this yii\web\View */
 /* @var $model common\models\order\order */
@@ -125,7 +123,18 @@ use common\enums\AuditStatusEnum;
                             }
 
                         ],
+                        [
+                            'attribute' => 'title',
+                            'value'=>function($model) {
+                                return Html::a($model->title, ['works-view', 'id' => $model->id,'returnUrl'=>\common\helpers\Url::getReturnUrl()], ['style'=>"text-decoration:underline;color:#3c8dbc"]);
+                            },
+                            'headerOptions' => ['class' => 'col-md-1'],
+                            'format' => 'raw',
+                            'filter' => Html::activeTextInput($searchModel, 'member.username', [
+                                'class' => 'form-control',
+                            ]),
 
+                        ],
                         [
                             'class' => 'yii\grid\ActionColumn',
                             'header' => '操作',

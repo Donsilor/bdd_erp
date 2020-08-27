@@ -44,7 +44,7 @@ class MemberWorksController extends BaseController
             'defaultOrder' => [
                 'id' => SORT_DESC
             ],
-            'pageSize' => $this->getPageSize(),
+            'pageSize' => $this->getPageSize(2),
             'relations' => [
                 'member' => ['username'],
                 'department' => ['name']
@@ -88,6 +88,7 @@ class MemberWorksController extends BaseController
     public function actionAjaxEdit()
     {
         $this->layout = '@backend/views/layouts/iframe';
+        $returnUrl = Yii::$app->request->get('returnUrl',['index']);
         $id = Yii::$app->request->get('id');
         $model = $this->findModel($id);
         $model = $model ?? new MemberWorks();
@@ -103,7 +104,7 @@ class MemberWorksController extends BaseController
                     throw new \Exception($this->getError($model));
                 }
                 $trans->commit();
-                return $this->message('操作成功', $this->redirect(Yii::$app->request->referrer), 'success');
+                return $this->message('操作成功', $this->redirect($returnUrl), 'success');
             }catch (\Exception $e){
                 $trans->rollBack();
                 return $this->message($e->getMessage(), $this->redirect(Yii::$app->request->referrer), 'error');
@@ -113,7 +114,7 @@ class MemberWorksController extends BaseController
         if($model->isNewRecord){
             $model->title = date('Y年m月d日').'工作日报';
         }
-        return $this->render($this->action->id, [
+        return $this->renderAjax($this->action->id, [
             'model' => $model,
         ]);
     }
@@ -265,6 +266,20 @@ class MemberWorksController extends BaseController
         ]);
     }
 
+
+    /**
+     * 详情展示页
+     * @return string
+     * @throws NotFoundHttpException
+     */
+    public function actionWorksView()
+    {
+        $id = Yii::$app->request->get('id');
+        $model = $this->findModel($id);
+        return $this->render($this->action->id, [
+            'model' => $model,
+        ]);
+    }
 
 
 
