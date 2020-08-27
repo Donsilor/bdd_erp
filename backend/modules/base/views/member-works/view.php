@@ -56,7 +56,7 @@ use common\enums\AuditStatusEnum;
                 <div class="box-tools">
                     <?= Html::create(['ajax-edit','returnUrl' => \common\helpers\Url::getReturnUrl()], '创建', [
                         'data-toggle' => 'modal',
-                        'data-target' => '#ajaxModalLg',
+                        'data-target' => '#ajaxModal',
                     ]); ?>
 
                 </div>
