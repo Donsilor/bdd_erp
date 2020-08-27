@@ -259,6 +259,7 @@ class GiftReceiptGoodsController extends BaseController
         $id = Yii::$app->request->get('id');
         $model = PurchaseReceiptForm::findOne(['id' => $id]);
         $model = $model ?? new PurchaseReceiptForm();
+        $model->ids = $ids;
         if ($model->load(Yii::$app->request->post())) {
             try {
                 $trans = Yii::$app->trans->beginTransaction();
