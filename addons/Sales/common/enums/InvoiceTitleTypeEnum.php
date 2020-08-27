@@ -11,6 +11,7 @@ use common\enums\BaseEnum;
  */
 class InvoiceTitleTypeEnum extends BaseEnum
 {
+    const NONE = 0;
     const ENTERPRISE = 1;
     const PERSONAL = 2;
 
@@ -22,6 +23,7 @@ class InvoiceTitleTypeEnum extends BaseEnum
         return [
             self::ENTERPRISE => '企业',
             self::PERSONAL => '个人',
+            self::NONE => '不开发票',
         ];
     }
 }

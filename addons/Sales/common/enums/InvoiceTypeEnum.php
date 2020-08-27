@@ -11,7 +11,6 @@ use common\enums\BaseEnum;
  */
 class InvoiceTypeEnum extends BaseEnum
 {
-    const NONE = 0;
     const PAPER = 1;
     const ELECTRONIC = 3;
 
@@ -22,8 +21,7 @@ class InvoiceTypeEnum extends BaseEnum
     {
         return [           
             self::ELECTRONIC => '电子发票',
-            self::PAPER => '纸质发票',
-            self::NONE => '不开发票',            
+            self::PAPER => '纸质发票',          
         ];
     }
 }
