@@ -48,10 +48,10 @@ class ExcelHelper
             foreach ($header as $k => $v) {
                 $sheet->setCellValue(Coordinate::stringFromColumnIndex($hk) . '1', $v[0]);
                 $sheet->getStyle(Coordinate::stringFromColumnIndex($hk) . '1')->getFont()->setBold(true);
-                // $sheet->getDefaultColumnDimension()->setWidth(12); //设置默认列宽为12
+                $sheet->getDefaultColumnDimension()->setWidth(12); //设置默认列宽为12
                 //$sheet->getDefaultRowDimension()->setRowHeight(24); //设置默认行高为24
                 $sheet->getStyle(Coordinate::stringFromColumnIndex($hk) . '1')->getAlignment()->setWrapText(true);
-                $sheet->getColumnDimension(Coordinate::stringFromColumnIndex($hk))->setAutoSize(true); //自动计算列宽
+                //$sheet->getColumnDimension(Coordinate::stringFromColumnIndex($hk))->setAutoSize(true); //自动计算列宽
                 $hk += 1;
             }
         }else{
