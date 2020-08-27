@@ -212,7 +212,7 @@ class JdOrderService extends Service
                 "jintuo_type"=> $this->getErpJintuoType($model),
                 "goods_num"=> $model->itemTotal,
                 "goods_price"=> $model->jdPrice,
-                "goods_pay_price"=> $model->jdPrice,
+                "goods_pay_price"=> $model->jdPrice - $goods_discount,
                 "goods_discount"=> $goods_discount,
                 "currency"=> 'CNY',
                 "exchange_rate"=> 1,
