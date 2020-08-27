@@ -168,7 +168,7 @@ class JdOrderService extends Service
         $invoice_type = null;
         $is_invoice = 0;
         
-        if($order->invoiceEasyInfo->invoiceType != 0) {
+        if($order->invoiceEasyInfo->invoiceType > 0) {
             if($order->invoiceEasyInfo->invoiceTitle != '个人') {
                 $title_type = \addons\Sales\common\enums\InvoiceTitleTypeEnum::ENTERPRISE;
             }else{
