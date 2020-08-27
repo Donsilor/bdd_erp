@@ -270,8 +270,6 @@ class OrderService extends Service
         $invoice->attributes = $invoiceInfo;
         if(false == $invoice->save()) {
             throw new \Exception("同步发票失败：".$this->getError($invoice));
-        } else{
-            print_r($invoice->toArray());
         }
         $order->is_invoice   = $invoice->invoice_type ? 1: 0;
         $order->goods_num   = $goods_num;

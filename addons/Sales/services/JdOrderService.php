@@ -199,7 +199,7 @@ class JdOrderService extends Service
                 "goods_name" => $model->skuName,
                 "goods_image"=> null,
                 "style_sn"=> $model->productNo,
-                "goods_sn"=> $model->skuId,
+                "out_sku_id"=> $model->skuId,
                 "jintuo_type"=> $this->getErpJintuoType($model),
                 "goods_num"=> $model->itemTotal,
                 "goods_price"=> $model->jdPrice,
@@ -322,7 +322,7 @@ class JdOrderService extends Service
      */
     public static function getErpCustomerMobile($order)
     {
-        return '86-'.$order->consigneeInfo->mobile;
+        return $order->consigneeInfo->mobile;
     }
     /**
      * ERP 订单销售渠道
