@@ -25,9 +25,10 @@ class JdController extends Controller
         $change_type = $time_type == 1 ? "day" : "hour";
         $time_format = $time_type == 1 ? "Y-m-d 00:00:00" : "Y-m-d H:00:00";
         $start_time = $start_time == 0 ? time() : strtotime(date('Y-m-d H:i:s', strtotime($start_time)));
-        for ($val = $time_val - 1; $val >= 0; $val--) {
-            $end_date = date($time_format, strtotime(" -{$val} {$change_type}", $start_time));
-            $start_date = date($time_format, $start_time);
+        for ($val = $time_val-1; $val >= 0; $val--) {
+            $start_date = date("Y-m-d 00:00:00", strtotime("-{$val} {$change_type}", $start_time));   
+            $end_date   = date("Y-m-d 23:59:59", strtotime("-{$val} {$change_type}", $start_time));    
+            Console::output("Date : [".$start_date.'] TO ['.$end_date.']');
             $this->syncOrderByDate($start_date, $end_date, $order_type);
         }
         Console::output("Sync JD Order END[".date('Y-m-d H:i:s')."]-------------------");
@@ -39,7 +40,6 @@ class JdController extends Controller
      */
     private function syncOrderByDate($start_date, $end_date, $order_type)
     {
-        Console::output("Pull Order By Time BEGIN : ".$start_date.' TO '.$end_date);
         try{
             $page = 1;
             list($order_list,$page_count) = \Yii::$app->jdSdk->getOrderList($start_date,$end_date,$page,$order_type);
@@ -58,7 +58,6 @@ class JdController extends Controller
             $this->syncOrders($order_list);
             Console::output("Page[".$page."] END ");
         }
-        Console::output("Pull Order By Time END : ".$start_date.' TO '.$end_date);
     }
     /**
      * 同步
