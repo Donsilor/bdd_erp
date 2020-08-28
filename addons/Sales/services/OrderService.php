@@ -199,15 +199,19 @@ class OrderService extends Service
                 $style_sn = $goodsInfo['style_sn'] ?? '';
                 $style = Style::find()->where(['style_sn'=>$style_sn])->one();
                 if(!$style) {
-                    throw new \Exception("[{$style_sn}]款号在erp系统不存在");
-                }
-                //从款式信息自动带出款的信息
-                $styleInfo = $style->toArray(['style_cate_id','product_type_id','is_inlay','style_channel_id','style_sex']);
-                $orderGoods = new OrderGoods();
-                $orderGoods->attributes = $goodsInfo + $styleInfo;
-                $orderGoods->order_id = $order->id;
-                if(empty($goodsInfo['goods_image'])) {
-                    $orderGoods->goods_image = $style->style_image;
+                    //throw new \Exception("[{$style_sn}]款号在erp系统不存在");
+                    $orderGoods = new OrderGoods();
+                    $orderGoods->attributes = $goodsInfo;
+                    $orderGoods->order_id = $order->id;
+                }else {
+                    //从款式信息自动带出款的信息
+                    $styleInfo = $style->toArray(['style_cate_id','product_type_id','is_inlay','style_channel_id','style_sex']);
+                    $orderGoods = new OrderGoods();
+                    $orderGoods->attributes = $goodsInfo + $styleInfo;
+                    $orderGoods->order_id = $order->id;
+                    if(empty($goodsInfo['goods_image'])) {
+                        $orderGoods->goods_image = $style->style_image;
+                    }
                 }
                 if(false === $orderGoods->save()) {
                     throw new \Exception("同步订单商品失败：".$this->getError($orderGoods));

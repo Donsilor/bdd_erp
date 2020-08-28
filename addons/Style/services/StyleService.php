@@ -114,7 +114,7 @@ class StyleService extends Service
         return array_column($list,'image');
     }
 
-    public function isExist($style_sn=null){
+    public function isExist($style_sn = null){
         if($style_sn == null) return false;
         $style = Style::find()->where(['style_sn'=>$style_sn])->select(['id'])->one();
         return $style;
