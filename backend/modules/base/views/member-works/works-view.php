@@ -7,7 +7,6 @@ use common\enums\AuditStatusEnum;
 /* @var $this yii\web\View */
 /* @var $model common\models\order\order */
 /* @var $form yii\widgets\ActiveForm */
-
 ?>
 <style>
 
