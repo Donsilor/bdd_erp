@@ -10,15 +10,24 @@ use common\helpers\Html;
 <style>
     .modal-open .modal{
         margin: 0;padding: 0;
+        width: 100%;
+        height: 100%;
+        position: fixed;
+        left: 0;
+        top: 0;
+        background: rgba(0,0,0,0.6);
     }
     .modal.in .modal-dialog {
+        width: 100%;
         margin: 0;padding: 0;
-        top: 50%;left: 50%;
-        -webkit-transform: translate(-50%, -50%);
+        position: fixed;
+        top: 50%;
+        left: 50%;
         -moz-transform: translate(-50%, -50%);
         -ms-transform: translate(-50%, -50%);
-        -o-transform: translate(-50%, -50%);
+        -webkit-transform: translate(-50%, -50%);
         transform: translate(-50%, -50%);
+        z-index: 9999999;
     }
     .modal-content {
     }
