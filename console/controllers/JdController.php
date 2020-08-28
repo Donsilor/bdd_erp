@@ -24,13 +24,20 @@ class JdController extends Controller
         Console::output("Sync JD Order BEGIN[".date('Y-m-d H:i:s')."]-------------------");
         $change_type = $time_type == 1 ? "day" : "month";
         $time_format = $time_type == 1 ? "Y-m-d 00:00:00" : "Y-m-d 00:00:00";        
-        $start_time = empty($start_time) ? time(): strtotime($start_time);
-        
-        for ($val = $time_val; $val > 0; $val = $val-1) {
-            $start_date = date("Y-m-d H:i:s", strtotime("-".$val." {$change_type}", $start_time)); 
-            $end_date   = date("Y-m-d H:i:s", strtotime("-".($val-1)." {$change_type}", $start_time));    
+        $start_time = empty($start_time) ? strtotime("-".$time_val." {$change_type}",time()): strtotime($start_time);
+        $break = false;
+        for ($val = 0; $val < $time_val; $val++) {
+            $start_date = date("Y-m-d H:i:s", strtotime("+".$val." {$change_type}", $start_time)); 
+            $end_date   = date("Y-m-d H:i:s", strtotime("+".($val+1)." {$change_type}", $start_time));
+            if(strtotime($end_date) > time()) {
+                $end_date = date("Y-m-d H:i:s");
+                $break = true;
+            }
             Console::output("Date : [".$start_date.'] TO ['.$end_date.']');
             $this->syncOrderByDate($start_date, $end_date, $order_type);
+            if($break) {
+                break;
+            }
         }
         Console::output("Sync JD Order END[".date('Y-m-d H:i:s')."]-------------------");
     }
