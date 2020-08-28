@@ -1,5 +1,6 @@
 <?php
 
+use addons\Sales\common\enums\DistributeStatusEnum;
 use addons\Sales\common\enums\PayStatusEnum;
 use common\helpers\Html;
 use addons\Sales\common\enums\OrderStatusEnum;
@@ -169,6 +170,23 @@ $this->params['breadcrumbs'][] = $this->title;
                             //'data-target' => '#ajaxModalLg',
                             'data-width' => '90%', 'data-height' => '90%', 'data-offset' => '20px'
                         ]);
+                    }
+                    ?>
+                    <?php
+                    if ($model->distribute_status == DistributeStatusEnum::ALLOWED){
+                        echo Html::edit(['distribution/account-sales','id' => $model->id,'returnUrl' => Url::getReturnUrl()],'配货',[
+                            'class'=>'btn btn-primary btn-ms',
+                        ]);
+                    }
+                    ?>
+                    <?php
+                    if ($model->distribute_status == DistributeStatusEnum::HAS_PEIHUO && $model->delivery_status == \addons\Sales\common\enums\DeliveryStatusEnum::SAVE){
+                        echo Html::a('发货质检', ['order-fqc/view', 'id' => $model->id,'returnUrl'=>Url::getReturnUrl()], ['class' => 'btn btn-primary btn-ms']);
+                    }
+                    ?>
+                    <?php
+                    if ($model->delivery_status == \addons\Sales\common\enums\DeliveryStatusEnum::TO_SEND){
+                        echo Html::a('发货', ['shipping/view', 'id' => $model->id,'returnUrl'=>Url::getReturnUrl()], ['class' => 'btn btn-primary btn-ms']);
                     }
                     ?>
                 </div>

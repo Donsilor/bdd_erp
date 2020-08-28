@@ -95,7 +95,7 @@ class DistributionController extends BaseController
                 //$error = $e->getMessage();\Yii::error($error);
                 return $this->message("保存失败:" . $e->getMessage(), $this->redirect([$this->action->id, 'id' => $model->id]), 'error');
             }
-            return $this->message("保存成功", $this->redirect($this->returnUrl), 'success');
+            return $this->message("保存成功", $this->redirect([$this->action->id, 'id' => $model->id]), 'success');
         }
 
         $dataProvider = null;
