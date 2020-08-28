@@ -187,6 +187,7 @@ $this->params['breadcrumbs'][] = $this->title;
     </div>
         <div class="box-footer text-center">
             <?php
+            if($model->delivery_status == \addons\Sales\common\enums\DeliveryStatusEnum::SAVE){
                 echo Html::edit(['ajax-fqc', 'id' => $model->id, 'is_pass'=>\addons\Sales\common\enums\IsPassEnum::YES, 'returnUrl' => Url::getReturnUrl()], '质检通过',[
                     'onclick' => 'rfTwiceAffirm(this,"质检通过", "确定通过吗？");return false;',
                     'class'=>"btn btn-success btn-sm",
@@ -197,6 +198,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     'data-toggle' => 'modal',
                     'data-target' => '#ajaxModal',
                 ]);
+            }
             ?>
             <span class="btn btn-white" onclick="history.go(-1)">返回</span>
         </div>

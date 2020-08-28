@@ -54,7 +54,7 @@ class DistributionController extends BaseController
             ->search(Yii::$app->request->queryParams);
         
         //$dataProvider->query->andWhere(['=',DistributionForm::tableName().'.order_id',$order_id]);
-        $dataProvider->query->andWhere(['=',Order::tableName().'.distribute_status', DistributeStatusEnum::ALLOWED]);
+        $dataProvider->query->andWhere(['>=',Order::tableName().'.distribute_status', DistributeStatusEnum::ALLOWED]);
         
         return $this->render('index', [
                 'dataProvider' => $dataProvider,
