@@ -110,7 +110,7 @@ class DistributionOrderService extends Service
             'total_market' => $total_market,
             'total_sale' => $total_sale,
             'auditor_id' => \Yii::$app->user->identity->getId(),
-            'audit_status' => AuditStatusEnum::PASS,
+            'audit_status' => AuditStatusEnum::PENDING,
             'audit_time' => time(),
             'creator_id' => \Yii::$app->user->identity->getId(),
             'created_at' => time(),

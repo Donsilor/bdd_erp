@@ -79,7 +79,11 @@ class OrderGoodsService extends Service
             }
 
             $wareshouse_goods->goods_status = GoodsStatusEnum::IN_SALE;
-            if(false === $wareshouse_goods->save(true,['goods_status'])){
+            //销售后更新出库成本
+            $outbound_cost = \Yii::$app->warehouseService->warehouseGoods->getOutboundCost($wareshouse_goods->goods_id);
+            $wareshouse_goods->sales_time = time();
+            $wareshouse_goods->outbound_cost = $outbound_cost;
+            if(false === $wareshouse_goods->save(true,['goods_status','outbound_cost','sales_time'])){
                 throw new \Exception($this->getError($wareshouse_goods));
             }
 
@@ -90,8 +94,6 @@ class OrderGoodsService extends Service
                 throw new \Exception($this->getError($model));
             }
 
-          //更新采购汇总：总金额和总数量
-          \Yii::$app->salesService->order->orderSummary($model->order_id);
 
 
     }
@@ -113,16 +115,22 @@ class OrderGoodsService extends Service
         $model->style_cate_id = $wareshouse_goods->style_cate_id;
         $model->product_type_id = $wareshouse_goods->product_type_id;
         $model->goods_num = 1;
+        $model->goods_price = 0;
+        $model->goods_pay_price = 0;
         $model->goods_name = $wareshouse_goods->goods_name;
         $model->style_sn = $wareshouse_goods->style_sn;
         $model->qiban_sn = $wareshouse_goods->qiban_sn;
         $model->currency = $model->order->currency;
+        $isNewRecord = $model->isNewRecord;
+
         if(false === $model->save(false)){
             throw new \Exception($this->getError($model));
         }
-        if($model->isNewRecord) {
-            Yii::$app->salesService->orderGoods->toStock($model);
+
+        if($isNewRecord) {
+            \Yii::$app->salesService->orderGoods->toStock($model);
         }
+
         return $model;
 
     }
@@ -153,6 +161,15 @@ class OrderGoodsService extends Service
                 throw new \Exception($this->getError($order_goods_attr));
             }
         }
+
+
+
+        //现货裸钻同步数据到库存
+        if($diamond_goods->is_stock == IsStockEnum::YES){
+
+        }
+
+
 
         //修改裸钻状态
         $diamond_goods->status = StatusEnum::DISABLED;
@@ -317,12 +334,11 @@ class OrderGoodsService extends Service
             throw new \Exception($this->getError($wareshouse_goods));
         }
 
-        //删除商品属性
-        OrderGoodsAttribute::deleteAll(['id'=>$model->id]);
-
         //还原原有商品属性
         $attr_list = json_decode($model->attr_info,true);
         if($attr_list){
+            //删除商品属性
+            OrderGoodsAttribute::deleteAll(['id'=>$model->id]);
             foreach ($attr_list as $attr){
                 $order_goods_attr = new OrderGoodsAttribute();
                 $order_goods_attr->attributes = $attr;

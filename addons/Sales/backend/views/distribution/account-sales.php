@@ -1,5 +1,6 @@
 <?php
 
+use addons\Sales\common\enums\IsStockEnum;
 use common\helpers\Html;
 use addons\Sales\common\enums\OrderStatusEnum;
 use common\helpers\Url;
@@ -122,11 +123,16 @@ $this->params['breadcrumbs'][] = $this->title;
                                     'attribute' => 'goods_id',
                                     'format' => 'raw',
                                     'value' => function ($model, $key, $index, $column){
-                                        return  Html::input('text', 'goods_ids['.$model->id.']', $model->goods_id ,['class' => 'form-control','placeholder' => '请输入货号',]);
+                                         if($model->is_gift){
+                                             return "赠品无需销账";
+                                         }else{
+                                             return  Html::input('text', 'goods_ids['.$model->id.']', $model->goods_id ,['class' => 'form-control','placeholder' => '请输入货号',]);
+                                         }
                                     },
                                     'headerOptions' => ['width' => '160'],
                                 ],
                                 [
+                                    'label' => '款号/起版号/批次号',
                                     'attribute'=>'goods_sn',
                                     'value' => 'goods_sn'
                                 ],
@@ -178,16 +184,16 @@ $this->params['breadcrumbs'][] = $this->title;
                                         }
                                 ],
                                 [
-                                        'attribute'=>'is_stock',
-                                        'value' => function($model){
-                                                return $model->is_stock;
-                                        }
+                                    'attribute' => 'is_stock',
+                                    'value' => function ($model) {
+                                        return IsStockEnum::getValue($model->is_stock);
+                                    }
                                 ],
                                 [
-                                        'attribute'=>'is_gift',
-                                        'value' => function($model){
-                                                return $model->is_gift;
-                                        }
+                                    'attribute' => 'is_gift',
+                                    'value' => function ($model) {
+                                        return \addons\Sales\common\enums\IsGiftEnum::getValue($model->is_gift);
+                                    }
                                 ],
                             ]
                         ]); ?>

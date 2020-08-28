@@ -71,21 +71,38 @@ class StyleGiftController extends BaseController
      */
     public function actionAjaxEdit()
     {
-        $id = Yii::$app->request->get('id');
+        $id = \Yii::$app->request->get('id');
         $model = $this->findModel($id) ?? new StyleGift();
-
+        $isNewRecord = $model->isNewRecord;
         // ajax 校验
         $this->activeFormValidate($model);
         if ($model->load(Yii::$app->request->post())) {
-            $style = Style::findOne(['style_sn'=>$model->style_sn]);
-            if(!$style){
-                return $this->message('款号不存在', $this->redirect(\Yii::$app->request->referrer), 'error');
+            try{
+                $trans = Yii::$app->trans->beginTransaction();
+//                if($isNewRecord) {
+//                    $style = Style::findOne(['style_sn'=>$model->style_sn]);
+//                    if(!$style){
+//                        return $this->message('款号不存在', $this->redirect(\Yii::$app->request->referrer), 'error');
+//                    }
+//                    if(empty($style->is_gift)){
+//                        return $this->message('款号不是赠品', $this->redirect(\Yii::$app->request->referrer), 'error');
+//                    }
+//                    $model->style_id = $style->id;
+//                }
+                $model->status = StatusEnum::DISABLED;
+                if(false === $model->save()) {
+                    throw new \Exception($this->getError($model));
+                }
+                //自动创建款号
+                if($isNewRecord && trim($model->style_sn) == "") {
+                    \Yii::$app->styleService->gift->createStyleSn($model);
+                }
+                $trans->commit();
+            }catch (\Exception $e){
+                $trans->rollBack();
+                return $this->message("保存失败:". $e->getMessage(),  $this->redirect(Yii::$app->request->referrer), 'error');
             }
-            $model->style_id = $style->id;
-            $model->status = StatusEnum::DISABLED;
-            return $model->save()
-                ? $this->redirect(Yii::$app->request->referrer)
-                : $this->message($this->getError($model), $this->redirect(Yii::$app->request->referrer), 'error');
+            return $this->message("保存成功", $this->redirect(Yii::$app->request->referrer), 'success');
         }
 
         return $this->renderAjax($this->action->id, [

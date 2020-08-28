@@ -60,7 +60,8 @@
         "overtrue/wechat": "~4.2.2",
         "mingyoung/dingtalk": "2.0",
         "finecho/logistics": "^3.0",
-        "ext-bcmath": "*"
+        "ext-bcmath": "*",
+		"monolog/monolog" : "1.24.0"
     },
     "require-dev": {
         "yiisoft/yii2-debug": "~2.0.0",
@@ -86,5 +87,11 @@
             "type": "composer",
             "url": "https://asset-packagist.org"
         }
-    ]
+    ],
+	"autoload" : {
+		"psr-4" : {
+			"ACES\\" : "common\\components\\jingdong\\security",
+			"JD\\" : "common\\components\\jingdong\\jd"
+		}
+	}
 }

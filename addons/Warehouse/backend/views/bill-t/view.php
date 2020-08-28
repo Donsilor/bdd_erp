@@ -24,10 +24,6 @@ $this->params['breadcrumbs'][] = $this->title;
                             <td><?= $model->bill_no ?></td>
                         </tr>
                         <tr>
-                            <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('send_goods_sn') ?>：</td>
-                            <td><?= $model->send_goods_sn ?></td>
-                        </tr>
-                        <tr>
                             <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('bill_type') ?>：</td>
                             <td><?= \addons\Warehouse\common\enums\BillTypeEnum::getValue($model->bill_type)?></td>
                         </tr>
@@ -59,41 +55,45 @@ $this->params['breadcrumbs'][] = $this->title;
                             <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('total_market') ?>：</td>
                             <td><?= $model->total_market ?></td>
                         </tr>
-                        <tr>
+                        <!--<tr>
                             <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('order_sn') ?>：</td>
                             <td><?= $model->order_sn ?></td>
-                        </tr>
+                        </tr>-->
                         <tr>
-                            <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('status') ?>：</td>
-                            <td><?= \common\enums\StatusEnum::getValue($model->status)?></td>
-                        </tr>
-                        <tr>
-                            <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('audit_status') ?>：</td>
-                            <td><?= \common\enums\AuditStatusEnum::getValue($model->audit_status)?></td>
+                            <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('send_goods_sn') ?>：</td>
+                            <td><?= $model->send_goods_sn ?></td>
                         </tr>
                         <tr>
                             <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('creator_id') ?>：</td>
                             <td><?= $model->creator ? $model->creator->username:''  ?></td>
                         </tr>
                         <tr>
+                            <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('created_at') ?>：</td>
+                            <td><?= \Yii::$app->formatter->asDatetime($model->created_at) ?></td>
+                        </tr>
+                        <tr>
                             <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('auditor_id') ?>：</td>
                             <td><?= $model->auditor ? $model->auditor->username:''  ?></td>
                         </tr>
                         <tr>
-                            <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('audit_remark') ?>：</td>
-                            <td><?= $model->audit_remark ?></td>
-                        </tr>
-                        <tr>
-                            <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('created_at') ?>：</td>
-                            <td><?= \Yii::$app->formatter->asDatetime($model->created_at) ?></td>
+                            <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('audit_status') ?>：</td>
+                            <td><?= \common\enums\AuditStatusEnum::getValue($model->audit_status)?></td>
                         </tr>
                         <tr>
                             <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('audit_time') ?>：</td>
                             <td><?= \Yii::$app->formatter->asDatetime($model->audit_time) ?></td>
                         </tr>
                         <tr>
+                            <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('audit_remark') ?>：</td>
+                            <td><?= $model->audit_remark ?></td>
+                        </tr>
+                        <tr>
                             <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('remark') ?>：</td>
                             <td><?= $model->remark ?></td>
+                        </tr>
+                        <tr>
+                            <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('status') ?>：</td>
+                            <td><?= \common\enums\StatusEnum::getValue($model->status)?></td>
                         </tr>
                     </table>
                 </div>
@@ -107,7 +107,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     echo Html::edit(['ajax-edit', 'id' => $model->id], '编辑', [
                         'data-toggle' => 'modal',
                         'class' => 'btn btn-primary btn-ms',
-                        'data-target' => '#ajaxModalLg',
+                        'data-target' => '#ajaxModal',
                     ]);
                     echo '&nbsp;';
                     echo Html::edit(['ajax-apply','id'=>$model->id], '提审', [

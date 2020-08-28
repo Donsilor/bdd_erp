@@ -40,6 +40,10 @@ return [
                                 'title' => '财务入库单',
                                 'route' => 'finance-entry/index',
                         ],
+                        [
+                            'title' => '财务销售明细单',
+                            'route' => 'sales-detail/index',
+                        ],
                 ],
                     
         ],

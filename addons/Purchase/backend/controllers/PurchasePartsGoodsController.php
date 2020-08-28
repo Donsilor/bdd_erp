@@ -3,6 +3,8 @@
 namespace addons\Purchase\backend\controllers;
 
 use addons\Purchase\common\models\PurchaseParts;
+use addons\Purchase\common\models\PurchasePartsGoods;
+use addons\Style\common\models\PartsStyle;
 use Yii;
 use common\models\base\SearchModel;
 use common\traits\Curd;
@@ -71,6 +73,7 @@ class PurchasePartsGoodsController extends BaseController
     /**
      * 编辑/创建
      * @var PurchaseGoodsForm $model
+     * @throws
      * @return mixed
      */
     public function actionEdit()
@@ -79,7 +82,7 @@ class PurchasePartsGoodsController extends BaseController
         
         $id = Yii::$app->request->get('id');
         $purchase_id = Yii::$app->request->get('purchase_id');
-        $model = $this->findModel($id);                
+        $model = $this->findModel($id) ?? new PurchasePartsGoods();
         if ($model->load(Yii::$app->request->post())) {
             if($model->isNewRecord && !empty($purchase_id)) {
                 $model->purchase_id = $purchase_id;
@@ -89,8 +92,8 @@ class PurchasePartsGoodsController extends BaseController
             }
             try{
                 $trans = Yii::$app->trans->beginTransaction();
-                //$stone = GoldStyle::find()->select(['style_sn'])->where(['gold_type'=>$model->material_type])->one();
-                //$model->goods_sn = $stone->style_sn??"";
+                //$parts = PartsStyle::find()->select(['parts_name','parts_type','metal_type','color','shape'])->where(['style_sn'=>$model->goods_sn])->one();
+                //$model->goods_sn = $parts->style_sn??"";
                 $model->cost_price = bcmul($model->gold_price, $model->goods_weight, 3);
                 if(false === $model->save()){
                     throw new \Exception($this->getError($model));
@@ -114,7 +117,7 @@ class PurchasePartsGoodsController extends BaseController
     /**
      * 详情展示页
      * @return string
-     * @throws NotFoundHttpException
+     * @throws
      */
     public function actionView()
     {
@@ -154,7 +157,7 @@ class PurchasePartsGoodsController extends BaseController
                 throw new \Exception("删除失败",422);
             }
             //更新单据汇总
-            Yii::$app->purchaseService->gold->summary($purchase_id);
+            Yii::$app->purchaseService->parts->summary($purchase_id);
             $trans->commit();
             
             return $this->message("删除成功", $this->redirect($this->returnUrl));
@@ -167,6 +170,7 @@ class PurchasePartsGoodsController extends BaseController
     /**
      * 申请编辑
      * @property PurchaseGoodsForm $model
+     * @throws
      * @return mixed
      */
     public function actionApplyEdit()
@@ -267,8 +271,9 @@ class PurchasePartsGoodsController extends BaseController
     }
 
     /**
-     * 分批收货
      *
+     * 分批收货
+     * @throws
      * @return mixed
      */
     public function actionWarehouse()
@@ -301,5 +306,26 @@ class PurchasePartsGoodsController extends BaseController
         return $this->render($this->action->id, [
             'model' => $model,
         ]);
+    }
+
+    /**
+     * 查询配件款号信息
+     * @return array
+     */
+    public function actionAjaxGetParts()
+    {
+        \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+
+        $goods_sn = \Yii::$app->request->get('goods_sn');
+        $model = PartsStyle::find()->select(['parts_name','parts_type','metal_type','color','shape'])->where(['style_sn'=>$goods_sn])->one();
+        //$model = new PartsStyle();
+        $data = [
+            'parts_name' => $model->parts_name,
+            'parts_type' => $model->parts_type,
+            'metal_type' => $model->metal_type,
+            'color' => $model->color,
+            'shape' => $model->shape,
+        ];
+        return ResultHelper::json(200,'查询成功', $data);
     }
 }

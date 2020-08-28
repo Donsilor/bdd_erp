@@ -17,17 +17,42 @@ use addons\Style\common\models\StyleImages;
 class StyleImageController extends Controller
 {
     /**
+     *  导出图片
+     * @param string $params
+     */
+    public function actionExport()
+    {
+        $dir = dirname(dirname(dirname(__FILE__)));
+        $newDir = $dir.'/upload/style';
+        FileHelper::createDirectory($newDir);
+        $list = Style::find()->select(['style_sn','style_image'])->where(['status'=>1])->limit(10000)->all();
+        foreach ($list as $model) {
+            if(!$model->style_image) {
+                console::output($model->style_sn.': empty---------------------');
+                continue;
+            }
+            $data = file_get_contents($model->style_image);
+            if($data) {
+                $file = $newDir.'/'.$model->style_sn.'.'.end(explode('.', $model->style_image));
+                file_put_contents($file, $data);
+                echo $model->style_sn.',';
+            }else{
+                console::output($model->style_sn.': error---------------------');
+            }
+        }
+    }
+    /**
      * 导入款式
      * @param string $params
      */
     public function actionImport()
     {
         $dir = dirname(dirname(dirname(__FILE__)));
-        $newDir = $dir.'/upload/'.date("Y/m/d");
-        $imageUrlDir = 'https://cdn-erp.bddco.cn/images/'.date("Y/m/d");
+        $newDir = $dir.'/upload/2020/08/14';
+        $imageUrlDir = 'https://cdn-erp.bddco.cn/images/2020/08/14';
         FileHelper::createDirectory($newDir);
         
-        $list = FileHelper::findFiles($dir."/upload/styleImages01/");
+        $list = FileHelper::findFiles($dir."/upload/styleImages02/");
         $style_image_list = [];
         foreach ($list as $file){
             if(!preg_match("/\.db$/is", $file)){
@@ -41,9 +66,13 @@ class StyleImageController extends Controller
                     continue;
                 }
                 $style_sn = $arr[1];
-                if(!file_exists($newfile)) {
-                    $res = file_put_contents($newfile, $fileData);
-                    console::output($newfile.'-'.$res);
+                if(strlen($style_sn) <=5) {
+                    console::output($file);exit;
+                }else{
+                     if(!file_exists($newfile) && !file_exists(str_replace('2020/08/14','2020/08/06',$newfile))) {
+                        $res = file_put_contents($newfile, $fileData);
+                        console::output($newfile.'-'.$res);
+                    } 
                 }
                 $style_image_list[$style_sn][] = $imageUrl;
             }
@@ -57,6 +86,7 @@ class StyleImageController extends Controller
             }
         }
         console::output("不存在的款号排查--end");
+
         foreach ($style_image_list as $style_sn=>$image_list){
             console::output($style_sn.': BEGING--------------');
             try{
@@ -83,10 +113,10 @@ class StyleImageController extends Controller
         if(!$style) {
             console::output($style_sn.": [{$style_sn}]款号不存在");
             return ;
-        }/* else if($style->style_image) {
+        } else if($style->style_image) {
             console::output($style_sn.": [{$style_sn}]款号已导入过图片");
             return ;
-        } */
+        }  
         foreach ($image_list as $image) {
             $model = StyleImages::find()->where(['style_id'=>$style->id,'image'=>$image])->one();
             if(!$model) {
@@ -101,7 +131,7 @@ class StyleImageController extends Controller
                     console::output('ERROR: '.$style_sn.':'.$image);
                 }
                 console::output('SUCCESS: '.$style_sn.':'.$image);
-            }
+            } 
         }        
     }
 }

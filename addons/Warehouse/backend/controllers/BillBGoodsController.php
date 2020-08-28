@@ -34,10 +34,9 @@ class BillBGoodsController extends BaseController
      */
     public function actionIndex()
     {
-
-        $tab = Yii::$app->request->get('tab',2);
-        $returnUrl = Yii::$app->request->get('returnUrl',Url::to(['bill-b/index']));
         $bill_id = Yii::$app->request->get('bill_id');
+        $tab = Yii::$app->request->get('tab',2);
+        $returnUrl = Yii::$app->request->get('returnUrl',Url::to(['bill-b/index', 'bill_id'=>$bill_id]));
         $searchModel = new SearchModel([
             'model' => $this->modelClass,
             'scenario' => 'default',

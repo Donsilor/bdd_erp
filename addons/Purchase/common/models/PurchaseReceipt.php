@@ -13,17 +13,20 @@ use common\models\backend\Member;
  * @property int $id ID
  * @property int $merchant_id
  * @property int $supplier_id 供应商
- * @property string $receipt_no 工厂出货单号
+ * @property string $receipt_no 收货单号
  * @property string $purchase_sn 采购单号
  * @property int $purchase_type 采购类型
  * @property int $receipt_status 单据状态
  * @property int $receipt_num 出货数量
+ * @property string $delivery_no 工厂出货单号
  * @property int $total_stone_num 总粒数
  * @property string $total_weight 总重量
  * @property string $total_cost 总金额（总成本）
  * @property int $put_in_type 入库方式
  * @property int $to_warehouse_id 入库仓库
  * @property int $is_to_warehouse 是否入库
+ * @property int $stock_status 入库状态
+ * @property int $stock_num 入库数量
  * @property int $auditor_id 审核人
  * @property int $audit_status 审核状态
  * @property int $audit_time 审核时间
@@ -51,10 +54,10 @@ class PurchaseReceipt extends BaseModel
     public function rules()
     {
         return [
-            [['id', 'merchant_id', 'supplier_id', 'purchase_type', 'receipt_status', 'receipt_num', 'total_stone_num', 'put_in_type', 'to_warehouse_id', 'is_to_warehouse', 'auditor_id', 'audit_status', 'audit_time', 'sort', 'status', 'creator_id', 'created_at', 'updated_at'], 'integer'],
-            [['supplier_id', 'receipt_no'], 'required'],
+            [['id', 'merchant_id', 'supplier_id', 'purchase_type', 'receipt_status', 'receipt_num', 'total_stone_num', 'put_in_type', 'to_warehouse_id', 'is_to_warehouse', 'stock_status', 'stock_num', 'auditor_id', 'audit_status', 'audit_time', 'sort', 'status', 'creator_id', 'created_at', 'updated_at'], 'integer'],
+            [['supplier_id'], 'required'],
             [['total_weight', 'total_cost'], 'number'],
-            [['receipt_no', 'purchase_sn'], 'string', 'max' => 30],
+            [['receipt_no', 'purchase_sn', 'delivery_no'], 'string', 'max' => 30],
             [['audit_remark', 'remark'], 'string', 'max' => 255],
             ['receipt_no', 'unique'],
         ];
@@ -69,17 +72,20 @@ class PurchaseReceipt extends BaseModel
             'id' => 'ID',
             'merchant_id' => '商户ID',
             'supplier_id' => '供应商',
-            'receipt_no' => '工厂出货单号',
+            'receipt_no' => '收货单号',
             'purchase_sn' => '采购单号',
             'purchase_type' => '采购类型',
             'receipt_status' => '单据状态',
             'receipt_num' => '出货数量',
+            'delivery_no' => '工厂出货单号',
             'total_stone_num' => '总粒数',
             'total_weight' => '总重量',
             'total_cost' => '总成本',
             'put_in_type' => '入库方式',
             'to_warehouse_id' => '入库仓库',
             'is_to_warehouse' => '是否入库',
+            'stock_status' => '入库状态',
+            'stock_num' => '已入库数量',
             'auditor_id' => '审核人',
             'audit_status' => '审核状态',
             'audit_time' => '审核时间',

@@ -260,6 +260,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                     'value' => function ($model) {
                                         return $model->cost_price ;
                                     },
+                                    'visible' => \common\helpers\Auth::verify(\common\enums\SpecialAuthEnum::VIEW_CAIGOU_PRICE),
                                     'filter' => false,
                                     'headerOptions' => ['width'=>'120'],
                             ],

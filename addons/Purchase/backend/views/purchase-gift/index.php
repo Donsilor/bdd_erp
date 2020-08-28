@@ -84,7 +84,14 @@ $params = $params ? "&".http_build_query($params) : '';
             [
                     'attribute' => 'total_num',
                     'value' => "total_num",
-                    'filter' => true,
+                    'filter' => false,
+                    'format' => 'raw',
+                    'headerOptions' => ['width'=>'80'],
+            ],
+            [
+                    'attribute' => 'receive_num',
+                    'value' => "receive_num",
+                    'filter' => false,
                     'format' => 'raw',
                     'headerOptions' => ['width'=>'80'],
             ],
@@ -93,7 +100,7 @@ $params = $params ? "&".http_build_query($params) : '';
                     'value' => function ($model){
                         return $model->total_cost;
                     },
-                    'filter' => true,
+                    'filter' => false,
                     'format' => 'raw',
                     'headerOptions' => ['width'=>'100'],
             ],            
@@ -168,11 +175,23 @@ $params = $params ? "&".http_build_query($params) : '';
                 ]),
                 'format' => 'raw',
                 'headerOptions' => ['width'=>'100'],
-            ],            
+            ],
+            [
+                'attribute' => 'receive_status',
+                'value' => function ($model){
+                    return \addons\Purchase\common\enums\ReceiveStatusEnum::getValue($model->receive_status);
+                },
+                'filter' => Html::activeDropDownList($searchModel, 'receive_status',\addons\Purchase\common\enums\ReceiveStatusEnum::getMap(), [
+                    'prompt' => '全部',
+                    'class' => 'form-control',
+                ]),
+                'format' => 'raw',
+                'headerOptions' => ['width'=>'100'],
+            ],
             [
                 'class' => 'yii\grid\ActionColumn',
                 'header' => '操作',
-                'template' => '{edit} {audit} {goods} {apply} {delete}',
+                'template' => '{edit} {apply} {audit} {goods} {cancel} {delete}',
                 'buttons' => [
                     'edit' => function($url, $model, $key){
                         if($model->purchase_status == PurchaseStatusEnum::SAVE){
@@ -220,8 +239,15 @@ $params = $params ? "&".http_build_query($params) : '';
                             ]);
                         }
                     },
+                    'cancel' => function($url, $model, $key){
+                        if($model->purchase_status == PurchaseStatusEnum::SAVE){
+                            return Html::delete(['cancel', 'id' => $model->id],'取消',[
+                                'onclick' => 'rfTwiceAffirm(this,"取消单据", "确定取消吗？");return false;',
+                            ]);
+                        }
+                    },
                     'delete' => function($url, $model, $key){
-                        if($model->purchase_status != PurchaseStatusEnum::CONFIRM){
+                        if($model->purchase_status == PurchaseStatusEnum::CANCEL){
                             return Html::delete(['delete', 'id' => $model->id]);
                         }
                     },                    

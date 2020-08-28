@@ -2,6 +2,7 @@
 
 namespace addons\Purchase\backend\controllers;
 
+use common\helpers\SnHelper;
 use Yii;
 use common\models\base\SearchModel;
 use addons\Purchase\common\models\PurchaseReceipt;
@@ -107,7 +108,10 @@ class ReceiptController extends BaseController
         // ajax 校验
         $this->activeFormValidate($model);
         if ($model->load(Yii::$app->request->post())) {
-
+            if($isNewRecord){
+                $model->receipt_no = SnHelper::createReceiptSn();
+                //$model->creator_id  = \Yii::$app->user->identity->getId();
+            }
             if(false === $model->save()){
                 $this->message('保存失败：'.$this->getError($model), $this->redirect(['index']), 'error');
             }
@@ -147,13 +151,14 @@ class ReceiptController extends BaseController
         if(!$model->receipt_num){
             return $this->message('单据明细不能为空', $this->redirect(\Yii::$app->request->referrer), 'error');
         }
-        $model->audit_status = AuditStatusEnum::PENDING;
-        $model->receipt_status = ReceiptStatusEnum::PENDING;
         try{
             $trans = \Yii::$app->trans->beginTransaction();
+            $model->audit_status = AuditStatusEnum::PENDING;
+            $model->receipt_status = ReceiptStatusEnum::PENDING;
             if(false === $model->save()){
                 throw new \Exception($this->getError($model));
             }
+            \Yii::$app->purchaseService->receipt->syncUpdatePriceAll($model);
             //日志
             $log = [
                     'receipt_id' => $model->id,

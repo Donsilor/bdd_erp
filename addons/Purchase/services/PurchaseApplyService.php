@@ -3,7 +3,9 @@
 namespace addons\Purchase\services;
 
 
+use addons\Style\common\enums\InlayEnum;
 use addons\Style\common\enums\LogTypeEnum;
+use addons\Supply\common\enums\PeishiTypeEnum;
 use addons\Warehouse\common\enums\PutInTypeEnum;
 use common\enums\TargetTypeEnum;
 use common\helpers\SnHelper;
@@ -130,6 +132,7 @@ class PurchaseApplyService extends Service
                         throw new \Exception($this->getError($goodsAttr));
                     }
                 }
+                unset($applyGoods);
             }
             return $apply;
         }catch (\Exception $e){
@@ -161,7 +164,7 @@ class PurchaseApplyService extends Service
             throw new \Exception("请选择同一采购分类的申请单");
         }
 
-        $supplierIds = PurchaseApplyGoods::find()->distinct('supplier_id')->where(['apply_id'=>$apply_ids])->asArray()->all();
+        $supplierIds = PurchaseApplyGoods::find()->distinct('supplier_id')->where(['apply_id'=>$apply_ids])->asArray()->select(['supplier_id'])->all();
         foreach ($group_apply_ids as $channel_id=>$apply_ids){
             foreach ($supplierIds as $supplierId){
                 $supplier_id = $supplierId['supplier_id'];
@@ -198,6 +201,8 @@ class PurchaseApplyService extends Service
                              "stone_info"=>$apply_goods->stone_info,
                              "parts_info"=>$apply_goods->parts_info,
                              "remark"=>$apply_goods->remark,
+                             //非镶嵌 配石类型默认不配石
+                             "peishi_type" => $apply_goods->is_inlay == InlayEnum::No ? PeishiTypeEnum::None : "",
                              "created_at"=>time(),
                              "updated_at"=>time(),
                      ];

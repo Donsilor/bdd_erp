@@ -75,7 +75,7 @@ class ProducePartsController extends BaseController
             return $this->message('布产单不是待领件状态,不能操作！', $this->redirect(Yii::$app->request->referrer), 'error');
         }
         foreach($produce->ProduceParts ?? [] as $produceParts) {
-            if($produceParts->peijian_status != PeijianStatusEnum::TO_LINGJIAN){
+            if($produceParts->peijian_status < PeijianStatusEnum::TO_LINGJIAN){
                 return $this->message("(ID={$produceParts->id})配件单不是待领件状态", $this->redirect(Yii::$app->request->referrer), 'error');
             }
         }        

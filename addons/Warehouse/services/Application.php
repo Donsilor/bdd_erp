@@ -17,6 +17,7 @@ use common\components\Service;
  * @property \addons\Warehouse\services\WarehouseBillAService $billA 调整单据
  * @property \addons\Warehouse\services\WarehouseBillJService $billJ 借货单据
  * @property \addons\Warehouse\services\WarehouseBillSService $billS 销售单据
+ * @property \addons\Warehouse\services\WarehouseBillDService $billD 销售退货单据
  * @property \addons\Warehouse\services\WarehouseBillTService $billT 其他收货单据
  * @property \addons\Warehouse\services\WarehouseBillCService $billC 其他出库单据
  * @property \addons\Warehouse\services\WarehouseBillBService $billB 退货返厂单据
@@ -70,6 +71,7 @@ class Application extends Service
         'billC' => 'addons\Warehouse\services\WarehouseBillCService',
         'billJ' => 'addons\Warehouse\services\WarehouseBillJService',
         'billS' => 'addons\Warehouse\services\WarehouseBillSService',
+        'billD' => 'addons\Warehouse\services\WarehouseBillDService',
         'billLog' => 'addons\Warehouse\services\WarehouseBillLogService',
         'repair' => 'addons\Warehouse\services\WarehouseBillRepairService',
         'gift' => 'addons\Warehouse\services\WarehouseGiftService',

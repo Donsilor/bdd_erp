@@ -63,7 +63,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'filter' => false,
                             ],
                             [
-                                'label' => '订单号',
+                                'label' => '采购单号/订单号',
                                 'value' => function ($model){
                                     return $model->produceGold->from_order_sn ?? '';
                                 },

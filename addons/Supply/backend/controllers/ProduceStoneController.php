@@ -42,7 +42,7 @@ class ProduceStoneController extends BaseController
                 'scenario' => 'default',
                 'partialMatchAttributes' => [], // 模糊查询
                 'defaultOrder' => [
-                        'stone_position' => SORT_ASC
+                        'id' => SORT_ASC
                 ],
                 'relations' => [
                      
@@ -77,7 +77,7 @@ class ProduceStoneController extends BaseController
             return $this->message('布产单不是待领石状态,不能操作！', $this->redirect(Yii::$app->request->referrer), 'error');
         }
         foreach($produce->produceStones ?? [] as $produceStone) {
-            if($produceStone->peishi_status != PeishiStatusEnum::TO_LINGSHI){
+            if($produceStone->peishi_status < PeishiStatusEnum::TO_LINGSHI){
                 return $this->message("(ID={$produceStone->id})配料单不是待领石状态", $this->redirect(Yii::$app->request->referrer), 'error');
             }
         }
@@ -90,8 +90,11 @@ class ProduceStoneController extends BaseController
             }
             //2
             $produce->peishi_status = PeishiStatusEnum::HAS_LINGSHI;
-            if($produce->peiliao_status == PeiliaoStatusEnum::HAS_LINGLIAO) {
-                $produce->bc_status = BuChanEnum::TO_PRODUCTION;
+            //布产单状态未生产之前，确认配石 需要变动布产状态
+            if($produce->bc_status < BuChanEnum::TO_PRODUCTION) {
+                if($produce->peiliao_status == PeiliaoStatusEnum::HAS_LINGLIAO) {
+                    $produce->bc_status = BuChanEnum::TO_PRODUCTION;
+                }
             }
             if(false === $produce->save(true,['peishi_status','bc_status','updated_at'])){
                 throw new \Exception("确认失败！code=2");

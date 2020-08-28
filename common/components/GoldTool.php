@@ -6,6 +6,9 @@ use Yii;
 use yii\base\Component;
 use common\components\goldtool\HuiTongApi;
 use common\helpers\AmountHelper;
+use common\models\common\GoldPrice;
+use common\enums\CacheEnum;
+use common\components\goldtool\RongTongApi;
 
 
 
@@ -18,16 +21,21 @@ use common\helpers\AmountHelper;
 class GoldTool extends Component
 {    
      //api对象
-     private $api;
+     private $huitong;
+     private $rongtong;
      
      private $exchangeRates;
      private $goldPrices;
      private $ounce = 31.1034768;
+     public $dbCache  = false;
      
      public function init()
      {
-         if(!$this->api) {
-             $this->api = new HuiTongApi();
+         if(!$this->huitong) {
+             $this->huitong = new HuiTongApi();
+         }
+         if(!$this->rongtong) {
+             $this->rongtong = new RongTongApi();
          }
          parent::init();
      }
@@ -38,7 +46,7 @@ class GoldTool extends Component
      public function getGoldUsdPrice($code = 'XAU')
      {
          if(!$this->goldPrices) {
-             $this->goldPrices = $this->api->fetchGoldPriceData();
+             $this->goldPrices = $this->huitong->fetchGoldPriceData();
          }
          return $this->goldPrices[$code] ?? 0;
      }     
@@ -50,7 +58,7 @@ class GoldTool extends Component
      public function getExchangeRate($code = 'USDCNY')
      {
          if(!$this->exchangeRates) {
-             $this->exchangeRates = $this->api->fetchExchaneRateData();
+             $this->exchangeRates = $this->huitong->fetchExchaneRateData();
          }
          return $this->exchangeRates[$code] ?? 0;
      }    
@@ -59,11 +67,34 @@ class GoldTool extends Component
       * @param string $code
       * @return string
       */
-     public function getGoldRmbPrice($code = 'XAU',$cha = 0)
+     public function getGoldRmbPrice($code = 'XAU')
      {
-         $rmbRate = $this->getExchangeRate();
-         $usdPrice = $this->getGoldUsdPrice($code);
-         $rmbPrice = AmountHelper::formatAmount(($usdPrice/$this->ounce)*$rmbRate+$cha, 2);
-         return $rmbPrice;
+         $data = $this->rongtong->fetchGoldPriceData();
+         return $data[$code] ?? 0;
      }
+     /**
+      * 获取金价
+      * @param string $code
+      * @return number
+      */
+     public function getGoldPrice($code = 'XAU')
+     {
+         $model = $this->getDbRow($code);
+         return $model['price'] ?? 0;
+     }
+     /**
+      * 获取金价信息
+      * @param string $code
+      * @return \yii\db\ActiveRecord|array|NULL
+      */
+     private function getDbRow($code = 'XAU')
+     {
+         $cacheKey = CacheEnum::getPrefix('goldPrice').':'.$code;
+         if (!($model = Yii::$app->cache->get($cacheKey)) || $this->dbCache == false) {
+             $model = GoldPrice::find()->select(['code','price'])->where(['code'=>$code])->asArray()->one();
+             Yii::$app->cache->set($cacheKey, $model,3600);
+         }
+         return $model;
+     }
+     
 }

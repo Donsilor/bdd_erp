@@ -43,6 +43,16 @@ $this->params['breadcrumbs'][] = $this->title;
                                     'format' => 'raw',
                             ],
                             [
+                                    'attribute' => 'is_increase',                                    
+                                    'value' => function ($model){
+                                        return \common\enums\ConfirmEnum::getValue($model->is_increase);
+                                    },
+                                    'filter' => false,
+                                    'format' => 'raw',
+                                    'headerOptions' => ['width' =>'80'],
+                                    
+                            ],
+                            [
                                     'label' => '领石单号',
                                     'attribute' => 'delivery_no',
                                     'filter' => false,

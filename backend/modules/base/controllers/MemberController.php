@@ -78,10 +78,10 @@ class MemberController extends BaseController
 
         // ajax 校验
         $this->activeFormValidate($model);
-        if ($model->load($request->post())) {
+        if ($model->load($request->post())) {            
             return $model->save()
-                ? $this->redirect(['index'])
-                : $this->message($this->getError($model), $this->redirect(['index']), 'error');
+                ? $this->message("保存成功", $this->redirect(Yii::$app->request->referrer), 'success')
+                : $this->message($this->getError($model), $this->redirect(Yii::$app->request->referrer), 'error');
         }
 
         return $this->renderAjax($this->action->id, [

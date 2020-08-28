@@ -9,6 +9,7 @@ use addons\Shop\common\models\OrderSync;
 use common\enums\ConfirmEnum;
 use addons\Shop\common\enums\OrderStatusEnum;
 use addons\Shop\common\enums\SyncPlatformEnum;
+use ACES\TDEClient;
 
 
 /**
@@ -18,7 +19,6 @@ use addons\Shop\common\enums\SyncPlatformEnum;
  */
 class OrderController extends Controller
 {
-    
     /**
      * 拉去官网订单
      * @param string $batch

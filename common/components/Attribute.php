@@ -49,9 +49,9 @@ class Attribute
     }   
     /**
      * 属性值键值对 映射
-     * @param unknown $attr_id
-     * @param unknown $language
-     * @param string $noCache
+     * @param integer $attr_id
+     * @param int $language
+     * @param bool $noCache
      * @return array
      */
     public function valueMap($attr_id, $key = 'id', $value = "name", $language = null, $noCache = false)

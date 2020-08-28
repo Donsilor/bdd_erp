@@ -3,6 +3,7 @@
 namespace addons\Finance\services;
 
 use addons\Sales\common\enums\DistributeStatusEnum;
+use addons\Sales\common\models\OrderGoods;
 use common\helpers\Url;
 use common\components\Service;
 use addons\Finance\common\forms\OrderPayForm;
@@ -46,7 +47,7 @@ class OrderPayService extends Service
         $form->account->paid_amount = $form->paid_amount;     
         if(false === $form->account->save()) {
             throw new \Exception($this->getError($form->account));
-        }         
+        }
         //点款日志写入
         $orderPay = new OrderPay();
         $orderPay->order_id = $form->id;
@@ -69,7 +70,32 @@ class OrderPayService extends Service
         $form->pay_time   = time();
         if(false === $form->save()) {
             throw new \Exception($this->getError($form));
-        }        
+        }
+
+        //生成财务销售明细表
+        $order_goods_list = OrderGoods::find()->where(['order_id'=>$orderPay->order_id])->all();
+        foreach ($order_goods_list as $order_goods){
+            $sale_detail = [
+                'order_id' => $order_goods->order_id,
+                'order_detail_id' => $order_goods->id,
+                'orde_sn' => $order_goods->order->order_sn,
+                'dept_id' => $order_goods->order->creator->dept_id,
+                'sale_channel_id' => $order_goods->order->sale_channel_id,
+                'goods_name' => $order_goods->goods_name,
+                'product_type_id' => $order_goods->product_type_id,
+                'goods_sn' => $order_goods->goods_sn,
+                'goods_num' => $order_goods->goods_num,
+                'goods_price' => $order_goods->goods_pay_price,
+                'pay_time' => time(),
+                'sale_price' => $order_goods->goods_pay_price * $order_goods->goods_num,
+                'cost_price' => 0 //暂时设置为0
+            ];
+            $res = \Yii::$app->financeService->saleDetail->editSaleDetail($sale_detail);
+            if(!$res){
+                return false;
+            }
+        }
+
         
         return $orderPay;        
     }

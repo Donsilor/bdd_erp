@@ -32,6 +32,7 @@ use Yii;
  * @property string $produce_sn 布产编号
  * @property int $is_stock 是否现货(1是0否)
  * @property int $is_gift 是否赠品
+ * @property int $is_return 是否退款
  * @property int $created_at 创建时间
  * @property int $updated_at 更新时间
  */
@@ -51,16 +52,16 @@ class OrderGoods extends BaseModel
     public function rules()
     {
         return [
-            [['merchant_id', 'order_id', 'style_cate_id', 'product_type_id', 'is_inlay','style_channel_id','jintuo_type', 'qiban_type','style_sex' ,'goods_num', 'delivery_status', 'distribute_status', 'bc_status','is_stock', 'is_gift', 'created_at', 'updated_at','is_apply','is_bc'], 'integer'],
+            [['merchant_id', 'order_id', 'style_cate_id', 'product_type_id', 'is_inlay','style_channel_id','jintuo_type', 'qiban_type','style_sex' ,'goods_num', 'delivery_status', 'distribute_status', 'bc_status','is_stock', 'is_gift', 'is_return', 'created_at', 'updated_at','is_apply','is_bc'], 'integer'],
             [['order_id','jintuo_type','goods_name','goods_num','goods_price','goods_pay_price'],'required'],
-            [['goods_price', 'goods_pay_price', 'goods_discount', 'exchange_rate'], 'number'],
+            [['goods_price', 'goods_pay_price', 'goods_discount', 'exchange_rate','assess_cost'], 'number'],
             [['style_sn', 'goods_sn','qiban_sn'], 'string', 'max' => 50],
             [['goods_id'], 'string', 'max' => 20],
             [['goods_name'], 'string', 'max' => 300],
             [['goods_image'], 'string', 'max' => 100],
             [['goods_spec','remark'], 'string', 'max' => 255],
             [['currency'], 'string', 'max' => 5],
-            [['produce_sn'], 'string', 'max' => 30],
+            [['produce_sn','out_sku_id'], 'string', 'max' => 30],
             [['apply_info'], 'string'],
         ];
     }
@@ -74,10 +75,10 @@ class OrderGoods extends BaseModel
             'id' => 'ID',
             'merchant_id' => '商户ID',
             'order_id' => '订单id',
-            'style_sn' => '款式编号',
-            'qiban_sn' => '起版编号',
+            'style_sn' => '款号',
+            'qiban_sn' => '起版号',
             'goods_sn' => '商品编号',
-            'goods_id' => '现货货号',
+            'goods_id' => '条码号',
             'style_cate_id' => '款式分类',
             'is_inlay' => '是否镶嵌',
             'product_type_id' => '产品线',
@@ -88,7 +89,8 @@ class OrderGoods extends BaseModel
             'goods_num' => '商品数量',
             'goods_image' => '商品图片',
             'style_sex' => '款式性别',
-            'goods_price' => '商品价格',
+            'goods_price' => '商品原价',
+            'assess_cost' => '预估成本',
             'goods_pay_price' => '实际成交价',
             'goods_discount' => '优惠金额',
             'goods_spec' => '商品规格',
@@ -101,10 +103,12 @@ class OrderGoods extends BaseModel
             'is_stock' => '是否现货',
             'is_gift' => '是否赠品',
             'is_bc' => '是否布产',
+            'is_return' => '是否退款',
             'created_at' => '创建时间',
             'updated_at' => '更新时间',
             'is_apply' => '是否申请修改',
             'remark' => '备注',
+            'out_sku_id' => '外部SKU',
 
         ];
     }

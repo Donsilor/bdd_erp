@@ -18,7 +18,7 @@ $form = ActiveForm::begin([
 </div>
     <div class="modal-body"> 
        <div class="col-sm-12">
-            <?= $form->field($model, 'receipt_no')->textInput(["placeholder"=>"请输入出货单号"])?>
+            <?= $form->field($model, 'receipt_no')->textInput(['disabled'=>true, "placeholder"=>"系统自动生成"])?>
 	        <?= $form->field($model, 'supplier_id')->widget(\kartik\select2\Select2::class, [
                     'data' => \Yii::$app->supplyService->supplier->getDropDown(),
                     'options' => ['placeholder' => '请选择'],
@@ -34,6 +34,7 @@ $form = ActiveForm::begin([
                     'allowClear' => false
                 ],
             ]);?>
+            <?= $form->field($model, 'delivery_no')->textInput(["placeholder"=>"请输入工厂出货单号"])?>
             <?= $form->field($model, 'remark')->textArea(['options'=>['maxlength' => true]])?>
         </div>    
                    

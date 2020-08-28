@@ -22,6 +22,9 @@ class MainController extends BaseController
      */
     public function actionIndex()
     {
+        if(preg_match("/:\/\/work/is",Yii::$app->getRequest()->absoluteUrl)) {
+            return Yii::$app->getResponse()->redirect('/base/member-works/works');
+        }
         return $this->renderPartial($this->action->id, [
         ]);
     }

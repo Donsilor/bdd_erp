@@ -3,6 +3,7 @@
 namespace common\models\backend;
 
 use common\models\common\Department;
+use common\models\rbac\AuthRole;
 use Yii;
 use yii\behaviors\TimestampBehavior;
 use yii\db\ActiveRecord;
@@ -153,4 +154,13 @@ class Member extends User
     {
         return $this->hasOne(Department::class, ['id'=>'dept_id'])->alias('department');
     }
+    /**
+     * 部门
+     * @return \yii\db\ActiveQuery
+     */
+    public function getAuthRole()
+    {
+        return $this->hasOne(AuthRole::class, ['id'=>'role'])->alias('authRole');
+    }
+
 }

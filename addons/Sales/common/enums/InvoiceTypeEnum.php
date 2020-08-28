@@ -12,16 +12,16 @@ use common\enums\BaseEnum;
 class InvoiceTypeEnum extends BaseEnum
 {
     const PAPER = 1;
-    const ELECTRONIC = 2;
+    const ELECTRONIC = 3;
 
     /**
      * @return array
      */
     public static function getMap(): array
     {
-        return [
-            self::PAPER => '纸质发票',
+        return [           
             self::ELECTRONIC => '电子发票',
+            self::PAPER => '纸质发票',          
         ];
     }
 }

@@ -18,9 +18,22 @@ $form = ActiveForm::begin([
 <div class="modal-body">
     <div class="col-sm-12">
         <?= $form->field($model, 'goods_sn')->textInput(["placeholder"=>"请输入款号/起版号"]) ?>
-        <?= $form->field($model, 'is_wholesale')->radioList(addons\Warehouse\common\enums\IsWholeSaleEnum::getMap())?>
-        <?= $form->field($model, 'goods_num')->textInput(["placeholder"=>"请输入数量"]) ?>
-        <?= $form->field($model, 'cost_price')->textInput(["placeholder"=>"请输入成本单价"]) ?>
+        <div class="row">
+            <div class="col-sm-7">
+                <?= $form->field($model, 'is_wholesale')->radioList(addons\Warehouse\common\enums\IsWholeSaleEnum::getMap())?>
+            </div>
+            <div class="col-sm-5">
+                <?= $form->field($model, 'auto_goods_id')->radioList(\common\enums\ConfirmEnum::getMap()) ?>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-6">
+                <?= $form->field($model, 'goods_num')->textInput(["placeholder"=>"请输入数量"]) ?>
+            </div>
+            <div class="col-sm-6">
+                <?= $form->field($model, 'cost_price')->textInput(["placeholder"=>"请输入成本单价"]) ?>
+            </div>
+        </div>
         <?= $form->field($model, 'order_sn')->textInput(["placeholder"=>"请输入订单号"]) ?>
     </div>
 </div>

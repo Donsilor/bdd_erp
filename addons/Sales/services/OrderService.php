@@ -23,6 +23,7 @@ use common\helpers\SnHelper;
 use addons\Sales\common\enums\PayStatusEnum;
 use common\enums\LogTypeEnum;
 use addons\Sales\common\enums\OrderFromEnum;
+use addons\Sales\common\models\OrderInvoice;
 
 /**
  * Class SaleChannelService
@@ -146,7 +147,7 @@ class OrderService extends Service
      * @throws \Exception
      * @return \addons\Sales\common\models\Order
      */
-    public function createSyncOrder($orderInfo, $accountInfo, $goodsList, $customerInfo, $addressInfo, $noticeInfo = [])
+    public function createSyncOrder($orderInfo, $accountInfo, $goodsList, $customerInfo, $addressInfo, $invoiceInfo = [])
     {
         if(empty($orderInfo['out_trade_no'])) {
             throw new \Exception("orderInfo->out_trade_no 不能为空");
@@ -191,7 +192,7 @@ class OrderService extends Service
             }
         }
         $order->pay_sn = $orderPay->pay_sn;//点款单号
-        
+        $goods_num = 0;//商品总数
         //4.同步订单商品明细
         if($isNewOrder === true) {
             foreach ($goodsList as $goodsInfo) {
@@ -205,6 +206,9 @@ class OrderService extends Service
                 $orderGoods = new OrderGoods();
                 $orderGoods->attributes = $goodsInfo + $styleInfo;
                 $orderGoods->order_id = $order->id;
+                if(empty($goodsInfo['goods_image'])) {
+                    $orderGoods->goods_image = $style->style_image;
+                }
                 if(false === $orderGoods->save()) {
                     throw new \Exception("同步订单商品失败：".$this->getError($orderGoods));
                 }
@@ -222,6 +226,8 @@ class OrderService extends Service
                         throw new \Exception("同步商品属性失败：".$this->getError($goodsAttr));
                     }
                 }
+                
+                $goods_num += $orderGoods->goods_num;
             }
         }
         //5.同步客户信息
@@ -244,15 +250,7 @@ class OrderService extends Service
             if(false == $customer->save()) {
                 throw new \Exception("更新用户失败：".$this->getError($customer));
             }
-        }
-        $order->customer_id = $customer->id;
-        if($order->order_sn == ''){
-            $order->order_sn = $this->createOrderSn($order);
-        }
-        if(false == $order->save()) {
-            throw new \Exception($this->getError($order));
-        }
-        
+        }        
         //6.同步订单收货地址
         $address = OrderAddress::find()->where(['order_id'=>$order->id])->one();
         if(!$address) {
@@ -264,6 +262,26 @@ class OrderService extends Service
             throw new \Exception("同步收货地址失败：".$this->getError($address));
         }  
         //7.同步发票
+        if(!empty($invoiceInfo)) {
+            $invoice = OrderInvoice::find()->where(['order_id'=>$order->id])->one();
+            if(!$invoice) {
+                $invoice = new OrderInvoice();
+                $invoice->order_id = $order->id;
+            }
+            $invoice->attributes = $invoiceInfo;
+            if(false == $invoice->save()) {
+                throw new \Exception("同步发票失败：".$this->getError($invoice));
+            }
+            $order->is_invoice   = $invoice->is_invoice;
+        }
+        $order->goods_num   = $goods_num;
+        $order->customer_id = $customer->id;
+        if($order->order_sn == ''){
+            $order->order_sn = $this->createOrderSn($order);
+        }
+        if(false == $order->save()) {
+            throw new \Exception($this->getError($order));
+        }
         
         //创建订单日志
         if($isNewOrder === true) {
@@ -304,6 +322,7 @@ class OrderService extends Service
         }        
         $models = $query->all();        
         foreach ($models as $model){
+            $style = Style::find()->where(['style_sn'=>$model->style_sn])->one();
             $goods = [
                     'order_detail_id' =>$model->id,
                     'goods_image'=>$model->goods_image,
@@ -311,6 +330,7 @@ class OrderService extends Service
                     'goods_name' =>$model->goods_name,
                     'goods_num' =>$model->goods_num,
                     'style_sn' => $model->style_sn,
+                    'style_id' => $style->id,
                     'qiban_sn' => $model->qiban_sn,
                     'qiban_type'=>$model->qiban_type,
                     'jintuo_type'=>$model->jintuo_type,
@@ -336,6 +356,12 @@ class OrderService extends Service
         $applyInfo['channel_id'] = $order->sale_channel_id;
         //同步采购申请单
         $apply = Yii::$app->purchaseService->apply->createSyncApply($applyInfo, $applyGoodsList);
+
+        //更新订单申请单ID
+        $order->apply_id = $apply->id;
+        if(false === $order->save(true,['apply_id'])) {
+            throw new \Exception($this->getError($order));
+        }
         return $apply;
     }
     /**
@@ -363,9 +389,9 @@ class OrderService extends Service
             $goods = [
                     'goods_name' =>$model->goods_name,
                     'goods_num' =>$model->goods_num,
-                    'from_order_id'=>$model->order_id,
-                    'from_detail_id' => $model->id,
-                    'from_order_sn'=>$order->order_sn,
+                    'order_detail_id'=>$model->order_id,
+                    'order_detail_id' => $model->id,
+                    'order_sn'=>$order->order_sn,
                     'from_type' => FromTypeEnum::ORDER,
                     'style_sn' => $model->style_sn,
                     //'peiliao_type'=>$model->peiliao_type,
@@ -414,6 +440,8 @@ class OrderService extends Service
     /**
      * 创建订单编号
      * @param Style $model
+     * @throws
+     * @return string
      */
     public static function createOrderSn($model,$save = false)
     {
@@ -452,7 +480,7 @@ class OrderService extends Service
                 $order_account->order_id = $order_id;
             }
             $order_account->discount_amount = $sum['total_goods_discount'];
-            $order_account->goods_amount = $sum['total_pay_price'];
+            $order_account->goods_amount = $sum['total_goods_price'];
             $order_account->order_amount = $order_account->goods_amount + $order_account->shipping_fee + $order_account->tax_fee + $order_account->safe_fee
                         + $order_account->other_fee; // 商品总金额+运费，税费，保险费
             $order_account->pay_amount = $order_account->order_amount - $order_account->discount_amount;

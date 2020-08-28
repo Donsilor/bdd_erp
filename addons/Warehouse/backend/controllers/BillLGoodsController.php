@@ -54,6 +54,7 @@ class BillLGoodsController extends BaseController
         $dataProvider->query->andWhere(['>',WarehouseBillGoodsL::tableName().'.status',-1]);
         $bill = WarehouseBill::find()->where(['id'=>$bill_id])->one();
         return $this->render($this->action->id, [
+            'model' => new WarehouseBillLGoodsForm(),
             'dataProvider' => $dataProvider,
             'searchModel' => $searchModel,
             'bill' => $bill,
@@ -87,6 +88,7 @@ class BillLGoodsController extends BaseController
         $dataProvider->query->andWhere(['>',WarehouseBillGoodsL::tableName().'.status',-1]);
         $bill = WarehouseBill::find()->where(['id'=>$bill_id])->one();
         return $this->render($this->action->id, [
+            'model' => new WarehouseBillLGoodsForm(),
             'dataProvider' => $dataProvider,
             'searchModel' => $searchModel,
             'bill' => $bill,
@@ -242,6 +244,35 @@ class BillLGoodsController extends BaseController
             \Yii::$app->getSession()->setFlash('success','删除成功');
             return $this->redirect(\Yii::$app->request->referrer);
         }catch (\Exception $e){
+            $trans->rollBack();
+            return $this->message($e->getMessage(), $this->redirect(\Yii::$app->request->referrer), 'error');
+        }
+    }
+
+    /**
+     *
+     * 同步更新价格
+     * @return mixed
+     */
+    public function actionUpdatePrice()
+    {
+        $ids = Yii::$app->request->post('ids');
+        if (empty($ids)) {
+            return $this->message("ID不能为空", $this->redirect(['index']), 'error');
+        }
+        try {
+            $trans = \Yii::$app->db->beginTransaction();
+            foreach ($ids as $id) {
+                $model = WarehouseBillLGoodsForm::findOne($id);
+                if(!empty($model)){
+                    \Yii::$app->warehouseService->billT->syncUpdatePrice($model);
+                }
+            }
+            \Yii::$app->warehouseService->billL->WarehouseBillLSummary($model->bill_id);
+            $trans->commit();
+            \Yii::$app->getSession()->setFlash('success', '刷新成功');
+            return $this->redirect(\Yii::$app->request->referrer);
+        } catch (\Exception $e) {
             $trans->rollBack();
             return $this->message($e->getMessage(), $this->redirect(\Yii::$app->request->referrer), 'error');
         }

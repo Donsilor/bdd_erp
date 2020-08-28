@@ -23,7 +23,7 @@ $form = ActiveForm::begin([
                 <div class="col-lg-6">
                 <?= $form->field($model, 'sale_channel_id')->widget(\kartik\select2\Select2::class, [
                     'data' => Yii::$app->salesService->saleChannel->getDropDown(),
-                    'options' => ['placeholder' => '请选择'],
+                    'options' => ['placeholder' => '请选择',],
                     'pluginOptions' => [
                         'allowClear' => true
                     ],
@@ -158,7 +158,7 @@ function fillCustomerFormByEmail(){
                       	   $("#"+formId+"-customer_level").val(data.data.level).attr("readonly",false);
                            $("#"+formId+"-customer_source").val(data.data.source_id).attr("readonly",false);
                        }else{
-                    	   //rfError("客户邮箱不存在，请先添加客户");
+                    	   rfError("客户邮箱不存在，请先添加客户");
                        }
                     }
                 }
@@ -196,4 +196,13 @@ $("#"+formId+"-sale_channel_id").change(function(){
 		fillCustomerFormByMobile();
 	}
 });
+
+$("#" + formId + "-sale_channel_id").change(function () {
+    var channel_id = $(this).val();
+    if (channel_id == 5 || channel_id == 6){
+        $("#" + formId + "-language").val("<?= \common\enums\LanguageEnum::ZH_CN ?>");
+        $("#" + formId + "-currency").val("<?= \common\enums\CurrencyEnum::CNY ?>");
+
+    }
+})
 </script>

@@ -2,15 +2,12 @@
 
 namespace addons\Warehouse\services;
 
-use addons\Warehouse\common\models\Warehouse;
-use addons\Warehouse\common\models\WarehouseGoodsLog;
-use common\components\Service;
-use common\enums\ConfirmEnum;
 use common\helpers\Url;
+use common\components\Service;
 use addons\Warehouse\common\models\WarehouseGoods;
+use addons\Warehouse\common\models\WarehouseGoodsLog;
 use addons\Style\common\enums\StyleSexEnum;
 use common\enums\AuditStatusEnum;
-
 
 /**
  * Class TypeService
@@ -31,9 +28,9 @@ class WarehouseGoodsService extends Service
 
     /**
      * 创建货号操作日志
-     * @param unknown $log
+     * @param string $log
      * @throws \Exception
-     * @return \addons\Warehouse\common\models\WarehouseGoodsLog
+     * @return object
      */ 
     public function createWarehouseGoodsLog($log){
         $model = new WarehouseGoodsLog();
@@ -93,4 +90,23 @@ class WarehouseGoodsService extends Service
     public function applyStatus($model){
         return $model->apply_id == \Yii::$app->user->identity->getId() && $model->audit_status == AuditStatusEnum::SAVE;
     }
+
+
+    /****
+     * @param $warehouse_goods
+     * 获取计算出库成本
+     */
+    public function getOutboundCost($goods_id){
+        $warehouse_goods = WarehouseGoods::find()->where(['goods_id'=>$goods_id])->one();
+        //产品线是Au990 ，Au999，Au9999
+        if(in_array($warehouse_goods->product_type_id,[9,28,34])){
+            $gold_price = \Yii::$app->goldTool->getGoldPrice('XAU');
+            $outbound_cost = $warehouse_goods->gold_weight * $gold_price * (1 + 0.03);
+        }else{
+            $outbound_cost = $warehouse_goods->cost_price * (1 + 0.05);
+        }
+        return round ($outbound_cost,2);
+
+    }
+
 }

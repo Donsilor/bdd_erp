@@ -183,6 +183,7 @@ class BillTController extends BaseController
             if(false === $model->save()){
                 return $this->message($this->getError($model), $this->redirect(\Yii::$app->request->referrer), 'error');
             }
+            \Yii::$app->warehouseService->billT->syncUpdatePriceAll($model);
             //日志
             $log = [
                 'bill_id' => $model->id,
@@ -226,7 +227,7 @@ class BillTController extends BaseController
                     'bill_id' => $model->id,
                     'log_type' => LogTypeEnum::ARTIFICIAL,
                     'log_module' => '其他入库单',
-                    'log_msg' => '单据取消'
+                    'log_msg' => '单据审核'
                 ];
                 \Yii::$app->warehouseService->billLog->createBillLog($log);
                 $trans->commit();
@@ -240,6 +241,36 @@ class BillTController extends BaseController
         return $this->renderAjax($this->action->id, [
             'model' => $model,
         ]);
+    }
+
+    /**
+     *
+     * 同步更新价格
+     * @param $id
+     * @return mixed
+     */
+    public function actionSyncUpdatePrice($id)
+    {
+        if (!($model = $this->modelClass::findOne($id))) {
+            return $this->message("找不到数据", $this->redirect(['index']), 'error');
+        }
+        try {
+            $trans = \Yii::$app->db->beginTransaction();
+
+            \Yii::$app->warehouseService->billT->syncUpdatePriceAll($id);
+
+            //更新收货单汇总：总金额和总数量
+            $res = \Yii::$app->warehouseService->billT->WarehouseBillTSummary($id);
+            if (false === $res) {
+                throw new \yii\db\Exception('更新单据汇总失败');
+            }
+            $trans->commit();
+            \Yii::$app->getSession()->setFlash('success', '更新成功');
+            return $this->redirect(\Yii::$app->request->referrer);
+        } catch (\Exception $e) {
+            $trans->rollBack();
+            return $this->message($e->getMessage(), $this->redirect(\Yii::$app->request->referrer), 'error');
+        }
     }
 
     /**
@@ -265,7 +296,7 @@ class BillTController extends BaseController
                 'bill_id' => $model->id,
                 'log_type' => LogTypeEnum::ARTIFICIAL,
                 'log_module' => '其他收货单',
-                'log_msg' => '取消单据'
+                'log_msg' => '单据取消'
             ];
             \Yii::$app->warehouseService->billLog->createBillLog($log);
             \Yii::$app->getSession()->setFlash('success','操作成功');

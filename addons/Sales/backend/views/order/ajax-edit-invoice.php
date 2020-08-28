@@ -20,11 +20,32 @@ $form = ActiveForm::begin([
     </div>
     <div class="modal-body">
             <?= $form->field($model, 'order_id')->hiddenInput()->label(false)?>   
-            <?= $form->field($model, 'invoice_type')->radioList(addons\Sales\common\enums\InvoiceTitleTypeEnum::getMap())?>
-            <?= $form->field($model, 'invoice_title')->textInput(['maxlength' => true]) ?>
-            <?= $form->field($model, 'tax_number')->textInput(['maxlength' => true]) ?>
-            <?= $form->field($model, 'is_electronic')->radioList(addons\Sales\common\enums\InvoiceElectronicEnum::getMap())?>
-            <?= $form->field($model, 'email')->textInput(['maxlength' => true]) ?>
+            <div class="row">
+                <div class="col-lg-6"> 
+                <?= $form->field($model, 'is_invoice')->radioList(addons\Sales\common\enums\IsInvoiceEnum::getMap())?>                 
+                </div>
+                <div class="col-lg-6"> 
+                
+                <?= $form->field($model, 'invoice_type')->radioList(addons\Sales\common\enums\InvoiceTypeEnum::getMap())?> 
+                         
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-6"> 
+                <?= $form->field($model, 'title_type')->radioList(addons\Sales\common\enums\InvoiceTitleTypeEnum::getMap())?>                 
+                </div>
+                <div class="col-lg-6">                 
+               <?= $form->field($model, 'invoice_title')->textInput(['maxlength' => true]) ?>                          
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-6"> 
+                <?= $form->field($model, 'tax_number')->textInput(['maxlength' => true]) ?>                
+                </div>
+                <div class="col-lg-6">                 
+                <?= $form->field($model, 'email')->textInput(['maxlength' => true]) ?>                          
+                </div>
+            </div>
     </div>
     <div class="modal-footer">
         <button type="button" class="btn btn-white" data-dismiss="modal">关闭</button>

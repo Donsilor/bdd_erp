@@ -77,6 +77,10 @@ return [
                         'route' => 'bill-b/index',
                     ],
                     [
+                        'title' => '销售退货单',
+                        'route' => 'bill-d/index',
+                    ],
+                    [
                         'title' => '其它入库单',
                         'route' => 'bill-t/index',
                     ],

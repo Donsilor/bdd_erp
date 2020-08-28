@@ -2,12 +2,12 @@
 
 namespace addons\Purchase\backend\controllers;
 
+use \addons\Style\common\enums\AttrIdEnum;
 use addons\Style\common\enums\InlayEnum;
 use addons\Style\common\forms\StyleAttrForm;
 use addons\Style\common\models\PartsStyle;
 use addons\Supply\common\enums\PeishiTypeEnum;
 use common\helpers\ArrayHelper;
-use function MongoDB\BSON\toJSON;
 use Yii;
 use addons\Style\common\models\Attribute;
 use common\models\base\SearchModel;
@@ -20,13 +20,20 @@ use addons\Style\common\models\Style;
 use addons\Purchase\common\forms\PurchaseGoodsForm;
 use addons\Style\common\forms\QibanAttrForm;
 use addons\Style\common\models\Qiban;
-use addons\Purchase\common\enums\PurchaseGoodsTypeEnum;
 use common\enums\StatusEnum;
 use addons\Purchase\common\models\PurchaseGoodsAttribute;
 use common\enums\AuditStatusEnum;
 use addons\Purchase\common\forms\PurchaseGoodsAuditForm;
 use addons\Purchase\common\enums\PurchaseTypeEnum;
 use addons\Style\common\enums\QibanTypeEnum;
+use addons\Supply\common\models\ProduceStone;
+use addons\Supply\common\enums\PeishiStatusEnum;
+use addons\Purchase\common\forms\PurchaseStoneIncreaseForm;
+use common\enums\ConfirmEnum;
+use addons\Supply\common\enums\PeiliaoStatusEnum;
+use addons\Supply\common\models\ProduceGold;
+use addons\Purchase\common\forms\PurchaseGoldIncreaseForm;
+use addons\Supply\common\models\Produce;
 /**
  * Attribute
  *
@@ -108,7 +115,20 @@ class PurchaseGoodsController extends BaseController
                 return ResultHelper::json(422, $this->getError($model));
             }
             try{                
-                $trans = Yii::$app->trans->beginTransaction();  
+                $trans = Yii::$app->trans->beginTransaction();
+
+                //【镶石费=镶石单价*总副石数量】
+                $second_stone_num = 0;
+                $atts = $model->getPostAttrs();
+                if(isset($atts[AttrIdEnum::SIDE_STONE1_NUM]) && !empty($atts[AttrIdEnum::SIDE_STONE1_NUM])){
+                    $second_stone_num += $atts[AttrIdEnum::SIDE_STONE1_NUM];
+                }
+                if(isset($atts[AttrIdEnum::SIDE_STONE2_NUM]) && !empty($atts[AttrIdEnum::SIDE_STONE2_NUM])){
+                    $second_stone_num += $atts[AttrIdEnum::SIDE_STONE2_NUM];
+                }
+                $model->xiangqian_fee = $model->xianqian_price * $second_stone_num;
+
+
                 if(false === $model->save()){
                     throw new \Exception($this->getError($model));
                 }     
@@ -207,6 +227,8 @@ class PurchaseGoodsController extends BaseController
         $this->modelClass = PurchaseGoodsForm::class;
         $model = $this->findModel($id);
         $model = $model ?? new PurchaseGoodsForm();
+        //非镶切 配石类型默认不配石
+        $model->peishi_type = $model->is_inlay == InlayEnum::No ? PeishiTypeEnum::None : $model->peishi_type;
         
         if ($model->load(Yii::$app->request->post())) {
             if(!$model->validate()) {
@@ -225,6 +247,7 @@ class PurchaseGoodsController extends BaseController
             }
         }
         $model->initApplyEdit();
+
         return $this->render($this->action->id, [
                 'model' => $model,
         ]);
@@ -276,9 +299,21 @@ class PurchaseGoodsController extends BaseController
                      $model->initApplyEdit();
                      $model->createAttrs();
                      $model->apply_info = json_encode($model->apply_info);
+
+
+                    //【镶石费=镶石单价*总副石数量】
+                    $second_stone_num = 0;
+                    $atts = $model->getPostAttrs();
+                    if(isset($atts[AttrIdEnum::SIDE_STONE1_NUM]) && !empty($atts[AttrIdEnum::SIDE_STONE1_NUM])){
+                        $second_stone_num += $atts[AttrIdEnum::SIDE_STONE1_NUM];
+                    }
+                    if(isset($atts[AttrIdEnum::SIDE_STONE2_NUM]) && !empty($atts[AttrIdEnum::SIDE_STONE2_NUM])){
+                        $second_stone_num += $atts[AttrIdEnum::SIDE_STONE2_NUM];
+                    }
+                    $model->xiangqian_fee = $model->xianqian_price * $second_stone_num;
                 }
                 $model->is_apply = 0;
-                $model->save(false);  
+                $model->save(false);
                 //金额汇总
                 Yii::$app->purchaseService->purchase->purchaseSummary($model->purchase_id);
                 //同步布产单
@@ -431,5 +466,146 @@ class PurchaseGoodsController extends BaseController
             'metal_type' => $style->metal_type??"",
         ];
         return ResultHelper::json(200,'查询成功', $data);
+    }
+    
+    /**
+     * ajax补石创建
+     *
+     * @return mixed|string|\yii\web\Response
+     * @throws \yii\base\ExitException
+     */
+    public function actionAjaxStoneIncrease()
+    {
+        $id = Yii::$app->request->get('id');
+        $this->modelClass = PurchaseStoneIncreaseForm::class;
+        $form = $this->findModel($id); 
+        // ajax 校验
+        $this->activeFormValidate($form);
+        if ($form->load(Yii::$app->request->post())) {
+            try {
+                $trans = Yii::$app->trans->beginTransaction();
+                $model = new ProduceStone();
+                //复制石头信息
+                $model->attributes = $form->toArray(['produce_id','produce_sn','supplier_id','from_order_sn','from_type','stone_type','stone_position','stone_weight','stone_spec','shape','secai','carat','color','clarity','cert_type','cert_no']);             
+                $model->stone_num = $form->increase_num;
+                $model->stone_weight = round($model->stone_num * $model->carat,2); 
+                $model->remark = $form->increase_remark;
+                $model->peishi_status = PeishiStatusEnum::PENDING;
+                $model->is_increase = ConfirmEnum::YES;
+                if(false === $model->save()) {
+                     throw new \Exception($this->getError($model));
+                }
+                Produce::updateAll(['peishi_status'=>PeishiStatusEnum::PENDING],['id'=>$form->produce_id]);
+                $trans->commit();
+                return $this->message("保存成功", $this->redirect(\Yii::$app->request->referrer), 'success');
+            }catch (\Exception $e){
+                $trans->rollback();
+                return $this->message($e->getMessage(), $this->redirect(\Yii::$app->request->referrer), 'error');
+            }
+        }       
+        return $this->renderAjax($this->action->id, [
+                'model' => $form,
+        ]);
+    }
+    
+    /**
+     * ajax 编辑补石
+     *
+     * @return mixed|string|\yii\web\Response
+     * @throws \yii\base\ExitException
+     */
+    public function actionAjaxStoneEdit()
+    {
+        $id = Yii::$app->request->get('id');
+        $this->modelClass = ProduceStone::class;
+        $model = $this->findModel($id);
+        // ajax 校验
+        $this->activeFormValidate($model);
+        if ($model->load(Yii::$app->request->post())) {
+            try {
+                $trans = Yii::$app->trans->beginTransaction();                
+                if(false === $model->save()) {
+                    throw new \Exception($this->getError($model));
+                }
+                $trans->commit();
+                return $this->message("保存成功", $this->redirect(\Yii::$app->request->referrer), 'success');
+            }catch (\Exception $e){
+                $trans->rollback();
+                return $this->message($e->getMessage(), $this->redirect(\Yii::$app->request->referrer), 'error');
+            }
+        }
+        return $this->renderAjax($this->action->id, [
+                'model' => $model,
+        ]);
+    }
+    
+    /**
+     * ajax补石创建
+     *
+     * @return mixed|string|\yii\web\Response
+     * @throws \yii\base\ExitException
+     */
+    public function actionAjaxGoldIncrease()
+    {
+        $id = Yii::$app->request->get('id');
+        $this->modelClass = PurchaseGoldIncreaseForm::class;
+        $form = $this->findModel($id);
+        // ajax 校验
+        $this->activeFormValidate($form);
+        if ($form->load(Yii::$app->request->post())) {
+            try {
+                $trans = Yii::$app->trans->beginTransaction();
+                $model = new ProduceGold();
+                //复制石头信息
+                $model->attributes = $form->toArray(['produce_id','produce_sn','supplier_id','from_order_sn','from_type','gold_type','gold_weight','gold_spec']);
+                $model->gold_weight = $form->increase_weight;
+                $model->remark = $form->increase_remark;
+                $model->peiliao_status = PeiliaoStatusEnum::PENDING;
+                $model->is_increase = ConfirmEnum::YES;
+                if(false === $model->save()) {
+                    throw new \Exception($this->getError($model));
+                }
+                Produce::updateAll(['peiliao_status'=>PeiliaoStatusEnum::PENDING],['id'=>$form->produce_id]);
+                $trans->commit();
+                return $this->message("保存成功", $this->redirect(\Yii::$app->request->referrer."#box-gold"), 'success');
+            }catch (\Exception $e){
+                $trans->rollback();
+                return $this->message($e->getMessage(), $this->redirect(\Yii::$app->request->referrer), 'error');
+            }
+        }
+        return $this->renderAjax($this->action->id, [
+                'model' => $form,
+        ]);
+    }
+    
+    /**
+     * ajax 编辑补料
+     *
+     * @return mixed|string|\yii\web\Response
+     * @throws \yii\base\ExitException
+     */
+    public function actionAjaxGoldEdit()
+    {
+        $id = Yii::$app->request->get('id');
+        $this->modelClass = ProduceGold::class;
+        $model = $this->findModel($id);
+        // ajax 校验
+        $this->activeFormValidate($model);
+        if ($model->load(Yii::$app->request->post())) {
+            try {
+                $trans = Yii::$app->trans->beginTransaction();
+                if(false === $model->save()) {
+                    throw new \Exception($this->getError($model));
+                }
+                $trans->commit();
+                return $this->message("保存成功", $this->redirect(\Yii::$app->request->referrer."#box-gold"), 'success');
+            }catch (\Exception $e){
+                $trans->rollback();
+                return $this->message($e->getMessage(), $this->redirect(\Yii::$app->request->referrer), 'error');
+            }
+        }
+        return $this->renderAjax($this->action->id, [
+                'model' => $model,
+        ]);
     }
 }

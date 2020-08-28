@@ -16,7 +16,7 @@ $this->params['breadcrumbs'][] = ['label' => $this->title, 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="box-body nav-tabs-custom">
-    <h2 class="page-header"><?php echo $this->title; ?> - <?php echo $receipt->receipt_no?></h2>
+    <h2 class="page-header"><?php echo $this->title; ?> - <?php echo $receipt->receipt_no?> - <?= ReceiptStatusEnum::getValue($receipt->receipt_status)??""; ?></h2>
     <?php echo Html::menuTab($tabList,$tab)?>
     <div class="box-tools" style="float:right;margin-top:-40px; margin-right: 20px;">
         <?php
@@ -108,19 +108,19 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'format' => 'raw',
                                 'headerOptions' => ['class' => 'col-md-1'],
                             ],
-                            [
-                                'attribute' => 'product_type_id',
-                                'value' => function($model){
-                                    return $model->type->name ?? '';
-                                },
-                                'filter' => Html::activeDropDownList($searchModel, 'product_type_id',Yii::$app->styleService->productType->getDropDown(), [
-                                    'prompt' => '全部',
-                                    'class' => 'form-control',
-                                    'style'=>'width:100px'
-                                ]),
-                                'format' => 'raw',
-                                'headerOptions' => ['class' => 'col-md-1'],
-                            ],
+//                            [
+//                                'attribute' => 'product_type_id',
+//                                'value' => function($model){
+//                                    return $model->type->name ?? '';
+//                                },
+//                                'filter' => Html::activeDropDownList($searchModel, 'product_type_id',Yii::$app->styleService->productType->getDropDown(), [
+//                                    'prompt' => '全部',
+//                                    'class' => 'form-control',
+//                                    'style'=>'width:100px'
+//                                ]),
+//                                'format' => 'raw',
+//                                'headerOptions' => ['class' => 'col-md-1'],
+//                            ],
                             [
                                 'attribute' => 'style_sex',
                                 'format' => 'raw',
@@ -298,7 +298,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'class' => 'yii\grid\ActionColumn',
                                 'header' => '操作',
                                 'contentOptions' => ['style' => ['white-space' => 'nowrap']],
-                                'template' => '{edit} {delete}',
+                                'template' => '{edit}',
                                 'buttons' => [
                                     'edit' => function($url, $model, $key) use($receipt){
                                         if($receipt->receipt_status == ReceiptStatusEnum::SAVE) {

@@ -19,6 +19,7 @@ class MemberForm extends Model
     public $password;
     public $username;
     public $role_id;
+    public $dept_id;
 
     /**
      * @var \common\models\backend\Member
@@ -36,7 +37,7 @@ class MemberForm extends Model
     public function rules()
     {
         return [
-            [['password', 'username'], 'required'],
+            [['password', 'username','role_id','dept_id'], 'required'],
             ['password', 'string', 'min' => 6],
             [
                 ['role_id'],
@@ -46,7 +47,6 @@ class MemberForm extends Model
                 'targetAttribute' => ['role_id' => 'id'],
             ],
             [['username'], 'isUnique'],
-            [['role_id'], 'required'],
         ];
     }
 
@@ -59,6 +59,7 @@ class MemberForm extends Model
             'password' => '登录密码',
             'username' => '登录名',
             'role_id' => '角色',
+            'dept_id' => '部门',
         ];
     }
 
@@ -73,7 +74,7 @@ class MemberForm extends Model
         } else {
             $this->member = new Member();
         }
-
+        $this->dept_id = $this->member->dept_id;
         $this->role_id = $this->member->assignment->role_id ?? '';
     }
 
@@ -116,12 +117,12 @@ class MemberForm extends Model
                 $member->last_time = time();
             }
             $member->username = $this->username;
+            $member->dept_id  = $this->dept_id;
             //$member->merchant_id = Yii::$app->services->merchant->getId();
             // 验证密码是否修改
             if ($this->member->password_hash != $this->password) {
                 $member->password_hash = Yii::$app->security->generatePasswordHash($this->password);;
             }
-
             if (!$member->save()) {
                 $this->addErrors($member->getErrors());
                 throw new NotFoundHttpException('用户编辑错误');

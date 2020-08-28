@@ -8,7 +8,7 @@ $this->title = '采购日志';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="box-body nav-tabs-custom">
-    <h2 class="page-header">采购详情 - <?php echo $purchase->purchase_sn?></h2>
+    <h2 class="page-header">采购详情 - <?php echo $purchase->purchase_sn?> - <?php echo \addons\Purchase\common\enums\PurchaseStatusEnum::getValue($purchase->purchase_status);?></h2>
     <?php echo Html::menuTab($tabList,$tab)?>
     <div class="tab-content">
         <div class="row col-xs-12" style="padding-left: 0px;padding-right: 0px;">
