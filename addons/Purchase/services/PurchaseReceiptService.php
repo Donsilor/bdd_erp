@@ -852,7 +852,7 @@ class PurchaseReceiptService extends Service
                 $goods = $model::find()->where(['id'=>$id])->select(['receipt_id', 'goods_status', 'xuhao'])->one();
                 if($purchase_type == PurchaseTypeEnum::MATERIAL_GIFT){
                     if($goods->goods_status == ReceiptGoodsStatusEnum::WAREHOUSE){
-                        throw new \Exception("[序号={$goods->xuhao}]已入库");
+                        throw new \Exception("[序号={$goods->xuhao}]已入库，不能重复入库");
                     }
                 }else{
                     if($goods->goods_status != ReceiptGoodsStatusEnum::IQC_PASS){
