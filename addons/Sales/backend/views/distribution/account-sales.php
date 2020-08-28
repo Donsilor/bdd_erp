@@ -1,5 +1,6 @@
 <?php
 
+use addons\Sales\common\enums\DistributeStatusEnum;
 use addons\Sales\common\enums\IsStockEnum;
 use common\helpers\Html;
 use addons\Sales\common\enums\OrderStatusEnum;
@@ -122,11 +123,15 @@ $this->params['breadcrumbs'][] = $this->title;
                                 [
                                     'attribute' => 'goods_id',
                                     'format' => 'raw',
-                                    'value' => function ($model, $key, $index, $column){
+                                    'value' => function ($model, $key, $index, $column) use($order){
                                          if($model->is_gift){
                                              return "赠品无需销账";
                                          }else{
-                                             return  Html::input('text', 'goods_ids['.$model->id.']', $model->goods_id ,['class' => 'form-control','placeholder' => '请输入货号',]);
+                                              if($order->distribute_status == DistributeStatusEnum::ALLOWED){
+                                                    return  Html::input('text', 'goods_ids['.$model->id.']', $model->goods_id ,['class' => 'form-control','placeholder' => '请输入货号',]);
+                                              }else{
+                                                  return $model->goods_id??"";
+                                              }
                                          }
                                     },
                                     'headerOptions' => ['width' => '160'],
@@ -202,7 +207,9 @@ $this->params['breadcrumbs'][] = $this->title;
     </div>
     <div class="modal-footer">
         <div class="col-sm-12 text-center">
-            <button class="btn btn-primary" type="submit">销账</button>
+            <?php if($model->distribute_status == DistributeStatusEnum::ALLOWED){ ?>
+                <button class="btn btn-primary" type="submit">销账</button>
+            <?php }?>
             <span class="btn btn-white" onclick="history.go(-1)">返回</span>
         </div>
     </div>

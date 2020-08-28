@@ -35,6 +35,7 @@ class MemberWorks extends BaseModel
     public function rules()
     {
         return [
+            [['title','content','date'], 'required'],
             [['type', 'creator_id', 'dept_id','created_at', 'updated_at'], 'integer'],
             [['content'], 'string'],
             [['date'], 'safe'],

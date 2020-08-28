@@ -114,6 +114,7 @@ class MemberWorksController extends BaseController
         if($model->isNewRecord){
             $model->title = date('Y年m月d日').'工作日报';
         }
+
         return $this->renderAjax($this->action->id, [
             'model' => $model,
         ]);
@@ -137,7 +138,7 @@ class MemberWorksController extends BaseController
                 'date'=>SORT_DESC,
                 'id' => SORT_DESC
             ],
-            'pageSize' => $this->getPageSize(5),
+            'pageSize' => $this->getPageSize(),
             'relations' => [
                 'member' => ['username'],
                 'department' => ['name']
@@ -249,7 +250,7 @@ class MemberWorksController extends BaseController
                 'date'=>SORT_DESC,
                 'id' => SORT_DESC
             ],
-            'pageSize' => $this->getPageSize(5),
+            'pageSize' => $this->getPageSize(),
             'relations' => [
                 'member' => ['username'],
                 'department' => ['name']
@@ -259,7 +260,14 @@ class MemberWorksController extends BaseController
         $dataProvider = $searchModel
             ->search(Yii::$app->request->queryParams);
         $dataProvider->query->andWhere([MemberWorks::tableName().'.creator_id'=>$creator_id ,MemberWorks::tableName().'.type'=>WorksTypeEnum::DAY_SUMMARY]);
-        return $this->render($this->action->id, [
+
+        if(Yii::$app->mobileDetect->isMobile()){
+            $render = $this->action->id;
+        }else{
+            $render = 'view.php';
+
+        }
+        return $this->render($render, [
             'model' => $model,
             'dataProvider'=>$dataProvider,
             'searchModel' => $searchModel,

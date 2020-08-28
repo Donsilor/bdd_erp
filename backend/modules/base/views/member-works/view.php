@@ -131,8 +131,8 @@ use common\enums\AuditStatusEnum;
                         [
                             'attribute' => 'content',
                             'format' => 'raw',
-                            'contentOptions' => ['style'=>'max-width:500px;max-height:80px;white-space:pre-wrap;'],
-                            'headerOptions' => ['class' => 'col-md-5'],
+                            'contentOptions' => ['style'=>'width:800px;max-height:80px;white-space:pre-wrap;'],
+                            'headerOptions' => ['class' => 'col-md-8'],
                             'filter' =>false,
                         ],
 

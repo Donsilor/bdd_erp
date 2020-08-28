@@ -1,5 +1,6 @@
 <?php
 
+use addons\Sales\common\enums\DistributeStatusEnum;
 use common\helpers\Html;
 use common\helpers\Url;
 use yii\grid\GridView;
@@ -223,9 +224,15 @@ $this->params['breadcrumbs'][] = $this->title;
                 'template' => '{account} {print}',
                 'buttons' => [
                     'account' => function($url, $model, $key){
+                        if ($model->distribute_status == DistributeStatusEnum::ALLOWED){
                             return Html::edit(['account-sales','id' => $model->id,'returnUrl' => Url::getReturnUrl()],'配货',[
-                                    'class'=>'btn btn-primary btn-sm',
+                                'class'=>'btn btn-primary btn-sm',
                             ]);
+                        }else{
+                            return Html::edit(['account-sales','id' => $model->id,'returnUrl' => Url::getReturnUrl()],'查看',[
+                                'class'=>'btn btn-warning btn-sm',
+                            ]);
+                        }
                     },
                     'print' => function($url, $model, $key){
                         return Html::a('打印提货单',['print','id'=>$model->id],[

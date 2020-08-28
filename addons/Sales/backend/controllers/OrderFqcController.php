@@ -64,7 +64,7 @@ class OrderFqcController extends BaseController
             $dataProvider->query->andFilterWhere(['between', Order::tableName().'.created_at', strtotime($start_date), strtotime($end_date) + 86400]);
         }
         $dataProvider->query->andWhere(['=',Order::tableName().'.distribute_status', DistributeStatusEnum::HAS_PEIHUO]);
-        $dataProvider->query->andWhere(['=',Order::tableName().'.delivery_status', DeliveryStatusEnum::SAVE]);
+        $dataProvider->query->andWhere(['>=',Order::tableName().'.delivery_status', DeliveryStatusEnum::SAVE]);
         return $this->render($this->action->id, [
                 'dataProvider' => $dataProvider,
                 'searchModel' => $searchModel,
