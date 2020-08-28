@@ -198,30 +198,32 @@ class JdOrderService extends Service
             if(!$model->productNo) {
                 continue;
             }
-            $goods_discount = 0;
-            foreach ($order->couponDetailList ?? [] as $coupon) {
-                if(($coupon->skuId ?? '') == $model->skuId) {
-                    $goods_discount += $coupon->couponPrice;
+            for($i =1; $i<= $model->itemTotal; $i++) {
+                $goods_discount = 0;
+                foreach ($order->couponDetailList ?? [] as $coupon) {
+                    if(($coupon->skuId ?? '') == $model->skuId) {
+                        $goods_discount += ($coupon->couponPrice/$model->itemTotal);
+                    }
                 }
+                $erpGoods = [
+                    "goods_name" => $model->skuName,
+                    "goods_image"=> null,
+                    "style_sn"=> $model->productNo,
+                    "out_sku_id"=> $model->skuId,
+                    "jintuo_type"=> $this->getErpJintuoType($model),
+                    "goods_num"=> 1,
+                    "goods_price"=> $model->jdPrice,
+                    "goods_pay_price"=> $model->jdPrice - $goods_discount,
+                    "goods_discount"=> $goods_discount,
+                    "currency"=> 'CNY',
+                    "exchange_rate"=> 1,
+                    "delivery_status"=> $this->getErpDeliveryStatus($order),
+                    "is_stock"=>$model->productNo ? 1:0,
+                    "is_gift"=>$model->productNo ? 0:1,
+                    "goods_attrs"=>$this->getErpOrderGoodsAttrsData($model),
+                ];
+                $erpGoodsList[] = $erpGoods;
             }
-            $erpGoods = [
-                "goods_name" => $model->skuName,
-                "goods_image"=> null,
-                "style_sn"=> $model->productNo,
-                "out_sku_id"=> $model->skuId,
-                "jintuo_type"=> $this->getErpJintuoType($model),
-                "goods_num"=> $model->itemTotal,
-                "goods_price"=> $model->jdPrice,
-                "goods_pay_price"=> $model->jdPrice - $goods_discount,
-                "goods_discount"=> $goods_discount,
-                "currency"=> 'CNY',
-                "exchange_rate"=> 1,
-                "delivery_status"=> $this->getErpDeliveryStatus($order),
-                "is_stock"=>$model->productNo ? 1:0,
-                "is_gift"=>$model->productNo ? 0:1,
-                "goods_attrs"=>$this->getErpOrderGoodsAttrsData($model),
-            ];
-            $erpGoodsList[] = $erpGoods;
         }
         
         return $erpGoodsList;
