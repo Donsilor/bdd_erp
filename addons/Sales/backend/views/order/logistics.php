@@ -9,7 +9,7 @@
                     <tbody>
                         <?php foreach ($logistics->list ?? [] as $log) {?>
                     	<tr>
-                    		<td class="text-center"><?= $log['datetime'] ?></td>
+                    		<td class="text-center col-md-2"><?= $log['datetime'] ?></td>
                     		<td><?= $log['remark'] ?></td>              	
                     	</tr>
                     	<?php }?>
