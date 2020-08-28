@@ -36,7 +36,7 @@ class OrderFqc extends BaseModel
     public function rules()
     {
         return [
-            [['problem_type'], 'required'],
+            //[['problem_type'], 'required'],
             [['order_id', 'problem_type', 'problem', 'is_pass', 'status', 'creator_id', 'created_at', 'updated_at'], 'integer'],
             [['order_sn'], 'string', 'max' => 50],
             [['remark'], 'string', 'max' => 255],
