@@ -34,5 +34,6 @@ return [
         '/common/flow/audit-view',  //审批流程
         '/base/member-works/works',  //个人日报
         '/base/member-works/ajax-edit',  //创建日报
+        '/base/member-works/works-view',  //创建日报
     ],
 ];
