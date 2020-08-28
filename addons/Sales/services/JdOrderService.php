@@ -391,7 +391,9 @@ class JdOrderService extends Service
     {
         $erp_express_id = 5;//京东快递
         $map = [
-            2087=>5
+            2087=>5,//京东快递
+            1499=>6,//中通快递
+            467=>2//顺丰快递
         ];
         return $map[$order->logisticsId] ?? $erp_express_id;
     }
