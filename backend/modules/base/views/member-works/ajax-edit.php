@@ -24,6 +24,7 @@ $form = ActiveForm::begin([
         <?= $form->field($model, 'date')->widget(DatePicker::class, [
             'options' => [
                 'value' => $model->isNewRecord ? date('Y-m-d') : $model->date,
+                'readonly' => true,
             ],
             'pluginOptions' => [
                 'format' => 'yyyy-mm-dd',
