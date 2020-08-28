@@ -129,7 +129,7 @@ $params = $params ? "&".http_build_query($params) : '';
                         [
                             'label' => '岗位',
                             'value'=>function($model) {
-                                return $model->member->authRole->title ?? '';
+                                return $model->member->assignment->role->title ?? '';
                             },
                             'filter' => false,
                             //'headerOptions' => ['width'=>'150'],

@@ -226,7 +226,7 @@ class MemberWorksController extends BaseController
     public function getData($ids)
     {
         $where = ['id' => $ids, 'type'=> WorksTypeEnum::DAY_SUMMARY];
-        $date_list = MemberWorks::find()->where($where)->groupBy('date')->select(['date'])->asArray()->all();
+        $date_list = MemberWorks::find()->where($where)->groupBy('date')->select(['date'])->orderBy('date desc')->asArray()->all();
         $creator_id_list = MemberWorks::find()->where($where)->groupBy('creator_id')->select(['creator_id'])->asArray()->all();
         $lists = [];
         foreach ($creator_id_list as $creator_id){
@@ -234,7 +234,7 @@ class MemberWorksController extends BaseController
             $member = Member::find()->where(['id'=>$creator_id])->one();
             $list['username'] = $member->username;
             $list['dept'] = $member->department->name ?? '';
-            $list['post'] = $member->authRole->title ?? '';
+            $list['post'] = $member->assignment->role->title ?? '';
             $member_works_list = MemberWorks::find() ->where($where)->andWhere(['creator_id'=>$creator_id])->select(['date','content'])->asArray()->all();
             $member_works_list = array_column($member_works_list,'content','date');
             foreach ($date_list as $date){

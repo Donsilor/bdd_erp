@@ -30,6 +30,9 @@ use common\enums\AuditStatusEnum;
         <div class="box">
             <div class="box-header">
                 <h3 class="box-title"><i class="fa fa-bars"></i> 个人信息</h3>
+                <div class="box-tools">
+                    <a href="<?= \common\helpers\Url::to(['../site/logout']); ?>" data-method="post"><i class="fa fa fa-sign-out"></i>退出</a>
+                </div>
             </div>
             <div class="box-body table-responsive" style="padding-left: 0px;padding-right: 0px;">
                 <div class="col-xs-12">
@@ -46,7 +49,7 @@ use common\enums\AuditStatusEnum;
                                 </tr>
                                 <tr>
                                     <td class="col-xs-2 text-right">岗位：</td>
-                                    <td><?= $model->authRole->title ??"" ?></td>
+                                    <td><?= $model->assignment->role->title ?? '';?></td>
                                 </tr>
                             </table>
                         </div>
