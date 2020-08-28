@@ -169,16 +169,16 @@ $this->params['breadcrumbs'][] = $this->title;
                                         }
                                 ],
                                 [
-                                        'attribute'=>'is_stock',
-                                        'value' => function($model){
-                                            return $model->is_stock;
-                                        }
+                                    'attribute' => 'is_stock',
+                                    'value' => function ($model) {
+                                        return IsStockEnum::getValue($model->is_stock);
+                                    }
                                 ],
                                 [
-                                        'attribute'=>'is_gift',
-                                        'value' => function($model){
-                                            return $model->is_gift;
-                                        }
+                                    'attribute' => 'is_gift',
+                                    'value' => function ($model) {
+                                        return \addons\Sales\common\enums\IsGiftEnum::getValue($model->is_gift);
+                                    }
                                 ],
                             ]
                         ]); ?>
