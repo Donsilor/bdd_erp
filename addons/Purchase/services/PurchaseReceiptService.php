@@ -2,12 +2,6 @@
 
 namespace addons\Purchase\services;
 
-use addons\Purchase\common\forms\PurchaseReceiptGoodsForm;
-use addons\Warehouse\common\enums\GiftStatusEnum;
-use addons\Warehouse\common\enums\PeiJianWayEnum;
-use addons\Warehouse\common\enums\PeiLiaoWayEnum;
-use addons\Warehouse\common\enums\PeiShiWayEnum;
-use addons\Warehouse\common\models\WarehouseGift;
 use Yii;
 use common\components\Service;
 use addons\Purchase\common\models\Purchase;
@@ -27,6 +21,13 @@ use addons\Supply\common\models\ProduceStoneGoods;
 use addons\Supply\common\models\Produce;
 use addons\Supply\common\models\ProduceAttribute;
 use addons\Supply\common\models\ProduceShipment;
+use addons\Purchase\common\enums\StockStatusEnum;
+use addons\Purchase\common\forms\PurchaseReceiptGoodsForm;
+use addons\Warehouse\common\enums\GiftStatusEnum;
+use addons\Warehouse\common\enums\PeiJianWayEnum;
+use addons\Warehouse\common\enums\PeiLiaoWayEnum;
+use addons\Warehouse\common\enums\PeiShiWayEnum;
+use addons\Warehouse\common\models\WarehouseGift;
 use addons\Purchase\common\enums\DefectiveStatusEnum;
 use addons\Purchase\common\enums\PurchaseTypeEnum;
 use addons\Purchase\common\enums\ReceiptGoodsStatusEnum;
@@ -46,6 +47,7 @@ use addons\Warehouse\common\enums\OrderTypeEnum;
 use addons\Supply\common\enums\QcTypeEnum;
 use addons\Style\common\enums\AttrIdEnum;
 use common\enums\AuditStatusEnum;
+use common\enums\ConfirmEnum;
 use common\enums\StatusEnum;
 use common\helpers\ArrayHelper;
 use common\helpers\SnHelper;
@@ -238,7 +240,7 @@ class PurchaseReceiptService extends Service
                     ->where(['pr.receipt_status'=>$data, 'g.purchase_detail_id'=>$purchase_detail_id])
                     ->count(1);
                 if($count){
-                    throw new \Exception("【".$good['goods_name']."】采购单已收货，不能重复收货");
+                    throw new \Exception("[".$good['goods_name']."]采购单已收货，不能重复收货");
                 }
             }
             $goods->attributes = $good;
@@ -850,11 +852,11 @@ class PurchaseReceiptService extends Service
                 $goods = $model::find()->where(['id'=>$id])->select(['receipt_id', 'goods_status', 'xuhao'])->one();
                 if($purchase_type == PurchaseTypeEnum::MATERIAL_GIFT){
                     if($goods->goods_status == ReceiptGoodsStatusEnum::WAREHOUSE){
-                        throw new \Exception("序号【{$goods->xuhao}】已入库");
+                        throw new \Exception("[序号={$goods->xuhao}]已入库，不能重复入库");
                     }
                 }else{
                     if($goods->goods_status != ReceiptGoodsStatusEnum::IQC_PASS){
-                        throw new \Exception("序号【{$goods->xuhao}】不是IQC质检通过状态，不能入库");
+                        throw new \Exception("[序号={$goods->xuhao}]不是IQC质检通过状态，不能入库");
                     }
                 }
             }
@@ -1303,7 +1305,7 @@ class PurchaseReceiptService extends Service
         if($form->receipt_num <= 0 ){
             throw new \Exception('采购收货单没有明细');
         }
-        if(!$detail_ids){
+        if(empty($detail_ids)){
             $detail_ids = $form->getIds();
         }
         $query = PurchaseGiftReceiptGoods::find()->where(['receipt_id'=>$form->id, 'goods_status' => ReceiptGoodsStatusEnum::SAVE]);
@@ -1375,6 +1377,41 @@ class PurchaseReceiptService extends Service
             if(false === $res){
                 throw new \Exception('更新采购收货单货品状态失败');
             }
+        }
+    }
+
+    /**
+     * 入库统计
+     * @param int $id
+     * @param int $purchase_type
+     * @throws
+     */
+    public function stockSummary($id, $purchase_type)
+    {
+        if (empty($id)) {
+            throw new \Exception('ID不能为空');
+        }
+        if ($purchase_type == PurchaseTypeEnum::MATERIAL_STONE) {
+            $model = new PurchaseStoneReceiptGoods();
+        } elseif ($purchase_type == PurchaseTypeEnum::MATERIAL_GOLD) {
+            $model = new PurchaseGoldReceiptGoods();
+        } elseif ($purchase_type == PurchaseTypeEnum::MATERIAL_PARTS) {
+            $model = new PurchasePartsReceiptGoods();
+        } elseif ($purchase_type == PurchaseTypeEnum::MATERIAL_GIFT) {
+            $model = new PurchaseGiftReceiptGoods();
+        } else {
+            $model = new PurchaseReceiptGoods();
+        }
+        $receipt = PurchaseReceipt::findOne($id);
+        $count = $model::find()->where(['receipt_id'=>$receipt->id, 'goods_status' => ReceiptGoodsStatusEnum::WAREHOUSE])->count();
+        if ($count < $receipt->receipt_num) {
+            $receipt->stock_status = StockStatusEnum::IN_STOCK;
+        } else {
+            $receipt->stock_status = StockStatusEnum::HAS_STOCK;
+        }
+        $receipt->stock_num = $count;
+        if (false === $receipt->save()) {
+            throw new \Exception($this->getError($receipt));
         }
     }
 

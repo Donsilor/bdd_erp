@@ -116,6 +116,13 @@ $params = $params ? "&" . http_build_query($params) : '';
                             'headerOptions' => [],
                         ],
                         [
+                            'attribute' => 'stock_num',
+                            'value' => "stock_num",
+                            'filter' => false,
+                            'format' => 'raw',
+                            'headerOptions' => ['width'=>'80'],
+                        ],
+                        [
                             'attribute' => 'total_cost',
                             'value' => 'total_cost',
                             'filter' => Html::activeTextInput($searchModel, 'total_cost', [
@@ -183,6 +190,18 @@ $params = $params ? "&" . http_build_query($params) : '';
                             ]),
                             'format' => 'raw',
                             'headerOptions' => ['class' => 'col-md-1'],
+                        ],
+                        [
+                            'attribute' => 'stock_status',
+                            'value' => function ($model){
+                                return \addons\Purchase\common\enums\StockStatusEnum::getValue($model->stock_status);
+                            },
+                            'filter' => Html::activeDropDownList($searchModel, 'stock_status',\addons\Purchase\common\enums\StockStatusEnum::getMap(), [
+                                'prompt' => '全部',
+                                'class' => 'form-control',
+                            ]),
+                            'format' => 'raw',
+                            'headerOptions' => ['width'=>'100'],
                         ],
                         [
                             'class' => 'yii\grid\ActionColumn',

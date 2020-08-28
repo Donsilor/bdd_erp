@@ -262,16 +262,18 @@ class OrderService extends Service
             throw new \Exception("同步收货地址失败：".$this->getError($address));
         }  
         //7.同步发票
-        $invoice = OrderInvoice::find()->where(['order_id'=>$order->id])->one();
-        if(!$invoice) {
-            $invoice = new OrderInvoice();
-            $invoice->order_id = $order->id;
+        if(!empty($invoiceInfo)) {
+            $invoice = OrderInvoice::find()->where(['order_id'=>$order->id])->one();
+            if(!$invoice) {
+                $invoice = new OrderInvoice();
+                $invoice->order_id = $order->id;
+            }
+            $invoice->attributes = $invoiceInfo;
+            if(false == $invoice->save()) {
+                throw new \Exception("同步发票失败：".$this->getError($invoice));
+            }
+            $order->is_invoice   = $invoice->is_invoice;
         }
-        $invoice->attributes = $invoiceInfo;
-        if(false == $invoice->save()) {
-            throw new \Exception("同步发票失败：".$this->getError($invoice));
-        }
-        $order->is_invoice   = $invoice->invoice_type ? 1: 0;
         $order->goods_num   = $goods_num;
         $order->customer_id = $customer->id;
         if($order->order_sn == ''){

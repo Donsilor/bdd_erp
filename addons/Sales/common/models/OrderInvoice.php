@@ -36,8 +36,8 @@ class OrderInvoice extends BaseModel
     public function rules()
     {
         return [
-            [['order_id','status'], 'required'],
-            [['order_id', 'invoice_type', 'title_type', 'send_num','status', 'created_at', 'updated_at'], 'integer'],
+            [['order_id','is_invoice'], 'required'],
+            [['order_id', 'invoice_type', 'title_type', 'send_num','is_invoice', 'created_at', 'updated_at'], 'integer'],
             [['invoice_title'], 'string', 'max' => 80],
             [['tax_number'], 'string', 'max' => 50],
             [['mobile'], 'string', 'max' => 30],
@@ -60,7 +60,7 @@ class OrderInvoice extends BaseModel
             'email' => '邮箱',
             'mobile' => '手机',
             'send_num' => '发送次数',
-            'status' => '是否开发票',
+            'is_invoice' => '是否开票',
             'created_at' => '创建时间',
             'updated_at' => '修改时间',
         ];

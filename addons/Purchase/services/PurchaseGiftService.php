@@ -41,7 +41,7 @@ class PurchaseGiftService extends Service
     public function summary($purchase_id)
     {
         $sum = PurchaseGiftGoods::find()
-            ->select(['sum(goods_num) as total_num', 'sum(cost_price*goods_num) as total_cost'])
+            ->select(['sum(1) as total_num', 'sum(cost_price*goods_num) as total_cost'])
             ->where(['purchase_id' => $purchase_id, 'status' => StatusEnum::ENABLED])
             ->asArray()->one();
         if ($sum) {

@@ -84,7 +84,14 @@ $params = $params ? "&".http_build_query($params) : '';
             [
                     'attribute' => 'total_num',
                     'value' => "total_num",
-                    'filter' => true,
+                    'filter' => false,
+                    'format' => 'raw',
+                    'headerOptions' => ['width'=>'80'],
+            ],
+            [
+                    'attribute' => 'receive_num',
+                    'value' => "receive_num",
+                    'filter' => false,
                     'format' => 'raw',
                     'headerOptions' => ['width'=>'80'],
             ],
@@ -93,7 +100,7 @@ $params = $params ? "&".http_build_query($params) : '';
                     'value' => function ($model){
                         return $model->total_cost;
                     },
-                    'filter' => true,
+                    'filter' => false,
                     'format' => 'raw',
                     'headerOptions' => ['width'=>'100'],
             ],            
@@ -168,7 +175,19 @@ $params = $params ? "&".http_build_query($params) : '';
                 ]),
                 'format' => 'raw',
                 'headerOptions' => ['width'=>'100'],
-            ],            
+            ],
+            [
+                'attribute' => 'receive_status',
+                'value' => function ($model){
+                    return \addons\Purchase\common\enums\ReceiveStatusEnum::getValue($model->receive_status);
+                },
+                'filter' => Html::activeDropDownList($searchModel, 'receive_status',\addons\Purchase\common\enums\ReceiveStatusEnum::getMap(), [
+                    'prompt' => '全部',
+                    'class' => 'form-control',
+                ]),
+                'format' => 'raw',
+                'headerOptions' => ['width'=>'100'],
+            ],
             [
                 'class' => 'yii\grid\ActionColumn',
                 'header' => '操作',

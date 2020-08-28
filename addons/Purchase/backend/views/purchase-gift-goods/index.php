@@ -14,7 +14,7 @@ $this->title = '赠品采购详情';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="box-body nav-tabs-custom">
-    <h2 class="page-header"><?php echo $this->title; ?> - <?php echo $purchase->purchase_sn ?></h2>
+    <h2 class="page-header"><?php echo $this->title; ?> - <?php echo $purchase->purchase_sn ?> - <?php echo PurchaseStatusEnum::getValue($purchase->purchase_status);?></h2>
     <?php echo Html::menuTab($tabList, $tab) ?>
     <div class="box-tools" style="float:right;margin-top:-40px; margin-right: 20px;">
         <?php
@@ -27,7 +27,7 @@ $this->params['breadcrumbs'][] = $this->title;
             ]);
         }
         if ($purchase->purchase_status == BillStatusEnum::CONFIRM) {
-            echo Html::batchPop(['warehouse', 'check' => 1], '分批收货', [
+            echo Html::batchPop(['warehouse', 'id'=>$purchase->id, 'check' => 1], '分批收货', [
                 'class' => 'btn btn-success btn-xs',
                 'data-width' => '40%',
                 'data-height' => '60%',

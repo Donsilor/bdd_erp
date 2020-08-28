@@ -259,6 +259,7 @@ class GiftReceiptGoodsController extends BaseController
         $id = Yii::$app->request->get('id');
         $model = PurchaseReceiptForm::findOne(['id' => $id]);
         $model = $model ?? new PurchaseReceiptForm();
+        $model->ids = $ids;
         if ($model->load(Yii::$app->request->post())) {
             try {
                 $trans = Yii::$app->trans->beginTransaction();
@@ -267,6 +268,8 @@ class GiftReceiptGoodsController extends BaseController
                 }
                 //同步采购收货单至金料收货单
                 Yii::$app->purchaseService->receipt->syncReceiptToGift($model);
+                //同步入库信息
+                Yii::$app->purchaseService->receipt->stockSummary($id, $this->purchaseType);
                 $trans->commit();
                 Yii::$app->getSession()->setFlash('success', '保存成功');
                 return ResultHelper::json(200, '保存成功');

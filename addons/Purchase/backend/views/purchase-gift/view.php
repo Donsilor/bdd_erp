@@ -14,7 +14,7 @@ $this->params['breadcrumbs'][] = $this->title;
 //
 ?>
 <div class="box-body nav-tabs-custom">
-    <h2 class="page-header"><?php echo $this->title;?> - <?php echo $model->purchase_sn?></h2>
+    <h2 class="page-header"><?php echo $this->title;?> - <?php echo $model->purchase_sn?> - <?php echo PurchaseStatusEnum::getValue($model->purchase_status);?></h2>
     <?php echo Html::menuTab($tabList,$tab)?>
     <div class="tab-content">
         <div class="col-xs-12">
@@ -50,9 +50,13 @@ $this->params['breadcrumbs'][] = $this->title;
                             <td><?= \Yii::$app->formatter->asDatetime($model->created_at) ?></td>
                         </tr>
                         <tr>
-                            <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('audit_status') ?>：</td>
-                            <td><?= \common\enums\AuditStatusEnum::getValue($model->audit_status)?></td>
+                            <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('receive_status') ?>：</td>
+                            <td><?= \addons\Purchase\common\enums\ReceiveStatusEnum::getValue($model->receive_status)?></td>
                         </tr>
+                         <tr>
+                             <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('audit_status') ?>：</td>
+                             <td><?= \common\enums\AuditStatusEnum::getValue($model->audit_status)?></td>
+                         </tr>
                         <tr>
                             <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('auditor_id') ?>：</td>
                             <td><?= $model->auditor->username ?? ''  ?></td>

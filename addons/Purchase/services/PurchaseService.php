@@ -2,6 +2,7 @@
 
 namespace addons\Purchase\services;
 
+use addons\Purchase\common\enums\ReceiveStatusEnum;
 use addons\Sales\common\models\OrderGoods;
 use addons\Style\common\enums\LogTypeEnum;
 use addons\Supply\common\enums\PeijianTypeEnum;
@@ -382,6 +383,46 @@ class PurchaseService extends Service
             if(false === $res){
                 throw new \Exception('更新货品状态失败');
             }
+        }
+    }
+
+    /**
+     * 收货统计
+     * @param int $id
+     * @param int $purchase_type
+     * @throws
+     */
+    public function receiveSummary($id, $purchase_type)
+    {
+        if (empty($id)) {
+            throw new \Exception('ID不能为空');
+        }
+        if ($purchase_type == PurchaseTypeEnum::MATERIAL_STONE) {
+            $model = new PurchaseStone();
+            $gModel = new PurchaseStoneGoods();
+        } elseif ($purchase_type == PurchaseTypeEnum::MATERIAL_GOLD) {
+            $model = new PurchaseGold();
+            $gModel = new PurchaseGoldGoods();
+        } elseif ($purchase_type == PurchaseTypeEnum::MATERIAL_PARTS) {
+            $model = new PurchaseParts();
+            $gModel = new PurchasePartsGoods();
+        } elseif ($purchase_type == PurchaseTypeEnum::MATERIAL_GIFT) {
+            $model = new PurchaseGift();
+            $gModel = new PurchaseGiftGoods();
+        } else {
+            $model = new Purchase();
+            $gModel = new PurchaseGoods();
+        }
+        $purchase = $model::findOne($id);
+        $count = $gModel::find()->where(['purchase_id'=>$purchase->id, 'is_receipt' => ConfirmEnum::YES])->count();
+        if ($count < $purchase->total_num) {
+            $purchase->receive_status = ReceiveStatusEnum::IN_RECEIVE;
+        } else {
+            $purchase->receive_status = ReceiveStatusEnum::HAS_RECEIVE;
+        }
+        $purchase->receive_num = $count;
+        if (false === $purchase->save()) {
+            throw new \Exception($this->getError($purchase));
         }
     }
 

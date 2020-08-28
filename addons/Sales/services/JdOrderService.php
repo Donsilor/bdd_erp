@@ -56,7 +56,7 @@ class JdOrderService extends Service
             "currency"=>'CNY',
             "pay_type"=>$this->getErpPayType($order),//京东（平台支付）
             "pay_status"=>$this->getErpPayStatus($order),//已支付
-            "pay_time"=>$order->paymentConfirmTime ? strtotime($order->paymentConfirmTime):null,
+            "pay_time"=> !empty($order->paymentConfirmTime) ? strtotime($order->paymentConfirmTime):null,
             //"out_pay_sn"=>$order->order_id,
             //"out_pay_time"=>$order->payment_time,
             'goods_num'=>1,
@@ -162,19 +162,29 @@ class JdOrderService extends Service
      * @param Order $order
      */
     public function getErpOrderInvoiceData($order)
-    {          
-        if($order->invoiceEasyInfo->invoiceTitle != '个人') {
-            $title_type = \addons\Sales\common\enums\InvoiceTitleTypeEnum::ENTERPRISE;
-        }else{
-            $title_type = \addons\Sales\common\enums\InvoiceTitleTypeEnum::PERSONAL;
-        }       
+    {   
+        
+        $title_type = null;
+        $invoice_type = null;
+        $is_invoice = 0;
+        
+        if($order->invoiceEasyInfo->invoiceType > 0) {
+            if($order->invoiceEasyInfo->invoiceTitle != '个人') {
+                $title_type = \addons\Sales\common\enums\InvoiceTitleTypeEnum::ENTERPRISE;
+            }else{
+                $title_type = \addons\Sales\common\enums\InvoiceTitleTypeEnum::PERSONAL;
+            } 
+            $invoice_type = $order->invoiceEasyInfo->invoiceType;
+            $is_invoice = 1;
+        }              
         return [
                 'title_type' =>$title_type,
-                'invoice_type'=>$order->invoiceEasyInfo->invoiceType,
-                'invoice_title'=>$order->invoiceEasyInfo->invoiceTitle,
+                'invoice_type'=>$invoice_type,
+                'invoice_title'=>$order->invoiceEasyInfo->invoiceTitle ?? '',
                 'tax_number'=>$order->invoiceEasyInfo->invoiceCode ?? '',
                 'email'=> $order->invoiceEasyInfo->invoiceConsigneeEmail ?? '',
-                'mobile'=> $order->invoiceEasyInfo->invoiceConsigneePhone ?? '',
+                'mobile'=> $order->invoiceEasyInfo->invoiceConsigneePhone ?? '',  
+                'is_invoice' =>$is_invoice,
         ];
     }
     /**
@@ -202,7 +212,7 @@ class JdOrderService extends Service
                 "jintuo_type"=> $this->getErpJintuoType($model),
                 "goods_num"=> $model->itemTotal,
                 "goods_price"=> $model->jdPrice,
-                "goods_pay_price"=> $model->jdPrice,
+                "goods_pay_price"=> $model->jdPrice - $goods_discount,
                 "goods_discount"=> $goods_discount,
                 "currency"=> 'CNY',
                 "exchange_rate"=> 1,
