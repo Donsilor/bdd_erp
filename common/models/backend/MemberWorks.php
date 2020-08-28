@@ -56,7 +56,7 @@ class MemberWorks extends BaseModel
             'title' => '标题',
             'files' => '附件',
             'content' => '内容',
-            'date' => '日期',
+            'date' => '日报日期',
             'creator_id' => '汇报人',
             'dept_id' => '部门',
             'created_at' => '创建时间',

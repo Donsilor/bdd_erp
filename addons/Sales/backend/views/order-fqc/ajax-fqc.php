@@ -20,6 +20,7 @@ $form = ActiveForm::begin([
        <div class="col-sm-12">
             <?= $form->field($model, 'order_id')->hiddenInput(['value'=>$model->order_id])->label(false)?>
             <?= $form->field($model, 'order_sn')->textInput(['readonly'=>true])?>
+            <?= $form->field($model, 'problem_type')->radioList(\addons\Sales\common\enums\ProblemTypeEnum::getMap())?>
             <?= $form->field($model, 'problem')->dropDownList(\Yii::$app->salesService->fqc->getDropDown(),['prompt'=>'请选择']);?>
             <?= $form->field($model, 'is_pass')->hiddenInput(['value'=>$model->is_pass])->label(false)?>
             <?= $form->field($model, 'remark')->textArea(['options'=>['maxlength' => true]])?>

@@ -11,6 +11,7 @@ use common\models\backend\Member;
  * @property int $id ID
  * @property int $order_id 订单ID
  * @property string $order_sn 订单号
+ * @property int $problem_type 问题类型
  * @property int $problem 质检问题
  * @property string $remark 质检备注
  * @property int $is_pass 是否质检通过
@@ -35,7 +36,8 @@ class OrderFqc extends BaseModel
     public function rules()
     {
         return [
-            [['order_id', 'problem', 'is_pass', 'status', 'creator_id', 'created_at', 'updated_at'], 'integer'],
+            //[['problem_type'], 'required'],
+            [['order_id', 'problem_type', 'problem', 'is_pass', 'status', 'creator_id', 'created_at', 'updated_at'], 'integer'],
             [['order_sn'], 'string', 'max' => 50],
             [['remark'], 'string', 'max' => 255],
         ];
@@ -50,6 +52,7 @@ class OrderFqc extends BaseModel
             'id' => 'ID',
             'order_id' => '订单ID',
             'order_sn' => '订单号',
+            'problem_type' => '问题类型',
             'problem' => '质检问题',
             'remark' => '质检备注',
             'is_pass' => '是否质检通过',

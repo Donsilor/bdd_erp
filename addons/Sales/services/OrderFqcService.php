@@ -2,6 +2,7 @@
 
 namespace addons\Sales\services;
 
+use addons\Sales\common\enums\ProblemTypeEnum;
 use common\helpers\Url;
 use Yii;
 use common\components\Service;
@@ -54,7 +55,7 @@ class OrderFqcService extends Service
         if ($order->distribute_status != DistributeStatusEnum::HAS_PEIHUO) {
             throw new \Exception('订单号：' . $form->order_sn . '不是已配货状态不能质检');
         }
-        if (!$form->is_pass) {
+        if (!$form->is_pass && $form->problem_type != ProblemTypeEnum::ORDER) {
             $order->distribute_status = DistributeStatusEnum::ALLOWED;
             //质检不通过，取消S单
             $bill = WarehouseBill::find()->where(['order_sn' => $form->order_sn])->one();
@@ -76,7 +77,11 @@ class OrderFqcService extends Service
                 throw new \Exception("货品改变状态数量与明细数量不一致");
             }
         } else {
-            $order->delivery_status = DeliveryStatusEnum::TO_SEND;
+            if($form->problem_type == ProblemTypeEnum::ORDER){
+                //$order->delivery_status = DeliveryStatusEnum::SAVE;
+            }else{
+                $order->delivery_status = DeliveryStatusEnum::TO_SEND;
+            }
         }
         //更新订单信息
         if (false === $order->save()) {
