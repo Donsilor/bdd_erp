@@ -56,6 +56,18 @@ $this->params['breadcrumbs'][] = $this->title;
                             'headerOptions' => ['class' => 'col-md-1'],
                         ],
                         [
+                            'attribute' => 'problem_type',
+                            'format' => 'raw',
+                            'value' =>function($model){
+                                return \addons\Sales\common\enums\ProblemTypeEnum::getValue($model->problem_type);
+                            },
+                            'filter' => Html::activeDropDownList($searchModel, 'problem_type',\addons\Sales\common\enums\ProblemTypeEnum::getMap(), [
+                                'prompt' => '全部',
+                                'class' => 'form-control',
+                            ]),
+                            'headerOptions' => ['class' => 'col-md-1'],
+                        ],
+                        [
                             'label' => '质检问题',
                             'attribute' => 'fqc.name',
                             'format' => 'raw',
