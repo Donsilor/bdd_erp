@@ -239,7 +239,7 @@ class OrderService extends Service
 
             $account->goods_discount = $goods_discount;
             $account->order_discount = $account->discount_amount - $goods_discount;
-            if(true === $account->save()) {
+            if(false === $account->save()) {
                 throw new \Exception("同步订单金额失败：".$this->getError($account));
             }            
         }
