@@ -105,12 +105,8 @@ class JdSdk extends Component
         $result = $responce->jingdong_pop_order_search_responce->searchorderinfo_result;        
         $order_count = $result->orderTotal;
         $page_count = floor($order_count/$page_size);
-        if($result->orderTotal == 0) {
-            if($page <= $page_count) {
-                throw new \Exception($result->apiResult->chineseErrCode);
-            }else{
-                return [[],$page_count];
-            }            
+        if($result->orderTotal == 0 && !$result->apiResult->success) {
+            throw new \Exception($result->apiResult->chineseErrCode);         
         }
         $tde = TDEClient::getInstance($this->accessToken, $this->appKey, $this->appSecret);
         $order_list = $result->orderInfoList;
