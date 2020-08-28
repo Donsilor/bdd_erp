@@ -26,10 +26,13 @@ class Auth
         if (Yii::$app->services->auth->isSuperAdmin()) {
             return true;
         }
-
         $route = trim($route);
+        
+        if (in_array(Url::to([$route]), Yii::$app->params['noAuthRoute']??[])) {
+            return true;
+        }  
+        
         $auth = !empty($defaultAuth) ? $defaultAuth : self::getAuth();
-
         if (
             in_array('/*', $auth) ||
             in_array('*', $auth) ||
@@ -37,8 +40,7 @@ class Auth
             in_array(Url::to([$route]), $auth)
         ) {
             return true;
-        }
-
+        }        
         return self::multistageCheck($route, $auth);
     }
 
