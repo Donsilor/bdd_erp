@@ -192,10 +192,11 @@ class OrderService extends Service
             }
         }
         $order->pay_sn = $orderPay->pay_sn;//点款单号
-        $goods_num = 0;//商品总数
-        $goods_discount = 0;//商品优惠金额
+                
         //4.同步订单商品明细
         if($isNewOrder === true) {
+            $goods_num = 0;//商品总数
+            $goods_discount = 0;//商品优惠金额
             foreach ($goodsList as $goodsInfo) {
                 $style_sn = $goodsInfo['style_sn'] ?? '';
                 $style = Style::find()->where(['style_sn'=>$style_sn])->one();
@@ -238,7 +239,7 @@ class OrderService extends Service
 
             $account->goods_discount = $goods_discount;
             $account->order_discount = $account->discount_amount - $goods_discount;
-            if(false === $account->save()) {
+            if(true === $account->save()) {
                 throw new \Exception("同步订单金额失败：".$this->getError($account));
             }            
         }
