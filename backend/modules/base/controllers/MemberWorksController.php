@@ -55,11 +55,11 @@ class MemberWorksController extends BaseController
         $date = $searchModel->date;
         if (!empty($date)) {
             $dataProvider->query->andFilterWhere(['>=',MemberWorks::tableName().'.date', explode('/', $date)[0]]);//起始时间
-            $dataProvider->query->andFilterWhere(['<',MemberWorks::tableName().'.date', explode('/', $date)[1]]);//结束时间
+            $dataProvider->query->andFilterWhere(['<=',MemberWorks::tableName().'.date', explode('/', $date)[1]]);//结束时间
         }else{
             $date = $searchModel->date = date('Y-m-01',time())."/".date('Y-m-d',time());
             $dataProvider->query->andFilterWhere(['>=',MemberWorks::tableName().'.date', explode('/', $date)[0]]);//起始时间
-            $dataProvider->query->andFilterWhere(['<',MemberWorks::tableName().'.date', explode('/', $date)[1]]);//结束时间
+            $dataProvider->query->andFilterWhere(['<=',MemberWorks::tableName().'.date', explode('/', $date)[1]]);//结束时间
         }
 
         //导出
@@ -74,9 +74,17 @@ class MemberWorksController extends BaseController
             $queryIds = $dataProvider->query->select(MemberWorks::tableName().'.id');
             $this->actionExport($queryIds);
         }
+
+
+        //查询当天未提交日志人姓名
+        $workMember = MemberWorks::find()->where(['date'=>date('Y-m-d'),'type'=>WorksTypeEnum::DAY_SUMMARY])->select(['creator_id'])->asArray()->all();
+        $workMember = array_column($workMember,'creator_id');
+        $workMember[] = 1; //过滤 admin
+        $noWorksMember = Member::find()->where(['not in','id', $workMember])->select(['username'])->all();
         return $this->render('index', [
             'dataProvider' => $dataProvider,
             'searchModel' => $searchModel,
+            'noWorksMember'=>$noWorksMember
         ]);
     }
     /**
@@ -145,9 +153,17 @@ class MemberWorksController extends BaseController
             ]
         ]);
 
-        $dataProvider = $searchModel
-            ->search(Yii::$app->request->queryParams);
-        $dataProvider->query->andWhere([MemberWorks::tableName().'.creator_id'=>$creator_id ,MemberWorks::tableName().'.type'=>WorksTypeEnum::DAY_SUMMARY]);
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams,['date']);
+        $date = $searchModel->date;
+        if (!empty($date)) {
+            $dataProvider->query->andFilterWhere(['>=',MemberWorks::tableName().'.date', explode('/', $date)[0]]);//起始时间
+            $dataProvider->query->andFilterWhere(['<=',MemberWorks::tableName().'.date', explode('/', $date)[1]]);//结束时间
+        }else{
+            $date = $searchModel->date = date('Y-m-01',time())."/".date('Y-m-d',time());
+            $dataProvider->query->andFilterWhere(['>=',MemberWorks::tableName().'.date', explode('/', $date)[0]]);//起始时间
+            $dataProvider->query->andFilterWhere(['<=',MemberWorks::tableName().'.date', explode('/', $date)[1]]);//结束时间
+        }
+        $dataProvider->query->andWhere([MemberWorks::tableName().'.creator_id'=>$creator_id]);
         return $this->render($this->action->id, [
             'model' => $model,
             'dataProvider'=>$dataProvider,
@@ -257,8 +273,16 @@ class MemberWorksController extends BaseController
             ]
         ]);
 
-        $dataProvider = $searchModel
-            ->search(Yii::$app->request->queryParams);
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams,['date']);
+        $date = $searchModel->date;
+        if (!empty($date)) {
+            $dataProvider->query->andFilterWhere(['>=',MemberWorks::tableName().'.date', explode('/', $date)[0]]);//起始时间
+            $dataProvider->query->andFilterWhere(['<=',MemberWorks::tableName().'.date', explode('/', $date)[1]]);//结束时间
+        }else{
+            $date = $searchModel->date = date('Y-m-01',time())."/".date('Y-m-d',time());
+            $dataProvider->query->andFilterWhere(['>=',MemberWorks::tableName().'.date', explode('/', $date)[0]]);//起始时间
+            $dataProvider->query->andFilterWhere(['<=',MemberWorks::tableName().'.date', explode('/', $date)[1]]);//结束时间
+        }
         $dataProvider->query->andWhere([MemberWorks::tableName().'.creator_id'=>$creator_id ,MemberWorks::tableName().'.type'=>WorksTypeEnum::DAY_SUMMARY]);
 
         if(Yii::$app->mobileDetect->isMobile()){
