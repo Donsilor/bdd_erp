@@ -80,7 +80,7 @@ class MemberWorksController extends BaseController
         //查询当天未提交日志人姓名
         $workMember = MemberWorks::find()->where(['date'=>date('Y-m-d'),'type'=>WorksTypeEnum::DAY_SUMMARY])->select(['creator_id'])->asArray()->all();
         $workMember = array_column($workMember,'creator_id');
-        $workMember[] = 1; //过滤 admin
+        $workMember = array_merge($workMember,[1,23,25]);  //过滤 admin 曲洪良、张鹏飞
         $noWorksMember = Member::find()->where(['not in','id', $workMember])->andWhere(['status'=>StatusEnum::ENABLED])->select(['username'])->all();
         return $this->render('index', [
             'dataProvider' => $dataProvider,

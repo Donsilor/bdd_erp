@@ -208,7 +208,7 @@ $this->params['breadcrumbs'][] = $this->title;
     <div class="modal-footer">
         <div class="col-sm-12 text-center">
             <?php if($model->distribute_status == DistributeStatusEnum::ALLOWED){ ?>
-                <button class="btn btn-primary" type="submit">销账</button>
+                <?= Html::submitButton('销账', ['class' => 'btn btn-primary']) ?>
             <?php }else{
                 echo Html::a('打印提货单',['print','id'=>$model->id],[
                 'target'=>'_blank',

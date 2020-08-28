@@ -19,7 +19,7 @@ $params = $params ? "&".http_build_query($params) : '';
         <div class="box">
             <div class="box-body table-responsive">
                 <div id="text">
-                    <h4>今日未提交日志人姓名：</h4>
+                    <h4>今日未提交日志 <?= count($noWorksMember)?> 人：</h4>
                     <div>
                         <?php
                         foreach ($noWorksMember as $member){
