@@ -89,9 +89,9 @@ class AddonsController extends Controller
             // 判断当前模块的是否为主模块, 模块+控制器+方法
             $permissionName = '/' . Yii::$app->controller->route;
             // 判断是否忽略校验
-            if (in_array($permissionName, Yii::$app->params['noAuthRoute'])) {
+            /* if (in_array($permissionName, Yii::$app->params['noAuthRoute'])) {
                 return true;
-            }
+            } */
             //权限白名单
             $actionId = Yii::$app->controller->action->id;
             if(in_array($actionId,$this->noAuthOptional)) {
