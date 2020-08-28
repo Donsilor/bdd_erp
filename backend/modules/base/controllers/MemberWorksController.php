@@ -2,6 +2,7 @@
 
 namespace backend\modules\base\controllers;
 
+use common\enums\StatusEnum;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use backend\controllers\BaseController;
 use common\enums\WorksTypeEnum;
@@ -80,7 +81,7 @@ class MemberWorksController extends BaseController
         $workMember = MemberWorks::find()->where(['date'=>date('Y-m-d'),'type'=>WorksTypeEnum::DAY_SUMMARY])->select(['creator_id'])->asArray()->all();
         $workMember = array_column($workMember,'creator_id');
         $workMember[] = 1; //过滤 admin
-        $noWorksMember = Member::find()->where(['not in','id', $workMember])->select(['username'])->all();
+        $noWorksMember = Member::find()->where(['not in','id', $workMember])->andWhere(['status'=>StatusEnum::ENABLED])->select(['username'])->all();
         return $this->render('index', [
             'dataProvider' => $dataProvider,
             'searchModel' => $searchModel,
