@@ -37,11 +37,56 @@ $this->params['breadcrumbs'][] = $this->title;
                             'class' => 'yii\grid\SerialColumn',
                             'visible' => false,
                         ],
+//                        [
+//                            'attribute' => 'id',
+//                            'filter' => true,
+//                            'format' => 'raw',
+//                            'headerOptions' => ['width'=>'80'],
+//                        ],
                         [
-                            'attribute' => 'id',
-                            'filter' => true,
+                            'attribute' => 'is_pass',
                             'format' => 'raw',
-                            'headerOptions' => ['width'=>'80'],
+                            'value' =>function($model){
+                                return \addons\Sales\common\enums\IsPassEnum::getValue($model->is_pass);
+                            },
+                            'filter' => Html::activeDropDownList($searchModel, 'is_pass',\addons\Sales\common\enums\IsPassEnum::getMap(), [
+                                'prompt' => '全部',
+                                'class' => 'form-control',
+                            ]),
+                            'headerOptions' => ['class' => 'col-md-1'],
+                        ],
+                        [
+                            'attribute' => 'created_at',
+                            'filter' => \kartik\daterange\DateRangePicker::widget([    // 日期组件
+                                'model' => $searchModel,
+                                'attribute' => 'created_at',
+                                'value' => '',
+                                'options' => ['readonly' => false, 'class' => 'form-control'],
+                                'pluginOptions' => [
+                                    'format' => 'yyyy-mm-dd',
+                                    'locale' => [
+                                        'separator' => '/',
+                                    ],
+                                    'endDate' => date('Y-m-d', time()),
+                                    'todayHighlight' => true,
+                                    'autoclose' => true,
+                                    'todayBtn' => 'linked',
+                                    'clearBtn' => true,
+                                ],
+                            ]),
+                            'value' => function ($model) {
+                                return Yii::$app->formatter->asDatetime($model->created_at);
+                            },
+                            'format' => 'raw',
+                            'headerOptions' => ['class' => 'col-md-2'],
+                        ],
+                        [
+                            'attribute' => 'creator_id',
+                            'value' => "creator.username",
+                            'filter' => Html::activeTextInput($searchModel, 'creator.username', [
+                                'class' => 'form-control',
+                            ]),
+                            'headerOptions' => ['class' => 'col-md-1'],
                         ],
                         [
                             'attribute' => 'order_sn',
@@ -82,51 +127,6 @@ $this->params['breadcrumbs'][] = $this->title;
                             'attribute'=>'remark',
                             'filter' => true,
                             'headerOptions' => [],
-                        ],
-                        [
-                            'attribute' => 'is_pass',
-                            'format' => 'raw',
-                            'value' =>function($model){
-                                return \addons\Sales\common\enums\IsPassEnum::getValue($model->is_pass);
-                            },
-                            'filter' => Html::activeDropDownList($searchModel, 'is_pass',\addons\Sales\common\enums\IsPassEnum::getMap(), [
-                                'prompt' => '全部',
-                                'class' => 'form-control',
-                            ]),
-                            'headerOptions' => ['class' => 'col-md-1'],
-                        ],
-                        [
-                            'attribute' => 'creator_id',
-                            'value' => "creator.username",
-                            'filter' => Html::activeTextInput($searchModel, 'creator.username', [
-                                'class' => 'form-control',
-                            ]),
-                            'headerOptions' => ['class' => 'col-md-1'],
-                        ],
-                        [
-                            'attribute' => 'created_at',
-                            'filter' => \kartik\daterange\DateRangePicker::widget([    // 日期组件
-                                'model' => $searchModel,
-                                'attribute' => 'created_at',
-                                'value' => '',
-                                'options' => ['readonly' => false, 'class' => 'form-control'],
-                                'pluginOptions' => [
-                                    'format' => 'yyyy-mm-dd',
-                                    'locale' => [
-                                        'separator' => '/',
-                                    ],
-                                    'endDate' => date('Y-m-d', time()),
-                                    'todayHighlight' => true,
-                                    'autoclose' => true,
-                                    'todayBtn' => 'linked',
-                                    'clearBtn' => true,
-                                ],
-                            ]),
-                            'value' => function ($model) {
-                                return Yii::$app->formatter->asDatetime($model->created_at);
-                            },
-                            'format' => 'raw',
-                            'headerOptions' => ['class' => 'col-md-2'],
                         ],
                     ]
                 ]); ?>
