@@ -265,7 +265,6 @@ class MemberWorksController extends BaseController
             $render = $this->action->id;
         }else{
             $render = 'view.php';
-            $render = $this->action->id;
 
         }
         return $this->render($render, [
