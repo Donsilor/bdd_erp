@@ -240,7 +240,7 @@ class PurchaseReceiptService extends Service
                     ->where(['pr.receipt_status'=>$data, 'g.purchase_detail_id'=>$purchase_detail_id])
                     ->count(1);
                 if($count){
-                    throw new \Exception("【".$good['goods_name']."】采购单已收货，不能重复收货");
+                    throw new \Exception("[".$good['goods_name']."]采购单已收货，不能重复收货");
                 }
             }
             $goods->attributes = $good;
@@ -852,11 +852,11 @@ class PurchaseReceiptService extends Service
                 $goods = $model::find()->where(['id'=>$id])->select(['receipt_id', 'goods_status', 'xuhao'])->one();
                 if($purchase_type == PurchaseTypeEnum::MATERIAL_GIFT){
                     if($goods->goods_status == ReceiptGoodsStatusEnum::WAREHOUSE){
-                        throw new \Exception("序号【{$goods->xuhao}】已入库");
+                        throw new \Exception("[序号={$goods->xuhao}]已入库");
                     }
                 }else{
                     if($goods->goods_status != ReceiptGoodsStatusEnum::IQC_PASS){
-                        throw new \Exception("序号【{$goods->xuhao}】不是IQC质检通过状态，不能入库");
+                        throw new \Exception("[序号={$goods->xuhao}]不是IQC质检通过状态，不能入库");
                     }
                 }
             }
