@@ -123,11 +123,11 @@ $this->params['breadcrumbs'][] = $this->title;
                                 [
                                     'attribute' => 'goods_id',
                                     'format' => 'raw',
-                                    'value' => function ($model, $key, $index, $column){
+                                    'value' => function ($model, $key, $index, $column) use($order){
                                          if($model->is_gift){
                                              return "赠品无需销账";
                                          }else{
-                                              if($model->distribute_status == DistributeStatusEnum::ALLOWED){
+                                              if($order->distribute_status == DistributeStatusEnum::ALLOWED){
                                                     return  Html::input('text', 'goods_ids['.$model->id.']', $model->goods_id ,['class' => 'form-control','placeholder' => '请输入货号',]);
                                               }else{
                                                   return $model->goods_id??"";
