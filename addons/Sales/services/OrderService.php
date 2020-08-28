@@ -193,6 +193,7 @@ class OrderService extends Service
         }
         $order->pay_sn = $orderPay->pay_sn;//点款单号
         $goods_num = 0;//商品总数
+        $goods_discount = 0;//商品优惠金额
         //4.同步订单商品明细
         if($isNewOrder === true) {
             foreach ($goodsList as $goodsInfo) {
@@ -230,9 +231,16 @@ class OrderService extends Service
                         throw new \Exception("同步商品属性失败：".$this->getError($goodsAttr));
                     }
                 }
-                
+                $goods_discount += $orderGoods->goods_discount;
                 $goods_num += $orderGoods->goods_num;
             }
+            $order->goods_num   = $goods_num;
+
+            $account->goods_discount = $goods_discount;
+            $account->order_discount = $account->discount_amount - $goods_discount;
+            if(false === $account->save()) {
+                throw new \Exception("同步订单金额失败：".$this->getError($account));
+            }            
         }
         //5.同步客户信息
         $customer = Customer::find()->where(['mobile'=>$order->customer_mobile,'channel_id'=>$order->sale_channel_id])->one();
@@ -278,7 +286,7 @@ class OrderService extends Service
             }
             $order->is_invoice   = $invoice->is_invoice;
         }
-        $order->goods_num   = $goods_num;
+        
         $order->customer_id = $customer->id;
         if($order->order_sn == ''){
             $order->order_sn = $this->createOrderSn($order);
