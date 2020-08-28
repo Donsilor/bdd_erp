@@ -30,7 +30,7 @@ class Auth
         
         if (in_array(Url::to([$route]), Yii::$app->params['noAuthRoute']??[])) {
             return true;
-        }  
+        }
         
         $auth = !empty($defaultAuth) ? $defaultAuth : self::getAuth();
         if (
