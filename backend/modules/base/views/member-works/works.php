@@ -5,7 +5,6 @@ use common\helpers\Html;
 /* @var $this yii\web\View */
 /* @var $model common\models\order\order */
 /* @var $form yii\widgets\ActiveForm */
-
 ?>
 <style>
     .modal-open .modal{
@@ -37,6 +36,10 @@ use common\helpers\Html;
         <div class="box">
             <div class="box-header">
                 <h3 class="box-title"><i class="fa fa-bars"></i> 个人信息</h3>
+                <div class="box-tools">
+                    <a href="<?= \common\helpers\Url::to(['../site/logout']); ?>" data-method="post"><i class="fa fa fa-sign-out"></i>退出</a>
+
+                </div>
             </div>
             <div class="box-body table-responsive" style="padding-left: 0px;padding-right: 0px;">
                 <div class="col-xs-12">
