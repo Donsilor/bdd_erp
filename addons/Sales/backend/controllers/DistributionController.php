@@ -56,7 +56,7 @@ class DistributionController extends BaseController
         //$dataProvider->query->andWhere(['=',DistributionForm::tableName().'.order_id',$order_id]);
         $dataProvider->query->andWhere(['>=',Order::tableName().'.distribute_status', DistributeStatusEnum::ALLOWED]);
         
-        return $this->render('index', [
+        return $this->render($this->action->id, [
                 'dataProvider' => $dataProvider,
                 'searchModel' => $searchModel,
                 //'order' => $order,

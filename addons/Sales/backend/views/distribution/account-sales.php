@@ -209,7 +209,12 @@ $this->params['breadcrumbs'][] = $this->title;
         <div class="col-sm-12 text-center">
             <?php if($model->distribute_status == DistributeStatusEnum::ALLOWED){ ?>
                 <button class="btn btn-primary" type="submit">销账</button>
-            <?php }?>
+            <?php }else{
+                echo Html::a('打印提货单',['print','id'=>$model->id],[
+                'target'=>'_blank',
+                'class'=>'btn btn-info btn-sm',
+                ]);
+            }?>
             <span class="btn btn-white" onclick="history.go(-1)">返回</span>
         </div>
     </div>
