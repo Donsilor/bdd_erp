@@ -19,7 +19,7 @@ class JdController extends Controller
      * @param number $order_type
      * @param number $start_time
      */
-    public function actionPullOrders($time_val = 1, $time_type = 1, $order_type = 1, $start_time = 0)
+    public function actionPullJdOrders($time_val = 1, $time_type = 1, $order_type = 1, $start_time = 0)
     {
         Console::output("Sync JD Order BEGIN[".date('Y-m-d H:i:s')."]-------------------");
         $change_type = $time_type == 1 ? "day" : "month";
@@ -68,7 +68,7 @@ class JdController extends Controller
         }
     }
     /**
-     * 同步
+     * 同步一组订单
      * @param unknown $order_list
      */
     private function syncOrders($order_list) {
