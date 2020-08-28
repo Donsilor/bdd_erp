@@ -4,7 +4,7 @@
             <div class=" table-responsive" >
                 <table class="table table-hover">
                     <thead>
-                    	<tr><th class="text-center">物流时间</th><th>内容</th></tr>
+                    	<tr><th>&nbsp;&nbsp;物流时间</th><th>内容</th></tr>
                     </thead>                    
                     <tbody>
                         <?php foreach ($logistics->list ?? [] as $log) {?>
