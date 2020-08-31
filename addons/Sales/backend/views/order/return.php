@@ -14,6 +14,7 @@ $this->params['breadcrumbs'][] = $this->title;
         <div class="box">
             <?php $form = ActiveForm::begin([]); ?>
             <div class="box-body">
+                <label class="control-label">商品信息</label>
                 <div class="box-body table-responsive">
                     <div class="row">
                     <div class="col-lg-12">
