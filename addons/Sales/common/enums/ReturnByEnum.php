@@ -17,8 +17,8 @@ class ReturnByEnum extends \common\enums\BaseEnum
     public static function getMap(): array
     {
         return [
-            self::GOODS => '退商品',
-            self::NO_GOODS => '不退商品'
+            self::GOODS => '退款退货',
+            self::NO_GOODS => '仅退款'
         ];
     }
 

@@ -129,6 +129,15 @@ $this->params['breadcrumbs'][] = $this->title;
                     'headerOptions' => ['width'=>'100'],
             ],
             [
+                    'attribute' => 'account.refund_amount',
+                    'value' => function($model){
+                        return \common\helpers\AmountHelper::outputAmount($model->account->refund_amount??0,2,$model->currency);
+                    },
+                    'filter' => false,
+                    'format' => 'raw',
+                    'headerOptions' => ['width'=>'100'],
+            ],
+            [
                     'attribute' => 'sale_channel_id',
                     'value' => function ($model){
                         return $model->saleChannel->name ?? '';
@@ -211,7 +220,20 @@ $this->params['breadcrumbs'][] = $this->title;
                     ]),
                     'format' => 'raw',
                     'headerOptions' => ['width'=>'100'],
-            ],  
+            ],
+            [
+                'attribute' => 'refund_status',
+                'value' => function ($model){
+                    return \addons\Sales\common\enums\RefundStatusEnum::getValue($model->refund_status);
+                },
+                'filter' => Html::activeDropDownList($searchModel, 'refund_status',\addons\Sales\common\enums\RefundStatusEnum::getMap(), [
+                    'prompt' => '全部',
+                    'class' => 'form-control',
+                    'style' =>'width:80px'
+                ]),
+                'format' => 'raw',
+                'headerOptions' => ['width'=>'100'],
+            ],
             [
                     'attribute' => 'order_from',
                     'value' => function ($model){

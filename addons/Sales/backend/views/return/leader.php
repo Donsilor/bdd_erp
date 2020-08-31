@@ -59,37 +59,6 @@ $params = $params ? "&".http_build_query($params) : '';
                             'headerOptions' => ['width'=>'80'],
                         ],
                         [
-                            'attribute'=>'created_at',
-                            'filter' => DateRangePicker::widget([    // 日期组件
-                                'model' => $searchModel,
-                                'attribute' => 'created_at',
-                                'value' => $searchModel->created_at,
-                                'options' => ['readonly' => false,'class'=>'form-control','style'=>'background-color:#fff;width:160px;'],
-                                'pluginOptions' => [
-                                    'format' => 'yyyy-mm-dd',
-                                    'locale' => [
-                                        'separator' => '/',
-                                    ],
-                                    'endDate' => date('Y-m-d',time()),
-                                    'todayHighlight' => true,
-                                    'autoclose' => true,
-                                    'todayBtn' => 'linked',
-                                    'clearBtn' => true,
-                                ],
-                            ]),
-                            'value'=>function($model){
-                                return Yii::$app->formatter->asDatetime($model->created_at);
-                            }
-                        ],
-                        [
-                            'attribute' => 'creator_id',
-                            'value' => 'creator.username',
-                            'headerOptions' => ['class' => 'col-md-1'],
-                            'filter' => Html::activeTextInput($searchModel, 'creator.username', [
-                                'class' => 'form-control',
-                            ]),
-                        ],
-                        [
                             'attribute'=>'return_no',
                             'format' => 'raw',
                             'value'=>function($model) {
@@ -111,13 +80,6 @@ $params = $params ? "&".http_build_query($params) : '';
                             ]),
                             'headerOptions' => ['class' => 'col-md-1'],
                         ],
-//                        [
-//                            'attribute'=>'goods_id',
-//                            'filter' => Html::activeTextInput($searchModel, 'goods_id', [
-//                                'class' => 'form-control',
-//                            ]),
-//                            'headerOptions' => ['class' => 'col-md-1'],
-//                        ],
                         [
                             'attribute' => 'return_type',
                             'format' => 'raw',
@@ -149,12 +111,18 @@ $params = $params ? "&".http_build_query($params) : '';
                             'headerOptions' => ['class' => 'col-md-1'],
                         ],
                         [
+                            'attribute' => 'goods_num',
+                            'filter' => false,
+                            'headerOptions' => ['width'=>'80'],
+                        ],
+                        [
                             'attribute'=>'customer_name',
                             'filter' => Html::activeTextInput($searchModel, 'customer_name', [
                                 'class' => 'form-control',
                             ]),
                             'headerOptions' => ['class' => 'col-md-1'],
                         ],
+                        'customer_mobile',
                         [
                             'attribute'=>'should_amount',
                             'filter' => false,
@@ -170,6 +138,44 @@ $params = $params ? "&".http_build_query($params) : '';
                             'filter' => false,
                             'headerOptions' => ['class' => 'col-md-1'],
                         ],
+                        [
+                            'attribute'=>'created_at',
+                            'filter' => DateRangePicker::widget([    // 日期组件
+                                'model' => $searchModel,
+                                'attribute' => 'created_at',
+                                'value' => $searchModel->created_at,
+                                'options' => ['readonly' => false,'class'=>'form-control','style'=>'background-color:#fff;width:160px;'],
+                                'pluginOptions' => [
+                                    'format' => 'yyyy-mm-dd',
+                                    'locale' => [
+                                        'separator' => '/',
+                                    ],
+                                    'endDate' => date('Y-m-d',time()),
+                                    'todayHighlight' => true,
+                                    'autoclose' => true,
+                                    'todayBtn' => 'linked',
+                                    'clearBtn' => true,
+                                ],
+                            ]),
+                            'value'=>function($model){
+                                return Yii::$app->formatter->asDatetime($model->created_at);
+                            }
+                        ],
+                        [
+                            'attribute' => 'creator_id',
+                            'value' => 'creator.username',
+                            'headerOptions' => ['class' => 'col-md-1'],
+                            'filter' => Html::activeTextInput($searchModel, 'creator.username', [
+                                'class' => 'form-control',
+                            ]),
+                        ],
+//                        [
+//                            'attribute'=>'goods_id',
+//                            'filter' => Html::activeTextInput($searchModel, 'goods_id', [
+//                                'class' => 'form-control',
+//                            ]),
+//                            'headerOptions' => ['class' => 'col-md-1'],
+//                        ],
                         [
                             'attribute' => 'leader_status',
                             'format' => 'raw',

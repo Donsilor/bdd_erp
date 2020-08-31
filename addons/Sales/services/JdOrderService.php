@@ -167,7 +167,7 @@ class JdOrderService extends Service
         $title_type = null;
         $invoice_type = null;
         $is_invoice = 0;
-        
+        $invoice_title = null;
         if($order->invoiceEasyInfo->invoiceType > 0) {
             if($order->invoiceEasyInfo->invoiceTitle != '个人') {
                 $title_type = \addons\Sales\common\enums\InvoiceTitleTypeEnum::ENTERPRISE;
@@ -176,15 +176,16 @@ class JdOrderService extends Service
             } 
             $invoice_type = $order->invoiceEasyInfo->invoiceType;
             $is_invoice = 1;
+            $invoice_title = $order->invoiceEasyInfo->invoiceTitle ?? '';
         }              
         return [
+                'is_invoice' =>$is_invoice,
                 'title_type' =>$title_type,
                 'invoice_type'=>$invoice_type,
-                'invoice_title'=>$order->invoiceEasyInfo->invoiceTitle ?? '',
+                'invoice_title'=>$invoice_title,
                 'tax_number'=>$order->invoiceEasyInfo->invoiceCode ?? '',
                 'email'=> $order->invoiceEasyInfo->invoiceConsigneeEmail ?? '',
-                'mobile'=> $order->invoiceEasyInfo->invoiceConsigneePhone ?? '',  
-                'is_invoice' =>$is_invoice,
+                'mobile'=> $order->invoiceEasyInfo->invoiceConsigneePhone ?? ''              
         ];
     }
     /**

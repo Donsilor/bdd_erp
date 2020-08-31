@@ -25,9 +25,9 @@ class ReturnStatusEnum extends \common\enums\BaseEnum
     public static function getMap(): array
     {
         return [
-            self::SAVE    => '已保存',
+            self::SAVE    => '待提审',
             self::PENDING => '待确认',
-            self::CONFIRM => '已完结',
+            self::CONFIRM => '退款完成',
             self::CANCEL => '已取消',
         ];
     }
