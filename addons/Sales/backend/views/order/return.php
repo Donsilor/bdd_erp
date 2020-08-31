@@ -83,10 +83,10 @@ $this->params['breadcrumbs'][] = $this->title;
                 </div>
                 <div class="row">
                     <div class="col-lg-6">
-                        <?= $form->field($model, 'new_order_sn')->textInput() ?>
-                    </div>
-                    <div class="col-lg-6">
                         <?= $form->field($model, 'return_reason')->dropDownList(\Yii::$app->salesService->returnConfig->getDropDown(),['prompt'=>'请选择']);?>
+                    </div>
+                    <div id="div1" class="col-lg-6" style="display:none;">
+                        <?= $form->field($model, 'new_order_sn')->textInput() ?>
                     </div>
 <!--                    <div class="col-lg-6">-->
 <!--                        --><?//= $form->field($model, 'is_finance_refund')->radioList(\common\enums\ConfirmEnum::getMap()) ?>
@@ -111,27 +111,37 @@ $this->params['breadcrumbs'][] = $this->title;
     </div>
 </div>
 <script>
-    var formId = 'purchasegoldgoodsform';
-    function fillStoneForm(){
-        var goods_sn = $("#"+formId+"-goods_sn").val();
-        if(goods_sn != '') {
-            $.ajax({
-                type: "get",
-                url: '<?php echo Url::to(['ajax-get-gold'])?>',
-                dataType: "json",
-                data: {
-                    'goods_sn': goods_sn,
-                },
-                success: function (data) {
-                    if (parseInt(data.code) == 200 && data.data) {
-                        $("#"+formId+"-goods_name").val(data.data.goods_name);
-                        $("#"+formId+"-material_type").val(data.data.gold_type);
-                    }
-                }
-            });
+    var formId = 'returnform';
+    //function fillStoneForm(){
+    //    var goods_sn = $("#"+formId+"-goods_sn").val();
+    //    if(goods_sn != '') {
+    //        $.ajax({
+    //            type: "get",
+    //            url: '<?php //echo Url::to(['ajax-get-gold'])?>//',
+    //            dataType: "json",
+    //            data: {
+    //                'goods_sn': goods_sn,
+    //            },
+    //            success: function (data) {
+    //                if (parseInt(data.code) == 200 && data.data) {
+    //                    $("#"+formId+"-goods_name").val(data.data.goods_name);
+    //                    $("#"+formId+"-material_type").val(data.data.gold_type);
+    //                }
+    //            }
+    //        });
+    //    }
+    //}
+    //$("#"+formId+"-goods_sn").change(function(){
+    //    fillStoneForm();
+    //});
+    $("#"+formId+"-return_type").change(function(){
+        var type = $(this).find(':checked').val();
+        if(type == 2){
+            $("#div1").show();
+        }else {
+            //$("#"+formId+"-new_order_sn").find('select').find("option:first").prop("selected",true);
+            $("#"+formId+"-new_order_sn").val("");
+            $("#div1").hide();
         }
-    }
-    $("#"+formId+"-goods_sn").change(function(){
-        fillStoneForm();
-    });
+    })
 </script>
