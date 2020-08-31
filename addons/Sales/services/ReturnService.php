@@ -82,7 +82,7 @@ class ReturnService extends Service
         } else {
             $form->return_by = ReturnByEnum::NO_GOODS;
         }
-        $should_amount = $apply_amount = 0;
+        $goods_num = $should_amount = $apply_amount = 0;
         $rGoods = [];
         $return_no =  SnHelper::createReturnSn();
         foreach ($form->ids as $id) {
@@ -100,6 +100,7 @@ class ReturnService extends Service
                 'creator_id' => \Yii::$app->user->identity->getId(),
                 'created_at' => time(),
             ];
+            $goods_num = bcadd($goods_num, $goods->goods_num);
             $should_amount = bcadd($should_amount, $goods->goods_pay_price, 3);
             $apply_amount = bcadd($apply_amount, $goods->goods_pay_price, 3);
 
@@ -117,7 +118,7 @@ class ReturnService extends Service
             'new_order_id' => $newOrder ? $newOrder->id : "",
             'new_order_sn' => $newOrder ? $newOrder->order_sn : "",
             'channel_id' => $order->sale_channel_id,
-            'goods_num' => count($rGoods),
+            'goods_num' => $goods_num,
             'should_amount' => $should_amount,
             'apply_amount' => $apply_amount,
             'return_reason' => $form->return_reason,
