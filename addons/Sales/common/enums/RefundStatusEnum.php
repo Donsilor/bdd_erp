@@ -10,7 +10,8 @@ class RefundStatusEnum extends \common\enums\BaseEnum
 {
     const SAVE = 0;
     const APPLY = 1;
-    const HAS_RETURN = 2;
+    const PART_RETURN = 2;
+    const HAS_RETURN = 3;
 
     /**
      * @return array
@@ -20,6 +21,7 @@ class RefundStatusEnum extends \common\enums\BaseEnum
         return [
             self::SAVE => "未操作",
             self::APPLY => "退款中",
+            self::PART_RETURN => "部分退款",
             self::HAS_RETURN => "已退款",
         ];
     }
