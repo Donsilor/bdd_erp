@@ -14,7 +14,8 @@ $this->params['breadcrumbs'][] = $this->title;
         <div class="box">
             <?php $form = ActiveForm::begin([]); ?>
             <div class="box-body">
-                <div class="row">
+                <div class="box-body table-responsive">
+                    <div class="row">
                     <div class="col-lg-12">
                         <?= GridView::widget([
                             'dataProvider' => $dataProvider,
@@ -67,6 +68,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             ]
                         ]); ?>
                     </div>
+                </div>
                 </div>
                 <div class="row">
                     <div class="col-lg-6">
