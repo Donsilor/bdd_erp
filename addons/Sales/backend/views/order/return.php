@@ -35,8 +35,10 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'id',
                                 [
                                     'attribute' => 'goods_name',
-                                    'value' => 'goods_name',
-                                    'contentOptions' => ['style' => 'width:200px;word-wrap:break-word;'],
+                                    'value' => function ($model) {
+                                        return "<div style='width:200px;white-space:pre-wrap;'>" . $model->goods_name . "</div>";
+                                    },
+                                    'format' => 'raw',
                                 ],
                                 [
                                     'attribute' => 'goods_id',
