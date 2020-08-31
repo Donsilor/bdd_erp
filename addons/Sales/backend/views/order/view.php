@@ -616,15 +616,15 @@ $this->params['breadcrumbs'][] = $this->title;
                         </div>
                         <div class="row">
                             <div class="col-lg-8 text-right">
-                                <label><?= $model->getAttributeLabel('account.refund_amount') ?>：</label></div>
-                            <div class="col-lg-4"
-                                 style="color:red"><?= AmountHelper::outputAmount($model->account->refund_amount ?? 0, 2, $model->currency) ?></div>
-                        </div>
-                        <div class="row">
-                            <div class="col-lg-8 text-right">
                                 <label><?= $model->getAttributeLabel('account.paid_amount') ?>：</label></div>
                             <div class="col-lg-4"
                                  style="color:red"><?= AmountHelper::outputAmount($model->account->paid_amount ?? 0, 2, $model->currency) ?></div>
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-8 text-right">
+                                <label><?= $model->getAttributeLabel('account.refund_amount') ?>：</label></div>
+                            <div class="col-lg-4"
+                                 style="color:red"><?= AmountHelper::outputAmount($model->account->refund_amount ?? 0, 2, $model->currency) ?></div>
                         </div>
                     </div><!-- end col-lg-6 -->
                 </div><!-- end footer -->
