@@ -195,10 +195,6 @@ class ReturnService extends Service
             if ($form->finance_status == AuditStatusEnum::PASS) {
                 $form->check_status = CheckStatusEnum::FINANCE;
                 $order = Order::findOne($form->order_id);
-                $order->refund_status = RefundStatusEnum::HAS_RETURN;
-                if (false === $order->save()) {
-                    throw new \Exception($this->getError($order));
-                }
                 $rGoods = ReturnGoodsForm::findAll(['return_id' => $form->id]);
                 $goods_id = [];
                 foreach ($rGoods as $good) {
@@ -208,6 +204,15 @@ class ReturnService extends Service
                     if (false === $goods->save()) {
                         throw new \Exception($this->getError($goods));
                     }
+                }
+                $count = OrderGoods::find()->where(['order_id'=>$order->id, 'is_return'=>[IsReturnEnum::SAVE, IsReturnEnum::APPLY]])->count();
+                if($count>0){
+                    $order->refund_status = RefundStatusEnum::PART_RETURN;
+                }else{
+                    $order->refund_status = RefundStatusEnum::HAS_RETURN;
+                }
+                if (false === $order->save()) {
+                    throw new \Exception($this->getError($order));
                 }
                 if ($form->return_type == ReturnTypeEnum::TRANSFER) {//转单
                     $newOrder = $this->zhuandan($form);

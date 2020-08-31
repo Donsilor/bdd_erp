@@ -164,7 +164,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     ?>
                     <?php
                     if ($model->pay_status == \addons\Sales\common\enums\PayStatusEnum::HAS_PAY
-                        && $model->refund_status != \addons\Sales\common\enums\RefundStatusEnum::HAS_RETURN) {
+                        && !in_array($model->refund_status, [\addons\Sales\common\enums\RefundStatusEnum::HAS_RETURN])) {
                         echo Html::edit(['return', 'id' => $model->id], '退款', [
                             //'data-toggle' => 'modal',
                             'class' => 'btn btn-warning btn-ms openIframe',
