@@ -33,6 +33,7 @@ use Yii;
  * @property int $is_stock 是否现货(1是0否)
  * @property int $is_gift 是否赠品
  * @property int $is_return 是否退款
+ * @property int $return_id 退款ID
  * @property string $return_no 退款编号
  * @property int $created_at 创建时间
  * @property int $updated_at 更新时间

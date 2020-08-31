@@ -148,6 +148,12 @@ class ReturnService extends Service
             if (false === $goodsM->save()) {
                 throw new \Exception($this->getError($goodsM));
             }
+
+            $goods = OrderGoods::findOne($goodsM->order_detail_id);
+            $goods->return_id = $form->id;
+            if (false === $goods->save(true, ['return_id'])) {
+                throw new \Exception($this->getError($goods));
+            }
         }
         //同步订单信息
         $order->refund_status = RefundStatusEnum::APPLY;
@@ -300,7 +306,7 @@ class ReturnService extends Service
         //2.还原商品状态
         $goods = ReturnGoodsForm::findAll(['return_id' => $form->id]);
         $ids = ArrayHelper::getColumn($goods, 'order_detail_id');
-        OrderGoods::updateAll(['is_return' => IsReturnEnum::SAVE, 'return_no'=> ""], ['id' => $ids]);
+        OrderGoods::updateAll(['is_return' => IsReturnEnum::SAVE, 'return_id'=> "", 'return_no'=> ""], ['id' => $ids]);
         //3.取消退款单状态
         $form->return_status = ReturnStatusEnum::CANCEL;
         $form->audit_status = AuditStatusEnum::UNPASS;

@@ -383,8 +383,10 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'attribute' => 'is_return',
                                 'value' => function ($model) {
                                     $str = "";
-                                    if (in_array($model->is_return, [\addons\Sales\common\enums\IsReturnEnum::APPLY, \addons\Sales\common\enums\IsReturnEnum::HAS_RETURN])) {
-                                        $str .= "(" . Html::a($model->return_no, ['view', 'id' => $model->return_id, 'returnUrl' => Url::getReturnUrl()], ['style' => "text-decoration:underline;color:#3c8dbc"] . ")");
+                                    if (in_array($model->is_return,
+                                            [\addons\Sales\common\enums\IsReturnEnum::APPLY, \addons\Sales\common\enums\IsReturnEnum::HAS_RETURN])
+                                    && !empty($model->return_id)) {
+                                        $str .= Html::a("(" .$model->return_no. ")", ['return/view', 'id' => $model->return_id, 'returnUrl' => Url::getReturnUrl()], ['style' => "text-decoration:underline;color:#3c8dbc"]);
                                     }
                                     return \addons\Sales\common\enums\IsReturnEnum::getValue($model->is_return) . $str ?? '未操作';
                                 },
