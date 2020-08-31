@@ -109,4 +109,30 @@ class WarehouseGoodsService extends Service
 
     }
 
+    /**
+     * 同步数据到库存
+     * @param array $goods
+     * @param array $applyGoodsList
+     * @throws \Exception
+     * @return \addons\Purchase\common\models\PurchaseApply $apply
+     */
+    public function createWarehouseGoods($goods)
+    {
+        try{
+            $warehouseGoods = new WarehouseGoods();
+            $warehouseGoods->attributes = $goods;
+            $warehouseGoods->created_at = time();
+            $warehouseGoods->updated_at = time();
+            $warehouseGoods->creator_id = \Yii::$app->user->id;
+            if(false === $warehouseGoods->save()) {
+                throw new \Exception($this->getError($warehouseGoods));
+            }
+            return $warehouseGoods;
+        }catch (\Exception $e){
+            throw $e;
+        }
+
+    }
+
+
 }

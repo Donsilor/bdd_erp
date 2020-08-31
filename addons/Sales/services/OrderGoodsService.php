@@ -9,6 +9,7 @@ use addons\Sales\common\models\OrderGoodsAttribute;
 use addons\Style\common\enums\AttrIdEnum;
 use addons\Style\common\enums\JintuoTypeEnum;
 use addons\Style\common\enums\QibanTypeEnum;
+use addons\Style\common\enums\StoneEnum;
 use addons\Style\common\models\Diamond;
 use addons\Style\common\models\Qiban;
 use addons\Style\common\models\Style;
@@ -166,6 +167,45 @@ class OrderGoodsService extends Service
 
         //现货裸钻同步数据到库存
         if($diamond_goods->is_stock == IsStockEnum::YES){
+//            print_r($diamond_goods->toArray());
+            $cert_id = $diamond_goods['cert_id'];
+            $warehouse_goods = WarehouseGoods::find()->where(['cert_id'=>$cert_id])->one();
+            if($warehouse_goods){
+                $warehouse_goods->goods_status = GoodsStatusEnum::IN_SALE;
+                if(false === $warehouse_goods->save(true,['goods_status'])){
+                    throw new \Exception($this->getError($warehouse_goods));
+                }
+            }else{
+                $goods = [
+                    'goods_id' => $diamond_goods['goods_sn'],
+                    'style_sn' => $model->style_sn,
+                    'goods_name' => $diamond_goods['goods_name'],
+                    'goods_image' => $diamond_goods['goods_image'],
+                    'cert_type' => $diamond_goods['cert_type'],
+                    'cert_id' => $diamond_goods['cert_id'],
+                    'goods_num' => $diamond_goods['goods_num'],
+                    'cost_price' => $diamond_goods['cost_price'],
+                    'market_price' => $diamond_goods['market_price'],
+                    'diamond_carat' => $diamond_goods['carat'],
+                    'diamond_clarity' => (string)$diamond_goods['clarity'],
+                    'diamond_cut' => (string)$diamond_goods['cut'],
+                    'diamond_shape' => (string)$diamond_goods['shape'],
+                    'diamond_symmetry' => (string)$diamond_goods['symmetry'],
+                    'diamond_polish' => (string)$diamond_goods['polish'],
+                    'diamond_fluorescence' => (string)$diamond_goods['fluorescence'],
+                    'diamond_discount' => (string)$diamond_goods['source_discount'],
+                    'remark' => $diamond_goods['remark'],
+                    'goods_status' => GoodsStatusEnum::IN_SALE,
+                    'sales_time' => time(),
+                    'product_type_id' => 1,
+                    'style_cate_id' => 15,
+                    'warehouse_id' => 17, //裸钻库
+                    'jintuo_type' => JintuoTypeEnum::Chengpin,
+                ];
+
+                \Yii::$app->warehouseService->warehouseGoods->createWarehouseGoods($goods);
+            }
+
 
         }
 
@@ -189,9 +229,11 @@ class OrderGoodsService extends Service
      * 删除裸钻
      */
     public function delDiamond($model){
-        $diamond_goods = Diamond::find()->where(['cert_id'=>$model->cert_id, 'audit_status'=>AuditStatusEnum::PASS])->one();
+        $cert_attr = OrderGoodsAttribute::find()->where(['id'=>$model->id, 'attr_id'=>AttrIdEnum::DIA_CERT_NO])->one();
+        $cert_id = $cert_attr->attr_value ?? 0;
+        $diamond_goods = Diamond::find()->where(['cert_id'=>$cert_id, 'audit_status'=>AuditStatusEnum::PASS])->one();
         if(empty($diamond_goods)){
-            throw new \Exception("此裸钻不存在或者不是审核状态",422);
+            throw new \Exception("此裸钻不存在或者不是审核状态".$model->cert_id,422);
         }
         //修改裸钻状态
         $diamond_goods->status = StatusEnum::ENABLED;
@@ -245,8 +287,12 @@ class OrderGoodsService extends Service
         //删除商品属性
         OrderGoodsAttribute::deleteAll(['id'=>$model->id]);
         $attr_list = \Yii::$app->warehouseService->gift->getMapping();
+        print_r($attr_list);exit;
         foreach ($attr_list as  $attr){
             $attr_value_id = $attr['input_type'] == InputTypeEnum::INPUT_TEXT ? 0 : $gift_goods->{$attr['attr_field']} ?? 0;
+            if($attr['input_type'] == InputTypeEnum::INPUT_SELECT && !$attr_value_id){
+                continue;
+            }
             $attr_value = $attr['input_type'] == InputTypeEnum::INPUT_TEXT ? $gift_goods->{$attr['attr_field']} : \Yii::$app->attr->valueName($attr_value_id) ?? '';
 
             $order_goods_attr = new OrderGoodsAttribute();

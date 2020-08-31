@@ -3,6 +3,8 @@
 namespace addons\Purchase\services;
 
 
+use addons\Purchase\common\enums\ApplyConfirmEnum;
+use addons\Purchase\common\enums\PurchaseGoodsTypeEnum;
 use addons\Style\common\enums\InlayEnum;
 use addons\Style\common\enums\LogTypeEnum;
 use addons\Supply\common\enums\PeishiTypeEnum;
@@ -110,6 +112,8 @@ class PurchaseApplyService extends Service
                 if(empty($applyGoods)) {
                     $applyGoods = new PurchaseApplyGoods();
                 }
+
+                $applyGoods->confirm_status = $applyGoods->goods_type == PurchaseGoodsTypeEnum::STYLE ? ApplyConfirmEnum::DESIGN : ApplyConfirmEnum::GOODS;
                 $applyGoods->attributes = $goodsInfo;
                 $applyGoods->apply_id = $apply->id;
                 $applyGoods->goods_sn = $goodsInfo['qiban_sn'] ? $goodsInfo['qiban_sn'] : $goodsInfo['style_sn'];
