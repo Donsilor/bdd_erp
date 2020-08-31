@@ -445,23 +445,30 @@ class ReturnService extends Service
     {
         $goods_ids = ReturnGoodsForm::findAll(['return_id' => $form->id]);
         if (empty($goods_ids)) {
-            throw new \Exception("货号[条码号]不能为空");
+            throw new \Exception("货号[条码号]不能为空[code=1]");
         }
         $bill_goods = [];
         $total_cost = $total_sale = $total_market = 0;
         foreach ($goods_ids as $good) {
             $goods_id = $good['goods_id'] ?? "";
             if (!$goods_id) {
-                throw new \Exception("货号不能为空");
+                throw new \Exception("货号[条码号]不能为空[code=2]");
+            }
+            $order_detail_id = $good['order_detail_id'] ?? "";
+            if(empty($order_detail_id)){
+                throw new \Exception("订单明细ID不能为空");
+            }
+            $orderGoods = OrderGoods::findOne($order_detail_id);
+            if($orderGoods->is_gift){//赠品
+                continue;
             }
             $goods = WarehouseGoods::find()->where(['goods_id' => $goods_id])->one();
-            if (!$goods) {
-                throw new \Exception("货号" . $goods_id . "不存在");
+            if (empty($goods)) {
+                throw new \Exception("货号[条码号]" . $goods_id . "不存在");
             }
             if ($goods->goods_status != GoodsStatusEnum::HAS_SOLD) {
-                throw new \Exception("货号" . $goods_id . "不是已销售状态");
+                throw new \Exception("货号[条码号]" . $goods_id . "不是已销售状态");
             }
-            //$orderGoods = OrderGoods::findOne($id);
             //$goodsAccount = OrderAccount::findOne($id);
             //$goods = new WarehouseGoods();
             $bill_goods[] = [
@@ -520,7 +527,7 @@ class ReturnService extends Service
         $condition = ['goods_id' => $goods_ids, 'goods_status' => GoodsStatusEnum::HAS_SOLD];
         $execute_num = WarehouseGoods::updateAll(['goods_status' => GoodsStatusEnum::IN_REFUND], $condition);
         if ($execute_num <> count($bill_goods)) {
-            throw new \Exception("货品改变状态数量与明细数量不一致");
+            throw new \Exception("货品[条码号]改变状态数量与明细数量不一致");
         }
         return $billM;
     }

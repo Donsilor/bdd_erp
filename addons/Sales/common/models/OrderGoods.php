@@ -33,6 +33,7 @@ use Yii;
  * @property int $is_stock 是否现货(1是0否)
  * @property int $is_gift 是否赠品
  * @property int $is_return 是否退款
+ * @property string $return_no 退款编号
  * @property int $created_at 创建时间
  * @property int $updated_at 更新时间
  */
@@ -61,7 +62,7 @@ class OrderGoods extends BaseModel
             [['goods_image'], 'string', 'max' => 100],
             [['goods_spec','remark'], 'string', 'max' => 255],
             [['currency'], 'string', 'max' => 5],
-            [['produce_sn','out_sku_id'], 'string', 'max' => 30],
+            [['produce_sn', 'return_no', 'out_sku_id'], 'string', 'max' => 30],
             [['apply_info'], 'string'],
         ];
     }
@@ -104,6 +105,7 @@ class OrderGoods extends BaseModel
             'is_gift' => '是否赠品',
             'is_bc' => '是否布产',
             'is_return' => '是否退款',
+            'return_no' => '退款编号',
             'created_at' => '创建时间',
             'updated_at' => '更新时间',
             'is_apply' => '是否申请修改',
