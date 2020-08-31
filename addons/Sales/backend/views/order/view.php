@@ -174,20 +174,20 @@ $this->params['breadcrumbs'][] = $this->title;
                     }
                     ?>
                     <?php
-                    if ($model->distribute_status == DistributeStatusEnum::ALLOWED){
-                        echo Html::edit(['distribution/account-sales','id' => $model->id,'returnUrl' => Url::getReturnUrl()],'配货',[
-                            'class'=>'btn btn-primary btn-ms',
+                    if ($model->distribute_status == DistributeStatusEnum::ALLOWED) {
+                        echo Html::edit(['distribution/account-sales', 'id' => $model->id, 'returnUrl' => Url::getReturnUrl()], '配货', [
+                            'class' => 'btn btn-primary btn-ms',
                         ]);
                     }
                     ?>
                     <?php
-                    if ($model->distribute_status == DistributeStatusEnum::HAS_PEIHUO && $model->delivery_status == \addons\Sales\common\enums\DeliveryStatusEnum::SAVE){
-                        echo Html::a('发货质检', ['order-fqc/view', 'id' => $model->id,'returnUrl'=>Url::getReturnUrl()], ['class' => 'btn btn-primary btn-ms']);
+                    if ($model->distribute_status == DistributeStatusEnum::HAS_PEIHUO && $model->delivery_status == \addons\Sales\common\enums\DeliveryStatusEnum::SAVE) {
+                        echo Html::a('发货质检', ['order-fqc/view', 'id' => $model->id, 'returnUrl' => Url::getReturnUrl()], ['class' => 'btn btn-primary btn-ms']);
                     }
                     ?>
                     <?php
-                    if ($model->delivery_status == \addons\Sales\common\enums\DeliveryStatusEnum::TO_SEND){
-                        echo Html::a('发货', ['shipping/view', 'id' => $model->id,'returnUrl'=>Url::getReturnUrl()], ['class' => 'btn btn-primary btn-ms']);
+                    if ($model->delivery_status == \addons\Sales\common\enums\DeliveryStatusEnum::TO_SEND) {
+                        echo Html::a('发货', ['shipping/view', 'id' => $model->id, 'returnUrl' => Url::getReturnUrl()], ['class' => 'btn btn-primary btn-ms']);
                     }
                     ?>
                 </div>
@@ -268,8 +268,8 @@ $this->params['breadcrumbs'][] = $this->title;
                             ],
                             [
                                 'attribute' => 'goods_name',
-                                'value' => function($model) {
-                                    return "<div style='width:200px;white-space:pre-wrap;'>".$model->goods_name."</div>";
+                                'value' => function ($model) {
+                                    return "<div style='width:200px;white-space:pre-wrap;'>" . $model->goods_name . "</div>";
                                 },
                                 'format' => 'raw',
                             ],
@@ -382,7 +382,11 @@ $this->params['breadcrumbs'][] = $this->title;
                             [
                                 'attribute' => 'is_return',
                                 'value' => function ($model) {
-                                    return \addons\Sales\common\enums\IsReturnEnum::getValue($model->is_return) ?? '未操作';
+                                    $str = "";
+                                    if (in_array($model->is_return, [\addons\Sales\common\enums\IsReturnEnum::APPLY, \addons\Sales\common\enums\IsReturnEnum::HAS_RETURN])) {
+                                        $str .= "(" . Html::a($model->return_no, ['view', 'id' => $model->return_id, 'returnUrl' => Url::getReturnUrl()], ['style' => "text-decoration:underline;color:#3c8dbc"] . ")");
+                                    }
+                                    return \addons\Sales\common\enums\IsReturnEnum::getValue($model->is_return) . $str ?? '未操作';
                                 },
                                 'format' => 'raw',
                             ],
@@ -695,7 +699,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             <td><?= addons\Sales\common\enums\IsInvoiceEnum::getValue($model->invoice->is_invoice ?? '') ?></td>
                             <td><?= $model->invoice->invoice_title ?? '' ?></td>
                             <td><?= $model->invoice->tax_number ?? '' ?></td>
-                             <td><?= addons\Sales\common\enums\InvoiceTypeEnum::getValue($model->invoice->invoice_type ?? '') ?></td>
+                            <td><?= addons\Sales\common\enums\InvoiceTypeEnum::getValue($model->invoice->invoice_type ?? '') ?></td>
                             <td><?= $model->invoice->email ?? '' ?></td>
                             <td><?= $model->invoice->send_num ?? '' ?></td>
                             <td><?= Html::edit(['ajax-edit-invoice', 'id' => $model->id, 'returnUrl' => $returnUrl], '编辑', [

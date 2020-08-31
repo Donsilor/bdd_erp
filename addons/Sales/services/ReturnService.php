@@ -84,11 +84,12 @@ class ReturnService extends Service
         }
         $should_amount = $apply_amount = 0;
         $rGoods = [];
+        $return_no =  SnHelper::createReturnSn();
         foreach ($form->ids as $id) {
             $goods = OrderGoods::findOne($id);
             $rGoods[] = [
                 'return_id' => rand(10000, 99999),
-                'return_no' => (string)rand(10000000000, 99999999999),
+                'return_no' => $return_no,
                 'goods_id' => $goods->goods_id,
                 'goods_name' => $goods->goods_name,
                 'order_detail_id' => $goods->id,
@@ -104,12 +105,13 @@ class ReturnService extends Service
 
             //同步订单明细信息
             $goods->is_return = IsReturnEnum::APPLY;
+            $goods->return_no = $return_no;
             if (false === $goods->save()) {
                 throw new \Exception($this->getError($goods));
             }
         }
         $return = [
-            'return_no' => SnHelper::createReturnSn(),
+            'return_no' => $return_no,
             'order_id' => $order->id,
             'order_sn' => $order->order_sn,
             'new_order_id' => $newOrder ? $newOrder->id : "",
@@ -142,7 +144,7 @@ class ReturnService extends Service
             $goodsM = new ReturnGoodsForm();
             $goodsM->attributes = $good;
             $goodsM->return_id = $form->id;
-            $goodsM->return_no = $form->return_no;
+            //$goodsM->return_no = $form->return_no;
             if (false === $goodsM->save()) {
                 throw new \Exception($this->getError($goodsM));
             }
@@ -298,7 +300,7 @@ class ReturnService extends Service
         //2.还原商品状态
         $goods = ReturnGoodsForm::findAll(['return_id' => $form->id]);
         $ids = ArrayHelper::getColumn($goods, 'order_detail_id');
-        OrderGoods::updateAll(['is_return' => IsReturnEnum::SAVE], ['id' => $ids]);
+        OrderGoods::updateAll(['is_return' => IsReturnEnum::SAVE, 'return_no'=> ""], ['id' => $ids]);
         //3.取消退款单状态
         $form->return_status = ReturnStatusEnum::CANCEL;
         $form->audit_status = AuditStatusEnum::UNPASS;
