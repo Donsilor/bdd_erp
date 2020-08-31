@@ -368,6 +368,11 @@ $this->params['breadcrumbs'][] = $this->title;
                                     return common\helpers\AmountHelper::outputAmount($model->goods_pay_price, 2, $model->currency);
                                 }
                             ],
+                            [
+                                'class' => 'yii\grid\CheckboxColumn',
+                                'name' => 'id',  //设置每行数据的复选框属性
+                                'headerOptions' => ['width' => '30'],
+                            ],
                             /* [
                                     'attribute'=>'produce_sn',
                                     'value' => 'produce_sn'
@@ -508,10 +513,15 @@ $this->params['breadcrumbs'][] = $this->title;
                             ],
                             'remark',
                             [
+                                'class' => 'yii\grid\CheckboxColumn',
+                                'name' => 'id',  //设置每行数据的复选框属性
+                                'headerOptions' => ['width' => '30'],
+                            ],
+                            [
                                 'class' => 'yii\grid\ActionColumn',
                                 'header' => '操作',
                                 //'headerOptions' => ['width' => '150'],
-                                'template' => '{view} {edit} {stock} {untie} {apply-edit} {delete}',
+                                'template' => '{view} {edit} {delete} <br/>{stock} {untie} {apply-edit} ',
                                 'buttons' => [
                                     'view' => function ($url, $model, $key) {
                                         return Html::edit(['order-goods/view', 'id' => $model->id, 'order_id' => $model->order_id, 'returnUrl' => Url::getReturnUrl()], '详情', [

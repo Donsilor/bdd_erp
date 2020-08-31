@@ -36,7 +36,8 @@ use common\helpers\Url;
                     <div class="row">
 
                         <div class="col-lg-4">
-                            <?= $form->field($model, 'project_name')->dropDownList(\addons\Finance\common\enums\ProjectEnum::getMap(),['prompt'=>'请选择']) ?>
+<!--                            --><?//= $form->field($model, 'project_name')->dropDownList(\addons\Finance\common\enums\ProjectEnum::getMap(),['prompt'=>'请选择']) ?>
+                            <?= $form->field($model, 'project_name')->textInput()?>
                         </div>
                         <div class="col-lg-4">
                             <?= $form->field($model, 'budget_year')->textInput()?>
@@ -74,7 +75,7 @@ use common\helpers\Url;
                     </div>
                     <div class="row">
                         <div class="col-lg-12">
-                           <?= $form->field($model, 'usage')->textArea(['options'=>['maxlength' => true]])?>
+                           <?= $form->field($model, 'usage')->textArea()?>
                         </div>
                     </div>
                     <div class="col-lg-12">
