@@ -197,7 +197,7 @@ class WarehouseBillTService extends Service
         $file = fopen($form->file->tempName, 'r');
         $i = 0;
         $flag = true;
-        $error = [];
+        $error = $saveData = [];
         while ($goods = fgetcsv($file)) {
             if ($i == 0) {
                 $i++;
@@ -571,7 +571,11 @@ class WarehouseBillTService extends Service
                 }
             }
             $remark = $goods[75] ?? "";
+            $bill = WarehouseBill::findOne($form->bill_id);
             $saveData[] = [
+                'bill_id' => $bill->id,
+                'bill_no' => $bill->bill_no,
+                'bill_type' => $bill->bill_type,
                 'goods_id' => $goods_id,
                 'style_sn' => $style_sn,
                 'qiban_sn' => $qiban_sn,
@@ -661,6 +665,30 @@ class WarehouseBillTService extends Service
                 $message .= '第' . ($k + 1) . '行' . $s . '<hr>';
             }
             throw new \Exception($message);
+        }
+
+        $value = [];
+        $key = array_keys($saveData[0]);
+        foreach ($saveData as $item) {
+            $goodsM = new WarehouseBillGoodsL();
+            $goodsM->setAttributes($item);
+            if (!$goodsM->validate()) {
+                throw new \Exception($this->getError($goodsM));
+            }
+            $value[] = array_values($item);
+            if (count($value) >= 10) {
+                $res = Yii::$app->db->createCommand()->batchInsert(WarehouseBillGoodsL::tableName(), $key, $value)->execute();
+                if (false === $res) {
+                    throw new \Exception("创建收货单据明细失败1");
+                }
+                $value = [];
+            }
+        }
+        if (!empty($value)) {
+            $res = \Yii::$app->db->createCommand()->batchInsert(WarehouseBillGoodsL::tableName(), $key, $value)->execute();
+            if (false === $res) {
+                throw new \Exception("创建收货单据明细失败2");
+            }
         }
     }
 
