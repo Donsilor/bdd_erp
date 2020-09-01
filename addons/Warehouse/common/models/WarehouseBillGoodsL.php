@@ -101,8 +101,8 @@ use Yii;
  * @property int $main_pei_type 主石配石类型
  * @property string $main_stone_sn 主石编号
  * @property string $main_cert_id 主石证书号
- * @property string $main_stone_type 主石类型
  * @property string $main_cert_type 主石证书类型
+ * @property string $main_stone_type 主石类型
  * @property int $main_stone_num 主石粒数
  * @property string $main_stone_weight 主石重(ct)
  * @property string $main_stone_shape 主石形状
