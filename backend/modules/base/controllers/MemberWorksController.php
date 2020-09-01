@@ -107,8 +107,10 @@ class MemberWorksController extends BaseController
         if ($model->load(Yii::$app->request->post())) {
             try{
                 $trans = Yii::$app->db->beginTransaction();
-                $model->creator_id = Yii::$app->user->identity->getId();
-                $model->dept_id = $model->member->dept_id;
+                if($model->isNewRecord) {
+                    $model->creator_id = Yii::$app->user->identity->getId();
+                    $model->dept_id = $model->member->dept_id;
+                }
                 if(false === $model->save()) {
                     throw new \Exception($this->getError($model));
                 }

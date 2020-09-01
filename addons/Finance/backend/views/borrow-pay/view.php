@@ -56,7 +56,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             </tr>
                             <tr>
                                 <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('borrow_remark') ?>：</td>
-                                <td><?= $model->borrow_remark ?></td>
+                                <td><?= nl2br($model->borrow_remark) ?></td>
                             </tr>
                             <tr>
                                 <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('created_at') ?>：</td>
@@ -89,7 +89,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             </tr>
                             <tr>
                                 <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('audit_remark') ?>：</td>
-                                <td><?= $model->audit_remark ?></td>
+                                <td><?= nl2br($model->audit_remark) ?></td>
                             </tr>
                         </table>
                     </div>

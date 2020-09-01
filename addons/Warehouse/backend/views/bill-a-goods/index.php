@@ -553,6 +553,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             [
                                 'attribute'=>'cost_price',
                                 'format' => 'raw',
+                                'visible' => \common\helpers\Auth::verify(\common\enums\SpecialAuthEnum::VIEW_CAIGOU_PRICE),
                                 'headerOptions' => ['class' => 'col-md-1'],
                                 'filter' => Html::activeTextInput($searchModel, 'cost_price', [
                                     'class' => 'form-control',

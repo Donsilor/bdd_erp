@@ -240,7 +240,7 @@ class Order extends BaseModel
      */
     public function getPayLogs()
     {
-        return $this->hasMany(OrderPay::class, ['order_id'=>'id']);
+        return $this->hasMany(OrderPay::class, ['order_id'=>'id'])->alias('payLogs');
     }
     /**
      * 对应快递模型

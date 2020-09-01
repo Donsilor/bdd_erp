@@ -253,6 +253,7 @@ $params = $params ? "&".http_build_query($params) : '';
 //                        ],
                         [
                             'attribute'=>'cost_price',
+                            'visible' => \common\helpers\Auth::verify(\common\enums\SpecialAuthEnum::VIEW_CAIGOU_PRICE),
                             'filter' => Html::activeTextInput($searchModel, 'cost_price', [
                                 'class' => 'form-control',
                             ]),
