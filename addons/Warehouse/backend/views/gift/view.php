@@ -99,10 +99,14 @@ $this->params['breadcrumbs'][] = $this->title;
                                     <td class="col-xs-3 text-right"><?= $model->getAttributeLabel('gold_price') ?>：</td>
                                     <td><?= $model->gold_price ?></td>
                                 </tr>
+                                <?php
+                                if(\common\helpers\Auth::verify(\common\enums\SpecialAuthEnum::VIEW_CAIGOU_PRICE)){
+                                ?>
                                 <tr>
                                     <td class="col-xs-3 text-right"><?= $model->getAttributeLabel('cost_price') ?>：</td>
                                     <td><?= $model->cost_price ?></td>
                                 </tr>
+                                <?php } ?>
                                 <tr>
                                     <td class="col-xs-3 text-right"><?= $model->getAttributeLabel('purchase_sn') ?>：</td>
                                     <td><?= $model->purchase_sn ?></td>

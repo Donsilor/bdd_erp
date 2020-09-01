@@ -12,15 +12,20 @@ use addons\Sales\common\models\Order;
 class OrderPayForm extends Order
 {
     public $paid_amount;
+    public $arrive_type;
+    public $estimate_arrival_time;
+    public $remark;
     /**
      * {@inheritdoc}
      */
     public function rules()
     {
         $rules = [
-             [['paid_amount','currency','pay_type','order_sn'],'required'],
+             [['paid_amount','currency','pay_type','order_sn','arrive_type'],'required'],
              [['paid_amount'],'number'], 
-             [['paid_amount'],'validateAmount'] 
+             [['paid_amount'],'validateAmount'],
+             ['estimate_arrival_time','safe'],
+             [['remark'], 'string', 'max' => 255],
         ];
         return ArrayHelper::merge(parent::rules() , $rules);
     }
@@ -43,7 +48,10 @@ class OrderPayForm extends Order
     {
         //合并
         return ArrayHelper::merge(parent::attributeLabels() , [
-                'paid_amount'=>'实际支付金额'
+                'paid_amount'=>'实际支付金额',
+                'arrive_type' => '到账方式',
+                'estimate_arrival_time' => '预估到账时间',
+                'remark' => '备注',
         ]);
     }
     

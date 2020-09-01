@@ -179,16 +179,16 @@ class SalesDetailController extends BaseController
             ['单价', 'goods_price' , 'text'],
             ['平台收款日期', 'pay_time', 'date', 'Y-m-d'],
             ['销售金额', 'sale_price' , 'text'],
-            ['发货时间', 'delivery_time', 'date', 'Y-m-d'],
-            ['采购成本', 'cost_price' , 'text'],
+            ['发货时间', 'delivery_time', 'date', 'Y-m-d'],       
             ['退款时间', 'refund_time', 'date', 'Y-m-d'],
             ['退款金额', 'refund_price' , 'text'],
             ['退货时间', 'return_time', 'date', 'Y-m-d'],
             ['退款方式', 'return_by' , 'text'],
 
-
-
         ];
+		if(\common\helpers\Auth::verify(\common\enums\SpecialAuthEnum::VIEW_CAIGOU_PRICE)){
+			array_splice($header,11,0,['成本价', 'cost_price' , 'text']);
+		}
         return ExcelHelper::exportData($list, $header, $name.'数据导出_' . date('YmdHis',time()));
     }
 

@@ -74,11 +74,14 @@ $this->params['breadcrumbs'][] = $this->title;
                             <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('goods_num') ?>：</td>
                             <td><?= $model->goods_num ?></td>
                         </tr>
-
+                        <?php
+                        if(\common\helpers\Auth::verify(\common\enums\SpecialAuthEnum::VIEW_CAIGOU_PRICE)){
+                        ?>
                         <tr>
                             <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('cost_price') ?>：</td>
                             <td><?= $model->cost_price ?></td>
                         </tr>
+                        <?php } ?>
                         <tr>
                             <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('outbound_cost') ?>：</td>
                             <td>

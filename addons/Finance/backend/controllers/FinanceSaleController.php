@@ -106,12 +106,15 @@ class FinanceSaleController extends BaseController
             ['商品名称', 'goods_name' , 'text'],
             ['产品线', 'product_type_name' , 'text'],
             ['货号', 'goods_id' , 'text'],
-            ['成本价', 'cost_price' , 'text'],
             ['实际销售价', 'sale_price' , 'text'],
             ['支付方式', 'pay_name' , 'text'],
             ['外部订单号', 'out_trade_no' , 'text'],
             ['销售人', 'sale_name' , 'text'],
         ];
+		
+		if(\common\helpers\Auth::verify(\common\enums\SpecialAuthEnum::VIEW_CAIGOU_PRICE)){
+			array_splice($header,7,0,['成本价', 'cost_price' , 'text']);
+		}
 
         return ExcelHelper::exportData($list, $header, $name.'数据导出_' . date('YmdHis',time()));
     }

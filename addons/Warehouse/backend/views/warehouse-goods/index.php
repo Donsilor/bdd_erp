@@ -884,6 +884,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         [
                             'attribute'=>'cost_price',
                             'filter' => false,
+                            'visible' => \common\helpers\Auth::verify(\common\enums\SpecialAuthEnum::VIEW_CAIGOU_PRICE),
                             'headerOptions' => [],
                         ],
 

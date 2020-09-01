@@ -69,7 +69,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
                             <tr>
                                 <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('usage') ?>：</td>
-                                <td><?= $model->usage ?></td>
+                                <td><?= nl2br($model->usage) ?></td>
                             </tr>
                             <tr>
                                 <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('created_at') ?>：</td>

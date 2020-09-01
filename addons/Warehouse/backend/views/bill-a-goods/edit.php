@@ -30,10 +30,13 @@ $this->params['breadcrumbs'][] = $this->title;
                     <div class="col-lg-4">
                         <?= $form->field($model, 'product_size')->textInput() ?>
                     </div>
-
+                    <?php
+                    if(\common\helpers\Auth::verify(\common\enums\SpecialAuthEnum::VIEW_CAIGOU_PRICE)){
+                    ?>
                     <div class="col-lg-4">
                         <?= $form->field($model, 'cost_price')->textInput() ?>
                     </div>
+                    <?php } ?>
                 </div>
 
                 <div class="row">
