@@ -71,7 +71,7 @@ class WebSocketController extends Controller
         'task_worker_num' => 4,//task进程的数量
         'ssl_cert_file' => '',
         'ssl_key_file' => '',
-        'pid_file' => '',
+        'pid_file' => './websocket.pid',
         'buffer_output_size' => 2 * 1024 * 1024, //配置发送输出缓存区内存尺寸
         'heartbeat_check_interval' => 60,// 心跳检测秒数
         'heartbeat_idle_time' => 600,// 检查最近一次发送数据的时间和当前时间的差，大于则强行关闭
