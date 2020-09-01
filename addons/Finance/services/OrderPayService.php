@@ -54,6 +54,9 @@ class OrderPayService extends Service
         $orderPay->pay_sn = SnHelper::createOrderPaySn();
         $orderPay->pay_amount = $form->paid_amount;
         $orderPay->pay_type =  $form->pay_type;
+        $orderPay->arrive_type =  $form->arrive_type;
+        $orderPay->arrival_time =  $form->arrival_time;
+        $orderPay->remark = $form->remark;
         $orderPay->pay_status = PayStatusEnum::HAS_PAY;
         $orderPay->currency = $form->account->currency;
         $orderPay->exchange_rate = $form->account->exchange_rate;

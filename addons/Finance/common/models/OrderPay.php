@@ -4,6 +4,7 @@ namespace addons\Finance\common\models;
 
 use addons\Sales\common\models\Order;
 use common\models\backend\Member;
+
 use Yii;
 
 /**
@@ -43,7 +44,7 @@ class OrderPay extends BaseModel
             [['pay_sn', 'creator'], 'string', 'max' => 30],
             [['remark'], 'string', 'max' => 255],
             [['currency'], 'string', 'max' => 3],
-            ['estimate_arrival_time','safe']
+            ['arrival_time','safe']
         ];
     }
 
@@ -64,13 +65,14 @@ class OrderPay extends BaseModel
             'creator' => '点款人',
             'arrive_type' => '到账方式',
             'arrive_status' => '到账状态',
-            'estimate_arrival_time' => '预估到账时间',
+            'arrival_time' => '到账时间',
             'remark' => '备注',
             'creator_id' => '点款人ID',
             'created_at' => '点款时间',
             'updated_at' => '更新时间',
         ];
     }
+
 
     /**
      * 订单

@@ -60,7 +60,7 @@ $form = ActiveForm::begin([
                    <?= $form->field($model, 'arrive_type')->dropDownList(\addons\Finance\common\enums\ArriveTypeEnum::getMap(),['prompt'=>'请选择']);?>
                </div>
                <div class="col-lg-6">
-                   <?= $form->field($model, 'estimate_arrival_time')->widget(\kartik\date\DatePicker::class, [
+                   <?= $form->field($model, 'arrival_time')->widget(\kartik\date\DatePicker::class, [
                        'options' => [
                            'value' => date('Y-m-d') ,
                            'readonly' => false,
