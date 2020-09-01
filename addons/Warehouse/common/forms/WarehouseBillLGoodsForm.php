@@ -977,7 +977,7 @@ class WarehouseBillLGoodsForm extends WarehouseBillGoodsL
      */
     public function getFaceCraftMap()
     {
-        return \Yii::$app->attr->valueMap(AttrIdEnum::XIANGQIAN_CRAFT) ?? [];
+        return \Yii::$app->attr->valueMap(AttrIdEnum::FACEWORK) ?? [];
     }
 
     /**
@@ -988,7 +988,7 @@ class WarehouseBillLGoodsForm extends WarehouseBillGoodsL
     public function getFaceCraftDrop($form)
     {
         if (!empty($form->style_sn)) {
-            $data = $this->getAttrValueListByStyle($form->style_sn, AttrIdEnum::XIANGQIAN_CRAFT);
+            $data = $this->getAttrValueListByStyle($form->style_sn, AttrIdEnum::FACEWORK);
         } else {
             $data = $this->getFaceCraftMap();
         }

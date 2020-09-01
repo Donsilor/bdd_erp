@@ -31,6 +31,12 @@ $this->params['breadcrumbs'][] = $this->title;
             echo '&nbsp;';
             echo Html::edit(['edit-all', 'bill_id' => $bill->id], '编辑货品', ['class' => 'btn btn-info btn-xs']);
             echo '&nbsp;';
+            echo Html::edit(['ajax-upload', 'bill_id' => $bill->id], '批量导入', [
+                'class' => 'btn btn-success btn-xs',
+                'data-toggle' => 'modal',
+                'data-target' => '#ajaxModal',
+            ]);
+            echo '&nbsp;';
             echo Html::tag('span', '批量删除', ["class" => "btn btn-danger btn-xs jsBatchStatus", "data-grid" => "grid", "data-url" => Url::to(['batch-delete']),]);
             echo '&nbsp;';
             echo Html::tag('span', '刷新价格', ["class" => "btn btn-warning btn-xs jsBatchStatus", "data-grid" => "grid", "data-url" => Url::to(['update-price']),]);

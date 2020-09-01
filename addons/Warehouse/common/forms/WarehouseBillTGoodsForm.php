@@ -14,6 +14,7 @@ use common\helpers\StringHelper;
 class WarehouseBillTGoodsForm extends WarehouseBillGoodsL
 {
     public $ids;
+    public $file;
 
     /**
      * {@inheritdoc}
@@ -21,7 +22,8 @@ class WarehouseBillTGoodsForm extends WarehouseBillGoodsL
     public function rules()
     {
         $rules = [
-            [['goods_sn', 'is_wholesale', 'auto_goods_id', 'goods_num'], 'required']
+            [['goods_sn', 'is_wholesale', 'auto_goods_id', 'goods_num'], 'required'],
+            [['file'], 'file', 'extensions' => ['csv']],//'skipOnEmpty' => false,
         ];
         return array_merge(parent::rules(), $rules);
     }
@@ -33,7 +35,8 @@ class WarehouseBillTGoodsForm extends WarehouseBillGoodsL
     {
         //合并
         return ArrayHelper::merge(parent::attributeLabels(), [
-            'is_wholesale' => '是否批发(批发入库时出库销售不可拆分)'
+            'is_wholesale' => '是否批发(批发入库时出库销售不可拆分)',
+            'file' => '文件上传',
         ]);
     }
 
@@ -49,7 +52,33 @@ class WarehouseBillTGoodsForm extends WarehouseBillGoodsL
     }
 
     /**
-     * 根据款号获取属性值
+     * {@inheritdoc}
+     */
+    public function trimField($data)
+    {
+        $res = [];
+        foreach ($data as $k => $v) {
+            $res[$k] = trim(iconv('gbk', 'utf-8', $v));
+        }
+        return $res ?? [];
+    }
+
+    /**
+     * 属性值转换属性ID
+     * @param string $style_sn 款号
+     * @param string $value 属性值
+     * @param int $attr_id 属性ID
+     * @return int
+     */
+    public function getAttrIdByAttrValue($style_sn, $value, $attr_id)
+    {
+        $valueList = $this->getAttrValueListByStyle($style_sn, $attr_id);
+        $valueList = array_flip($valueList);
+        return $valueList[$value] ?? "";
+    }
+
+    /**
+     * 根据款号获取属性值列表
      * @param string $style_sn
      * @param integer $attr_id
      * @return array
@@ -980,7 +1009,7 @@ class WarehouseBillTGoodsForm extends WarehouseBillGoodsL
      */
     public function getFaceCraftMap()
     {
-        return \Yii::$app->attr->valueMap(AttrIdEnum::XIANGQIAN_CRAFT) ?? [];
+        return \Yii::$app->attr->valueMap(AttrIdEnum::FACEWORK) ?? [];
     }
 
     /**
@@ -991,7 +1020,7 @@ class WarehouseBillTGoodsForm extends WarehouseBillGoodsL
     public function getFaceCraftDrop($form)
     {
         if (!empty($form->style_sn)) {
-            $data = $this->getAttrValueListByStyle($form->style_sn, AttrIdEnum::XIANGQIAN_CRAFT);
+            $data = $this->getAttrValueListByStyle($form->style_sn, AttrIdEnum::FACEWORK);
         } else {
             $data = $this->getFaceCraftMap();
         }

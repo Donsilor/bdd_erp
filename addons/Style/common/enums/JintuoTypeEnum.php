@@ -42,5 +42,14 @@ class JintuoTypeEnum extends \common\enums\BaseEnum
                 ],
         ];
     }
-    
+
+    /**
+     * @param string $name
+     * @return int
+     */
+    public static function getIdByName($name)
+    {
+        $data = array_flip(JintuoTypeEnum::getMap());
+        return $data[$name] ?? "";
+    }
 }
