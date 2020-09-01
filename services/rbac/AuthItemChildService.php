@@ -79,7 +79,7 @@ class AuthItemChildService extends Service
         foreach ($allAuthItem as &$val) {
             $val = ArrayHelper::regroupMapToArr($val, 'name');
         }
-
+       
         $defaultAuth = [];
         // 默认后台权限
         if (!empty($allAuthItem[AppEnum::BACKEND])) {
@@ -102,18 +102,17 @@ class AuthItemChildService extends Service
             // 菜单类型
             $is_menu = in_array($key, $removeAppIds) ? AuthMenuEnum::TOP : AuthMenuEnum::LEFT;
             $allAuth = ArrayHelper::merge($allAuth, $this->regroupByAddonsData($item, $menu, $is_menu, $name, $key));
-        }
+        } 
         // 创建权限
         $rows = $this->createByAddonsData(ArrayHelper::merge($defaultAuth, $allAuth));
         // 批量写入数据        
         if(!empty($rows)){
             $field = ['key','title','name', 'app_id', 'is_addon', 'addons_name','pid', 'level', 'sort', 'tree', 'created_at', 'updated_at'];
-            Yii::$app->db->createCommand()->batchInsert(AuthItem::tableName(), $field, $rows)->execute();
+            $res = Yii::$app->db->createCommand()->batchInsert(AuthItem::tableName(), $field, $rows)->execute();
             
-            $sql = "update ".AuthItemChild::tableName()." child inner join ".AuthItem::tableName()." item on child.item_key=item.key set child.item_id=item.id";
-            Yii::$app->db->createCommand($sql)->execute();
-        }
-        
+            $sql = "update ".AuthItemChild::tableName()." child inner join ".AuthItem::tableName()." item on child.item_key=item.key set child.item_id=item.id where item.addons_name='{$name}'";
+            $res = Yii::$app->db->createCommand($sql)->getRawSql();
+        }        
         unset($data, $allAuth, $installData, $defaultAuth);
     }
 
