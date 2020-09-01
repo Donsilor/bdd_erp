@@ -24,4 +24,14 @@ class PeiLiaoWayEnum extends \common\enums\BaseEnum
         ];
     }
 
+    /**
+     * @param string $name
+     * @return int
+     */
+    public static function getIdByName($name)
+    {
+        $data = array_flip(PeiLiaoWayEnum::getMap());
+        return $data[$name] ?? "";
+    }
+
 }

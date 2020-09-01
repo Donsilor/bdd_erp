@@ -16,6 +16,9 @@ use addons\Warehouse\common\enums\PeiLiaoWayEnum;
 use addons\Warehouse\common\enums\PeiShiWayEnum;
 use addons\Style\common\enums\JintuoTypeEnum;
 use addons\Style\common\enums\QibanTypeEnum;
+use addons\Style\common\enums\AttrIdEnum;
+use common\enums\AuditStatusEnum;
+use common\helpers\UploadHelper;
 use common\enums\StatusEnum;
 
 /**
@@ -173,6 +176,492 @@ class WarehouseBillTService extends Service
         }
 
         $this->warehouseBillTSummary($form->bill_id);
+    }
+
+    /**
+     * 批量导入
+     * @param WarehouseBillTGoodsForm $form
+     * @throws
+     */
+    public function uploadGoods($form)
+    {
+        if (empty($form->file) && !isset($form->file)) {
+            throw new \Exception("请上传文件");
+        }
+        if (UploadHelper::getExt($form->file->name) != 'csv') {
+            throw new \Exception("请上传csv格式文件");
+        }
+        if (!$form->file->tempName) {
+            throw new \Exception("文件不能为空");
+        }
+        $file = fopen($form->file->tempName, 'r');
+        $i = 0;
+        $flag = true;
+        $error = [];
+        while ($goods = fgetcsv($file)) {
+            if ($i == 0) {
+                $i++;
+                continue;
+            }
+            if (count($goods) != 76) {
+                throw new \Exception("模板格式不正确，请下载最新模板");
+            }
+            $goods = $form->trimField($goods);
+            $goods_id = $goods[0] ?? "";
+            if (empty($goods_id)) {
+                $goods_id = SnHelper::createGoodsId();
+            }
+            $style_sn = $goods[1] ?? "";
+            if (empty($style_sn)) {
+                $flag = false;
+                $error[$i][] = "款号不能为空";
+            }
+            $style = Style::findOne(['style_sn' => $style_sn, 'audit_status' => AuditStatusEnum::UNPASS]);
+            if (empty($style)) {
+                $flag = false;
+                $error[$i][] = "款号不存在或未审核";
+            }
+            $qiban_sn = $goods[2] ?? "";
+            $goods_name = $goods[3] ?? "";
+            $material_type = $goods[4] ?? "";
+            if (!empty($material_type)) {
+                $attr_id = $form->getAttrIdByAttrValue($style_sn, $material_type, AttrIdEnum::MATERIAL_TYPE);
+                if(empty($attr_id)){
+                    $flag = false;
+                    $error[$i][] = "材质录入值不对或该款[".$style_sn."]材质不支持[".$material_type."]请前往款式库核实";
+                }else{
+                    $material_type = $attr_id;
+                }
+            }
+            $material_color = $goods[5] ?? "";
+            if (!empty($material_color)) {
+                $attr_id = $form->getAttrIdByAttrValue($style_sn, $material_color, AttrIdEnum::MATERIAL_COLOR);
+                if(empty($attr_id)){
+                    $flag = false;
+                    $error[$i][] = "材质颜色录入值不对或该款[".$style_sn."]材质颜色不支持[".$material_type."]请前往款式库核实";
+                }else{
+                    $material_type = $attr_id;
+                }
+            }
+            $finger_hk = $goods[6] ?? "";
+            if (!empty($finger_hk)) {
+                $attr_id = $form->getAttrIdByAttrValue($style_sn, $finger_hk, AttrIdEnum::PORT_NO);
+                if(empty($attr_id)){
+                    $flag = false;
+                    $error[$i][] = "手寸(港号)录入值不对或该款[".$style_sn."]手寸(港号)不支持[".$finger_hk."]请前往款式库核实";
+                }else{
+                    $finger_hk = $attr_id;
+                }
+            }
+            $finger = $goods[7] ?? "";
+            if (!empty($finger)) {
+                $attr_id = $form->getAttrIdByAttrValue($style_sn, $finger, AttrIdEnum::FINGER);
+                if(empty($attr_id)){
+                    $flag = false;
+                    $error[$i][] = "手寸(美号)录入值不对或该款[".$style_sn."]手寸(美号)不支持[".$finger."]请前往款式库核实";
+                }else{
+                    $finger = $attr_id;
+                }
+            }
+            $length = $goods[8] ?? "";
+            $product_size = $goods[9] ?? "";
+            $xiangkou = $goods[10] ?? "";
+            if (!empty($xiangkou)) {
+                $attr_id = $form->getAttrIdByAttrValue($style_sn, $xiangkou, AttrIdEnum::XIANGKOU);
+                if(empty($attr_id)){
+                    $flag = false;
+                    $error[$i][] = "镶口录入值不对或该款[".$style_sn."]镶口不支持[".$xiangkou."]请前往款式库核实";
+                }else{
+                    $xiangkou = $attr_id;
+                }
+            }
+            $kezi = $goods[11] ?? "";
+            $chain_type = $goods[12] ?? "";
+            if (!empty($chain_type)) {
+                $attr_id = $form->getAttrIdByAttrValue($style_sn, $chain_type, AttrIdEnum::CHAIN_TYPE);
+                if(empty($attr_id)){
+                    $flag = false;
+                    $error[$i][] = "链类型录入值不对或该款[".$style_sn."]链类型不支持[".$chain_type."]请前往款式库核实";
+                }else{
+                    $chain_type = $attr_id;
+                }
+            }
+            $cramp_ring = $goods[13] ?? "";
+            if (!empty($cramp_ring)) {
+                $attr_id = $form->getAttrIdByAttrValue($style_sn, $cramp_ring, AttrIdEnum::CHAIN_BUCKLE);
+                if(empty($attr_id)){
+                    $flag = false;
+                    $error[$i][] = "扣环录入值不对或该款[".$style_sn."]扣环不支持[".$cramp_ring."]请前往款式库核实";
+                }else{
+                    $cramp_ring = $attr_id;
+                }
+            }
+            $talon_head_type = $goods[14] ?? "";
+            if (!empty($talon_head_type)) {
+                $attr_id = $form->getAttrIdByAttrValue($style_sn, $talon_head_type, AttrIdEnum::TALON_HEAD_TYPE);
+                if(empty($attr_id)){
+                    $flag = false;
+                    $error[$i][] = "爪头形状录入值不对或该款[".$style_sn."]爪头形状不支持[".$talon_head_type."]请前往款式库核实";
+                }else{
+                    $talon_head_type = $attr_id;
+                }
+            }
+            $peiliao_way = $goods[15] ?? "";
+            if(!empty($peiliao_way)){
+                $peiliao_way = \addons\Warehouse\common\enums\PeiLiaoWayEnum::getIdByName($peiliao_way);
+                if(empty($peiliao_way)){
+                    $flag = false;
+                    $error[$i][] = "配料方式录入值不对";
+                }
+            }
+            $suttle_weight = $goods[16] ?? "";
+            $gold_weight = $goods[17] ?? "";
+            $gold_loss = $goods[18] ?? "";
+            $gold_price = $goods[19] ?? "";
+            $main_pei_type = $goods[20] ?? "";
+            if(!empty($main_pei_type)){
+                $main_pei_type = \addons\Warehouse\common\enums\PeiShiWayEnum::getIdByName($main_pei_type);
+                if(empty($main_pei_type)){
+                    $flag = false;
+                    $error[$i][] = "主石配石方式录入值不对";
+                }
+            }
+            $main_stone_sn = $goods[21] ?? "";
+            $main_stone_type = $goods[22] ?? "";
+            if (!empty($main_stone_type)) {
+                $attr_id = $form->getAttrIdByAttrValue($style_sn, $main_stone_type, AttrIdEnum::MAIN_STONE_TYPE);
+                if(empty($attr_id)){
+                    $flag = false;
+                    $error[$i][] = "主石类型录入值不对或该款[".$style_sn."]主石类型不支持[".$main_stone_type."]请前往款式库核实";
+                }else{
+                    $main_stone_type = $attr_id;
+                }
+            }
+            $main_stone_num = $goods[23] ?? "";
+            $main_stone_weight = $goods[24] ?? "";
+            $main_stone_price = $goods[25] ?? "";
+            $main_stone_shape = $goods[26] ?? "";
+            if (!empty($main_stone_shape)) {
+                $attr_id = $form->getAttrIdByAttrValue($style_sn, $main_stone_shape, AttrIdEnum::MAIN_STONE_CLARITY);
+                if(empty($attr_id)){
+                    $flag = false;
+                    $error[$i][] = "主石形状录入值不对或该款[".$style_sn."]主石形状不支持[".$main_stone_shape."]请前往款式库核实";
+                }else{
+                    $main_stone_shape = $attr_id;
+                }
+            }
+            $main_stone_color = $goods[27] ?? "";
+            if (!empty($second_stone_shape1)) {
+                $attr_id = $form->getAttrIdByAttrValue($style_sn, $main_stone_color, AttrIdEnum::MAIN_STONE_COLOR);
+                if(empty($attr_id)){
+                    $flag = false;
+                    $error[$i][] = "主石颜色录入值不对或该款[".$style_sn."]主石颜色不支持[".$second_stone_shape1."]请前往款式库核实";
+                }else{
+                    $second_stone_shape1 = $attr_id;
+                }
+            }
+            $main_stone_clarity = $goods[28] ?? "";
+            if (!empty($main_stone_clarity)) {
+                $attr_id = $form->getAttrIdByAttrValue($style_sn, $main_stone_clarity, AttrIdEnum::MAIN_STONE_CLARITY);
+                if(empty($attr_id)){
+                    $flag = false;
+                    $error[$i][] = "主石净度录入值不对或该款[".$style_sn."]主石净度不支持[".$main_stone_clarity."]请前往款式库核实";
+                }else{
+                    $main_stone_clarity = $attr_id;
+                }
+            }
+            $main_stone_cut = $goods[29] ?? "";
+            if (!empty($main_stone_cut)) {
+                $attr_id = $form->getAttrIdByAttrValue($style_sn, $main_stone_cut, AttrIdEnum::MAIN_STONE_CUT);
+                if(empty($attr_id)){
+                    $flag = false;
+                    $error[$i][] = "主石切工录入值不对或该款[".$style_sn."]主石切工不支持[".$main_stone_cut."]请前往款式库核实";
+                }else{
+                    $main_stone_cut = $attr_id;
+                }
+            }
+            $main_stone_colour = $goods[30] ?? "";
+            if (!empty($main_stone_colour)) {
+                $attr_id = $form->getAttrIdByAttrValue($style_sn, $main_stone_colour, AttrIdEnum::MAIN_STONE_COLOUR);
+                if(empty($attr_id)){
+                    $flag = false;
+                    $error[$i][] = "主石色彩录入值不对或该款[".$style_sn."]主石色彩不支持[".$main_stone_colour."]请前往款式库核实";
+                }else{
+                    $main_stone_colour = $attr_id;
+                }
+            }
+            $main_stone_size = $goods[31] ?? "";
+            $second_pei_type = $goods[32] ?? "";
+            if(!empty($second_pei_type)){
+                $second_pei_type = \addons\Warehouse\common\enums\PeiShiWayEnum::getIdByName($second_pei_type);
+                if(empty($second_pei_type)){
+                    $flag = false;
+                    $error[$i][] = "副石1配石方式录入值不对";
+                }
+            }
+            $second_stone_sn1 = $goods[33] ?? "";
+            $second_stone_type1 = $goods[34] ?? "";
+            if (!empty($second_stone_type1)) {
+                $attr_id = $form->getAttrIdByAttrValue($style_sn, $second_stone_type1, AttrIdEnum::SIDE_STONE1_TYPE);
+                if(empty($attr_id)){
+                    $flag = false;
+                    $error[$i][] = "副石1类型录入值不对或该款[".$style_sn."]副石1类型不支持[".$second_stone_type1."]请前往款式库核实";
+                }else{
+                    $second_stone_type1 = $attr_id;
+                }
+            }
+            $second_stone_num1 = $goods[35] ?? "";
+            $second_stone_weight1 = $goods[36] ?? "";
+            $second_stone_price1 = $goods[37] ?? "";
+            $second_stone_shape1 = $goods[38] ?? "";
+            if (!empty($second_stone_shape1)) {
+                $attr_id = $form->getAttrIdByAttrValue($style_sn, $second_stone_shape1, AttrIdEnum::SIDE_STONE1_SHAPE);
+                if(empty($attr_id)){
+                    $flag = false;
+                    $error[$i][] = "副石1形状录入值不对或该款[".$style_sn."]副石1形状不支持[".$second_stone_shape1."]请前往款式库核实";
+                }else{
+                    $second_stone_shape1 = $attr_id;
+                }
+            }
+            $second_stone_color1 = $goods[39] ?? "";
+            if (!empty($second_stone_color1)) {
+                $attr_id = $form->getAttrIdByAttrValue($style_sn, $second_stone_color1, AttrIdEnum::SIDE_STONE1_COLOR);
+                if(empty($attr_id)){
+                    $flag = false;
+                    $error[$i][] = "副石1颜色录入值不对或该款[".$style_sn."]副石1颜色不支持[".$second_stone_color1."]请前往款式库核实";
+                }else{
+                    $second_stone_color1 = $attr_id;
+                }
+            }
+            $second_stone_clarity1 = $goods[40] ?? "";
+            if (!empty($second_stone_clarity1)) {
+                $attr_id = $form->getAttrIdByAttrValue($style_sn, $second_stone_clarity1, AttrIdEnum::SIDE_STONE1_CLARITY);
+                if(empty($attr_id)){
+                    $flag = false;
+                    $error[$i][] = "副石1净度录入值不对或该款[".$style_sn."]副石1净度不支持[".$second_stone_clarity1."]请前往款式库核实";
+                }else{
+                    $second_stone_clarity1 = $attr_id;
+                }
+            }
+            $second_stone_colour1 = $goods[41] ?? "";
+            if (!empty($second_stone_colour1)) {
+                $attr_id = $form->getAttrIdByAttrValue($style_sn, $second_stone_colour1, AttrIdEnum::SIDE_STONE1_COLOUR);
+                if(empty($attr_id)){
+                    $flag = false;
+                    $error[$i][] = "副石1色彩录入值不对或该款[".$style_sn."]副石1色彩不支持[".$second_stone_colour1."]请前往款式库核实";
+                }else{
+                    $second_stone_colour1 = $attr_id;
+                }
+            }
+            $second_pei_type2 = $goods[42] ?? "";
+            if(!empty($second_pei_type2)){
+                $second_pei_type2 = \addons\Warehouse\common\enums\PeiShiWayEnum::getIdByName($second_pei_type2);
+                if(empty($second_pei_type2)){
+                    $flag = false;
+                    $error[$i][] = "副石2配石方式录入值不对";
+                }
+            }
+            $second_stone_sn2 = $goods[43] ?? "";
+            $second_stone_type2 = $goods[44] ?? "";
+            if (!empty($second_stone_type2)) {
+                $attr_id = $form->getAttrIdByAttrValue($style_sn, $second_stone_type2, AttrIdEnum::SIDE_STONE2_TYPE);
+                if(empty($attr_id)){
+                    $flag = false;
+                    $error[$i][] = "副石2类型录入值不对或该款[".$style_sn."]副石2类型不支持[".$second_stone_type2."]请前往款式库核实";
+                }else{
+                    $second_stone_type2 = $attr_id;
+                }
+            }
+            $second_stone_num2 = $goods[45] ?? "";
+            $second_stone_weight2 = $goods[46] ?? "";
+            $second_stone_price2 = $goods[47] ?? "";
+            $second_stone_shape2 = $goods[48] ?? "";
+            if (!empty($second_stone_shape2)) {
+                $attr_id = $form->getAttrIdByAttrValue($style_sn, $second_stone_shape2, AttrIdEnum::SIDE_STONE2_SHAPE);
+                if(empty($attr_id)){
+                    $flag = false;
+                    $error[$i][] = "副石2形状录入值不对或该款[".$style_sn."]副石2形状不支持[".$second_stone_shape2."]请前往款式库核实";
+                }else{
+                    $second_stone_shape2 = $attr_id;
+                }
+            }
+            $second_stone_size2 = $goods[49] ?? "";
+            $stone_remark = $goods[50] ?? "";
+            $parts_way = $goods[51] ?? "";
+            if(!empty($parts_way)){
+                $parts_way = \addons\Warehouse\common\enums\PeiJianWayEnum::getIdByName($parts_way);
+                if(empty($parts_way)){
+                    $flag = false;
+                    $error[$i][] = "配件方式录入值不对";
+                }
+            }
+            $parts_type = $goods[52] ?? "";
+            if (!empty($parts_type)) {
+                $attr_id = $form->getAttrIdByAttrValue($style_sn, $parts_type, AttrIdEnum::MAT_PARTS_TYPE);
+                if(empty($attr_id)){
+                    $flag = false;
+                    $error[$i][] = "配件类型录入值不对或该款[".$style_sn."]配件类型不支持[".$parts_type."]请前往款式库核实";
+                }else{
+                    $parts_type = $attr_id;
+                }
+            }
+            $parts_material = $goods[53] ?? "";
+            if (!empty($parts_material)) {
+                $attr_id = $form->getAttrIdByAttrValue($style_sn, $parts_material, AttrIdEnum::MATERIAL_TYPE);
+                if(empty($attr_id)){
+                    $flag = false;
+                    $error[$i][] = "配件材质录入值不对或该款[".$style_sn."]配件材质不支持[".$parts_material."]请前往款式库核实";
+                }else{
+                    $parts_material = $attr_id;
+                }
+            }
+            $parts_num = $goods[54] ?? "";
+            $parts_gold_weight = $goods[55] ?? "";
+            $parts_price = $goods[56] ?? "";
+            $peishi_gong_fee = $goods[57] ?? "";
+            $peishi_fee = $goods[58] ?? "";
+            $parts_fee = $goods[59] ?? "";
+            $gong_fee = $goods[60] ?? "";
+            $xiangqian_craft = $goods[61] ?? "";
+            if (!empty($xiangqian_craft)) {
+                $attr_id = $form->getAttrIdByAttrValue($style_sn, $xiangqian_craft, AttrIdEnum::MATERIAL_TYPE);
+                if(empty($attr_id)){
+                    $flag = false;
+                    $error[$i][] = "镶嵌工艺录入值不对或该款[".$style_sn."]镶嵌工艺不支持[".$xiangqian_craft."]请前往款式库核实";
+                }else{
+                    $xiangqian_craft = $attr_id;
+                }
+            }
+            $xianqian_price = $goods[62] ?? "";
+            $biaomiangongyi = $goods[63] ?? "";
+            if (!empty($biaomiangongyi)) {
+                $attr_id = $form->getAttrIdByAttrValue($style_sn, $biaomiangongyi, AttrIdEnum::FACEWORK);
+                if(empty($attr_id)){
+                    $flag = false;
+                    $error[$i][] = "表面工艺录入值不对或该款[".$style_sn."]表面工艺不支持[".$biaomiangongyi."]请前往款式库核实";
+                }else{
+                    $biaomiangongyi = $attr_id;
+                }
+            }
+            $biaomiangongyi_fee = $goods[64] ?? "";
+            $fense_fee = $goods[65] ?? "";
+            $penlasha_fee = $goods[66] ?? "";
+            $bukou_fee = $goods[67] ?? "";
+            $templet_fee = $goods[68] ?? "";
+            $cert_fee = $goods[69] ?? "";
+            $other_fee = $goods[70] ?? "";
+            $main_cert_id = $goods[71] ?? "";
+            $main_cert_type = $goods[72] ?? "";
+            if (!empty($main_cert_type)) {
+                $attr_id = $form->getAttrIdByAttrValue($style_sn, $main_cert_type, AttrIdEnum::DIA_CERT_TYPE);
+                if(empty($attr_id)){
+                    $flag = false;
+                    $error[$i][] = "主石证书类型录入值不对或该款[".$style_sn."]主石证书类型不支持[".$main_cert_type."]请前往款式库核实";
+                }else{
+                    $main_cert_type = $attr_id;
+                }
+            }
+            $markup_rate = $goods[73] ?? "";
+            $jintuo_type = $goods[74] ?? "";
+            if(!empty($jintuo_type)){
+                $jintuo_type = JintuoTypeEnum::getIdByName($jintuo_type);
+                if(empty($jintuo_type)){
+                    $flag = false;
+                    $error[$i][] = "金托类型录入值不对";
+                }
+            }
+            $remark = $goods[75] ?? "";
+            $saveData[] = [
+                'goods_id' => $goods_id,
+                'style_sn' => $style_sn,
+                'qiban_sn' => $qiban_sn,
+                'goods_name' => $goods_name,
+                'material_type' => $material_type,
+                'finger_hk' => $finger_hk,
+                'finger' => $finger,
+                'length' => $length,
+                'product_size' => $product_size,
+                'xiangkou' => $xiangkou,
+                'kezi' => $kezi,
+                'chain_type' => $chain_type,
+                'cramp_ring' => $cramp_ring,
+                'talon_head_type' => $talon_head_type,
+                'peiliao_way' => $peiliao_way,
+                'suttle_weight' => $suttle_weight,
+                'gold_weight' => $gold_weight,
+                'gold_loss' => $gold_loss,
+                'gold_price' => $gold_price,
+                'main_pei_type' => $main_pei_type,
+                'main_stone_sn' => $main_stone_sn,
+                'main_stone_type' => $main_stone_type,
+                'main_stone_num' => $main_stone_num,
+                'main_stone_weight' => $main_stone_weight,
+                'main_stone_price' => $main_stone_price,
+                'main_stone_shape' => $main_stone_shape,
+                'main_stone_color' => $main_stone_color,
+                'main_stone_clarity' => $main_stone_clarity,
+                'main_stone_cut' => $main_stone_cut,
+                'main_stone_colour' => $main_stone_colour,
+                'main_stone_size' => $main_stone_size,
+                'second_pei_type' => $second_pei_type,
+                'second_stone_sn1' => $second_stone_sn1,
+                'second_stone_type1' => $second_stone_type1,
+                'second_stone_num1' => $second_stone_num1,
+                'second_stone_weight1' => $second_stone_weight1,
+                'second_stone_price1' => $second_stone_price1,
+                'second_stone_shape1' => $second_stone_shape1,
+                'second_stone_color1' => $second_stone_color1,
+                'second_stone_clarity1' => $second_stone_clarity1,
+                'second_stone_colour1' => $second_stone_colour1,
+                'second_pei_type2' => $second_pei_type2,
+                'second_stone_sn2' => $second_stone_sn2,
+                'second_stone_type2' => $second_stone_type2,
+                'second_stone_num2' => $second_stone_num2,
+                'second_stone_weight2' => $second_stone_weight2,
+                'second_stone_price2' => $second_stone_price2,
+                'second_stone_shape2' => $second_stone_shape2,
+                'second_stone_size2' => $second_stone_size2,
+                'stone_remark' => $stone_remark,
+                'parts_way' => $parts_way,
+                'parts_type' => $parts_type,
+                'parts_material' => $parts_material,
+                'parts_num' => $parts_num,
+                'parts_gold_weight' => $parts_gold_weight,
+                'parts_price' => $parts_price,
+                'peishi_gong_fee' => $peishi_gong_fee,
+                'peishi_fee' => $peishi_fee,
+                'parts_fee' => $parts_fee,
+                'gong_fee' => $gong_fee,
+                'xiangqian_craft' => $xiangqian_craft,
+                'xianqian_price' => $xianqian_price,
+                'biaomiangongyi' => $biaomiangongyi,
+                'biaomiangongyi_fee' => $biaomiangongyi_fee,
+                'fense_fee' => $fense_fee,
+                'penlasha_fee' => $penlasha_fee,
+                'bukou_fee' => $bukou_fee,
+                'templet_fee' => $templet_fee,
+                'cert_fee' => $cert_fee,
+                'other_fee' => $other_fee,
+                'main_cert_id' => $main_cert_id,
+                'main_cert_type' => $main_cert_type,
+                'markup_rate' => $markup_rate,
+                'jintuo_type' => $jintuo_type,
+                'remark' => $remark,
+                'status' => StatusEnum::ENABLED,
+                'creator_id' => \Yii::$app->user->identity->getId(),
+                'created_at' => time(),
+            ];
+        }
+
+        if (!$flag) {
+            //发生错误
+            $message = '';
+            foreach ($error as $k => $v) {
+                $s = "【" . implode('】,【', $v) . '】';
+                $message .= '第' . ($k + 1) . '行' . $s . '<hr>';
+            }
+            throw new \Exception($message);
+        }
     }
 
     /**
