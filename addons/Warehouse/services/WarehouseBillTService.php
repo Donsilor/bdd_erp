@@ -241,10 +241,14 @@ class WarehouseBillTService extends Service
                     $flag = false;
                     $error[$i][] = $row . "款号不能为空";
                 }
-                $style = Style::findOne(['style_sn' => $style_sn, 'audit_status' => AuditStatusEnum::PASS]);
+                $style = Style::findOne(['style_sn' => $style_sn]);
                 if (empty($style)) {
                     $flag = false;
-                    $error[$i][] = $row . "款号不存在或未审核";
+                    $error[$i][] = $row . "款号不存在";
+                }
+                if ($style->audit_status != AuditStatusEnum::PASS) {
+                    $flag = false;
+                    $error[$i][] = $row . "款号未审核";
                 }
                 if ($style->status != StatusEnum::ENABLED) {
                     $flag = false;
