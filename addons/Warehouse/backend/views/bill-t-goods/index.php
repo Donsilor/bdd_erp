@@ -540,6 +540,18 @@ $this->params['breadcrumbs'][] = $this->title;
                                 ]),
                             ],
                             [
+                                'attribute' => 'main_stone_type',
+                                'value' => function ($model) {
+                                    return Yii::$app->attr->valueName($model->main_stone_type) ?? "";
+                                },
+                                'filter' => Html::activeDropDownList($searchModel, 'main_stone_type', $model->getMainStoneTypeMap(), [
+                                    'prompt' => '全部',
+                                    'class' => 'form-control',
+                                    'style' => 'width:80px;'
+                                ]),
+                                'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#afb4db;'],
+                            ],
+                            [
                                 'attribute' => 'main_stone_num',
                                 'format' => 'raw',
                                 'filter' => false,
@@ -662,11 +674,11 @@ $this->params['breadcrumbs'][] = $this->title;
                                 ]),
                             ],
                             [
-                                'attribute' => 'main_stone_type',
+                                'attribute' => 'main_cert_type',
                                 'value' => function ($model) {
-                                    return Yii::$app->attr->valueName($model->main_stone_type) ?? "";
+                                    return Yii::$app->attr->valueName($model->main_cert_type) ?? "";
                                 },
-                                'filter' => Html::activeDropDownList($searchModel, 'main_stone_type', $model->getMainStoneTypeMap(), [
+                                'filter' => Html::activeDropDownList($searchModel, 'main_cert_type', $model->getMainCertTypeMap(), [
                                     'prompt' => '全部',
                                     'class' => 'form-control',
                                     'style' => 'width:80px;'

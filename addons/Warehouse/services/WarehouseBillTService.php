@@ -322,7 +322,7 @@ class WarehouseBillTService extends Service
             $gold_weight = $form->formatValue($goods[17],0) ?? 0;
             $gold_loss = $form->formatValue($goods[18],0) ?? 0;
             $gold_price = $form->formatValue($goods[19],0) ?? 0;
-            $main_pei_type = $goods[20] ?? "";
+            $main_pei_type = $form->formatValue($goods[20], 0) ?? 0;
             if (!empty($main_pei_type)) {
                 $main_pei_type = \addons\Warehouse\common\enums\PeiShiWayEnum::getIdByName($main_pei_type);
                 if (empty($main_pei_type)) {
@@ -395,7 +395,7 @@ class WarehouseBillTService extends Service
                 }
             }
             $main_stone_size = $goods[31] ?? "";
-            $second_pei_type = $goods[32] ?? "";
+            $second_pei_type = $form->formatValue($goods[32],0) ?? 0;
             if (!empty($second_pei_type)) {
                 $second_pei_type = \addons\Warehouse\common\enums\PeiShiWayEnum::getIdByName($second_pei_type);
                 if (empty($second_pei_type)) {
@@ -457,7 +457,7 @@ class WarehouseBillTService extends Service
                     $second_stone_colour1 = $attr_id;
                 }
             }
-            $second_pei_type2 = $goods[42] ?? "";
+            $second_pei_type2 = $form->formatValue($goods[42],0) ?? 0;
             if (!empty($second_pei_type2)) {
                 $second_pei_type2 = \addons\Warehouse\common\enums\PeiShiWayEnum::getIdByName($second_pei_type2);
                 if (empty($second_pei_type2)) {
@@ -677,15 +677,16 @@ class WarehouseBillTService extends Service
                 $flag = false;
                 $error[$i][] = $this->getError($goodsM);
             }
+
+            $i++;
         }
 
         if (!$flag) {
             //发生错误
             $message = '';
-            $error = array_reverse($error);
             foreach ($error as $k => $v) {
                 $s = "【" . implode('】,【', $v) . '】';
-                $message .= '第' . ($k + 2) . '行' . $s . '<hr>';
+                $message .= '第' . ($k + 1) . '行' . $s . '<hr>';
             }
             throw new \Exception($message);
         }

@@ -560,6 +560,30 @@ class WarehouseBillTGoodsForm extends WarehouseBillGoodsL
     }
 
     /**
+     * 主石证书类型列表
+     * @return array
+     */
+    public function getMainCertTypeMap()
+    {
+        return \Yii::$app->attr->valueMap(AttrIdEnum::DIA_CERT_TYPE) ?? [];
+    }
+
+    /**
+     * 主石证书类型
+     * @param WarehouseBillTGoodsForm $form
+     * @return array
+     */
+    public function getMainCertTypeDrop($form)
+    {
+        if (!empty($form->style_sn)) {
+            $data = $this->getAttrValueListByStyle($form->style_sn, AttrIdEnum::DIA_CERT_TYPE);
+        } else {
+            $data = $this->getMainCertTypeMap();
+        }
+        return $data ?? [];
+    }
+
+    /**
      * 主石颜色列表
      * @return array
      */
