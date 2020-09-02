@@ -1589,32 +1589,32 @@ $this->params['breadcrumbs'][] = $this->title;
 //                                    'style' => 'width:80px;'
 //                                ]),
                             ],
-                            [
-                                'attribute' => 'factory_cost',
-                                'format' => 'raw',
-                                'value' => function ($model, $key, $index, $column) {
-                                    return Html::ajaxInput('factory_cost', $model->factory_cost, ['data-id' => $model->id, 'onfocus' => 'rfClearVal(this)', 'data-type' => 'number']);
-                                },
-                                'filter' => false,
-                                'headerOptions' => ['class' => 'col-md-1 batch_full', 'attr-name' => 'factory_cost', 'style' => 'background-color:#b7ba6b;'],
-//                                'filter' => Html::activeTextInput($searchModel, 'factory_cost', [
-//                                    'class' => 'form-control',
-//                                    'style' => 'width:100px;'
-//                                ]),
-                            ],
-                            [
-                                'attribute' => 'cost_price',
-                                'format' => 'raw',
-                                'value' => function ($model, $key, $index, $column) {
-                                    return Html::ajaxInput('cost_price', $model->cost_price, ['data-id' => $model->id, 'onfocus' => 'rfClearVal(this)', 'data-type' => 'number']);
-                                },
-                                'filter' => false,
-                                'headerOptions' => ['class' => 'col-md-1 batch_full', 'attr-name' => 'cost_price', 'style' => 'background-color:#b7ba6b;'],
-//                                'filter' => Html::activeTextInput($searchModel, 'cost_price', [
-//                                    'class' => 'form-control',
-//                                    'style' => 'width:100px;'
-//                                ]),
-                            ],
+//                            [
+//                                'attribute' => 'factory_cost',
+//                                'format' => 'raw',
+//                                'value' => function ($model, $key, $index, $column) {
+//                                    return Html::ajaxInput('factory_cost', $model->factory_cost, ['data-id' => $model->id, 'onfocus' => 'rfClearVal(this)', 'data-type' => 'number']);
+//                                },
+//                                'filter' => false,
+//                                'headerOptions' => ['class' => 'col-md-1 batch_full', 'attr-name' => 'factory_cost', 'style' => 'background-color:#b7ba6b;'],
+////                                'filter' => Html::activeTextInput($searchModel, 'factory_cost', [
+////                                    'class' => 'form-control',
+////                                    'style' => 'width:100px;'
+////                                ]),
+//                            ],
+//                            [
+//                                'attribute' => 'cost_price',
+//                                'format' => 'raw',
+//                                'value' => function ($model, $key, $index, $column) {
+//                                    return Html::ajaxInput('cost_price', $model->cost_price, ['data-id' => $model->id, 'onfocus' => 'rfClearVal(this)', 'data-type' => 'number']);
+//                                },
+//                                'filter' => false,
+//                                'headerOptions' => ['class' => 'col-md-1 batch_full', 'attr-name' => 'cost_price', 'style' => 'background-color:#b7ba6b;'],
+////                                'filter' => Html::activeTextInput($searchModel, 'cost_price', [
+////                                    'class' => 'form-control',
+////                                    'style' => 'width:100px;'
+////                                ]),
+//                            ],
                             [
                                 'attribute' => 'markup_rate',
                                 'format' => 'raw',
@@ -1627,19 +1627,19 @@ $this->params['breadcrumbs'][] = $this->title;
                                     'style' => 'width:80px;'
                                 ]),
                             ],
-                            [
-                                'attribute' => 'market_price',
-                                'format' => 'raw',
-                                'value' => function ($model, $key, $index, $column) {
-                                    return Html::ajaxInput('market_price', $model->market_price, ['data-id' => $model->id, 'onfocus' => 'rfClearVal(this)', 'data-type' => 'number']);
-                                },
-                                'filter' => false,
-                                'headerOptions' => ['class' => 'col-md-1 batch_full', 'attr-name' => 'market_price', 'style' => 'background-color:#b7ba6b;'],
-//                                'filter' => Html::activeTextInput($searchModel, 'market_price', [
-//                                    'class' => 'form-control',
-//                                    'style' => 'width:100px;'
-//                                ]),
-                            ],
+//                            [
+//                                'attribute' => 'market_price',
+//                                'format' => 'raw',
+//                                'value' => function ($model, $key, $index, $column) {
+//                                    return Html::ajaxInput('market_price', $model->market_price, ['data-id' => $model->id, 'onfocus' => 'rfClearVal(this)', 'data-type' => 'number']);
+//                                },
+//                                'filter' => false,
+//                                'headerOptions' => ['class' => 'col-md-1 batch_full', 'attr-name' => 'market_price', 'style' => 'background-color:#b7ba6b;'],
+////                                'filter' => Html::activeTextInput($searchModel, 'market_price', [
+////                                    'class' => 'form-control',
+////                                    'style' => 'width:100px;'
+////                                ]),
+//                            ],
                             [
                                 'attribute' => 'style_sex',
                                 'format' => 'raw',
