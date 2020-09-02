@@ -573,7 +573,7 @@ class WarehouseBillTService extends Service
                 }
             }
             $remark = $goods[76] ?? "";
-            $saveData[] = $item =  [
+            $saveData[] = $item = [
                 'bill_id' => $bill->id,
                 'bill_no' => $bill->bill_no,
                 'bill_type' => $bill->bill_type,
