@@ -785,6 +785,7 @@ class WarehouseBillTService extends Service
             }
         }
 
+        //同步更新价格
         $this->syncUpdatePriceAll($bill);
     }
 
