@@ -175,9 +175,9 @@ class BddOrderService extends Service
     public function getErpOrderAddressData($order)
     {
         return [
-            "country_id"=>$order->address->country_id,
-            "province_id"=>$order->address->province_id,
-            "city_id"=>$order->address->city_id,
+            "country_id"=>$order->address->country_id/1,
+            "province_id"=>$order->address->province_id/1,
+            "city_id"=>$order->address->city_id/1,
             "firstname"=>$order->address->firstname,
             "lastname"=>$order->address->lastname,
             "realname"=>$order->address->realname,
