@@ -236,7 +236,7 @@ class WarehouseBillTService extends Service
                 }
                 $style_sn = $qiban->style_sn ?? "";
             }
-            if ($qiban_type == QibanTypeEnum::NO_STYLE) {
+            if ($qiban_type != QibanTypeEnum::NO_STYLE) {
                 if (empty($style_sn)) {
                     $flag = false;
                     $error[$i][] = $row . "款号不能为空";
