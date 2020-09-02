@@ -80,12 +80,12 @@ class WarehouseBillTGoodsForm extends WarehouseBillGoodsL
      */
     public function getPeiType($stone_sn = null, $stone_num = null, $stone_weight = null)
     {
-        if(!empty($stone_sn)){
+        if (!empty($stone_sn)) {
             $main_pei_type = \addons\Warehouse\common\enums\PeiShiWayEnum::COMPANY;
-        }else{
-            if(empty($stone_num) && empty($stone_weight)){
+        } else {
+            if (empty($stone_num) && empty($stone_weight)) {
                 $main_pei_type = \addons\Warehouse\common\enums\PeiShiWayEnum::NO_PEI;
-            }else{
+            } else {
                 $main_pei_type = \addons\Warehouse\common\enums\PeiShiWayEnum::FACTORY;
             }
         }
@@ -101,7 +101,11 @@ class WarehouseBillTGoodsForm extends WarehouseBillGoodsL
      */
     public function getAttrIdByAttrValue($style_sn, $value, $attr_id)
     {
-        $valueList = $this->getAttrValueListByStyle($style_sn, $attr_id);
+        if (!empty($style_sn)) {
+            $valueList = $this->getAttrValueListByStyle($style_sn, $attr_id);
+        } else {
+            $valueList = \Yii::$app->attr->valueMap($attr_id);
+        }
         $valueList = array_flip($valueList);
         return (string)$valueList[$value] ?? "";
     }

@@ -209,6 +209,7 @@ class WarehouseBillTService extends Service
             if (count($goods) != 77) {
                 throw new \Exception("模板格式不正确，请下载最新模板");
             }
+            $row = "第" . ($i + 1) . "行";
             $goods = $form->trimField($goods);
             $goods_id = $goods[0] ?? "";
             $auto_goods_id = 1;//是否自动货号 默认手填
@@ -217,20 +218,39 @@ class WarehouseBillTService extends Service
                 $auto_goods_id = 0;
             }
             $style_sn = $goods[1] ?? "";
-            if (empty($style_sn)) {
-                $flag = false;
-                $error[$i][] = "款号不能为空";
-            }
-            $style = Style::findOne(['style_sn' => $style_sn, 'audit_status' => AuditStatusEnum::PASS]);
-            if (empty($style)) {
-                $flag = false;
-                $error[$i][] = "款号不存在或未审核";
-            }
-            if ($style->status != StatusEnum::ENABLED) {
-                $flag = false;
-                $error[$i][] = "款号不是启用状态";
-            }
             $qiban_sn = $goods[2] ?? "";
+            if (!empty($style_sn) && !empty($qiban_sn)) {
+                throw new \Exception($row . "[款号]和[起版号]只能填写其一");
+            }
+            $qiban_type = QibanTypeEnum::NON_VERSION;
+            if (!empty($qiban_sn)) {
+                $qiban = Qiban::findOne(['qiban_sn' => $qiban_sn]);
+                if (!$qiban) {
+                    throw new \Exception($row . "[起版号]不存在");
+                } elseif ($qiban->status != StatusEnum::ENABLED) {
+                    throw new \Exception($row . "[起版号]不是启用状态");
+                } elseif (empty($qiban->style_sn)) {
+                    $qiban_type = QibanTypeEnum::NO_STYLE;
+                } else {
+                    $qiban_type = QibanTypeEnum::HAVE_STYLE;
+                }
+                $style_sn = $qiban->style_sn ?? "";
+            }
+            if ($qiban_type == QibanTypeEnum::NO_STYLE) {
+                if (empty($style_sn)) {
+                    $flag = false;
+                    $error[$i][] = $row . "款号不能为空";
+                }
+                $style = Style::findOne(['style_sn' => $style_sn, 'audit_status' => AuditStatusEnum::PASS]);
+                if (empty($style)) {
+                    $flag = false;
+                    $error[$i][] = $row . "款号不存在或未审核";
+                }
+                if ($style->status != StatusEnum::ENABLED) {
+                    $flag = false;
+                    $error[$i][] = $row . "款号不是启用状态";
+                }
+            }
             $goods_sn = !empty($style_sn) ? $style_sn : $qiban_sn;
             $goods_num = 1;
             $goods_name = $goods[3] ?? "";
@@ -349,7 +369,7 @@ class WarehouseBillTService extends Service
                     $flag = false;
                     $error[$i][] = "主石配石方式录入值不对";
                 }
-            }else{
+            } else {
                 $main_pei_type = $form->getPeiType($main_stone_sn, $main_stone_num, $main_stone_weight);
             }
             $main_stone_price = $form->formatValue($goods[25], 0) ?? 0;
@@ -424,7 +444,7 @@ class WarehouseBillTService extends Service
                     $flag = false;
                     $error[$i][] = "副石1配石方式录入值不对";
                 }
-            }else{
+            } else {
                 $second_pei_type = $form->getPeiType($second_stone_sn1, $second_stone_num1, $second_stone_weight1);
             }
             $second_stone_price1 = $form->formatValue($goods[37], 0) ?? 0;
@@ -488,7 +508,7 @@ class WarehouseBillTService extends Service
                     $flag = false;
                     $error[$i][] = "副石2配石方式录入值不对";
                 }
-            }else{
+            } else {
                 $second_pei_type = $form->getPeiType($second_stone_sn2, $second_stone_num2, $second_stone_weight2);
             }
             $second_stone_price2 = $form->formatValue($goods[47], 0) ?? 0;
@@ -605,6 +625,7 @@ class WarehouseBillTService extends Service
                 'supplier_id' => $bill->supplier_id,
                 'put_in_type' => $bill->put_in_type,
                 'qiban_sn' => $qiban_sn,
+                'qiban_type' => $qiban_type,
                 'goods_name' => $goods_name,
                 'goods_num' => $goods_num,
                 'material_type' => $material_type,
