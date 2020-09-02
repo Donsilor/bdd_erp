@@ -537,7 +537,7 @@ class WarehouseBillTService extends Service
                     $xiangqian_craft = $attr_id;
                 }
             }
-            $xianqian_price = $goods[63] ?? 0;
+            $xianqian_price = $form->formatValue($goods[63],0) ?? 0;
             $biaomiangongyi = $goods[64] ?? "";
             if (!empty($biaomiangongyi)) {
                 $attr_id = $form->getAttrIdByAttrValue($style_sn, $biaomiangongyi, AttrIdEnum::FACEWORK);
@@ -685,7 +685,7 @@ class WarehouseBillTService extends Service
             $error = array_reverse($error);
             foreach ($error as $k => $v) {
                 $s = "【" . implode('】,【', $v) . '】';
-                $message .= '第' . ($k + 1) . '行' . $s . '<hr>';
+                $message .= '第' . ($k + 2) . '行' . $s . '<hr>';
             }
             throw new \Exception($message);
         }
