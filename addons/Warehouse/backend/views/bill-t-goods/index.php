@@ -209,7 +209,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                     'class' => 'form-control',
                                     'style' => 'width:80px;'
                                 ]),
-                                'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#feeeed;'],
+                                'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#afdfe4;'],
                             ],
                             [
                                 'attribute' => 'finger',
@@ -221,12 +221,12 @@ $this->params['breadcrumbs'][] = $this->title;
                                     'class' => 'form-control',
                                     'style' => 'width:80px;'
                                 ]),
-                                'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#feeeed;'],
+                                'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#afdfe4;'],
                             ],
                             [
                                 'attribute' => 'length',
                                 'format' => 'raw',
-                                'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#feeeed;'],
+                                'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#afdfe4;'],
                                 'filter' => Html::activeTextInput($searchModel, 'length', [
                                     'class' => 'form-control',
                                     'style' => 'width:80px;'
@@ -234,7 +234,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             ],
                             [
                                 'attribute' => 'product_size',
-                                'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#feeeed;'],
+                                'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#afdfe4;'],
                                 'filter' => Html::activeTextInput($searchModel, 'product_size', [
                                     'class' => 'form-control',
                                     'style' => 'width:100px;'
@@ -250,11 +250,11 @@ $this->params['breadcrumbs'][] = $this->title;
                                     'class' => 'form-control',
                                     'style' => 'width:80px;'
                                 ]),
-                                'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#feeeed;'],
+                                'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#afdfe4;'],
                             ],
                             [
                                 'attribute' => 'kezi',
-                                'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#feeeed;'],
+                                'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#afdfe4;'],
                                 'filter' => Html::activeTextInput($searchModel, 'kezi', [
                                     'class' => 'form-control',
                                     'style' => 'width:80px;'
@@ -270,11 +270,11 @@ $this->params['breadcrumbs'][] = $this->title;
                                     'class' => 'form-control',
                                     'style' => 'width:80px;'
                                 ]),
-                                'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#feeeed;'],
+                                'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#afdfe4;'],
                             ],
                             [
                                 'attribute' => 'chain_long',
-                                'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#feeeed;'],
+                                'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#afdfe4'],
                                 'filter' => Html::activeTextInput($searchModel, 'chain_long', [
                                     'class' => 'form-control',
                                     'style' => 'width:100px;'
@@ -290,7 +290,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                     'class' => 'form-control',
                                     'style' => 'width:80px;'
                                 ]),
-                                'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#feeeed;'],
+                                'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#afdfe4;'],
                             ],
                             [
                                 'attribute' => 'talon_head_type',
@@ -302,7 +302,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                     'class' => 'form-control',
                                     'style' => 'width:80px;'
                                 ]),
-                                'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#feeeed;'],
+                                'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#afdfe4;'],
                             ],
                             [
                                 'attribute' => 'peiliao_way',
@@ -540,6 +540,18 @@ $this->params['breadcrumbs'][] = $this->title;
                                 ]),
                             ],
                             [
+                                'attribute' => 'main_stone_type',
+                                'value' => function ($model) {
+                                    return Yii::$app->attr->valueName($model->main_stone_type) ?? "";
+                                },
+                                'filter' => Html::activeDropDownList($searchModel, 'main_stone_type', $model->getMainStoneTypeMap(), [
+                                    'prompt' => '全部',
+                                    'class' => 'form-control',
+                                    'style' => 'width:80px;'
+                                ]),
+                                'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#afb4db;'],
+                            ],
+                            [
                                 'attribute' => 'main_stone_num',
                                 'format' => 'raw',
                                 'filter' => false,
@@ -662,11 +674,11 @@ $this->params['breadcrumbs'][] = $this->title;
                                 ]),
                             ],
                             [
-                                'attribute' => 'main_stone_type',
+                                'attribute' => 'main_cert_type',
                                 'value' => function ($model) {
-                                    return Yii::$app->attr->valueName($model->main_stone_type) ?? "";
+                                    return Yii::$app->attr->valueName($model->main_cert_type) ?? "";
                                 },
-                                'filter' => Html::activeDropDownList($searchModel, 'main_stone_type', $model->getMainStoneTypeMap(), [
+                                'filter' => Html::activeDropDownList($searchModel, 'main_cert_type', $model->getMainCertTypeMap(), [
                                     'prompt' => '全部',
                                     'class' => 'form-control',
                                     'style' => 'width:80px;'
@@ -1024,7 +1036,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'attribute' => 'peishi_gong_fee',
                                 'format' => 'raw',
                                 'filter' => false,
-                                'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#f8aba6;'],
+                                'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#cde6c7;'],
 //                                'filter' => Html::activeTextInput($searchModel, 'peishi_gong_fee', [
 //                                    'class' => 'form-control',
 //                                    'style' => 'width:80px;'
@@ -1034,7 +1046,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'attribute' => 'peishi_fee',
                                 'format' => 'raw',
                                 'filter' => false,
-                                'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#f8aba6;'],
+                                'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#cde6c7;'],
 //                                'filter' => Html::activeTextInput($searchModel, 'peishi_fee', [
 //                                    'class' => 'form-control',
 //                                    'style' => 'width:80px;'
@@ -1043,7 +1055,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             [
                                 'attribute' => 'stone_remark',
                                 'format' => 'raw',
-                                'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#f8aba6;'],
+                                'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#cde6c7;'],
                                 'filter' => Html::activeTextInput($searchModel, 'stone_remark', [
                                     'class' => 'form-control',
                                     'style' => 'width:160px;'

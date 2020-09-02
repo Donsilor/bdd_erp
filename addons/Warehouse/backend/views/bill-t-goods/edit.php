@@ -172,7 +172,13 @@ $this->params['breadcrumbs'][] = $this->title;
                         <h5 class="box-title" style="font-weight: bold">主石信息</h5>
                     </div>
                     <div class="col-lg-4">
+                        <?= $form->field($model, 'main_pei_type')->dropDownList(\addons\Warehouse\common\enums\PeiShiWayEnum::getMap(), ['prompt' => '请选择']) ?>
+                    </div>
+                    <div class="col-lg-4">
                         <?= $form->field($model, 'main_stone_sn')->textInput() ?>
+                    </div>
+                    <div class="col-lg-4">
+                        <?= $form->field($model, 'main_stone_type')->dropDownList($model->getMainStoneTypeDrop($model), ['prompt' => '请选择']) ?>
                     </div>
                     <div class="col-lg-4">
                         <?= $form->field($model, 'main_stone_num')->textInput() ?>
@@ -205,12 +211,15 @@ $this->params['breadcrumbs'][] = $this->title;
                         <?= $form->field($model, 'main_cert_id')->textInput() ?>
                     </div>
                     <div class="col-lg-4">
-                        <?= $form->field($model, 'main_stone_type')->dropDownList($model->getMainStoneTypeDrop($model), ['prompt' => '请选择']) ?>
+                        <?= $form->field($model, 'main_cert_type')->dropDownList($model->getMainCertTypeDrop($model), ['prompt' => '请选择']) ?>
                     </div>
                 </div>
                 <div class="row">
                     <div class="with-border">
                         <h5 class="box-title" style="font-weight: bold">副石1信息</h5>
+                    </div>
+                    <div class="col-lg-4">
+                        <?= $form->field($model, 'second_pei_type')->dropDownList(\addons\Warehouse\common\enums\PeiShiWayEnum::getMap(), ['prompt' => '请选择']) ?>
                     </div>
                     <div class="col-lg-4">
                         <?= $form->field($model, 'second_stone_sn1')->textInput() ?>
@@ -258,6 +267,9 @@ $this->params['breadcrumbs'][] = $this->title;
                 <div class="row">
                     <div class="with-border">
                         <h5 class="box-title" style="font-weight: bold">副石2信息</h5>
+                    </div>
+                    <div class="col-lg-4">
+                        <?= $form->field($model, 'second_pei_type2')->dropDownList(\addons\Warehouse\common\enums\PeiShiWayEnum::getMap(), ['prompt' => '请选择']) ?>
                     </div>
                     <div class="col-lg-4">
                         <?= $form->field($model, 'second_stone_sn2')->textInput() ?>
