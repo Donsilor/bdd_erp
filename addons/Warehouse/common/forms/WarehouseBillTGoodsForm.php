@@ -76,6 +76,23 @@ class WarehouseBillTGoodsForm extends WarehouseBillGoodsL
     }
 
     /**
+     * {@inheritdoc}
+     */
+    public function getPeiType($stone_sn = null, $stone_num = null, $stone_weight = null)
+    {
+        if(!empty($stone_sn)){
+            $main_pei_type = \addons\Warehouse\common\enums\PeiShiWayEnum::COMPANY;
+        }else{
+            if(empty($stone_num) && empty($stone_weight)){
+                $main_pei_type = \addons\Warehouse\common\enums\PeiShiWayEnum::NO_PEI;
+            }else{
+                $main_pei_type = \addons\Warehouse\common\enums\PeiShiWayEnum::FACTORY;
+            }
+        }
+        return $main_pei_type;
+    }
+
+    /**
      * 属性值转换属性ID
      * @param string $style_sn 款号
      * @param string $value 属性值
