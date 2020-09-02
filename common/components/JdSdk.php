@@ -8,6 +8,9 @@ use JD\JdClient;
 use JD\request\PopOrderGetRequest;
 use JD\request\PopOrderSearchRequest;
 use ACES\TDEClient;
+use JD\request\SkuReadSearchSkuListRequest;
+use JD\request\NewWareAttributesQueryRequest;
+use JD\request\NewWareAttributeGroupsQueryRequest;
 
 
 
@@ -131,6 +134,40 @@ class JdSdk extends Component
         }
         return [$order_list,$page_count];
     }
-    
+    /**
+     * SKU信息查询
+     * @param unknown $skuIds
+     */
+    public function getSkuList($skuIds)
+    {
+        $request = new SkuReadSearchSkuListRequest();
+        $option_fields = 'skuId,skuName,status,categoryId,saleAttrs,features,multiCateProps';
+        $request->setField($option_fields); 
+        $request->setSkuId($skuIds); 
+        $request->setSkuStatuValue("1,2,4");
+        $responce = $this->client->execute($request, $this->accessToken);
+        if(isset($responce->error_response)){
+            throw new \Exception($responce->error_response->zh_desc);
+        }
+        return $responce->jingdong_sku_read_searchSkuList_responce->page->data ?? [];      
+    }
+    /**
+     * 获取所有属性列表
+     * @throws \Exception
+     */
+    public function getAttrList()
+    {
+        echo $this->appKey.'--'.$this->appSecret.'--'.$this->accessToken;exit;
+        /* $request = new NewWareAttributeGroupsQueryRequest();
+        $responce = $this->client->execute($request, $this->accessToken);
+        print_r($responce);exit; */
+        $request = new NewWareAttributesQueryRequest();
+        //$request->setId('123L,456L');
+        $responce = $this->client->execute($request, $this->accessToken);
+        /* if(isset($responce->error_response)){
+            throw new \Exception($responce->error_response->zh_desc);
+        } */
+        print_r($responce);exit;    
+    }
     
 }
