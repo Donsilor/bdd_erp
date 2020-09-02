@@ -64,6 +64,18 @@ class WarehouseBillTGoodsForm extends WarehouseBillGoodsL
     }
 
     /**
+     * {@inheritdoc}
+     */
+    public function formatValue($value = null, $defaultValue = null)
+    {
+        if (!empty($value)) {
+            return $value;
+        } else {
+            return $defaultValue;
+        }
+    }
+
+    /**
      * 属性值转换属性ID
      * @param string $style_sn 款号
      * @param string $value 属性值
@@ -74,7 +86,7 @@ class WarehouseBillTGoodsForm extends WarehouseBillGoodsL
     {
         $valueList = $this->getAttrValueListByStyle($style_sn, $attr_id);
         $valueList = array_flip($valueList);
-        return $valueList[$value] ?? "";
+        return (string)$valueList[$value] ?? "";
     }
 
     /**
