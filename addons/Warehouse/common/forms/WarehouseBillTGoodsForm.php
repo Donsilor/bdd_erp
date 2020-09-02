@@ -64,6 +64,35 @@ class WarehouseBillTGoodsForm extends WarehouseBillGoodsL
     }
 
     /**
+     * {@inheritdoc}
+     */
+    public function formatValue($value = null, $defaultValue = null)
+    {
+        if (!empty($value)) {
+            return $value;
+        } else {
+            return $defaultValue;
+        }
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getPeiType($stone_sn = null, $stone_num = null, $stone_weight = null)
+    {
+        if (!empty($stone_sn)) {
+            $main_pei_type = \addons\Warehouse\common\enums\PeiShiWayEnum::COMPANY;
+        } else {
+            if (empty($stone_num) && empty($stone_weight)) {
+                $main_pei_type = \addons\Warehouse\common\enums\PeiShiWayEnum::NO_PEI;
+            } else {
+                $main_pei_type = \addons\Warehouse\common\enums\PeiShiWayEnum::FACTORY;
+            }
+        }
+        return $main_pei_type;
+    }
+
+    /**
      * 属性值转换属性ID
      * @param string $style_sn 款号
      * @param string $value 属性值
@@ -72,9 +101,13 @@ class WarehouseBillTGoodsForm extends WarehouseBillGoodsL
      */
     public function getAttrIdByAttrValue($style_sn, $value, $attr_id)
     {
-        $valueList = $this->getAttrValueListByStyle($style_sn, $attr_id);
+        if (!empty($style_sn)) {
+            $valueList = $this->getAttrValueListByStyle($style_sn, $attr_id);
+        } else {
+            $valueList = \Yii::$app->attr->valueMap($attr_id);
+        }
         $valueList = array_flip($valueList);
-        return $valueList[$value] ?? "";
+        return (string)$valueList[$value] ?? "";
     }
 
     /**
@@ -543,6 +576,30 @@ class WarehouseBillTGoodsForm extends WarehouseBillGoodsL
             $data = $this->getAttrValueListByStyle($form->style_sn, AttrIdEnum::MAIN_STONE_TYPE);
         } else {
             $data = $this->getMainStoneTypeMap();
+        }
+        return $data ?? [];
+    }
+
+    /**
+     * 主石证书类型列表
+     * @return array
+     */
+    public function getMainCertTypeMap()
+    {
+        return \Yii::$app->attr->valueMap(AttrIdEnum::DIA_CERT_TYPE) ?? [];
+    }
+
+    /**
+     * 主石证书类型
+     * @param WarehouseBillTGoodsForm $form
+     * @return array
+     */
+    public function getMainCertTypeDrop($form)
+    {
+        if (!empty($form->style_sn)) {
+            $data = $this->getAttrValueListByStyle($form->style_sn, AttrIdEnum::DIA_CERT_TYPE);
+        } else {
+            $data = $this->getMainCertTypeMap();
         }
         return $data ?? [];
     }

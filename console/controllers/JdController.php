@@ -19,9 +19,25 @@ class JdController extends Controller
      * @param number $order_type
      * @param number $start_time
      */
-    public function actionPullJdOrders($time_val = 1, $time_type = 1, $order_type = 1, $start_time = 0)
+    public function actionUpdateJdSku($time_val = 1, $time_type = 1, $order_type = 1, $start_time = 0)
     {
-        Console::output("Sync JD Order BEGIN[".date('Y-m-d H:i:s')."]-------------------");
+        Console::output("Update JD Sku BEGIN[".date('Y-m-d H:i:s')."]-------------------");
+        $skuIds = '65400274093,65400274093,67717128256,65400274093,67717128256,10020341807332,65400274093,67717128256,71124461109,65400274093,67717128256,65711139973,68706523817,65400274093,67717128256,70414516226';
+        $skuList = \Yii::$app->jdSdk->getSkuList($skuIds);
+        print_r($skuList);
+        Console::output("Update JD Sku END[".date('Y-m-d H:i:s')."]-------------------");
+    }
+    
+    /**
+     * 同步订单
+     * @param number $time_val
+     * @param number $time_type
+     * @param number $order_type
+     * @param number $start_time
+     */
+    public function actionPullJdOrders($time_val = 1, $time_type = 1, $order_type = 1, $start_time = 0)
+    {        
+        Console::output("Pull JD Orders BEGIN[".date('Y-m-d H:i:s')."]-------------------");       
         $change_type = $time_type == 1 ? "day" : "month";
         $time_format = $time_type == 1 ? "Y-m-d 00:00:00" : "Y-m-d 00:00:00";        
         $start_time = empty($start_time) ? strtotime("-".$time_val." {$change_type}",time()): strtotime($start_time);
@@ -39,7 +55,7 @@ class JdController extends Controller
                 break;
             }
         }
-        Console::output("Sync JD Order END[".date('Y-m-d H:i:s')."]-------------------");
+        Console::output("Pull JD Orders END[".date('Y-m-d H:i:s')."]-------------------");
     }
     /**
      * 根据时间同步订单

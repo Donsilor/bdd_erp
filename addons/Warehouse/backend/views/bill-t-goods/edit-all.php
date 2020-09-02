@@ -30,9 +30,17 @@ $this->params['breadcrumbs'][] = $this->title;
                 'data-target' => '#ajaxModal',
             ]);
             echo '&nbsp;';
-            echo Html::a('返回列表', ['bill-t-goods/index', 'bill_id' => $bill->id], ['class' => 'btn btn-white btn-xs']);
+            echo Html::edit(['ajax-upload', 'bill_id' => $bill->id], '批量导入', [
+                'class' => 'btn btn-success btn-xs',
+                'data-toggle' => 'modal',
+                'data-target' => '#ajaxModal',
+            ]);
+            echo '&nbsp;';
+            echo Html::tag('span', '刷新价格', ["class" => "btn btn-warning btn-xs jsBatchStatus", "data-grid" => "grid", "data-url" => Url::to(['update-price']),]);
             echo '&nbsp;';
             echo Html::tag('span', '批量删除', ["class" => "btn btn-danger btn-xs jsBatchStatus", "data-grid" => "grid", "data-url" => Url::to(['batch-delete']),]);
+            echo '&nbsp;';
+            echo Html::a('返回列表', ['bill-t-goods/index', 'bill_id' => $bill->id], ['class' => 'btn btn-white btn-xs']);
         }
         ?>
     </div>
@@ -216,7 +224,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                     'class' => 'form-control',
                                     'style' => 'width:80px;'
                                 ]),
-                                'headerOptions' => ['class' => 'col-md-1 batch_select_full', 'attr-name' => 'material_type', 'attr-id' => AttrIdEnum::MATERIAL_TYPE, 'style' => 'background-color:#feeeed;'],
+                                'headerOptions' => ['class' => 'col-md-1 batch_select_full', 'attr-name' => 'material_type', 'attr-id' => AttrIdEnum::MATERIAL_TYPE, 'style' => 'background-color:#F5DEB3;'],
                             ],
                             [
                                 'attribute' => 'material_color',
@@ -229,11 +237,11 @@ $this->params['breadcrumbs'][] = $this->title;
                                     'class' => 'form-control',
                                     'style' => 'width:80px;'
                                 ]),
-                                'headerOptions' => ['class' => 'col-md-1 batch_select_full', 'attr-name' => 'material_color', 'attr-id' => AttrIdEnum::MATERIAL_COLOR, 'style' => 'background-color:#feeeed;'],
+                                'headerOptions' => ['class' => 'col-md-1 batch_select_full', 'attr-name' => 'material_color', 'attr-id' => AttrIdEnum::MATERIAL_COLOR, 'style' => 'background-color:#F5DEB3;'],
                             ],
                             [
                                 'attribute' => 'goods_num',
-                                'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#feeeed;'],
+                                'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#F5DEB3;'],
                                 'filter' => false,
 //                                'filter' => Html::activeTextInput($searchModel, 'goods_num', [
 //                                    'class' => 'form-control',
@@ -251,7 +259,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                     'class' => 'form-control',
                                     'style' => 'width:100px;'
                                 ]),
-                                'headerOptions' => ['class' => 'col-md-1 batch_select_full', 'attr-name' => 'finger_hk', 'attr-id' => AttrIdEnum::PORT_NO, 'style' => 'background-color:#feeeed;'],
+                                'headerOptions' => ['class' => 'col-md-1 batch_select_full', 'attr-name' => 'finger_hk', 'attr-id' => AttrIdEnum::PORT_NO, 'style' => 'background-color:#F5DEB3;'],
                             ],
                             [
                                 'attribute' => 'finger',
@@ -264,7 +272,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                     'class' => 'form-control',
                                     'style' => 'width:100px;'
                                 ]),
-                                'headerOptions' => ['class' => 'col-md-1 batch_select_full', 'attr-name' => 'finger', 'attr-id' => AttrIdEnum::FINGER, 'style' => 'background-color:#feeeed;'],
+                                'headerOptions' => ['class' => 'col-md-1 batch_select_full', 'attr-name' => 'finger', 'attr-id' => AttrIdEnum::FINGER, 'style' => 'background-color:#F5DEB3;'],
                             ],
                             [
                                 'attribute' => 'length',
@@ -272,7 +280,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'value' => function ($model, $key, $index, $column) {
                                     return Html::ajaxInput('length', $model->length, ['data-id' => $model->id]);
                                 },
-                                'headerOptions' => ['class' => 'col-md-1 batch_full', 'attr-name' => 'length', 'style' => 'background-color:#feeeed;'],
+                                'headerOptions' => ['class' => 'col-md-1 batch_full', 'attr-name' => 'length', 'style' => 'background-color:#F5DEB3;'],
                                 'filter' => Html::activeTextInput($searchModel, 'length', [
                                     'class' => 'form-control',
                                     'style' => 'width:80px;'
@@ -281,7 +289,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             [
                                 'attribute' => 'product_size',
                                 'format' => 'raw',
-                                'headerOptions' => ['class' => 'col-md-1 batch_full', 'attr-name' => 'product_size', 'style' => 'background-color:#feeeed;'],
+                                'headerOptions' => ['class' => 'col-md-1 batch_full', 'attr-name' => 'product_size', 'style' => 'background-color:#F5DEB3;'],
                                 'value' => function ($model, $key, $index, $column) {
                                     return Html::ajaxInput('product_size', $model->product_size, ['data-id' => $model->id]);
                                 },
@@ -301,7 +309,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                     'class' => 'form-control',
                                     'style' => 'width:100px;'
                                 ]),
-                                'headerOptions' => ['class' => 'col-md-1 batch_select_full', 'attr-name' => 'xiangkou', 'attr-id' => AttrIdEnum::XIANGKOU, 'style' => 'background-color:#feeeed;'],
+                                'headerOptions' => ['class' => 'col-md-1 batch_select_full', 'attr-name' => 'xiangkou', 'attr-id' => AttrIdEnum::XIANGKOU, 'style' => 'background-color:#F5DEB3;'],
                             ],
                             [
                                 'class' => 'yii\grid\CheckboxColumn',
@@ -310,7 +318,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             [
                                 'attribute' => 'goods_name',
                                 'format' => 'raw',
-                                'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#feeeed;'],
+                                'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#afdfe4;'],
                                 'filter' => false,
 //                                'filter' => Html::activeTextInput($searchModel, 'goods_name', [
 //                                    'class' => 'form-control',
@@ -320,7 +328,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             [
                                 'attribute' => 'kezi',
                                 'format' => 'raw',
-                                'headerOptions' => ['class' => 'col-md-1 batch_full', 'attr-name' => 'kezi', 'style' => 'background-color:#feeeed;'],
+                                'headerOptions' => ['class' => 'col-md-1 batch_full', 'attr-name' => 'kezi', 'style' => 'background-color:#afdfe4;'],
                                 'value' => function ($model, $key, $index, $column) {
                                     return Html::ajaxInput('kezi', $model->kezi, ['data-id' => $model->id]);
                                 },
@@ -340,12 +348,12 @@ $this->params['breadcrumbs'][] = $this->title;
                                     'class' => 'form-control',
                                     'style' => 'width:80px;'
                                 ]),
-                                'headerOptions' => ['class' => 'col-md-1 batch_select_full', 'attr-name' => 'chain_type', 'attr-id' => AttrIdEnum::CHAIN_TYPE, 'style' => 'background-color:#feeeed;'],
+                                'headerOptions' => ['class' => 'col-md-1 batch_select_full', 'attr-name' => 'chain_type', 'attr-id' => AttrIdEnum::CHAIN_TYPE, 'style' => 'background-color:#afdfe4;'],
                             ],
                             [
                                 'attribute' => 'chain_long',
                                 'format' => 'raw',
-                                'headerOptions' => ['class' => 'col-md-1 batch_full', 'attr-name' => 'chain_long', 'style' => 'background-color:#feeeed;'],
+                                'headerOptions' => ['class' => 'col-md-1 batch_full', 'attr-name' => 'chain_long', 'style' => 'background-color:#afdfe4;'],
                                 'value' => function ($model, $key, $index, $column) {
                                     return Html::ajaxInput('chain_long', $model->chain_long, ['data-id' => $model->id]);
                                 },
@@ -365,7 +373,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                     'class' => 'form-control',
                                     'style' => 'width:80px;'
                                 ]),
-                                'headerOptions' => ['class' => 'col-md-1 batch_select_full', 'attr-name' => 'cramp_ring', 'attr-id' => AttrIdEnum::CHAIN_BUCKLE, 'style' => 'background-color:#feeeed;'],
+                                'headerOptions' => ['class' => 'col-md-1 batch_select_full', 'attr-name' => 'cramp_ring', 'attr-id' => AttrIdEnum::CHAIN_BUCKLE, 'style' => 'background-color:#afdfe4;'],
                             ],
                             [
                                 'attribute' => 'talon_head_type',
@@ -378,7 +386,20 @@ $this->params['breadcrumbs'][] = $this->title;
                                     'class' => 'form-control',
                                     'style' => 'width:80px;'
                                 ]),
-                                'headerOptions' => ['class' => 'col-md-1 batch_select_full', 'attr-name' => 'talon_head_type', 'attr-id' => AttrIdEnum::TALON_HEAD_TYPE, 'style' => 'background-color:#feeeed;'],
+                                'headerOptions' => ['class' => 'col-md-1 batch_select_full', 'attr-name' => 'talon_head_type', 'attr-id' => AttrIdEnum::TALON_HEAD_TYPE, 'style' => 'background-color:#afdfe4;'],
+                            ],
+                            [
+                                'attribute' => 'peiliao_way',
+                                'format' => 'raw',
+                                'value' => function ($model, $key, $index, $column) {
+                                    return Html::ajaxSelect($model, 'peiliao_way', \addons\Warehouse\common\enums\PeiLiaoWayEnum::getMap(), ['data-id' => $model->id, 'prompt' => '请选择']);
+                                },
+                                'filter' => Html::activeDropDownList($searchModel, 'peiliao_way', \addons\Warehouse\common\enums\PeiLiaoWayEnum::getMap(), [
+                                    'prompt' => '全部',
+                                    'class' => 'form-control',
+                                    'style' => 'width:80px;'
+                                ]),
+                                'headerOptions' => ['class' => 'col-md-1', 'attr-name' => 'peiliao_way', 'style' => 'background-color:#afdfe4;'],
                             ],
                             [
                                 'attribute' => 'suttle_weight',
@@ -651,6 +672,19 @@ $this->params['breadcrumbs'][] = $this->title;
 //                                ]),
                             ],
                             [
+                                'attribute' => 'main_pei_type',
+                                'format' => 'raw',
+                                'value' => function ($model, $key, $index, $column) {
+                                    return Html::ajaxSelect($model, 'main_pei_type', \addons\Warehouse\common\enums\PeiShiWayEnum::getMap(), ['data-id' => $model->id, 'prompt' => '请选择']);
+                                },
+                                'filter' => Html::activeDropDownList($searchModel, 'main_pei_type', \addons\Warehouse\common\enums\PeiShiWayEnum::getMap(), [
+                                    'prompt' => '全部',
+                                    'class' => 'form-control',
+                                    'style' => 'width:80px;'
+                                ]),
+                                'headerOptions' => ['class' => 'col-md-1', 'attr-name' => 'main_pei_type', 'style' => 'background-color:#afb4db;'],
+                            ],
+                            [
                                 'attribute' => 'main_stone_sn',
                                 'format' => 'raw',
                                 'value' => function ($model, $key, $index, $column) {
@@ -661,6 +695,19 @@ $this->params['breadcrumbs'][] = $this->title;
                                     'class' => 'form-control',
                                     'style' => 'width:100px;'
                                 ]),
+                            ],
+                            [
+                                'attribute' => 'main_stone_type',
+                                'format' => 'raw',
+                                'value' => function ($model, $key, $index, $column) {
+                                    return Html::ajaxSelect($model, 'main_stone_type', $model->getMainStoneTypeDrop($model), ['data-id' => $model->id, 'prompt' => '请选择']);
+                                },
+                                'filter' => Html::activeDropDownList($searchModel, 'main_stone_type', $model->getMainStoneTypeMap(), [
+                                    'prompt' => '全部',
+                                    'class' => 'form-control',
+                                    'style' => 'width:80px;'
+                                ]),
+                                'headerOptions' => ['class' => 'col-md-1 batch_select_full', 'attr-name' => 'main_stone_type', 'attr-id' => AttrIdEnum::MAIN_STONE_TYPE, 'style' => 'background-color:#afb4db;'],
                             ],
                             [
                                 'attribute' => 'main_stone_num',
@@ -790,17 +837,17 @@ $this->params['breadcrumbs'][] = $this->title;
                                 ]),
                             ],
                             [
-                                'attribute' => 'main_stone_type',
+                                'attribute' => 'main_cert_type',
                                 'format' => 'raw',
                                 'value' => function ($model, $key, $index, $column) {
-                                    return Html::ajaxSelect($model, 'main_stone_type', $model->getMainStoneTypeDrop($model), ['data-id' => $model->id, 'prompt' => '请选择']);
+                                    return Html::ajaxSelect($model, 'main_cert_type', $model->getMainCertTypeDrop($model), ['data-id' => $model->id, 'prompt' => '请选择']);
                                 },
-                                'filter' => Html::activeDropDownList($searchModel, 'main_stone_type', $model->getMainStoneTypeMap(), [
+                                'filter' => Html::activeDropDownList($searchModel, 'main_cert_type', $model->getMainCertTypeMap(), [
                                     'prompt' => '全部',
                                     'class' => 'form-control',
                                     'style' => 'width:80px;'
                                 ]),
-                                'headerOptions' => ['class' => 'col-md-1 batch_select_full', 'attr-name' => 'main_stone_type', 'attr-id' => AttrIdEnum::MAIN_STONE_TYPE, 'style' => 'background-color:#afb4db;'],
+                                'headerOptions' => ['class' => 'col-md-1 batch_select_full', 'attr-name' => 'main_cert_type', 'attr-id' => AttrIdEnum::DIA_CERT_TYPE, 'style' => 'background-color:#afb4db;'],
                             ],
                             [
                                 'class' => 'yii\grid\CheckboxColumn',
@@ -814,6 +861,19 @@ $this->params['breadcrumbs'][] = $this->title;
                                     'class' => 'form-control',
                                     'style' => 'width:200px;'
                                 ]),
+                            ],
+                            [
+                                'attribute' => 'second_pei_type',
+                                'format' => 'raw',
+                                'value' => function ($model, $key, $index, $column) {
+                                    return Html::ajaxSelect($model, 'second_pei_type', \addons\Warehouse\common\enums\PeiShiWayEnum::getMap(), ['data-id' => $model->id, 'prompt' => '请选择']);
+                                },
+                                'filter' => Html::activeDropDownList($searchModel, 'second_pei_type', \addons\Warehouse\common\enums\PeiShiWayEnum::getMap(), [
+                                    'prompt' => '全部',
+                                    'class' => 'form-control',
+                                    'style' => 'width:80px;'
+                                ]),
+                                'headerOptions' => ['class' => 'col-md-1', 'attr-name' => 'second_pei_type', 'style' => 'background-color:#dec674;'],
                             ],
                             [
                                 'attribute' => 'second_stone_sn1',
@@ -966,6 +1026,19 @@ $this->params['breadcrumbs'][] = $this->title;
                                     'class' => 'form-control',
                                     'style' => 'width:200px;'
                                 ]),
+                            ],
+                            [
+                                'attribute' => 'second_pei_type2',
+                                'format' => 'raw',
+                                'value' => function ($model, $key, $index, $column) {
+                                    return Html::ajaxSelect($model, 'second_pei_type2', \addons\Warehouse\common\enums\PeiShiWayEnum::getMap(), ['data-id' => $model->id, 'prompt' => '请选择']);
+                                },
+                                'filter' => Html::activeDropDownList($searchModel, 'second_pei_type2', \addons\Warehouse\common\enums\PeiShiWayEnum::getMap(), [
+                                    'prompt' => '全部',
+                                    'class' => 'form-control',
+                                    'style' => 'width:80px;'
+                                ]),
+                                'headerOptions' => ['class' => 'col-md-1', 'attr-name' => 'second_pei_type2', 'style' => 'background-color:#84bf96;'],
                             ],
                             [
                                 'attribute' => 'second_stone_sn2',
@@ -1288,10 +1361,36 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'attribute' => 'goods_name',
                                 'format' => 'raw',
                                 'filter' => false,
-                                'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#b7ba6b;'],
+                                'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#FFA500;'],
 //                                'filter' => Html::activeTextInput($searchModel, 'goods_name', [
 //                                    'class' => 'form-control',
 //                                    'style' => 'width:200px;'
+//                                ]),
+                            ],
+                            [
+                                'attribute' => 'peishi_num',
+                                'format' => 'raw',
+                                'value' => function ($model, $key, $index, $column) {
+                                    return Html::ajaxInput('peishi_num', $model->peishi_num, ['data-id' => $model->id, 'onfocus' => 'rfClearVal(this)', 'data-type' => 'number']);
+                                },
+                                'filter' => false,
+                                'headerOptions' => ['class' => 'col-md-1 batch_full', 'attr-name' => 'peishi_num', 'style' => 'background-color:#FFA500;'],
+//                                'filter' => Html::activeTextInput($searchModel, 'peishi_num', [
+//                                    'class' => 'form-control',
+//                                    'style' => 'width:80px;'
+//                                ]),
+                            ],
+                            [
+                                'attribute' => 'peishi_weight',
+                                'format' => 'raw',
+                                'value' => function ($model, $key, $index, $column) {
+                                    return Html::ajaxInput('peishi_weight', $model->peishi_weight, ['data-id' => $model->id, 'onfocus' => 'rfClearVal(this)', 'data-type' => 'number']);
+                                },
+                                'filter' => false,
+                                'headerOptions' => ['class' => 'col-md-1 batch_full', 'attr-name' => 'peishi_weight', 'style' => 'background-color:#FFA500;'],
+//                                'filter' => Html::activeTextInput($searchModel, 'peishi_weight', [
+//                                    'class' => 'form-control',
+//                                    'style' => 'width:80px;'
 //                                ]),
                             ],
                             [
@@ -1301,7 +1400,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                     return Html::ajaxInput('peishi_gong_fee', $model->peishi_gong_fee, ['data-id' => $model->id, 'onfocus' => 'rfClearVal(this)', 'data-type' => 'number']);
                                 },
                                 'filter' => false,
-                                'headerOptions' => ['class' => 'col-md-1 batch_full', 'attr-name' => 'peishi_gong_fee', 'style' => 'background-color:#b7ba6b;'],
+                                'headerOptions' => ['class' => 'col-md-1 batch_full', 'attr-name' => 'peishi_gong_fee', 'style' => 'background-color:#FFA500;'],
 //                                'filter' => Html::activeTextInput($searchModel, 'peishi_gong_fee', [
 //                                    'class' => 'form-control',
 //                                    'style' => 'width:80px;'
@@ -1314,7 +1413,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                     return Html::ajaxInput('peishi_fee', $model->peishi_fee, ['data-id' => $model->id, 'onfocus' => 'rfClearVal(this)', 'data-type' => 'number']);
                                 },
                                 'filter' => false,
-                                'headerOptions' => ['class' => 'col-md-1 batch_full', 'attr-name' => 'peishi_fee', 'style' => 'background-color:#b7ba6b;'],
+                                'headerOptions' => ['class' => 'col-md-1 batch_full', 'attr-name' => 'peishi_fee', 'style' => 'background-color:#FFA500;'],
 //                                'filter' => Html::activeTextInput($searchModel, 'peishi_fee', [
 //                                    'class' => 'form-control',
 //                                    'style' => 'width:80px;'
@@ -1327,7 +1426,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                     return Html::ajaxInput('parts_fee', $model->parts_fee, ['data-id' => $model->id, 'onfocus' => 'rfClearVal(this)', 'data-type' => 'number']);
                                 },
                                 'filter' => false,
-                                'headerOptions' => ['class' => 'col-md-1 batch_full', 'attr-name' => 'parts_fee', 'style' => 'background-color:#b7ba6b;'],
+                                'headerOptions' => ['class' => 'col-md-1 batch_full', 'attr-name' => 'parts_fee', 'style' => 'background-color:#FFA500;'],
 //                                'filter' => Html::activeTextInput($searchModel, 'parts_fee', [
 //                                    'class' => 'form-control',
 //                                    'style' => 'width:80px;'
@@ -1340,7 +1439,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                     return Html::ajaxInput('gong_fee', $model->gong_fee, ['data-id' => $model->id, 'onfocus' => 'rfClearVal(this)', 'data-type' => 'number']);
                                 },
                                 'filter' => false,
-                                'headerOptions' => ['class' => 'col-md-1 batch_full', 'attr-name' => 'gong_fee', 'style' => 'background-color:#b7ba6b;'],
+                                'headerOptions' => ['class' => 'col-md-1 batch_full', 'attr-name' => 'gong_fee', 'style' => 'background-color:#FFA500;'],
 //                                'filter' => Html::activeTextInput($searchModel, 'gong_fee', [
 //                                    'class' => 'form-control',
 //                                    'style' => 'width:80px;'
@@ -1357,7 +1456,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                     'class' => 'form-control',
                                     'style' => 'width:80px;'
                                 ]),
-                                'headerOptions' => ['class' => 'col-md-1 batch_select_full', 'attr-name' => 'xiangqian_craft', 'attr-id' => AttrIdEnum::XIANGQIAN_CRAFT, 'style' => 'background-color:#b7ba6b;'],
+                                'headerOptions' => ['class' => 'col-md-1 batch_select_full', 'attr-name' => 'xiangqian_craft', 'attr-id' => AttrIdEnum::XIANGQIAN_CRAFT, 'style' => 'background-color:#FFA500;'],
                             ],
                             [
                                 'attribute' => 'xianqian_price',
@@ -1366,7 +1465,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                     return Html::ajaxInput('xianqian_price', $model->xianqian_price, ['data-id' => $model->id, 'onfocus' => 'rfClearVal(this)', 'data-type' => 'number']);
                                 },
                                 'filter' => false,
-                                'headerOptions' => ['class' => 'col-md-1 batch_full', 'attr-name' => 'xianqian_price', 'style' => 'background-color:#b7ba6b;'],
+                                'headerOptions' => ['class' => 'col-md-1 batch_full', 'attr-name' => 'xianqian_price', 'style' => 'background-color:#FFA500;'],
 //                                'filter' => Html::activeTextInput($searchModel, 'xianqian_price', [
 //                                    'class' => 'form-control',
 //                                    'style' => 'width:80px;'
@@ -1383,7 +1482,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                     'class' => 'form-control',
                                     'style' => 'width:100px;'
                                 ]),
-                                'headerOptions' => ['class' => 'col-md-1 batch_select_full', 'attr-name' => 'biaomiangongyi', 'attr-id' => AttrIdEnum::FACEWORK, 'style' => 'background-color:#b7ba6b;'],
+                                'headerOptions' => ['class' => 'col-md-1 batch_select_full', 'attr-name' => 'biaomiangongyi', 'attr-id' => AttrIdEnum::FACEWORK, 'style' => 'background-color:#FFA500;'],
                             ],
                             [
                                 'attribute' => 'biaomiangongyi_fee',
@@ -1392,7 +1491,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                     return Html::ajaxInput('biaomiangongyi_fee', $model->biaomiangongyi_fee, ['data-id' => $model->id, 'onfocus' => 'rfClearVal(this)', 'data-type' => 'number']);
                                 },
                                 'filter' => false,
-                                'headerOptions' => ['class' => 'col-md-1 batch_full', 'attr-name' => 'biaomiangongyi_fee', 'style' => 'background-color:#b7ba6b;'],
+                                'headerOptions' => ['class' => 'col-md-1 batch_full', 'attr-name' => 'biaomiangongyi_fee', 'style' => 'background-color:#FFA500;'],
 //                                'filter' => Html::activeTextInput($searchModel, 'biaomiangongyi_fee', [
 //                                    'class' => 'form-control',
 //                                    'style' => 'width:80px;'
@@ -1405,7 +1504,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                     return Html::ajaxInput('fense_fee', $model->fense_fee, ['data-id' => $model->id, 'onfocus' => 'rfClearVal(this)', 'data-type' => 'number']);
                                 },
                                 'filter' => false,
-                                'headerOptions' => ['class' => 'col-md-1 batch_full', 'attr-name' => 'fense_fee', 'style' => 'background-color:#b7ba6b;'],
+                                'headerOptions' => ['class' => 'col-md-1 batch_full', 'attr-name' => 'fense_fee', 'style' => 'background-color:#FFA500;'],
 //                                'filter' => Html::activeTextInput($searchModel, 'fense_fee', [
 //                                    'class' => 'form-control',
 //                                    'style' => 'width:80px;'
@@ -1418,7 +1517,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                     return Html::ajaxInput('penlasha_fee', $model->penlasha_fee, ['data-id' => $model->id, 'onfocus' => 'rfClearVal(this)', 'data-type' => 'number']);
                                 },
                                 'filter' => false,
-                                'headerOptions' => ['class' => 'col-md-1 batch_full', 'attr-name' => 'penlasha_fee', 'style' => 'background-color:#b7ba6b;'],
+                                'headerOptions' => ['class' => 'col-md-1 batch_full', 'attr-name' => 'penlasha_fee', 'style' => 'background-color:#FFA500;'],
 //                                'filter' => Html::activeTextInput($searchModel, 'penlasha_fee', [
 //                                    'class' => 'form-control',
 //                                    'style' => 'width:80px;'
@@ -1431,7 +1530,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                     return Html::ajaxInput('bukou_fee', $model->bukou_fee, ['data-id' => $model->id, 'onfocus' => 'rfClearVal(this)', 'data-type' => 'number']);
                                 },
                                 'filter' => false,
-                                'headerOptions' => ['class' => 'col-md-1 batch_full', 'attr-name' => 'bukou_fee', 'style' => 'background-color:#b7ba6b;'],
+                                'headerOptions' => ['class' => 'col-md-1 batch_full', 'attr-name' => 'bukou_fee', 'style' => 'background-color:#FFA500;'],
 //                                'filter' => Html::activeTextInput($searchModel, 'bukou_fee', [
 //                                    'class' => 'form-control',
 //                                    'style' => 'width:80px;'
@@ -1490,32 +1589,32 @@ $this->params['breadcrumbs'][] = $this->title;
 //                                    'style' => 'width:80px;'
 //                                ]),
                             ],
-                            [
-                                'attribute' => 'factory_cost',
-                                'format' => 'raw',
-                                'value' => function ($model, $key, $index, $column) {
-                                    return Html::ajaxInput('factory_cost', $model->factory_cost, ['data-id' => $model->id, 'onfocus' => 'rfClearVal(this)', 'data-type' => 'number']);
-                                },
-                                'filter' => false,
-                                'headerOptions' => ['class' => 'col-md-1 batch_full', 'attr-name' => 'factory_cost', 'style' => 'background-color:#b7ba6b;'],
-//                                'filter' => Html::activeTextInput($searchModel, 'factory_cost', [
-//                                    'class' => 'form-control',
-//                                    'style' => 'width:100px;'
-//                                ]),
-                            ],
-                            [
-                                'attribute' => 'cost_price',
-                                'format' => 'raw',
-                                'value' => function ($model, $key, $index, $column) {
-                                    return Html::ajaxInput('cost_price', $model->cost_price, ['data-id' => $model->id, 'onfocus' => 'rfClearVal(this)', 'data-type' => 'number']);
-                                },
-                                'filter' => false,
-                                'headerOptions' => ['class' => 'col-md-1 batch_full', 'attr-name' => 'cost_price', 'style' => 'background-color:#b7ba6b;'],
-//                                'filter' => Html::activeTextInput($searchModel, 'cost_price', [
-//                                    'class' => 'form-control',
-//                                    'style' => 'width:100px;'
-//                                ]),
-                            ],
+//                            [
+//                                'attribute' => 'factory_cost',
+//                                'format' => 'raw',
+//                                'value' => function ($model, $key, $index, $column) {
+//                                    return Html::ajaxInput('factory_cost', $model->factory_cost, ['data-id' => $model->id, 'onfocus' => 'rfClearVal(this)', 'data-type' => 'number']);
+//                                },
+//                                'filter' => false,
+//                                'headerOptions' => ['class' => 'col-md-1 batch_full', 'attr-name' => 'factory_cost', 'style' => 'background-color:#b7ba6b;'],
+////                                'filter' => Html::activeTextInput($searchModel, 'factory_cost', [
+////                                    'class' => 'form-control',
+////                                    'style' => 'width:100px;'
+////                                ]),
+//                            ],
+//                            [
+//                                'attribute' => 'cost_price',
+//                                'format' => 'raw',
+//                                'value' => function ($model, $key, $index, $column) {
+//                                    return Html::ajaxInput('cost_price', $model->cost_price, ['data-id' => $model->id, 'onfocus' => 'rfClearVal(this)', 'data-type' => 'number']);
+//                                },
+//                                'filter' => false,
+//                                'headerOptions' => ['class' => 'col-md-1 batch_full', 'attr-name' => 'cost_price', 'style' => 'background-color:#b7ba6b;'],
+////                                'filter' => Html::activeTextInput($searchModel, 'cost_price', [
+////                                    'class' => 'form-control',
+////                                    'style' => 'width:100px;'
+////                                ]),
+//                            ],
                             [
                                 'attribute' => 'markup_rate',
                                 'format' => 'raw',
@@ -1528,19 +1627,19 @@ $this->params['breadcrumbs'][] = $this->title;
                                     'style' => 'width:80px;'
                                 ]),
                             ],
-                            [
-                                'attribute' => 'market_price',
-                                'format' => 'raw',
-                                'value' => function ($model, $key, $index, $column) {
-                                    return Html::ajaxInput('market_price', $model->market_price, ['data-id' => $model->id, 'onfocus' => 'rfClearVal(this)', 'data-type' => 'number']);
-                                },
-                                'filter' => false,
-                                'headerOptions' => ['class' => 'col-md-1 batch_full', 'attr-name' => 'market_price', 'style' => 'background-color:#b7ba6b;'],
-//                                'filter' => Html::activeTextInput($searchModel, 'market_price', [
-//                                    'class' => 'form-control',
-//                                    'style' => 'width:100px;'
-//                                ]),
-                            ],
+//                            [
+//                                'attribute' => 'market_price',
+//                                'format' => 'raw',
+//                                'value' => function ($model, $key, $index, $column) {
+//                                    return Html::ajaxInput('market_price', $model->market_price, ['data-id' => $model->id, 'onfocus' => 'rfClearVal(this)', 'data-type' => 'number']);
+//                                },
+//                                'filter' => false,
+//                                'headerOptions' => ['class' => 'col-md-1 batch_full', 'attr-name' => 'market_price', 'style' => 'background-color:#b7ba6b;'],
+////                                'filter' => Html::activeTextInput($searchModel, 'market_price', [
+////                                    'class' => 'form-control',
+////                                    'style' => 'width:100px;'
+////                                ]),
+//                            ],
                             [
                                 'attribute' => 'style_sex',
                                 'format' => 'raw',
