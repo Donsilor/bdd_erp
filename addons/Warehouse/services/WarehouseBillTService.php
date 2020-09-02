@@ -210,8 +210,10 @@ class WarehouseBillTService extends Service
             }
             $goods = $form->trimField($goods);
             $goods_id = $goods[0] ?? "";
+            $auto_goods_id = 1;//是否自动货号 默认手填
             if (empty($goods_id)) {
                 $goods_id = SnHelper::createGoodsId();
+                $auto_goods_id = 0;
             }
             $style_sn = $goods[1] ?? "";
             if (empty($style_sn)) {
@@ -666,6 +668,7 @@ class WarehouseBillTService extends Service
                 'main_cert_type' => $main_cert_type,
                 'markup_rate' => $markup_rate,
                 'jintuo_type' => $jintuo_type,
+                'auto_goods_id' => $auto_goods_id,
                 'remark' => $remark,
                 'status' => StatusEnum::ENABLED,
                 'creator_id' => \Yii::$app->user->identity->getId(),
