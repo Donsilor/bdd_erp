@@ -36,6 +36,18 @@ return [
                     
             ],
             [
+                'title' => '供应商',
+                'route' => 'indexOrder',
+                'icon' => 'fa fa-superpowers',
+                'child' => [
+                    [
+                        'title' => '供应商列表',
+                        'route' => 'supplier/index',
+                    ],
+                ],
+
+            ],
+            [
                     'title' => '客户管理',
                     'route' => 'indexOrder',
                     'icon' => 'fa fa-superpowers',
