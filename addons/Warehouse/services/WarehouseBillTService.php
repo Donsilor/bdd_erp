@@ -251,6 +251,19 @@ class WarehouseBillTService extends Service
                     $error[$i][] = $row . "款号不是启用状态";
                 }
             }
+            if (!empty($qiban_sn)) {
+                $style_image = $qiban->style_image;
+                $style_cate_id = $qiban->style_cate_id;
+                $product_type_id = $qiban->product_type_id;
+                $style_sex = $qiban->style_sex;
+                $style_channel_id = $qiban->style_channel_id;
+            } else {
+                $style_image = $style->style_image;
+                $style_cate_id = $style->style_cate_id;
+                $product_type_id = $style->product_type_id;
+                $style_sex = $style->style_sex;
+                $style_channel_id = $style->style_channel_id;
+            }
             $goods_sn = !empty($style_sn) ? $style_sn : $qiban_sn;
             $goods_num = 1;
             $goods_name = $goods[3] ?? "";
@@ -615,13 +628,13 @@ class WarehouseBillTService extends Service
                 'bill_type' => $bill->bill_type,
                 'goods_id' => $goods_id,
                 'goods_sn' => $goods_sn,
-                'style_id' => $style->id,
+                'style_id' => $style->id ?? $qiban->id,
                 'style_sn' => $style_sn,
-                'goods_image' => $style->style_image,
-                'style_cate_id' => $style->style_cate_id,
-                'product_type_id' => $style->product_type_id,
-                'style_sex' => $style->style_sex,
-                'style_channel_id' => $style->style_channel_id,
+                'goods_image' => $style_image,
+                'style_cate_id' => $style_cate_id,
+                'product_type_id' => $product_type_id,
+                'style_sex' => $style_sex,
+                'style_channel_id' => $style_channel_id,
                 'supplier_id' => $bill->supplier_id,
                 'put_in_type' => $bill->put_in_type,
                 'qiban_sn' => $qiban_sn,
