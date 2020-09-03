@@ -185,7 +185,7 @@ class MemberWorksController extends BaseController
         if(!$ids){
             return $this->message('ID不为空', $this->redirect(['index']), 'warning');
         }
-        list($list,$date_list) = $this->getData($ids);
+        list($lists,$date_list) = $this->getData($ids);
         // [名称, 字段名, 类型, 类型规则]
         $header = [
             ['部门', 'dept', 'text'],
@@ -200,22 +200,25 @@ class MemberWorksController extends BaseController
 
         // 初始化
         $spreadsheet = new Spreadsheet();
-        $sheet = $spreadsheet->getActiveSheet();
-        // 写入头部
-        $hk = 1;
-        foreach ($header as $k => $v) {
-            $sheet->setCellValue(Coordinate::stringFromColumnIndex($hk) . '1', $v[0]);
-            $sheet->getStyle(Coordinate::stringFromColumnIndex($hk) . '1')->getFont()->setBold(true);
-            $sheet->getDefaultColumnDimension()->setWidth(45); //设置默认列宽为12
-            $sheet->getColumnDimension('A')->setWidth(15); //设置默认列宽为12
-            $sheet->getColumnDimension('B')->setWidth(15); //设置默认列宽为12
-            $sheet->getColumnDimension('C')->setWidth(15); //设置默认列宽为12
-            $sheet->getDefaultRowDimension()->setRowHeight(-1); //设置行高自动
-            $sheet->getStyle(Coordinate::stringFromColumnIndex($hk) . '1')->getAlignment()->setWrapText(true);
+        foreach ($lists as $sheetIndex=> $list){
+            $sheet = $spreadsheet->createSheet($sheetIndex);
+            // 写入头部
+            $hk = 1;
+            foreach ($header as $k => $v) {
+                $sheet->setCellValue(Coordinate::stringFromColumnIndex($hk) . '1', $v[0]);
+                $sheet->getStyle(Coordinate::stringFromColumnIndex($hk) . '1')->getFont()->setBold(true);
+                $sheet->getDefaultColumnDimension()->setWidth(45); //设置默认列宽为12
+                $sheet->getColumnDimension('A')->setWidth(15); //设置默认列宽为12
+                $sheet->getColumnDimension('B')->setWidth(15); //设置默认列宽为12
+                $sheet->getColumnDimension('C')->setWidth(15); //设置默认列宽为12
+                $sheet->getDefaultRowDimension()->setRowHeight(-1); //设置行高自动
+                $sheet->getStyle(Coordinate::stringFromColumnIndex($hk) . '1')->getAlignment()->setWrapText(true);
 //            $sheet->getColumnDimension(Coordinate::stringFromColumnIndex($hk))->setAutoSize(true); //自动计算列宽
-            $hk += 1;
+                $hk += 1;
+            }
+            return ExcelHelper::exportData($list, $header, '工作日报' . date('YmdHis',time()),'xlsx', [$spreadsheet,$sheet]);
+
         }
-        return ExcelHelper::exportData($list, $header, '工作日报' . date('YmdHis',time()),'xlsx', [$spreadsheet,$sheet]);
 
     }
 
@@ -230,10 +233,17 @@ class MemberWorksController extends BaseController
         $where = ['id' => $ids, 'type'=> WorksTypeEnum::DAY_SUMMARY];
         $date_list = MemberWorks::find()->where($where)->groupBy('date')->select(['date'])->orderBy('date desc')->asArray()->all();
         $creator_id_list = MemberWorks::find()->where($where)->groupBy('creator_id')->select(['creator_id'])->asArray()->all();
-        $lists = [];
+        $lists = [
+            0=>[],
+            1 => [],
+            2 => [],
+            3 => [],
+            4 => []
+        ];
         foreach ($creator_id_list as $creator_id){
             $list = [];
             $member = Member::find()->where(['id'=>$creator_id])->one();
+            if(!$member) continue;
             $list['username'] = $member->username;
             $list['dept'] = $member->department->name ?? '';
             $list['post'] = $member->assignment->role->title ?? '';
@@ -242,7 +252,18 @@ class MemberWorksController extends BaseController
             foreach ($date_list as $date){
                 $list[$date['date']] = $member_works_list[$date['date']] ?? '';
             }
-            $lists[] = $list;
+            if($member->dept_id == 34){
+                $lists[1][] = $list;
+            }elseif ($member->dept_id == 35){
+                $lists[2][] = $list;
+            }elseif ($member->dept_id == 36){
+                $lists[3][] = $list;
+            }elseif ($member->dept_id == 37){
+                $lists[4][] = $list;
+            }else{
+                $lists[0][] = $list;
+            }
+
         }
 
         return [$lists, $date_list];
