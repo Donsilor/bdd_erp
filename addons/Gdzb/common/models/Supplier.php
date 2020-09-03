@@ -141,7 +141,6 @@ class Supplier extends BaseModel
     {
         return $this->hasOne(Member::class, ['id'=>'auditor_id'])->alias('auditor');
     }
-
     /**
      * 对应跟进人（管理员）模型
      * @return \yii\db\ActiveQuery
