@@ -74,8 +74,15 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'class' => 'yii\grid\ActionColumn',
                                 'header' => '操作',
                                 'contentOptions' => ['style' => ['white-space' => 'nowrap']],
-                                'template' => '{edit} {delete}',
+                                'template' => '{image} {edit} {delete}',
                                 'buttons' => [
+                                    'image' => function ($url, $model, $key) {
+                                        return Html::edit(['ajax-image', 'id' => $model->id], '图片', [
+                                            'class' => 'btn btn-warning btn-xs',
+                                            'data-toggle' => 'modal',
+                                            'data-target' => '#ajaxModal',
+                                        ]);
+                                    },
                                     'edit' => function ($url, $model, $key) use ($bill) {
                                         if ($bill->bill_status == BillStatusEnum::SAVE) {
                                             return Html::edit(['edit', 'id' => $model->id, 'bill_id' => $bill->id], '编辑', [
