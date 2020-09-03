@@ -54,6 +54,11 @@ $this->params['breadcrumbs'][] = $this->title;
                         'filterModel' => $searchModel,
                         'tableOptions' => ['class' => 'table table-hover'],
                         'options' => ['style' => 'white-space:nowrap;'],
+                        'rowOptions'=>function($model,$key, $index){
+                            if($index%2 === 0){
+                                return ['style'=>'background:#E1FFFF'];
+                            }
+                        },
                         'showFooter' => false,//显示footer行
                         'id' => 'grid',
                         'columns' => [
@@ -74,8 +79,15 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'class' => 'yii\grid\ActionColumn',
                                 'header' => '操作',
                                 'contentOptions' => ['style' => ['white-space' => 'nowrap']],
-                                'template' => '{edit} {delete}',
+                                'template' => '{image} {edit} {delete}',
                                 'buttons' => [
+                                    'image' => function ($url, $model, $key) {
+                                        return Html::edit(['ajax-image', 'id' => $model->id], '图片', [
+                                            'class' => 'btn btn-warning btn-xs',
+                                            'data-toggle' => 'modal',
+                                            'data-target' => '#ajaxModal',
+                                        ]);
+                                    },
                                     'edit' => function ($url, $model, $key) use ($bill) {
                                         if ($bill->bill_status == BillStatusEnum::SAVE) {
                                             return Html::edit(['edit', 'id' => $model->id, 'bill_id' => $bill->id], '编辑', [
@@ -272,14 +284,14 @@ $this->params['breadcrumbs'][] = $this->title;
                                 ]),
                                 'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#afdfe4;'],
                             ],
-                            [
-                                'attribute' => 'chain_long',
-                                'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#afdfe4'],
-                                'filter' => Html::activeTextInput($searchModel, 'chain_long', [
-                                    'class' => 'form-control',
-                                    'style' => 'width:100px;'
-                                ]),
-                            ],
+//                            [
+//                                'attribute' => 'chain_long',
+//                                'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#afdfe4'],
+//                                'filter' => Html::activeTextInput($searchModel, 'chain_long', [
+//                                    'class' => 'form-control',
+//                                    'style' => 'width:100px;'
+//                                ]),
+//                            ],
                             [
                                 'attribute' => 'cramp_ring',
                                 'value' => function ($model) {
@@ -1032,6 +1044,16 @@ $this->params['breadcrumbs'][] = $this->title;
 //                                    'style' => 'width:80px;'
 //                                ]),
                             ],*/
+                            [
+                                'attribute' => 'peishi_weight',
+                                'format' => 'raw',
+                                'filter' => false,
+                                'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#cde6c7;'],
+//                                'filter' => Html::activeTextInput($searchModel, 'peishi_weight', [
+//                                    'class' => 'form-control',
+//                                    'style' => 'width:80px;'
+//                                ]),
+                            ],
                             [
                                 'attribute' => 'peishi_gong_fee',
                                 'format' => 'raw',

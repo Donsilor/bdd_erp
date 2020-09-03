@@ -72,9 +72,9 @@ $this->params['breadcrumbs'][] = $this->title;
                     <div class="col-lg-4">
                         <?= $form->field($model, 'chain_type')->dropDownList($model->getChainTypeDrop($model), ['prompt' => '请选择']) ?>
                     </div>
-                    <div class="col-lg-4">
-                        <?= $form->field($model, 'chain_long')->textInput() ?>
-                    </div>
+<!--                    <div class="col-lg-4">-->
+<!--                        --><?//= $form->field($model, 'chain_long')->textInput() ?>
+<!--                    </div>-->
                     <div class="col-lg-4">
                         <?= $form->field($model, 'cramp_ring')->dropDownList($model->getCrampRingDrop($model), ['prompt' => '请选择']) ?>
                     </div>
@@ -254,15 +254,9 @@ $this->params['breadcrumbs'][] = $this->title;
 <!--                    <div class="col-lg-4">-->
 <!--                        --><?//= $form->field($model, 'second_stone_type1')->dropDownList($model->getSecondStoneType1Drop($model), ['prompt' => '请选择']) ?>
 <!--                    </div>-->
-                    <div class="col-lg-4">
-                        <?= $form->field($model, 'peishi_fee')->textInput() ?>
-                    </div>
-                    <div class="col-lg-4">
-                        <?= $form->field($model, 'peishi_gong_fee')->textInput() ?>
-                    </div>
-                    <div class="col-lg-4">
-                        <?= $form->field($model, 'stone_remark')->textInput() ?>
-                    </div>
+<!--                    <div class="col-lg-4">-->
+<!--                        --><?//= $form->field($model, 'peishi_fee')->textInput() ?>
+<!--                    </div>-->
                 </div>
                 <div class="row">
                     <div class="with-border">
@@ -283,9 +277,9 @@ $this->params['breadcrumbs'][] = $this->title;
                     <div class="col-lg-4">
                         <?= $form->field($model, 'second_stone_price2')->textInput() ?>
                     </div>
-                    <div class="col-lg-4">
-                        <?= $form->field($model, 'second_stone_shape2')->dropDownList($model->getSecondStoneShape2Drop($model), ['prompt' => '请选择']) ?>
-                    </div>
+<!--                    <div class="col-lg-4">-->
+<!--                        --><?//= $form->field($model, 'second_stone_shape2')->dropDownList($model->getSecondStoneShape2Drop($model), ['prompt' => '请选择']) ?>
+<!--                    </div>-->
 <!--                    <div class="col-lg-4">-->
 <!--                        --><?//= $form->field($model, 'second_stone_color2')->dropDownList($model->getSecondStoneClarity2Drop($model), ['prompt' => '请选择']) ?>
 <!--                    </div>-->
@@ -295,14 +289,23 @@ $this->params['breadcrumbs'][] = $this->title;
 <!--                    <div class="col-lg-4">-->
 <!--                        --><?//= $form->field($model, 'second_stone_colour2')->dropDownList($model->getSecondStoneColour2Drop($model), ['prompt' => '请选择']) ?>
 <!--                    </div>-->
+<!--                    <div class="col-lg-4">-->
+<!--                        --><?//= $form->field($model, 'second_stone_size2')->textInput() ?>
+<!--                    </div>-->
+<!--                    <div class="col-lg-4">-->
+<!--                        --><?//= $form->field($model, 'second_cert_id2')->textInput() ?>
+<!--                    </div>-->
+<!--                    <div class="col-lg-4">-->
+<!--                        --><?//= $form->field($model, 'second_stone_type2')->dropDownList($model->getSecondStoneType2Drop($model), ['prompt' => '请选择']) ?>
+<!--                    </div>-->
                     <div class="col-lg-4">
-                        <?= $form->field($model, 'second_stone_size2')->textInput() ?>
+                        <?= $form->field($model, 'peishi_weight')->textInput() ?>
                     </div>
                     <div class="col-lg-4">
-                        <?= $form->field($model, 'second_cert_id2')->textInput() ?>
+                        <?= $form->field($model, 'peishi_gong_fee')->textInput() ?>
                     </div>
                     <div class="col-lg-4">
-                        <?= $form->field($model, 'second_stone_type2')->dropDownList($model->getSecondStoneType2Drop($model), ['prompt' => '请选择']) ?>
+                        <?= $form->field($model, 'stone_remark')->textInput() ?>
                     </div>
                 </div>
 <!--                <div class="row">-->

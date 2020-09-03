@@ -95,24 +95,36 @@ class BillTGoodsController extends BaseController
 
     /**
      *
+     * ajax查看图片
+     * @return mixed|string|\yii\web\Response
+     * @throws
+     */
+    public function actionAjaxImage()
+    {
+        $id = \Yii::$app->request->get('id');
+        $model = $this->findModel($id);
+        $model = $model ?? new WarehouseBillTGoodsForm();
+        return $this->renderAjax($this->action->id, [
+            'model' => $model,
+        ]);
+    }
+
+    /**
+     *
      * 文件格式导出
      * @return mixed|string|\yii\web\Response
      * @throws
      */
     public function actionDownload()
     {
-        $fields = [
-            '条码号(货号)', '款号', '起版号', '商品名称', '材质', '材质颜色', '手寸(港号)', '手寸(美号)', '尺寸', '成品尺寸', '镶口', '刻字', '链类型', '扣环', '爪头形状',
-            '配料方式', '连石重', '金重', '损耗', '金价',
-            '主石配石方式', '主石编号', '主石类型', '主石粒数', '主石重', '主石单价', '主石形状', '主石颜色', '主石净度', '主石切工', '主石色彩', '主石规格',
-            '副石1配石方式', '副石1编号', '副石1类型', '副石1粒数', '副石1重', '副石1单价', '副石1形状', '副石1颜色', '副石1净度', '副石1色彩',
-            '副石2配石方式', '副石2编号', '副石2类型', '副石2粒数', '副石2重', '副石2单价', '副石2形状', '副石2规格', '石料备注',
-            '配件方式', '配件类型', '配件材质', '配件数量', '配件金重', '配件金价',
-            '配石数量', '配石重量', '配石工费', '配件工费', '克/工费', '镶嵌工艺', '镶石单价', '表面工艺', '表面工艺费', '分色/分件费', '喷拉砂费', '补口费', '版费', '证书费',
-            '其他费用', '主石证书号', '主石证书类型', '倍率', '金托类型', '备注',
-        ];
-        header("Content-Disposition: attachment;filename=入库明细" . date('Ymd') . ".csv");
-        echo iconv("utf-8", "gbk", implode($fields, ",") . "\n");
+        $bill_id = \Yii::$app->request->get('bill_id');
+        $bill = WarehouseBill::findOne($bill_id);
+        $model = new WarehouseBillTGoodsForm();
+        list($values, $fields) = $model->getTitleList();
+        header("Content-Disposition: attachment;filename=【{$bill_id}】入库单明细($bill->bill_no).csv");
+        $content = implode($values, ",") . "\n" . implode($fields, ",") . "\n";
+        echo iconv("utf-8", "gbk", $content);
+        exit();
     }
 
     /**
@@ -127,6 +139,7 @@ class BillTGoodsController extends BaseController
         $bill_id = Yii::$app->request->get('bill_id');
         $model = $this->findModel($id);
         $model = $model ?? new WarehouseBillTGoodsForm();
+        $bill = WarehouseBill::findOne($bill_id);
         // ajax 校验
         $this->activeFormValidate($model);
         if (Yii::$app->request->isPost) {
@@ -145,6 +158,7 @@ class BillTGoodsController extends BaseController
         }
         return $this->renderAjax($this->action->id, [
             'model' => $model,
+            'bill' => $bill,
         ]);
     }
 

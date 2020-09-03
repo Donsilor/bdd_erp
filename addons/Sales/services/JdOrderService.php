@@ -206,14 +206,15 @@ class JdOrderService extends Service
                         $goods_discount += ($coupon->couponPrice/$model->itemTotal);
                     }
                 }
-                if(!$model->skuId) {
-                    throw new \Exception($model->productNo." skuId is empty");
+                if(!$model->skuId || !$model->wareId) {
+                    throw new \Exception($model->productNo." skuId or wareId is empty");
                 }
                 $erpGoods = [
                     "goods_name" => $model->skuName,
                     "goods_image"=> null,
                     "style_sn"=> $model->productNo,
                     "out_sku_id"=> $model->skuId,
+                    "out_ware_id"=> $model->wareId,
                     "jintuo_type"=> $this->getErpJintuoType($model),
                     "goods_num"=> 1,
                     "goods_price"=> $model->jdPrice,
@@ -235,10 +236,16 @@ class JdOrderService extends Service
     
     /**
      * ERP订单商品属性表单
+     * <ul class="pop-select-dropdown-list"><li class="pop-select-item" style="display: none;">FL/无暇</li>
+     * <li class="pop-select-item" style="display: none;">IF/镜下无暇</li>
+     * <li class="pop-select-item" style="display: none;">VVS/极微瑕</li>
+     * <li class="pop-select-item" style="display: none;">VS/微瑕</li>
+     * <li class="pop-select-item pop-select-item-selected">SI/小瑕</li>
+     * <li class="pop-select-item" style="display: none;">P/不洁净</li><li class="pop-select-item" style="display: none;">不分级</li></ul>
      * @param OrderGoods $model 订单商品Model
      */
     public function getErpOrderGoodsAttrsData($model)
-    {
+    {       
         return [];
     }
     
@@ -310,7 +317,6 @@ class JdOrderService extends Service
         }
         return [$material_type,$material_color];
     }
-    
     /**
      * 获取商品总金额
      * @param unknown $order
