@@ -22,6 +22,7 @@ use addons\Style\common\enums\AttrIdEnum;
 use common\enums\AuditStatusEnum;
 use common\helpers\UploadHelper;
 use common\enums\StatusEnum;
+use yii\helpers\Url;
 
 /**
  * 其他收货单
@@ -199,7 +200,7 @@ class WarehouseBillTService extends Service
         $file = fopen($form->file->tempName, 'r');
         $i = 0;
         $flag = true;
-        //$error_txt = true;
+        $error_txt = true;
         $error = $saveData = [];
         $bill = WarehouseBill::findOne($form->bill_id);
         while ($goods = fgetcsv($file)) {
@@ -814,24 +815,11 @@ class WarehouseBillTService extends Service
                 $s = "【" . implode('】,【', $v) . '】';
                 $message .= '第' . ($k + 1) . '行' . $s . '<hr>';
             }
-//            if ($error_txt && $message) {
-//                $word = "";
-//                $file = Yii::getAlias('@runtime').DIRECTORY_SEPARATOR.'logs'.DIRECTORY_SEPARATOR.'app2.log';
-//                if (!file_exists($file)) {
-//                    file_put_contents($file, '');
-//                }
-//                $fh = fopen($file, "a");
-//                $word .= $message . "\r\n\r\n\r\n";
-//                fwrite($fh, $word);
-//                header("Content-type:text/txt;charset=gbk");
-//                header("Content-Type: application/octet-stream");
-//                header("Accept-Ranges:bytes ");
-//                header('Content-Disposition: attachment; filename="' . iconv("utf-8", "gbk", "error:") . '.txt"');
-//                header('Cache-Control:must-revalidate,post-check=0,pre-check=0');
-//                header('Expires:0');
-//                header('Pragma:public');
-//                echo iconv("utf-8", "gbk//IGNORE", $message);
-//            }
+            if ($error_txt && count($error) > 5 && $message) {
+                header("Content-Disposition: attachment;filename=错误提示" . date('YmdHis') . ".log");
+                echo iconv("utf-8", "gbk", str_replace("<hr>", "\r\n", $message));
+                exit();
+            }
             throw new \Exception($message);
         }
 
