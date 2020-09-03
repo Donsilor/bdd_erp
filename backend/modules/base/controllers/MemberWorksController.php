@@ -47,7 +47,7 @@ class MemberWorksController extends BaseController
         $searchModel = new SearchModel([
             'model' => $this->modelClass,
             'scenario' => 'default',
-            'partialMatchAttributes' => [], // 模糊查询
+            'partialMatchAttributes' => ['member.username'], // 模糊查询
             'defaultOrder' => [
                 'id' => SORT_DESC
             ],
