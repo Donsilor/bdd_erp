@@ -276,7 +276,7 @@ class WarehouseBillTService extends Service
                 $attr_id = $form->getAttrIdByAttrValue($style_sn, $material_type, AttrIdEnum::MATERIAL_TYPE);
                 if (empty($attr_id)) {
                     $flag = false;
-                    $error[$i][] = "材质录入值不对或该款[" . $style_sn . "]材质不支持[" . $material_type . "]请前往款式库核实";
+                    $error[$i][] = "材质录入值不对或该款[" . $goods_sn . "]材质不支持[" . $material_type . "]请前往款式库核实";
                 } else {
                     $material_type = $attr_id;
                 }
@@ -286,7 +286,7 @@ class WarehouseBillTService extends Service
                 $attr_id = $form->getAttrIdByAttrValue($style_sn, $material_color, AttrIdEnum::MATERIAL_COLOR);
                 if (empty($attr_id)) {
                     $flag = false;
-                    $error[$i][] = "材质颜色录入值不对或该款[" . $style_sn . "]材质颜色不支持[" . $material_color . "]请前往款式库核实";
+                    $error[$i][] = "材质颜色录入值不对或该款[" . $goods_sn . "]材质颜色不支持[" . $material_color . "]请前往款式库核实";
                 } else {
                     $material_color = $attr_id;
                 }
@@ -296,7 +296,7 @@ class WarehouseBillTService extends Service
                 $attr_id = $form->getAttrIdByAttrValue($style_sn, $finger_hk, AttrIdEnum::PORT_NO);
                 if (empty($attr_id)) {
                     $flag = false;
-                    $error[$i][] = "手寸(港号)录入值不对或该款[" . $style_sn . "]手寸(港号)不支持[" . $finger_hk . "]请前往款式库核实";
+                    $error[$i][] = "手寸(港号)录入值不对或该款[" . $goods_sn . "]手寸(港号)不支持[" . $finger_hk . "]请前往款式库核实";
                 } else {
                     $finger_hk = $attr_id;
                 }
@@ -306,7 +306,7 @@ class WarehouseBillTService extends Service
                 $attr_id = $form->getAttrIdByAttrValue($style_sn, $finger, AttrIdEnum::FINGER);
                 if (empty($attr_id)) {
                     $flag = false;
-                    $error[$i][] = "手寸(美号)录入值不对或该款[" . $style_sn . "]手寸(美号)不支持[" . $finger . "]请前往款式库核实";
+                    $error[$i][] = "手寸(美号)录入值不对或该款[" . $goods_sn . "]手寸(美号)不支持[" . $finger . "]请前往款式库核实";
                 } else {
                     $finger = $attr_id;
                 }
@@ -318,7 +318,7 @@ class WarehouseBillTService extends Service
                 $attr_id = $form->getAttrIdByAttrValue($style_sn, $xiangkou, AttrIdEnum::XIANGKOU);
                 if (empty($attr_id)) {
                     $flag = false;
-                    $error[$i][] = "镶口录入值不对或该款[" . $style_sn . "]镶口不支持[" . $xiangkou . "]请前往款式库核实";
+                    $error[$i][] = "镶口录入值不对或该款[" . $goods_sn . "]镶口不支持[" . $xiangkou . "]请前往款式库核实";
                 } else {
                     $xiangkou = $attr_id;
                 }
@@ -329,7 +329,7 @@ class WarehouseBillTService extends Service
                 $attr_id = $form->getAttrIdByAttrValue($style_sn, $chain_type, AttrIdEnum::CHAIN_TYPE);
                 if (empty($attr_id)) {
                     $flag = false;
-                    $error[$i][] = "链类型录入值不对或该款[" . $style_sn . "]链类型不支持[" . $chain_type . "]请前往款式库核实";
+                    $error[$i][] = "链类型录入值不对或该款[" . $goods_sn . "]链类型不支持[" . $chain_type . "]请前往款式库核实";
                 } else {
                     $chain_type = $attr_id;
                 }
@@ -339,7 +339,7 @@ class WarehouseBillTService extends Service
                 $attr_id = $form->getAttrIdByAttrValue($style_sn, $cramp_ring, AttrIdEnum::CHAIN_BUCKLE);
                 if (empty($attr_id)) {
                     $flag = false;
-                    $error[$i][] = "扣环录入值不对或该款[" . $style_sn . "]扣环不支持[" . $cramp_ring . "]请前往款式库核实";
+                    $error[$i][] = "扣环录入值不对或该款[" . $goods_sn . "]扣环不支持[" . $cramp_ring . "]请前往款式库核实";
                 } else {
                     $cramp_ring = $attr_id;
                 }
@@ -349,7 +349,7 @@ class WarehouseBillTService extends Service
                 $attr_id = $form->getAttrIdByAttrValue($style_sn, $talon_head_type, AttrIdEnum::TALON_HEAD_TYPE);
                 if (empty($attr_id)) {
                     $flag = false;
-                    $error[$i][] = "爪头形状录入值不对或该款[" . $style_sn . "]爪头形状不支持[" . $talon_head_type . "]请前往款式库核实";
+                    $error[$i][] = "爪头形状录入值不对或该款[" . $goods_sn . "]爪头形状不支持[" . $talon_head_type . "]请前往款式库核实";
                 } else {
                     $talon_head_type = $attr_id;
                 }
@@ -373,7 +373,7 @@ class WarehouseBillTService extends Service
                 $attr_id = $form->getAttrIdByAttrValue($style_sn, $main_stone_type, AttrIdEnum::MAIN_STONE_TYPE);
                 if (empty($attr_id)) {
                     $flag = false;
-                    $error[$i][] = "主石类型录入值不对或该款[" . $style_sn . "]主石类型不支持[" . $main_stone_type . "]请前往款式库核实";
+                    $error[$i][] = "主石类型录入值不对或该款[" . $goods_sn . "]主石类型不支持[" . $main_stone_type . "]请前往款式库核实";
                 } else {
                     $main_stone_type = $attr_id;
                 }
@@ -395,7 +395,7 @@ class WarehouseBillTService extends Service
                 $attr_id = $form->getAttrIdByAttrValue($style_sn, $main_stone_shape, AttrIdEnum::MAIN_STONE_CLARITY);
                 if (empty($attr_id)) {
                     $flag = false;
-                    $error[$i][] = "主石形状录入值不对或该款[" . $style_sn . "]主石形状不支持[" . $main_stone_shape . "]请前往款式库核实";
+                    $error[$i][] = "主石形状录入值不对或该款[" . $goods_sn . "]主石形状不支持[" . $main_stone_shape . "]请前往款式库核实";
                 } else {
                     $main_stone_shape = $attr_id;
                 }
@@ -405,7 +405,7 @@ class WarehouseBillTService extends Service
                 $attr_id = $form->getAttrIdByAttrValue($style_sn, $main_stone_color, AttrIdEnum::MAIN_STONE_COLOR);
                 if (empty($attr_id)) {
                     $flag = false;
-                    $error[$i][] = "主石颜色录入值不对或该款[" . $style_sn . "]主石颜色不支持[" . $second_stone_shape1 . "]请前往款式库核实";
+                    $error[$i][] = "主石颜色录入值不对或该款[" . $goods_sn . "]主石颜色不支持[" . $second_stone_shape1 . "]请前往款式库核实";
                 } else {
                     $second_stone_shape1 = $attr_id;
                 }
@@ -415,7 +415,7 @@ class WarehouseBillTService extends Service
                 $attr_id = $form->getAttrIdByAttrValue($style_sn, $main_stone_clarity, AttrIdEnum::MAIN_STONE_CLARITY);
                 if (empty($attr_id)) {
                     $flag = false;
-                    $error[$i][] = "主石净度录入值不对或该款[" . $style_sn . "]主石净度不支持[" . $main_stone_clarity . "]请前往款式库核实";
+                    $error[$i][] = "主石净度录入值不对或该款[" . $goods_sn . "]主石净度不支持[" . $main_stone_clarity . "]请前往款式库核实";
                 } else {
                     $main_stone_clarity = $attr_id;
                 }
@@ -425,7 +425,7 @@ class WarehouseBillTService extends Service
                 $attr_id = $form->getAttrIdByAttrValue($style_sn, $main_stone_cut, AttrIdEnum::MAIN_STONE_CUT);
                 if (empty($attr_id)) {
                     $flag = false;
-                    $error[$i][] = "主石切工录入值不对或该款[" . $style_sn . "]主石切工不支持[" . $main_stone_cut . "]请前往款式库核实";
+                    $error[$i][] = "主石切工录入值不对或该款[" . $goods_sn . "]主石切工不支持[" . $main_stone_cut . "]请前往款式库核实";
                 } else {
                     $main_stone_cut = $attr_id;
                 }
@@ -435,7 +435,7 @@ class WarehouseBillTService extends Service
                 $attr_id = $form->getAttrIdByAttrValue($style_sn, $main_stone_colour, AttrIdEnum::MAIN_STONE_COLOUR);
                 if (empty($attr_id)) {
                     $flag = false;
-                    $error[$i][] = "主石色彩录入值不对或该款[" . $style_sn . "]主石色彩不支持[" . $main_stone_colour . "]请前往款式库核实";
+                    $error[$i][] = "主石色彩录入值不对或该款[" . $goods_sn . "]主石色彩不支持[" . $main_stone_colour . "]请前往款式库核实";
                 } else {
                     $main_stone_colour = $attr_id;
                 }
@@ -448,7 +448,7 @@ class WarehouseBillTService extends Service
                 $attr_id = $form->getAttrIdByAttrValue($style_sn, $second_stone_type1, AttrIdEnum::SIDE_STONE1_TYPE);
                 if (empty($attr_id)) {
                     $flag = false;
-                    $error[$i][] = "副石1类型录入值不对或该款[" . $style_sn . "]副石1类型不支持[" . $second_stone_type1 . "]请前往款式库核实";
+                    $error[$i][] = "副石1类型录入值不对或该款[" . $goods_sn . "]副石1类型不支持[" . $second_stone_type1 . "]请前往款式库核实";
                 } else {
                     $second_stone_type1 = $attr_id;
                 }
@@ -470,7 +470,7 @@ class WarehouseBillTService extends Service
                 $attr_id = $form->getAttrIdByAttrValue($style_sn, $second_stone_shape1, AttrIdEnum::SIDE_STONE1_SHAPE);
                 if (empty($attr_id)) {
                     $flag = false;
-                    $error[$i][] = "副石1形状录入值不对或该款[" . $style_sn . "]副石1形状不支持[" . $second_stone_shape1 . "]请前往款式库核实";
+                    $error[$i][] = "副石1形状录入值不对或该款[" . $goods_sn . "]副石1形状不支持[" . $second_stone_shape1 . "]请前往款式库核实";
                 } else {
                     $second_stone_shape1 = $attr_id;
                 }
@@ -480,7 +480,7 @@ class WarehouseBillTService extends Service
                 $attr_id = $form->getAttrIdByAttrValue($style_sn, $second_stone_color1, AttrIdEnum::SIDE_STONE1_COLOR);
                 if (empty($attr_id)) {
                     $flag = false;
-                    $error[$i][] = "副石1颜色录入值不对或该款[" . $style_sn . "]副石1颜色不支持[" . $second_stone_color1 . "]请前往款式库核实";
+                    $error[$i][] = "副石1颜色录入值不对或该款[" . $goods_sn . "]副石1颜色不支持[" . $second_stone_color1 . "]请前往款式库核实";
                 } else {
                     $second_stone_color1 = $attr_id;
                 }
@@ -490,7 +490,7 @@ class WarehouseBillTService extends Service
                 $attr_id = $form->getAttrIdByAttrValue($style_sn, $second_stone_clarity1, AttrIdEnum::SIDE_STONE1_CLARITY);
                 if (empty($attr_id)) {
                     $flag = false;
-                    $error[$i][] = "副石1净度录入值不对或该款[" . $style_sn . "]副石1净度不支持[" . $second_stone_clarity1 . "]请前往款式库核实";
+                    $error[$i][] = "副石1净度录入值不对或该款[" . $goods_sn . "]副石1净度不支持[" . $second_stone_clarity1 . "]请前往款式库核实";
                 } else {
                     $second_stone_clarity1 = $attr_id;
                 }
@@ -500,7 +500,7 @@ class WarehouseBillTService extends Service
                 $attr_id = $form->getAttrIdByAttrValue($style_sn, $second_stone_colour1, AttrIdEnum::SIDE_STONE1_COLOUR);
                 if (empty($attr_id)) {
                     $flag = false;
-                    $error[$i][] = "副石1色彩录入值不对或该款[" . $style_sn . "]副石1色彩不支持[" . $second_stone_colour1 . "]请前往款式库核实";
+                    $error[$i][] = "副石1色彩录入值不对或该款[" . $goods_sn . "]副石1色彩不支持[" . $second_stone_colour1 . "]请前往款式库核实";
                 } else {
                     $second_stone_colour1 = $attr_id;
                 }
@@ -512,7 +512,7 @@ class WarehouseBillTService extends Service
                 $attr_id = $form->getAttrIdByAttrValue($style_sn, $second_stone_type2, AttrIdEnum::SIDE_STONE2_TYPE);
                 if (empty($attr_id)) {
                     $flag = false;
-                    $error[$i][] = "副石2类型录入值不对或该款[" . $style_sn . "]副石2类型不支持[" . $second_stone_type2 . "]请前往款式库核实";
+                    $error[$i][] = "副石2类型录入值不对或该款[" . $goods_sn . "]副石2类型不支持[" . $second_stone_type2 . "]请前往款式库核实";
                 } else {
                     $second_stone_type2 = $attr_id;
                 }
@@ -534,7 +534,7 @@ class WarehouseBillTService extends Service
                 $attr_id = $form->getAttrIdByAttrValue($style_sn, $second_stone_shape2, AttrIdEnum::SIDE_STONE2_SHAPE);
                 if (empty($attr_id)) {
                     $flag = false;
-                    $error[$i][] = "副石2形状录入值不对或该款[" . $style_sn . "]副石2形状不支持[" . $second_stone_shape2 . "]请前往款式库核实";
+                    $error[$i][] = "副石2形状录入值不对或该款[" . $goods_sn . "]副石2形状不支持[" . $second_stone_shape2 . "]请前往款式库核实";
                 } else {
                     $second_stone_shape2 = $attr_id;
                 }
@@ -554,7 +554,7 @@ class WarehouseBillTService extends Service
                 $attr_id = $form->getAttrIdByAttrValue($style_sn, $parts_type, AttrIdEnum::MAT_PARTS_TYPE);
                 if (empty($attr_id)) {
                     $flag = false;
-                    $error[$i][] = "配件类型录入值不对或该款[" . $style_sn . "]配件类型不支持[" . $parts_type . "]请前往款式库核实";
+                    $error[$i][] = "配件类型录入值不对或该款[" . $goods_sn . "]配件类型不支持[" . $parts_type . "]请前往款式库核实";
                 } else {
                     $parts_type = $attr_id;
                 }
@@ -564,7 +564,7 @@ class WarehouseBillTService extends Service
                 $attr_id = $form->getAttrIdByAttrValue($style_sn, $parts_material, AttrIdEnum::MATERIAL_TYPE);
                 if (empty($attr_id)) {
                     $flag = false;
-                    $error[$i][] = "配件材质录入值不对或该款[" . $style_sn . "]配件材质不支持[" . $parts_material . "]请前往款式库核实";
+                    $error[$i][] = "配件材质录入值不对或该款[" . $goods_sn . "]配件材质不支持[" . $parts_material . "]请前往款式库核实";
                 } else {
                     $parts_material = $attr_id;
                 }
@@ -582,7 +582,7 @@ class WarehouseBillTService extends Service
                 $attr_id = $form->getAttrIdByAttrValue($style_sn, $xiangqian_craft, AttrIdEnum::MATERIAL_TYPE);
                 if (empty($attr_id)) {
                     $flag = false;
-                    $error[$i][] = "镶嵌工艺录入值不对或该款[" . $style_sn . "]镶嵌工艺不支持[" . $xiangqian_craft . "]请前往款式库核实";
+                    $error[$i][] = "镶嵌工艺录入值不对或该款[" . $goods_sn . "]镶嵌工艺不支持[" . $xiangqian_craft . "]请前往款式库核实";
                 } else {
                     $xiangqian_craft = $attr_id;
                 }
@@ -593,7 +593,7 @@ class WarehouseBillTService extends Service
                 $attr_id = $form->getAttrIdByAttrValue($style_sn, $biaomiangongyi, AttrIdEnum::FACEWORK);
                 if (empty($attr_id)) {
                     $flag = false;
-                    $error[$i][] = "表面工艺录入值不对或该款[" . $style_sn . "]表面工艺不支持[" . $biaomiangongyi . "]请前往款式库核实";
+                    $error[$i][] = "表面工艺录入值不对或该款[" . $goods_sn . "]表面工艺不支持[" . $biaomiangongyi . "]请前往款式库核实";
                 } else {
                     $biaomiangongyi = $attr_id;
                 }
@@ -611,7 +611,7 @@ class WarehouseBillTService extends Service
                 $attr_id = $form->getAttrIdByAttrValue($style_sn, $main_cert_type, AttrIdEnum::DIA_CERT_TYPE);
                 if (empty($attr_id)) {
                     $flag = false;
-                    $error[$i][] = "主石证书类型录入值不对或该款[" . $style_sn . "]主石证书类型不支持[" . $main_cert_type . "]请前往款式库核实";
+                    $error[$i][] = "主石证书类型录入值不对或该款[" . $goods_sn . "]主石证书类型不支持[" . $main_cert_type . "]请前往款式库核实";
                 } else {
                     $main_cert_type = $attr_id;
                 }
