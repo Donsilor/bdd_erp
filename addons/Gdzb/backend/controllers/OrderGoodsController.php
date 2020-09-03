@@ -1,5 +1,5 @@
 <?php
-namespace addons\Sales\backend\controllers;
+namespace addons\Gdzb\backend\controllers;
 
 use addons\Sales\common\enums\IsGiftEnum;
 use addons\Sales\common\enums\IsStockEnum;

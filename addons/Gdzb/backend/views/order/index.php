@@ -72,9 +72,9 @@ $this->params['breadcrumbs'][] = $this->title;
                                     'todayBtn' => 'linked',
                                     'clearBtn' => true,
                             ],
-                    ]),                    
+                    ]),
                     'headerOptions' => ['class' => 'col-md-1'],
-            
+
             ],
             [
                     'attribute' => 'order_sn',
@@ -87,6 +87,19 @@ $this->params['breadcrumbs'][] = $this->title;
                     ]),
                     'format' => 'raw',
                     'headerOptions' => ['class' => 'col-md-1'],
+            ],
+            [
+                'attribute' => 'channel_id',
+                'value' => function ($model){
+                    return $model->saleChannel->name ?? '';
+                },
+                'filter' => Html::activeDropDownList($searchModel, 'channel_id',Yii::$app->salesService->saleChannel->getDropDown(), [
+                    'prompt' => '全部',
+                    'class' => 'form-control',
+                    'style'=> 'width:120px;'
+                ]),
+                'format' => 'raw',
+                'headerOptions' => [],
             ],
             [
                     'attribute' => 'customer_name',
@@ -120,49 +133,25 @@ $this->params['breadcrumbs'][] = $this->title;
                     'headerOptions' => ['width'=>'80'],
             ], */
             [
-                    'attribute' => 'account.order_amount',
+                    'attribute' => 'order_amount',
                     'value' => function($model){
-                         return \common\helpers\AmountHelper::outputAmount($model->account->order_amount??0,2,$model->currency);
+                         return \common\helpers\AmountHelper::outputAmount($model->order_amount??0,2,$model->currency);
                     },
                     'filter' => false,
                     'format' => 'raw',
                     'headerOptions' => ['width'=>'100'],
             ],
             [
-                    'attribute' => 'account.refund_amount',
+                    'attribute' => 'refund_amount',
                     'value' => function($model){
-                        return \common\helpers\AmountHelper::outputAmount($model->account->refund_amount??0,2,$model->currency);
+                        return \common\helpers\AmountHelper::outputAmount($model->refund_amount??0,2,$model->currency);
                     },
                     'filter' => false,
                     'format' => 'raw',
                     'headerOptions' => ['width'=>'100'],
             ],
-            [
-                    'attribute' => 'sale_channel_id',
-                    'value' => function ($model){
-                        return $model->saleChannel->name ?? '';
-                    },
-                    'filter' => Html::activeDropDownList($searchModel, 'sale_channel_id',Yii::$app->salesService->saleChannel->getDropDown(), [
-                            'prompt' => '全部',
-                            'class' => 'form-control',
-                            'style'=> 'width:120px;'
-                    ]),
-                    'format' => 'raw',
-                    'headerOptions' => [],
-            ],  
-            [
-                    'attribute' => 'order_type',
-                    'value' =>function($model){
-                         return \addons\Sales\common\enums\OrderTypeEnum::getValue($model->order_type);
-                    },
-                    'filter' => Html::activeDropDownList($searchModel, 'order_type',\addons\Sales\common\enums\OrderTypeEnum::getMap(), [
-                            'prompt' => '全部',
-                            'class' => 'form-control',
-                            'style'=> 'width:80px;'
-                    ]),
-                    'format' => 'raw',
-                    'headerOptions' => [],
-            ],         
+
+
             [
                     'attribute' => 'pay_status',
                     'value' => function ($model){
@@ -176,19 +165,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     'format' => 'raw',
                     'headerOptions' => ['width'=>'100'],
             ],  
-            [
-                    'attribute' => 'distribute_status',
-                    'value' => function ($model){
-                        return \addons\Sales\common\enums\DistributeStatusEnum::getValue($model->distribute_status);
-                    },
-                    'filter' => Html::activeDropDownList($searchModel, 'distribute_status',\addons\Sales\common\enums\DistributeStatusEnum::getMap(), [
-                            'prompt' => '全部',
-                            'class' => 'form-control',
-                            'style' =>'width:80px'
-                    ]),
-                    'format' => 'raw',
-                    'headerOptions' => ['width'=>'100'],
-           ],  
+
             [
                     'attribute' => 'delivery_status',
                     'value' => function ($model){
@@ -205,13 +182,7 @@ $this->params['breadcrumbs'][] = $this->title;
             [
                     'attribute' => 'order_status',
                     'value' => function ($model){
-                        $model->getTargetType();
-                        $audit_name_str = '';
-                        if($model->targetType){
-                            $audit_name = Yii::$app->services->flowType->getCurrentUsersName($model->targetType,$model->id);
-                            $audit_name_str = $audit_name ? "({$audit_name})" : "";
-                        }
-                         return \addons\Sales\common\enums\OrderStatusEnum::getValue($model->order_status).$audit_name_str;
+                         return \addons\Sales\common\enums\OrderStatusEnum::getValue($model->order_status);
                     },
                     'filter' => Html::activeDropDownList($searchModel, 'order_status',\addons\Sales\common\enums\OrderStatusEnum::getMap(), [
                             'prompt' => '全部',
@@ -234,29 +205,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 'format' => 'raw',
                 'headerOptions' => ['width'=>'100'],
             ],
-            [
-                    'attribute' => 'order_from',
-                    'value' => function ($model){
-                        return \addons\Sales\common\enums\OrderFromEnum::getValue($model->order_from);
-                    },
-                    'filter' => Html::activeDropDownList($searchModel, 'order_from',\addons\Sales\common\enums\OrderFromEnum::getMap(), [
-                            'prompt' => '全部',
-                            'class' => 'form-control',
-                            'style' =>'width:90px'
-                    ]),
-                    'format' => 'raw',
-                    'headerOptions' => ['width'=>'100'],
-            ], 
-            [
-                    'attribute' => 'out_trade_no',
-                    'value'=>"out_trade_no",
-                    'filter' => Html::activeTextInput($searchModel, 'out_trade_no', [
-                            'class' => 'form-control',
-                            'style'=> 'width:150px;'
-                    ]),
-                    'format' => 'raw',
-                    'headerOptions' => ['class' => 'col-md-1'],
-           ],
+
             [
                 'attribute' => 'creator_id',
                 'value' => 'creator.username',
