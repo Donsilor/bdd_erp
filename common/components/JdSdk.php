@@ -11,6 +11,7 @@ use ACES\TDEClient;
 use JD\request\SkuReadSearchSkuListRequest;
 use JD\request\NewWareAttributesQueryRequest;
 use JD\request\NewWareAttributeGroupsQueryRequest;
+use JD\request\SkuReadFindSkuByIdRequest;
 
 
 
@@ -145,11 +146,30 @@ class JdSdk extends Component
         $request->setField($option_fields); 
         $request->setSkuId($skuIds); 
         $request->setSkuStatuValue("1,2,4");
+        $request->setPageNo(1);
+        $request->setPageSize(30);
         $responce = $this->client->execute($request, $this->accessToken);
         if(isset($responce->error_response)){
             throw new \Exception($responce->error_response->zh_desc);
         }
         return $responce->jingdong_sku_read_searchSkuList_responce->page->data ?? [];      
+    }
+    /**
+     * SKU信息查询
+     * @param unknown $skuIds
+     */
+    public function getSku($skuId)
+    {
+        $request = new SkuReadFindSkuByIdRequest();
+        $option_fields = 'skuId,skuName,status,categoryId,saleAttrs,features,multiCateProps';
+        $request->setField($option_fields);
+        $request->setSkuId($skuId);
+        $responce = $this->client->execute($request, $this->accessToken);
+        print_r($responce);exit;
+        if(isset($responce->error_response)){
+            throw new \Exception($responce->error_response->zh_desc);
+        }
+        return $responce->jingdong_sku_read_searchSkuList_responce->page->data ?? [];
     }
     /**
      * 获取所有属性列表

@@ -22,7 +22,8 @@ class JdController extends Controller
     public function actionUpdateJdSku($time_val = 1, $time_type = 1, $order_type = 1, $start_time = 0)
     {
         Console::output("Update JD Sku BEGIN[".date('Y-m-d H:i:s')."]-------------------");
-        $skuIds = '65400274093,65400274093,67717128256,65400274093,67717128256,10020341807332,65400274093,67717128256,71124461109,65400274093,67717128256,65711139973,68706523817,65400274093,67717128256,70414516226';
+        $skuIds = '65400274093,65400274093,67717128256,65400274093,67717128256,10020341807332';
+        $skuIds = '65400274093,67717128256,71124461109,65400274093,67717128256,65711139973,68706523817,65400274093,67717128256,70414516226';
         $skuList = \Yii::$app->jdSdk->getSkuList($skuIds);
         print_r($skuList);
         Console::output("Update JD Sku END[".date('Y-m-d H:i:s')."]-------------------");

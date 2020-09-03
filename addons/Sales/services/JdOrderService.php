@@ -206,6 +206,9 @@ class JdOrderService extends Service
                         $goods_discount += ($coupon->couponPrice/$model->itemTotal);
                     }
                 }
+                if(!$model->skuId) {
+                    throw new \Exception($model->productNo." skuId is empty");
+                }
                 $erpGoods = [
                     "goods_name" => $model->skuName,
                     "goods_image"=> null,
