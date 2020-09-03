@@ -200,7 +200,7 @@ class WarehouseBillTService extends Service
         $file = fopen($form->file->tempName, 'r');
         $i = 0;
         $flag = true;
-        $error_txt = true;
+        $error_off = true;
         $error = $saveData = [];
         $bill = WarehouseBill::findOne($form->bill_id);
         while ($goods = fgetcsv($file)) {
@@ -364,7 +364,7 @@ class WarehouseBillTService extends Service
                     $talon_head_type = $attr_id;
                 }
             }
-            $peiliao_way = $goods[15] ?? "";
+            $peiliao_way = $form->formatValue($goods[15], 0) ?? "";
             if (!empty($peiliao_way)) {
                 $peiliao_way = \addons\Warehouse\common\enums\PeiLiaoWayEnum::getIdByName($peiliao_way);
                 if (empty($peiliao_way)) {
@@ -385,7 +385,7 @@ class WarehouseBillTService extends Service
                 if (empty($stone)) {
                     $flag = false;
                     $error[$i][] = "主石编号不对";
-                }else{
+                } else {
                     $cert_id = $stone->cert_id ?? "";
                     $cert_type = $stone->cert_type ?? "";
                 }
@@ -623,7 +623,7 @@ class WarehouseBillTService extends Service
 //                $second_stone_size2 = $stone->stone_size ?? "";
 //            }
             $stone_remark = $goods[48] ?? "";
-            $parts_way = $goods[49] ?? "";
+            $parts_way = $form->formatValue($goods[49], 0) ?? "";
             if (!empty($parts_way)) {
                 $parts_way = \addons\Warehouse\common\enums\PeiJianWayEnum::getIdByName($parts_way);
                 if (empty($parts_way)) {
@@ -688,7 +688,7 @@ class WarehouseBillTService extends Service
             $cert_fee = $form->formatValue($goods[67], 0) ?? 0;
             $other_fee = $form->formatValue($goods[68], 0) ?? 0;
             $main_cert_id = $goods[69] ?? "";
-            if(empty($main_cert_id)){
+            if (empty($main_cert_id)) {
                 $main_cert_id = $cert_id;
             }
             $main_cert_type = $goods[70] ?? "";
@@ -700,7 +700,7 @@ class WarehouseBillTService extends Service
                 } else {
                     $main_cert_type = $attr_id;
                 }
-            }else{
+            } else {
                 $main_cert_type = $cert_type;
             }
             $markup_rate = $form->formatValue($goods[71], 1) ?? 1;
@@ -826,14 +826,14 @@ class WarehouseBillTService extends Service
                 $s = "【" . implode('】,【', $v) . '】';
                 $message .= '第' . ($k + 1) . '行' . $s . '<hr>';
             }
-            if ($error_txt && count($error) > 5 && $message) {
+            if ($error_off && count($error) > 5 && $message) {
                 header("Content-Disposition: attachment;filename=错误提示" . date('YmdHis') . ".log");
                 echo iconv("utf-8", "gbk", str_replace("<hr>", "\r\n", $message));
                 exit();
             }
             throw new \Exception($message);
         }
-        if(empty($saveData)){
+        if (empty($saveData)) {
             throw new \Exception("数据不能为空");
         }
         $value = [];
@@ -992,14 +992,14 @@ class WarehouseBillTService extends Service
 
     /**
      *
-     * 配石费=((副石重/数量)小于0.03ct的，*数量*配石工费)[配石费=(配石数量*配石重量*配石工费/ct)]
+     * 配石费=((副石重/数量)小于0.03ct的，*数量*配石工费)[配石费=(配石重量*配石工费/ct)]
      * @param WarehouseBillTGoodsForm $form
      * @return integer
      * @throws
      */
     public function calculatePeishiFee($form)
     {
-        return bcmul(bcmul($form->peishi_num, $form->peishi_weight, 3), $form->peishi_gong_fee) ?? 0;
+        return bcmul($form->peishi_weight, $form->peishi_gong_fee) ?? 0;
     }
 
     /**
