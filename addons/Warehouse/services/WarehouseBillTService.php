@@ -378,11 +378,15 @@ class WarehouseBillTService extends Service
             $main_pei_type = $form->formatValue($goods[20], 0) ?? 0;
             $main_stone_sn = $goods[21] ?? "";
             $stone = null;
+            $cert_id = $cert_type = "";
             if (!empty($main_stone_sn)) {
                 $stone = WarehouseStone::findOne(['stone_sn' => $main_stone_sn]);
                 if (empty($stone)) {
                     $flag = false;
                     $error[$i][] = "主石编号不对";
+                }else{
+                    $cert_id = $stone->cert_id ?? "";
+                    $cert_type = $stone->cert_type ?? "";
                 }
             }
             $main_stone_type = $goods[22] ?? "";
@@ -603,7 +607,7 @@ class WarehouseBillTService extends Service
             }
             $second_stone_size2 = $goods[49] ?? "";
             if (empty($second_stone_size2)) {
-                $second_stone_size2 = $stone->stone_size;
+                $second_stone_size2 = $stone->stone_size ?? "";
             }
             $stone_remark = $goods[50] ?? "";
             $parts_way = $goods[51] ?? "";
@@ -671,6 +675,9 @@ class WarehouseBillTService extends Service
             $cert_fee = $form->formatValue($goods[70], 0) ?? 0;
             $other_fee = $form->formatValue($goods[71], 0) ?? 0;
             $main_cert_id = $goods[72] ?? "";
+            if(empty($main_cert_id)){
+                $main_cert_id = $cert_id;
+            }
             $main_cert_type = $goods[73] ?? "";
             if (!empty($main_cert_type)) {
                 $attr_id = $form->getAttrIdByAttrValue($style_sn, $main_cert_type, AttrIdEnum::DIA_CERT_TYPE);
@@ -680,6 +687,8 @@ class WarehouseBillTService extends Service
                 } else {
                     $main_cert_type = $attr_id;
                 }
+            }else{
+                $main_cert_type = $cert_type;
             }
             $markup_rate = $form->formatValue($goods[74], 1) ?? 1;
             $jintuo_type = $goods[75] ?? "";
