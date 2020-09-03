@@ -95,6 +95,22 @@ class BillTGoodsController extends BaseController
 
     /**
      *
+     * ajax查看图片
+     * @return mixed|string|\yii\web\Response
+     * @throws
+     */
+    public function actionAjaxImage()
+    {
+        $id = \Yii::$app->request->get('id');
+        $model = $this->findModel($id);
+        $model = $model ?? new WarehouseBillTGoodsForm();
+        return $this->renderAjax($this->action->id, [
+            'model' => $model,
+        ]);
+    }
+
+    /**
+     *
      * 文件格式导出
      * @return mixed|string|\yii\web\Response
      * @throws
