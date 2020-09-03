@@ -53,9 +53,9 @@ class JdSdk extends Component
                 $this->client->accessToken = $this->accessToken;
             }
         }     
-        echo $this->appKey.'\r\n';
-        echo $this->appSecret.'\r\n';
-        echo $this->accessToken.'\r\n';exit;
+        //echo $this->appKey.'\r\n';
+        //echo $this->appSecret.'\r\n';
+        //echo $this->accessToken.'\r\n';
         parent::init();
     }
     /**
