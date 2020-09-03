@@ -46,6 +46,19 @@ $this->params['breadcrumbs'][] = ['label' => $this->title];
                         'realname',
                         'mobile',
                         [
+                            'attribute' => 'dept_id',
+                            'value'=>function($model) {
+                                return $model->department->name ?? '';
+                            },
+                            'filter' => Html::activeDropDownList($searchModel, 'dept_id',Yii::$app->services->department->getDropDown(), [
+                                'prompt' => '全部',
+                                'class' => 'form-control',
+                                'style'=> 'width:100px;'
+                            ]),
+                            'format' => 'raw',
+                            //'headerOptions' => ['width'=>'150'],
+                        ],
+                        [
                             'label' => '角色',
                             'filter' => false, //不显示搜索框
                             'value' => function ($model) {

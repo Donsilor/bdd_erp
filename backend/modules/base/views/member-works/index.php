@@ -104,7 +104,12 @@ $params = $params ? "&".http_build_query($params) : '';
                         [
                             'attribute' => 'creator_id',
                             'value'=>function($model) {
-                                return Html::a($model->member->username, ['view', 'creator_id' => $model->creator_id,'returnUrl'=>Url::getReturnUrl()], ['style'=>"text-decoration:underline;color:#3c8dbc"]);
+                                $username = $model->member->username ?? '';
+                                if($username != ''){
+                                    return Html::a($model->member->username, ['view', 'creator_id' => $model->creator_id,'returnUrl'=>Url::getReturnUrl()], ['style'=>"text-decoration:underline;color:#3c8dbc"]);
+                                }else{
+                                    return '';
+                                }
                             },
                             'headerOptions' => ['class' => 'col-md-1'],
                             'format' => 'raw',
