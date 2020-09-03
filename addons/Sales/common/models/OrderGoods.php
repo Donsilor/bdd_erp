@@ -64,7 +64,7 @@ class OrderGoods extends BaseModel
             [['remark'], 'string', 'max' => 255],
             [['goods_spec'], 'string', 'max' => 1024],
             [['currency'], 'string', 'max' => 5],
-            [['produce_sn', 'return_no', 'out_sku_id'], 'string', 'max' => 30],
+            [['produce_sn', 'return_no', 'out_sku_id','out_ware_id'], 'string', 'max' => 30],
             [['apply_info'], 'string'],
         ];
     }
@@ -113,7 +113,8 @@ class OrderGoods extends BaseModel
             'updated_at' => '更新时间',
             'is_apply' => '是否申请修改',
             'remark' => '备注',
-            'out_sku_id' => '外部SKU',
+            'out_sku_id' => '外部商品SKU',
+            'out_ware_id' => '外部商品编号',
 
         ];
     }

@@ -12,6 +12,7 @@ use JD\request\SkuReadSearchSkuListRequest;
 use JD\request\NewWareAttributesQueryRequest;
 use JD\request\NewWareAttributeGroupsQueryRequest;
 use JD\request\SkuReadFindSkuByIdRequest;
+use JD\request\WareReadSearchWare4ValidRequest;
 
 
 
@@ -51,7 +52,10 @@ class JdSdk extends Component
                 $this->accessToken = $data['access_token'];
                 $this->client->accessToken = $this->accessToken;
             }
-        }        
+        }     
+        echo $this->appKey.'\r\n';
+        echo $this->appSecret.'\r\n';
+        echo $this->accessToken.'\r\n';exit;
         parent::init();
     }
     /**
@@ -139,12 +143,31 @@ class JdSdk extends Component
      * SKU信息查询
      * @param unknown $skuIds
      */
+    public function getWareList($wareIds)
+    {
+        $request = new WareReadSearchWare4ValidRequest();
+        $option_fields = 'wareId,wareStatus,features,multiCateProps';
+        $request->setField($option_fields); 
+        $request->setWareStatusValue("1,2,4,8,513,513,514,516,520,1028");
+        $request->setPageNo(1);
+        $request->setPageSize(30);
+        $responce = $this->client->execute($request, $this->accessToken);
+        if(isset($responce->error_response)){
+            throw new \Exception($responce->error_response->zh_desc);
+        }
+        return $responce->jingdong_ware_read_searchWare4Valid_response->page->data ?? [];      
+    }
+    
+    /**
+     * SKU信息查询
+     * @param unknown $skuIds
+     */
     public function getSkuList($skuIds)
     {
         $request = new SkuReadSearchSkuListRequest();
         $option_fields = 'skuId,skuName,status,categoryId,saleAttrs,features,multiCateProps';
-        $request->setField($option_fields); 
-        $request->setSkuId($skuIds); 
+        $request->setField($option_fields);
+        $request->setSkuId($skuIds);
         $request->setSkuStatuValue("1,2,4");
         $request->setPageNo(1);
         $request->setPageSize(30);
@@ -152,42 +175,7 @@ class JdSdk extends Component
         if(isset($responce->error_response)){
             throw new \Exception($responce->error_response->zh_desc);
         }
-        return $responce->jingdong_sku_read_searchSkuList_responce->page->data ?? [];      
-    }
-    /**
-     * SKU信息查询
-     * @param unknown $skuIds
-     */
-    public function getSku($skuId)
-    {
-        $request = new SkuReadFindSkuByIdRequest();
-        $option_fields = 'skuId,skuName,status,categoryId,saleAttrs,features,multiCateProps';
-        $request->setField($option_fields);
-        $request->setSkuId($skuId);
-        $responce = $this->client->execute($request, $this->accessToken);
-        print_r($responce);exit;
-        if(isset($responce->error_response)){
-            throw new \Exception($responce->error_response->zh_desc);
-        }
         return $responce->jingdong_sku_read_searchSkuList_responce->page->data ?? [];
-    }
-    /**
-     * 获取所有属性列表
-     * @throws \Exception
-     */
-    public function getAttrList()
-    {
-        echo $this->appKey.'--'.$this->appSecret.'--'.$this->accessToken;exit;
-        /* $request = new NewWareAttributeGroupsQueryRequest();
-        $responce = $this->client->execute($request, $this->accessToken);
-        print_r($responce);exit; */
-        $request = new NewWareAttributesQueryRequest();
-        //$request->setId('123L,456L');
-        $responce = $this->client->execute($request, $this->accessToken);
-        /* if(isset($responce->error_response)){
-            throw new \Exception($responce->error_response->zh_desc);
-        } */
-        print_r($responce);exit;    
     }
     
 }

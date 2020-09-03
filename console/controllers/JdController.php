@@ -4,6 +4,7 @@ namespace console\controllers;
 
 use yii\console\Controller;
 use yii\helpers\Console;
+use addons\Sales\common\models\OrderGoods;
 
 /**
  * 京东API任务处理
@@ -19,16 +20,36 @@ class JdController extends Controller
      * @param number $order_type
      * @param number $start_time
      */
-    public function actionUpdateJdSku($time_val = 1, $time_type = 1, $order_type = 1, $start_time = 0)
+    public function actionUpdateJdWare($time_val = 1, $time_type = 1, $order_type = 1, $start_time = 0)
     {
         Console::output("Update JD Sku BEGIN[".date('Y-m-d H:i:s')."]-------------------");
-        $skuIds = '65400274093,65400274093,67717128256,65400274093,67717128256,10020341807332';
-        $skuIds = '65400274093,67717128256,71124461109,65400274093,67717128256,65711139973,68706523817,65400274093,67717128256,70414516226';
-        $skuList = \Yii::$app->jdSdk->getSkuList($skuIds);
-        print_r($skuList);
+        $ware_list = OrderGoods::find()->select(['out_ware_id'])->distinct(true)->where(['<>','out_ware_id',''])->asArray()->all();
+        $ware_list = $ware_list ? array_column($ware_list, 'out_ware_id') : [];
+        $group_list = $this->groupArray($ware_list,40);
+        foreach ($group_list as $wareIds) {
+            $wareIds = implode(",", $wareIds);
+            $wareList = \Yii::$app->jdSdk->getWareList($wareIds);
+            print_r($wareList);
+        }
         Console::output("Update JD Sku END[".date('Y-m-d H:i:s')."]-------------------");
     }
-    
+    /**
+     * 数组分组
+     * @param unknown $array
+     * @param number $group_size
+     */
+    private function groupArray($array,$group_size = 30)
+    {
+        if(empty($array) || !is_array($array)) {
+            return [];
+        }
+        $per    = ceil(count($array)/30);
+        $group = [];
+        foreach ($array as $key=>$vo) {
+            $group[$key%$per][] = $vo;
+        }
+        return $group;
+    }
     /**
      * 同步订单
      * @param number $time_val
