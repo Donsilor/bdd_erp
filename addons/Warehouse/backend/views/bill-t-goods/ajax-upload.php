@@ -21,18 +21,18 @@ $form = ActiveForm::begin([
 <div class="modal-body">
     <div class="col-sm-12">
         <?= $form->field($model, 'file')->fileInput() ?>
-        <?= Html::a("下载导入数据格式", ['download'], ['style' => "text-decoration:underline;color:#3c8dbc"]) ?>
+        <?= Html::a("下载导入数据格式", ['download', 'bill_id' => $bill->id], ['style' => "text-decoration:underline;color:#3c8dbc"]) ?>
     </div>
 </div>
 <div class="modal-footer">
     <button type="button" class="btn btn-white" data-dismiss="modal">关闭</button>
-    <button id = "save" class="btn btn-primary" type="submit" data-loading-text="保存">保存</button>
+    <button id="save" class="btn btn-primary" type="submit" data-loading-text="保存">保存</button>
 </div>
 <?php ActiveForm::end(); ?>
 <script>
-    $(function() {
-        $("#save").click(function(){
-            $(this).button('loading').delay(1000).queue(function() {
+    $(function () {
+        $("#save").click(function () {
+            $(this).button('loading').delay(1000).queue(function () {
                 // $(this).button('reset');
                 // $(this).dequeue();
             });
