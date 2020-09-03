@@ -3,17 +3,23 @@
 namespace backend\modules\base\controllers;
 
 use common\enums\StatusEnum;
-use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use backend\controllers\BaseController;
 use common\enums\WorksTypeEnum;
 use common\helpers\ExcelHelper;
 use common\helpers\StringHelper;
 use common\models\backend\Member;
 use common\models\backend\MemberWorks;
-use PhpOffice\PhpSpreadsheet\Cell\Coordinate;
 use Yii;
 use common\models\base\SearchModel;
 use common\traits\Curd;
+
+use PhpOffice\PhpSpreadsheet\Cell\DataType;
+use PhpOffice\PhpSpreadsheet\Cell\Coordinate;
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\Writer\Html;
+use PhpOffice\PhpSpreadsheet\Writer\Xls;
+use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
+use PhpOffice\PhpSpreadsheet\Writer\Csv;
 
 
 /**
@@ -197,28 +203,7 @@ class MemberWorksController extends BaseController
             $header[] = [$date_txt, $date['date'],'text'];
         }
 
-
-        // 初始化
-        $spreadsheet = new Spreadsheet();
-        foreach ($lists as $sheetIndex=> $list){
-            $sheet = $spreadsheet->createSheet($sheetIndex);
-            // 写入头部
-            $hk = 1;
-            foreach ($header as $k => $v) {
-                $sheet->setCellValue(Coordinate::stringFromColumnIndex($hk) . '1', $v[0]);
-                $sheet->getStyle(Coordinate::stringFromColumnIndex($hk) . '1')->getFont()->setBold(true);
-                $sheet->getDefaultColumnDimension()->setWidth(45); //设置默认列宽为12
-                $sheet->getColumnDimension('A')->setWidth(15); //设置默认列宽为12
-                $sheet->getColumnDimension('B')->setWidth(15); //设置默认列宽为12
-                $sheet->getColumnDimension('C')->setWidth(15); //设置默认列宽为12
-                $sheet->getDefaultRowDimension()->setRowHeight(-1); //设置行高自动
-                $sheet->getStyle(Coordinate::stringFromColumnIndex($hk) . '1')->getAlignment()->setWrapText(true);
-//            $sheet->getColumnDimension(Coordinate::stringFromColumnIndex($hk))->setAutoSize(true); //自动计算列宽
-                $hk += 1;
-            }
-            return ExcelHelper::exportData($list, $header, '工作日报' . date('YmdHis',time()),'xlsx', [$spreadsheet,$sheet]);
-
-        }
+        return self::exportData($lists, $header, '工作日报' . date('YmdHis',time()),'xlsx');
 
     }
 
@@ -234,11 +219,6 @@ class MemberWorksController extends BaseController
         $date_list = MemberWorks::find()->where($where)->groupBy('date')->select(['date'])->orderBy('date desc')->asArray()->all();
         $creator_id_list = MemberWorks::find()->where($where)->groupBy('creator_id')->select(['creator_id'])->asArray()->all();
         $lists = [
-            0=>[],
-            1 => [],
-            2 => [],
-            3 => [],
-            4 => []
         ];
         foreach ($creator_id_list as $creator_id){
             $list = [];
@@ -253,15 +233,15 @@ class MemberWorksController extends BaseController
                 $list[$date['date']] = $member_works_list[$date['date']] ?? '';
             }
             if($member->dept_id == 34){
-                $lists[1][] = $list;
+                $lists['平洲直播'][] = $list;
             }elseif ($member->dept_id == 35){
-                $lists[2][] = $list;
+                $lists['平洲微信'][] = $list;
             }elseif ($member->dept_id == 36){
-                $lists[3][] = $list;
+                $lists['四会直播1组'][] = $list;
             }elseif ($member->dept_id == 37){
-                $lists[4][] = $list;
+                $lists['四会直播2组'][] = $list;
             }else{
-                $lists[0][] = $list;
+                $lists['深圳办公室+香港办公室'][] = $list;
             }
 
         }
@@ -335,6 +315,115 @@ class MemberWorksController extends BaseController
         return $this->render($this->action->id, [
             'model' => $model,
         ]);
+    }
+
+
+
+
+    /**
+     * 导出Excel
+     *
+     * @param array $list
+     * @param array $header
+     * @param string $filename
+     * @param string $title
+     * @return bool
+     * @throws \PhpOffice\PhpSpreadsheet\Exception
+     * @throws \PhpOffice\PhpSpreadsheet\Writer\Exception
+     */
+    public static function exportData($lists = [], $header = [], $filename = '', $suffix = 'xlsx')
+    {
+        if (!is_array($lists) || !is_array($header)) {
+            return false;
+        }
+
+        !$filename && $filename = time();
+        $spreadsheet = new Spreadsheet();
+        $spreadsheet->removeSheetByIndex(0);
+        $sheetIndex = 1;
+        foreach($lists as $title => $list){
+            $sheet = $spreadsheet->createSheet($sheetIndex);
+            $sheet->setTitle($title);
+            $sheetIndex += 1;
+            // 写入头部
+            $hk = 1;
+            foreach ($header as $k => $v) {
+                $sheet->setCellValue(Coordinate::stringFromColumnIndex($hk) . '1', $v[0]);
+                $sheet->getStyle(Coordinate::stringFromColumnIndex($hk) . '1')->getFont()->setBold(true);
+                $sheet->getDefaultColumnDimension()->setWidth(45); //设置默认列宽为12
+                $sheet->getColumnDimension('A')->setWidth(15); //设置默认列宽为12
+                $sheet->getColumnDimension('B')->setWidth(15); //设置默认列宽为12
+                $sheet->getColumnDimension('C')->setWidth(15); //设置默认列宽为12
+                $sheet->getDefaultRowDimension()->setRowHeight(-1); //设置行高自动
+                $sheet->getStyle(Coordinate::stringFromColumnIndex($hk) . '1')->getAlignment()->setWrapText(true);
+                $hk += 1;
+            }
+
+            // 开始写入内容
+            $column = 2;
+            $size = ceil(count($list) / 500);
+            for ($i = 0; $i < $size; $i++) {
+                $buffer = array_slice($list, $i * 500, 500);
+
+                foreach ($buffer as $k => $row) {
+                    $span = 1;
+
+                    foreach ($header as $key => $value) {
+                        // 解析字段
+                        $realData = ExcelHelper::formatting($header[$key], trim(ExcelHelper::formattingField($row, $value[1])), $row);
+                        // 写入excel
+                        $sheet->setCellValueExplicit(Coordinate::stringFromColumnIndex($span) . $column, $realData, DataType::TYPE_STRING);
+                        // $sheet->setCellValue(Coordinate::stringFromColumnIndex($span) . $column, $realData);
+                        $span++;
+                    }
+
+                    $column++;
+                    unset($buffer[$k]);
+                }
+            }
+        }
+        // 清除之前的错误输出
+        ob_end_clean();
+        ob_start();
+
+        // 直接输出下载
+        switch ($suffix) {
+            case 'xlsx' :
+                $writer = new Xlsx($spreadsheet);
+                header("Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=utf-8;");
+                header("Content-Disposition: inline;filename=\"{$filename}.xlsx\"");
+                header('Cache-Control: max-age=0');
+                $writer->save('php://output');
+                break;
+            case 'xls' :
+                $writer = new Xls($spreadsheet);
+                header("Content-Type:application/vnd.ms-excel;charset=utf-8;");
+                header("Content-Disposition:inline;filename=\"{$filename}.xls\"");
+                header('Cache-Control: max-age=0');
+                $writer->save('php://output');
+                break;
+            case 'csv' :
+                $writer = new Csv($spreadsheet);
+                header("Content-type:text/csv;charset=utf-8;");
+                header("Content-Disposition:attachment; filename={$filename}.csv");
+                header('Cache-Control: max-age=0');
+                $writer->save('php://output');
+                break;
+            case 'html' :
+                $writer = new Html($spreadsheet);
+                header("Content-Type:text/html;charset=utf-8;");
+                header("Content-Disposition:attachment;filename=\"{$filename}.{$suffix}\"");
+                header('Cache-Control: max-age=0');
+                $writer->save('php://output');
+                break;
+        }
+
+        /* 释放内存 */
+        $spreadsheet->disconnectWorksheets();
+        unset($spreadsheet);
+        ob_end_flush();
+
+        exit();
     }
 
 

@@ -259,7 +259,7 @@ class ExcelHelper
      * @param array $array 头部规则
      * @return false|mixed|null|string 内容值
      */
-    protected static function formatting(array $array, $value, $row)
+    public static function formatting(array $array, $value, $row)
     {
         !isset($array[2]) && $array[2] = 'text';
 
@@ -296,7 +296,7 @@ class ExcelHelper
      * @param $field
      * @return mixed
      */
-    protected static function formattingField($row, $field)
+    public static function formattingField($row, $field)
     {
         $newField = explode('.', $field);
         if (count($newField) == 1) {
