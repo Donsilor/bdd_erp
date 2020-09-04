@@ -104,13 +104,21 @@ $this->params['breadcrumbs'][] = $this->title;
                             <td></td>
                         </tr>
                         <tr>
+                            <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('customer_message') ?>：</td>
+                            <td colspan="5"><?= $model->customer_message ?></td>
+                        </tr>
+                        <tr>
+                            <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('store_remark') ?>：</td>
+                            <td colspan="5"><?= $model->store_remark ?></td>
+                        </tr>
+                        <tr>
                             <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('pay_remark') ?>：</td>
                             <td colspan="5"><?= $model->pay_remark ?></td>
                         </tr>
                         <tr>
                             <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('remark') ?>：</td>
                             <td colspan="5"><?= $model->remark ?></td>
-                        </tr>
+                        </tr>                        
                     </table>
                 </div>
                 <div class="box-footer text-center">
