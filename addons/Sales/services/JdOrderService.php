@@ -259,7 +259,7 @@ class JdOrderService extends Service
                     "currency"=> 'CNY',
                     "exchange_rate"=> 1,
                     "delivery_status"=> $this->getErpDeliveryStatus($order),
-                    "is_stock"=>$model->productNo ? 1:0,
+                    "is_stock"=>0,
                     "is_gift"=>$model->productNo ? 0:1,
                     //"goods_attrs"=>$this->getErpOrderGoodsAttrsData($model),
                 ];
