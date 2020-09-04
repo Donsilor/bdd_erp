@@ -526,8 +526,23 @@ $this->params['breadcrumbs'][] = $this->title;
                                 },
 
                             ],
-                            'remark',
                             [
+                                    'label' => '外部商品SKU/编号',
+                                    'value' => function ($model) {
+                                        $str = '';
+                                        if($model->out_sku_id) {
+                                            $str.= '商品SKU：'.$model->out_sku_id."<br/>";
+                                        }
+                                        if($model->out_sku_id) {
+                                            $str.= '商品编号：'.$model->out_ware_id."<br/>";
+                                        }
+                                        return $str;
+                                    },
+                                    'format' => 'raw',
+                                
+                            ],
+                            'remark',
+                             [
                                 'class' => 'yii\grid\CheckboxColumn',
                                 'name' => 'id',  //设置每行数据的复选框属性
                                 'headerOptions' => ['width' => '30'],

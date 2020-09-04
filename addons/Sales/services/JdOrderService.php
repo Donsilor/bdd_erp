@@ -87,6 +87,7 @@ class JdOrderService extends Service
      */
     public function getErpOrderData($order)
     {
+        $store_remark = ($order->venderRemark ?? '').';京东买家账户:'.($order->open_id_buyer ?? '');
         return [
             "language"=>'zh-CN',
             "currency"=>'CNY',
