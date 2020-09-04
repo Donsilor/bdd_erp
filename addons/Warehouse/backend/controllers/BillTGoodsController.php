@@ -2,6 +2,7 @@
 
 namespace addons\Warehouse\backend\controllers;
 
+use common\helpers\StringHelper;
 use Yii;
 use common\traits\Curd;
 use common\helpers\Url;
@@ -51,7 +52,7 @@ class BillTGoodsController extends BaseController
         $dataProvider->query->andWhere(['>', WarehouseBillGoodsL::tableName() . '.status', -1]);
         $bill = WarehouseBill::find()->where(['id' => $bill_id])->one();
         $model = new WarehouseBillTGoodsForm();
-        $total = $model->goodsSummary($bill_id);
+        $total = $model->goodsSummary($bill_id, Yii::$app->request->queryParams);
         return $this->render($this->action->id, [
             'model' => $model,
             'dataProvider' => $dataProvider,

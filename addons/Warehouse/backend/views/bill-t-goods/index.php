@@ -49,6 +49,11 @@ $this->params['breadcrumbs'][] = $this->title;
                 <div class="box-body table-responsive">
                     <?php echo Html::batchButtons(false) ?>
                     <span style="color:red;">Ctrl+F键可快速查找字段名</span>
+                    <span style="font-size:16px">
+                        <!--<span style="font-weight:bold;">明细汇总：</span>-->
+                        货品总数：<span style="color:green;"><?= $bill->goods_num?></span>
+                        总成本价：<span style="color:green;"><?= $bill->total_cost?></span>
+                    </span>
                     <?= GridView::widget([
                         'dataProvider' => $dataProvider,
                         'filterModel' => $searchModel,

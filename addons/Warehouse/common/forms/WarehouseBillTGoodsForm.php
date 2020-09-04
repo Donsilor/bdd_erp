@@ -100,7 +100,7 @@ class WarehouseBillTGoodsForm extends WarehouseBillGoodsL
     /**
      * {@inheritdoc}
      */
-    public function goodsSummary($bill_id = null, $ids = null)
+    public function goodsSummary($bill_id = null, $params = null)
     {
         $total = [
             'goods_num' => 0,
