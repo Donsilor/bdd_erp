@@ -156,6 +156,7 @@ class BillTGoodsController extends BaseController
                 return $this->redirect(['edit-all', 'bill_id' => $bill_id]);
             } catch (\Exception $e) {
                 $trans->rollBack();
+                //var_dump($e->getTraceAsString());die;
                 return $this->message($e->getMessage(), $this->redirect(\Yii::$app->request->referrer), 'error');
             }
         }

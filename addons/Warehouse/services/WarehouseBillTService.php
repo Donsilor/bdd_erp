@@ -367,7 +367,7 @@ class WarehouseBillTService extends Service
             $peiliao_way = $form->formatValue($goods[15], 0) ?? "";
             if (!empty($peiliao_way)) {
                 $peiliao_way = \addons\Warehouse\common\enums\PeiLiaoWayEnum::getIdByName($peiliao_way);
-                if (empty($peiliao_way)) {
+                if (empty($peiliao_way) && $peiliao_way === "") {
                     $flag = false;
                     $error[$i][] = "配料方式录入值不对";
                 }
@@ -406,7 +406,7 @@ class WarehouseBillTService extends Service
             $main_stone_weight = $form->formatValue($goods[24], 0) ?? 0;
             if (!empty($main_pei_type)) {
                 $main_pei_type = \addons\Warehouse\common\enums\PeiShiWayEnum::getIdByName($main_pei_type);
-                if (empty($main_pei_type)) {
+                if (empty($main_pei_type) && $main_pei_type === "") {
                     $flag = false;
                     $error[$i][] = "主石配石方式录入值不对";
                 }
@@ -504,7 +504,7 @@ class WarehouseBillTService extends Service
             $second_stone_weight1 = $form->formatValue($goods[35], 0) ?? 0;
             if (!empty($second_pei_type)) {
                 $second_pei_type = \addons\Warehouse\common\enums\PeiShiWayEnum::getIdByName($second_pei_type);
-                if (empty($second_pei_type)) {
+                if (empty($second_pei_type) && $second_pei_type === "") {
                     $flag = false;
                     $error[$i][] = "副石1配石方式录入值不对";
                 }
@@ -596,9 +596,9 @@ class WarehouseBillTService extends Service
             }
             $second_stone_num2 = $form->formatValue($goods[45], 0) ?? 0;
             $second_stone_weight2 = $form->formatValue($goods[46], 0) ?? 0;
-            if (!empty($second_pei_type2)) {
+            if (!empty($second_pei_type2) && $second_pei_type2 === "") {
                 $second_pei_type2 = \addons\Warehouse\common\enums\PeiShiWayEnum::getIdByName($second_pei_type2);
-                if (empty($second_pei_type2)) {
+                if (empty($second_pei_type2) && $second_pei_type2 === "") {
                     $flag = false;
                     $error[$i][] = "副石2配石方式录入值不对";
                 }
@@ -626,7 +626,7 @@ class WarehouseBillTService extends Service
             $parts_way = $form->formatValue($goods[49], 0) ?? "";
             if (!empty($parts_way)) {
                 $parts_way = \addons\Warehouse\common\enums\PeiJianWayEnum::getIdByName($parts_way);
-                if (empty($parts_way)) {
+                if (empty($parts_way) && $parts_way === "") {
                     $flag = false;
                     $error[$i][] = "配件方式录入值不对";
                 }
@@ -638,7 +638,7 @@ class WarehouseBillTService extends Service
                     $flag = false;
                     $error[$i][] = "配件类型录入值不对或该款[" . $goods_sn . "]配件类型不支持[" . $parts_type . "]请前往款式库核实";
                 } else {
-                    $parts_type = $attr_id;
+                    $parts_type = (int)$attr_id ?? "";
                 }
             }
             $parts_material = $goods[51] ?? "";
@@ -826,7 +826,7 @@ class WarehouseBillTService extends Service
                 $s = "【" . implode('】,【', $v) . '】';
                 $message .= '第' . ($k + 1) . '行' . $s . '<hr>';
             }
-            if ($error_off && count($error) > 5 && $message) {
+            if ($error_off && count($error) > 0 && $message) {
                 header("Content-Disposition: attachment;filename=错误提示" . date('YmdHis') . ".log");
                 echo iconv("utf-8", "gbk", str_replace("<hr>", "\r\n", $message));
                 exit();

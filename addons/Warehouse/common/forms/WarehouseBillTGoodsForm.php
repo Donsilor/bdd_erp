@@ -285,7 +285,8 @@ class WarehouseBillTGoodsForm extends WarehouseBillGoodsL
             $valueList = \Yii::$app->attr->valueMap($attr_id);
         }
         $valueList = array_flip($valueList);
-        return (string)$valueList[$value] ?? "";
+        $attrId = isset($valueList[$value]) ? $valueList[$value] : "";
+        return (string)$attrId ?? "";
     }
 
     /**

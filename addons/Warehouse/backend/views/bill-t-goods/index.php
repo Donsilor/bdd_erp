@@ -80,7 +80,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#feeeed;'],
                                 'footerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#feeeed;'],
                                 'value' => function ($model, $key, $index, $widget) {
-                                    $widget->footer = "汇总：";
+                                    $widget->footer = "Total：";
                                     return $model->id ?? 0;
                                 },
                                 'filter' => false,
