@@ -49,14 +49,19 @@ $this->params['breadcrumbs'][] = $this->title;
                 <div class="box-body table-responsive">
                     <?php echo Html::batchButtons(false) ?>
                     <span style="color:red;">Ctrl+F键可快速查找字段名</span>
+                    <span style="font-size:16px">
+                        <!--<span style="font-weight:bold;">明细汇总：</span>-->
+                        货品总数：<span style="color:green;"><?= $bill->goods_num?></span>
+                        总成本价：<span style="color:green;"><?= $bill->total_cost?></span>
+                    </span>
                     <?= GridView::widget([
                         'dataProvider' => $dataProvider,
                         'filterModel' => $searchModel,
-                        'tableOptions' => ['class' => 'table table-hover'],
+                        //'tableOptions' => ['class' => 'table table-hover'],
                         'options' => ['style' => 'white-space:nowrap;'],
-                        'rowOptions'=>function($model,$key, $index){
-                            if($index%2 === 0){
-                                return ['style'=>'background:#E1FFFF'];
+                        'rowOptions' => function ($model, $key, $index) {
+                            if ($index % 2 === 0) {
+                                return ['style' => 'background:#E1FFFF'];
                             }
                         },
                         'showFooter' => true,//显示footer行
@@ -73,8 +78,9 @@ $this->params['breadcrumbs'][] = $this->title;
                             [
                                 'attribute' => 'id',
                                 'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#feeeed;'],
-                                'value'=>function ($model, $key, $index, $widget) {
-                                    $widget->footer = "汇总：";
+                                'footerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#feeeed;'],
+                                'value' => function ($model, $key, $index, $widget) {
+                                    $widget->footer = "Total：";
                                     return $model->id ?? 0;
                                 },
                                 'filter' => false,
@@ -83,6 +89,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'class' => 'yii\grid\ActionColumn',
                                 'header' => '操作',
                                 'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#feeeed;'],
+                                'footerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#feeeed;'],
                                 'contentOptions' => ['style' => ['white-space' => 'nowrap']],
                                 'template' => '{image} {edit} {delete}',
                                 'buttons' => [
@@ -116,8 +123,9 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'attribute' => 'style_cate_id',
                                 'format' => 'raw',
                                 'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#feeeed;'],
+                                'footerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#feeeed;'],
                                 //'value' => 'styleCate.name',
-                                'value'=>function ($model, $key, $index, $widget) {
+                                'value' => function ($model, $key, $index, $widget) {
                                     $widget->footer = $model->getAttributeLabel('style_cate_id');
                                     return $model->styleCate->name ?? "";
                                 },
@@ -131,7 +139,8 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'attribute' => 'product_type_id',
                                 'format' => 'raw',
                                 'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#feeeed;'],
-                                'value'=>function ($model, $key, $index, $widget) {
+                                'footerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#feeeed;'],
+                                'value' => function ($model, $key, $index, $widget) {
                                     $widget->footer = $model->getAttributeLabel('product_type_id');
                                     return $model->productType->name ?? "";
                                 },
@@ -145,7 +154,8 @@ $this->params['breadcrumbs'][] = $this->title;
                             [
                                 'attribute' => 'goods_id',
                                 'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#feeeed;'],
-                                'value'=>function ($model, $key, $index, $widget) {
+                                'footerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#feeeed;'],
+                                'value' => function ($model, $key, $index, $widget) {
                                     $widget->footer = $model->getAttributeLabel('goods_id');
                                     return $model->goods_id ?? "";
                                 },
@@ -157,7 +167,8 @@ $this->params['breadcrumbs'][] = $this->title;
                             [
                                 'attribute' => 'style_sn',
                                 'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#feeeed;'],
-                                'value'=>function ($model, $key, $index, $widget) {
+                                'footerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#feeeed;'],
+                                'value' => function ($model, $key, $index, $widget) {
                                     $widget->footer = $model->getAttributeLabel('style_sn');
                                     return $model->style_sn ?? "";
                                 },
@@ -169,7 +180,8 @@ $this->params['breadcrumbs'][] = $this->title;
                             [
                                 'attribute' => 'qiban_sn',
                                 'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#feeeed;'],
-                                'value'=>function ($model, $key, $index, $widget) {
+                                'footerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#feeeed;'],
+                                'value' => function ($model, $key, $index, $widget) {
                                     $widget->footer = $model->getAttributeLabel('qiban_sn');
                                     return $model->qiban_sn ?? "";
                                 },
@@ -182,7 +194,8 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'attribute' => 'goods_name',
                                 //'format' => 'raw',
                                 'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#feeeed;'],
-                                'value'=>function ($model, $key, $index, $widget) {
+                                'footerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#feeeed;'],
+                                'value' => function ($model, $key, $index, $widget) {
                                     $widget->footer = $model->getAttributeLabel('goods_name');
                                     return $model->goods_name ?? "";
                                 },
@@ -207,7 +220,8 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'attribute' => 'material_type',
                                 'format' => 'raw',
                                 'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#feeeed;'],
-                                'value'=>function ($model, $key, $index, $widget) {
+                                'footerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#feeeed;'],
+                                'value' => function ($model, $key, $index, $widget) {
                                     $widget->footer = $model->getAttributeLabel('material_type');
                                     return Yii::$app->attr->valueName($model->material_type) ?? "";
                                 },
@@ -221,8 +235,9 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'attribute' => 'material_color',
                                 'format' => 'raw',
                                 'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#feeeed;'],
-                                'value'=>function ($model, $key, $index, $widget) {
-                                    $widget->footer = $model->getAttributeLabel('material_type');
+                                'footerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#feeeed;'],
+                                'value' => function ($model, $key, $index, $widget) {
+                                    $widget->footer = $model->getAttributeLabel('material_color');
                                     return Yii::$app->attr->valueName($model->material_color) ?? "";
                                 },
                                 'filter' => Html::activeDropDownList($searchModel, 'material_color', $model->getMaterialColorMap(), [
@@ -234,12 +249,12 @@ $this->params['breadcrumbs'][] = $this->title;
                             [
                                 'attribute' => 'goods_num',
                                 'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#feeeed;'],
-                                'filter' => false,
-                                'value'=>function ($model, $key, $index, $widget) use ($total) {
-                                    $goods_num = $total['goods_num'] ?? 0;
-                                    $widget->footer = $goods_num;
+                                'footerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#feeeed;'],
+                                'value' => function ($model, $key, $index, $widget) use ($total) {
+                                    $widget->footer = $model->getFooterValues('goods_num', $total);
                                     return $model->goods_num ?? 0;
                                 },
+                                'filter' => false,
 //                                'filter' => Html::activeTextInput($searchModel, 'goods_num', [
 //                                    'class' => 'form-control',
 //                                    'style' => 'width:80px;'
@@ -249,7 +264,8 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'attribute' => 'finger_hk',
                                 'format' => 'raw',
                                 'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#afdfe4;'],
-                                'value'=>function ($model, $key, $index, $widget) {
+                                'footerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#afdfe4;'],
+                                'value' => function ($model, $key, $index, $widget) {
                                     $widget->footer = $model->getAttributeLabel('material_type');
                                     return Yii::$app->attr->valueName($model->finger_hk) ?? "";
                                 },
@@ -263,7 +279,8 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'attribute' => 'finger',
                                 'format' => 'raw',
                                 'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#afdfe4;'],
-                                'value'=>function ($model, $key, $index, $widget) {
+                                'footerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#afdfe4;'],
+                                'value' => function ($model, $key, $index, $widget) {
                                     $widget->footer = $model->getAttributeLabel('finger');
                                     return Yii::$app->attr->valueName($model->finger) ?? "";
                                 },
@@ -277,7 +294,8 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'attribute' => 'length',
                                 //'format' => 'raw',
                                 'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#afdfe4;'],
-                                'value'=>function ($model, $key, $index, $widget) {
+                                'footerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#afdfe4;'],
+                                'value' => function ($model, $key, $index, $widget) {
                                     $widget->footer = $model->getAttributeLabel('length');
                                     return $model->length ?? "";
                                 },
@@ -289,7 +307,8 @@ $this->params['breadcrumbs'][] = $this->title;
                             [
                                 'attribute' => 'product_size',
                                 'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#afdfe4;'],
-                                'value'=>function ($model, $key, $index, $widget) {
+                                'footerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#afdfe4;'],
+                                'value' => function ($model, $key, $index, $widget) {
                                     $widget->footer = $model->getAttributeLabel('product_size');
                                     return $model->product_size ?? "";
                                 },
@@ -302,7 +321,8 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'attribute' => 'xiangkou',
                                 'format' => 'raw',
                                 'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#afdfe4;'],
-                                'value'=>function ($model, $key, $index, $widget) {
+                                'footerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#afdfe4;'],
+                                'value' => function ($model, $key, $index, $widget) {
                                     $widget->footer = $model->getAttributeLabel('xiangkou');
                                     return Yii::$app->attr->valueName($model->xiangkou) ?? "";
                                 },
@@ -315,7 +335,8 @@ $this->params['breadcrumbs'][] = $this->title;
                             [
                                 'attribute' => 'kezi',
                                 'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#afdfe4;'],
-                                'value'=>function ($model, $key, $index, $widget) {
+                                'footerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#afdfe4;'],
+                                'value' => function ($model, $key, $index, $widget) {
                                     $widget->footer = $model->getAttributeLabel('kezi');
                                     return $model->kezi ?? "";
                                 },
@@ -328,7 +349,8 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'attribute' => 'chain_type',
                                 'format' => 'raw',
                                 'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#afdfe4;'],
-                                'value'=>function ($model, $key, $index, $widget) {
+                                'footerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#afdfe4;'],
+                                'value' => function ($model, $key, $index, $widget) {
                                     $widget->footer = $model->getAttributeLabel('chain_type');
                                     return Yii::$app->attr->valueName($model->chain_type) ?? "";
                                 },
@@ -350,7 +372,8 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'attribute' => 'cramp_ring',
                                 'format' => 'raw',
                                 'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#afdfe4;'],
-                                'value'=>function ($model, $key, $index, $widget) {
+                                'footerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#afdfe4;'],
+                                'value' => function ($model, $key, $index, $widget) {
                                     $widget->footer = $model->getAttributeLabel('cramp_ring');
                                     return Yii::$app->attr->valueName($model->cramp_ring) ?? "";
                                 },
@@ -364,7 +387,8 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'attribute' => 'talon_head_type',
                                 'format' => 'raw',
                                 'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#afdfe4;'],
-                                'value'=>function ($model, $key, $index, $widget) {
+                                'footerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#afdfe4;'],
+                                'value' => function ($model, $key, $index, $widget) {
                                     $widget->footer = $model->getAttributeLabel('talon_head_type');
                                     return Yii::$app->attr->valueName($model->talon_head_type) ?? "";
                                 },
@@ -377,8 +401,9 @@ $this->params['breadcrumbs'][] = $this->title;
                             [
                                 'attribute' => 'peiliao_way',
                                 'format' => 'raw',
-                                'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#afdfe4;'],
-                                'value'=>function ($model, $key, $index, $widget) {
+                                'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#FFD700;'],
+                                'footerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#FFD700;'],
+                                'value' => function ($model, $key, $index, $widget) {
                                     $widget->footer = $model->getAttributeLabel('peiliao_way');
                                     return \addons\Warehouse\common\enums\PeiLiaoWayEnum::getValue($model->peiliao_way) ?? "";
                                 },
@@ -390,10 +415,10 @@ $this->params['breadcrumbs'][] = $this->title;
                             ],
                             [
                                 'attribute' => 'suttle_weight',
-                                'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#afdfe4;'],
-                                'value'=>function ($model, $key, $index, $widget) use ($total) {
-                                    $suttle_weight = $total['suttle_weight'] ?? "0.000";
-                                    $widget->footer = $suttle_weight;
+                                'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#FFD700;'],
+                                'footerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#FFD700;'],
+                                'value' => function ($model, $key, $index, $widget) use ($total) {
+                                    $widget->footer = $model->getFooterValues('suttle_weight', $total, "0.000");
                                     return $model->suttle_weight ?? "0.000";
                                 },
                                 'filter' => false,
@@ -404,10 +429,10 @@ $this->params['breadcrumbs'][] = $this->title;
                             ],
                             [
                                 'attribute' => 'gold_weight',
-                                'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#afdfe4;'],
-                                'value'=>function ($model, $key, $index, $widget) use ($total) {
-                                    $gold_weight = $total['gold_weight'] ?? "0.000";
-                                    $widget->footer = $gold_weight;
+                                'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#FFD700;'],
+                                'footerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#FFD700;'],
+                                'value' => function ($model, $key, $index, $widget) use ($total) {
+                                    $widget->footer = $model->getFooterValues('gold_weight', $total, "0.000");
                                     return $model->gold_weight ?? "0.000";
                                 },
                                 'filter' => false,
@@ -418,8 +443,9 @@ $this->params['breadcrumbs'][] = $this->title;
                             ],
                             [
                                 'attribute' => 'gold_loss',
-                                'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#afdfe4;'],
-                                'value'=>function ($model, $key, $index, $widget) {
+                                'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#FFD700;'],
+                                'footerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#FFD700;'],
+                                'value' => function ($model, $key, $index, $widget) {
                                     $widget->footer = $model->getAttributeLabel('gold_loss');
                                     return $model->gold_loss ?? "0";
                                 },
@@ -432,10 +458,10 @@ $this->params['breadcrumbs'][] = $this->title;
                             [
                                 'attribute' => 'lncl_loss_weight',
                                 'filter' => false,
-                                'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#afdfe4;'],
-                                'value'=>function ($model, $key, $index, $widget) use ($total) {
-                                    $lncl_loss_weight = $total['lncl_loss_weight'] ?? "0.000";
-                                    $widget->footer = $lncl_loss_weight;
+                                'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#FFD700;'],
+                                'footerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#FFD700;'],
+                                'value' => function ($model, $key, $index, $widget) use ($total) {
+                                    $widget->footer = $model->getFooterValues('lncl_loss_weight', $total, "0.000");
                                     return $model->lncl_loss_weight ?? "0.000";
                                 },
 //                                'filter' => Html::activeTextInput($searchModel, 'lncl_loss_weight', [
@@ -445,8 +471,9 @@ $this->params['breadcrumbs'][] = $this->title;
                             ],
                             [
                                 'attribute' => 'gold_price',
-                                'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#afdfe4;'],
-                                'value'=>function ($model, $key, $index, $widget) {
+                                'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#FFD700;'],
+                                'footerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#FFD700;'],
+                                'value' => function ($model, $key, $index, $widget) {
                                     $widget->footer = $model->getAttributeLabel('gold_price');
                                     return $model->gold_price ?? "";
                                 },
@@ -459,10 +486,10 @@ $this->params['breadcrumbs'][] = $this->title;
                             [
                                 'attribute' => 'gold_amount',
                                 'filter' => false,
-                                'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#afdfe4;'],
-                                'value'=>function ($model, $key, $index, $widget) use ($total) {
-                                    $gold_amount = $total['gold_amount'] ?? "0.000";
-                                    $widget->footer = $gold_amount;
+                                'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#FFD700;'],
+                                'footerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#FFD700;'],
+                                'value' => function ($model, $key, $index, $widget) use ($total) {
+                                    $widget->footer = $model->getFooterValues('gold_amount', $total, "0.000");
                                     return $model->gold_amount ?? "0.000";
                                 },
 //                                'filter' => Html::activeTextInput($searchModel, 'gold_amount', [
@@ -620,7 +647,8 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'attribute' => 'main_pei_type',
                                 'format' => 'raw',
                                 'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#afb4db;'],
-                                'value'=>function ($model, $key, $index, $widget) {
+                                'footerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#afb4db;'],
+                                'value' => function ($model, $key, $index, $widget) {
                                     $widget->footer = $model->getAttributeLabel('main_pei_type');
                                     return \addons\Warehouse\common\enums\PeiShiWayEnum::getValue($model->main_pei_type) ?? "";
                                 },
@@ -634,7 +662,8 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'attribute' => 'main_stone_sn',
                                 //'format' => 'raw',
                                 'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#afb4db;'],
-                                'value'=>function ($model, $key, $index, $widget) {
+                                'footerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#afb4db;'],
+                                'value' => function ($model, $key, $index, $widget) {
                                     $widget->footer = $model->getAttributeLabel('main_stone_sn');
                                     return $model->main_stone_sn ?? "";
                                 },
@@ -647,7 +676,8 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'attribute' => 'main_stone_type',
                                 'format' => 'raw',
                                 'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#afb4db;'],
-                                'value'=>function ($model, $key, $index, $widget) {
+                                'footerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#afb4db;'],
+                                'value' => function ($model, $key, $index, $widget) {
                                     $widget->footer = $model->getAttributeLabel('main_stone_type');
                                     return Yii::$app->attr->valueName($model->main_stone_type) ?? "";
                                 },
@@ -661,9 +691,9 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'attribute' => 'main_stone_num',
                                 //'format' => 'raw',
                                 'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#afb4db;'],
-                                'value'=>function ($model, $key, $index, $widget) use ($total) {
-                                    $main_stone_num = $total['main_stone_num'] ?? 0;
-                                    $widget->footer = $main_stone_num;
+                                'footerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#afb4db;'],
+                                'value' => function ($model, $key, $index, $widget) use ($total) {
+                                    $widget->footer = $model->getFooterValues('main_stone_num', $total);
                                     return $model->main_stone_num ?? 0;
                                 },
                                 'filter' => false,
@@ -676,9 +706,9 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'attribute' => 'main_stone_weight',
                                 //'format' => 'raw',
                                 'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#afb4db;'],
-                                'value'=>function ($model, $key, $index, $widget) use ($total) {
-                                    $main_stone_weight = $total['main_stone_weight'] ?? "0.000";
-                                    $widget->footer = $main_stone_weight;
+                                'footerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#afb4db;'],
+                                'value' => function ($model, $key, $index, $widget) use ($total) {
+                                    $widget->footer = $model->getFooterValues('main_stone_weight', $total, "0.000");
                                     return $model->main_stone_weight ?? "0.000";
                                 },
                                 'filter' => false,
@@ -691,7 +721,8 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'attribute' => 'main_stone_price',
                                 //'format' => 'raw',
                                 'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#afb4db;'],
-                                'value'=>function ($model, $key, $index, $widget) {
+                                'footerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#afb4db;'],
+                                'value' => function ($model, $key, $index, $widget) {
                                     $widget->footer = $model->getAttributeLabel('main_stone_price');
                                     return $model->main_stone_price ?? "0.00";
                                 },
@@ -705,9 +736,9 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'attribute' => 'main_stone_amount',
                                 //'format' => 'raw',
                                 'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#afb4db;'],
-                                'value'=>function ($model, $key, $index, $widget) use ($total) {
-                                    $main_stone_amount = $total['main_stone_amount'] ?? "0.00";
-                                    $widget->footer = $main_stone_amount;
+                                'footerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#afb4db;'],
+                                'value' => function ($model, $key, $index, $widget) use ($total) {
+                                    $widget->footer = $model->getFooterValues('main_stone_amount', $total, "0.000");
                                     return $model->main_stone_amount ?? "0.00";
                                 },
                                 'filter' => false,
@@ -720,7 +751,8 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'attribute' => 'main_stone_shape',
                                 'format' => 'raw',
                                 'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#afb4db;'],
-                                'value'=>function ($model, $key, $index, $widget) {
+                                'footerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#afb4db;'],
+                                'value' => function ($model, $key, $index, $widget) {
                                     $widget->footer = $model->getAttributeLabel('main_stone_price');
                                     return Yii::$app->attr->valueName($model->main_stone_shape) ?? "";
                                 },
@@ -734,7 +766,8 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'attribute' => 'main_stone_color',
                                 'format' => 'raw',
                                 'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#afb4db;'],
-                                'value'=>function ($model, $key, $index, $widget) {
+                                'footerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#afb4db;'],
+                                'value' => function ($model, $key, $index, $widget) {
                                     $widget->footer = $model->getAttributeLabel('main_stone_color');
                                     return Yii::$app->attr->valueName($model->main_stone_color) ?? "";
                                 },
@@ -748,7 +781,8 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'attribute' => 'main_stone_clarity',
                                 'format' => 'raw',
                                 'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#afb4db;'],
-                                'value'=>function ($model, $key, $index, $widget) {
+                                'footerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#afb4db;'],
+                                'value' => function ($model, $key, $index, $widget) {
                                     $widget->footer = $model->getAttributeLabel('main_stone_clarity');
                                     return Yii::$app->attr->valueName($model->main_stone_clarity) ?? "";
                                 },
@@ -762,7 +796,8 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'attribute' => 'main_stone_cut',
                                 'format' => 'raw',
                                 'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#afb4db;'],
-                                'value'=>function ($model, $key, $index, $widget) {
+                                'footerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#afb4db;'],
+                                'value' => function ($model, $key, $index, $widget) {
                                     $widget->footer = $model->getAttributeLabel('main_stone_cut');
                                     return Yii::$app->attr->valueName($model->main_stone_cut) ?? "";
                                 },
@@ -776,7 +811,8 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'attribute' => 'main_stone_colour',
                                 'format' => 'raw',
                                 'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#afb4db;'],
-                                'value'=>function ($model, $key, $index, $widget) {
+                                'footerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#afb4db;'],
+                                'value' => function ($model, $key, $index, $widget) {
                                     $widget->footer = $model->getAttributeLabel('main_stone_colour');
                                     return Yii::$app->attr->valueName($model->main_stone_colour) ?? "";
                                 },
@@ -786,24 +822,26 @@ $this->params['breadcrumbs'][] = $this->title;
                                     'style' => 'width:80px;'
                                 ]),
                             ],
-                            [
-                                'attribute' => 'main_stone_size',
-                                //'format' => 'raw',
-                                'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#afb4db;'],
-                                'value'=>function ($model, $key, $index, $widget) {
-                                    $widget->footer = $model->getAttributeLabel('main_stone_size');
-                                    return $model->main_stone_size ?? "";
-                                },
-                                'filter' => Html::activeTextInput($searchModel, 'main_stone_size', [
-                                    'class' => 'form-control',
-                                    'style' => 'width:100px;'
-                                ]),
-                            ],
+//                            [
+//                                'attribute' => 'main_stone_size',
+//                                //'format' => 'raw',
+//                                'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#afb4db;'],
+//                                'footerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#afb4db;'],
+//                                'value' => function ($model, $key, $index, $widget) {
+//                                    $widget->footer = $model->getAttributeLabel('main_stone_size');
+//                                    return $model->main_stone_size ?? "";
+//                                },
+//                                'filter' => Html::activeTextInput($searchModel, 'main_stone_size', [
+//                                    'class' => 'form-control',
+//                                    'style' => 'width:100px;'
+//                                ]),
+//                            ],
                             [
                                 'attribute' => 'main_cert_id',
                                 //'format' => 'raw',
                                 'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#afb4db;'],
-                                'value'=>function ($model, $key, $index, $widget) {
+                                'footerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#afb4db;'],
+                                'value' => function ($model, $key, $index, $widget) {
                                     $widget->footer = $model->getAttributeLabel('main_cert_id');
                                     return $model->main_cert_id ?? "";
                                 },
@@ -816,7 +854,8 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'attribute' => 'main_cert_type',
                                 'format' => 'raw',
                                 'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#afb4db;'],
-                                'value'=>function ($model, $key, $index, $widget) {
+                                'footerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#afb4db;'],
+                                'value' => function ($model, $key, $index, $widget) {
                                     $widget->footer = $model->getAttributeLabel('main_cert_type');
                                     return Yii::$app->attr->valueName($model->main_cert_type) ?? "";
                                 },
@@ -830,7 +869,8 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'attribute' => 'second_pei_type',
                                 'format' => 'raw',
                                 'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#dec674;'],
-                                'value'=>function ($model, $key, $index, $widget) {
+                                'footerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#dec674;'],
+                                'value' => function ($model, $key, $index, $widget) {
                                     $widget->footer = $model->getAttributeLabel('second_pei_type');
                                     return \addons\Warehouse\common\enums\PeiShiWayEnum::getValue($model->second_pei_type) ?? "";
                                 },
@@ -844,7 +884,8 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'attribute' => 'second_stone_sn1',
                                 //'format' => 'raw',
                                 'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#dec674;'],
-                                'value'=>function ($model, $key, $index, $widget) {
+                                'footerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#dec674;'],
+                                'value' => function ($model, $key, $index, $widget) {
                                     $widget->footer = $model->getAttributeLabel('second_stone_sn1');
                                     return Yii::$app->attr->valueName($model->second_stone_sn1) ?? "";
                                 },
@@ -854,12 +895,27 @@ $this->params['breadcrumbs'][] = $this->title;
                                 ]),
                             ],
                             [
+                                'attribute' => 'second_stone_type1',
+                                'format' => 'raw',
+                                'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#dec674;'],
+                                'footerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#dec674;'],
+                                'value' => function ($model, $key, $index, $widget) {
+                                    $widget->footer = $model->getAttributeLabel('second_stone_type1');
+                                    return Yii::$app->attr->valueName($model->second_stone_type1) ?? "";
+                                },
+                                'filter' => Html::activeDropDownList($searchModel, 'second_stone_type1', $model->getSecondStoneType1Map(), [
+                                    'prompt' => '全部',
+                                    'class' => 'form-control',
+                                    'style' => 'width:80px;'
+                                ]),
+                            ],
+                            [
                                 'attribute' => 'second_stone_num1',
                                 'format' => 'raw',
                                 'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#dec674;'],
-                                'value'=>function ($model, $key, $index, $widget) use ($total) {
-                                    $second_stone_num1 = $total['second_stone_num1'] ?? 0;
-                                    $widget->footer = $second_stone_num1;
+                                'footerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#dec674;'],
+                                'value' => function ($model, $key, $index, $widget) use ($total) {
+                                    $widget->footer = $model->getFooterValues('second_stone_num1', $total);
                                     return $model->second_stone_num1 ?? 0;
                                 },
                                 'filter' => false,
@@ -872,9 +928,9 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'attribute' => 'second_stone_weight1',
                                 'format' => 'raw',
                                 'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#dec674;'],
-                                'value'=>function ($model, $key, $index, $widget) use ($total) {
-                                    $second_stone_weight1 = $total['second_stone_weight1'] ?? "0.000";
-                                    $widget->footer = $second_stone_weight1;
+                                'footerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#dec674;'],
+                                'value' => function ($model, $key, $index, $widget) use ($total) {
+                                    $widget->footer = $model->getFooterValues('second_stone_weight1', $total, "0.000");
                                     return $model->second_stone_weight1 ?? "0.000";
                                 },
                                 'filter' => false,
@@ -887,7 +943,8 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'attribute' => 'second_stone_price1',
                                 //'format' => 'raw',
                                 'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#dec674;'],
-                                'value'=>function ($model, $key, $index, $widget) {
+                                'footerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#dec674;'],
+                                'value' => function ($model, $key, $index, $widget) {
                                     $widget->footer = $model->getAttributeLabel('second_stone_price1');
                                     return $model->second_stone_price1 ?? "0.00";
                                 },
@@ -901,9 +958,9 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'attribute' => 'second_stone_amount1',
                                 //'format' => 'raw',
                                 'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#dec674;'],
-                                'value'=>function ($model, $key, $index, $widget) use ($total) {
-                                    $second_stone_amount1 = $total['second_stone_amount1'] ?? "0.00";
-                                    $widget->footer = $second_stone_amount1;
+                                'footerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#dec674;'],
+                                'value' => function ($model, $key, $index, $widget) use ($total) {
+                                    $widget->footer = $model->getFooterValues('second_stone_amount1', $total, "0.00");
                                     return $model->second_stone_amount1 ?? "0.00";
                                 },
                                 'filter' => false,
@@ -913,24 +970,11 @@ $this->params['breadcrumbs'][] = $this->title;
 //                                ]),
                             ],
                             [
-                                'attribute' => 'second_stone_shape1',
-                                'format' => 'raw',
-                                'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#dec674;'],
-                                'value'=>function ($model, $key, $index, $widget) {
-                                    $widget->footer = $model->getAttributeLabel('second_stone_shape1');
-                                    return Yii::$app->attr->valueName($model->second_stone_shape1) ?? "";
-                                },
-                                'filter' => Html::activeDropDownList($searchModel, 'second_stone_shape1', $model->getSecondStoneShape1Map(), [
-                                    'prompt' => '全部',
-                                    'class' => 'form-control',
-                                    'style' => 'width:80px;'
-                                ]),
-                            ],
-                            [
                                 'attribute' => 'second_stone_color1',
                                 'format' => 'raw',
                                 'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#dec674;'],
-                                'value'=>function ($model, $key, $index, $widget) {
+                                'footerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#dec674;'],
+                                'value' => function ($model, $key, $index, $widget) {
                                     $widget->footer = $model->getAttributeLabel('second_stone_color1');
                                     return Yii::$app->attr->valueName($model->second_stone_color1) ?? "";
                                 },
@@ -941,10 +985,41 @@ $this->params['breadcrumbs'][] = $this->title;
                                 ]),
                             ],
                             [
+                                'attribute' => 'second_stone_shape1',
+                                'format' => 'raw',
+                                'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#dec674;'],
+                                'footerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#dec674;'],
+                                'value' => function ($model, $key, $index, $widget) {
+                                    $widget->footer = $model->getAttributeLabel('second_stone_shape1');
+                                    return Yii::$app->attr->valueName($model->second_stone_shape1) ?? "";
+                                },
+                                'filter' => Html::activeDropDownList($searchModel, 'second_stone_shape1', $model->getSecondStoneShape1Map(), [
+                                    'prompt' => '全部',
+                                    'class' => 'form-control',
+                                    'style' => 'width:80px;'
+                                ]),
+                            ],
+                            [
+                                'attribute' => 'second_stone_cut1',
+                                'format' => 'raw',
+                                'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#dec674;'],
+                                'footerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#dec674;'],
+                                'value' => function ($model, $key, $index, $widget) {
+                                    $widget->footer = $model->getAttributeLabel('second_stone_cut1');
+                                    return Yii::$app->attr->valueName($model->second_stone_cut1) ?? "";
+                                },
+                                'filter' => Html::activeDropDownList($searchModel, 'second_stone_cut1', $model->getSecondStoneCut1Map(), [
+                                    'prompt' => '全部',
+                                    'class' => 'form-control',
+                                    'style' => 'width:80px;'
+                                ]),
+                            ],
+                            [
                                 'attribute' => 'second_stone_clarity1',
                                 'format' => 'raw',
                                 'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#dec674;'],
-                                'value'=>function ($model, $key, $index, $widget) {
+                                'footerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#dec674;'],
+                                'value' => function ($model, $key, $index, $widget) {
                                     $widget->footer = $model->getAttributeLabel('second_stone_clarity1');
                                     return Yii::$app->attr->valueName($model->second_stone_clarity1) ?? "";
                                 },
@@ -958,7 +1033,8 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'attribute' => 'second_stone_colour1',
                                 'format' => 'raw',
                                 'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#dec674;'],
-                                'value'=>function ($model, $key, $index, $widget) {
+                                'footerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#dec674;'],
+                                'value' => function ($model, $key, $index, $widget) {
                                     $widget->footer = $model->getAttributeLabel('second_stone_colour1');
                                     return Yii::$app->attr->valueName($model->second_stone_colour1) ?? "";
                                 },
@@ -1002,7 +1078,8 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'attribute' => 'second_pei_type2',
                                 'format' => 'raw',
                                 'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#84bf96;'],
-                                'value'=>function ($model, $key, $index, $widget) {
+                                'footerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#84bf96;'],
+                                'value' => function ($model, $key, $index, $widget) {
                                     $widget->footer = $model->getAttributeLabel('second_pei_type2');
                                     return \addons\Warehouse\common\enums\PeiShiWayEnum::getValue($model->second_pei_type2) ?? "";
                                 },
@@ -1016,7 +1093,8 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'attribute' => 'second_stone_sn2',
                                 //'format' => 'raw',
                                 'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#84bf96;'],
-                                'value'=>function ($model, $key, $index, $widget) {
+                                'footerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#84bf96;'],
+                                'value' => function ($model, $key, $index, $widget) {
                                     $widget->footer = $model->getAttributeLabel('second_stone_sn2');
                                     return $model->second_stone_sn2 ?? "";
                                 },
@@ -1026,12 +1104,27 @@ $this->params['breadcrumbs'][] = $this->title;
                                 ]),
                             ],
                             [
+                                'attribute' => 'second_stone_type2',
+                                'format' => 'raw',
+                                'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#84bf96;'],
+                                'footerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#84bf96;'],
+                                'value' => function ($model, $key, $index, $widget) {
+                                    $widget->footer = $model->getAttributeLabel('second_stone_type2');
+                                    return Yii::$app->attr->valueName($model->second_stone_type2) ?? "";
+                                },
+                                'filter' => Html::activeDropDownList($searchModel, 'second_stone_type2', $model->getSecondStoneType2Map(), [
+                                    'prompt' => '全部',
+                                    'class' => 'form-control',
+                                    'style' => 'width:80px;'
+                                ]),
+                            ],
+                            [
                                 'attribute' => 'second_stone_num2',
                                 //'format' => 'raw',
                                 'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#84bf96;'],
-                                'value'=>function ($model, $key, $index, $widget) use ($total) {
-                                    $second_stone_num2 = $total['second_stone_num2'] ?? 0;
-                                    $widget->footer = $second_stone_num2;
+                                'footerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#84bf96;'],
+                                'value' => function ($model, $key, $index, $widget) use ($total) {
+                                    $widget->footer = $model->getFooterValues('second_stone_num2', $total);
                                     return $model->second_stone_num2 ?? 0;
                                 },
                                 'filter' => false,
@@ -1044,9 +1137,9 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'attribute' => 'second_stone_weight2',
                                 //'format' => 'raw',
                                 'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#84bf96;'],
-                                'value'=>function ($model, $key, $index, $widget) use ($total) {
-                                    $second_stone_weight2 = $total['second_stone_weight2'] ?? "0.000";
-                                    $widget->footer = $second_stone_weight2;
+                                'footerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#84bf96;'],
+                                'value' => function ($model, $key, $index, $widget) use ($total) {
+                                    $widget->footer = $model->getFooterValues('second_stone_weight2', $total, "0.000");
                                     return $model->second_stone_weight2 ?? "0.000";
                                 },
                                 'filter' => false,
@@ -1059,7 +1152,8 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'attribute' => 'second_stone_price2',
                                 //'format' => 'raw',
                                 'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#84bf96;'],
-                                'value'=>function ($model, $key, $index, $widget) {
+                                'footerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#84bf96;'],
+                                'value' => function ($model, $key, $index, $widget) {
                                     $widget->footer = $model->getAttributeLabel('second_stone_price2');
                                     return $model->second_stone_price2 ?? "0.00";
                                 },
@@ -1073,9 +1167,9 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'attribute' => 'second_stone_amount2',
                                 //'format' => 'raw',
                                 'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#84bf96;'],
-                                'value'=>function ($model, $key, $index, $widget) use ($total) {
-                                    $second_stone_amount2 = $total['second_stone_amount2'] ?? "0.00";
-                                    $widget->footer = $second_stone_amount2;
+                                'footerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#84bf96;'],
+                                'value' => function ($model, $key, $index, $widget) use ($total) {
+                                    $widget->footer = $model->getFooterValues('second_stone_amount2', $total, "0.00");
                                     return $model->second_stone_amount2 ?? "0.00";
                                 },
                                 'filter' => false,
@@ -1085,10 +1179,25 @@ $this->params['breadcrumbs'][] = $this->title;
 //                                ]),
                             ],
                             [
+                                'attribute' => 'stone_remark',
+                                //'format' => 'raw',
+                                'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#84bf96;'],
+                                'footerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#84bf96;'],
+                                'value' => function ($model, $key, $index, $widget) {
+                                    $widget->footer = $model->getAttributeLabel('stone_remark');
+                                    return $model->stone_remark ?? "";
+                                },
+                                'filter' => Html::activeTextInput($searchModel, 'stone_remark', [
+                                    'class' => 'form-control',
+                                    'style' => 'width:160px;'
+                                ]),
+                            ],
+                            /*[
                                 'attribute' => 'second_stone_shape2',
                                 'format' => 'raw',
                                 'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#84bf96;'],
-                                'value'=>function ($model, $key, $index, $widget) {
+                                'footerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#84bf96;'],
+                                'value' => function ($model, $key, $index, $widget) {
                                     $widget->footer = $model->getAttributeLabel('second_stone_shape2');
                                     return Yii::$app->attr->valueName($model->second_stone_shape2) ?? "";
                                 },
@@ -1098,7 +1207,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                     'style' => 'width:80px;'
                                 ]),
                             ],
-                            /*[
+                            [
                                 'attribute' => 'second_stone_color2',
                                 'value' => function ($model) {
                                     return Yii::$app->attr->valueName($model->second_stone_color2) ?? "";
@@ -1134,12 +1243,13 @@ $this->params['breadcrumbs'][] = $this->title;
                                     'style' => 'width:80px;'
                                 ]),
                                 'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#84bf96;'],
-                            ],*/
+                            ],
                             [
                                 'attribute' => 'second_stone_size2',
                                 //'format' => 'raw',
                                 'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#84bf96;'],
-                                'value'=>function ($model, $key, $index, $widget) {
+                                'footerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#84bf96;'],
+                                'value' => function ($model, $key, $index, $widget) {
                                     $widget->footer = $model->getAttributeLabel('second_stone_size2');
                                     return $model->second_stone_size2 ?? "";
                                 },
@@ -1152,7 +1262,8 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'attribute' => 'second_cert_id2',
                                 //'format' => 'raw',
                                 'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#84bf96;'],
-                                'value'=>function ($model, $key, $index, $widget) {
+                                'footerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#84bf96;'],
+                                'value' => function ($model, $key, $index, $widget) {
                                     $widget->footer = $model->getAttributeLabel('second_cert_id2');
                                     return $model->second_cert_id2 ?? "";
                                 },
@@ -1165,7 +1276,8 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'attribute' => 'second_stone_type2',
                                 'format' => 'raw',
                                 'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#84bf96;'],
-                                'value'=>function ($model, $key, $index, $widget) {
+                                'footerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#84bf96;'],
+                                'value' => function ($model, $key, $index, $widget) {
                                     $widget->footer = $model->getAttributeLabel('second_stone_type2');
                                     return Yii::$app->attr->valueName($model->second_stone_type2) ?? "";
                                 },
@@ -1175,7 +1287,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                     'style' => 'width:80px;'
                                 ]),
                             ],
-                            /*[
+                            [
                                 'attribute' => 'second_pei_type3',
                                 'format' => 'raw',
                                 'value' => function ($model, $key, $index, $column) {
@@ -1241,69 +1353,11 @@ $this->params['breadcrumbs'][] = $this->title;
 //                                ]),
                             ],*/
                             [
-                                'attribute' => 'peishi_weight',
-                                //'format' => 'raw',
-                                'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#cde6c7;'],
-                                'value'=>function ($model, $key, $index, $widget) use ($total) {
-                                    $peishi_weight = $total['peishi_weight'] ?? "0.000";
-                                    $widget->footer = $peishi_weight;
-                                    return $model->peishi_weight ?? "0.000";
-                                },
-                                'filter' => false,
-
-//                                'filter' => Html::activeTextInput($searchModel, 'peishi_weight', [
-//                                    'class' => 'form-control',
-//                                    'style' => 'width:80px;'
-//                                ]),
-                            ],
-                            [
-                                'attribute' => 'peishi_gong_fee',
-                                //'format' => 'raw',
-                                'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#cde6c7;'],
-                                'value'=>function ($model, $key, $index, $widget) use ($total) {
-                                    $peishi_gong_fee = $total['peishi_gong_fee'] ?? "0.00";
-                                    $widget->footer = $peishi_gong_fee;
-                                    return $model->peishi_gong_fee ?? "0.00";
-                                },
-                                'filter' => false,
-//                                'filter' => Html::activeTextInput($searchModel, 'peishi_gong_fee', [
-//                                    'class' => 'form-control',
-//                                    'style' => 'width:80px;'
-//                                ]),
-                            ],
-                            [
-                                'attribute' => 'peishi_fee',
-                                //'format' => 'raw',
-                                'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#cde6c7;'],
-                                'value'=>function ($model, $key, $index, $widget) use ($total) {
-                                    $peishi_fee = $total['peishi_fee'] ?? "0.00";
-                                    $widget->footer = $peishi_fee;
-                                    return $model->peishi_fee ?? "0.00";
-                                },
-                                'filter' => false,
-//                                'filter' => Html::activeTextInput($searchModel, 'peishi_fee', [
-//                                    'class' => 'form-control',
-//                                    'style' => 'width:80px;'
-//                                ]),
-                            ],
-                            [
-                                'attribute' => 'stone_remark',
-                                //'format' => 'raw',
-                                'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#cde6c7;'],
-                                'value'=>function ($model, $key, $index, $widget) {
-                                    $widget->footer = $model->getAttributeLabel('stone_remark');
-                                    return $model->stone_remark ?? "";
-                                },
-                                'filter' => Html::activeTextInput($searchModel, 'stone_remark', [
-                                    'class' => 'form-control',
-                                    'style' => 'width:160px;'
-                                ]),
-                            ],
-                            [
                                 'attribute' => 'parts_way',
                                 'format' => 'raw',
                                 'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#cde6c7;'],
-                                'value'=>function ($model, $key, $index, $widget) {
+                                'footerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#cde6c7;'],
+                                'value' => function ($model, $key, $index, $widget) {
                                     $widget->footer = $model->getAttributeLabel('parts_way');
                                     return \addons\Warehouse\common\enums\PeiJianWayEnum::getValue($model->parts_way) ?? "";
                                 },
@@ -1317,7 +1371,8 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'attribute' => 'parts_type',
                                 'format' => 'raw',
                                 'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#cde6c7;'],
-                                'value'=>function ($model, $key, $index, $widget) {
+                                'footerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#cde6c7;'],
+                                'value' => function ($model, $key, $index, $widget) {
                                     $widget->footer = $model->getAttributeLabel('parts_way');
                                     return Yii::$app->attr->valueName($model->parts_type) ?? "";
                                 },
@@ -1331,7 +1386,8 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'attribute' => 'parts_material',
                                 'format' => 'raw',
                                 'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#cde6c7;'],
-                                'value'=>function ($model, $key, $index, $widget) {
+                                'footerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#cde6c7;'],
+                                'value' => function ($model, $key, $index, $widget) {
                                     $widget->footer = $model->getAttributeLabel('parts_material');
                                     return Yii::$app->attr->valueName($model->parts_material) ?? "";
                                 },
@@ -1345,9 +1401,9 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'attribute' => 'parts_num',
                                 //'format' => 'raw',
                                 'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#cde6c7;'],
-                                'value'=>function ($model, $key, $index, $widget) use ($total) {
-                                    $parts_num = $total['parts_num'] ?? 0;
-                                    $widget->footer = $parts_num;
+                                'footerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#cde6c7;'],
+                                'value' => function ($model, $key, $index, $widget) use ($total) {
+                                    $widget->footer = $model->getFooterValues('parts_num', $total);
                                     return $model->parts_num ?? 0;
                                 },
                                 'filter' => false,
@@ -1360,9 +1416,9 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'attribute' => 'parts_gold_weight',
                                 //'format' => 'raw',
                                 'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#cde6c7;'],
-                                'value'=>function ($model, $key, $index, $widget) use ($total) {
-                                    $parts_gold_weight = $total['parts_gold_weight'] ?? "0.000";
-                                    $widget->footer = $parts_gold_weight;
+                                'footerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#cde6c7;'],
+                                'value' => function ($model, $key, $index, $widget) use ($total) {
+                                    $widget->footer = $model->getFooterValues('parts_gold_weight', $total, "0.000");
                                     return $model->parts_gold_weight ?? "0.000";
                                 },
                                 'filter' => false,
@@ -1375,7 +1431,8 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'attribute' => 'parts_price',
                                 //'format' => 'raw',
                                 'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#cde6c7;'],
-                                'value'=>function ($model, $key, $index, $widget) {
+                                'footerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#cde6c7;'],
+                                'value' => function ($model, $key, $index, $widget) {
                                     $widget->footer = $model->getAttributeLabel('parts_price');
                                     return $model->parts_price ?? "0.00";
                                 },
@@ -1389,10 +1446,10 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'attribute' => 'parts_amount',
                                 //'format' => 'raw',
                                 'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#cde6c7;'],
-                                'value'=>function ($model, $key, $index, $widget) use ($total) {
-                                    $parts_amount = $total['parts_amount'] ?? "0.000";
-                                    $widget->footer = $parts_amount;
-                                    return $model->parts_amount ?? "0.000";
+                                'footerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#cde6c7;'],
+                                'value' => function ($model, $key, $index, $widget) use ($total) {
+                                    $widget->footer = $model->getFooterValues('parts_amount', $total, "0.00");
+                                    return $model->parts_amount ?? "0.00";
                                 },
                                 'filter' => false,
 //                                'filter' => Html::activeTextInput($searchModel, 'parts_amount', [
@@ -1401,16 +1458,16 @@ $this->params['breadcrumbs'][] = $this->title;
 //                                ]),
                             ],
                             [
-                                'attribute' => 'parts_fee',
+                                'attribute' => 'basic_gong_fee',
                                 //'format' => 'raw',
-                                'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#cde6c7;'],
-                                'value'=>function ($model, $key, $index, $widget) use ($total) {
-                                    $parts_fee = $total['parts_fee'] ?? "0.000";
-                                    $widget->footer = $parts_fee;
-                                    return $model->parts_fee ?? "0.000";
+                                'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#b7ba6b;'],
+                                'footerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#b7ba6b;'],
+                                'value' => function ($model, $key, $index, $widget) use ($total) {
+                                    $widget->footer = $model->getFooterValues('basic_gong_fee', $total, "0.00");
+                                    return $model->basic_gong_fee ?? "0.00";
                                 },
                                 'filter' => false,
-//                                'filter' => Html::activeTextInput($searchModel, 'parts_fee', [
+//                                'filter' => Html::activeTextInput($searchModel, 'basic_gong_fee', [
 //                                    'class' => 'form-control',
 //                                    'style' => 'width:80px;'
 //                                ]),
@@ -1419,7 +1476,8 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'attribute' => 'gong_fee',
                                 //'format' => 'raw',
                                 'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#b7ba6b;'],
-                                'value'=>function ($model, $key, $index, $widget) {
+                                'footerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#b7ba6b;'],
+                                'value' => function ($model, $key, $index, $widget) {
                                     $widget->footer = $model->getAttributeLabel('gong_fee');
                                     return $model->gong_fee ?? "0.00";
                                 },
@@ -1430,16 +1488,62 @@ $this->params['breadcrumbs'][] = $this->title;
 //                                ]),
                             ],
                             [
-                                'attribute' => 'basic_gong_fee',
+                                'attribute' => 'peishi_weight',
                                 //'format' => 'raw',
                                 'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#b7ba6b;'],
-                                'value'=>function ($model, $key, $index, $widget) use ($total) {
-                                    $basic_gong_fee = $total['basic_gong_fee'] ?? "0.000";
-                                    $widget->footer = $basic_gong_fee;
-                                    return $model->basic_gong_fee ?? "0.000";
+                                'footerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#b7ba6b;'],
+                                'value' => function ($model, $key, $index, $widget) use ($total) {
+                                    $widget->footer = $model->getFooterValues('peishi_weight', $total, "0.000");
+                                    return $model->peishi_weight ?? "0.000";
                                 },
                                 'filter' => false,
-//                                'filter' => Html::activeTextInput($searchModel, 'basic_gong_fee', [
+
+//                                'filter' => Html::activeTextInput($searchModel, 'peishi_weight', [
+//                                    'class' => 'form-control',
+//                                    'style' => 'width:80px;'
+//                                ]),
+                            ],
+                            [
+                                'attribute' => 'peishi_gong_fee',
+                                //'format' => 'raw',
+                                'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#b7ba6b;'],
+                                'footerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#b7ba6b;'],
+                                'value' => function ($model, $key, $index, $widget) use ($total) {
+                                    $widget->footer = $model->getFooterValues('peishi_gong_fee', $total, "0.00");
+                                    return $model->peishi_gong_fee ?? "0.00";
+                                },
+                                'filter' => false,
+//                                'filter' => Html::activeTextInput($searchModel, 'peishi_gong_fee', [
+//                                    'class' => 'form-control',
+//                                    'style' => 'width:80px;'
+//                                ]),
+                            ],
+                            [
+                                'attribute' => 'peishi_fee',
+                                //'format' => 'raw',
+                                'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#b7ba6b;'],
+                                'footerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#b7ba6b;'],
+                                'value' => function ($model, $key, $index, $widget) use ($total) {
+                                    $widget->footer = $model->getFooterValues('peishi_fee', $total, "0.00");
+                                    return $model->peishi_fee ?? "0.00";
+                                },
+                                'filter' => false,
+//                                'filter' => Html::activeTextInput($searchModel, 'peishi_fee', [
+//                                    'class' => 'form-control',
+//                                    'style' => 'width:80px;'
+//                                ]),
+                            ],
+                            [
+                                'attribute' => 'parts_fee',
+                                //'format' => 'raw',
+                                'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#b7ba6b;'],
+                                'footerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#b7ba6b;'],
+                                'value' => function ($model, $key, $index, $widget) use ($total) {
+                                    $widget->footer = $model->getFooterValues('parts_fee', $total, "0.00");
+                                    return $model->parts_fee ?? "0.000";
+                                },
+                                'filter' => false,
+//                                'filter' => Html::activeTextInput($searchModel, 'parts_fee', [
 //                                    'class' => 'form-control',
 //                                    'style' => 'width:80px;'
 //                                ]),
@@ -1448,7 +1552,8 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'attribute' => 'xiangqian_craft',
                                 'format' => 'raw',
                                 'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#b7ba6b;'],
-                                'value'=>function ($model, $key, $index, $widget) {
+                                'footerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#b7ba6b;'],
+                                'value' => function ($model, $key, $index, $widget) {
                                     $widget->footer = $model->getAttributeLabel('xiangqian_craft');
                                     return Yii::$app->attr->valueName($model->xiangqian_craft) ?? "";
                                 },
@@ -1462,7 +1567,8 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'attribute' => 'xianqian_price',
                                 //'format' => 'raw',
                                 'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#b7ba6b;'],
-                                'value'=>function ($model, $key, $index, $widget) {
+                                'footerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#b7ba6b;'],
+                                'value' => function ($model, $key, $index, $widget) {
                                     $widget->footer = $model->getAttributeLabel('xianqian_price');
                                     return $model->xianqian_price ?? "0.00";
                                 },
@@ -1476,10 +1582,10 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'attribute' => 'xianqian_fee',
                                 //'format' => 'raw',
                                 'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#b7ba6b;'],
-                                'value'=>function ($model, $key, $index, $widget) use ($total) {
-                                    $xianqian_fee = $total['xianqian_fee'] ?? "0.000";
-                                    $widget->footer = $xianqian_fee;
-                                    return $model->xianqian_fee ?? "0.000";
+                                'footerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#b7ba6b;'],
+                                'value' => function ($model, $key, $index, $widget) use ($total) {
+                                    $widget->footer = $model->getFooterValues('xianqian_fee', $total, "0.00");
+                                    return $model->xianqian_fee ?? "0.00";
                                 },
                                 'filter' => false,
 //                                'filter' => Html::activeTextInput($searchModel, 'xianqian_fee', [
@@ -1491,7 +1597,8 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'attribute' => 'biaomiangongyi',
                                 'format' => 'raw',
                                 'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#b7ba6b;'],
-                                'value'=>function ($model, $key, $index, $widget) {
+                                'footerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#b7ba6b;'],
+                                'value' => function ($model, $key, $index, $widget) {
                                     $widget->footer = $model->getAttributeLabel('biaomiangongyi');
                                     return Yii::$app->attr->valueName($model->biaomiangongyi) ?? "0.00";
                                 },
@@ -1505,10 +1612,10 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'attribute' => 'biaomiangongyi_fee',
                                 //'format' => 'raw',
                                 'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#b7ba6b;'],
-                                'value'=>function ($model, $key, $index, $widget) use ($total) {
-                                    $biaomiangongyi_fee = $total['biaomiangongyi_fee'] ?? "0.000";
-                                    $widget->footer = $biaomiangongyi_fee;
-                                    return $model->biaomiangongyi_fee ?? "0.000";
+                                'footerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#b7ba6b;'],
+                                'value' => function ($model, $key, $index, $widget) use ($total) {
+                                    $widget->footer = $model->getFooterValues('biaomiangongyi_fee', $total, "0.00");
+                                    return $model->biaomiangongyi_fee ?? "0.00";
                                 },
                                 'filter' => false,
 //                                'filter' => Html::activeTextInput($searchModel, 'biaomiangongyi_fee', [
@@ -1520,10 +1627,10 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'attribute' => 'fense_fee',
                                 //'format' => 'raw',
                                 'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#b7ba6b;'],
-                                'value'=>function ($model, $key, $index, $widget) use ($total) {
-                                    $fense_fee = $total['fense_fee'] ?? "0.000";
-                                    $widget->footer = $fense_fee;
-                                    return $model->fense_fee ?? "0.000";
+                                'footerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#b7ba6b;'],
+                                'value' => function ($model, $key, $index, $widget) use ($total) {
+                                    $widget->footer = $model->getFooterValues('fense_fee', $total, "0.00");
+                                    return $model->fense_fee ?? "0.00";
                                 },
                                 'filter' => false,
 //                                'filter' => Html::activeTextInput($searchModel, 'fense_fee', [
@@ -1535,10 +1642,10 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'attribute' => 'penlasha_fee',
                                 //'format' => 'raw',
                                 'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#b7ba6b;'],
-                                'value'=>function ($model, $key, $index, $widget) use ($total) {
-                                    $penlasha_fee = $total['penlasha_fee'] ?? "0.000";
-                                    $widget->footer = $penlasha_fee;
-                                    return $model->penlasha_fee ?? "0.000";
+                                'footerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#b7ba6b;'],
+                                'value' => function ($model, $key, $index, $widget) use ($total) {
+                                    $widget->footer = $model->getFooterValues('penlasha_fee', $total, "0.00");
+                                    return $model->penlasha_fee ?? "0.00";
                                 },
                                 'filter' => false,
 //                                'filter' => Html::activeTextInput($searchModel, 'penlasha_fee', [
@@ -1550,10 +1657,10 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'attribute' => 'bukou_fee',
                                 //'format' => 'raw',
                                 'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#b7ba6b;'],
-                                'value'=>function ($model, $key, $index, $widget) use ($total) {
-                                    $bukou_fee = $total['bukou_fee'] ?? "0.000";
-                                    $widget->footer = $bukou_fee;
-                                    return $model->bukou_fee ?? "0.000";
+                                'footerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#b7ba6b;'],
+                                'value' => function ($model, $key, $index, $widget) use ($total) {
+                                    $widget->footer = $model->getFooterValues('bukou_fee', $total, "0.00");
+                                    return $model->bukou_fee ?? "0.00";
                                 },
                                 'filter' => false,
 //                                'filter' => Html::activeTextInput($searchModel, 'bukou_fee', [
@@ -1565,10 +1672,10 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'attribute' => 'templet_fee',
                                 //'format' => 'raw',
                                 'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#b7ba6b;'],
-                                'value'=>function ($model, $key, $index, $widget) use ($total) {
-                                    $templet_fee = $total['templet_fee'] ?? "0.000";
-                                    $widget->footer = $templet_fee;
-                                    return $model->templet_fee ?? "0.000";
+                                'footerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#b7ba6b;'],
+                                'value' => function ($model, $key, $index, $widget) use ($total) {
+                                    $widget->footer = $model->getFooterValues('templet_fee', $total, "0.00");
+                                    return $model->templet_fee ?? "0.00";
                                 },
                                 'filter' => false,
 //                                'filter' => Html::activeTextInput($searchModel, 'templet_fee', [
@@ -1580,10 +1687,10 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'attribute' => 'cert_fee',
                                 //'format' => 'raw',
                                 'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#b7ba6b;'],
-                                'value'=>function ($model, $key, $index, $widget) use ($total) {
-                                    $cert_fee = $total['cert_fee'] ?? "0.000";
-                                    $widget->footer = $cert_fee;
-                                    return $model->cert_fee ?? "0.000";
+                                'footerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#b7ba6b;'],
+                                'value' => function ($model, $key, $index, $widget) use ($total) {
+                                    $widget->footer = $model->getFooterValues('cert_fee', $total, "0.00");
+                                    return $model->cert_fee ?? "0.00";
                                 },
                                 'filter' => false,
 //                                'filter' => Html::activeTextInput($searchModel, 'cert_fee', [
@@ -1595,10 +1702,10 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'attribute' => 'other_fee',
                                 //'format' => 'raw',
                                 'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#b7ba6b;'],
-                                'value'=>function ($model, $key, $index, $widget) use ($total) {
-                                    $other_fee = $total['other_fee'] ?? "0.000";
-                                    $widget->footer = $other_fee;
-                                    return $model->other_fee ?? "0.000";
+                                'footerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#b7ba6b;'],
+                                'value' => function ($model, $key, $index, $widget) use ($total) {
+                                    $widget->footer = $model->getFooterValues('other_fee', $total, "0.00");
+                                    return $model->other_fee ?? "0.00";
                                 },
                                 'filter' => false,
 //                                'filter' => Html::activeTextInput($searchModel, 'other_fee', [
@@ -1609,11 +1716,11 @@ $this->params['breadcrumbs'][] = $this->title;
                             [
                                 'attribute' => 'factory_cost',
                                 //'format' => 'raw',
-                                'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#b7ba6b;'],
-                                'value'=>function ($model, $key, $index, $widget) use ($total) {
-                                    $factory_cost = $total['factory_cost'] ?? "0.000";
-                                    $widget->footer = $factory_cost;
-                                    return $model->factory_cost ?? "0.000";
+                                'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#9b95c9;'],
+                                'footerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#9b95c9;'],
+                                'value' => function ($model, $key, $index, $widget) use ($total) {
+                                    $widget->footer = $model->getFooterValues('factory_cost', $total, "0.00");
+                                    return $model->factory_cost ?? "0.00";
                                 },
                                 'filter' => false,
 //                                'filter' => Html::activeTextInput($searchModel, 'factory_cost', [
@@ -1624,11 +1731,11 @@ $this->params['breadcrumbs'][] = $this->title;
                             [
                                 'attribute' => 'cost_price',
                                 //'format' => 'raw',
-                                'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#b7ba6b;'],
-                                'value'=>function ($model, $key, $index, $widget) use ($total) {
-                                    $cost_price = $total['cost_price'] ?? "0.000";
-                                    $widget->footer = $cost_price;
-                                    return $model->cost_price ?? "0.000";
+                                'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#9b95c9;'],
+                                'footerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#9b95c9;'],
+                                'value' => function ($model, $key, $index, $widget) use ($total) {
+                                    $widget->footer = $model->getFooterValues('cost_price', $total, "0.00");
+                                    return $model->cost_price ?? "0.00";
                                 },
                                 'visible' => \common\helpers\Auth::verify(\common\enums\SpecialAuthEnum::VIEW_CAIGOU_PRICE),
                                 'filter' => false,
@@ -1641,7 +1748,8 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'attribute' => 'markup_rate',
                                 //'format' => 'raw',
                                 'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#9b95c9;'],
-                                'value'=>function ($model, $key, $index, $widget) {
+                                'footerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#9b95c9;'],
+                                'value' => function ($model, $key, $index, $widget) {
                                     $widget->footer = $model->getAttributeLabel('markup_rate');
                                     return $model->markup_rate ?? "";
                                 },
@@ -1654,10 +1762,10 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'attribute' => 'market_price',
                                 //'format' => 'raw',
                                 'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#9b95c9;'],
-                                'value'=>function ($model, $key, $index, $widget) use ($total) {
-                                    $market_price = $total['market_price'] ?? "0.000";
-                                    $widget->footer = $market_price;
-                                    return $model->cost_price ?? "0.000";
+                                'footerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#9b95c9;'],
+                                'value' => function ($model, $key, $index, $widget) use ($total) {
+                                    $widget->footer = $model->getFooterValues('market_price', $total, "0.00");
+                                    return $model->cost_price ?? "0.00";
                                 },
                                 'filter' => false,
 //                                'filter' => Html::activeTextInput($searchModel, 'market_price', [
@@ -1666,35 +1774,11 @@ $this->params['breadcrumbs'][] = $this->title;
 //                                ]),
                             ],
                             [
-                                'attribute' => 'factory_mo',
-                                //'format' => 'raw',
-                                'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#9b95c9;'],
-                                'value'=>function ($model, $key, $index, $widget) {
-                                    $widget->footer = $model->getAttributeLabel('factory_mo');
-                                    return $model->factory_mo ?? "";
-                                },
-                                'filter' => Html::activeTextInput($searchModel, 'factory_mo', [
-                                    'class' => 'form-control',
-                                    'style' => 'width:100px;'
-                                ]),
-                            ],
-                            [
-                                'attribute' => 'order_sn',
-                                'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#9b95c9;'],
-                                'value'=>function ($model, $key, $index, $widget) {
-                                    $widget->footer = $model->getAttributeLabel('order_sn');
-                                    return $model->order_sn ?? "";
-                                },
-                                'filter' => Html::activeTextInput($searchModel, 'order_sn', [
-                                    'class' => 'form-control',
-                                    'style' => 'width:100px;'
-                                ]),
-                            ],
-                            [
                                 'attribute' => 'style_sex',
                                 'format' => 'raw',
                                 'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#9b95c9;'],
-                                'value'=>function ($model, $key, $index, $widget) {
+                                'footerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#9b95c9;'],
+                                'value' => function ($model, $key, $index, $widget) {
                                     $widget->footer = $model->getAttributeLabel('style_sex');
                                     return \addons\Style\common\enums\StyleSexEnum::getValue($model->style_sex) ?? "";
                                 },
@@ -1708,21 +1792,23 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'attribute' => 'jintuo_type',
                                 'format' => 'raw',
                                 'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#9b95c9;'],
-                                'value'=>function ($model, $key, $index, $widget) {
+                                'footerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#9b95c9;'],
+                                'value' => function ($model, $key, $index, $widget) {
                                     $widget->footer = $model->getAttributeLabel('jintuo_type');
                                     return \addons\Style\common\enums\JintuoTypeEnum::getValue($model->jintuo_type) ?? "";
                                 },
                                 'filter' => Html::activeDropDownList($searchModel, 'jintuo_type', $model->getJietuoTypeMap(), [
                                     'prompt' => '全部',
                                     'class' => 'form-control',
-                                    'style' => 'width:100px;'
+                                    'style' => 'width:80px;'
                                 ]),
                             ],
                             [
                                 'attribute' => 'qiban_type',
                                 'format' => 'raw',
                                 'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#9b95c9;'],
-                                'value'=>function ($model, $key, $index, $widget) {
+                                'footerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#9b95c9;'],
+                                'value' => function ($model, $key, $index, $widget) {
                                     $widget->footer = $model->getAttributeLabel('qiban_type');
                                     return \addons\Style\common\enums\QibanTypeEnum::getValue($model->qiban_type) ?? "";
                                 },
@@ -1736,7 +1822,8 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'attribute' => 'is_inlay',
                                 'format' => 'raw',
                                 'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#9b95c9;'],
-                                'value'=>function ($model, $key, $index, $widget) {
+                                'footerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#9b95c9;'],
+                                'value' => function ($model, $key, $index, $widget) {
                                     $widget->footer = $model->getAttributeLabel('is_inlay');
                                     return \addons\Style\common\enums\InlayEnum::getValue($model->is_inlay) ?? "";
                                 },
@@ -1747,10 +1834,38 @@ $this->params['breadcrumbs'][] = $this->title;
                                 ]),
                             ],
                             [
+                                'attribute' => 'factory_mo',
+                                //'format' => 'raw',
+                                'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#9b95c9;'],
+                                'footerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#9b95c9;'],
+                                'value' => function ($model, $key, $index, $widget) {
+                                    $widget->footer = $model->getAttributeLabel('factory_mo');
+                                    return $model->factory_mo ?? "";
+                                },
+                                'filter' => Html::activeTextInput($searchModel, 'factory_mo', [
+                                    'class' => 'form-control',
+                                    'style' => 'width:100px;'
+                                ]),
+                            ],
+                            [
+                                'attribute' => 'order_sn',
+                                'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#9b95c9;'],
+                                'footerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#9b95c9;'],
+                                'value' => function ($model, $key, $index, $widget) {
+                                    $widget->footer = $model->getAttributeLabel('order_sn');
+                                    return $model->order_sn ?? "";
+                                },
+                                'filter' => Html::activeTextInput($searchModel, 'order_sn', [
+                                    'class' => 'form-control',
+                                    'style' => 'width:100px;'
+                                ]),
+                            ],
+                            [
                                 'attribute' => 'remark',
                                 //'format' => 'raw',
                                 'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#9b95c9;'],
-                                'value'=>function ($model, $key, $index, $widget) {
+                                'footerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#9b95c9;'],
+                                'value' => function ($model, $key, $index, $widget) {
                                     $widget->footer = $model->getAttributeLabel('remark');
                                     return $model->remark ?? "";
                                 },
@@ -1780,6 +1895,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'header' => '操作',
                                 'contentOptions' => ['style' => ['white-space' => 'nowrap']],
                                 'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#9b95c9;'],
+                                'footerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#9b95c9;'],
                                 'template' => '{edit} {delete}',
                                 'buttons' => [
                                     'edit' => function ($url, $model, $key) use ($bill) {

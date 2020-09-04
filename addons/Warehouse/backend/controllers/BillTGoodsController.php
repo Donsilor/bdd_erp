@@ -2,6 +2,7 @@
 
 namespace addons\Warehouse\backend\controllers;
 
+use common\helpers\StringHelper;
 use Yii;
 use common\traits\Curd;
 use common\helpers\Url;
@@ -51,7 +52,7 @@ class BillTGoodsController extends BaseController
         $dataProvider->query->andWhere(['>', WarehouseBillGoodsL::tableName() . '.status', -1]);
         $bill = WarehouseBill::find()->where(['id' => $bill_id])->one();
         $model = new WarehouseBillTGoodsForm();
-        $total = $model->goodsSummary($bill_id);
+        $total = $model->goodsSummary($bill_id, Yii::$app->request->queryParams);
         return $this->render($this->action->id, [
             'model' => $model,
             'dataProvider' => $dataProvider,
@@ -155,6 +156,7 @@ class BillTGoodsController extends BaseController
                 return $this->redirect(['edit-all', 'bill_id' => $bill_id]);
             } catch (\Exception $e) {
                 $trans->rollBack();
+                //var_dump($e->getTraceAsString());die;
                 return $this->message($e->getMessage(), $this->redirect(\Yii::$app->request->referrer), 'error');
             }
         }
@@ -277,7 +279,7 @@ class BillTGoodsController extends BaseController
 
     /**
      *
-     * 收货单-编辑
+     * 收货单-批量编辑
      * @return mixed
      * @throws
      */
@@ -300,11 +302,14 @@ class BillTGoodsController extends BaseController
         $dataProvider->query->andWhere(['=', 'bill_id', $bill_id]);
         //$dataProvider->query->andWhere(['>',WarehouseBillGoodsT::tableName().'.status',-1]);
         $bill = WarehouseBill::find()->where(['id' => $bill_id])->one();
+        $model = new WarehouseBillTGoodsForm();
+        $total = $model->goodsSummary($bill_id);
         return $this->render($this->action->id, [
-            'model' => new WarehouseBillTGoodsForm(),
+            'model' => $model,
             'dataProvider' => $dataProvider,
             'searchModel' => $searchModel,
             'bill' => $bill,
+            'total' => $total,
             'tabList' => \Yii::$app->warehouseService->bill->menuTabList($bill_id, $this->billType, $returnUrl, $tab),
             'tab' => $tab,
         ]);
