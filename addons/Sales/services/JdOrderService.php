@@ -115,7 +115,7 @@ class JdOrderService extends Service
             "customer_mobile"=>$this->getErpCustomerMobile($order),
             //"customer_email"=>$order->consigneeInfo->email,
             "customer_message"=>$order->orderRemark,
-            "store_remark"=>($order->venderRemark ?? '').';京东买家账户:'.($order->open_id_buyer ?? ''),
+            "store_remark"=>($order->venderRemark ?? ''),
             'order_time'=>strtotime($order->orderStartTime),
         ];
     }
