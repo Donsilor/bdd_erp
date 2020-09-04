@@ -46,16 +46,18 @@ class BillTGoodsController extends BaseController
                 'styleCate' => ['name'],
             ]
         ]);
-
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
         $dataProvider->query->andWhere(['=', 'bill_id', $bill_id]);
         $dataProvider->query->andWhere(['>', WarehouseBillGoodsL::tableName() . '.status', -1]);
         $bill = WarehouseBill::find()->where(['id' => $bill_id])->one();
+        $model = new WarehouseBillTGoodsForm();
+        $total = $model->goodsSummary($bill_id);
         return $this->render($this->action->id, [
-            'model' => new WarehouseBillTGoodsForm(),
+            'model' => $model,
             'dataProvider' => $dataProvider,
             'searchModel' => $searchModel,
             'bill' => $bill,
+            'total' => $total,
             'tabList' => \Yii::$app->warehouseService->bill->menuTabList($bill_id, $this->billType, $returnUrl),
             'tab' => $tab,
         ]);
