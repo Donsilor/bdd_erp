@@ -5,6 +5,7 @@ namespace addons\Sales\services;
 
 use Yii;
 use common\components\Service;
+use addons\Sales\common\enums\JdAttrEnum;
 
 /**
  * Bdd 订单同步
@@ -38,13 +39,34 @@ class JdOrderService extends Service
         //exit;
         try{
             $trans = Yii::$app->trans->beginTransaction();
-            Yii::$app->salesService->order->createSyncOrder($orderInfo, $accountInfo, $goodsList, $customerInfo, $addressInfo, $invoiceInfo);            
+            Yii::$app->salesService->order->syncOrder($orderInfo, $accountInfo, $goodsList, $customerInfo, $addressInfo, $invoiceInfo);            
             $trans->commit();
         }catch (\Exception $e){
             $trans->rollback();
             throw $e;
         }
     }
+    /**
+     * 同步订单到erp
+     * @param int $order_id 订单Id
+     */
+    public function syncOrderGoods($ware)
+    {
+        if(!$ware) {
+            throw new \Exception("ware不能为空");
+        }
+        if(!$ware->multiCateProps) {
+            throw new \Exception("ware->multiCateProps不能为空");
+        }
+        $goods_spec = [];
+        foreach ($ware->multiCateProps as $prop) {
+             $attrName = JdAttrEnum::getAttrName($prop->attrId); 
+             if($attrName) {
+                 $goods_spec[$attrName] = implode(',',$prop->attrValueAlias);
+             }
+        }
+        Yii::$app->salesService->order->syncOrderGoodsSpec($ware->wareId,$goods_spec);        
+    }    
     /**
      * ERP订单主表表单
      * @param Order $order

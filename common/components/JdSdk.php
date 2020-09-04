@@ -149,13 +149,14 @@ class JdSdk extends Component
         $option_fields = 'wareId,wareStatus,features,multiCateProps';
         $request->setField($option_fields); 
         $request->setWareStatusValue("1,2,4,8,513,513,514,516,520,1028");
+        $request->setWareId($wareIds);
         $request->setPageNo(1);
-        $request->setPageSize(30);
+        $request->setPageSize(20);
         $responce = $this->client->execute($request, $this->accessToken);
         if(isset($responce->error_response)){
             throw new \Exception($responce->error_response->zh_desc);
         }
-        return $responce->jingdong_ware_read_searchWare4Valid_response->page->data ?? [];      
+        return $responce->jingdong_ware_read_searchWare4Valid_responce->page->data ?? [];      
     }
     
     /**

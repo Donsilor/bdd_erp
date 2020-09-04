@@ -164,4 +164,28 @@ class OrderGoods extends BaseModel
     {
         return $this->hasMany(OrderGoodsAttribute::class, ['id'=>'id'])->alias('attrs')->orderBy('sort asc');
     }
+    /**
+     * 商品规格
+     * @return string
+     */
+    public function getGoodsSpec()
+    {
+        $spec_list = [];
+        //销售属性
+        $goods_name_pices = [];
+        if($this->out_ware_id) {
+            $goods_name_pices = explode(' ',$this->goods_name);
+            if(count($goods_name_pices) >1) {
+                unset($goods_name_pices[0]);
+                $spec_list['销售属性'] = implode(' ',$goods_name_pices);
+            }
+        } 
+        //商品规格
+        $spec_list = $spec_list + (json_decode($this->goods_spec,true) ?? []);        
+        $str = '';
+        foreach ($spec_list as $key=>$value) {
+            $str .= $key.':'.$value."<br/>";
+        }
+        return $str;
+    }
 }

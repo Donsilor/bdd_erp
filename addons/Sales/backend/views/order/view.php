@@ -274,6 +274,13 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'format' => 'raw',
                             ],
                             [
+                                'attribute' => 'goods_spec',
+                                'value' => function ($model) {
+                                    return $model->getGoodsSpec();
+                                },
+                                'format' => 'raw',
+                           ],
+                            [
                                 'attribute' => 'goods_id',
                                 'value' => 'goods_id',
                                 'headerOptions' => ['class' => 'col-md-1'],
@@ -534,12 +541,11 @@ $this->params['breadcrumbs'][] = $this->title;
                                                 return Html::edit(['order-goods/edit-diamond', 'id' => $model->id], '编辑', ['class' => 'btn btn-primary btn-xs openIframe', 'data-width' => '90%', 'data-height' => '90%', 'data-offset' => '20px']);
                                             } elseif ($model->is_gift == \addons\Sales\common\enums\IsGiftEnum::YES) {
                                                 return Html::edit(['order-goods/edit-gift', 'id' => $model->id], '编辑', ['class' => 'btn btn-primary btn-xs openIframe', 'data-width' => '90%', 'data-height' => '90%', 'data-offset' => '20px']);
-                                            } elseif ($model->is_stock == IsStockEnum::NO) {
-                                                return Html::edit(['order-goods/edit', 'id' => $model->id], '编辑', ['class' => 'btn btn-primary btn-xs openIframe', 'data-width' => '90%', 'data-height' => '90%', 'data-offset' => '20px']);
-                                            } else {
+                                            }elseif ($model->is_stock == IsStockEnum::YES && $model->goods_id) {
                                                 return Html::edit(['order-goods/edit-stock', 'id' => $model->id], '编辑', ['class' => 'btn btn-primary btn-xs openIframe', 'data-width' => '90%', 'data-height' => '90%', 'data-offset' => '20px']);
+                                            }else {
+                                                return Html::edit(['order-goods/edit', 'id' => $model->id], '编辑', ['class' => 'btn btn-primary btn-xs openIframe', 'data-width' => '90%', 'data-height' => '90%', 'data-offset' => '20px']);
                                             }
-
                                         }
                                     },
                                     'stock' => function ($url, $model, $key) use ($order) {
