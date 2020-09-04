@@ -25,7 +25,7 @@ class JdAttrEnum extends \common\enums\BaseEnum
         return [
                 self::DIA_ClARITY =>[
                         'name'=>'钻石净度',
-                        'idMap' =>[ 91083=>AttrIdEnum::DIA_CLARITY],
+                        'idMap' =>[ self::DIA_ClARITY=>AttrIdEnum::DIA_CLARITY],
                         'itemMap'=>[
                                 'FL/无暇'=>6,//【ERP:6        FL
                                 'IF/镜下无暇'=>7,//【ERP:7        IF
@@ -38,7 +38,7 @@ class JdAttrEnum extends \common\enums\BaseEnum
                 ],
                 self::DIA_CUT =>[
                         'name'=>'钻石切工',
-                        'idMap' =>[ 91084=>AttrIdEnum::DIA_CUT ],
+                        'idMap' =>[self::DIA_CUT=>AttrIdEnum::DIA_CUT ],
                         'itemMap'=>[
                                 'Excellent极好'=>13,//【ERP:        13        EX
                                 'Very Good很好'=>14,//【ERP:        14        VG
@@ -50,7 +50,7 @@ class JdAttrEnum extends \common\enums\BaseEnum
                 ],
                 self::DIA_COLOR =>[
                         'name'=>'钻石颜色',
-                        'idMap' =>[ 91082=>AttrIdEnum::DIA_COLOR ],
+                        'idMap' =>[self::DIA_COLOR=>AttrIdEnum::DIA_COLOR ],
                         'itemMap'=>[
                                 'D'=>18,//【映射ERP：18        D
                                 'E'=>19,//【映射ERP：19        E
@@ -86,7 +86,7 @@ class JdAttrEnum extends \common\enums\BaseEnum
                 ],
                 self::CERT_TYPE=>[
                         'name'=>'证书类型',
-                        'idMap' =>[ 72374=>0 ],
+                        'idMap' =>[ self::CERT_TYPE=>AttrIdEnum::DIA_CERT_TYPE],
                         'itemMap'=>[
                                 'GIA/美国宝石学院'=>138,//【ERP：138        GIA
                                 'NGTC/国家珠宝玉石质量监督检验中心'=>151,//【ERP：151        NGTC-国检                                

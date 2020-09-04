@@ -18,14 +18,14 @@ use Yii;
  * @property int $created_at
  * @property int $updated_at
  */
-class StyleChannel extends BaseModel
+class StyleChannel extends \addons\Sales\common\models\BaseModel
 {
     /**
      * {@inheritdoc}
      */
     public static function tableName()
     {
-        return self::tableFullName('style_channel');
+        return self::tableFullName('sale_channel');
     }
 
     /**

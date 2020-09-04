@@ -383,8 +383,31 @@ class OrderService extends Service
      * @param unknown $goods_spec
      * @return boolean
      */
-    public function syncOrderGoodsAttr($wareId,$goods_attr)
+    public function syncOrderGoodsAttr($wareId, $goods_attrs,$order_ids = [])
     {
+        $orderGoodsList = OrderGoods::find()->select(['id'])->where(['out_ware_id'=>$wareId])->andFilterWhere(['in','order_id',$order_ids])->limit(1000)->all();
+        if(empty($orderGoodsList)) {
+             throw new \Exception("[{$wareId}] 查询不到记录");
+        }
+        foreach ($orderGoodsList as $orderGoods) {
+            foreach ($goods_attrs ??[] as $goods_attr) {
+                if(empty($goods_attr['attr_id'])) {
+                    throw new \Exception("同步商品属性失败：attr_id 不能为空");
+                }
+                $model = OrderGoodsAttribute::find()->where(['id'=>$orderGoods->id,'attr_id'=>$goods_attr['attr_id']])->one();
+                if(!$model){
+                    $model = new OrderGoodsAttribute(); 
+                }
+                $model->attributes = $goods_attr;
+                if($model->attr_value_id) {
+                    $model->attr_value = Yii::$app->attr->valueName($model->attr_value_id);
+                }
+                $model->id = $orderGoods->id;
+                if(false === $model->save()) {
+                    throw new \Exception("同步商品属性失败：".$this->getError($model));
+                }
+            }
+        }
         
     }
     /**

@@ -50,7 +50,7 @@ class JdOrderService extends Service
      * 同步订单到erp
      * @param int $order_id 订单Id
      */
-    public function syncOrderGoods($ware)
+    public function syncOrderGoods($ware,$order_ids = [])
     {
         if(!$ware) {
             throw new \Exception("ware不能为空");
@@ -58,14 +58,28 @@ class JdOrderService extends Service
         if(!$ware->multiCateProps) {
             throw new \Exception("ware->multiCateProps不能为空");
         }
-        $goods_spec = [];
+        $goods_attrs = [];
+        $goods_specs = [];
         foreach ($ware->multiCateProps as $prop) {
              $attrName = JdAttrEnum::getAttrName($prop->attrId); 
              if($attrName) {
-                 $goods_spec[$attrName] = implode(',',$prop->attrValueAlias);
+                 $goods_specs[$attrName] = implode(',',$prop->attrValueAlias);
              }
+             $attr_id = JdAttrEnum::getAttrId($prop->attrId);
+             if($attr_id) {
+                 $attr_value_id = JdAttrEnum::getValueId($prop->attrId,$prop->attrValueAlias[0]);
+                 if($attr_value_id) {
+                     $goods_attrs[] = ['attr_id'=>$attr_id,'attr_value_id'=>$attr_value_id,'attr_value'=>''];
+                 }
+             }
+             
+        } 
+        if(!empty($goods_specs)) {
+            Yii::$app->salesService->order->syncOrderGoodsSpec($ware->wareId,$goods_specs);
         }
-        Yii::$app->salesService->order->syncOrderGoodsSpec($ware->wareId,$goods_spec);        
+        if(!empty($goods_attrs)) {
+            Yii::$app->salesService->order->syncOrderGoodsAttr($ware->wareId,$goods_attrs,$order_ids);
+        }
     }    
     /**
      * ERP订单主表表单
@@ -247,7 +261,7 @@ class JdOrderService extends Service
                     "delivery_status"=> $this->getErpDeliveryStatus($order),
                     "is_stock"=>$model->productNo ? 1:0,
                     "is_gift"=>$model->productNo ? 0:1,
-                    "goods_attrs"=>$this->getErpOrderGoodsAttrsData($model),
+                    //"goods_attrs"=>$this->getErpOrderGoodsAttrsData($model),
                 ];
                 $erpGoodsList[] = $erpGoods;
             }
@@ -266,9 +280,9 @@ class JdOrderService extends Service
      * <li class="pop-select-item" style="display: none;">P/不洁净</li><li class="pop-select-item" style="display: none;">不分级</li></ul>
      * @param OrderGoods $model 订单商品Model
      */
-    public function getErpOrderGoodsAttrsData($model)
+    public function getErpOrderGoodsAttrsData($ware)
     {       
-        return [];
+         return [];
     }
     
     /**
