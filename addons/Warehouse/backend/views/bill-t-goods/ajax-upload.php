@@ -21,7 +21,7 @@ $form = ActiveForm::begin([
 <div class="modal-body">
     <div class="col-sm-12">
         <?= $form->field($model, 'file')->fileInput() ?>
-        <?= Html::a("下载导入数据格式", ['download', 'bill_id' => $bill->id], ['style' => "text-decoration:underline;color:#3c8dbc"]) ?>
+        <?= Html::a("下载数据导入格式", ['download', 'bill_id' => $bill->id], ['style' => "text-decoration:underline;color:#3c8dbc"]) ?>
     </div>
 </div>
 <div class="modal-footer">

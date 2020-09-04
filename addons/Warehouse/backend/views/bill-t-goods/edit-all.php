@@ -30,6 +30,8 @@ $this->params['breadcrumbs'][] = $this->title;
                 'data-target' => '#ajaxModal',
             ]);
             echo '&nbsp;';
+            echo Html::a('返回列表', ['bill-t-goods/index', 'bill_id' => $bill->id], ['class' => 'btn btn-white btn-xs']);
+            echo '&nbsp;';
             echo Html::edit(['ajax-upload', 'bill_id' => $bill->id], '批量导入', [
                 'class' => 'btn btn-success btn-xs',
                 'data-toggle' => 'modal',
@@ -39,8 +41,6 @@ $this->params['breadcrumbs'][] = $this->title;
             echo Html::tag('span', '刷新价格', ["class" => "btn btn-warning btn-xs jsBatchStatus", "data-grid" => "grid", "data-url" => Url::to(['update-price']),]);
             echo '&nbsp;';
             echo Html::tag('span', '批量删除', ["class" => "btn btn-danger btn-xs jsBatchStatus", "data-grid" => "grid", "data-url" => Url::to(['batch-delete']),]);
-            echo '&nbsp;';
-            echo Html::a('返回列表', ['bill-t-goods/index', 'bill_id' => $bill->id], ['class' => 'btn btn-white btn-xs']);
         }
         ?>
     </div>
@@ -75,8 +75,15 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'class' => 'yii\grid\ActionColumn',
                                 'header' => '操作',
                                 'contentOptions' => ['style' => ['white-space' => 'nowrap']],
-                                'template' => '{ajax-edit} {delete}',
+                                'template' => '{image} {ajax-edit} {delete}',
                                 'buttons' => [
+                                    'image' => function ($url, $model, $key) {
+                                        return Html::edit(['ajax-image', 'id' => $model->id], '图片', [
+                                            'class' => 'btn btn-warning btn-xs',
+                                            'data-toggle' => 'modal',
+                                            'data-target' => '#ajaxModal',
+                                        ]);
+                                    },
                                     'ajax-edit' => function ($url, $model, $key) use ($bill) {
                                         if ($bill->bill_status == BillStatusEnum::SAVE) {
                                             return Html::edit(['edit', 'id' => $model->id, 'bill_id' => $bill->id], '编辑', [
@@ -350,18 +357,18 @@ $this->params['breadcrumbs'][] = $this->title;
                                 ]),
                                 'headerOptions' => ['class' => 'col-md-1 batch_select_full', 'attr-name' => 'chain_type', 'attr-id' => AttrIdEnum::CHAIN_TYPE, 'style' => 'background-color:#afdfe4;'],
                             ],
-                            [
-                                'attribute' => 'chain_long',
-                                'format' => 'raw',
-                                'headerOptions' => ['class' => 'col-md-1 batch_full', 'attr-name' => 'chain_long', 'style' => 'background-color:#afdfe4;'],
-                                'value' => function ($model, $key, $index, $column) {
-                                    return Html::ajaxInput('chain_long', $model->chain_long, ['data-id' => $model->id]);
-                                },
-                                'filter' => Html::activeTextInput($searchModel, 'chain_long', [
-                                    'class' => 'form-control',
-                                    'style' => 'width:100px;'
-                                ]),
-                            ],
+//                            [
+//                                'attribute' => 'chain_long',
+//                                'format' => 'raw',
+//                                'headerOptions' => ['class' => 'col-md-1 batch_full', 'attr-name' => 'chain_long', 'style' => 'background-color:#afdfe4;'],
+//                                'value' => function ($model, $key, $index, $column) {
+//                                    return Html::ajaxInput('chain_long', $model->chain_long, ['data-id' => $model->id]);
+//                                },
+//                                'filter' => Html::activeTextInput($searchModel, 'chain_long', [
+//                                    'class' => 'form-control',
+//                                    'style' => 'width:100px;'
+//                                ]),
+//                            ],
                             [
                                 'attribute' => 'cramp_ring',
                                 'format' => 'raw',
@@ -1367,19 +1374,19 @@ $this->params['breadcrumbs'][] = $this->title;
 //                                    'style' => 'width:200px;'
 //                                ]),
                             ],
-                            [
-                                'attribute' => 'peishi_num',
-                                'format' => 'raw',
-                                'value' => function ($model, $key, $index, $column) {
-                                    return Html::ajaxInput('peishi_num', $model->peishi_num, ['data-id' => $model->id, 'onfocus' => 'rfClearVal(this)', 'data-type' => 'number']);
-                                },
-                                'filter' => false,
-                                'headerOptions' => ['class' => 'col-md-1 batch_full', 'attr-name' => 'peishi_num', 'style' => 'background-color:#FFA500;'],
-//                                'filter' => Html::activeTextInput($searchModel, 'peishi_num', [
-//                                    'class' => 'form-control',
-//                                    'style' => 'width:80px;'
-//                                ]),
-                            ],
+//                            [
+//                                'attribute' => 'peishi_num',
+//                                'format' => 'raw',
+//                                'value' => function ($model, $key, $index, $column) {
+//                                    return Html::ajaxInput('peishi_num', $model->peishi_num, ['data-id' => $model->id, 'onfocus' => 'rfClearVal(this)', 'data-type' => 'number']);
+//                                },
+//                                'filter' => false,
+//                                'headerOptions' => ['class' => 'col-md-1 batch_full', 'attr-name' => 'peishi_num', 'style' => 'background-color:#FFA500;'],
+////                                'filter' => Html::activeTextInput($searchModel, 'peishi_num', [
+////                                    'class' => 'form-control',
+////                                    'style' => 'width:80px;'
+////                                ]),
+//                            ],
                             [
                                 'attribute' => 'peishi_weight',
                                 'format' => 'raw',

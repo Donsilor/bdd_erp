@@ -122,6 +122,7 @@ use Yii;
  * @property string $second_stone_shape1 副石1形状
  * @property string $second_stone_color1 副石1颜色
  * @property string $second_stone_clarity1 副石1净度
+ * @property string $second_stone_cut1 副石1切工
  * @property string $second_stone_colour1 副石1色彩
  * @property string $second_stone_size1 副石1规格
  * @property string $second_stone_price1 副石1总计价
@@ -182,7 +183,7 @@ class WarehouseBillGoodsL extends BaseModel
             [['goods_name', 'goods_image', 'product_size', 'cert_id', 'length', 'goods_color', 'main_stone_size', 'second_stone_size1', 'second_stone_size2'], 'string', 'max' => 100],
             [['order_sn'], 'string', 'max' => 40],
             [['gross_weight', 'diamond_cert_id', 'second_cert_id1'], 'string', 'max' => 20],
-            [['finger', 'finger_hk', 'material', 'material_type', 'material_color', 'diamond_color', 'diamond_shape', 'diamond_clarity', 'diamond_cut', 'diamond_polish', 'diamond_symmetry', 'diamond_fluorescence', 'diamond_discount', 'diamond_cert_type', 'xiangkou', 'biaomiangongyi', 'chain_type', 'cramp_ring', 'talon_head_type', 'xiangqian_craft', 'parts_material', 'main_stone_type', 'main_cert_type', 'main_stone_shape', 'main_stone_color', 'main_stone_clarity', 'main_stone_cut', 'main_stone_colour', 'second_stone_type1', 'second_stone_shape1', 'second_stone_color1', 'second_stone_clarity1', 'second_stone_colour1', 'second_stone_type2', 'second_stone_shape2', 'second_stone_color2', 'second_stone_clarity2', 'second_stone_colour2', 'second_stone_type3'], 'string', 'max' => 10],
+            [['finger', 'finger_hk', 'material', 'material_type', 'material_color', 'diamond_color', 'diamond_shape', 'diamond_clarity', 'diamond_cut', 'diamond_polish', 'diamond_symmetry', 'diamond_fluorescence', 'diamond_discount', 'diamond_cert_type', 'xiangkou', 'biaomiangongyi', 'chain_type', 'cramp_ring', 'talon_head_type', 'xiangqian_craft', 'parts_material', 'main_stone_type', 'main_cert_type', 'main_stone_shape', 'main_stone_color', 'main_stone_clarity', 'main_stone_cut', 'main_stone_colour', 'second_stone_type1', 'second_stone_shape1', 'second_stone_color1', 'second_stone_clarity1', 'second_stone_cut1', 'second_stone_colour1', 'second_stone_type2', 'second_stone_shape2', 'second_stone_color2', 'second_stone_clarity2', 'second_stone_colour2', 'second_stone_type3'], 'string', 'max' => 10],
             [['kezi', 'cert_type', 'factory_mo'], 'string', 'max' => 50],
             [['stone_remark', 'remark'], 'string', 'max' => 255],
             [['goods_id'], 'unique'],
@@ -227,7 +228,7 @@ class WarehouseBillGoodsL extends BaseModel
             'gross_weight' => '毛重(g)',
             'finger' => '手寸(美号)',
             'finger_hk' => '手寸(港号)',
-            'product_size' => '成品尺寸(cm)',
+            'product_size' => '成品尺寸(mm)',
             'kezi' => '刻字',
             'cert_type' => '证书类别[成品]',
             'cert_id' => '成品证书号',
@@ -252,7 +253,7 @@ class WarehouseBillGoodsL extends BaseModel
             'gong_fee' => '克工费/g',
             'basic_gong_fee' => '基本工费',
             'bukou_fee' => '补口费',
-            'xianqian_price' => '镶石单价/ct',
+            'xianqian_price' => '镶石单价/颗',
             'xianqian_fee' => '镶石费',
             'cert_fee' => '证书费',
             'markup_rate' => '倍率[加价率]',
@@ -261,7 +262,7 @@ class WarehouseBillGoodsL extends BaseModel
             'fense_fee' => '分色/分件费',
             'other_fee' => '其他费用',
             'biaomiangongyi_fee' => '表面工艺费',
-            'penlasha_fee' => '喷拉砂费',
+            'penlasha_fee' => '喷拉沙费',
             'templet_fee' => '版费',
             'total_gong_fee' => '总工费',
             'xiangkou' => '戒托镶口(ct)',
@@ -308,6 +309,7 @@ class WarehouseBillGoodsL extends BaseModel
             'second_stone_shape1' => '副石1形状',
             'second_stone_color1' => '副石1颜色',
             'second_stone_clarity1' => '副石1净度',
+            'second_stone_cut1' => '副石1切工',
             'second_stone_colour1' => '副石1色彩',
             'second_stone_size1' => '副石1规格',
             'second_stone_price1' => '副石1单价/ct',

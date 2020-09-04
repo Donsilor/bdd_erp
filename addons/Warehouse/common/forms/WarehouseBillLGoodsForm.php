@@ -516,30 +516,6 @@ class WarehouseBillLGoodsForm extends WarehouseBillGoodsL
     }
 
     /**
-     * 主石颜色列表
-     * @return array
-     */
-    public function getMainStoneColorMap()
-    {
-        return \Yii::$app->attr->valueMap(AttrIdEnum::MAIN_STONE_COLOR) ?? [];
-    }
-
-    /**
-     * 主石颜色
-     * @param WarehouseBillTGoodsForm $form
-     * @return array
-     */
-    public function getMainStoneColorDrop($form)
-    {
-        if (!empty($form->style_sn)) {
-            $data = $this->getAttrValueListByStyle($form->style_sn, AttrIdEnum::MAIN_STONE_COLOR);
-        } else {
-            $data = $this->getMainStoneColorMap();
-        }
-        return $data ?? [];
-    }
-
-    /**
      * 主石形状列表
      * @return array
      */
@@ -559,6 +535,30 @@ class WarehouseBillLGoodsForm extends WarehouseBillGoodsL
             $data = $this->getAttrValueListByStyle($form->style_sn, AttrIdEnum::MAIN_STONE_SHAPE);
         } else {
             $data = $this->getMainStoneShapeMap();
+        }
+        return $data ?? [];
+    }
+
+    /**
+     * 主石颜色列表
+     * @return array
+     */
+    public function getMainStoneColorMap()
+    {
+        return \Yii::$app->attr->valueMap(AttrIdEnum::MAIN_STONE_COLOR) ?? [];
+    }
+
+    /**
+     * 主石颜色
+     * @param WarehouseBillTGoodsForm $form
+     * @return array
+     */
+    public function getMainStoneColorDrop($form)
+    {
+        if (!empty($form->style_sn)) {
+            $data = $this->getAttrValueListByStyle($form->style_sn, AttrIdEnum::MAIN_STONE_COLOR);
+        } else {
+            $data = $this->getMainStoneColorMap();
         }
         return $data ?? [];
     }
@@ -727,6 +727,30 @@ class WarehouseBillLGoodsForm extends WarehouseBillGoodsL
             $data = $this->getAttrValueListByStyle($form->style_sn, AttrIdEnum::SIDE_STONE1_CLARITY);
         } else {
             $data = $this->getSecondStoneClarity1Map();
+        }
+        return $data ?? [];
+    }
+
+    /**
+     * 副石1切工列表
+     * @return array
+     */
+    public function getSecondStoneCut1Map()
+    {
+        return \Yii::$app->attr->valueMap(AttrIdEnum::SIDE_STONE1_CUT) ?? [];
+    }
+
+    /**
+     * 副石1切工
+     * @param WarehouseBillTGoodsForm $form
+     * @return array
+     */
+    public function getSecondStoneCut1Drop($form)
+    {
+        if (!empty($form->style_sn)) {
+            $data = $this->getAttrValueListByStyle($form->style_sn, AttrIdEnum::SIDE_STONE1_CUT);
+        } else {
+            $data = $this->getSecondStoneCut1Map();
         }
         return $data ?? [];
     }
@@ -1023,12 +1047,21 @@ class WarehouseBillLGoodsForm extends WarehouseBillGoodsL
     }
 
     /**
-     * 配件方式
+     * 配料方式
      * @return array
      */
     public function getPeiLiaoWayMap()
     {
         return \addons\Warehouse\common\enums\PeiLiaoWayEnum::getMap() ?? [];
+    }
+
+    /**
+     * 配石方式(类型)
+     * @return array
+     */
+    public function getPeiShiWayMap()
+    {
+        return \addons\Warehouse\common\enums\PeiShiWayEnum::getMap() ?? [];
     }
 
     /**
@@ -1040,12 +1073,5 @@ class WarehouseBillLGoodsForm extends WarehouseBillGoodsL
         return \addons\Warehouse\common\enums\PeiJianWayEnum::getMap() ?? [];
     }
 
-    /**
-     * 配石方式(类型)
-     * @return array
-     */
-    public function getPeiShiWayMap()
-    {
-        return \addons\Warehouse\common\enums\PeiShiWayEnum::getMap() ?? [];
-    }
+
 }
