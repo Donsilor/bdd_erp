@@ -287,6 +287,7 @@ class WarehouseBillTService extends Service
                 if (empty($attr_id)) {
                     $flag = false;
                     $error[$i][] = "材质录入值不对或该款[" . $goods_sn . "]材质不支持[" . $material_type . "]请前往款式库核实";
+                    $material_type = "";
                 } else {
                     $material_type = $attr_id;
                 }
@@ -297,6 +298,7 @@ class WarehouseBillTService extends Service
                 if (empty($attr_id)) {
                     $flag = false;
                     $error[$i][] = "材质颜色录入值不对或该款[" . $goods_sn . "]材质颜色不支持[" . $material_color . "]请前往款式库核实";
+                    $material_color = "";
                 } else {
                     $material_color = $attr_id;
                 }
@@ -307,6 +309,7 @@ class WarehouseBillTService extends Service
                 if (empty($attr_id)) {
                     $flag = false;
                     $error[$i][] = "手寸(港号)录入值不对或该款[" . $goods_sn . "]手寸(港号)不支持[" . $finger_hk . "]请前往款式库核实";
+                    $finger_hk = "";
                 } else {
                     $finger_hk = $attr_id;
                 }
@@ -317,6 +320,7 @@ class WarehouseBillTService extends Service
                 if (empty($attr_id)) {
                     $flag = false;
                     $error[$i][] = "手寸(美号)录入值不对或该款[" . $goods_sn . "]手寸(美号)不支持[" . $finger . "]请前往款式库核实";
+                    $finger = "";
                 } else {
                     $finger = $attr_id;
                 }
@@ -329,6 +333,7 @@ class WarehouseBillTService extends Service
                 if (empty($attr_id)) {
                     $flag = false;
                     $error[$i][] = "镶口录入值不对或该款[" . $goods_sn . "]镶口不支持[" . $xiangkou . "]请前往款式库核实";
+                    $xiangkou = "";
                 } else {
                     $xiangkou = $attr_id;
                 }
@@ -340,6 +345,7 @@ class WarehouseBillTService extends Service
                 if (empty($attr_id)) {
                     $flag = false;
                     $error[$i][] = "链类型录入值不对或该款[" . $goods_sn . "]链类型不支持[" . $chain_type . "]请前往款式库核实";
+                    $chain_type = "";
                 } else {
                     $chain_type = $attr_id;
                 }
@@ -350,6 +356,7 @@ class WarehouseBillTService extends Service
                 if (empty($attr_id)) {
                     $flag = false;
                     $error[$i][] = "扣环录入值不对或该款[" . $goods_sn . "]扣环不支持[" . $cramp_ring . "]请前往款式库核实";
+                    $cramp_ring = "";
                 } else {
                     $cramp_ring = $attr_id;
                 }
@@ -360,6 +367,7 @@ class WarehouseBillTService extends Service
                 if (empty($attr_id)) {
                     $flag = false;
                     $error[$i][] = "爪头形状录入值不对或该款[" . $goods_sn . "]爪头形状不支持[" . $talon_head_type . "]请前往款式库核实";
+                    $talon_head_type = "";
                 } else {
                     $talon_head_type = $attr_id;
                 }
@@ -370,6 +378,7 @@ class WarehouseBillTService extends Service
                 if (empty($peiliao_way) && $peiliao_way === "") {
                     $flag = false;
                     $error[$i][] = "配料方式录入值不对";
+                    $peiliao_way = "";
                 }
             }
             $suttle_weight = $form->formatValue($goods[16], 0) ?? 0;
@@ -396,6 +405,7 @@ class WarehouseBillTService extends Service
                 if (empty($attr_id)) {
                     $flag = false;
                     $error[$i][] = "主石类型录入值不对或该款[" . $goods_sn . "]主石类型不支持[" . $main_stone_type . "]请前往款式库核实";
+                    $main_stone_type = "";
                 } else {
                     $main_stone_type = $attr_id;
                 }
@@ -409,6 +419,7 @@ class WarehouseBillTService extends Service
                 if (empty($main_pei_type) && $main_pei_type === "") {
                     $flag = false;
                     $error[$i][] = "主石配石方式录入值不对";
+                    $main_pei_type = "";
                 }
             } else {
                 $main_pei_type = $form->getPeiType($main_stone_sn, $main_stone_num, $main_stone_weight);
@@ -420,6 +431,7 @@ class WarehouseBillTService extends Service
                 if (empty($attr_id)) {
                     $flag = false;
                     $error[$i][] = "主石形状录入值不对或该款[" . $goods_sn . "]主石形状不支持[" . $main_stone_shape . "]请前往款式库核实";
+                    $main_stone_shape = "";
                 } else {
                     $main_stone_shape = $attr_id;
                 }
@@ -432,6 +444,7 @@ class WarehouseBillTService extends Service
                 if (empty($attr_id)) {
                     $flag = false;
                     $error[$i][] = "主石颜色录入值不对或该款[" . $goods_sn . "]主石颜色不支持[" . $main_stone_color . "]请前往款式库核实";
+                    $main_stone_color = "";
                 } else {
                     $main_stone_color = $attr_id;
                 }
@@ -444,6 +457,7 @@ class WarehouseBillTService extends Service
                 if (empty($attr_id)) {
                     $flag = false;
                     $error[$i][] = "主石净度录入值不对或该款[" . $goods_sn . "]主石净度不支持[" . $main_stone_clarity . "]请前往款式库核实";
+                    $main_stone_clarity = "";
                 } else {
                     $main_stone_clarity = $attr_id;
                 }
@@ -456,6 +470,7 @@ class WarehouseBillTService extends Service
                 if (empty($attr_id)) {
                     $flag = false;
                     $error[$i][] = "主石切工录入值不对或该款[" . $goods_sn . "]主石切工不支持[" . $main_stone_cut . "]请前往款式库核实";
+                    $main_stone_cut = "";
                 } else {
                     $main_stone_cut = $attr_id;
                 }
@@ -468,6 +483,7 @@ class WarehouseBillTService extends Service
                 if (empty($attr_id)) {
                     $flag = false;
                     $error[$i][] = "主石色彩录入值不对或该款[" . $goods_sn . "]主石色彩不支持[" . $main_stone_colour . "]请前往款式库核实";
+                    $main_stone_colour = "";
                 } else {
                     $main_stone_colour = $attr_id;
                 }
@@ -494,6 +510,7 @@ class WarehouseBillTService extends Service
                 if (empty($attr_id)) {
                     $flag = false;
                     $error[$i][] = "副石1类型录入值不对或该款[" . $goods_sn . "]副石1类型不支持[" . $second_stone_type1 . "]请前往款式库核实";
+                    $second_stone_type1 = "";
                 } else {
                     $second_stone_type1 = $attr_id;
                 }
@@ -507,6 +524,7 @@ class WarehouseBillTService extends Service
                 if (empty($second_pei_type) && $second_pei_type === "") {
                     $flag = false;
                     $error[$i][] = "副石1配石方式录入值不对";
+                    $second_pei_type = "";
                 }
             } else {
                 $second_pei_type = $form->getPeiType($second_stone_sn1, $second_stone_num1, $second_stone_weight1);
@@ -518,6 +536,7 @@ class WarehouseBillTService extends Service
                 if (empty($attr_id)) {
                     $flag = false;
                     $error[$i][] = "副石1形状录入值不对或该款[" . $goods_sn . "]副石1形状不支持[" . $second_stone_shape1 . "]请前往款式库核实";
+                    $second_stone_shape1 = "";
                 } else {
                     $second_stone_shape1 = $attr_id;
                 }
@@ -530,6 +549,7 @@ class WarehouseBillTService extends Service
                 if (empty($attr_id)) {
                     $flag = false;
                     $error[$i][] = "副石1颜色录入值不对或该款[" . $goods_sn . "]副石1颜色不支持[" . $second_stone_color1 . "]请前往款式库核实";
+                    $second_stone_color1 = "";
                 } else {
                     $second_stone_color1 = $attr_id;
                 }
@@ -542,6 +562,7 @@ class WarehouseBillTService extends Service
                 if (empty($attr_id)) {
                     $flag = false;
                     $error[$i][] = "副石1净度录入值不对或该款[" . $goods_sn . "]副石1净度不支持[" . $second_stone_clarity1 . "]请前往款式库核实";
+                    $second_stone_clarity1 = "";
                 } else {
                     $second_stone_clarity1 = $attr_id;
                 }
@@ -554,6 +575,7 @@ class WarehouseBillTService extends Service
                 if (empty($attr_id)) {
                     $flag = false;
                     $error[$i][] = "副石1切工录入值不对或该款[" . $goods_sn . "]副石1切工不支持[" . $second_stone_cut1 . "]请前往款式库核实";
+                    $second_stone_cut1 = "";
                 } else {
                     $second_stone_cut1 = $attr_id;
                 }
@@ -566,6 +588,7 @@ class WarehouseBillTService extends Service
                 if (empty($attr_id)) {
                     $flag = false;
                     $error[$i][] = "副石1色彩录入值不对或该款[" . $goods_sn . "]副石1色彩不支持[" . $second_stone_colour1 . "]请前往款式库核实";
+                    $second_stone_colour1 = "";
                 } else {
                     $second_stone_colour1 = $attr_id;
                 }
@@ -588,6 +611,7 @@ class WarehouseBillTService extends Service
                 if (empty($attr_id)) {
                     $flag = false;
                     $error[$i][] = "副石2类型录入值不对或该款[" . $goods_sn . "]副石2类型不支持[" . $second_stone_type2 . "]请前往款式库核实";
+                    $second_stone_type2 = "";
                 } else {
                     $second_stone_type2 = $attr_id;
                 }
@@ -601,6 +625,7 @@ class WarehouseBillTService extends Service
                 if (empty($second_pei_type2) && $second_pei_type2 === "") {
                     $flag = false;
                     $error[$i][] = "副石2配石方式录入值不对";
+                    $second_pei_type2 = "";
                 }
             } else {
                 $second_pei_type = $form->getPeiType($second_stone_sn2, $second_stone_num2, $second_stone_weight2);
@@ -629,6 +654,7 @@ class WarehouseBillTService extends Service
                 if (empty($parts_way) && $parts_way === "") {
                     $flag = false;
                     $error[$i][] = "配件方式录入值不对";
+                    $parts_way = "";
                 }
             }
             $parts_type = $goods[50] ?? "";
@@ -637,6 +663,7 @@ class WarehouseBillTService extends Service
                 if (empty($attr_id)) {
                     $flag = false;
                     $error[$i][] = "配件类型录入值不对或该款[" . $goods_sn . "]配件类型不支持[" . $parts_type . "]请前往款式库核实";
+                    $parts_type = "";
                 } else {
                     $parts_type = (int)$attr_id ?? "";
                 }
@@ -647,6 +674,7 @@ class WarehouseBillTService extends Service
                 if (empty($attr_id)) {
                     $flag = false;
                     $error[$i][] = "配件材质录入值不对或该款[" . $goods_sn . "]配件材质不支持[" . $parts_material . "]请前往款式库核实";
+                    $parts_material = "";
                 } else {
                     $parts_material = $attr_id;
                 }
@@ -665,6 +693,7 @@ class WarehouseBillTService extends Service
                 if (empty($attr_id)) {
                     $flag = false;
                     $error[$i][] = "镶嵌工艺录入值不对或该款[" . $goods_sn . "]镶嵌工艺不支持[" . $xiangqian_craft . "]请前往款式库核实";
+                    $xiangqian_craft = "";
                 } else {
                     $xiangqian_craft = $attr_id;
                 }
@@ -676,6 +705,7 @@ class WarehouseBillTService extends Service
                 if (empty($attr_id)) {
                     $flag = false;
                     $error[$i][] = "表面工艺录入值不对或该款[" . $goods_sn . "]表面工艺不支持[" . $biaomiangongyi . "]请前往款式库核实";
+                    $biaomiangongyi = "";
                 } else {
                     $biaomiangongyi = $attr_id;
                 }
@@ -697,6 +727,7 @@ class WarehouseBillTService extends Service
                 if (empty($attr_id)) {
                     $flag = false;
                     $error[$i][] = "主石证书类型录入值不对或该款[" . $goods_sn . "]主石证书类型不支持[" . $main_cert_type . "]请前往款式库核实";
+                    $main_cert_type = "";
                 } else {
                     $main_cert_type = $attr_id;
                 }
@@ -710,6 +741,7 @@ class WarehouseBillTService extends Service
                 if (empty($jintuo_type)) {
                     $flag = false;
                     $error[$i][] = "金托类型录入值不对";
+                    $jintuo_type = "";
                 }
             }
             $remark = $goods[73] ?? "";
