@@ -542,7 +542,10 @@ $this->registerJs($script);
                 }
             });
         }else{
-            rfPrompt("请输入["+name+"]", function (fromValue) {
+            if(name){
+                name = "["+name+"]";
+            }
+            rfPrompt("请输入"+name, function (fromValue) {
                 $.ajax({
                     type: "post",
                     url: url,
