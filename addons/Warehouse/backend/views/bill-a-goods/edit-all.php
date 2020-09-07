@@ -583,21 +583,6 @@ $this->params['breadcrumbs'][] = $this->title;
                                     'style'=> 'width:80px;'
                                 ]),
                             ],
-
-                            [
-                                'attribute'=>'cost_price',
-                                'format' => 'raw',
-                                'value' => function ($model, $key, $index, $column){
-                                    return  Html::ajaxInput('cost_price', $model->cost_price, ['data-id'=>$model->id]);
-                                },
-                                'headerOptions' => ['class' => 'col-md-1 batch_full', 'attr-name' => 'cost_price'],
-                                'filter' => Html::activeTextInput($searchModel, 'cost_price', [
-                                    'class' => 'form-control',
-                                    'style'=> 'width:100px;'
-                                ]),
-                            ],
-
-
                             [
                                 'attribute'=>'parts_gold_weight',
                                 'format' => 'raw',
@@ -648,18 +633,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                     'style'=> 'width:80px;'
                                 ]),
                             ],
-                            [
-                                'attribute'=>'xianqian_fee',
-                                'format' => 'raw',
-                                'value' => function ($model, $key, $index, $column){
-                                    return  Html::ajaxInput('xianqian_fee', $model->xianqian_fee, ['data-id'=>$model->id]);
-                                },
-                                'headerOptions' => ['class' => 'col-md-1 batch_full', 'attr-name' => 'xianqian_fee'],
-                                'filter' => Html::activeTextInput($searchModel, 'xianqian_fee', [
-                                    'class' => 'form-control',
-                                    'style'=> 'width:80px;'
-                                ]),
-                            ],
+
                             [
                                 'attribute'=>'cert_fee',
                                 'format' => 'raw',
@@ -682,6 +656,102 @@ $this->params['breadcrumbs'][] = $this->title;
                                 },
                                 'headerOptions' => ['class' => 'col-md-1 batch_full', 'attr-name' => 'biaomiangongyi_fee'],
                                 'filter' => Html::activeTextInput($searchModel, 'biaomiangongyi_fee', [
+                                    'class' => 'form-control',
+                                    'style'=> 'width:80px;'
+                                ]),
+                            ],
+                            [
+                                'attribute'=>'parts_fee',
+                                'format' => 'raw',
+                                'value' => function ($model, $key, $index, $column){
+                                    return  Html::ajaxInput('parts_fee', $model->parts_fee, ['data-id'=>$model->id]);
+                                },
+                                'headerOptions' => ['class' => 'col-md-1 batch_full', 'attr-name' => 'parts_fee'],
+                                'filter' => Html::activeTextInput($searchModel, 'parts_fee', [
+                                    'class' => 'form-control',
+                                    'style'=> 'width:80px;'
+                                ]),
+                            ],
+                            [
+                                'attribute'=>'fense_fee',
+                                'format' => 'raw',
+                                'value' => function ($model, $key, $index, $column){
+                                    return  Html::ajaxInput('fense_fee', $model->fense_fee, ['data-id'=>$model->id]);
+                                },
+                                'headerOptions' => ['class' => 'col-md-1 batch_full', 'attr-name' => 'fense_fee'],
+                                'filter' => Html::activeTextInput($searchModel, 'fense_fee', [
+                                    'class' => 'form-control',
+                                    'style'=> 'width:80px;'
+                                ]),
+                            ],
+                            [
+                                'attribute'=>'penrasa_fee',
+                                'format' => 'raw',
+                                'value' => function ($model, $key, $index, $column){
+                                    return  Html::ajaxInput('penrasa_fee', $model->penrasa_fee, ['data-id'=>$model->id]);
+                                },
+                                'headerOptions' => ['class' => 'col-md-1 batch_full', 'attr-name' => 'penrasa_fee'],
+                                'filter' => Html::activeTextInput($searchModel, 'penrasa_fee', [
+                                    'class' => 'form-control',
+                                    'style'=> 'width:80px;'
+                                ]),
+                            ],
+                            [
+                                'attribute'=>'edition_fee',
+                                'format' => 'raw',
+                                'value' => function ($model, $key, $index, $column){
+                                    return  Html::ajaxInput('edition_fee', $model->edition_fee, ['data-id'=>$model->id]);
+                                },
+                                'headerOptions' => ['class' => 'col-md-1 batch_full', 'attr-name' => 'edition_fee'],
+                                'filter' => Html::activeTextInput($searchModel, 'edition_fee', [
+                                    'class' => 'form-control',
+                                    'style'=> 'width:80px;'
+                                ]),
+                            ],
+                            [
+                                'attribute'=>'xianqian_price',
+                                'format' => 'raw',
+                                'value' => function ($model, $key, $index, $column){
+                                    return  Html::ajaxInput('xianqian_price', $model->xianqian_price, ['data-id'=>$model->id]);
+                                },
+                                'headerOptions' => ['class' => 'col-md-1 batch_full', 'attr-name' => 'xianqian_price'],
+                                'filter' => Html::activeTextInput($searchModel, 'xianqian_price', [
+                                    'class' => 'form-control',
+                                    'style'=> 'width:80px;'
+                                ]),
+                            ],
+                            [
+                                'attribute'=>'other_fee',
+                                'format' => 'raw',
+                                'value' => function ($model, $key, $index, $column){
+                                    return  Html::ajaxInput('other_fee', $model->other_fee, ['data-id'=>$model->id]);
+                                },
+                                'headerOptions' => ['class' => 'col-md-1 batch_full', 'attr-name' => 'other_fee'],
+                                'filter' => Html::activeTextInput($searchModel, 'other_fee', [
+                                    'class' => 'form-control',
+                                    'style'=> 'width:80px;'
+                                ]),
+                            ],
+                            [
+                                'attribute'=>'peishi_fee',
+                                'format' => 'raw',
+                                'value' => function ($model, $key, $index, $column){
+                                    return  Html::ajaxInput('peishi_fee', $model->peishi_fee, ['data-id'=>$model->id]);
+                                },
+                                'headerOptions' => ['class' => 'col-md-1 batch_full', 'attr-name' => 'peishi_fee'],
+                                'filter' => Html::activeTextInput($searchModel, 'peishi_fee', [
+                                    'class' => 'form-control',
+                                    'style'=> 'width:80px;'
+                                ]),
+                            ],
+                            [
+                                'attribute'=>'peishi_weight',
+                                'format' => 'raw',
+                                'value' => function ($model, $key, $index, $column){
+                                    return  Html::ajaxInput('peishi_weight', $model->peishi_weight, ['data-id'=>$model->id]);
+                                },
+                                'headerOptions' => ['class' => 'col-md-1 batch_full', 'attr-name' => 'peishi_weight'],
+                                'filter' => Html::activeTextInput($searchModel, 'peishi_weight', [
                                     'class' => 'form-control',
                                     'style'=> 'width:80px;'
                                 ]),

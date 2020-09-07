@@ -6,6 +6,8 @@ use Yii;
 use common\helpers\Url;
 use common\components\Service;
 use addons\Style\common\models\Style;
+use addons\Style\common\models\StyleFactory;
+use addons\Style\common\models\StyleFactoryFee;
 use addons\Style\common\models\StyleAttribute;
 use addons\Style\common\models\StyleImages;
 use addons\Style\common\enums\StyleSexEnum;
@@ -132,8 +134,8 @@ class StyleService extends Service
      */
     public static function createGiftStyle($form)
     {
-        $goods_size = \Yii::$app->styleService->styleAttribute->getAttrValueListByStyle($form->style_sn, AttrIdEnum::PRODUCT_SIZE);
-        $chain_length = \Yii::$app->styleService->styleAttribute->getAttrValueListByStyle($form->style_sn, AttrIdEnum::CHAIN_LENGTH);
+        //$goods_size = \Yii::$app->styleService->styleAttribute->getAttrValueListByStyle($form->style_sn, AttrIdEnum::PRODUCT_SIZE);
+        //$chain_length = \Yii::$app->styleService->styleAttribute->getAttrValueListByStyle($form->style_sn, AttrIdEnum::CHAIN_LENGTH);
         $gift = new StyleGift();
         $style = [
             'style_id' => $form->id,
@@ -164,7 +166,7 @@ class StyleService extends Service
      * @param StyleForm $form
      * @throws
      */
-    public function uploadGoods($form)
+    public function uploadStyles($form)
     {
         if (empty($form->file) && !isset($form->file)) {
             throw new \Exception("请上传文件");
@@ -179,15 +181,190 @@ class StyleService extends Service
         $i = 0;
         $flag = true;
         $error_off = true;
-        $error = $saveData = [];
-        while ($goods = fgetcsv($file)) {
+        $error = $styleList = $factoryList1 = $factoryList2 = $styleFee = [];
+        while ($style = fgetcsv($file)) {
             if ($i <= 1) {
                 $i++;
                 continue;
             }
-            if (count($goods) != 74) {
+            if (count($style) != 31) {
                 throw new \Exception("模板格式不正确，请下载最新模板");
             }
+
+            $style = $form->trimField($style);
+
+            $style_name = $style[0];
+            $style_sn = $style[1];
+            $style_cate_id = $style[2];
+            $product_type_id = $style[3];
+            $style_source_id = $style[4];
+            $style_channel_id = $style[5];
+            $style_material = $style[6];
+            $style_sex = $style[7];
+            $is_made = $style[8];
+            $is_gift = $style[9];
+            $remark = $style[10];
+
+            $factory_name1 = $style[11];
+            $factory_id1 = 1;
+            $factory_mo1 = $style[12];
+            $factory_remark1 = $style[13];
+            $shipping_time1 = $style[14];
+            $factory_made1 = $style[15];
+
+            $factory_name2 = $style[16];
+            $factory_id2 = 1;
+            $factory_mo2 = $style[17];
+            $factory_remark2 = $style[18];
+            $shipping_time2 = $style[19];
+            $factory_made2 = $style[20];
+
+            $peishi_fee = $style[21];
+            $peijian_fee = $style[22];
+            $gram_fee = $style[23];
+            $basic_fee = $style[24];
+            $xiangshi_fee = $style[25];
+            $technology_fee = $style[26];
+            $fense_fee = $style[27];
+            $penlasa_fee = $style[28];
+            $bukou_fee = $style[29];
+            $templet_fee = $style[30];
+            $cert_fee = $style[31];
+            $other_fee = $style[32];
+
+            $creator_id = \Yii::$app->user->identity->getId();
+            $styleList[] = $styleInfo = [
+                'style_sn' => $style_sn,
+                'style_name' => $style_name,
+                'style_cate_id' => $style_cate_id,
+                'product_type_id' => $product_type_id,
+                'style_source_id' => $style_source_id,
+                'style_channel_id' => $style_channel_id,
+                'style_sex' => $style_sex,
+                'style_material' => $style_material,
+                'is_autosn' => 1,
+                'is_made' => $is_made,
+                'is_gift' => $is_gift,
+                'remark' => $remark,
+                'creator_id' => $creator_id,
+                'created_at' => time(),
+            ];
+
+            $factoryList1[] = $factoryInfo1 = [
+                'factory_id' => $factory_id1,
+                'factory_mo' => $factory_mo1,
+                'shipping_time' => $shipping_time1,
+                'is_made' => $factory_made1,
+                'is_default' => 1,
+                'remark' => $factory_remark1,
+                'creator_id' => $creator_id,
+                'created_at' => time(),
+            ];
+
+            $factoryList2[] = $factoryInfo2 = [
+                'factory_id' => $factory_id2,
+                'factory_mo' => $factory_mo2,
+                'shipping_time' => $shipping_time2,
+                'is_made' => $factory_made2,
+                'remark' => $factory_remark2,
+                'creator_id' => $creator_id,
+                'created_at' => time(),
+            ];
+
+            $styleFee[] = $styleInfo = [
+                'peishi_fee' => $peishi_fee,
+                'peijian_fee' => $peijian_fee,
+                'gram_fee' => $gram_fee,
+                'basic_fee' => $basic_fee,
+                'xiangshi_fee' => $xiangshi_fee,
+                'technology_fee' => $technology_fee,
+                'fense_fee' => $fense_fee,
+                'penlasa_fee' => $penlasa_fee,
+                'bukou_fee' => $bukou_fee,
+                'templet_fee' => $templet_fee,
+                'cert_fee' => $cert_fee,
+                'other_fee' => $other_fee,
+            ];
+
+            $styleM = new StyleForm();
+            $styleM->setAttributes($styleInfo);
+            if (!$styleM->validate()) {
+                $flag = false;
+                $error[$i][] = $this->getError($styleM);
+            }
+            $factoryM1 = new StyleFactory();
+            $factoryM1->setAttributes($factoryInfo1);
+            if (!$factoryM1->validate()) {
+                $flag = false;
+                $error[$i][] = $this->getError($factoryM1);
+            }
+            $factoryM1->setAttributes($factoryInfo2);
+            if (!$factoryM1->validate()) {
+                $flag = false;
+                $error[$i][] = $this->getError($factoryM1);
+            }
+            $feeM = new StyleFactoryFee();
+            $feeM->setAttributes($styleFee);
+            if (!$feeM->validate()) {
+                $flag = false;
+                $error[$i][] = $this->getError($feeM);
+            }
+
+        }
+        if (!$flag) {
+            //发生错误
+            $message = "";
+            foreach ($error as $k => $v) {
+                $s = "【" . implode('】,【', $v) . '】';
+                $message .= '第' . ($k + 1) . '行：' . $s . '<hr>';
+            }
+            if ($error_off && count($error) > 0 && $message) {
+                header("Content-Disposition: attachment;filename=错误提示" . date('YmdHis') . ".log");
+                echo iconv("utf-8", "gbk", str_replace("<hr>", "\r\n", $message));
+                exit();
+            }
+            throw new \Exception($message);
+        }
+
+        if (empty($styleList)) {
+            throw new \Exception("数据不能为空");
+        }
+        foreach ($styleList as $k => $item) {
+            $styleM = new StyleForm();
+            $styleM->setAttributes($item);
+            if (false === $styleM->save()) {
+                throw new \Exception($this->getError($styleM));
+            }
+            if(empty($styleM->style_sn)){//款号为空自动创建
+                Yii::$app->styleService->style->createStyleSn($styleM);
+            }
+            if (!empty($factoryList1[$k]) || !empty($factoryList2[$k])) {
+                $factoryList = array_merge($factoryList1[$k], $factoryList2[$k]);
+                foreach ($factoryList as $factory) {
+                    $factoryM = new StyleFactory();
+                    $factoryM->style_id = $styleM->id;
+                    $factoryM->setAttributes($factory);
+                    if (false === $factoryM->save()) {
+                        throw new \Exception($this->getError($factoryM));
+                    }
+                }
+            }
+            $styleFee = $styleFee[$k] ?? [];
+            foreach ($styleFee as $type => $fee) {
+                if ($fee > 0 && !empty($fee)) {
+                    $feeM = new StyleFactoryFee();
+                    $feeM->style_id = $styleM->id;
+                    $feeM->fee_type = $form->getFeeTypeMap($type);
+                    $feeM->fee_price = $fee;
+                    $feeM->creator_id = \Yii::$app->user->identity->getId();
+                    $feeM->created_at = time();
+                    $feeM->setAttributes($fee);
+                    if (false === $feeM->save()) {
+                        throw new \Exception($this->getError($feeM));
+                    }
+                }
+            }
+
         }
     }
 }

@@ -33,9 +33,6 @@ $this->params['breadcrumbs'][] = $this->title;
                     <?php
                     if(\common\helpers\Auth::verify(\common\enums\SpecialAuthEnum::VIEW_CAIGOU_PRICE)){
                     ?>
-                    <div class="col-lg-4">
-                        <?= $form->field($model, 'cost_price')->textInput() ?>
-                    </div>
                     <?php } ?>
                 </div>
 
@@ -55,9 +52,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     <div class="col-lg-4">
                         <?= $form->field($model, 'gold_price')->textInput() ?>
                     </div>
-                    <div class="col-lg-4">
-                        <?= $form->field($model, 'gold_amount')->textInput() ?>
-                    </div>
+
                 </div>
 
                 <div class="row">
@@ -160,13 +155,34 @@ $this->params['breadcrumbs'][] = $this->title;
                         <?= $form->field($model, 'bukou_fee')->textInput() ?>
                     </div>
                     <div class="col-lg-4">
-                        <?= $form->field($model, 'xianqian_fee')->textInput() ?>
-                    </div>
-                    <div class="col-lg-4">
                         <?= $form->field($model, 'cert_fee')->textInput() ?>
                     </div>
                     <div class="col-lg-4">
                         <?= $form->field($model, 'biaomiangongyi_fee')->textInput() ?>
+                    </div>
+                    <div class="col-lg-4">
+                        <?= $form->field($model, 'parts_fee')->textInput() ?>
+                    </div>
+                    <div class="col-lg-4">
+                        <?= $form->field($model, 'fense_fee')->textInput() ?>
+                    </div>
+                    <div class="col-lg-4">
+                        <?= $form->field($model, 'penrasa_fee')->textInput() ?>
+                    </div>
+                    <div class="col-lg-4">
+                        <?= $form->field($model, 'edition_fee')->textInput() ?>
+                    </div>
+                    <div class="col-lg-4">
+                        <?= $form->field($model, 'other_fee')->textInput() ?>
+                    </div>
+                    <div class="col-lg-4">
+                        <?= $form->field($model, 'xianqian_price')->textInput() ?>
+                    </div>
+                    <div class="col-lg-4">
+                        <?= $form->field($model, 'peishi_fee')->textInput() ?>
+                    </div>
+                    <div class="col-lg-4">
+                        <?= $form->field($model, 'peishi_weight')->textInput() ?>
                     </div>
                 </div>
                <!-- ./box-body -->

@@ -58,7 +58,7 @@ class WarehouseBillTGoodsForm extends WarehouseBillGoodsL
     {
         $res = [];
         foreach ($data as $k => $v) {
-            $res[$k] = trim(iconv('gbk', 'utf-8', $v));
+            $res[$k] = StringHelper::strIconv($v);
         }
         return $res ?? [];
     }
@@ -261,10 +261,10 @@ class WarehouseBillTGoodsForm extends WarehouseBillGoodsL
         if (!empty($stone_sn)) {
             $pei_type = \addons\Warehouse\common\enums\PeiShiWayEnum::COMPANY;
         } else {
-            if (empty($stone_num) && empty($stone_weight)) {
-                $pei_type = \addons\Warehouse\common\enums\PeiShiWayEnum::NO_PEI;
-            } else {
+            if (!empty($stone_num) || !empty($stone_weight)) {
                 $pei_type = \addons\Warehouse\common\enums\PeiShiWayEnum::FACTORY;
+            } else {
+                $pei_type = \addons\Warehouse\common\enums\PeiShiWayEnum::NO_PEI;
             }
         }
         return $pei_type;

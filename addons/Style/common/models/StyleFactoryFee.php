@@ -9,8 +9,8 @@ use Yii;
  *
  * @property int $id
  * @property int $style_id 款号ID
- * @property int $position 石头位置
- * @property int $stone_type 石头类型
+ * @property int $fee_type 石头位置
+ * @property int $fee_price 石头类型
  * @property int $creator_id 配置人ID
  * @property int $sort
  * @property int $status 状态 1启用 0禁用 -1删除

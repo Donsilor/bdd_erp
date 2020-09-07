@@ -124,21 +124,23 @@ class StyleController extends BaseController
                 'model' => $model,
         ]);
     }
+
     /**
      *
      * 文件格式导出
      * @return mixed|string|\yii\web\Response
      * @throws
      */
-    public function actionDownload()
+    public function actionDownloadCsv()
     {
         $model = new StyleForm();
         list($values, $fields) = $model->getTitleList();
-        header("Content-Disposition: attachment;filename=款式数据".time().").csv");
+        header("Content-Disposition: attachment;filename=款式数据(" . date('Ymd', time()) . ").csv");
         $content = implode($values, ",") . "\n" . implode($fields, ",") . "\n";
         echo iconv("utf-8", "gbk", $content);
         exit();
     }
+
     /**
      *
      * ajax批量导入
@@ -154,7 +156,7 @@ class StyleController extends BaseController
             try {
                 $trans = \Yii::$app->db->beginTransaction();
                 $model->file = UploadedFile::getInstance($model, 'file');
-                Yii::$app->styleService->style->uploadGoods($model);
+                Yii::$app->styleService->style->uploadStyles($model);
                 $trans->commit();
                 \Yii::$app->getSession()->setFlash('success', '保存成功');
                 return $this->redirect(\Yii::$app->request->referrer);
@@ -168,6 +170,7 @@ class StyleController extends BaseController
             'model' => $model,
         ]);
     }
+
     /**
      * 详情展示页
      * @return string
