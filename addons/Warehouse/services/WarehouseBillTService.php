@@ -635,7 +635,7 @@ class WarehouseBillTService extends Service
             }
             $second_stone_num2 = $form->formatValue($goods[45], 0) ?? 0;
             $second_stone_weight2 = $form->formatValue($goods[46], 0) ?? 0;
-            if (!empty($second_pei_type2) && $second_pei_type2 === "") {
+            if (!empty($second_pei_type2)) {
                 $second_pei_type2 = \addons\Warehouse\common\enums\PeiShiWayEnum::getIdByName($second_pei_type2);
                 if (empty($second_pei_type2) && $second_pei_type2 === "") {
                     $flag = false;
