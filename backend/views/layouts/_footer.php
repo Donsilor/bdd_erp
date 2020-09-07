@@ -527,6 +527,7 @@ $this->registerJs($script);
                     attr_id:attr_id,
                 },
                 success: function (data) {
+                    console.log(data);
                     if (parseInt(data.code) !== 200) {
                         rfAffirm(data.message);
                     } else {

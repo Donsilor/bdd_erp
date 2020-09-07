@@ -2,12 +2,10 @@
 
 namespace addons\Gdzb\common\forms;
 
-use common\enums\TargetTypeEnum;
 use Yii;
 use common\helpers\ArrayHelper;
 use addons\Gdzb\common\models\Order;
-use common\helpers\RegularHelper;
-use addons\Gdzb\common\models\Customer;
+
 
 /**
  * 订单 Form
@@ -15,13 +13,6 @@ use addons\Gdzb\common\models\Customer;
 class OrderForm extends Order
 {
 
-    //审批流程
-    public $targetType;
-    
-    public $customer_mobile_1;
-    public $customer_mobile_2;
-    public $customer_email_1;
-    public $customer_email_2;
     public $customer_source;
     public $customer_level;
     /**

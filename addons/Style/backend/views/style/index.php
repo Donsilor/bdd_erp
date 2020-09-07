@@ -23,6 +23,11 @@ $this->params['breadcrumbs'][] = $this->title;
                         'data-toggle' => 'modal',
                         'data-target' => '#ajaxModalLg',
                     ]); ?>
+                    <?= Html::edit(['ajax-upload'], '批量导入', [
+                        'class' => 'btn btn-primary btn-xs',
+                        'data-toggle' => 'modal',
+                        'data-target' => '#ajaxModal',
+                    ]); ?>
                 </div>
             </div>
             <div class="box-body table-responsive">  

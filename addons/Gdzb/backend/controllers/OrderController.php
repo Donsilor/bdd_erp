@@ -69,7 +69,7 @@ class OrderController extends BaseController
                 ]
         ]);
         
-        $dataProvider = $searchModel->search(Yii::$app->request->queryParams, ['created_at', 'customer_mobile', 'customer_email']);
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams, ['created_at']);
         $searchParams = Yii::$app->request->queryParams['SearchModel'] ?? [];
         if($order_status != -1) {
             $dataProvider->query->andWhere(['=', 'order_status', $order_status]);
@@ -78,7 +78,7 @@ class OrderController extends BaseController
         if(!empty($searchParams['customer_mobile'])) {
             $where = [ 'or',
                     ['like', Order::tableName().'.customer_mobile', $searchParams['customer_mobile']],
-                    ['like', Order::tableName().'.customer_email', $searchParams['customer_mobile']]
+
             ];            
             $dataProvider->query->andWhere($where);
         }        
@@ -118,10 +118,7 @@ class OrderController extends BaseController
             }
         }
         //初始化 默认值
-        $model->customer_email_1 = $model->customer_email;
-        $model->customer_email_2 = $model->customer_email;
-        $model->customer_mobile_1 = $model->customer_mobile;
-        $model->customer_mobile_2 = $model->customer_mobile;
+
         $model->customer_source = $model->customer->source_id ?? '';
         $model->customer_level = $model->customer->level ?? '';
         return $this->renderAjax($this->action->id, [

@@ -279,11 +279,11 @@ class WarehouseBillTGoodsForm extends WarehouseBillGoodsL
      */
     public function getAttrIdByAttrValue($style_sn, $value, $attr_id)
     {
-        if (!empty($style_sn)) {
-            $valueList = $this->getAttrValueListByStyle($style_sn, $attr_id);
-        } else {
+//        if (!empty($style_sn)) {
+//            $valueList = $this->getAttrValueListByStyle($style_sn, $attr_id);
+//        } else {
             $valueList = \Yii::$app->attr->valueMap($attr_id);
-        }
+//        }
         $valueList = array_flip($valueList);
         $attrId = isset($valueList[$value]) ? $valueList[$value] : "";
         return (string)$attrId ?? "";
