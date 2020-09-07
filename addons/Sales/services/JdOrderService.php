@@ -39,8 +39,9 @@ class JdOrderService extends Service
         //exit;
         try{
             $trans = Yii::$app->trans->beginTransaction();
-            Yii::$app->salesService->order->syncOrder($orderInfo, $accountInfo, $goodsList, $customerInfo, $addressInfo, $invoiceInfo);            
+            $order = Yii::$app->salesService->order->syncOrder($orderInfo, $accountInfo, $goodsList, $customerInfo, $addressInfo, $invoiceInfo);            
             $trans->commit();
+            return $order->id;
         }catch (\Exception $e){
             $trans->rollback();
             throw $e;
