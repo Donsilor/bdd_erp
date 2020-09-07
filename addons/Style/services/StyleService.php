@@ -2,15 +2,12 @@
 
 namespace addons\Style\services;
 
-use addons\Style\common\models\StyleFactory;
-use addons\Style\common\models\StyleFactoryFee;
-use addons\Warehouse\common\models\WarehouseBillGoodsL;
-use common\enums\AuditStatusEnum;
-use common\helpers\StringHelper;
 use Yii;
 use common\helpers\Url;
 use common\components\Service;
 use addons\Style\common\models\Style;
+use addons\Style\common\models\StyleFactory;
+use addons\Style\common\models\StyleFactoryFee;
 use addons\Style\common\models\StyleAttribute;
 use addons\Style\common\models\StyleImages;
 use addons\Style\common\enums\StyleSexEnum;
@@ -224,10 +221,10 @@ class StyleService extends Service
 
             $peishi_fee = $style[21];
             $peijian_fee = $style[22];
-            $weight_fee = $style[23];
+            $gram_fee = $style[23];
             $basic_fee = $style[24];
             $xiangshi_fee = $style[25];
-            $face_work_fee = $style[26];
+            $technology_fee = $style[26];
             $fense_fee = $style[27];
             $penlasa_fee = $style[28];
             $bukou_fee = $style[29];
@@ -277,10 +274,10 @@ class StyleService extends Service
             $styleFee[] = $styleInfo = [
                 'peishi_fee' => $peishi_fee,
                 'peijian_fee' => $peijian_fee,
-                'weight_fee' => $weight_fee,
+                'gram_fee' => $gram_fee,
                 'basic_fee' => $basic_fee,
                 'xiangshi_fee' => $xiangshi_fee,
-                'face_work_fee' => $face_work_fee,
+                'technology_fee' => $technology_fee,
                 'fense_fee' => $fense_fee,
                 'penlasa_fee' => $penlasa_fee,
                 'bukou_fee' => $bukou_fee,
@@ -351,11 +348,10 @@ class StyleService extends Service
             }
             $styleFee = $styleFee[$k] ?? [];
             foreach ($styleFee as $type => $fee) {
-                $fee_type = $type + 1;
                 if ($fee > 0 && !empty($fee)) {
                     $feeM = new StyleFactoryFee();
                     $feeM->style_id = $styleM->id;
-                    $feeM->fee_type = $fee_type;
+                    $feeM->fee_type = $form->getFeeTypeMap($type);
                     $feeM->fee_price = $fee;
                     $feeM->creator_id = \Yii::$app->user->identity->getId();
                     $feeM->created_at = time();

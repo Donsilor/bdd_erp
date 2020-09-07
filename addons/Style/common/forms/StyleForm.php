@@ -2,6 +2,7 @@
 
 namespace addons\Style\common\forms;
 
+use addons\Style\common\enums\FactoryFeeEnum;
 use Yii;
 use addons\Style\common\models\Style;
 use common\helpers\StringHelper;
@@ -42,26 +43,26 @@ class StyleForm extends Style
     public function getTitleList()
     {
         $values = [
-            '#','#',
-            $this->getAttributeLabel('style_cate_id').$this->formatTitleId($this->getCateList()),
-            $this->getAttributeLabel('product_type_id').$this->formatTitleId($this->getProductList()),
-            $this->getAttributeLabel('style_channel_id').$this->formatTitleId($this->getChannelList()),
-            $this->getAttributeLabel('style_source_id').$this->formatTitleId($this->getSourceList()),
-            $this->getAttributeLabel('style_material').$this->formatTitleId($this->getMaterialList()),
-            $this->getAttributeLabel('style_sex').$this->formatTitleId($this->getSexList()),
-            $this->getAttributeLabel('is_made').$this->formatTitleId($this->getIsMadeList()),
-            $this->getAttributeLabel('is_gift').$this->formatTitleId($this->getIsGiftList()),
+            '#', '#',
+            $this->getAttributeLabel('style_cate_id') . $this->formatTitleId($this->getCateList()),
+            $this->getAttributeLabel('product_type_id') . $this->formatTitleId($this->getProductList()),
+            $this->getAttributeLabel('style_channel_id') . $this->formatTitleId($this->getChannelList()),
+            $this->getAttributeLabel('style_source_id') . $this->formatTitleId($this->getSourceList()),
+            $this->getAttributeLabel('style_material') . $this->formatTitleId($this->getMaterialList()),
+            $this->getAttributeLabel('style_sex') . $this->formatTitleId($this->getSexList()),
+            $this->getAttributeLabel('is_made') . $this->formatTitleId($this->getIsMadeList()),
+            $this->getAttributeLabel('is_gift') . $this->formatTitleId($this->getIsGiftList()),
             '#',
 
             $this->formatTitleId($this->getSupplierList()),
-            '#','#','#',
+            '#', '#', '#',
             $this->formatTitleId($this->getIsMadeList()),
 
             $this->formatTitleId($this->getSupplierList()),
-            '#','#','#',
+            '#', '#', '#',
             $this->formatTitleId($this->getIsMadeList()),
 
-            '#','#','#','#','#','#','#','#','#','#',
+            '#', '#', '#', '#', '#', '#', '#', '#', '#', '#',
         ];
         $fields = [
             '*款式名称', '款式编号', '款式分类', '产品线', '归属渠道', '款式来源', '*款式材质', '*款式性别', '是否支持定制', '是否赠品', '备注',
@@ -189,5 +190,29 @@ class StyleForm extends Style
     public function getSupplierList()
     {
         return Yii::$app->supplyService->supplier->getDropDown() ?? [];
+    }
+
+    /**
+     * 工费类型映射
+     * @param string $type
+     * @return string
+     */
+    public function getFeeTypeMap($type)
+    {
+        $feeType = [
+            'peishi_fee' => FactoryFeeEnum::PEISHI_GF,
+            'peijian_fee' => FactoryFeeEnum::PARTS_GF,
+            'gram_fee' => FactoryFeeEnum::GEAM_GF,
+            'basic_fee' => FactoryFeeEnum::BASIC_GF,
+            'xiangshi_fee' => FactoryFeeEnum::INLAID_GF,
+            'technology_fee' => FactoryFeeEnum::TECHNOLOGY_GF,
+            'fense_fee' => FactoryFeeEnum::FENSE_GF,
+            'penlasa_fee' => FactoryFeeEnum::PENLASHA_GF,
+            'bukou_fee' => FactoryFeeEnum::BUKOU_GF,
+            'templet_fee' => FactoryFeeEnum::TEMPLET_GF,
+            'cert_fee' => FactoryFeeEnum::CERT_GF,
+            'other_fee' => FactoryFeeEnum::OTHER_GF,
+        ];
+        return $feeType[$type] ?? "";
     }
 }

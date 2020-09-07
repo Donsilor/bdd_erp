@@ -12,7 +12,7 @@ class FactoryFeeEnum extends \common\enums\BaseEnum
     const INLAID_GF = 2;
     const PARTS_GF = 3;
     const TECHNOLOGY_GF = 4;
-    const WEIGHT_GF = 5;
+    const GEAM_GF = 5;
     const PEISHI_GF = 6;
     const FENSE_GF = 7;
     const PENLASHA_GF = 8;
@@ -23,7 +23,7 @@ class FactoryFeeEnum extends \common\enums\BaseEnum
     const OTHER_GF = 99;
     /**
      * @return array
-     * 
+     *
      */
     public static function getMap(): array
     {
@@ -32,7 +32,7 @@ class FactoryFeeEnum extends \common\enums\BaseEnum
             self::INLAID_GF => "镶石工费",
             self::PARTS_GF => "配件工费",
             self::TECHNOLOGY_GF => "工艺工费",
-            self::WEIGHT_GF => "克/工费",
+            self::GEAM_GF => "克/工费",
             self::PEISHI_GF => "配石工费",
             self::FENSE_GF => "分色费",
             self::PENLASHA_GF => "喷拉沙费",
@@ -43,6 +43,6 @@ class FactoryFeeEnum extends \common\enums\BaseEnum
             self::OTHER_GF => "其他费用",
 
         ];
-    }   
-    
+    }
+
 }
