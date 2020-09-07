@@ -57,10 +57,12 @@ $form = ActiveForm::begin([
             <div class="col-sm-4">
                 <?= $form->field($model, 'send_goods_sn')->textInput() ?>
             </div>
-            <div class="col-sm-4">
-                <?= $form->field($model, 'file')->fileInput() ?>
-                <?= Html::a("下载数据导入格式", ['bill-t/download'], ['style' => "text-decoration:underline;color:#3c8dbc"]) ?>
-            </div>
+            <?php if ($model->isNewRecord) { ?>
+                <div class="col-sm-4">
+                    <?= $form->field($model, 'file')->fileInput() ?>
+                    <?= Html::a("下载数据导入格式", ['bill-t/download'], ['style' => "text-decoration:underline;color:#3c8dbc"]) ?>
+                </div>
+            <?php } ?>
         </div>
         <?= $form->field($model, 'remark')->textArea(); ?>
     </div>

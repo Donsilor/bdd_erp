@@ -35,7 +35,7 @@ class WarehouseBillTForm extends WarehouseBill
             //'supplier_id' => '加工商',
             'creator_id' => '制单人',
             'created_at' => '制单时间',
-            'file' => '明细文件上传',
+            'file' => '上传明细',
         ]);
     }
 }
