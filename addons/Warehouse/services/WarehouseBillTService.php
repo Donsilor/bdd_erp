@@ -393,7 +393,7 @@ class WarehouseBillTService extends Service
                 if (empty($peiliao_way) && $peiliao_way === "") {
                     $flag = false;
                     $error[$i][] = "配料方式：[" . $peiliao_way . "]录入值有误";
-                    $peiliao_way = "";
+                    $peiliao_way = 0;
                 }
             }
             $suttle_weight = $form->formatValue($goods[16], 0) ?? 0;
@@ -434,7 +434,7 @@ class WarehouseBillTService extends Service
                 if (empty($main_pei_type) && $main_pei_type === "") {
                     $flag = false;
                     $error[$i][] = "主石配石方式：录入值有误";
-                    $main_pei_type = "";
+                    $main_pei_type = 0;
                 }
             } else {
                 $main_pei_type = $form->getPeiType($main_stone_sn, $main_stone_num, $main_stone_weight);
@@ -539,7 +539,7 @@ class WarehouseBillTService extends Service
                 if (empty($second_pei_type) && $second_pei_type === "") {
                     $flag = false;
                     $error[$i][] = "副石1配石方式：录入值有误";
-                    $second_pei_type = "";
+                    $second_pei_type = 0;
                 }
             } else {
                 $second_pei_type = $form->getPeiType($second_stone_sn1, $second_stone_num1, $second_stone_weight1);
@@ -640,7 +640,7 @@ class WarehouseBillTService extends Service
                 if (empty($second_pei_type2) && $second_pei_type2 === "") {
                     $flag = false;
                     $error[$i][] = "副石2配石方式：录入值有误";
-                    $second_pei_type2 = "";
+                    $second_pei_type2 = 0;
                 }
             } else {
                 $second_pei_type = $form->getPeiType($second_stone_sn2, $second_stone_num2, $second_stone_weight2);
@@ -669,7 +669,7 @@ class WarehouseBillTService extends Service
                 if (empty($parts_way) && $parts_way === "") {
                     $flag = false;
                     $error[$i][] = "配件方式：录入值有误";
-                    $parts_way = "";
+                    $parts_way = 0;
                 }
             }
             $parts_type = $goods[50] ?? "";
@@ -704,7 +704,7 @@ class WarehouseBillTService extends Service
             $gong_fee = $form->formatValue($goods[58], 0) ?? 0;
             $xiangqian_craft = $goods[59] ?? "";
             if (!empty($xiangqian_craft)) {
-                $attr_id = $form->getAttrIdByAttrValue($style_sn, $xiangqian_craft, AttrIdEnum::MATERIAL_TYPE);
+                $attr_id = $form->getAttrIdByAttrValue($style_sn, $xiangqian_craft, AttrIdEnum::XIANGQIAN_CRAFT);
                 if (empty($attr_id)) {
                     $flag = false;
                     $error[$i][] = "镶嵌工艺：[" . $xiangqian_craft . "]录入值有误";
