@@ -272,8 +272,8 @@ class WarehouseBillTService extends Service
                 }
             }
             if (!$flag) {
-                $flag = true;
-                continue;
+                //$flag = true;
+                //continue;
             }
             if (!empty($qiban_sn)) {
                 $style_image = $qiban->style_image;
