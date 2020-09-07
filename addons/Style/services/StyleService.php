@@ -313,7 +313,7 @@ class StyleService extends Service
         }
         if (!$flag) {
             //发生错误
-            $message = "*注：填写属性值有误可能为以下情况：①填写格式有误 ②该款式属性下无此属性值<hr><hr>";
+            $message = "";
             foreach ($error as $k => $v) {
                 $s = "【" . implode('】,【', $v) . '】';
                 $message .= '第' . ($k + 1) . '行：' . $s . '<hr>';
@@ -334,6 +334,9 @@ class StyleService extends Service
             $styleM->setAttributes($item);
             if (false === $styleM->save()) {
                 throw new \Exception($this->getError($styleM));
+            }
+            if(empty($styleM->style_sn)){//款号为空自动创建
+                Yii::$app->styleService->style->createStyleSn($styleM);
             }
             if (!empty($factoryList1[$k]) || !empty($factoryList2[$k])) {
                 $factoryList = array_merge($factoryList1[$k], $factoryList2[$k]);
