@@ -258,13 +258,13 @@ class BillTGoodsController extends BaseController
         if (!$attr_id) {
             return ResultHelper::json(422, '参数错误');
         }
-        $check = Yii::$app->request->get('check', null);
-        if ($check) {
-            return ResultHelper::json(200, '', ['url' => Url::to([$this->action->id, 'ids' => $ids, 'name' => $name, 'attr_id' => $attr_id])]);
-        }
         $style_arr = $model::find()->where(['id' => $id_arr])->select(['style_sn'])->asArray()->distinct('style_sn')->all();
         if (count($style_arr) != 1) {
             return ResultHelper::json(422, '请选择同款的商品进行操作');
+        }
+        $check = Yii::$app->request->get('check', null);
+        if ($check) {
+            return ResultHelper::json(200, '', ['url' => Url::to([$this->action->id, 'ids' => $ids, 'name' => $name, 'attr_id' => $attr_id])]);
         }
         $style_sn = $style_arr[0]['style_sn'] ?? "";
         $attr_arr = Yii::$app->styleService->styleAttribute->getAttrValueListByStyle($style_sn, $attr_id);
