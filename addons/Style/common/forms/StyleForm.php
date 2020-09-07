@@ -88,6 +88,24 @@ class StyleForm extends Style
     /**
      * {@inheritdoc}
      */
+    public function formatValue($value = null, $defaultValue = null)
+    {
+        if (!empty($value)) {
+            $result = array();
+            preg_match_all("/(?:\[)(.*)(?:\])/i", $value, $result);
+            if (isset($result[1][0]) && !empty($result[1][0])) {
+                return $result[1][0];
+            } else {
+                return $value;
+            }
+        } else {
+            return $defaultValue;
+        }
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function formatTitle($values)
     {
         $title = "";
