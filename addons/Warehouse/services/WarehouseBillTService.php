@@ -211,7 +211,6 @@ class WarehouseBillTService extends Service
             if (count($goods) != 74) {
                 throw new \Exception("模板格式不正确，请下载最新模板");
             }
-            $row = "第" . ($i + 1) . "行";
             $goods = $form->trimField($goods);
             $goods_id = $goods[0] ?? "";
             $auto_goods_id = 1;//是否自动货号 默认手填
@@ -228,15 +227,18 @@ class WarehouseBillTService extends Service
             if (!empty($qiban_sn)) {
                 $qiban = Qiban::findOne(['qiban_sn' => $qiban_sn]);
                 if (!$qiban) {
-                    throw new \Exception($row . "[起版号]不存在");
+                    $flag = false;
+                    $error[$i][] = "[起版号]不存在";
                 } elseif ($qiban->status != StatusEnum::ENABLED) {
-                    throw new \Exception($row . "[起版号]未启用");
+                    $flag  = false;
+                    $error[$i][] = "[起版号]未启用";
                 } elseif (empty($qiban->style_sn)) {
                     $qiban_type = QibanTypeEnum::NO_STYLE;
                 } else {
                     if (!empty($style_sn)
                         && $style_sn != $qiban->style_sn) {
-                        throw new \Exception($row . "有空起版[款号]和填写[款号]不一致");
+                        $flag  = false;
+                        $error[$i][] = "有空起版[款号]和填写[款号]不一致";
                     }
                     $qiban_type = QibanTypeEnum::HAVE_STYLE;
                 }
@@ -268,6 +270,9 @@ class WarehouseBillTService extends Service
                     $flag = false;
                     $error[$i][] = $qiban_error . "[款号]不是启用状态";
                 }
+            }
+            if(!$flag){
+                continue;
             }
             if (!empty($qiban_sn)) {
                 $style_image = $qiban->style_image;
