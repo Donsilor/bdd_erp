@@ -25,7 +25,6 @@ class JdController extends Controller
         Console::output("Update JD Sku BEGIN[".date('Y-m-d H:i:s')."]-------------------");
         $wareIds = OrderGoods::find()->select(['out_ware_id'])->distinct(true)->where(['<>','out_ware_id',''])->asArray()->all();
         $wareIds = $wareIds ? array_column($wareIds, 'out_ware_id') : [];
-        $wareIds = [14372741661];
         $group_list = $this->groupArray($wareIds,20);
         foreach ($group_list as $wareIds) {
             $wareIds = implode(",", $wareIds);
