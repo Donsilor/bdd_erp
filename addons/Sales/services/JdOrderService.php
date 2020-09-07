@@ -61,7 +61,7 @@ class JdOrderService extends Service
         $goods_attrs = [];
         $goods_specs = [];
         foreach ($ware->multiCateProps as $prop) {
-             $attr_list = \Yii::$app->jdSdk->getAttrList($prop->multiCategoryId);
+             $attr_list = \Yii::$app->jdSdk->getAttrList($ware->multiCategoryId);
              $attrName = JdAttrEnum::getAttrName($prop->attrId,$attr_list); 
              if($attrName && count($prop->attrValueAlias)==0) {
                  $goods_specs[$attrName] = implode(',',$prop->attrValueAlias);
