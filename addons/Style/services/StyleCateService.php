@@ -78,4 +78,19 @@ class StyleCateService extends Service
 
         return  ArrayHelper::itemsMergeGrpDropDown($models,0,'id','name','pid',$treeStat);
     }
+
+    /**
+     * 产品分类列表
+     */
+    public static function getList($pid = null, $key = 'id', $value = 'name')
+    {
+        $list = StyleCate::find()
+            ->where(['=', 'status', StatusEnum::ENABLED])
+            ->andFilterWhere(['<>', 'id', $pid])
+            ->select(['id', 'name'])
+            ->orderBy('sort asc')
+            ->asArray()
+            ->all();
+        return array_column($list, $value, $key);
+    }
 }

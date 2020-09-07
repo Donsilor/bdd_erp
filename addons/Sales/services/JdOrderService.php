@@ -61,19 +61,20 @@ class JdOrderService extends Service
         $goods_attrs = [];
         $goods_specs = [];
         foreach ($ware->multiCateProps as $prop) {
-             $attrName = JdAttrEnum::getAttrName($prop->attrId); 
-             if($attrName) {
+             $attr_list = \Yii::$app->jdSdk->getAttrList($ware->multiCategoryId);
+             $attrName = JdAttrEnum::getAttrName($prop->attrId,$attr_list); 
+             if($attrName && count($prop->attrValueAlias)==1) {
                  $goods_specs[$attrName] = implode(',',$prop->attrValueAlias);
              }
-             $attr_id = JdAttrEnum::getAttrId($prop->attrId);
+             /* $attr_id = JdAttrEnum::getAttrId($prop->attrId);
              if($attr_id) {
                  $attr_value_id = JdAttrEnum::getValueId($prop->attrId,$prop->attrValueAlias[0]);
                  if($attr_value_id) {
                      $goods_attrs[] = ['attr_id'=>$attr_id,'attr_value_id'=>$attr_value_id,'attr_value'=>''];
                  }
-             }
+             } */
              
-        } 
+        }     
         if(!empty($goods_specs)) {
             Yii::$app->salesService->order->syncOrderGoodsSpec($ware->wareId,$goods_specs);
         }

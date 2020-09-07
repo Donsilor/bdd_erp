@@ -2,6 +2,8 @@
 
 namespace addons\Warehouse\backend\controllers;
 
+use addons\Warehouse\common\forms\WarehouseBillForm;
+use addons\Warehouse\common\forms\WarehouseBillTGoodsForm;
 use Yii;
 use common\traits\Curd;
 use common\models\base\SearchModel;
@@ -22,6 +24,7 @@ use common\enums\AuditStatusEnum;
 use common\helpers\SnHelper;
 use common\helpers\Url;
 use yii\db\Exception;
+use yii\web\UploadedFile;
 
 /**
  * WarehouseBillController implements the CRUD actions for WarehouseBillController model.
@@ -96,7 +99,7 @@ class BillTController extends BaseController
     {
         $id = \Yii::$app->request->get('id');
         $model = $this->findModel($id);
-        $model = $model ?? new WarehouseBill();
+        $model = $model ?? new WarehouseBillTForm();
         // ajax 校验
         $this->activeFormValidate($model);
         if ($model->load(\Yii::$app->request->post())) {
@@ -110,8 +113,13 @@ class BillTController extends BaseController
                 if(false === $model->save()) {
                     throw new \Exception($this->getError($model));
                 }
-
                 if($isNewRecord){
+                    $gModel = new WarehouseBillTGoodsForm();
+                    $gModel->bill_id = $model->id;
+                    $gModel->file = UploadedFile::getInstance($model, 'file');
+                    if (!empty($gModel->file) && isset($gModel->file)) {
+                        \Yii::$app->warehouseService->billT->uploadGoods($gModel);
+                    }
                     $log_msg = "创建其他入库单{$model->bill_no}";
                 }else{
                     $log_msg = "修改其他入库单{$model->bill_no}";
@@ -241,6 +249,22 @@ class BillTController extends BaseController
         return $this->renderAjax($this->action->id, [
             'model' => $model,
         ]);
+    }
+
+    /**
+     *
+     * 文件格式导出
+     * @return mixed|string|\yii\web\Response
+     * @throws
+     */
+    public function actionDownloadCsv()
+    {
+        $model = new WarehouseBillTGoodsForm();
+        list($values, $fields) = $model->getTitleList();
+        header("Content-Disposition: attachment;filename=【".rand(100,999)."】入库单明细(".date('Ymd').").csv");
+        $content = implode($values, ",") . "\n" . implode($fields, ",") . "\n";
+        echo iconv("utf-8", "gbk", $content);
+        exit();
     }
 
     /**

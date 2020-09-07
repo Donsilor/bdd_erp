@@ -106,4 +106,19 @@ class ProductTypeService extends Service
             ->one();
         return $model['name'];
     }
+
+    /**
+     * 产品线列表
+     */
+    public static function getList($pid = null, $key = 'id', $value = 'name')
+    {
+        $list = ProductType::find()
+            ->where(['=', 'status', StatusEnum::ENABLED])
+            ->andFilterWhere(['<>', 'id', $pid])
+            ->select(['id', 'name'])
+            ->orderBy('sort asc')
+            ->asArray()
+            ->all();
+        return array_column($list, $value, $key);
+    }
 }

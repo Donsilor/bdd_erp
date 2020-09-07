@@ -14,7 +14,7 @@ class JdAttrEnum extends \common\enums\BaseEnum
     const DIA_CUT = 91084;
     const DIA_COLOR = 91082;
     const DIA_CATAT = 99873;    
-    const MATERIAL = 93655;
+    const MATERIAL = 91088;//93655
     const CERT_TYPE = 72374;    
     const SEDOND_STONE_WEIGHT = 99874;
     /**
@@ -129,10 +129,10 @@ class JdAttrEnum extends \common\enums\BaseEnum
      * @param unknown $funcName
      * @return NULL|mixed
      */
-    public static function getAttrName($key)
-    {
-        $map = self::getMap();
-        return $map[$key]['name'] ?? null;
+    public static function getAttrName($attr_id,$attr_list)
+    {  
+        $map = array_column($attr_list, 'name','id');
+        return $map[$attr_id] ?? null;
     }
     /**
      * 
