@@ -78,10 +78,7 @@ class JdController extends Controller
     private function syncOrders($order_list) {
         foreach ($order_list as $order) {
             try{
-                $order_id = \Yii::$app->salesService->jdOrder->syncOrder($order);
-                if($order_id && !$this->order_ids[$order_id]) {
-                    $this->order_ids[] = $order_id;
-                }
+                \Yii::$app->salesService->jdOrder->syncOrder($order);
                 Console::output($order->orderId." Success");
             }catch (\Exception $e) {
                 Console::output($order->orderId." Error:".$e->getMessage());
