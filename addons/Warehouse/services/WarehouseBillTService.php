@@ -442,7 +442,7 @@ class WarehouseBillTService extends Service
             $main_stone_price = $form->formatValue($goods[25], 0) ?? 0;
             $main_stone_shape = $goods[26] ?? "";
             if (!empty($main_stone_shape)) {
-                $attr_id = $form->getAttrIdByAttrValue($style_sn, $main_stone_shape, AttrIdEnum::MAIN_STONE_CLARITY);
+                $attr_id = $form->getAttrIdByAttrValue($style_sn, $main_stone_shape, AttrIdEnum::MAIN_STONE_SHAPE);
                 if (empty($attr_id)) {
                     $flag = false;
                     $error[$i][] = "主石形状：[" . $main_stone_shape . "]录入值有误";
