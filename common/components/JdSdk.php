@@ -13,6 +13,8 @@ use JD\request\NewWareAttributesQueryRequest;
 use JD\request\NewWareAttributeGroupsQueryRequest;
 use JD\request\SkuReadFindSkuByIdRequest;
 use JD\request\WareReadSearchWare4ValidRequest;
+use JD\request\VenderCategoryGetFullValidCategoryResultByVenderIdRequest;
+use JD\request\CategoryReadFindAttrsByCategoryIdUnlimitCateRequest;
 
 
 
@@ -53,9 +55,9 @@ class JdSdk extends Component
                 $this->client->accessToken = $this->accessToken;
             }
         }     
-        //echo $this->appKey.'\r\n';
-        //echo $this->appSecret.'\r\n';
-        //echo $this->accessToken.'\r\n';
+        echo $this->appKey.PHP_EOL;
+        echo $this->appSecret.PHP_EOL;
+        echo $this->accessToken.PHP_EOL;
         parent::init();
     }
     /**
@@ -146,7 +148,7 @@ class JdSdk extends Component
     public function getWareList($wareIds)
     {
         $request = new WareReadSearchWare4ValidRequest();
-        $option_fields = 'wareId,wareStatus,features,multiCateProps';
+        $option_fields = 'wareId,wareStatus,features,multiCateProps,multiCategoryId';
         $request->setField($option_fields); 
         $request->setWareStatusValue("1,2,4,8,513,513,514,516,520,1028");
         $request->setWareId($wareIds);
@@ -166,7 +168,7 @@ class JdSdk extends Component
     public function getSkuList($skuIds)
     {
         $request = new SkuReadSearchSkuListRequest();
-        $option_fields = 'skuId,skuName,status,categoryId,saleAttrs,features,multiCateProps';
+        $option_fields = 'skuId,skuName,status,categoryId,saleAttrs,features,multiCateProps,multiCategoryId';
         $request->setField($option_fields);
         $request->setSkuId($skuIds);
         $request->setSkuStatuValue("1,2,4");
@@ -178,5 +180,48 @@ class JdSdk extends Component
         }
         return $responce->jingdong_sku_read_searchSkuList_responce->page->data ?? [];
     }
+    /**
+     * 查询类目列表
+     */
+    public function getCateList()
+    {
+        $key = "JdCates:0";
+        if($data = \Yii::$app->cache->get($key)) {
+            return $data;
+        }
+        $request = new VenderCategoryGetFullValidCategoryResultByVenderIdRequest();
+        $responce = $this->client->execute($request, $this->accessToken);
+        if(isset($responce->error_response)){
+            throw new \Exception($responce->error_response->zh_desc);
+        }
+        $data = $responce->jingdong_vender_category_getFullValidCategoryResultByVenderId_responce->returnType->list ?? [];
+        if($data) {
+            \Yii::$app->cache->set($key,$data);
+        }
+        return $data;
+    }
+    /**
+     * 查询属性列表
+     * @param int $cate_id
+     */
+    public function getAttrList($cate_id) 
+    {
+        $key = "JdAttrs:".$cate_id;
+        if($data = \Yii::$app->cache->get($key)) {
+            return $data;
+        }
+        $request = new CategoryReadFindAttrsByCategoryIdUnlimitCateRequest();
+        $request->setField('id,name,attrValueList');
+        $responce = $this->client->execute($request, $this->accessToken);
+        if(isset($responce->error_response)){
+            throw new \Exception($responce->error_response->zh_desc);
+        }
+        $data = $responce->jingdong_category_read_findAttrsByCategoryIdUnlimitCate_responce->findattrsbycategoryidunlimitcate_result ?? [];
+        if($data) {
+            \Yii::$app->cache->set($key,$data);
+        }
+        return $data;
+    }
+    
     
 }
