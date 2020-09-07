@@ -117,16 +117,8 @@ class PurchaseGoodsController extends BaseController
             try{                
                 $trans = Yii::$app->trans->beginTransaction();
 
-                //【镶石费=镶石单价*总副石数量】
-                $second_stone_num = 0;
-                $atts = $model->getPostAttrs();
-                if(isset($atts[AttrIdEnum::SIDE_STONE1_NUM]) && !empty($atts[AttrIdEnum::SIDE_STONE1_NUM])){
-                    $second_stone_num += $atts[AttrIdEnum::SIDE_STONE1_NUM];
-                }
-                if(isset($atts[AttrIdEnum::SIDE_STONE2_NUM]) && !empty($atts[AttrIdEnum::SIDE_STONE2_NUM])){
-                    $second_stone_num += $atts[AttrIdEnum::SIDE_STONE2_NUM];
-                }
-                $model->xiangqian_fee = $model->xianqian_price * $second_stone_num;
+                //计算费用
+                $model->setComputeFee();
 
 
                 if(false === $model->save()){
@@ -300,17 +292,8 @@ class PurchaseGoodsController extends BaseController
                      $model->createAttrs();
                      $model->apply_info = json_encode($model->apply_info);
 
-
-                    //【镶石费=镶石单价*总副石数量】
-                    $second_stone_num = 0;
-                    $atts = $model->getPostAttrs();
-                    if(isset($atts[AttrIdEnum::SIDE_STONE1_NUM]) && !empty($atts[AttrIdEnum::SIDE_STONE1_NUM])){
-                        $second_stone_num += $atts[AttrIdEnum::SIDE_STONE1_NUM];
-                    }
-                    if(isset($atts[AttrIdEnum::SIDE_STONE2_NUM]) && !empty($atts[AttrIdEnum::SIDE_STONE2_NUM])){
-                        $second_stone_num += $atts[AttrIdEnum::SIDE_STONE2_NUM];
-                    }
-                    $model->xiangqian_fee = $model->xianqian_price * $second_stone_num;
+                    //计算费用
+                    $model->setComputeFee();
                 }
                 $model->is_apply = 0;
                 $model->save(false);

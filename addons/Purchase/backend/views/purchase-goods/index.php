@@ -423,9 +423,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             [
                                 'label'=>'主石成本',
                                 'value' => function($model){
-                                    $main_stone_price = $model->attr[AttrIdEnum::MAIN_STONE_PRICE] ?? 0;
-                                    $main_stone_weight = $model->attr[AttrIdEnum::MAIN_STONE_WEIGHT] ?? 0;
-                                    return round($main_stone_weight * $main_stone_price,2);
+                                    return $model->main_stone_cost;
                                 },
                                 'filter' => false,
                                 'headerOptions' => [],
@@ -497,10 +495,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             [
                                 'label'=>'副石1成本',
                                 'value' => function($model){
-                                    $side_stone1_price = $model->attr[AttrIdEnum::SIDE_STONE1_PRICE] ?? 0;
-                                    $side_stone1_weight = $model->attr[AttrIdEnum::SIDE_STONE1_WEIGHT] ?? 0;
-                                    $side_stone1_weight = $side_stone1_weight == ''? 0:$side_stone1_weight;
-                                    return round($side_stone1_weight * $side_stone1_price,2);
+                                    return $model->second_stone1_cost;
                                 },
                                 'filter' => false,
                                 'headerOptions' => [],
@@ -571,10 +566,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             [
                                 'label'=>'副石2成本',
                                 'value' => function($model){
-                                    $side_stone2_price = $model->attr[AttrIdEnum::SIDE_STONE2_PRICE] ?? 0;
-                                    $side_stone2_weight = $model->attr[AttrIdEnum::SIDE_STONE2_WEIGHT] ?? 0;
-                                    $side_stone2_weight = $side_stone2_weight == ''? 0:$side_stone2_weight;
-                                    return round($side_stone2_weight * $side_stone2_price,2);
+                                    return $model->second_stone2_cost;
                                 },
                                 'filter' => false,
                                 'headerOptions' => [],

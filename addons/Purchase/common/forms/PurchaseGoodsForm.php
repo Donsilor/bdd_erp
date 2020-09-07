@@ -2,9 +2,13 @@
 
 namespace addons\Purchase\common\forms;
 
+use addons\Style\common\enums\AttrIdEnum;
 use addons\Supply\common\enums\PeijianTypeEnum;
 use addons\Supply\common\enums\PeishiTypeEnum;
 use addons\Supply\common\enums\TempletTypeEnum;
+use addons\Warehouse\common\enums\PeiJianWayEnum;
+use addons\Warehouse\common\enums\PeiLiaoWayEnum;
+use addons\Warehouse\common\enums\PeiShiWayEnum;
 use Yii;
 use addons\Style\common\enums\QibanTypeEnum;
 use addons\Purchase\common\models\PurchaseGoods;
@@ -37,7 +41,7 @@ class PurchaseGoodsForm extends PurchaseGoods
     public function rules()
     {      
          $rules = [
-             [['peiliao_type','peishi_type', 'peijian_type', 'templet_type'], 'required'],
+            [['peiliao_type','peishi_type', 'peijian_type', 'templet_type'], 'required'],
             [['attr_require'], 'required','isEmpty'=>function($value){
                 if(!empty($value)) {
                     foreach ($value as $k=>$v) {
@@ -271,6 +275,92 @@ class PurchaseGoodsForm extends PurchaseGoods
             throw new \Exception("保存失败",500);
         }
         
-    }    
+    }
+
+
+    /***
+     * 计算各种费用
+     */
+    public function setComputeFee(){
+
+        //【镶石费=镶石单价*总副石数量】
+        $second_stone_num = 0;
+        $atts = $this->getPostAttrs();
+        if(isset($atts[AttrIdEnum::SIDE_STONE1_NUM]) && !empty($atts[AttrIdEnum::SIDE_STONE1_NUM])){
+            $second_stone_num += $atts[AttrIdEnum::SIDE_STONE1_NUM];
+        }
+        if(isset($atts[AttrIdEnum::SIDE_STONE2_NUM]) && !empty($atts[AttrIdEnum::SIDE_STONE2_NUM])){
+            $second_stone_num += $atts[AttrIdEnum::SIDE_STONE2_NUM];
+        }
+        $this->xiangqian_fee = $this->xianqian_price * $second_stone_num;
+
+        //含耗重=净重*（1+损耗）
+        $this->gross_weight = $this->suttle_weight * (1 + $this->gold_loss);
+
+        //金料成本=金价*净重*（1+损耗）
+        $this->gold_amount = $this->gross_weight * $this->gold_price;
+
+        //【配件额=配件重*配件金价】
+        $this->parts_amount = $this->parts_weight * $this->parts_price;
+
+        //工费【需要自动计算】=克工费*含耗重
+        $this->gong_fee = $this->gross_weight * $this->ke_gong_fee;
+
+        //配石费 = 配石工费 * 配石重量
+        $this->peishi_amount = $this->peishi_weight * $this->peishi_fee;
+
+        //总工费【自动计算】=所有工费【基本工费+配件工费+配石工费+镶石费+表面工艺费+分色费+喷砂费+补口工费+版费 + 证书费 + 其他费用】
+        $this->total_gong_fee = $this->gong_fee + $this->parts_fee + $this->peishi_amount + $this->xiangqian_fee + $this->biaomiangongyi_fee
+            + $this->fense_fee + $this->penrasa_fee + $this->bukou_fee + $this->edition_fee + $this->cert_fee + $this->other_fee;
+
+
+
+        //主石成本 = 主石重 * 主石买入单价
+        $main_stone_price = $atts[AttrIdEnum::MAIN_STONE_PRICE] ?? 0;
+        $main_stone_weight = $atts[AttrIdEnum::MAIN_STONE_WEIGHT] ?? 0;
+        $main_stone_weight = $main_stone_weight == ''? 0:$main_stone_weight;
+        $this->main_stone_cost = round($main_stone_weight * $main_stone_price,2);
+
+        //副石1成本 = 副石1重 * 副石1买入单价
+        $side_stone1_price = $atts[AttrIdEnum::SIDE_STONE1_PRICE] ?? 0;
+        $side_stone1_weight = $atts[AttrIdEnum::SIDE_STONE1_WEIGHT] ?? 0;
+        $side_stone1_weight = $side_stone1_weight == ''? 0:$side_stone1_weight;
+        $this->second_stone1_cost = round($side_stone1_weight * $side_stone1_price,2);
+
+        //副石2成本 = 副石2重 * 副石2买入单价
+        $side_stone2_price = $atts[AttrIdEnum::SIDE_STONE2_PRICE] ?? 0;
+        $side_stone2_weight = $atts[AttrIdEnum::SIDE_STONE2_WEIGHT] ?? 0;
+        $side_stone2_weight = $side_stone2_weight == ''? 0:$side_stone2_weight;
+        $this->second_stone2_cost = round($side_stone2_weight * $side_stone2_price,2);
+
+        //公司成本 = 金料成本 + 主石成本 + 副石1成本 + 副石2成本 + 配件额 + 总工费
+        $this->cost_price = $this->gold_amount + $this->main_stone_cost + $this->second_stone1_cost +
+            $this->second_stone2_cost + $this->parts_amount + $this->total_gong_fee ;
+
+        $this->company_total_price = $this->cost_price * $this->goods_num;
+
+        //工厂成本
+        $this->factory_cost_price = 0;
+        if($this->main_peishi_way == PeiShiWayEnum::FACTORY){
+            $this->factory_cost_price += $this->main_stone_cost;
+        }
+        if($this->second_peishi_way1 == PeiShiWayEnum::FACTORY){
+            $this->factory_cost_price += $this->second_stone1_cost;
+        }
+        if($this->second_peishi_way2 == PeiShiWayEnum::FACTORY){
+            $this->factory_cost_price += $this->second_stone2_cost;
+        }
+        if($this->peiliao_way == PeiLiaoWayEnum::FACTORY){
+            $this->factory_cost_price += $this->gold_amount;
+        }
+        if($this->peijian_way == PeiJianWayEnum::FACTORY){
+            $this->factory_cost_price += $this->parts_amount;
+        }
+
+        $this->factory_total_price = $this->factory_cost_price * $this->goods_num;
+
+
+
+    }
    
 }

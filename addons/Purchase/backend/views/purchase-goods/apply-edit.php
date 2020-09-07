@@ -45,9 +45,9 @@ $this->params['breadcrumbs'][] = $this->title;
         			 <div class="col-lg-4">
         			 	<?= $form->field($model, 'goods_num')->textInput() ?>
         			 </div>
-        			 <div class="col-lg-4">
-        			 	<?= $form->field($model, 'cost_price')->textInput() ?>
-        			 </div> 
+                     <div class="col-lg-4">
+                         <?= $form->field($model, 'templet_type')->dropDownList(\addons\Supply\common\enums\TempletTypeEnum::getMap(), ['prompt' => '请选择'])?>
+                     </div>
     			 </div>
     			 <div class="row">
     			     <div class="col-lg-4">
@@ -60,11 +60,6 @@ $this->params['breadcrumbs'][] = $this->title;
                          <?= $form->field($model, 'peijian_type')->dropDownList(\addons\Supply\common\enums\PeijianTypeEnum::getMap(), ['prompt' => '请选择'])?>
                      </div>
             	 </div>
-                <div class="row">
-                    <div class="col-lg-4">
-                        <?= $form->field($model, 'templet_type')->dropDownList(\addons\Supply\common\enums\TempletTypeEnum::getMap(), ['prompt' => '请选择'])?>
-                    </div>
-                </div>
     			 <div style="margin-bottom:20px;">
                         <h3 class="box-title"> 属性信息</h3>
                  </div>
@@ -185,7 +180,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     </div>
 
                     <div class="col-lg-4">
-                        <?= $form->field($model, 'peishi_amount')->textInput() ?>
+                        <?= $form->field($model, 'peishi_weight')->textInput() ?>
                     </div>
                     <div class="col-lg-4">
                         <?= $form->field($model, 'jiagong_fee')->textInput() ?>
@@ -196,21 +191,14 @@ $this->params['breadcrumbs'][] = $this->title;
                     <div class="col-lg-4">
                         <?= $form->field($model, 'factory_mo')->textInput() ?>
                     </div>
-                    <div class="col-lg-4">
-                        <?= $form->field($model, 'factory_cost_price')->textInput() ?>
-                    </div>
 
                     <div class="col-lg-4">
                         <?= $form->field($model, 'ke_gong_fee')->textInput() ?>
                     </div>
-                </div>
-
-                <div class="row">
                     <div class="col-lg-4">
                         <?= $form->field($model, 'xianqian_price')->textInput() ?>
                     </div>
                 </div>
-
                 <div class="row">
                     <div class="col-lg-4">
                         <?= $form->field($model, 'biaomiangongyi_fee')->textInput() ?>
@@ -248,18 +236,10 @@ $this->params['breadcrumbs'][] = $this->title;
                 </div>
                 <div class="row">
                     <div class="col-lg-4">
+                        <?= $form->field($model, 'other_fee')->textarea() ?>
+                    </div>
+                    <div class="col-lg-4">
                         <?= $form->field($model, 'unit_cost_price')->textInput() ?>
-                    </div>
-                    <div class="col-lg-4">
-                        <?= $form->field($model, 'factory_total_price')->textInput() ?>
-                    </div>
-                    <div class="col-lg-4">
-                        <?= $form->field($model, 'company_total_price')->textInput() ?>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-lg-4">
-                        <?= $form->field($model, 'xianqian_price')->textInput() ?>
                     </div>
                 </div>
 
