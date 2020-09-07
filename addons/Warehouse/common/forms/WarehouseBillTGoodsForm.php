@@ -90,6 +90,95 @@ class WarehouseBillTGoodsForm extends WarehouseBillGoodsL
     /**
      * {@inheritdoc}
      */
+    public function getFooterValues($name = null, $total = [], $defaultValue = 0)
+    {
+        $value = $total[$name] ?? $defaultValue;
+        $footer_value = $this->getAttributeLabel($name)."<span style='font-size:16px; color: red;'>[$value]</span>";
+        return $footer_value;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function goodsSummary($bill_id = null, $params = null)
+    {
+        $total = [
+            'goods_num' => 0,
+            'suttle_weight' => 0,
+            'gold_weight' => 0,
+            'lncl_loss_weight' => 0,
+            'gold_amount' => 0,
+            'main_stone_num' => 0,
+            'main_stone_weight' => 0,
+            'main_stone_amount' => 0,
+            'second_stone_num1' => 0,
+            'second_stone_weight1' => 0,
+            'second_stone_amount1' => 0,
+            'second_stone_num2' => 0,
+            'second_stone_weight2' => 0,
+            'second_stone_amount2' => 0,
+            'peishi_weight' => 0,
+            'peishi_fee' => 0,
+            'parts_num' => 0,
+            'parts_gold_weight' => 0,
+            'parts_amount' => 0,
+            'parts_fee' => 0,
+            'basic_gong_fee' => 0,
+            'xianqian_fee' => 0,
+            'biaomiangongyi_fee' => 0,
+            'fense_fee' => 0,
+            'penlasha_fee' => 0,
+            'bukou_fee' => 0,
+            'templet_fee' => 0,
+            'cert_fee' => 0,
+            'other_fee' => 0,
+            'factory_cost' => 0,
+            'cost_price' => 0,
+            'market_price' => 0,
+        ];
+        $goods = $this->find()->select(array_keys($total))->where(['bill_id' => $bill_id])->all();
+        if (!empty($goods)) {
+            foreach ($goods as $good) {
+                $total['goods_num'] = bcadd($total['goods_num'], $good->goods_num);
+                $total['suttle_weight'] = bcadd($total['suttle_weight'], $good->suttle_weight, 3);
+                $total['gold_weight'] = bcadd($total['gold_weight'], $good->gold_weight, 3);
+                $total['lncl_loss_weight'] = bcadd($total['lncl_loss_weight'], $good->lncl_loss_weight, 3);
+                $total['gold_amount'] = bcadd($total['gold_amount'], $good->gold_amount, 2);
+                $total['main_stone_num'] = bcadd($total['main_stone_num'], $good->main_stone_num);
+                $total['main_stone_weight'] = bcadd($total['main_stone_weight'], $good->main_stone_weight, 3);
+                $total['main_stone_amount'] = bcadd($total['main_stone_amount'], $good->main_stone_amount, 2);
+                $total['second_stone_num1'] = bcadd($total['second_stone_num1'], $good->second_stone_num1);
+                $total['second_stone_weight1'] = bcadd($total['second_stone_weight1'], $good->second_stone_weight1, 3);
+                $total['second_stone_amount1'] = bcadd($total['second_stone_amount1'], $good->second_stone_amount1, 2);
+                $total['second_stone_num2'] = bcadd($total['second_stone_num2'], $good->second_stone_num2);
+                $total['second_stone_weight2'] = bcadd($total['second_stone_weight2'], $good->second_stone_weight2, 3);
+                $total['second_stone_amount2'] = bcadd($total['second_stone_amount2'], $good->second_stone_amount2, 2);
+                $total['peishi_weight'] = bcadd($total['peishi_weight'], $good->peishi_weight, 3);
+                $total['peishi_fee'] = bcadd($total['peishi_fee'], $good->peishi_fee, 2);
+                $total['parts_num'] = bcadd($total['parts_num'], $good->parts_num);
+                $total['parts_gold_weight'] = bcadd($total['parts_gold_weight'], $good->parts_gold_weight, 3);
+                $total['parts_amount'] = bcadd($total['parts_amount'], $good->parts_amount, 2);
+                $total['parts_fee'] = bcadd($total['parts_fee'], $good->parts_fee, 2);
+                $total['basic_gong_fee'] = bcadd($total['basic_gong_fee'], $good->basic_gong_fee, 2);
+                $total['xianqian_fee'] = bcadd($total['xianqian_fee'], $good->xianqian_fee, 2);
+                $total['biaomiangongyi_fee'] = bcadd($total['biaomiangongyi_fee'], $good->biaomiangongyi_fee, 2);
+                $total['fense_fee'] = bcadd($total['fense_fee'], $good->fense_fee, 2);
+                $total['penlasha_fee'] = bcadd($total['penlasha_fee'], $good->penlasha_fee, 2);
+                $total['bukou_fee'] = bcadd($total['bukou_fee'], $good->bukou_fee, 2);
+                $total['templet_fee'] = bcadd($total['templet_fee'], $good->templet_fee, 2);
+                $total['cert_fee'] = bcadd($total['cert_fee'], $good->cert_fee, 2);
+                $total['other_fee'] = bcadd($total['other_fee'], $good->other_fee, 2);
+                $total['factory_cost'] = bcadd($total['factory_cost'], $good->factory_cost, 2);
+                $total['cost_price'] = bcadd($total['cost_price'], $good->cost_price, 2);
+                $total['market_price'] = bcadd($total['market_price'], $good->market_price, 2);
+            }
+        }
+        return $total;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function getTitleList()
     {
         $values = [
@@ -190,13 +279,14 @@ class WarehouseBillTGoodsForm extends WarehouseBillGoodsL
      */
     public function getAttrIdByAttrValue($style_sn, $value, $attr_id)
     {
-        if (!empty($style_sn)) {
-            $valueList = $this->getAttrValueListByStyle($style_sn, $attr_id);
-        } else {
+//        if (!empty($style_sn)) {
+//            $valueList = $this->getAttrValueListByStyle($style_sn, $attr_id);
+//        } else {
             $valueList = \Yii::$app->attr->valueMap($attr_id);
-        }
+//        }
         $valueList = array_flip($valueList);
-        return (string)$valueList[$value] ?? "";
+        $attrId = isset($valueList[$value]) ? $valueList[$value] : "";
+        return (string)$attrId ?? "";
     }
 
     /**

@@ -34,14 +34,14 @@ $this->params['breadcrumbs'][] = $this->title;
                              $disabled = ['disabled'=>'disabled'];
                              if($model->qiban_type == QibanTypeEnum::NON_VERSION ){
                                  //非起版
-                                 $is_exeist = Yii::$app->styleService->style->isExist($model->goods_sn);
-                                 if(!$is_exeist){
+                                 $is_exist = Yii::$app->styleService->style->isExist($model->goods_sn);
+                                 if(!$is_exist){
                                      $disabled = [];
                                  }
                              }else{
                                  //起版
-                                 $is_exeist = Yii::$app->styleService->qiban->isExist($model->goods_sn);
-                                 if(!$is_exeist){
+                                 $is_exist = Yii::$app->styleService->qiban->isExist($model->goods_sn);
+                                 if(!$is_exist){
                                      $disabled = [];
                                  }
                              }
@@ -87,8 +87,14 @@ $this->params['breadcrumbs'][] = $this->title;
                      </div>
                      <div class="row">
                          <div class="col-lg-4">
-                             <?= $form->field($model, 'remark')->textarea() ?>
+                             <?= $form->field($model, 'remark')->textarea(['readonly'=>false,'style'=>'height:80px']) ?>
                          </div>
+                         <?php if($model->getGoodsSpec()) {?>
+                         <div class="col-lg-4">
+                             <?php $model->goods_spec = str_replace("<br/>",PHP_EOL,$model->getGoodsSpec());?>
+                             <?= $form->field($model, 'goods_spec')->textarea(['readonly'=>true,'style'=>'height:80px']) ?>
+                         </div>
+                         <?php }?>
                      </div>
 
                      <?php if($model->is_stock == \addons\Sales\common\enums\IsStockEnum::NO){ ?>

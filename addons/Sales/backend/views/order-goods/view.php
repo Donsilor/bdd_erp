@@ -96,7 +96,10 @@ $this->params['breadcrumbs'][] = $this->title;
                                     <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('is_inlay') ?>：</td>
                                     <td><?= \addons\Style\common\enums\InlayEnum::getValue($model->is_inlay) ?></td>
                                 </tr>
-
+								<tr>
+                                    <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('goods_spec') ?>：</td>
+                                    <td><?= $model->getGoodsSpec() ?></td>
+                                </tr>
 
                             </table>
                         </div>

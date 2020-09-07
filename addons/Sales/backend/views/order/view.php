@@ -104,13 +104,21 @@ $this->params['breadcrumbs'][] = $this->title;
                             <td></td>
                         </tr>
                         <tr>
+                            <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('customer_message') ?>：</td>
+                            <td colspan="5"><?= $model->customer_message ?></td>
+                        </tr>
+                        <tr>
+                            <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('store_remark') ?>：</td>
+                            <td colspan="5"><?= $model->store_remark ?></td>
+                        </tr>
+                        <tr>
                             <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('pay_remark') ?>：</td>
                             <td colspan="5"><?= $model->pay_remark ?></td>
                         </tr>
                         <tr>
                             <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('remark') ?>：</td>
                             <td colspan="5"><?= $model->remark ?></td>
-                        </tr>
+                        </tr>                        
                     </table>
                 </div>
                 <div class="box-footer text-center">
@@ -273,6 +281,13 @@ $this->params['breadcrumbs'][] = $this->title;
                                 },
                                 'format' => 'raw',
                             ],
+                            [
+                                'attribute' => 'goods_spec',
+                                'value' => function ($model) {
+                                    return $model->getGoodsSpec();
+                                },
+                                'format' => 'raw',
+                           ],
                             [
                                 'attribute' => 'goods_id',
                                 'value' => 'goods_id',
@@ -511,8 +526,23 @@ $this->params['breadcrumbs'][] = $this->title;
                                 },
 
                             ],
-                            'remark',
                             [
+                                    'label' => '外部商品SKU/编号',
+                                    'value' => function ($model) {
+                                        $str = '';
+                                        if($model->out_sku_id) {
+                                            $str.= '商品SKU：'.$model->out_sku_id."<br/>";
+                                        }
+                                        if($model->out_sku_id) {
+                                            $str.= '商品编号：'.$model->out_ware_id."<br/>";
+                                        }
+                                        return $str;
+                                    },
+                                    'format' => 'raw',
+                                
+                            ],
+                            'remark',
+                             [
                                 'class' => 'yii\grid\CheckboxColumn',
                                 'name' => 'id',  //设置每行数据的复选框属性
                                 'headerOptions' => ['width' => '30'],
@@ -534,12 +564,11 @@ $this->params['breadcrumbs'][] = $this->title;
                                                 return Html::edit(['order-goods/edit-diamond', 'id' => $model->id], '编辑', ['class' => 'btn btn-primary btn-xs openIframe', 'data-width' => '90%', 'data-height' => '90%', 'data-offset' => '20px']);
                                             } elseif ($model->is_gift == \addons\Sales\common\enums\IsGiftEnum::YES) {
                                                 return Html::edit(['order-goods/edit-gift', 'id' => $model->id], '编辑', ['class' => 'btn btn-primary btn-xs openIframe', 'data-width' => '90%', 'data-height' => '90%', 'data-offset' => '20px']);
-                                            } elseif ($model->is_stock == IsStockEnum::NO) {
-                                                return Html::edit(['order-goods/edit', 'id' => $model->id], '编辑', ['class' => 'btn btn-primary btn-xs openIframe', 'data-width' => '90%', 'data-height' => '90%', 'data-offset' => '20px']);
-                                            } else {
+                                            }elseif ($model->is_stock == IsStockEnum::YES && $model->goods_id) {
                                                 return Html::edit(['order-goods/edit-stock', 'id' => $model->id], '编辑', ['class' => 'btn btn-primary btn-xs openIframe', 'data-width' => '90%', 'data-height' => '90%', 'data-offset' => '20px']);
+                                            }else {
+                                                return Html::edit(['order-goods/edit', 'id' => $model->id], '编辑', ['class' => 'btn btn-primary btn-xs openIframe', 'data-width' => '90%', 'data-height' => '90%', 'data-offset' => '20px']);
                                             }
-
                                         }
                                     },
                                     'stock' => function ($url, $model, $key) use ($order) {

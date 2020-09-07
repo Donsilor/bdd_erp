@@ -23,13 +23,25 @@ class JdController extends Controller
     public function actionUpdateJdWare($time_val = 1, $time_type = 1, $order_type = 1, $start_time = 0)
     {
         Console::output("Update JD Sku BEGIN[".date('Y-m-d H:i:s')."]-------------------");
-        $ware_list = OrderGoods::find()->select(['out_ware_id'])->distinct(true)->where(['<>','out_ware_id',''])->asArray()->all();
-        $ware_list = $ware_list ? array_column($ware_list, 'out_ware_id') : [];
-        $group_list = $this->groupArray($ware_list,40);
+        $wareIds = OrderGoods::find()->select(['out_ware_id'])->distinct(true)->where(['<>','out_ware_id',''])->asArray()->all();
+        $wareIds = $wareIds ? array_column($wareIds, 'out_ware_id') : [];
+        $group_list = $this->groupArray($wareIds,20);
         foreach ($group_list as $wareIds) {
             $wareIds = implode(",", $wareIds);
-            $wareList = \Yii::$app->jdSdk->getWareList($wareIds);
-            print_r($wareList);
+            try{
+                $wareList = \Yii::$app->jdSdk->getWareList($wareIds);
+            }catch (\Exception $e) {
+                Console::output("error=>".$e->getMessage());
+                continue;
+            }
+            foreach ($wareList as $ware) {
+                try{
+                    \Yii::$app->salesService->jdOrder->syncOrderGoods($ware);
+                    Console::output($ware->wareId." Success");
+                }catch (\Exception $e) {
+                    Console::output("{$ware->wareId}: error=>".$e->getMessage());
+                }
+            }
         }
         Console::output("Update JD Sku END[".date('Y-m-d H:i:s')."]-------------------");
     }
@@ -43,7 +55,7 @@ class JdController extends Controller
         if(empty($array) || !is_array($array)) {
             return [];
         }
-        $per    = ceil(count($array)/30);
+        $per    = ceil(count($array)/$group_size);
         $group = [];
         foreach ($array as $key=>$vo) {
             $group[$key%$per][] = $vo;

@@ -95,7 +95,7 @@ class BddOrderService extends Service
         $customerInfo = $this->getErpCustomerData($order);
         try{
             $trans = Yii::$app->trans->beginTransaction();
-            $erpOrder = Yii::$app->salesService->order->createSyncOrder($orderInfo, $accountInfo, $goodsList, $customerInfo, $addressInfo);
+            $erpOrder = Yii::$app->salesService->order->syncOrder($orderInfo, $accountInfo, $goodsList, $customerInfo, $addressInfo);
             OrderSync::updateAll(['sync_created'=>1,'sync_created_time'=>time()],['order_id'=>$order_id,'sync_platform'=>SyncPlatformEnum::SYNC_EPR]);
             $trans->commit();
         }catch (\Exception $e){

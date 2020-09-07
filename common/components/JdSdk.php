@@ -94,7 +94,7 @@ class JdSdk extends Component
         //1）WAIT_SELLER_STOCK_OUT 等待出库 2）WAIT_GOODS_RECEIVE_CONFIRM 等待确认收货   5）FINISHED_L 完成 
         $order_state = 'WAIT_SELLER_STOCK_OUT,WAIT_GOODS_RECEIVE_CONFIRM,FINISHED_L';
         $request->setOrderState($order_state);
-        $option_fields = 'orderId,orderTotalPrice,orderSellerPrice,orderPayment,freightPrice,sellerDiscount,orderState,deliveryType,invoiceEasyInfo,invoiceInfo,invoiceCode,salesPin,open_id_seller,orderRemark,orderStartTime,orderEndTime,consigneeInfo,itemInfoList,orderExt,paymentConfirmTime,logisticsId,waybill,venderRemark,vatInfo,couponDetailList';
+        $option_fields = 'orderId,orderTotalPrice,orderSellerPrice,orderPayment,freightPrice,sellerDiscount,orderState,deliveryType,invoiceEasyInfo,invoiceInfo,invoiceCode,salesPin,open_id_buyer,open_id_seller,orderRemark,orderStartTime,orderEndTime,consigneeInfo,itemInfoList,orderExt,paymentConfirmTime,logisticsId,waybill,venderRemark,vatInfo,couponDetailList';
         $request->setOptionalFields($option_fields);
         $request->setPage($page);
         $request->setPageSize(20);
@@ -149,13 +149,14 @@ class JdSdk extends Component
         $option_fields = 'wareId,wareStatus,features,multiCateProps';
         $request->setField($option_fields); 
         $request->setWareStatusValue("1,2,4,8,513,513,514,516,520,1028");
+        $request->setWareId($wareIds);
         $request->setPageNo(1);
-        $request->setPageSize(30);
+        $request->setPageSize(20);
         $responce = $this->client->execute($request, $this->accessToken);
         if(isset($responce->error_response)){
             throw new \Exception($responce->error_response->zh_desc);
         }
-        return $responce->jingdong_ware_read_searchWare4Valid_response->page->data ?? [];      
+        return $responce->jingdong_ware_read_searchWare4Valid_responce->page->data ?? [];      
     }
     
     /**

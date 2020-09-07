@@ -147,7 +147,7 @@ class OrderService extends Service
      * @throws \Exception
      * @return \addons\Sales\common\models\Order
      */
-    public function createSyncOrder($orderInfo, $accountInfo, $goodsList, $customerInfo, $addressInfo, $invoiceInfo = [])
+    public function syncOrder($orderInfo, $accountInfo, $goodsList, $customerInfo, $addressInfo, $invoiceInfo = [])
     {
         if(empty($orderInfo['out_trade_no'])) {
             throw new \Exception("orderInfo->out_trade_no 不能为空");
@@ -378,77 +378,53 @@ class OrderService extends Service
         return $apply;
     }
     /**
-     * 同步订单商品生成布产单
-     * @param int $order_id
-     * @param array $detail_ids
-     * @throws \Exception
+     * 同步商品属性
+     * @param unknown $wareId
+     * @param unknown $goods_spec
+     * @return boolean
      */
-    /* public function syncProduce($order_id, $detail_ids = null)
+    public function syncOrderGoodsAttr($wareId, $goods_attrs,$order_ids = [])
     {
-        $order = Order::find()->where(['id'=>$order_id])->one();
-        if($order->total_num <= 0 ){
-            throw new \Exception('订单没有明细');
+        $orderGoodsList = OrderGoods::find()->select(['id'])->where(['out_ware_id'=>$wareId])->andFilterWhere(['in','order_id',$order_ids])->limit(1000)->all();
+        if(empty($orderGoodsList)) {
+             throw new \Exception("[{$wareId}] 查询不到记录");
         }
-        if($order->audit_status != AuditStatusEnum::PASS){
-            throw new \Exception('订单没有审核');
-        }
-        $query = OrderGoods::find()->where(['order_id'=>$order_id,'is_stock'=>IsStockEnum::NO]);
-        if(!empty($detail_ids)) {
-            $query->andWhere(['id'=>$detail_ids]);
-        }
-        $models = $query->all();
-        foreach ($models as $model){
-            $buchan_status = BuChanEnum::INITIALIZATION;
-            $goods = [
-                    'goods_name' =>$model->goods_name,
-                    'goods_num' =>$model->goods_num,
-                    'order_detail_id'=>$model->order_id,
-                    'order_detail_id' => $model->id,
-                    'order_sn'=>$order->order_sn,
-                    'from_type' => FromTypeEnum::ORDER,
-                    'style_sn' => $model->style_sn,
-                    //'peiliao_type'=>$model->peiliao_type,
-                    //'peishi_type'=>$model->peishi_type,
-                    //'peishi_status'=>$peishi_status,
-                    //'peiliao_status'=>$peiliao_status,
-                    'bc_status' => $buchan_status,
-                    'qiban_sn' => $model->qiban_sn,
-                    'qiban_type'=>$model->qiban_type,
-                    'jintuo_type'=>$model->jintuo_type,
-                    'style_sex' =>$model->style_sex,
-                    'is_inlay' =>$model->is_inlay,
-                    'product_type_id'=>$model->product_type_id,
-                    'style_cate_id'=>$model->style_cate_id,
-                    //'supplier_id'=>$order->supplier_id,
-                    //'follower_id'=>$order->follower_id,
-                    'factory_mo'=>$model->factory_mo,
-                    //'factory_distribute_time' => time()
-            ];
-            if($model->produce_id && $model->produce){
-                if($model->produce->bc_status > BuChanEnum::IN_PRODUCTION) {
-                    //生产中之后的流程，禁止同步
-                    continue;
-                }else {
-                    unset($goods['bc_status']);
-                    $goods['id'] = $model->produce->id;
-                    //如果是配料中的，不同步配料类型和配料状态
-                    if($model->produce->bc_status == BuChanEnum::IN_PEILIAO) {
-                        unset($goods['peiliao_type']);
-                        unset($goods['peishi_status']);
-                        unset($goods['peiliao_status']);
-                    }
+        foreach ($orderGoodsList as $orderGoods) {
+            foreach ($goods_attrs ??[] as $goods_attr) {
+                if(empty($goods_attr['attr_id'])) {
+                    throw new \Exception("同步商品属性失败：attr_id 不能为空");
+                }
+                $model = OrderGoodsAttribute::find()->where(['id'=>$orderGoods->id,'attr_id'=>$goods_attr['attr_id']])->one();
+                if(!$model){
+                    $model = new OrderGoodsAttribute(); 
+                }
+                $model->attributes = $goods_attr;
+                if($model->attr_value_id) {
+                    $model->attr_value = Yii::$app->attr->valueName($model->attr_value_id);
+                }
+                $model->id = $orderGoods->id;
+                if(false === $model->save()) {
+                    throw new \Exception("同步商品属性失败：".$this->getError($model));
                 }
             }
-            $goods_attrs = OrderGoodsAttribute::find()->where(['id'=>$model->id])->asArray()->all();
-            $produce = Yii::$app->supplyService->produce->createProduce($goods ,$goods_attrs);
-            if($produce) {
-                $model->produce_id = $produce->id;
-            }
-            if(false === $model->save()) {
-                throw new \Exception($this->getError($model),422);
-            }
         }
-    } */
+        
+    }
+    /**
+     * 同步商品规格
+     * @param unknown $wareId
+     * @param unknown $goods_spec
+     * @return boolean
+     */
+    public function syncOrderGoodsSpec($wareId,$goods_spec) 
+    {
+        if(is_array($goods_spec)) {
+            $goods_spec = json_encode($goods_spec);
+        }else{
+            return false;
+        }
+        return OrderGoods::updateAll(['goods_spec'=>$goods_spec],['out_ware_id'=>$wareId]);
+    }
     
     /**
      * 创建订单编号

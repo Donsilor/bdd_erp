@@ -2,6 +2,8 @@
 
 namespace addons\Sales\common\enums;
 
+use addons\Style\common\enums\AttrIdEnum;
+
 /**
  * 京东属性 枚举
  * @package common\enums
@@ -21,54 +23,54 @@ class JdAttrEnum extends \common\enums\BaseEnum
     public static function getMap(): array
     {
         return [
-                "91083"=>[
+                self::DIA_ClARITY =>[
                         'name'=>'钻石净度',
-                        'idMap' =>[ 91083=>0 ],
+                        'idMap' =>[ self::DIA_ClARITY=>AttrIdEnum::DIA_CLARITY],
                         'itemMap'=>[
-                                'FL/无暇'=>0,
-                                'IF/镜下无暇'=>0,
-                                'VVS/极微瑕'=>0,
-                                'VS/微瑕'=>0,
-                                'SI/小瑕'=>0,
-                                'P/不洁净'=>0,
-                                '不分级'=>0
+                                'FL/无暇'=>6,//【ERP:6        FL
+                                'IF/镜下无暇'=>7,//【ERP:7        IF
+                                'VVS/极微瑕'=>8,//【ERP:8        VVS1；62        VVS2
+                                'VS/微瑕'=>63,//【ERP:        63        VS1；64        VS2
+                                'SI/小瑕'=>448,//【ERP:448        SI
+                                'P/不洁净'=>324,//【ERP:324        P1
+                                '不分级'=>243   //【ERP:          243        不分级    
                         ]
                 ],
-                "91084"=>[
+                self::DIA_CUT =>[
                         'name'=>'钻石切工',
-                        'idMap' =>[ 91084=>0 ],
+                        'idMap' =>[self::DIA_CUT=>AttrIdEnum::DIA_CUT ],
                         'itemMap'=>[
-                                'Excellent极好'=>0,
-                                'Very Good很好'=>0,
-                                'Good好'=>0,
-                                'Fair一般'=>0,
-                                'Poor差'=>0,
-                                '不分级'=>0
+                                'Excellent极好'=>13,//【ERP:        13        EX
+                                'Very Good很好'=>14,//【ERP:        14        VG
+                                'Good好'=>15,//【ERP:        15        GD
+                                'Fair一般'=>336,//【ERP:336        Fair
+                                'Poor差'=>337,//【ERP:337        Poor
+                                '不分级'=>null //【ERP为空
                         ]
                 ],
-                "91082"=>[
+                self::DIA_COLOR =>[
                         'name'=>'钻石颜色',
-                        'idMap' =>[ 91082=>0 ],
+                        'idMap' =>[self::DIA_COLOR=>AttrIdEnum::DIA_COLOR ],
                         'itemMap'=>[
-                                'D'=>0,
-                                'E'=>0,
-                                'F'=>0,
-                                'F-G'=>0,
-                                'G'=>0,
-                                'H'=>0,
-                                'I'=>0,
-                                'I-J'=>0,
-                                'J'=>0,
-                                'K'=>0,
-                                'K-L'=>0,
-                                'L'=>0,
-                                'M'=>0,
-                                'M-N'=>0,
-                                'N'=>0,
-                                '不分级'=>0
+                                'D'=>18,//【映射ERP：18        D
+                                'E'=>19,//【映射ERP：19        E
+                                'F'=>22,//【映射ERP：22        F
+                                'F-G'=>22,//【映射ERP：22        F  ；50  G
+                                'G'=>50,//【映射ERP：50  G
+                                'H'=>51, //【映射ERP：51        H
+                                'I'=>52,//【映射ERP： 52        I
+                                'I-J'=>447,//【映射ERP：         447        IJ
+                                'J'=>53,//【映射ERP：        53        J
+                                'K'=>153,//【映射ERP：         153        K
+                                'K-L'=>154,//【映射ERP： 154        L；153        K
+                                'L'=>154,//【映射ERP：         154        L；
+                                'M'=>155,//【映射ERP：155        M
+                                'M-N'=>155,//【映射ERP：155        M；156        N
+                                'N'=>156,//【映射ERP：156        N
+                                '不分级'=>242 //【映射ERP：242        不分级
                         ]
                 ],
-                "93655"=>[
+                self::MATERIAL =>[
                         'name'=>'镶嵌材质',
                         'idMap' =>[ 93655=>0 ],
                         'itemMap'=>[
@@ -82,23 +84,23 @@ class JdAttrEnum extends \common\enums\BaseEnum
                                 '其它'=>0,
                         ]
                 ],
-                "72374"=>[
+                self::CERT_TYPE=>[
                         'name'=>'证书类型',
-                        'idMap' =>[ 72374=>0 ],
+                        'idMap' =>[ self::CERT_TYPE=>AttrIdEnum::DIA_CERT_TYPE],
                         'itemMap'=>[
-                                'GIA/美国宝石学院'=>0,
-                                'NGTC/国家珠宝玉石质量监督检验中心'=>0,
-                                'HRD/比利时钻石高层议会'=>0,
-                                'IGI/国际宝石学院'=>0,
-                                'NJQSIC/国家首饰质量监督检验中心'=>0,
-                                'CCGTC/北京市中工商联珠宝检测中心'=>0,
-                                'GIC/中国地质大学（武汉）珠宝检测中心'=>0,
-                                '其它国内证书'=>0,
-                                '其它国际证书'=>0,
-                                '无证书'=>0,
+                                'GIA/美国宝石学院'=>138,//【ERP：138        GIA
+                                'NGTC/国家珠宝玉石质量监督检验中心'=>151,//【ERP：151        NGTC-国检                                
+                                'HRD/比利时钻石高层议会'=>346,//【ERP：346        HRD
+                                'IGI/国际宝石学院'=>348,//【ERP：348        IGI
+                                'NJQSIC/国家首饰质量监督检验中心'=>479,//【ERP：479        NJQSIC/国家首饰质量
+                                'CCGTC/北京市中工商联珠宝检测中心'=>152,//【ERP:152        其它
+                                'GIC/中国地质大学（武汉）珠宝检测中心'=>480,//【ERP:480   GIC/中国地质大学(武汉)
+                                '其它国内证书'=>152,//【ERP:152        其它
+                                '其它国际证书'=>152,//【ERP:152        其它
+                                '无证书'=>null,//【ERP:为空
                         ]
                 ],
-                "99873"=>[
+                self::DIA_CATAT =>[
                         'name'=>'主石重量',
                         'idMap' =>[ ],
                         'itemMap'=>[
@@ -113,7 +115,7 @@ class JdAttrEnum extends \common\enums\BaseEnum
                                 '无主石'=>0,
                         ]
                 ],
-                "99874"=>[
+                self::SEDOND_STONE_WEIGHT =>[
                         'name'=>'副石重量',
                         'idMap' =>[ ],
                         'itemMap'=>[

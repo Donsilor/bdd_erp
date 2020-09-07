@@ -335,7 +335,7 @@ class WarehouseBillGoodsL extends BaseModel
             'second_stone_amount3' => '副石3成本价',
             'stone_remark' => '石料备注',
             'peishi_num' => '配石数量',
-            'peishi_weight' => '配石重量',
+            'peishi_weight' => '配石重量(ct)',
             'peishi_fee' => '配石费',
             'peishi_gong_fee' => '配石工费/ct',
             'source_detail_id' => '来源明细ID',
