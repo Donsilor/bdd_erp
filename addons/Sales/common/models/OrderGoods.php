@@ -96,7 +96,7 @@ class OrderGoods extends BaseModel
             'assess_cost' => '预估成本',
             'goods_pay_price' => '实际成交价',
             'goods_discount' => '优惠金额',
-            'goods_spec' => '商品规格',
+            'goods_spec' => '商品参数',
             'currency' => '货币',
             'exchange_rate' => '汇率',
             'delivery_status' => '发货状态',
