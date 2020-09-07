@@ -230,14 +230,14 @@ class WarehouseBillTService extends Service
                     $flag = false;
                     $error[$i][] = "[起版号]不存在";
                 } elseif ($qiban->status != StatusEnum::ENABLED) {
-                    $flag  = false;
+                    $flag = false;
                     $error[$i][] = "[起版号]未启用";
                 } elseif (empty($qiban->style_sn)) {
                     $qiban_type = QibanTypeEnum::NO_STYLE;
                 } else {
                     if (!empty($style_sn)
                         && $style_sn != $qiban->style_sn) {
-                        $flag  = false;
+                        $flag = false;
                         $error[$i][] = "有空起版[款号]和填写[款号]不一致";
                     }
                     $qiban_type = QibanTypeEnum::HAVE_STYLE;
@@ -271,8 +271,9 @@ class WarehouseBillTService extends Service
                     $error[$i][] = $qiban_error . "[款号]不是启用状态";
                 }
             }
-            if(!$flag){
-                continue;
+            if (!$flag) {
+                //$flag = true;
+                //continue;
             }
             if (!empty($qiban_sn)) {
                 $style_image = $qiban->style_image;
