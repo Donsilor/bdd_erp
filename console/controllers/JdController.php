@@ -5,6 +5,7 @@ namespace console\controllers;
 use yii\console\Controller;
 use yii\helpers\Console;
 use addons\Sales\common\models\OrderGoods;
+use addons\Sales\common\models\Order;
 
 /**
  * 京东API任务处理
@@ -92,7 +93,8 @@ class JdController extends Controller
     private function syncOrderGoods()
     {
         Console::output("Update JD Sku BEGIN[".date('Y-m-d H:i:s')."]-------------------");
-        $wareIds = OrderGoods::find()->select(['out_ware_id'])->distinct(true)->where(['<>','out_ware_id',''])->asArray()->all();
+        $orderIdQuery = Order::find()->select(['id'])->where(['order_from'=>3]);
+        $wareIds = OrderGoods::find()->select(['out_ware_id'])->distinct(true)->where(['order_id'=>$orderIdQuery])->asArray()->all();
         $wareIds = $wareIds ? array_column($wareIds, 'out_ware_id') : [];
         $group_list = $this->groupArray($wareIds,20);
         foreach ($group_list as $wareIds) {
