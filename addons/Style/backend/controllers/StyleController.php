@@ -2,6 +2,9 @@
 
 namespace addons\Style\backend\controllers;
 
+use addons\Style\common\forms\StyleForm;
+use addons\Warehouse\common\forms\WarehouseBillTGoodsForm;
+use addons\Warehouse\common\models\WarehouseBill;
 use common\enums\FlowStatusEnum;
 use common\enums\TargetTypeEnum;
 use Yii;
@@ -20,6 +23,7 @@ use yii\behaviors\AttributeTypecastBehavior;
 use addons\Style\common\enums\AttrTypeEnum;
 use common\helpers\SnHelper;
 use common\enums\AutoSnEnum;
+use yii\web\UploadedFile;
 
 /**
 * Style
@@ -118,6 +122,50 @@ class StyleController extends BaseController
         
         return $this->renderAjax($this->action->id, [
                 'model' => $model,
+        ]);
+    }
+    /**
+     *
+     * 文件格式导出
+     * @return mixed|string|\yii\web\Response
+     * @throws
+     */
+    public function actionDownload()
+    {
+        $model = new StyleForm();
+        list($values, $fields) = $model->getTitleList();
+        header("Content-Disposition: attachment;filename=款式数据".time().").csv");
+        $content = implode($values, ",") . "\n" . implode($fields, ",") . "\n";
+        echo iconv("utf-8", "gbk", $content);
+        exit();
+    }
+    /**
+     *
+     * ajax批量导入
+     * @return mixed|string|\yii\web\Response
+     * @throws
+     */
+    public function actionAjaxUpload()
+    {
+        $model = new StyleForm();
+        // ajax 校验
+        $this->activeFormValidate($model);
+        if (Yii::$app->request->isPost) {
+            try {
+                $trans = \Yii::$app->db->beginTransaction();
+                $model->file = UploadedFile::getInstance($model, 'file');
+                Yii::$app->styleService->style->uploadGoods($model);
+                $trans->commit();
+                \Yii::$app->getSession()->setFlash('success', '保存成功');
+                return $this->redirect(\Yii::$app->request->referrer);
+            } catch (\Exception $e) {
+                $trans->rollBack();
+                //var_dump($e->getTraceAsString());die;
+                return $this->message($e->getMessage(), $this->redirect(\Yii::$app->request->referrer), 'error');
+            }
+        }
+        return $this->renderAjax($this->action->id, [
+            'model' => $model,
         ]);
     }
     /**
