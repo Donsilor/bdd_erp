@@ -222,7 +222,7 @@ class WarehouseBillTService extends Service
             $style_sn = $goods[1] ?? "";
             $qiban_sn = $goods[2] ?? "";
             if (!empty($style_sn) && !empty($qiban_sn)) {
-                throw new \Exception($row . "[款号]和[起版号]只能填其一");
+                //throw new \Exception($row . "[款号]和[起版号]只能填其一");
             }
             $qiban_type = QibanTypeEnum::NON_VERSION;
             if (!empty($qiban_sn)) {
@@ -234,6 +234,10 @@ class WarehouseBillTService extends Service
                 } elseif (empty($qiban->style_sn)) {
                     $qiban_type = QibanTypeEnum::NO_STYLE;
                 } else {
+                    if (!empty($style_sn)
+                        && $style_sn != $qiban->style_sn) {
+                        throw new \Exception($row . "有空起版[款号]和填写[款号]不一致");
+                    }
                     $qiban_type = QibanTypeEnum::HAVE_STYLE;
                 }
                 $style_sn = $qiban->style_sn ?? "";

@@ -37,7 +37,7 @@ class BillTGoodsController extends BaseController
         $searchModel = new SearchModel([
             'model' => $this->modelClass,
             'scenario' => 'default',
-            'partialMatchAttributes' => [], // 模糊查询
+            'partialMatchAttributes' => ['goods_name', 'stone_remark', 'remark'], // 模糊查询
             'defaultOrder' => [
                 'id' => SORT_DESC
             ],
@@ -206,7 +206,7 @@ class BillTGoodsController extends BaseController
 
     /**
      *
-     * ajax批量编辑
+     * ajax批量填充
      * @return mixed|string|\yii\web\Response
      * @throws
      */
@@ -291,7 +291,7 @@ class BillTGoodsController extends BaseController
         $searchModel = new SearchModel([
             'model' => $this->modelClass,
             'scenario' => 'default',
-            'partialMatchAttributes' => [], // 模糊查询
+            'partialMatchAttributes' => ['goods_name', 'stone_remark', 'remark'], // 模糊查询
             'defaultOrder' => [
                 'id' => SORT_DESC
             ],
