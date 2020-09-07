@@ -133,8 +133,8 @@ class StyleService extends Service
      */
     public static function createGiftStyle($form)
     {
-        $goods_size = \Yii::$app->styleService->styleAttribute->getAttrValueListByStyle($form->style_sn, AttrIdEnum::PRODUCT_SIZE);
-        $chain_length = \Yii::$app->styleService->styleAttribute->getAttrValueListByStyle($form->style_sn, AttrIdEnum::CHAIN_LENGTH);
+        //$goods_size = \Yii::$app->styleService->styleAttribute->getAttrValueListByStyle($form->style_sn, AttrIdEnum::PRODUCT_SIZE);
+        //$chain_length = \Yii::$app->styleService->styleAttribute->getAttrValueListByStyle($form->style_sn, AttrIdEnum::CHAIN_LENGTH);
         $gift = new StyleGift();
         $style = [
             'style_id' => $form->id,
@@ -180,15 +180,15 @@ class StyleService extends Service
         $i = 0;
         $flag = true;
         $error = $saveData = [];
-        while ($goods = fgetcsv($file)) {
+        while ($style = fgetcsv($file)) {
             if ($i <= 1) {
                 $i++;
                 continue;
             }
-            if (count($goods) != 31) {
+            if (count($style) != 31) {
                 throw new \Exception("模板格式不正确，请下载最新模板");
             }
-            $goods =$form->trimField($goods);
+            $style = $form->trimField($style);
         }
     }
 }

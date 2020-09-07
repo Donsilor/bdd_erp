@@ -2,9 +2,9 @@
 
 namespace addons\Style\common\forms;
 
-use common\helpers\StringHelper;
 use Yii;
 use addons\Style\common\models\Style;
+use common\helpers\StringHelper;
 use common\helpers\ArrayHelper;
 
 /**
@@ -43,14 +43,14 @@ class StyleForm extends Style
     {
         $values = [
             '#','#',
-            $this->formatTitleId($this->getCateList()),
-            $this->formatTitleId($this->getProductList()),
-            $this->formatTitleId($this->getChannelList()),
-            $this->formatTitleId($this->getSourceList()),
-            $this->formatTitleId($this->getMaterialList()),
-            $this->formatTitleId($this->getSexList()),
-            $this->formatTitleId($this->getIsMadeList()),
-            $this->formatTitleId($this->getIsGiftList()),
+            $this->getAttributeLabel('style_cate_id').$this->formatTitleId($this->getCateList()),
+            $this->getAttributeLabel('product_type_id').$this->formatTitleId($this->getProductList()),
+            $this->getAttributeLabel('style_channel_id').$this->formatTitleId($this->getChannelList()),
+            $this->getAttributeLabel('style_source_id').$this->formatTitleId($this->getSourceList()),
+            $this->getAttributeLabel('style_material').$this->formatTitleId($this->getMaterialList()),
+            $this->getAttributeLabel('style_sex').$this->formatTitleId($this->getSexList()),
+            $this->getAttributeLabel('is_made').$this->formatTitleId($this->getIsMadeList()),
+            $this->getAttributeLabel('is_gift').$this->formatTitleId($this->getIsGiftList()),
             '#',
 
             $this->formatTitleId($this->getSupplierList()),
