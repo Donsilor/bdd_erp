@@ -643,7 +643,7 @@ class WarehouseBillTService extends Service
                     $second_pei_type2 = 0;
                 }
             } else {
-                $second_pei_type = $form->getPeiType($second_stone_sn2, $second_stone_num2, $second_stone_weight2);
+                $second_pei_type2 = $form->getPeiType($second_stone_sn2, $second_stone_num2, $second_stone_weight2);
             }
             $second_stone_price2 = $form->formatValue($goods[47], 0) ?? 0;
 //            $second_stone_shape2 = $goods[48] ?? "";
