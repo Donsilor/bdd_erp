@@ -2,9 +2,10 @@
 
 namespace addons\Style\common\forms;
 
-use common\helpers\ArrayHelper;
+use common\helpers\StringHelper;
 use Yii;
 use addons\Style\common\models\Style;
+use common\helpers\ArrayHelper;
 
 /**
  * 款式 Form
@@ -69,6 +70,18 @@ class StyleForm extends Style
             '配石工费/ct', '配件工费', '克/工费', '基本工费', '镶石费表面工艺费', '分色费喷拉沙费', '补口费', '版费', '证书费', '其他费用',
         ];
         return [$values, $fields];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function trimField($data)
+    {
+        $res = [];
+        foreach ($data as $k => $v) {
+            $res[$k] = StringHelper::strIconv($v);
+        }
+        return $res ?? [];
     }
 
     /**

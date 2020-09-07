@@ -253,6 +253,22 @@ class BillTController extends BaseController
 
     /**
      *
+     * 文件格式导出
+     * @return mixed|string|\yii\web\Response
+     * @throws
+     */
+    public function actionDownloadCsv()
+    {
+        $model = new WarehouseBillTGoodsForm();
+        list($values, $fields) = $model->getTitleList();
+        header("Content-Disposition: attachment;filename=【".rand(100,999)."】入库单明细(".date('Ymd').").csv");
+        $content = implode($values, ",") . "\n" . implode($fields, ",") . "\n";
+        echo iconv("utf-8", "gbk", $content);
+        exit();
+    }
+
+    /**
+     *
      * 同步更新价格
      * @param $id
      * @return mixed

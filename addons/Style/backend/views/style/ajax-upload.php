@@ -7,7 +7,7 @@ use common\helpers\Url;
 $form = ActiveForm::begin([
     'id' => $model->formName(),
     'enableAjaxValidation' => true,
-    'validationUrl' => Url::to(['ajax-edit', 'id' => $model['id']]),
+    'validationUrl' => Url::to(['ajax-upload']),
     'fieldConfig' => [
         //'template' => "<div class='col-sm-3 text-right'>{label}</div><div class='col-sm-9'>{input}\n{hint}\n{error}</div>",
     ]

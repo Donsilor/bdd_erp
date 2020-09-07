@@ -573,4 +573,13 @@ class StringHelper extends BaseStringHelper
             return $c . "整";
         }
     }
+
+    /**
+     * 字符串乱码转换
+     * {@inheritdoc}
+     */
+    public static function strIconv($str)
+    {
+        return  trim(iconv('gbk', 'utf-8', $str));
+    }
 }

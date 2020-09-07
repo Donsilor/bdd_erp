@@ -58,7 +58,7 @@ class WarehouseBillTGoodsForm extends WarehouseBillGoodsL
     {
         $res = [];
         foreach ($data as $k => $v) {
-            $res[$k] = trim(iconv('gbk', 'utf-8', $v));
+            $res[$k] = StringHelper::strIconv($v);
         }
         return $res ?? [];
     }

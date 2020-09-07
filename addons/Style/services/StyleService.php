@@ -2,6 +2,7 @@
 
 namespace addons\Style\services;
 
+use common\helpers\StringHelper;
 use Yii;
 use common\helpers\Url;
 use common\components\Service;
@@ -164,7 +165,7 @@ class StyleService extends Service
      * @param StyleForm $form
      * @throws
      */
-    public function uploadGoods($form)
+    public function uploadStyles($form)
     {
         if (empty($form->file) && !isset($form->file)) {
             throw new \Exception("请上传文件");
@@ -178,16 +179,16 @@ class StyleService extends Service
         $file = fopen($form->file->tempName, 'r');
         $i = 0;
         $flag = true;
-        $error_off = true;
         $error = $saveData = [];
         while ($goods = fgetcsv($file)) {
             if ($i <= 1) {
                 $i++;
                 continue;
             }
-            if (count($goods) != 74) {
+            if (count($goods) != 31) {
                 throw new \Exception("模板格式不正确，请下载最新模板");
             }
+            $goods =$form->trimField($goods);
         }
     }
 }
