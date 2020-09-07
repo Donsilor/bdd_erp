@@ -24,7 +24,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         'data-target' => '#ajaxModalLg',
                     ]); ?>
                     <?= Html::edit(['ajax-upload'], '批量导入', [
-                        'class' => 'btn btn-success btn-xs',
+                        'class' => 'btn btn-primary btn-xs',
                         'data-toggle' => 'modal',
                         'data-target' => '#ajaxModal',
                     ]); ?>
