@@ -212,6 +212,7 @@ class JdSdk extends Component
         }
         $request = new CategoryReadFindAttrsByCategoryIdUnlimitCateRequest();
         $request->setField('id,name,attrValueList');
+        $request->setCid($cate_id);
         $responce = $this->client->execute($request, $this->accessToken);
         if(isset($responce->error_response)){
             throw new \Exception($responce->error_response->zh_desc);
