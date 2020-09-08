@@ -187,50 +187,74 @@ class StyleService extends Service
                 $i++;
                 continue;
             }
-            if (count($style) != 31) {
+            if (count($style) != 33) {
                 throw new \Exception("模板格式不正确，请下载最新模板");
             }
 
             $style = $form->trimField($style);
 
-            $style_name = $style[0];
-            $style_sn = $style[1];
-            $style_cate_id = $style[2];
-            $product_type_id = $style[3];
-            $style_source_id = $style[4];
-            $style_channel_id = $style[5];
-            $style_material = $style[6];
-            $style_sex = $style[7];
-            $is_made = $style[8];
-            $is_gift = $style[9];
-            $remark = $style[10];
+            $style_name = $form->formatValue($style[0], "");
+            if(empty($style_name)){
+                $flag = false;
+                $error[$i][] = "款式名称不能为空";
+            }
+            $style_sn = $form->formatValue($style[1], "");
+            $style_cate_id = $form->formatValue($style[2], 0);
+            if(empty($style_cate_id)){
+                $flag = false;
+                $error[$i][] = "款式分类不能为空";
+            }
+            $product_type_id = $form->formatValue($style[3], 0);
+            if(empty($product_type_id)){
+                $flag = false;
+                $error[$i][] = "产品线不能为空";
+            }
+            $style_source_id = $form->formatValue($style[4], 0);
+            $style_channel_id = $form->formatValue($style[5], 0);
+            if(empty($style_channel_id)){
+                $flag = false;
+                $error[$i][] = "归属渠道不能为空";
+            }
+            $style_material = $form->formatValue($style[6], 0);
+            if(empty($style_material)){
+                $flag = false;
+                $error[$i][] = "款式材质不能为空";
+            }
+            $style_sex = $form->formatValue($style[7], 0);
+            if(empty($style_sex)){
+                $flag = false;
+                $error[$i][] = "款式性别不能为空";
+            }
+            $is_made = $form->formatValue($style[8], 0);
+            $is_gift = $form->formatValue($style[9], 0);
+            $remark = $form->formatValue($style[10], "");
 
-            $factory_name1 = $style[11];
-            $factory_id1 = 1;
-            $factory_mo1 = $style[12];
-            $factory_remark1 = $style[13];
-            $shipping_time1 = $style[14];
-            $factory_made1 = $style[15];
+            $factory_name1 = $form->formatValue($style[11], "");
+            $factory_id1 = $factory_name1;
+            $factory_mo1 = $form->formatValue($style[12], "");
+            $factory_remark1 = $form->formatValue($style[13], "");
+            $shipping_time1 = $form->formatValue($style[14], "");
+            $factory_made1 = $form->formatValue($style[15], 0);
 
-            $factory_name2 = $style[16];
-            $factory_id2 = 1;
-            $factory_mo2 = $style[17];
-            $factory_remark2 = $style[18];
-            $shipping_time2 = $style[19];
-            $factory_made2 = $style[20];
+            $factory_name2 = $form->formatValue($style[16], "");
+            $factory_id2 = $factory_name2;
+            $factory_mo2 = $form->formatValue($style[17], "");
+            $factory_remark2 = $form->formatValue($style[18], "");
+            $shipping_time2 = $form->formatValue($style[19], "");
+            $factory_made2 = $form->formatValue($style[20], 0);
 
-            $peishi_fee = $style[21];
-            $peijian_fee = $style[22];
-            $gram_fee = $style[23];
-            $basic_fee = $style[24];
-            $xiangshi_fee = $style[25];
-            $technology_fee = $style[26];
-            $fense_fee = $style[27];
-            $penlasa_fee = $style[28];
-            $bukou_fee = $style[29];
-            $templet_fee = $style[30];
-            $cert_fee = $style[31];
-            $other_fee = $style[32];
+            $peishi_fee = $form->formatValue($style[21], '0.00');
+            $peijian_fee = $form->formatValue($style[22], '0.00');
+            $gram_fee = $form->formatValue($style[23], '0.00');
+            $basic_fee = $form->formatValue($style[24], '0.00');
+            $xiangshi_fee = $form->formatValue($style[25], '0.00');
+            $technology_fee = $form->formatValue($style[26], '0.00');
+            $fense_fee = $form->formatValue($style[27], '0.00');
+            $penlasa_fee = $form->formatValue($style[28], '0.00');
+            $bukou_fee = $form->formatValue($style[29], '0.00');
+            $templet_fee = $form->formatValue($style[30], '0.00');
+            $cert_fee = $form->formatValue($style[31], '0.00');
+            $other_fee = $form->formatValue($style[32], '0.00');
 
             $creator_id = \Yii::$app->user->identity->getId();
             $styleList[] = $styleInfo = [
@@ -287,12 +311,14 @@ class StyleService extends Service
             ];
 
             $styleM = new StyleForm();
+            $styleM->id = rand(1000000000,9999999999);
             $styleM->setAttributes($styleInfo);
             if (!$styleM->validate()) {
                 $flag = false;
                 $error[$i][] = $this->getError($styleM);
             }
             $factoryM1 = new StyleFactory();
+            $factoryM1->style_id = $styleM->id;
             $factoryM1->setAttributes($factoryInfo1);
             if (!$factoryM1->validate()) {
                 $flag = false;
@@ -302,12 +328,6 @@ class StyleService extends Service
             if (!$factoryM1->validate()) {
                 $flag = false;
                 $error[$i][] = $this->getError($factoryM1);
-            }
-            $feeM = new StyleFactoryFee();
-            $feeM->setAttributes($styleFee);
-            if (!$feeM->validate()) {
-                $flag = false;
-                $error[$i][] = $this->getError($feeM);
             }
 
         }
@@ -330,14 +350,17 @@ class StyleService extends Service
             throw new \Exception("数据不能为空");
         }
         foreach ($styleList as $k => $item) {
+            //创建款式信息
             $styleM = new StyleForm();
+            $styleM->id = null;
             $styleM->setAttributes($item);
             if (false === $styleM->save()) {
                 throw new \Exception($this->getError($styleM));
             }
-            if(empty($styleM->style_sn)){//款号为空自动创建
+            if (empty($styleM->style_sn)) {//款号为空自动创建
                 Yii::$app->styleService->style->createStyleSn($styleM);
             }
+            //创建款式工厂信息
             if (!empty($factoryList1[$k]) || !empty($factoryList2[$k])) {
                 $factoryList = array_merge($factoryList1[$k], $factoryList2[$k]);
                 foreach ($factoryList as $factory) {
@@ -349,12 +372,14 @@ class StyleService extends Service
                     }
                 }
             }
+            //创建款式工费信息
             $styleFee = $styleFee[$k] ?? [];
             foreach ($styleFee as $type => $fee) {
-                if ($fee > 0 && !empty($fee)) {
+                $fee_type = $form->getFeeTypeMap($type);
+                if ($fee > 0 && !empty($fee) && !empty($fee_type)) {
                     $feeM = new StyleFactoryFee();
                     $feeM->style_id = $styleM->id;
-                    $feeM->fee_type = $form->getFeeTypeMap($type);
+                    $feeM->fee_type = $fee_type;
                     $feeM->fee_price = $fee;
                     $feeM->creator_id = \Yii::$app->user->identity->getId();
                     $feeM->created_at = time();
