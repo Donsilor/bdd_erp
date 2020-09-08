@@ -252,7 +252,7 @@ class PurchaseGoodsForm extends PurchaseGoods
                     'group' =>'attr',
              );            
         }
-        //其他信息
+        //其它信息
         $fields = array(
                 'gold_price','gold_cost_price','gold_amount','gross_weight',
                 'gold_loss','single_stone_weight','parts_material','parts_num','parts_weight','parts_price','parts_amount','suttle_weight',
@@ -309,7 +309,7 @@ class PurchaseGoodsForm extends PurchaseGoods
         //配石费 = 配石工费 * 配石重量
         $this->peishi_amount = $this->peishi_weight * $this->peishi_fee;
 
-        //总工费【自动计算】=所有工费【基本工费+配件工费+配石工费+镶石费+表面工艺费+分色费+喷砂费+补口工费+版费 + 证书费 + 其他费用】
+        //总工费【自动计算】=所有工费【基本工费+配件工费+配石工费+镶石费+表面工艺费+分色费+喷砂费+补口工费+版费 + 证书费 + 其它费用】
         $this->total_gong_fee = $this->gong_fee + $this->parts_fee + $this->peishi_amount + $this->xiangqian_fee + $this->biaomiangongyi_fee
             + $this->fense_fee + $this->penrasa_fee + $this->bukou_fee + $this->edition_fee + $this->cert_fee + $this->other_fee;
 

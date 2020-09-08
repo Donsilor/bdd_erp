@@ -160,7 +160,7 @@ $this->params['breadcrumbs'][] = $this->title;
       </div>    
     
       <div class="row nav-tabs-custom tab-pane tab0 active" id="tab_3">
-        <h4 class="box-title" style="font-weight: bold;"> 其他信息</h4>
+        <h4 class="box-title" style="font-weight: bold;"> 其它信息</h4>
         <div class="box-body col-lg-12">
             <div class="row">
                 <div class="col-lg-6">

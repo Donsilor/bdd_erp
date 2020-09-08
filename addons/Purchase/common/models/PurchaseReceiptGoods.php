@@ -142,7 +142,7 @@ use addons\Style\common\models\StyleChannel;
  * @property string $cert_fee 证书费
  * @property string $extra_stone_fee 超石费
  * @property string $tax_fee 税费
- * @property string $other_fee 其他费用
+ * @property string $other_fee 其它费用
  * @property string $total_gong_fee 总工费
  * @property int $sort 排序
  * @property int $status 状态 1启用 0禁用 -1 删除
@@ -317,7 +317,7 @@ class PurchaseReceiptGoods extends BaseModel
             'cert_fee' => '证书费',
             'extra_stone_fee' => '超石费',
             'tax_fee' => '税费',
-            'other_fee' => '其他费用',
+            'other_fee' => '其它费用',
             'total_gong_fee' => '总工费',
             'sort' => '排序',
             'status' => '状态',

@@ -248,7 +248,7 @@ class OrderGoodsForm extends OrderGoods
                 'group' =>'attr',
             );
         }
-        //其他信息
+        //其它信息
         $fields = [];
         foreach ($fields as $field) {
             $apply_info[] = array(

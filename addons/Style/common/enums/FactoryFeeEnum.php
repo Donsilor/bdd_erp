@@ -40,7 +40,7 @@ class FactoryFeeEnum extends \common\enums\BaseEnum
             self::TEMPLET_GF => "版费",
             self::CERT_GF => "证书费",
 
-            self::OTHER_GF => "其他费用",
+            self::OTHER_GF => "其它费用",
 
         ];
     }

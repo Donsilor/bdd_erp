@@ -27,7 +27,7 @@ class PutInTypeEnum extends \common\enums\BaseEnum
             self::PROXY_PRODUCE => '委托加工',
             self::PROXY_SALE => '代销',
             self::BORROW => '借入',
-            self::OTHER => '其他',
+            self::OTHER => '其它',
         ];
     }
 

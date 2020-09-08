@@ -25,7 +25,7 @@ use common\helpers\StringHelper;
 use yii\helpers\Url;
 
 /**
- * 其他收货单
+ * 其它收货单
  * @package services\common
  * @author jianyan74 <751393839@qq.com>
  */
@@ -643,7 +643,7 @@ class WarehouseBillTService extends Service
                     $second_pei_type2 = 0;
                 }
             } else {
-                $second_pei_type = $form->getPeiType($second_stone_sn2, $second_stone_num2, $second_stone_weight2);
+                $second_pei_type2 = $form->getPeiType($second_stone_sn2, $second_stone_num2, $second_stone_weight2);
             }
             $second_stone_price2 = $form->formatValue($goods[47], 0) ?? 0;
 //            $second_stone_shape2 = $goods[48] ?? "";
@@ -1090,7 +1090,7 @@ class WarehouseBillTService extends Service
 
     /**
      *
-     * 总工费=(配石费+基本工费+配件工费+镶石费+表面工艺费+分色分件费+喷拉砂费+补口费+版费+证书费+其他费用)
+     * 总工费=(配石费+基本工费+配件工费+镶石费+表面工艺费+分色分件费+喷拉砂费+补口费+版费+证书费+其它费用)
      * @param WarehouseBillTGoodsForm $form
      * @return integer
      * @throws
@@ -1109,7 +1109,7 @@ class WarehouseBillTService extends Service
         //$total_gong_fee = bcadd($total_gong_fee, $form->extra_stone_fee, 3);//超石费
         $total_gong_fee = bcadd($total_gong_fee, $form->templet_fee, 3);//样板工费
         $total_gong_fee = bcadd($total_gong_fee, $form->cert_fee, 3);//证书费
-        $total_gong_fee = bcadd($total_gong_fee, $form->other_fee, 3);//其他补充费用
+        $total_gong_fee = bcadd($total_gong_fee, $form->other_fee, 3);//其它补充费用
 
         return sprintf("%.2f", $total_gong_fee) ?? 0;
     }

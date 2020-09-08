@@ -107,7 +107,7 @@ class WarehouseBillAGoodsForm extends WarehouseBillGoodsA
         $goods->peishi_amount = $this->peishi_fee * $this->peishi_weight;
         //【镶石费=镶石单价*总副石数量】
         $goods->xianqian_fee = $this->xianqian_price * ($this->second_stone_num1 + $this->second_stone_num2);
-        //总工费【自动计算】=所有工费【基本工费+配件工费+配石工费+镶石费+表面工艺费+分色费+喷砂费+补口工费+版费 + 证书费 + 其他费用】
+        //总工费【自动计算】=所有工费【基本工费+配件工费+配石工费+镶石费+表面工艺费+分色费+喷砂费+补口工费+版费 + 证书费 + 其它费用】
         $goods->total_gong_fee = $this->gong_fee + $this->parts_fee + $goods->peishi_amount + $goods->xianqian_fee + $this->biaomiangongyi_fee
             + $this->fense_fee + $this->penrasa_fee + $this->bukou_fee + $this->edition_fee + $this->cert_fee + $this->other_fee;
 

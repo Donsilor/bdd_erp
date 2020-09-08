@@ -26,7 +26,7 @@ class GiftBillTypeEnum extends \common\enums\BaseEnum
         return [
             self::GIFT_PURCHASE   => '采购单',
             self::GIFT_ORDER   => '客订单',
-            self::GIFT_OTHER   => '其他',
+            self::GIFT_OTHER   => '其它',
 
         ];
     }

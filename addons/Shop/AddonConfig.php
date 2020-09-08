@@ -4,7 +4,6 @@ namespace addons\Shop;
 
 use common\components\BaseAddonConfig;
 use addons\Shop\common\components\Bootstrap;
-use addons\Shop\services\Application;
 
 /**
  * Class Addon
@@ -48,7 +47,7 @@ class AddonConfig extends BaseAddonConfig
     *
     * @var Bootstrap
     */
-    public $bootstrap = Bootstrap::class;
+    public $bootstrap = '';
 
     /**
     * 服务层
@@ -65,7 +64,7 @@ class AddonConfig extends BaseAddonConfig
     *
     * @var string
     */
-    public $service = Application::class;
+    public $service = '';
 
     /**
      * 参数配置开启
@@ -102,7 +101,7 @@ class AddonConfig extends BaseAddonConfig
      *      'services'  => "常用服务及工具",
      *      'biz'       => "行业解决方案",
      *      'h5game'    => "H5游戏",
-     *      'other'     => "其他",
+     *      'other'     => "其它",
      * ]
      */
     public $group = 'plug';

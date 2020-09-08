@@ -17,7 +17,7 @@ use common\helpers\ArrayHelper;
 use common\helpers\Url;
 
 /**
- * 其他出库单
+ * 其它出库单
  * @package services\common
  * @author jianyan74 <751393839@qq.com>
  */
@@ -25,7 +25,7 @@ class WarehouseBillCService extends WarehouseBillService
 {
 
     /**
-     * 创建其他出库单明细
+     * 创建其它出库单明细
      * @param WarehouseBillCForm $form
      * @param array $bill_goods
      * @throws
@@ -71,7 +71,7 @@ class WarehouseBillCService extends WarehouseBillService
         {
             $status = GoodsStatusEnum::IN_SALE;
         }else{
-            //其他出库类型
+            //其它出库类型
             $status = GoodsStatusEnum::IN_STOCK;//待定
         }
 //        $execute_num = WarehouseGoods::updateAll(['goods_status'=> $status],['goods_id'=>$goods_ids, 'goods_status' => GoodsStatusEnum::IN_STOCK]);
@@ -95,7 +95,7 @@ class WarehouseBillCService extends WarehouseBillService
     }
 
     /**
-     * 其他出库单审核
+     * 其它出库单审核
      * @param WarehouseBillCForm $form
      * @throws
      */
@@ -120,7 +120,7 @@ class WarehouseBillCService extends WarehouseBillService
                 $status = GoodsStatusEnum::HAS_SOLD;
                 $conStatus = GoodsStatusEnum::IN_SALE;
             }else{
-                //其他出库类型
+                //其它出库类型
                 $status = GoodsStatusEnum::IN_STOCK;//待定
                 $conStatus = GoodsStatusEnum::IN_STOCK;//待定
             }
@@ -136,7 +136,7 @@ class WarehouseBillCService extends WarehouseBillService
     }
 
     /**
-     * 其他出库单-关闭
+     * 其它出库单-关闭
      * @param WarehouseBill $form
      * @throws
      */
@@ -159,7 +159,7 @@ class WarehouseBillCService extends WarehouseBillService
     }
 
     /**
-     * 其他出库单-删除
+     * 其它出库单-删除
      * @param WarehouseBill $form
      * @throws
      */

@@ -43,10 +43,10 @@ use addons\Supply\common\models\Supplier;
  * @property string $sy_weight 损坏重量(ct)
  * @property int $th_cnt 退货数
  * @property string $th_weight 退货重(ct)
- * @property int $rk_cnt 其他入库数量
- * @property string $rk_weight 其他入库重量(ct)
- * @property int $ck_cnt 其他出库数量
- * @property string $ck_weight 其他出库重量(ct)
+ * @property int $rk_cnt 其它入库数量
+ * @property string $rk_weight 其它入库重量(ct)
+ * @property int $ck_cnt 其它出库数量
+ * @property string $ck_weight 其它出库重量(ct)
  * @property string $stone_price 石料单价/ct
  * @property string $cost_price 石料总额
  * @property string $sale_price 销售价
@@ -130,10 +130,10 @@ class WarehouseStone extends BaseModel
             'sy_weight' => '损坏重量(ct)',
             'th_cnt' => '退货数',
             'th_weight' => '退货重(ct)',
-            'rk_cnt' => '其他入库数量',
-            'rk_weight' => '其他入库重量(ct)',
-            'ck_cnt' => '其他出库数量',
-            'ck_weight' => '其他出库重量(ct)',
+            'rk_cnt' => '其它入库数量',
+            'rk_weight' => '其它入库重量(ct)',
+            'ck_cnt' => '其它出库数量',
+            'ck_weight' => '其它出库重量(ct)',
             'stone_price' => '石料单价/ct',
             'cost_price' => '石料总额',
             'sale_price' => '销售价',

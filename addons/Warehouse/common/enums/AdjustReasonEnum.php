@@ -26,7 +26,7 @@ class AdjustReasonEnum extends \common\enums\BaseEnum
             self::SAVE    => '未调整',
             self::HAS_SOLD => '已销售',
             self::NORMAL_WASTE => '正常耗损',
-            self::OTHER => '其他'
+            self::OTHER => '其它'
         ];
     }
     

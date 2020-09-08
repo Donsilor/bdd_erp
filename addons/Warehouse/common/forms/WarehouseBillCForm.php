@@ -7,7 +7,7 @@ use common\helpers\ArrayHelper;
 use common\helpers\StringHelper;
 
 /**
- * 其他出库单 Form
+ * 其它出库单 Form
  *
  */
 class WarehouseBillCForm extends WarehouseBill
@@ -23,7 +23,7 @@ class WarehouseBillCForm extends WarehouseBill
     public function rules()
     {
          $rules = [
-            [['delivery_type', 'order_sn'], 'required']
+            [['delivery_type'], 'required']
          ];
          return array_merge(parent::rules() , $rules);
     }

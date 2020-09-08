@@ -73,7 +73,7 @@ use Yii;
  * @property string $extra_stone_fee 超石费
  * @property string $tax_fee 税费
  * @property string $fense_fee 分色/分件费
- * @property string $other_fee 其他费用
+ * @property string $other_fee 其它费用
  * @property string $biaomiangongyi_fee 表面工艺费
  * @property string $penlasha_fee 喷拉砂费
  * @property string $templet_fee 版费
@@ -260,7 +260,7 @@ class WarehouseBillGoodsL extends BaseModel
             'extra_stone_fee' => '超石费',
             'tax_fee' => '税费',
             'fense_fee' => '分色/分件费',
-            'other_fee' => '其他费用',
+            'other_fee' => '其它费用',
             'biaomiangongyi_fee' => '表面工艺费',
             'penlasha_fee' => '喷拉沙费',
             'templet_fee' => '版费',

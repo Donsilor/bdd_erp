@@ -182,7 +182,7 @@ class BillCGoodsController extends BaseController
     }
 
     /**
-     * 其他出库单-批量编辑
+     * 其它出库单-批量编辑
      * @return mixed
      */
     public function actionEditAll()

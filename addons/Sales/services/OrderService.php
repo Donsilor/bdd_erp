@@ -192,7 +192,7 @@ class OrderService extends Service
             }
         }
         $order->pay_sn = $orderPay->pay_sn;//点款单号
-                
+
         //4.同步订单商品明细
         if($isNewOrder === true) {
             $goods_num = 0;//商品总数

@@ -92,7 +92,7 @@ class BillCController extends BaseController
     }
 
     /**
-     * ajax编辑/创建 其他出库单
+     * ajax编辑/创建 其它出库单
      *
      * @return mixed|string|\yii\web\Response
      * @throws \yii\base\ExitException
@@ -128,14 +128,14 @@ class BillCController extends BaseController
                 }
 
                 if($isNewRecord){
-                    $log_msg = "创建其他出库单{$model->bill_no}，出库类型：".DeliveryTypeEnum::getValue($model->delivery_type) ."，参考编号/订单号：{$model->order_sn} ";
+                    $log_msg = "创建其它出库单{$model->bill_no}，出库类型：".DeliveryTypeEnum::getValue($model->delivery_type) ."，参考编号/订单号：{$model->order_sn} ";
                 }else{
-                    $log_msg = "修改其他出库单{$model->bill_no}，出库类型：".DeliveryTypeEnum::getValue($model->delivery_type) ."，参考编号/订单号：{$model->order_sn} ";
+                    $log_msg = "修改其它出库单{$model->bill_no}，出库类型：".DeliveryTypeEnum::getValue($model->delivery_type) ."，参考编号/订单号：{$model->order_sn} ";
                 }
                 $log = [
                     'bill_id' => $model->id,
                     'log_type' => LogTypeEnum::ARTIFICIAL,
-                    'log_module' => '其他出库单',
+                    'log_module' => '其它出库单',
                     'log_msg' => $log_msg
                 ];
                 \Yii::$app->warehouseService->billLog->createBillLog($log);
@@ -177,7 +177,7 @@ class BillCController extends BaseController
     }
 
     /**
-     * ajax 其他出库单-申请审核
+     * ajax 其它出库单-申请审核
      *
      * @return mixed|string|\yii\web\Response
      * @throws \yii\base\ExitException
@@ -203,7 +203,7 @@ class BillCController extends BaseController
             $log = [
                 'gold_id' => $model->id,
                 'log_type' => LogTypeEnum::ARTIFICIAL,
-                'log_module' => '其他出库单',
+                'log_module' => '其它出库单',
                 'log_msg' => '单据提审'
             ];
             \Yii::$app->warehouseService->billLog->createBillLog($log);
@@ -217,7 +217,7 @@ class BillCController extends BaseController
     }
 
     /**
-     * ajax 其他出库单-审核
+     * ajax 其它出库单-审核
      *
      * @return mixed|string|\yii\web\Response
      * @throws \yii\base\ExitException
@@ -246,7 +246,7 @@ class BillCController extends BaseController
                 $log = [
                     'gold_id' => $model->id,
                     'log_type' => LogTypeEnum::ARTIFICIAL,
-                    'log_module' => '其他出库单',
+                    'log_module' => '其它出库单',
                     'log_msg' => '单据审核'
                 ];
                 \Yii::$app->warehouseService->billLog->createBillLog($log);
@@ -266,7 +266,7 @@ class BillCController extends BaseController
     }
 
     /**
-     * 其他出库单-关闭
+     * 其它出库单-关闭
      *
      * @param $id
      * @return mixed
@@ -286,7 +286,7 @@ class BillCController extends BaseController
             $log = [
                 'gold_id' => $model->id,
                 'log_type' => LogTypeEnum::ARTIFICIAL,
-                'log_module' => '其他出库单',
+                'log_module' => '其它出库单',
                 'log_msg' => '单据取消'
             ];
             \Yii::$app->warehouseService->billLog->createBillLog($log);
@@ -299,7 +299,7 @@ class BillCController extends BaseController
     }
 
     /**
-     * 其他出库单-删除
+     * 其它出库单-删除
      *
      * @param $id
      * @return mixed
@@ -317,7 +317,7 @@ class BillCController extends BaseController
             $log = [
                 'bill_id' => $model->id,
                 'log_type' => LogTypeEnum::ARTIFICIAL,
-                'log_module' => '其他出库单',
+                'log_module' => '其它出库单',
                 'log_msg' => '单据删除'
             ];
             \Yii::$app->warehouseService->billLog->createBillLog($log);

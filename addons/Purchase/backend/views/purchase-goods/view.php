@@ -174,7 +174,7 @@ $this->params['breadcrumbs'][] = $this->title;
     <div class="col-xs-12">
         <div class="box">
             <div class="box-header">
-                <h3 class="box-title"><i class="fa fa-qrcode"></i> 其他信息</h3>
+                <h3 class="box-title"><i class="fa fa-qrcode"></i> 其它信息</h3>
             </div>
             <div class="box-body table-responsive">
                 <div class="col-xs-6">

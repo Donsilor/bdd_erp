@@ -85,7 +85,7 @@ return [
                         'route' => 'bill-t/index',
                     ],
                     [
-                        'title' => '其他出库单',
+                        'title' => '其它出库单',
                         'route' => 'bill-c/index',
                     ],
                     [

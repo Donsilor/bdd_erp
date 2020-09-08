@@ -120,14 +120,14 @@ class BillTController extends BaseController
                     if (!empty($gModel->file) && isset($gModel->file)) {
                         \Yii::$app->warehouseService->billT->uploadGoods($gModel);
                     }
-                    $log_msg = "创建其他入库单{$model->bill_no}";
+                    $log_msg = "创建其它入库单{$model->bill_no}";
                 }else{
-                    $log_msg = "修改其他入库单{$model->bill_no}";
+                    $log_msg = "修改其它入库单{$model->bill_no}";
                 }
                 $log = [
                     'bill_id' => $model->id,
                     'log_type' => LogTypeEnum::ARTIFICIAL,
-                    'log_module' => '其他入库单',
+                    'log_module' => '其它入库单',
                     'log_msg' => $log_msg
                 ];
                 \Yii::$app->warehouseService->billLog->createBillLog($log);
@@ -196,7 +196,7 @@ class BillTController extends BaseController
             $log = [
                 'bill_id' => $model->id,
                 'log_type' => LogTypeEnum::ARTIFICIAL,
-                'log_module' => '其他入库单',
+                'log_module' => '其它入库单',
                 'log_msg' => '单据提审'
             ];
             \Yii::$app->warehouseService->billLog->createBillLog($log);
@@ -234,7 +234,7 @@ class BillTController extends BaseController
                 $log = [
                     'bill_id' => $model->id,
                     'log_type' => LogTypeEnum::ARTIFICIAL,
-                    'log_module' => '其他入库单',
+                    'log_module' => '其它入库单',
                     'log_msg' => '单据审核'
                 ];
                 \Yii::$app->warehouseService->billLog->createBillLog($log);
@@ -319,7 +319,7 @@ class BillTController extends BaseController
             $log = [
                 'bill_id' => $model->id,
                 'log_type' => LogTypeEnum::ARTIFICIAL,
-                'log_module' => '其他收货单',
+                'log_module' => '其它收货单',
                 'log_msg' => '单据取消'
             ];
             \Yii::$app->warehouseService->billLog->createBillLog($log);
@@ -361,7 +361,7 @@ class BillTController extends BaseController
             $log = [
                 'bill_id' => $model->id,
                 'log_type' => LogTypeEnum::ARTIFICIAL,
-                'log_module' => '其他出库单',
+                'log_module' => '其它出库单',
                 'log_msg' => '单据删除'
             ];
             \Yii::$app->warehouseService->billLog->createBillLog($log);

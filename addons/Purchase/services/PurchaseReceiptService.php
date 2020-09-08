@@ -1568,7 +1568,7 @@ class PurchaseReceiptService extends Service
     /**
      *
      * 工厂成本=(基本工费+镶石费+补口费+超石费+配石费+配石工费+配件工费+税费+版费
-     *  +分色/分件费+表面工艺费+喷拉砂费+证书费+其他费用)
+     *  +分色/分件费+表面工艺费+喷拉砂费+证书费+其它费用)
      * @param PurchaseReceiptGoods $form
      * @return integer
      * @throws
@@ -1606,7 +1606,7 @@ class PurchaseReceiptService extends Service
         $factory_cost = bcadd($factory_cost, $form->xianqian_fee, 3);//镶嵌工费
         $factory_cost = bcadd($factory_cost, $form->extra_stone_fee, 3);//超石费
         $factory_cost = bcadd($factory_cost, $form->tax_fee, 3);//税费
-        $factory_cost = bcadd($factory_cost, $form->other_fee, 3);//其他补充费用
+        $factory_cost = bcadd($factory_cost, $form->other_fee, 3);//其它补充费用
 
         return sprintf("%.2f", $factory_cost) ?? 0;
     }

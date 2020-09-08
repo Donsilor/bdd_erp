@@ -241,7 +241,7 @@ class PurchaseApplyDiamondForm extends PurchaseApplyGoods
                     'group' =>'attr',
             );
         }
-        //其他信息
+        //其它信息
         $fields = array('stone_info','parts_info','remark');
         foreach ($fields as $field) {
             $apply_info[] = array(
