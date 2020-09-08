@@ -16,11 +16,101 @@ $this->params['breadcrumbs'][] = $this->title;
 ?>
 
 <div class="row">
-    <div class="col-xs-12">
+    <div class="col-sm-12">
         <div class="box">
             <div class="box-header">
                 <h3 class="box-title"><?= Html::encode($this->title) ?></h3>
                 <h6 style="color:red">*有款起版的商品（既有款号又有起版号的），下订单只能用起版号下单</h6>
+            </div>
+            <div >
+                    <?= Html::beginForm(Url::to(\common\helpers\ArrayHelper::merge([0 => 'index'], Yii::$app->request->get())), 'get') ?>
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h4 class="modal-title">筛选查询</h4>
+                        </div>
+                        <div class="modal-body">
+                            <div class="col-lg-3">
+                                <div class="form-group field-cate-sort">
+                                    <div class="col-sm-6 text-right">
+                                        <label class="control-label" for="cate-sort">条码号/款号/起版号：</label>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <?= Html::textInput('goods_sn', $search->goods_sn, ['class' => 'form-control']) ?>
+                                        <div class="help-block"></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-3">
+                                <div class="form-group field-cate-sort">
+                                    <div class="col-sm-4 text-right">
+                                        <label class="control-label" for="cate-sort">商品名称：</label>
+                                    </div>
+                                    <div class="col-sm-8">
+                                        <?= Html::textInput('goods_name', $search->goods_name, ['class' => 'form-control']) ?>
+                                        <div class="help-block"></div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-lg-6">
+                                <div class="form-group field-cate-sort">
+                                    <div class="col-sm-4 text-right">
+                                        <label class="control-label" for="cate-sort">款式分类：</label>
+                                    </div>
+                                    <div class="col-sm-8">
+                                        <?= \kartik\select2\Select2::widget([
+                                            'name'=>'style_cate_id',
+                                            'value'=>$search->style_cate_id,
+                                            'data'=>Yii::$app->styleService->styleCate::getDropDown(),
+                                            'options' => ['placeholder' =>"请选择",'multiple'=>true,'style'=>"width:180px"],
+                                            'pluginOptions' => [
+                                                'allowClear' => true,
+                                            ],
+                                        ])
+                                        ?>
+                                        <div class="help-block"></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!--                <div class="col-lg-6">-->
+                            <!--                    <div class="form-group field-cate-sort">-->
+                            <!--                        <div class="col-sm-4 text-right">-->
+                            <!--                            <label class="control-label" for="cate-sort">销量</label>-->
+                            <!--                        </div>-->
+                            <!--                        <div class="col-sm-8 ">-->
+                            <!--                            <div class="col-lg-12 input-group">-->
+                            <!--                                <div class="input-group">-->
+                            <!--                                    --><?//= Html::textInput('min_sales', $search->min_sales, ['class' => 'form-control', 'placeholder' => '最低销量']) ?>
+                            <!--                                    <span class="input-group-addon" style="border-color: #fff">-</span>-->
+                            <!--                                    --><?//= Html::textInput('max_sales', $search->max_sales, ['class' => 'form-control', 'placeholder' => '最高销量']) ?>
+                            <!--                                </div>-->
+                            <!--                                <div class="help-block"></div>-->
+                            <!--                            </div>-->
+                            <!--                        </div>-->
+                            <!--                    </div>-->
+                            <!--                </div>-->
+                            <!--                <div class="col-lg-6">-->
+                            <!--                    <div class="form-group field-cate-sort">-->
+                            <!--                        <div class="col-sm-4 text-right">-->
+                            <!--                            <label class="control-label" for="cate-sort">供应商</label>-->
+                            <!--                        </div>-->
+                            <!--                        <div class="col-sm-8">-->
+                            <!--                            --><?//= Html::dropDownList('supplier_id', $search->supplier_id, Yii::$app->tinyShopService->baseSupplier->getMapList(), [
+                            //                                'class' => 'form-control',
+                            //                                'prompt' => '全部',
+                            //                            ]) ?>
+                            <!--                            <div class="help-block"></div>-->
+                            <!--                        </div>-->
+                            <!--                    </div>-->
+                            <!--                </div>-->
+
+                        </div>
+                        <div class="modal-footer">
+                            <button type="reset" class="btn btn-white">重置</button>
+                            <button class="btn btn-primary">确定</button>
+                        </div>
+                    </div>
+                    <?= Html::endForm() ?>
             </div>
             <div class="box-body table-responsive">
                 <?php echo Html::batchButtons(false)?>
@@ -28,7 +118,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     'dataProvider' => $dataProvider,
                     'filterModel' => $searchModel,
                     'tableOptions' => ['class' => 'table table-hover'],
-                    'options' => ['style'=>' width:100%;white-space:nowrap;' ],
+                    'options' => ['style'=>'white-space:nowrap;' ],
                     'showFooter' => false,//显示footer行
                     'id'=>'grid',
                     'columns' => [
@@ -36,11 +126,11 @@ $this->params['breadcrumbs'][] = $this->title;
                             'class' => 'yii\grid\SerialColumn',
                             'visible' => false,
                         ],
-//                        [
-//                            'class'=>'yii\grid\CheckboxColumn',
-//                            'name'=>'id',  //设置每行数据的复选框属性
-//                            'headerOptions' => ['width'=>'30'],
-//                        ],
+                        [
+                            'class'=>'yii\grid\CheckboxColumn',
+                            'name'=>'id',  //设置每行数据的复选框属性
+                            'headerOptions' => ['width'=>'30'],
+                        ],
                         [
                             'label' => '商品图片',
                             'value' => function ($model) {
@@ -1106,3 +1196,6 @@ $this->params['breadcrumbs'][] = $this->title;
         </div>
     </div>
 </div>
+
+
+

@@ -4,6 +4,7 @@ namespace addons\Warehouse\backend\controllers;
 
 use addons\Style\common\enums\LogTypeEnum;
 use addons\Warehouse\common\forms\WarehouseGoodsForm;
+use addons\Warehouse\common\forms\WarehousGoodsSearchForm;
 use addons\Warehouse\common\models\WarehouseGoods;
 use common\enums\AuditStatusEnum;
 use common\enums\ConfirmEnum;
@@ -48,8 +49,16 @@ class WarehouseGoodsController extends BaseController
             ]
         ]);
 
+        $search = new WarehousGoodsSearchForm();
+        $search->attributes = Yii::$app->request->get();
         $dataProvider = $searchModel
             ->search(Yii::$app->request->queryParams,['updated_at']);
+
+
+        $dataProvider->query->andFilterWhere(['in', 'style_cate_id', $search->cateIds()])
+            ->andFilterWhere(['like', 'goods_name', $search->goods_name])
+            ->andFilterWhere($search->goods_sn());
+
 
         $created_at = $searchModel->created_at;
         if (!empty($created_at)) {
@@ -67,6 +76,7 @@ class WarehouseGoodsController extends BaseController
         return $this->render($this->action->id, [
             'dataProvider' => $dataProvider,
             'searchModel' => $searchModel,
+            'search' => $search,
         ]);
 
 
