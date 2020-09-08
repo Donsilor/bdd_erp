@@ -218,7 +218,7 @@ class StyleService extends Service
             if (empty($style_cate_id)) {
                 $flag = false;
                 $error[$i][] = "款式分类不能为空";
-            }elseif(!is_numeric($style_cate_id)){
+            } elseif (!is_numeric($style_cate_id)) {
                 $flag = false;
                 $error[$i][] = "款式分类填写有误";
             }
@@ -226,7 +226,7 @@ class StyleService extends Service
             if (empty($product_type_id)) {
                 $flag = false;
                 $error[$i][] = "产品线不能为空";
-            }elseif(!is_numeric($product_type_id)){
+            } elseif (!is_numeric($product_type_id)) {
                 $flag = false;
                 $error[$i][] = "产品线填写有误";
             }
@@ -234,7 +234,7 @@ class StyleService extends Service
             if (empty($style_channel_id)) {
                 $flag = false;
                 $error[$i][] = "归属渠道不能为空";
-            }elseif(!is_numeric($style_channel_id)){
+            } elseif (!is_numeric($style_channel_id)) {
                 $flag = false;
                 $error[$i][] = "归属渠道填写有误";
             }
@@ -243,7 +243,7 @@ class StyleService extends Service
             if (empty($style_material)) {
                 $flag = false;
                 $error[$i][] = "款式材质不能为空";
-            }elseif(!is_numeric($style_material)){
+            } elseif (!is_numeric($style_material)) {
                 $flag = false;
                 $error[$i][] = "款式材质填写有误";
             }
@@ -251,7 +251,7 @@ class StyleService extends Service
             if (empty($style_sex)) {
                 $flag = false;
                 $error[$i][] = "款式性别不能为空";
-            }elseif(!is_numeric($style_sex)){
+            } elseif (!is_numeric($style_sex)) {
                 $flag = false;
                 $error[$i][] = "款式性别填写有误";
             }
@@ -268,7 +268,7 @@ class StyleService extends Service
             }
             $remark = $form->formatValue($style['remark'], "");
 
-            $factory_name1 = $form->formatValue($style['factory_id1'], "");
+            $factory_name1 = $form->formatValue($style['factory_id1'], 0);
             $factory_id1 = $factory_name1;
             if (!is_numeric($factory_id1)) {
                 $flag = false;
@@ -288,7 +288,7 @@ class StyleService extends Service
                 $error[$i][] = "工厂1是否启用填写有误";
             }
 
-            $factory_name2 = $form->formatValue($style['factory_id2'], "");
+            $factory_name2 = $form->formatValue($style['factory_id2'], 0);
             $factory_id2 = $factory_name2;
             if (!is_numeric($factory_id2)) {
                 $flag = false;
@@ -493,11 +493,14 @@ class StyleService extends Service
                     }
                 }
             }
-        }
-        //创建款式属性信息
-        if (!empty($style_ids)) {
-            $command = \Yii::$app->db->createCommand("call sp_create_style_attributes(" . implode(',', $style_ids) . ");");
+
+            $command = \Yii::$app->db->createCommand("call sp_create_style_attributes(" . $styleM->id . ");");
             $command->execute();
         }
+        //创建款式属性信息
+//        if (!empty($style_ids)) {
+//            $command = \Yii::$app->db->createCommand("call sp_create_style_attributes(" . implode(',', $style_ids) . ");");
+//            $command->execute();
+//        }
     }
 }
