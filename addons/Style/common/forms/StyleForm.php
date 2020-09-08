@@ -2,9 +2,9 @@
 
 namespace addons\Style\common\forms;
 
-use addons\Style\common\enums\FactoryFeeEnum;
 use Yii;
 use addons\Style\common\models\Style;
+use addons\Style\common\enums\FactoryFeeEnum;
 use common\helpers\StringHelper;
 use common\helpers\ArrayHelper;
 

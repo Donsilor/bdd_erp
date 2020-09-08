@@ -194,13 +194,37 @@ class StyleService extends Service
             $style = $form->trimField($style);
 
             $style_name = $form->formatValue($style[0], "");
+            if(empty($style_name)){
+                $flag = false;
+                $error[$i][] = "款式名称不能为空";
+            }
             $style_sn = $form->formatValue($style[1], "");
             $style_cate_id = $form->formatValue($style[2], 0);
+            if(empty($style_cate_id)){
+                $flag = false;
+                $error[$i][] = "款式分类不能为空";
+            }
             $product_type_id = $form->formatValue($style[3], 0);
+            if(empty($product_type_id)){
+                $flag = false;
+                $error[$i][] = "产品线不能为空";
+            }
             $style_source_id = $form->formatValue($style[4], 0);
             $style_channel_id = $form->formatValue($style[5], 0);
+            if(empty($style_channel_id)){
+                $flag = false;
+                $error[$i][] = "归属渠道不能为空";
+            }
             $style_material = $form->formatValue($style[6], 0);
+            if(empty($style_material)){
+                $flag = false;
+                $error[$i][] = "款式材质不能为空";
+            }
             $style_sex = $form->formatValue($style[7], 0);
+            if(empty($style_sex)){
+                $flag = false;
+                $error[$i][] = "款式性别不能为空";
+            }
             $is_made = $form->formatValue($style[8], 0);
             $is_gift = $form->formatValue($style[9], 0);
             $remark = $form->formatValue($style[10], "");
@@ -326,6 +350,7 @@ class StyleService extends Service
             throw new \Exception("数据不能为空");
         }
         foreach ($styleList as $k => $item) {
+            //创建款式信息
             $styleM = new StyleForm();
             $styleM->id = null;
             $styleM->setAttributes($item);
@@ -335,6 +360,7 @@ class StyleService extends Service
             if (empty($styleM->style_sn)) {//款号为空自动创建
                 Yii::$app->styleService->style->createStyleSn($styleM);
             }
+            //创建款式工厂信息
             if (!empty($factoryList1[$k]) || !empty($factoryList2[$k])) {
                 $factoryList = array_merge($factoryList1[$k], $factoryList2[$k]);
                 foreach ($factoryList as $factory) {
@@ -346,6 +372,7 @@ class StyleService extends Service
                     }
                 }
             }
+            //创建款式工费信息
             $styleFee = $styleFee[$k] ?? [];
             foreach ($styleFee as $type => $fee) {
                 $fee_type = $form->getFeeTypeMap($type);
