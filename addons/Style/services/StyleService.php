@@ -185,7 +185,7 @@ class StyleService extends Service
         $error_off = true;
         $error = $field = $styleList = $factoryList1 = $factoryList2 = $styleFee = [];
         while ($style = fgetcsv($file)) {
-            if (count($style) != 33) {
+            if (count($style) != 35) {
                 throw new \Exception("模板格式不正确，请下载最新模板");
             }
             if ($i >= 102) {
@@ -197,7 +197,7 @@ class StyleService extends Service
                     if($field == false){
                         throw new \Exception("表头格式不对[code=1]");
                     }
-                    if(count($field) != 33){
+                    if(count($field) != 35){
                         throw new \Exception("表头格式不对[code=2]");
                     }
                 }
@@ -378,7 +378,7 @@ class StyleService extends Service
         }
 
         if (empty($styleList)) {
-            throw new \Exception("数据不能为空");
+            throw new \Exception("导入数据不能为空");
         }
         foreach ($styleList as $k => $item) {
             //创建款式信息
