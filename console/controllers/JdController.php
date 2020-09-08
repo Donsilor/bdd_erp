@@ -24,7 +24,7 @@ class JdController extends Controller
      */
     public function actionPullJdOrders($time_val = 1, $time_type = 1, $order_type = 1, $start_time = 0)
     {        
-        Console::output("Pull JD Orders BEGIN[".date('Y-m-d H:i:s')."]-------------------");       
+        Console::output("Pull JD Orders BEGIN[".date('Y-m-d H:i:s')."]-------------------");
         $change_type = $time_type == 1 ? "day" : "month";
         $start_format = $time_type == 1 ? "Y-m-d 00:00:00" : "Y-m-d H:i:s";        
         $start_time = empty($start_time) ? strtotime("-".$time_val." {$change_type}",time()): strtotime($start_time);
@@ -96,6 +96,7 @@ class JdController extends Controller
         $orderIdQuery = Order::find()->select(['id'])->where(['order_from'=>3]);
         $wareIds = OrderGoods::find()->select(['out_ware_id'])->distinct(true)->where(['AND',['order_id'=>$orderIdQuery],['IS','goods_spec', new \yii\db\Expression('NULL')]])->asArray()->all();
         $wareIds = $wareIds ? array_column($wareIds, 'out_ware_id') : [];
+        $wareIds = array_filter($wareIds); 
         $group_list = $this->groupArray($wareIds,20);
         foreach ($group_list as $wareIds) {
             $wareIds = implode(",", $wareIds);
