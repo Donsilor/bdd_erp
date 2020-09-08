@@ -2,6 +2,8 @@
 
 namespace addons\Style\services;
 
+use addons\Style\common\enums\InlayEnum;
+use common\enums\AuditStatusEnum;
 use Yii;
 use common\helpers\Url;
 use common\components\Service;
@@ -186,6 +188,9 @@ class StyleService extends Service
             if (count($style) != 33) {
                 throw new \Exception("模板格式不正确，请下载最新模板");
             }
+            if ($i >= 102) {
+                throw new \Exception("每次最多能导入100条数据");
+            }
             if ($i <= 1) {
                 if($i == 1){
                     $field = $form->formatField($style);
@@ -235,8 +240,9 @@ class StyleService extends Service
                 $flag = false;
                 $error[$i][] = "款式性别不能为空";
             }
-            $is_made = $form->formatValue($style['is_made'], 0);
-            $is_gift = $form->formatValue($style['is_gift'], 0);
+            $is_made = $form->formatValue($style['is_made'], 1);
+            //$is_gift = $form->formatValue($style['is_gift'], 0);
+            $status = $form->formatValue($style['status'], 1);
             $remark = $form->formatValue($style['remark'], "");
 
             $factory_name1 = $form->formatValue($style['factory_id1'], "");
@@ -244,14 +250,16 @@ class StyleService extends Service
             $factory_mo1 = $form->formatValue($style['factory_mo1'], "");
             $factory_remark1 = $form->formatValue($style['factory_remark1'], "");
             $shipping_time1 = $form->formatValue($style['shipping_time1'], "");
-            $factory_made1 = $form->formatValue($style['factory_made1'], 0);
+            $factory_made1 = $form->formatValue($style['factory_made1'], 1);
+            $factory_status1 = $form->formatValue($style['factory_status2'], 1);
 
             $factory_name2 = $form->formatValue($style['factory_id2'], "");
             $factory_id2 = $factory_name2;
             $factory_mo2 = $form->formatValue($style['factory_mo2'], "");
             $factory_remark2 = $form->formatValue($style['factory_remark2'], "");
             $shipping_time2 = $form->formatValue($style['shipping_time2'], "");
-            $factory_made2 = $form->formatValue($style['factory_made2'], 0);
+            $factory_made2 = $form->formatValue($style['factory_made2'], 1);
+            $factory_status2 = $form->formatValue($style['factory_status2'], 1);
 
             $peishi_fee = $form->formatValue($style['peishi_fee'], '0.00');
             $peijian_fee = $form->formatValue($style['peijian_fee'], '0.00');
@@ -278,7 +286,8 @@ class StyleService extends Service
                 'style_material' => $style_material,
                 'is_autosn' => 1,
                 'is_made' => $is_made,
-                'is_gift' => $is_gift,
+                //'is_gift' => $is_gift,
+                'status' => $status,
                 'remark' => $remark,
                 'creator_id' => $creator_id,
                 'created_at' => time(),
@@ -291,6 +300,7 @@ class StyleService extends Service
                 'is_made' => $factory_made1,
                 'is_default' => 1,
                 'remark' => $factory_remark1,
+                'status' => $factory_status1,
                 'creator_id' => $creator_id,
                 'created_at' => time(),
             ];
@@ -301,6 +311,7 @@ class StyleService extends Service
                 'shipping_time' => $shipping_time2,
                 'is_made' => $factory_made2,
                 'remark' => $factory_remark2,
+                'status' => $factory_status2,
                 'creator_id' => $creator_id,
                 'created_at' => time(),
             ];
@@ -344,7 +355,12 @@ class StyleService extends Service
                     $error[$i][] = $this->getError($factoryM1);
                 }
             }
-
+            foreach ($styleInfo as $item) {
+                if(!empty($item) && !is_numeric($item)){
+                    $flag = false;
+                    $error[$i][] = "费用必须为数字";
+                }
+            }
         }
         if (!$flag) {
             //发生错误
@@ -369,6 +385,18 @@ class StyleService extends Service
             $styleM = new Style();
             $styleM->id = null;
             $styleM->setAttributes($item);
+            if($styleM->status == StatusEnum::ENABLED){//启动则待审核
+                $styleM->audit_status = AuditStatusEnum::PENDING;
+                $styleM->auditor_id = \Yii::$app->user->identity->getId();
+                $styleM->audit_time = time();
+                $styleM->audit_remark = "批量导入";
+            }
+            if(empty($styleM->style_sn)){
+                $styleM->is_autosn = AutoSnEnum::YES;
+            }
+            if($styleM->type) {
+                $styleM->is_inlay = $styleM->type->is_inlay;
+            }
             if (false === $styleM->save()) {
                 throw new \Exception($this->getError($styleM));
             }
