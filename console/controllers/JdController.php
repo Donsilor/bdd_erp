@@ -106,7 +106,6 @@ class JdController extends Controller
                 Console::output("error=>".$e->getMessage());
                 continue;
             }
-            //print_r($wareList);exit;
             foreach ($wareList as $ware) {
                 try{
                     \Yii::$app->salesService->jdOrder->syncOrderGoods($ware);
