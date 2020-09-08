@@ -129,7 +129,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 <?php if($model->style_id) {?>
 
                     <div style="margin: 0px 0 20px 0;">
-                        <h3 class="box-title"> 其他信息<span style="font-size: 16px;color:grey;">（单据导出需填信息）</span></h3>
+                        <h3 class="box-title"> 其它信息<span style="font-size: 16px;color:grey;">（单据导出需填信息）</span></h3>
                     </div>
                     <div class="row">
                         <div class="col-lg-4">

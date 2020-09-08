@@ -8,7 +8,7 @@ use addons\Style\common\enums\AttrIdEnum;
 use common\helpers\StringHelper;
 
 /**
- * 其他收货单明细 Form
+ * 其它收货单明细 Form
  *
  */
 class WarehouseBillTGoodsForm extends WarehouseBillGoodsL
@@ -248,7 +248,7 @@ class WarehouseBillTGoodsForm extends WarehouseBillGoodsL
             '副石2配石方式', '副石2编号', '副石2类型', '副石2粒数', '副石2重(ct)', '副石2单价/ct', '石料备注',
             '配件方式', '配件类型', '配件材质', '配件数量', '配件金重(g)', '配件金价/g',
             '配石重量(ct)', '配石工费/ct', '配件工费', '克/工费', '镶嵌工艺', '镶石单价/颗', '表面工艺', '表面工艺费', '分色/分件费', '喷拉沙费', '补口费', '版费', '证书费',
-            '其他费用', '主石证书号', '主石证书类型', '(*)倍率(默认1)', '(*)金托类型', '备注',
+            '其它费用', '主石证书号', '主石证书类型', '(*)倍率(默认1)', '(*)金托类型', '备注',
         ];
         return [$values, $fields];
     }

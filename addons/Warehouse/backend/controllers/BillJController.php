@@ -167,7 +167,7 @@ class BillJController extends BaseController
     }
 
     /**
-     * ajax 其他出库单-申请审核
+     * ajax 其它出库单-申请审核
      *
      * @return mixed|string|\yii\web\Response
      * @throws \yii\base\ExitException

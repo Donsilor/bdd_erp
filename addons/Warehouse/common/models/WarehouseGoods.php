@@ -71,7 +71,7 @@ use Yii;
  * @property string $cert_fee 证书费
  * @property string $markup_rate 加价率
  * @property string $fense_fee 分色/分件费
- * @property string $other_fee 其他费用
+ * @property string $other_fee 其它费用
  * @property string $biaomiangongyi_fee 表面工艺工费
  * @property string $total_gong_fee 总工费
  * @property string $xiangkou 戒托镶口
@@ -228,7 +228,7 @@ class WarehouseGoods extends BaseModel
             'factory_cost' => '工厂成本',
             'bukou_fee' => '补口费',
             'tax_fee' => '税费',
-            'other_fee' => '其他费用',
+            'other_fee' => '其它费用',
             'biaomiangongyi_fee' => '表面工艺费',
             'xianqian_fee' => '镶石费',
             'extra_stone_fee' => '超石费',

@@ -37,7 +37,7 @@ class WarehouseTypeEnum extends \common\enums\BaseEnum
             self::CaiHuo => '拆货',
             self::TuiHuo => '退货',
             self::JieHuo => '借货',
-            self::QiTa => '其他',
+            self::QiTa => '其它',
         ];
     }
 

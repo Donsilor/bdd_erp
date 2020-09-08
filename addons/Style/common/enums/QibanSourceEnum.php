@@ -23,7 +23,7 @@ class QibanSourceEnum extends \common\enums\BaseEnum
     return [
         self::MANUAL_CREATE => '手动创建',
         self::BUSINESS_APPLI => '业务申请',
-        self::OTHER => '其他',
+        self::OTHER => '其它',
     ];
   }
    

@@ -149,7 +149,7 @@ class WarehouseBillGoodsA extends BaseModel
             'bukou_fee' => Yii::t('app', '补口费'),
             'xianqian_fee' => Yii::t('app', '镶石费'),
             'cert_fee' => Yii::t('app', '证书费'),
-            'other_fee' => Yii::t('app', '其他费用'),
+            'other_fee' => Yii::t('app', '其它费用'),
             'parts_fee' => Yii::t('app', '配件工费'),
             'fense_fee' => Yii::t('app', '分色/分件费'),
             'penrasa_fee' => Yii::t('app', '喷拉沙费'),

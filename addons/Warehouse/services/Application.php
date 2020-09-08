@@ -18,8 +18,8 @@ use common\components\Service;
  * @property \addons\Warehouse\services\WarehouseBillJService $billJ 借货单据
  * @property \addons\Warehouse\services\WarehouseBillSService $billS 销售单据
  * @property \addons\Warehouse\services\WarehouseBillDService $billD 销售退货单据
- * @property \addons\Warehouse\services\WarehouseBillTService $billT 其他收货单据
- * @property \addons\Warehouse\services\WarehouseBillCService $billC 其他出库单据
+ * @property \addons\Warehouse\services\WarehouseBillTService $billT 其它收货单据
+ * @property \addons\Warehouse\services\WarehouseBillCService $billC 其它出库单据
  * @property \addons\Warehouse\services\WarehouseBillBService $billB 退货返厂单据
  * @property \addons\Warehouse\services\WarehouseBillLogService $billLog 单据日志
  * @property \addons\Warehouse\services\WarehouseBillRepairService $repair 维修单据

@@ -356,7 +356,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 </div>
                 <div class="row">
                     <div class="with-border">
-                        <h5 class="box-title" style="font-weight: bold">工费及其他费用信息</h5>
+                        <h5 class="box-title" style="font-weight: bold">工费及其它费用信息</h5>
                     </div>
                     <div class="col-lg-4">
                         <?= $form->field($model, 'gong_fee')->textInput() ?>

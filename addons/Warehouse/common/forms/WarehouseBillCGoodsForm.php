@@ -7,7 +7,7 @@ use addons\Warehouse\common\models\WarehouseBillGoods;
 use common\helpers\StringHelper;
 
 /**
- * 其他出库单明细 Form
+ * 其它出库单明细 Form
  *
  */
 class WarehouseBillCGoodsForm extends WarehouseBillGoods

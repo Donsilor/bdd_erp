@@ -73,7 +73,7 @@ class StyleForm extends Style
             '工厂名称2[factory_id2]', '工厂模号2[factory_mo2]', '备注(计费方式)2[factory_remark2]', '出货时间(天)2[shipping_time2]', '是否支持定制2[factory_made2]',
 
             '配石工费/ct[peishi_fee]', '配件工费[peijian_fee]', '克/工费[gram_fee]', '基本工费[basic_fee]', '镶石费[xiangshi_fee]','表面工艺费[technology_fee]',
-            '分色费[fense_fee]', '喷拉沙费[penlasa_fee]', '补口费[bukou_fee]', '版费[templet_fee]', '证书费[cert_fee]', '其他费用[other_fee]',
+            '分色费[fense_fee]', '喷拉沙费[penlasa_fee]', '补口费[bukou_fee]', '版费[templet_fee]', '证书费[cert_fee]', '其它费用[other_fee]',
         ];
         return [$values, $fields];
     }

@@ -96,7 +96,7 @@ class AttrIdEnum
     const SIDE_STONE3_NUM = 999;//副石3数量
     const SIDE_STONE3_SPEC = 999;//副石3规格
 
-    //其他信息
+    //其它信息
     const GOODS_COLOR = 77;//货品外部颜色
     const PRODUCT_SIZE = 75;//成品尺寸(mm)
     const TALON_HEAD_TYPE = 90;//爪头形状

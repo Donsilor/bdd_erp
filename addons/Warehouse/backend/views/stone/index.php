@@ -376,7 +376,7 @@ $params = $params ? "&".http_build_query($params) : '';
                             'headerOptions' => ['width'=>'80'],
                         ],
                         [
-                            'label' => '其他入库',
+                            'label' => '其它入库',
                             'attribute'=>'rk_cnt',
                             'filter' => Html::activeTextInput($searchModel, 'rk_cnt', [
                                 'class' => 'form-control',
@@ -384,7 +384,7 @@ $params = $params ? "&".http_build_query($params) : '';
                             'headerOptions' => ['width'=>'80'],
                         ],
                         [
-                            'label' => '其他出库',
+                            'label' => '其它出库',
                             'attribute'=>'ck_cnt',
                             'filter' => Html::activeTextInput($searchModel, 'ck_cnt', [
                                 'class' => 'form-control',
