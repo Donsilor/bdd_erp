@@ -287,4 +287,28 @@ class StyleForm extends Style
         ];
         return $feeType[$type] ?? "";
     }
+
+    /**
+     * 工费类型映射
+     * @param string $type
+     * @return string
+     */
+    public function getFeeTypeNameMap($type)
+    {
+        $feeName = [
+            'peishi_fee' => "配石费",
+            'peijian_fee' => "配件费",
+            'gram_fee' => "克/工费",
+            'basic_fee' => "基本工费",
+            'xiangshi_fee' => "镶石费",
+            'technology_fee' => "表面工艺费",
+            'fense_fee' => "分色费",
+            'penlasa_fee' => "喷拉沙费",
+            'bukou_fee' => "补口费",
+            'templet_fee' => "版费",
+            'cert_fee' => "证书费",
+            'other_fee' => "其他费用",
+        ];
+        return $feeName[$type] ?? "";
+    }
 }

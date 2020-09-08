@@ -402,10 +402,10 @@ class StyleService extends Service
                     $error[$i][] = $this->getError($factoryM1);
                 }
             }
-            foreach ($feeInfo as $fee) {
+            foreach ($feeInfo as $type => $fee) {
                 if (!empty($fee) && !is_numeric($fee)) {
                     $flag = false;
-                    $error[$i][] = "费用必须为数字";
+                    $error[$i][] = $form->getFeeTypeNameMap($type)."必须为数字";
                 }
             }
             $i++;
