@@ -240,7 +240,7 @@ class StyleService extends Service
             }
             $style_source_id = $form->formatValue($style['style_source_id'], 0);
             $style_material = $form->formatValue($style['style_material'], 0);
-            if (empty($style_material)) {
+            if ($style_material === "") {
                 $flag = false;
                 $error[$i][] = "款式材质不能为空";
             } elseif (!is_numeric($style_material)) {
@@ -405,7 +405,7 @@ class StyleService extends Service
             foreach ($feeInfo as $type => $fee) {
                 if (!empty($fee) && !is_numeric($fee)) {
                     $flag = false;
-                    $error[$i][] = $form->getFeeTypeNameMap($type)."必须为数字";
+                    $error[$i][] = $form->getFeeTypeNameMap($type) . "必须为数字";
                 }
             }
             $i++;
