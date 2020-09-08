@@ -363,7 +363,7 @@ class StyleService extends Service
                 'created_at' => time(),
             ];
 
-            $styleFee[] = $styleInfo = [
+            $styleFee[] = $feeInfo = [
                 'peishi_fee' => $peishi_fee,
                 'peijian_fee' => $peijian_fee,
                 'gram_fee' => $gram_fee,
@@ -402,8 +402,8 @@ class StyleService extends Service
                     $error[$i][] = $this->getError($factoryM1);
                 }
             }
-            foreach ($styleInfo as $item) {
-                if (!empty($item) && !is_numeric($item)) {
+            foreach ($feeInfo as $fee) {
+                if (!empty($fee) && !is_numeric($fee)) {
                     $flag = false;
                     $error[$i][] = "费用必须为数字";
                 }
