@@ -94,7 +94,7 @@ class JdController extends Controller
     {
         Console::output("Update JD Sku BEGIN[".date('Y-m-d H:i:s')."]-------------------");
         $orderIdQuery = Order::find()->select(['id'])->where(['order_from'=>3]);
-        $wareIds = OrderGoods::find()->select(['out_ware_id'])->distinct(true)->where([['order_id'=>$orderIdQuery],['IS','goods_spec',new \yii\db\Expression('NULL')]])->asArray()->all();
+        $wareIds = OrderGoods::find()->select(['out_ware_id'])->distinct(true)->where(['AND',['order_id'=>$orderIdQuery],['goods_spec'=> new \yii\db\Expression('IS NULL')]])->asArray()->all();
         $wareIds = $wareIds ? array_column($wareIds, 'out_ware_id') : [];
         $group_list = $this->groupArray($wareIds,20);
         foreach ($group_list as $wareIds) {
