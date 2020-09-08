@@ -55,9 +55,9 @@ class JdSdk extends Component
                 $this->client->accessToken = $this->accessToken;
             }
         }     
-        echo $this->appKey.PHP_EOL;
-        echo $this->appSecret.PHP_EOL;
-        echo $this->accessToken.PHP_EOL;
+        //echo $this->appKey.PHP_EOL;
+        //echo $this->appSecret.PHP_EOL;
+        //echo $this->accessToken.PHP_EOL;
         parent::init();
     }
     /**
