@@ -410,6 +410,7 @@ class StyleService extends Service
             }
             $i++;
         }
+
         if (!$flag) {
             //发生错误
             $message = "";
@@ -477,8 +478,7 @@ class StyleService extends Service
                 }
             }
             //创建款式工费信息
-            $styleFee = $styleFee[$k] ?? [];
-            foreach ($styleFee as $type => $fee) {
+            foreach ($styleFee[$k] as $type => $fee) {
                 $fee_type = $form->getFeeTypeMap($type);
                 if ($fee > 0 && !empty($fee) && !empty($fee_type)) {
                     $feeM = new StyleFactoryFee();
