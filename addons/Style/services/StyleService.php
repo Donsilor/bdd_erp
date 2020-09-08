@@ -192,12 +192,12 @@ class StyleService extends Service
                 throw new \Exception("每次最多能导入100条数据");
             }
             if ($i <= 1) {
-                if($i == 1){
+                if ($i == 1) {
                     $field = $form->formatField($style);
-                    if($field == false){
+                    if ($field == false) {
                         throw new \Exception("表头格式不对[code=1]");
                     }
-                    if(count($field) != 35){
+                    if (count($field) != 35) {
                         throw new \Exception("表头格式不对[code=2]");
                     }
                 }
@@ -205,7 +205,7 @@ class StyleService extends Service
                 continue;
             }
             $style = $form->trimField($style, $field);
-            if($style == false){
+            if ($style == false) {
                 throw new \Exception("数据格式不对");
             }
             $style_name = $form->formatValue($style['style_name'], "");
@@ -356,7 +356,7 @@ class StyleService extends Service
                 }
             }
             foreach ($styleInfo as $item) {
-                if(!empty($item) && !is_numeric($item)){
+                if (!empty($item) && !is_numeric($item)) {
                     $flag = false;
                     $error[$i][] = "费用必须为数字";
                 }
@@ -380,26 +380,28 @@ class StyleService extends Service
         if (empty($styleList)) {
             throw new \Exception("导入数据不能为空");
         }
+        $style_ids = [];
         foreach ($styleList as $k => $item) {
             //创建款式信息
             $styleM = new Style();
             $styleM->id = null;
             $styleM->setAttributes($item);
-            if($styleM->status == StatusEnum::ENABLED){//启动则待审核
-                $styleM->audit_status = AuditStatusEnum::PENDING;
+            if ($styleM->status == StatusEnum::ENABLED) {//启动则待审核
+                $styleM->audit_status = AuditStatusEnum::PASS;
                 $styleM->auditor_id = \Yii::$app->user->identity->getId();
                 $styleM->audit_time = time();
                 $styleM->audit_remark = "批量导入";
             }
-            if(empty($styleM->style_sn)){
+            if (empty($styleM->style_sn)) {
                 $styleM->is_autosn = AutoSnEnum::YES;
             }
-            if($styleM->type) {
+            if ($styleM->type) {
                 $styleM->is_inlay = $styleM->type->is_inlay;
             }
             if (false === $styleM->save()) {
                 throw new \Exception($this->getError($styleM));
             }
+            $style_ids[] = $styleM->id;
             if (empty($styleM->style_sn)) {//款号为空自动创建
                 Yii::$app->styleService->style->createStyleSn($styleM);
             }
@@ -443,7 +445,11 @@ class StyleService extends Service
                     }
                 }
             }
-            //创建款式属性信息
+        }
+        //创建款式属性信息
+        if (!empty($style_ids)) {
+            $command = \Yii::$app->db->createCommand("call sp_create_style_attributes(" . implode(',', $style_ids) . ");");
+            $command->execute();
         }
     }
 }
