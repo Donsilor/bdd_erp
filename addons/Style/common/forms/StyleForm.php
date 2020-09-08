@@ -62,7 +62,7 @@ class StyleForm extends Style
             '#', '#', '#',
             "是否支持定制2" . $this->formatTitleId($this->getIsMadeList()),
 
-            '#', '#', '#', '#', '#', '#', '#', '#', '#', '#','#', '#',
+            '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#',
         ];
         $fields = [
             '(*)款式名称', '款式编号', '(*)款式分类', '(*)产品线', '(*)归属渠道', '款式来源', '(*)款式材质', '(*)款式性别', '是否支持定制', '是否赠品', '备注',
@@ -93,8 +93,14 @@ class StyleForm extends Style
         if (!empty($value)) {
             $result = array();
             preg_match_all("/(?:\[)(.*)(?:\])/i", $value, $result);
-            if (isset($result[1][0]) && !empty($result[1][0])) {
-                return $result[1][0];
+            if (isset($result[1][0])) {
+                if ($result[1][0] === 0) {
+                    return $defaultValue;
+                } elseif (!empty($result[1][0])) {
+                    return $result[1][0];
+                } else {
+                    return $defaultValue;
+                }
             } else {
                 return $value;
             }

@@ -194,34 +194,34 @@ class StyleService extends Service
             $style = $form->trimField($style);
 
             $style_name = $form->formatValue($style[0], "");
-            if(empty($style_name)){
+            if (empty($style_name)) {
                 $flag = false;
                 $error[$i][] = "款式名称不能为空";
             }
             $style_sn = $form->formatValue($style[1], "");
             $style_cate_id = $form->formatValue($style[2], 0);
-            if(empty($style_cate_id)){
+            if (empty($style_cate_id)) {
                 $flag = false;
                 $error[$i][] = "款式分类不能为空";
             }
             $product_type_id = $form->formatValue($style[3], 0);
-            if(empty($product_type_id)){
+            if (empty($product_type_id)) {
                 $flag = false;
                 $error[$i][] = "产品线不能为空";
             }
-            $style_source_id = $form->formatValue($style[4], 0);
-            $style_channel_id = $form->formatValue($style[5], 0);
-            if(empty($style_channel_id)){
+            $style_channel_id = $form->formatValue($style[4], 0);
+            if (empty($style_channel_id)) {
                 $flag = false;
                 $error[$i][] = "归属渠道不能为空";
             }
+            $style_source_id = $form->formatValue($style[5], 0);
             $style_material = $form->formatValue($style[6], 0);
-            if(empty($style_material)){
+            if (empty($style_material)) {
                 $flag = false;
                 $error[$i][] = "款式材质不能为空";
             }
             $style_sex = $form->formatValue($style[7], 0);
-            if(empty($style_sex)){
+            if (empty($style_sex)) {
                 $flag = false;
                 $error[$i][] = "款式性别不能为空";
             }
@@ -311,23 +311,28 @@ class StyleService extends Service
             ];
 
             $styleM = new StyleForm();
-            $styleM->id = rand(1000000000,9999999999);
+            $styleM->id = rand(1000000000, 9999999999);
             $styleM->setAttributes($styleInfo);
             if (!$styleM->validate()) {
                 $flag = false;
                 $error[$i][] = $this->getError($styleM);
             }
+
             $factoryM1 = new StyleFactory();
             $factoryM1->style_id = $styleM->id;
-            $factoryM1->setAttributes($factoryInfo1);
-            if (!$factoryM1->validate()) {
-                $flag = false;
-                $error[$i][] = $this->getError($factoryM1);
+            if (!empty($factoryInfo1['factory_id'])) {
+                $factoryM1->setAttributes($factoryInfo1);
+                if (!$factoryM1->validate()) {
+                    $flag = false;
+                    $error[$i][] = $this->getError($factoryM1);
+                }
             }
-            $factoryM1->setAttributes($factoryInfo2);
-            if (!$factoryM1->validate()) {
-                $flag = false;
-                $error[$i][] = $this->getError($factoryM1);
+            if (!empty($factoryInfo2['factory_id'])) {
+                $factoryM1->setAttributes($factoryInfo2);
+                if (!$factoryM1->validate()) {
+                    $flag = false;
+                    $error[$i][] = $this->getError($factoryM1);
+                }
             }
 
         }
@@ -351,7 +356,7 @@ class StyleService extends Service
         }
         foreach ($styleList as $k => $item) {
             //创建款式信息
-            $styleM = new StyleForm();
+            $styleM = new Style();
             $styleM->id = null;
             $styleM->setAttributes($item);
             if (false === $styleM->save()) {
@@ -361,12 +366,23 @@ class StyleService extends Service
                 Yii::$app->styleService->style->createStyleSn($styleM);
             }
             //创建款式工厂信息
-            if (!empty($factoryList1[$k]) || !empty($factoryList2[$k])) {
-                $factoryList = array_merge($factoryList1[$k], $factoryList2[$k]);
-                foreach ($factoryList as $factory) {
+            if (isset($factoryList1[$k]) || isset($factoryList2[$k])) {
+                if (isset($factoryList1[$k]['factory_id'])
+                    && !empty($factoryList1[$k]['factory_id'])) {
+
                     $factoryM = new StyleFactory();
                     $factoryM->style_id = $styleM->id;
-                    $factoryM->setAttributes($factory);
+                    $factoryM->setAttributes($factoryList1[$k]);
+                    if (false === $factoryM->save()) {
+                        throw new \Exception($this->getError($factoryM));
+                    }
+                }
+                if (isset($factoryList2[$k]['factory_id'])
+                    && !empty($factoryList2[$k]['factory_id'])) {
+
+                    $factoryM = new StyleFactory();
+                    $factoryM->style_id = $styleM->id;
+                    $factoryM->setAttributes($factoryList2[$k]);
                     if (false === $factoryM->save()) {
                         throw new \Exception($this->getError($factoryM));
                     }
@@ -380,7 +396,7 @@ class StyleService extends Service
                     $feeM = new StyleFactoryFee();
                     $feeM->style_id = $styleM->id;
                     $feeM->fee_type = $fee_type;
-                    $feeM->fee_price = $fee;
+                    $feeM->fee_price = sprintf("%.2f", round($fee, 2));
                     $feeM->creator_id = \Yii::$app->user->identity->getId();
                     $feeM->created_at = time();
                     $feeM->setAttributes($fee);
