@@ -386,7 +386,7 @@ class StyleService extends Service
             $styleM = new Style();
             $styleM->id = null;
             $styleM->setAttributes($item);
-            if ($styleM->status == StatusEnum::ENABLED) {//启动则待审核
+            if ($styleM->status == StatusEnum::ENABLED) {//启动即审核
                 $styleM->audit_status = AuditStatusEnum::PASS;
                 $styleM->auditor_id = \Yii::$app->user->identity->getId();
                 $styleM->audit_time = time();
