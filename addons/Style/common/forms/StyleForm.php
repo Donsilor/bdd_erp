@@ -165,13 +165,13 @@ class StyleForm extends Style
      */
     public function formatTitleId($data)
     {
-        $title = "[";
+        $title = "";
         if (!empty($data)) {
             foreach ($data as $id => $value) {
                 $title .= $value . "[" . $id . "]|";
             }
         }
-        return rtrim($title, "|") . "]" ?? "";
+        return rtrim($title, "|") ?? "";
     }
 
     /**
