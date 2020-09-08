@@ -80,7 +80,7 @@ class JdController extends Controller
         foreach ($order_list as $order) {
             try{
                 \Yii::$app->salesService->jdOrder->syncOrder($order);
-                Console::output($order->orderId." Success");
+                Console::output($order->orderId." Order Success");
             }catch (\Exception $e) {
                 Console::output($order->orderId." Error:".$e->getMessage());
             }
@@ -110,7 +110,7 @@ class JdController extends Controller
             foreach ($wareList as $ware) {
                 try{
                     \Yii::$app->salesService->jdOrder->syncOrderGoods($ware);
-                    Console::output($ware->wareId." Success");
+                    Console::output($ware->wareId." Goods Success");
                 }catch (\Exception $e) {
                     Console::output("{$ware->wareId}: error=>".$e->getMessage());
                 }
