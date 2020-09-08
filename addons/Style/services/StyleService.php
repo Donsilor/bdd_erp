@@ -408,6 +408,7 @@ class StyleService extends Service
                     $error[$i][] = "费用必须为数字";
                 }
             }
+            $i++;
         }
         if (!$flag) {
             //发生错误
