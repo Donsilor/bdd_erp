@@ -13,9 +13,25 @@ use yii\base\Model;
  */
 class WarehousGoodsSearchForm extends Model
 {
+    public $goods_id;
     public $goods_sn;
     public $goods_name;
     public $style_cate_id;
+    public $product_type_id;
+    public $goods_status;
+    public $material_type;
+    public $jintuo_type;
+    public $main_stone_type;
+    public $min_gold_weight;
+    public $max_gold_weight;
+    public $min_suttle_weight;
+    public $max_suttle_weight;
+    public $min_diamond_carat;
+    public $max_diamond_carat;
+    public $warehouse_id;
+    public $supplier_id;
+    public $style_channel_id;
+    public $goods_source;
 
     /**
      * @return array|array[]
@@ -24,8 +40,11 @@ class WarehousGoodsSearchForm extends Model
     {
         return [
 //            ['recommend', 'safe'],
-            [['goods_name','goods_sn'], 'string'],
-            [['style_cate_id'], 'integer'],
+            [['goods_name','goods_id','goods_sn'], 'string'],
+            [['style_cate_id','product_type_id','goods_status','material_type','jintuo_type','main_stone_type'
+                ,'warehouse_id','supplier_id','style_channel_id','goods_source'], 'integer'],
+            [['min_suttle_weight','max_suttle_weight','min_gold_weight','max_gold_weight','min_diamond_carat',
+                'max_diamond_carat'],'number'],
         ];
     }
 
@@ -33,65 +52,69 @@ class WarehousGoodsSearchForm extends Model
      * @return array
      */
     public function goods_sn(){
-        $where = ['or',['=','goods_id',$this->goods_sn],['=','style_sn',$this->goods_sn],['=','qiban_sn',$this->goods_sn]];
-        return $where;
-    }
-    /**
-     * @return array
-     */
-    public function recommend()
-    {
-        $where = [];
-        if (empty($this->recommend)) {
-            return $where;
-        }
-
-        foreach ($this->recommend as $value) {
-            if ($value == 1) {
-                $where['is_hot'] = 1;
-            }
-
-            if ($value == 2) {
-                $where['is_recommend'] = 1;
-            }
-
-            if ($value == 3) {
-                $where['is_new'] = 1;
-            }
-
-
-
-            // 分销
-            if ($value == 5) {
-                $where['is_open_commission'] = 1;
-            }
-
-            // 预售
-            if ($value == 6) {
-                $where['is_open_presell'] = 1;
-            }
-        }
-
+        $where = ['or',['=','style_sn',$this->goods_sn],['=','qiban_sn',$this->goods_sn]];
         return $where;
     }
 
 
+    /**
+     * @return array
+     * 金重
+     */
+    public function betweenSuttleWeight()
+    {
+        if (!empty($this->min_suttle_weight) && !empty($this->max_suttle_weight)) {
+            return ['between', 'suttle_weight', $this->min_suttle_weight, $this->max_suttle_weight];
+        }
+
+        if (!empty($this->min_suttle_weight)) {
+            return ['>=', 'suttle_weight', $this->min_suttle_weight];
+        }
+
+        if (!empty($this->max_suttle_weight)) {
+            return ['<=', 'suttle_weight', $this->max_suttle_weight];
+        }
+
+        return [];
+    }
 
     /**
      * @return array
+     * 连石重
      */
-    public function betweenSales()
+    public function betweenDiamondCarat()
     {
-        if (!empty($this->min_sales) && !empty($this->max_sales)) {
-            return ['between', 'total_sales', $this->min_sales, $this->max_sales];
+        if (!empty($this->min_diamond_carat) && !empty($this->max_diamond_carat)) {
+            return ['between', 'diamond_carat', $this->min_diamond_carat, $this->max_diamond_carat];
         }
 
-        if (!empty($this->min_sales)) {
-            return ['>=', 'total_sales', $this->min_sales];
+        if (!empty($this->min_diamond_carat)) {
+            return ['>=', 'diamond_carat', $this->min_diamond_carat];
         }
 
-        if (!empty($this->max_sales)) {
-            return ['<=', 'total_sales', $this->max_sales];
+        if (!empty($this->max_diamond_carat)) {
+            return ['<=', 'diamond_carat', $this->max_diamond_carat];
+        }
+
+        return [];
+    }
+
+    /**
+     * @return array
+     * 主石重
+     */
+    public function betweenGoldWeight()
+    {
+        if (!empty($this->min_gold_weight) && !empty($this->max_gold_weight)) {
+            return ['between', 'gold_weight', $this->min_gold_weight, $this->max_gold_weight];
+        }
+
+        if (!empty($this->min_gold_weight)) {
+            return ['>=', 'gold_weight', $this->min_gold_weight];
+        }
+
+        if (!empty($this->max_gold_weight)) {
+            return ['<=', 'gold_weight', $this->max_gold_weight];
         }
 
         return [];
@@ -101,7 +124,7 @@ class WarehousGoodsSearchForm extends Model
      *
      * @return array
      */
-    public function cateIds()
+    public function styleCateIds()
     {
         $style_cate_id_arr = [];
         $style_cate_id = $this->style_cate_id;
@@ -113,5 +136,25 @@ class WarehousGoodsSearchForm extends Model
             $style_cate_id_arr = ArrayHelper::merge($style_cate_id_arr,Yii::$app->styleService->styleCate->findChildIdsById($style_cate_id));
         }
         return $style_cate_id_arr;
+    }
+
+
+    /**
+     * 产品id
+     *
+     * @return array
+     */
+    public function proTypeIds()
+    {
+        $product_type_id_arr = [];
+        $product_type_id = $this->product_type_id;
+        if(is_array($product_type_id)){
+            foreach ($product_type_id as $pro_type_id){
+                $product_type_id_arr = ArrayHelper::merge($product_type_id_arr,Yii::$app->styleService->productType->findChildIdsById($pro_type_id));
+            }
+        }else{
+            $product_type_id_arr = ArrayHelper::merge($product_type_id_arr,Yii::$app->styleService->productType->findChildIdsById($product_type_id));
+        }
+        return $product_type_id_arr;
     }
 }
