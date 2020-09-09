@@ -250,8 +250,26 @@ return [
 
     'authItem' => [
         [
-            'title' => '所有权限',
-            'name' => '*',
+            'title' => '仓储管理',
+            'name' => 'warehouse',
+            'child' => [
+                [
+                    'title' =>'其他收货单',
+                    'name'  => 'bill-t/index',
+                    'child' =>[
+                        ['title' => '新增/编辑','name'  => 'bill-t/ajax-edit'],
+                        ['title' => '启用/禁用','name'  => 'bill-t/ajax-update'],
+                        ['title' => '提交审核','name'  => 'bill-t/ajax-apply'],
+                        ['title' => '审核','name'  => 'bill-t/ajax-audit'],
+                        ['title' => '详情','name'  => 'bill-t/view'],
+                        ['title' => '批量导入','name'  => 'bill-t/ajax-upload'],
+
+                        ['title' => '单据明细(*)','name'  => 'bill-t-goods/*'],
+                        ['title' => '结算商信息(*)','name'  => 'bill-pay/*'],
+                        ['title' => '日志列表(*)','name'  => 'bill-log/*'],
+                    ],
+                ],
+            ],
         ],
     ],
 ];
