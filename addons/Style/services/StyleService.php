@@ -2,9 +2,7 @@
 
 namespace addons\Style\services;
 
-use addons\Style\common\enums\InlayEnum;
-use common\enums\AuditStatusEnum;
-use common\helpers\StringHelper;
+use addons\Warehouse\common\models\WarehouseBillGoodsL;
 use Yii;
 use common\helpers\Url;
 use common\components\Service;
@@ -14,13 +12,15 @@ use addons\Style\common\models\StyleFactoryFee;
 use addons\Style\common\models\StyleAttribute;
 use addons\Style\common\models\StyleImages;
 use addons\Style\common\enums\StyleSexEnum;
-use addons\Style\common\enums\AttrIdEnum;
 use addons\Style\common\forms\StyleForm;
 use addons\Style\common\models\StyleGift;
-use common\helpers\UploadHelper;
+use common\enums\AuditStatusEnum;
+use common\enums\TargetTypeEnum;
 use common\enums\ConfirmEnum;
 use common\enums\StatusEnum;
 use common\enums\AutoSnEnum;
+use common\helpers\UploadHelper;
+use common\helpers\StringHelper;
 
 /**
  * Class TypeService
@@ -29,6 +29,7 @@ use common\enums\AutoSnEnum;
  */
 class StyleService extends Service
 {
+    public $targetType = TargetTypeEnum::STYLE_STYLE;
 
     /**
      * 款式编辑 tab
@@ -438,14 +439,14 @@ class StyleService extends Service
         if (empty($styleList)) {
             throw new \Exception("导入数据不能为空");
         }
-        $style_ids = [];
+        $style_ids = $saveFactory = $saveFee = [];
         foreach ($styleList as $k => $item) {
             //创建款式信息
             $styleM = new Style();
             $styleM->id = null;
             $styleM->setAttributes($item);
-            if ($styleM->status == StatusEnum::ENABLED) {//启动即审核
-                $styleM->audit_status = AuditStatusEnum::PASS;
+            if ($styleM->status == StatusEnum::ENABLED) {//启用即审核
+                $styleM->audit_status = AuditStatusEnum::PENDING;
                 $styleM->auditor_id = \Yii::$app->user->identity->getId();
                 $styleM->audit_time = time();
                 $styleM->audit_remark = "批量导入";
@@ -463,53 +464,105 @@ class StyleService extends Service
             if (empty($styleM->style_sn)) {//款号为空自动创建
                 Yii::$app->styleService->style->createStyleSn($styleM);
             }
-            //创建款式工厂信息
+            //创建审批流程
+            Yii::$app->services->flowType->createFlow($this->targetType, $styleM->id, $styleM->style_sn);
+            //款式工厂信息
             if (isset($factoryList1[$k]) || isset($factoryList2[$k])) {
                 if (isset($factoryList1[$k]['factory_id'])
                     && !empty($factoryList1[$k]['factory_id'])) {
-
-                    $factoryM = new StyleFactory();
-                    $factoryM->style_id = $styleM->id;
-                    $factoryM->setAttributes($factoryList1[$k]);
-                    if (false === $factoryM->save()) {
-                        throw new \Exception($this->getError($factoryM));
-                    }
+                    $factoryList1[$k]['style_id'] = $styleM->id;
+                    $saveFactory[] = $factoryList1[$k];
                 }
                 if (isset($factoryList2[$k]['factory_id'])
                     && !empty($factoryList2[$k]['factory_id'])) {
+                    $factoryList2[$k]['style_id'] = $styleM->id;
+                    $saveFactory[] = $factoryList2[$k];
 
-                    $factoryM = new StyleFactory();
-                    $factoryM->style_id = $styleM->id;
-                    $factoryM->setAttributes($factoryList2[$k]);
-                    if (false === $factoryM->save()) {
-                        throw new \Exception($this->getError($factoryM));
-                    }
                 }
             }
             //创建款式工费信息
             foreach ($styleFee[$k] as $type => $fee) {
                 $fee_type = $form->getFeeTypeMap($type);
                 if ($fee > 0 && !empty($fee) && !empty($fee_type)) {
-                    $feeM = new StyleFactoryFee();
-                    $feeM->style_id = $styleM->id;
-                    $feeM->fee_type = $fee_type;
-                    $feeM->fee_price = sprintf("%.2f", round($fee, 2));
-                    $feeM->creator_id = \Yii::$app->user->identity->getId();
-                    $feeM->created_at = time();
-                    $feeM->setAttributes($fee);
-                    if (false === $feeM->save()) {
-                        throw new \Exception($this->getError($feeM));
-                    }
+                    $feeData = [];
+                    $feeData['style_id'] = $styleM->id;
+                    $feeData['fee_type'] = $fee_type;
+                    $feeData['fee_price'] = sprintf("%.2f", round($fee, 2));
+                    $feeData['creator_id'] = \Yii::$app->user->identity->getId();
+                    $feeData['created_at'] = time();
+                    $saveFee[] = $feeData;
                 }
             }
 
             $command = \Yii::$app->db->createCommand("call sp_create_style_attributes(" . $styleM->id . ");");
             $command->execute();
         }
+
+        //创建款式工厂信息
+        $value = [];
+        $key = array_keys($saveFactory[0]);
+        foreach ($saveFactory as $item) {
+            $factoryM = new StyleFactory();
+            $factoryM->setAttributes($item);
+            if (!$factoryM->validate()) {
+                throw new \Exception($this->getError($factoryM));
+            }
+            $value[] = array_values($item);
+            if (count($value) >= 10) {
+                $res = Yii::$app->db->createCommand()->batchInsert(StyleFactory::tableName(), $key, $value)->execute();
+                if (false === $res) {
+                    throw new \Exception("创建工厂信息失败1");
+                }
+                $value = [];
+            }
+        }
+        if (!empty($value)) {
+            $res = \Yii::$app->db->createCommand()->batchInsert(StyleFactory::tableName(), $key, $value)->execute();
+            if (false === $res) {
+                throw new \Exception("创建工厂信息失败2");
+            }
+        }
+
+        //创建款式工费信息
+        $value = [];
+        $key = array_keys($saveFee[0]);
+        foreach ($saveFee as $item) {
+            $feeM = new StyleFactoryFee();
+            $feeM->setAttributes($item);
+            if (!$feeM->validate()) {
+                throw new \Exception($this->getError($feeM));
+            }
+            $value[] = array_values($item);
+            if (count($value) >= 10) {
+                $res = Yii::$app->db->createCommand()->batchInsert(StyleFactoryFee::tableName(), $key, $value)->execute();
+                if (false === $res) {
+                    throw new \Exception("创建工费信息失败1");
+                }
+                $value = [];
+            }
+        }
+        if (!empty($value)) {
+            $res = \Yii::$app->db->createCommand()->batchInsert(StyleFactoryFee::tableName(), $key, $value)->execute();
+            if (false === $res) {
+                throw new \Exception("创建工费信息失败2");
+            }
+        }
+
         //创建款式属性信息
 //        if (!empty($style_ids)) {
-//            $command = \Yii::$app->db->createCommand("call sp_create_style_attributes(" . implode(',', $style_ids) . ");");
-//            $command->execute();
+//            $styleIds = [];
+//            foreach ($style_ids as $style_id) {
+//                $styleIds[] = $style_id;
+//                if (count($styleIds) >= 10) {
+//                    $command = \Yii::$app->db->createCommand("call sp_create_style_attributes(" . implode(',', $styleIds) . ");");
+//                    $command->execute();
+//                    $styleIds = [];
+//                }
+//            }
+//            if (!empty($styleIds)) {
+//                $command = \Yii::$app->db->createCommand("call sp_create_style_attributes(" . implode(',', $styleIds) . ");");
+//                $command->execute();
+//            }
 //        }
     }
 }
