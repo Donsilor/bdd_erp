@@ -196,63 +196,63 @@ class WarehouseBillTGoodsForm extends WarehouseBillGoodsL
             '[非起版]和[有款起版]款号不能为空',
             '[起版号]和[款号]必填其一',
             '#',
-            '材质' . $this->formatTitle($this->getMaterialTypeMap()),
-            '材质颜色' . $this->formatTitle($this->getMaterialColorMap()),
-            '手寸(港号)' . $this->formatTitle($this->getPortNoMap()),
-            '手寸(美号)' . $this->formatTitle($this->getFingerMap()),
+            $this->formatTitle($this->getMaterialTypeMap()),//'材质' .
+            $this->formatTitle($this->getMaterialColorMap()),//'材质颜色' .
+            $this->formatTitle($this->getPortNoMap()),//'手寸(港号)' .
+            $this->formatTitle($this->getFingerMap()),//'手寸(美号)' .
             '#', '#',
-            '镶口' . $this->formatTitle($this->getXiangkouMap()),
+            $this->formatTitle($this->getXiangkouMap()),//'镶口' .
             '#',
-            '链类型' . $this->formatTitle($this->getChainTypeMap()),
-            '扣环' . $this->formatTitle($this->getCrampRingMap()),
-            '爪头形状' . $this->formatTitle($this->getTalonHeadTypeMap()),
+            $this->formatTitle($this->getChainTypeMap()),//'链类型' .
+            $this->formatTitle($this->getCrampRingMap()),//'扣环' .
+            $this->formatTitle($this->getTalonHeadTypeMap()),//'爪头形状' .
 
-            '配料方式' . $this->formatTitle($this->getPeiLiaoWayMap()),
+            $this->formatTitle($this->getPeiLiaoWayMap()),//'配料方式' .
             '#', '#', '#', '#',
 
-            '主石配石方式' . $this->formatTitle($this->getPeiShiWayMap()),
+            $this->formatTitle($this->getPeiShiWayMap()),//'主石配石方式' .
             '#',
-            '主石类型' . $this->formatTitle($this->getMainStoneTypeMap()),
+            $this->formatTitle($this->getMainStoneTypeMap()),//'主石类型' .
             '#', '#', '#',
-            '主石形状' . $this->formatTitle($this->getMainStoneShapeMap()),
-            '主石颜色' . $this->formatTitle($this->getMainStoneColorMap()),
-            '主石净度' . $this->formatTitle($this->getMainStoneClarityMap()),
-            '主石切工' . $this->formatTitle($this->getMainStoneCutMap()),
-            '主石色彩' . $this->formatTitle($this->getMainStoneColourMap()),
+            $this->formatTitle($this->getMainStoneShapeMap()),//'主石形状' .
+            $this->formatTitle($this->getMainStoneColorMap()),//'主石颜色' .
+            $this->formatTitle($this->getMainStoneClarityMap()),//'主石净度' .
+            $this->formatTitle($this->getMainStoneCutMap()),//'主石切工' .
+            $this->formatTitle($this->getMainStoneColourMap()),//'主石色彩' .
 
-            '副石1配石方式' . $this->formatTitle($this->getPeiShiWayMap()),
+            $this->formatTitle($this->getPeiShiWayMap()),//'副石1配石方式' .
             '#',
-            '副石1类型' . $this->formatTitle($this->getSecondStoneType1Map()),
+            $this->formatTitle($this->getSecondStoneType1Map()),//'副石1类型' .
             '#', '#', '#',
-            '副石1形状' . $this->formatTitle($this->getSecondStoneShape1Map()),
-            '副石1颜色' . $this->formatTitle($this->getSecondStoneColor1Map()),
-            '副石1净度' . $this->formatTitle($this->getSecondStoneClarity1Map()),
-            '副石1切工' . $this->formatTitle($this->getSecondStoneCut1Map()),
-            '副石1色彩' . $this->formatTitle($this->getSecondStoneColour1Map()),
+            $this->formatTitle($this->getSecondStoneShape1Map()),//'副石1形状' .
+            $this->formatTitle($this->getSecondStoneColor1Map()),//'副石1颜色' .
+            $this->formatTitle($this->getSecondStoneClarity1Map()),//'副石1净度' .
+            $this->formatTitle($this->getSecondStoneCut1Map()),//'副石1切工' .
+            $this->formatTitle($this->getSecondStoneColour1Map()),//'副石1色彩' .
 
-            '副石2配石方式' . $this->formatTitle($this->getPeiShiWayMap()),
+            $this->formatTitle($this->getPeiShiWayMap()),//'副石2配石方式' .
             '#',
-            '副石2类型' . $this->formatTitle($this->getSecondStoneType2Map()),
+            $this->formatTitle($this->getSecondStoneType2Map()),//'副石2类型' .
             '#', '#', '#',
 
-            '副石3配石方式' . $this->formatTitle($this->getPeiShiWayMap()),
+            $this->formatTitle($this->getPeiShiWayMap()),//'副石3配石方式' .
             '#',
-            '副石3类型' . $this->formatTitle($this->getSecondStoneType3Map()),
+            $this->formatTitle($this->getSecondStoneType3Map()),//'副石3类型' .
             '#', '#', '#', '#',
 
-            '配件方式' . $this->formatTitle($this->getPeiJianWayMap()),
-            '配件类型' . $this->formatTitle($this->getPartsTypeMap()),
-            '配件材质' . $this->formatTitle($this->getPartsMaterialMap()),
+            $this->formatTitle($this->getPeiJianWayMap()),//'配件方式' .
+            $this->formatTitle($this->getPartsTypeMap()),//'配件类型' .
+            $this->formatTitle($this->getPartsMaterialMap()),//'配件材质' .
             '#', '#', '#',
 
             '#', '#', '#', '#',
-            '镶嵌工艺' . $this->formatTitle($this->getXiangqianCraftMap()),
+            $this->formatTitle($this->getXiangqianCraftMap()),//'镶嵌工艺' .
             '#',
-            '表面工艺' . $this->formatTitle($this->getFaceCraftMap()),
+            $this->formatTitle($this->getFaceCraftMap()),//'表面工艺' .
             '#', '#', '#', '#', '#', '#', '#', '#', '#',
-            '主石证书类型' . $this->formatTitle($this->getCertTypeMap()),
+            $this->formatTitle($this->getCertTypeMap()),//'主石证书类型' .
             '#',
-            '金托类型' . $this->formatTitle($this->getJietuoTypeMap()),
+            $this->formatTitle($this->getJietuoTypeMap()),//'金托类型' .
             '#',
         ];
         $fields = [

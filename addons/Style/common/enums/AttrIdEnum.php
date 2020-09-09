@@ -91,7 +91,7 @@ class AttrIdEnum
     const SIDE_STONE2_COLOUR = 89;//副石2色彩
     
     //副石3信息
-    const SIDE_STONE3_TYPE = 999;//副石3类型
+    const SIDE_STONE3_TYPE = 98;//副石3类型
     const SIDE_STONE3_WEIGHT = 999;//副石3重量(ct)
     const SIDE_STONE3_NUM = 999;//副石3数量
     const SIDE_STONE3_SPEC = 999;//副石3规格
