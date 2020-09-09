@@ -901,7 +901,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'footerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#dec674;'],
                                 'value' => function ($model, $key, $index, $widget) {
                                     $widget->footer = $model->getAttributeLabel('second_stone_sn1');
-                                    return Yii::$app->attr->valueName($model->second_stone_sn1) ?? "";
+                                    return $model->second_stone_sn1 ?? "";
                                 },
                                 'filter' => Html::activeTextInput($searchModel, 'second_stone_sn1', [
                                     'class' => 'form-control',
