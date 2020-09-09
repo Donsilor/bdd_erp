@@ -124,7 +124,7 @@ class BillTGoodsController extends BaseController
         $bill = WarehouseBill::findOne($bill_id);
         $model = new WarehouseBillTGoodsForm();
         list($values, $fields) = $model->getTitleList();
-        header("Content-Disposition: attachment;filename=【{$bill_id}】入库单明细($bill->bill_no).csv");
+        header("Content-Disposition: attachment;filename=【{$bill_id}】入库单明细导入($bill->bill_no).csv");
         $content = implode($values, ",") . "\n" . implode($fields, ",") . "\n";
         echo iconv("utf-8", "gbk", $content);
         exit();

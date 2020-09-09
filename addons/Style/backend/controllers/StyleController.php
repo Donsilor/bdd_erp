@@ -135,7 +135,7 @@ class StyleController extends BaseController
     {
         $model = new StyleForm();
         list($values, $fields) = $model->getTitleList();
-        header("Content-Disposition: attachment;filename=【" . rand(000, 999) . "】款式数据(" . date('Ymd', time()) . ").csv");
+        header("Content-Disposition: attachment;filename=【" . rand(000, 999) . "】款式数据导入(" . date('Ymd', time()) . ").csv");
         $content = implode($values, ",") . "\n" . implode($fields, ",") . "\n";
         echo iconv("utf-8", "gbk", $content);
         exit();
