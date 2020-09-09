@@ -106,6 +106,7 @@ class WarehouseBillTGoodsForm extends WarehouseBillGoodsL
             'goods_num' => 0,
             'suttle_weight' => 0,
             'gold_weight' => 0,
+            'pure_gold' => 0,
             'lncl_loss_weight' => 0,
             'gold_amount' => 0,
             'main_stone_num' => 0,
@@ -128,6 +129,7 @@ class WarehouseBillTGoodsForm extends WarehouseBillGoodsL
             'biaomiangongyi_fee' => 0,
             'fense_fee' => 0,
             'penlasha_fee' => 0,
+            'lasha_fee' => 0,
             'bukou_fee' => 0,
             'templet_fee' => 0,
             'cert_fee' => 0,
@@ -142,6 +144,7 @@ class WarehouseBillTGoodsForm extends WarehouseBillGoodsL
                 $total['goods_num'] = bcadd($total['goods_num'], $good->goods_num);
                 $total['suttle_weight'] = bcadd($total['suttle_weight'], $good->suttle_weight, 3);
                 $total['gold_weight'] = bcadd($total['gold_weight'], $good->gold_weight, 3);
+                $total['pure_gold'] = bcadd($total['pure_gold'], $good->pure_gold, 3);
                 $total['lncl_loss_weight'] = bcadd($total['lncl_loss_weight'], $good->lncl_loss_weight, 3);
                 $total['gold_amount'] = bcadd($total['gold_amount'], $good->gold_amount, 2);
                 $total['main_stone_num'] = bcadd($total['main_stone_num'], $good->main_stone_num);
@@ -164,6 +167,7 @@ class WarehouseBillTGoodsForm extends WarehouseBillGoodsL
                 $total['biaomiangongyi_fee'] = bcadd($total['biaomiangongyi_fee'], $good->biaomiangongyi_fee, 2);
                 $total['fense_fee'] = bcadd($total['fense_fee'], $good->fense_fee, 2);
                 $total['penlasha_fee'] = bcadd($total['penlasha_fee'], $good->penlasha_fee, 2);
+                $total['lasha_fee'] = bcadd($total['lasha_fee'], $good->lasha_fee, 2);
                 $total['bukou_fee'] = bcadd($total['bukou_fee'], $good->bukou_fee, 2);
                 $total['templet_fee'] = bcadd($total['templet_fee'], $good->templet_fee, 2);
                 $total['cert_fee'] = bcadd($total['cert_fee'], $good->cert_fee, 2);

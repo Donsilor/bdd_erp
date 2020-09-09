@@ -934,14 +934,33 @@ class WarehouseBillTService extends Service
 
     /**
      *
-     * 含耗重=(净重*(1+损耗))
+     * 金重=(连石重-(主石重*数量)-副石1重-副石2重-副石3重-(配件重*数量))
+     * @param WarehouseBillTGoodsForm $form
+     * @return integer
+     * @throws
+     */
+    public function calculateGoldWeight($form)
+    {
+        $weight = bcsub($form->suttle_weight, $this->calculateMainStoneWeight($form), 3) ?? 0;
+        $weight = bcsub($weight, $this->calculateSecondStoneWeight($form), 3) ?? 0;
+        $weight = bcsub($weight, $this->calculatePartsWeight($form), 3) ?? 0;
+
+        if ($weight < 0) {
+            $weight = 0;
+        }
+        return $weight ?? 0;
+    }
+
+    /**
+     *
+     * 含耗重(g)=(净重(g)*(1+损耗(%)))
      * @param WarehouseBillTGoodsForm $form
      * @return integer
      * @throws
      */
     public function calculateLossWeight($form)
     {
-        return bcmul($form->suttle_weight, 1 + ($form->gold_loss / 100), 3) ?? 0;
+        return bcmul($this->calculateGoldWeight($form), 1 + ($form->gold_loss / 100), 3) ?? 0;
     }
 
     /**
@@ -958,7 +977,7 @@ class WarehouseBillTService extends Service
 
     /**
      *
-     * 主石总重=(主石单颗重*主石数量)
+     * 主石总重(ct)=(主石单颗重(ct)*主石数量)
      * @param WarehouseBillTGoodsForm $form
      * @return integer
      * @throws
@@ -966,6 +985,30 @@ class WarehouseBillTService extends Service
     public function calculateMainStoneWeight($form)
     {
         return bcmul($form->main_stone_weight, $form->main_stone_num, 3) ?? 0;
+    }
+
+    /**
+     *
+     * 副石总数量=(副石1数量+副石2数量+副石3数量)
+     * @param WarehouseBillTGoodsForm $form
+     * @return integer
+     * @throws
+     */
+    public function calculateSecondStoneNum($form)
+    {
+        return bcadd(bcadd($form->second_stone_num1, $form->second_stone_num2, 3), $form->second_stone_num3, 3) ?? 0;
+    }
+
+    /**
+     *
+     * 副石总重(ct)=(副石1重(ct)+副石2重(ct)+副石3重(ct))
+     * @param WarehouseBillTGoodsForm $form
+     * @return integer
+     * @throws
+     */
+    public function calculateSecondStoneWeight($form)
+    {
+        return bcadd(bcadd($form->second_stone_weight1, $form->second_stone_weight2, 3), $form->second_stone_weight3, 3) ?? 0;
     }
 
     /**
@@ -978,18 +1021,6 @@ class WarehouseBillTService extends Service
     public function calculateMainStoneCost($form)
     {
         return bcmul($this->calculateMainStoneWeight($form), $form->main_stone_price, 3) ?? 0;
-    }
-
-    /**
-     *
-     * 副石总重=(副石1重+副石2重+副石3重)
-     * @param WarehouseBillTGoodsForm $form
-     * @return integer
-     * @throws
-     */
-    public function calculateSecondStoneWeight($form)
-    {
-        return bcadd(bcadd($form->second_stone_weight1, $form->second_stone_weight2, 3), $form->second_stone_weight3, 3) ?? 0;
     }
 
     /**
@@ -1030,14 +1061,26 @@ class WarehouseBillTService extends Service
 
     /**
      *
-     * 配件额=(配件重*配件金价)
+     * 配件总重(g)=(配件重(g)*配件数量)
+     * @param WarehouseBillTGoodsForm $form
+     * @return integer
+     * @throws
+     */
+    public function calculatePartsWeight($form)
+    {
+        return bcmul($form->parts_gold_weight, $form->parts_num, 3) ?? 0;
+    }
+
+    /**
+     *
+     * 配件额=(配件总重(g)*配件金价/g)
      * @param WarehouseBillTGoodsForm $form
      * @return integer
      * @throws
      */
     public function calculatePartsAmount($form)
     {
-        return bcmul($form->parts_gold_weight, $form->parts_price, 3) ?? 0;
+        return bcmul($this->calculatePartsWeight($form), $form->parts_price, 3) ?? 0;
     }
 
     /**
@@ -1062,18 +1105,6 @@ class WarehouseBillTService extends Service
     public function calculateBasicGongFee($form)
     {
         return bcmul($form->gong_fee, $this->calculateLossWeight($form), 3) ?? 0;
-    }
-
-    /**
-     *
-     * 总副石数量=(副石1数量+副石2数量+副石3数量)
-     * @param WarehouseBillTGoodsForm $form
-     * @return integer
-     * @throws
-     */
-    public function calculateSecondStoneNum($form)
-    {
-        return bcadd(bcadd($form->second_stone_num1, $form->second_stone_num2, 3), $form->second_stone_num3, 3) ?? 0;
     }
 
     /**
@@ -1192,6 +1223,11 @@ class WarehouseBillTService extends Service
         if (!$form->validate()) {
             throw new \Exception($this->getError($form));
         }
+        if(!empty($form->pure_gold) && empty($form->peiliao_way)){
+            //如果折足填写，配料方式未填，则默认：配料方式：来料加工
+            $form->peiliao_way = PeiLiaoWayEnum::LAILIAO;
+        }
+        $form->gold_weight = $this->calculateGoldWeight($form);//金重
         $form->lncl_loss_weight = $this->calculateLossWeight($form);//含耗重
         $form->gold_amount = $this->calculateGoldAmount($form);//金料额
         $form->main_stone_amount = $this->calculateMainStoneCost($form);//主石成本
