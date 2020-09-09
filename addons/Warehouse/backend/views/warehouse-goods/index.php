@@ -116,7 +116,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             <div class="col-lg-3">
                                 <div class="form-group field-cate-sort">
                                     <div class="col-sm-4 text-right">
-                                        <label class="control-label" for="cate-sort">商品状态</label>
+                                        <label class="control-label" for="cate-sort">商品状态：</label>
                                     </div>
                                     <div class="col-sm-8">
                                         <?= Html::dropDownList('goods_status', $search->goods_status, \addons\Warehouse\common\enums\GoodsStatusEnum::getMap(), [
@@ -130,7 +130,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             <div class="col-lg-3">
                                 <div class="form-group field-cate-sort">
                                     <div class="col-sm-4 text-right">
-                                        <label class="control-label" for="cate-sort">材质</label>
+                                        <label class="control-label" for="cate-sort">材质：</label>
                                     </div>
                                     <div class="col-sm-8">
                                         <?= Html::dropDownList('material_type', $search->material_type, Yii::$app->attr->valueMap(AttrIdEnum::MATERIAL_TYPE), [
@@ -144,7 +144,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             <div class="col-lg-3">
                                 <div class="form-group field-cate-sort">
                                     <div class="col-sm-4 text-right">
-                                        <label class="control-label" for="cate-sort">金托类型</label>
+                                        <label class="control-label" for="cate-sort">金托类型：</label>
                                     </div>
                                     <div class="col-sm-8">
                                         <?= Html::dropDownList('jintuo_type', $search->jintuo_type, \addons\Style\common\enums\JintuoTypeEnum::getMap(), [
@@ -158,7 +158,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             <div class="col-lg-3">
                                 <div class="form-group field-cate-sort">
                                     <div class="col-sm-4 text-right">
-                                        <label class="control-label" for="cate-sort">主石类型</label>
+                                        <label class="control-label" for="cate-sort">主石类型：</label>
                                     </div>
                                     <div class="col-sm-8">
                                         <?= Html::dropDownList('main_stone_type', $search->main_stone_type, Yii::$app->attr->valueMap(AttrIdEnum::MAIN_STONE_TYPE), [
@@ -172,7 +172,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             <div class="col-lg-3">
                                 <div class="form-group field-cate-sort">
                                     <div class="col-sm-4 text-right">
-                                        <label class="control-label" for="cate-sort">金重</label>
+                                        <label class="control-label" for="cate-sort">金重：</label>
                                     </div>
                                     <div class="col-sm-8 ">
                                         <div class="col-lg-12 input-group">
@@ -189,7 +189,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             <div class="col-lg-3">
                                 <div class="form-group field-cate-sort">
                                     <div class="col-sm-4 text-right">
-                                        <label class="control-label" for="cate-sort">连石重</label>
+                                        <label class="control-label" for="cate-sort">连石重：</label>
                                     </div>
                                     <div class="col-sm-8 ">
                                         <div class="col-lg-12 input-group">
@@ -206,7 +206,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             <div class="col-lg-3">
                                 <div class="form-group field-cate-sort">
                                     <div class="col-sm-4 text-right">
-                                        <label class="control-label" for="cate-sort">主石重</label>
+                                        <label class="control-label" for="cate-sort">主石重：</label>
                                     </div>
                                     <div class="col-sm-8 ">
                                         <div class="col-lg-12 input-group">
@@ -244,7 +244,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             <div class="col-lg-3">
                                 <div class="form-group field-cate-sort">
                                     <div class="col-sm-4 text-right">
-                                        <label class="control-label" for="cate-sort">供应商</label>
+                                        <label class="control-label" for="cate-sort">供应商：</label>
                                     </div>
                                     <div class="col-sm-8">
                                         <?= \kartik\select2\Select2::widget([
@@ -264,7 +264,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             <div class="col-lg-3">
                                 <div class="form-group field-cate-sort">
                                     <div class="col-sm-4 text-right">
-                                        <label class="control-label" for="cate-sort">所属渠道</label>
+                                        <label class="control-label" for="cate-sort">所属渠道：</label>
                                     </div>
                                     <div class="col-sm-8">
                                         <?= \kartik\select2\Select2::widget([
@@ -284,7 +284,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             <div class="col-lg-3">
                                 <div class="form-group field-cate-sort">
                                     <div class="col-sm-4 text-right">
-                                        <label class="control-label" for="cate-sort">库存来源</label>
+                                        <label class="control-label" for="cate-sort">库存来源：</label>
                                     </div>
                                     <div class="col-sm-8">
                                         <?= \kartik\select2\Select2::widget([
