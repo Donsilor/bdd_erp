@@ -1101,7 +1101,7 @@ class WarehouseBillTService extends Service
      */
     public function calculatePartsWeight($form)
     {
-        return bcmul($form->parts_gold_weight, $form->parts_num, 3) ?? 0;
+        return bcmul($form->parts_gold_weight, 1, 3) ?? 0;//$form->parts_num
     }
 
     /**
@@ -1256,7 +1256,7 @@ class WarehouseBillTService extends Service
         if (!$form->validate()) {
             throw new \Exception($this->getError($form));
         }
-        if(!empty($form->pure_gold) && empty($form->peiliao_way)){
+        if (!empty($form->pure_gold) && empty($form->peiliao_way)) {
             //如果折足填写，配料方式未填，则默认：配料方式：来料加工
             $form->peiliao_way = PeiLiaoWayEnum::LAILIAO;
         }
