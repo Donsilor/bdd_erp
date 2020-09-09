@@ -412,6 +412,9 @@ class WarehouseBillTService extends Service
             $gold_loss = StringHelper::findNum($gold_loss);
             $gold_price = $form->formatValue($goods[18], 0) ?? 0;
             $pure_gold = $form->formatValue($goods[19], 0) ?? 0;
+            if(empty($peiliao_way) && $pure_gold>0){
+                $peiliao_way = PeiLiaoWayEnum::LAILIAO;
+            }
 
             $main_pei_type = $form->formatValue($goods[20], 0) ?? 0;
             $main_stone_sn = $goods[21] ?? "";
@@ -1001,7 +1004,7 @@ class WarehouseBillTService extends Service
      */
     public function calculateGoldWeight($form)
     {
-        $stone_weight = bcadd($this->calculateMainStoneWeight($form), $this->calculateSecondStoneWeight($form));
+        $stone_weight = bcadd($this->calculateMainStoneWeight($form), $this->calculateSecondStoneWeight($form), 3);
         $stone_weight = bcmul($stone_weight, 0.2, 5);//ct转换为克重
         $weight = bcsub($form->suttle_weight, $stone_weight, 3) ?? 0;
         $weight = bcsub($weight, $this->calculatePartsWeight($form), 3) ?? 0;
@@ -1166,7 +1169,7 @@ class WarehouseBillTService extends Service
      */
     public function calculateBasicGongFee($form)
     {
-        if(!empty($form->piece_fee)){
+        if(bccomp($form->piece_fee, 0, 5)>0){
             return $form->piece_fee ?? 0;
         }
         return bcmul($form->gong_fee, $this->calculateLossWeight($form), 3) ?? 0;
@@ -1289,10 +1292,10 @@ class WarehouseBillTService extends Service
         if (!$form->validate()) {
             throw new \Exception($this->getError($form));
         }
-        if (!empty($form->pure_gold) && empty($form->peiliao_way)) {
-            //如果折足填写，配料方式未填，则默认：配料方式：来料加工
-            $form->peiliao_way = PeiLiaoWayEnum::LAILIAO;
-        }
+//        if (!empty($form->pure_gold) && $form->peiliao_way === "") {
+//            //如果折足填写，配料方式未填，则默认：配料方式：来料加工
+//            $form->peiliao_way = PeiLiaoWayEnum::LAILIAO;
+//        }
         $form->gold_weight = $this->calculateGoldWeight($form);//金重
         $form->lncl_loss_weight = $this->calculateLossWeight($form);//含耗重
         $form->gold_amount = $this->calculateGoldAmount($form);//金料额

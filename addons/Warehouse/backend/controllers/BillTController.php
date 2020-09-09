@@ -135,7 +135,9 @@ class BillTController extends BaseController
                 $trans->commit();
 
                 if($isNewRecord) {
-                    return $this->message("保存成功", $this->redirect(['view', 'id' => $model->id]), 'success');
+                    \Yii::$app->getSession()->setFlash('success', '保存成功');
+                    return $this->redirect(['bill-t-goods/edit-all', 'bill_id' => $model->id]);
+                    //return $this->message("保存成功", $this->redirect(['view', 'id' => $model->id]), 'success');
                 }else {
                     \Yii::$app->getSession()->setFlash('success', '保存成功');
                     return $this->redirect(\Yii::$app->request->referrer);
