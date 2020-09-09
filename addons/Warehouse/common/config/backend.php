@@ -263,6 +263,7 @@ return [
                         ['title' => '审核','name'  => 'bill-t/ajax-audit'],
                         ['title' => '详情','name'  => 'bill-t/view'],
                         ['title' => '批量导入','name'  => 'bill-t/ajax-upload'],
+                        ['title' => '批量导入文件下载','name'  => 'bill-t/download-csv'],
 
                         ['title' => '单据明细(*)','name'  => 'bill-t-goods/*'],
                         ['title' => '结算商信息(*)','name'  => 'bill-pay/*'],

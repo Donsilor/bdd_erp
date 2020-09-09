@@ -184,7 +184,7 @@ class StyleService extends Service
         $i = 0;
         $flag = true;
         $error_off = true;
-        $error = $field = $styleList = $factoryList1 = $factoryList2 = $styleFee = [];
+        $error = $style_sns = $field = $styleList = $factoryList1 = $factoryList2 = $styleFee = [];
         while ($style = fgetcsv($file)) {
             if (count($style) != 35) {
                 throw new \Exception("模板格式不正确，请下载最新模板");
@@ -216,6 +216,13 @@ class StyleService extends Service
                 $style_name = StringHelper::strToChineseCharacters($style['style_cate_id']) ?? "1";
             }
             $style_sn = $form->formatValue($style['style_sn'], "");
+            if (!empty($style_sn)) {
+                if ($key = array_search($style_sn, $style_sns)) {
+                    $flag = false;
+                    $error[$i][] = "款号与第" . ($key + 1) . "行款号重复";
+                }
+                $style_sns[$i] = $style_sn;
+            }
             $style_cate_id = $form->formatValue($style['style_cate_id'], 0);
             if (empty($style_cate_id)) {
                 $flag = false;
