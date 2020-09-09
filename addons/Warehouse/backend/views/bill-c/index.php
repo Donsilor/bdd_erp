@@ -26,6 +26,10 @@ $params = $params ? "&".http_build_query($params) : '';
                         'data-toggle' => 'modal',
                         'data-target' => '#ajaxModal',
                     ]); ?>
+                    <?= Html::create(['ajax-import'], '批量导入', [
+                        'data-toggle' => 'modal',
+                        'data-target' => '#ajaxModal',
+                    ]); ?>
                     <?= Html::button('导出', [
                         'class'=>'btn btn-success btn-xs',
                         'onclick' => 'batchExport()',

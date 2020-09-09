@@ -26,6 +26,9 @@ use addons\Warehouse\common\forms\WarehouseBillBForm;
 use addons\Warehouse\common\enums\BillStatusEnum;
 use addons\Warehouse\common\enums\BillTypeEnum;
 use common\enums\AuditStatusEnum;
+use common\helpers\FileHelper;
+use addons\Warehouse\common\forms\ImportBillCForm;
+use yii\web\UploadedFile;
 
 /**
  * WarehouseBillBController implements the CRUD actions for WarehouseBillBController model.
@@ -276,7 +279,7 @@ class BillCController extends BaseController
         $this->modelClass = WarehouseBill::class;
         if (!($model = $this->modelClass::findOne($id))) {
             return $this->message("找不到数据", $this->redirect(Yii::$app->request->referrer), 'error');
-        }
+        }        
         try{
             $trans = \Yii::$app->db->beginTransaction();
 
@@ -328,7 +331,49 @@ class BillCController extends BaseController
             return $this->message($e->getMessage(), $this->redirect(\Yii::$app->request->referrer), 'error');
         }
     }
-
+    /**
+     * 其它出库单批量导入
+     */
+    public function actionAjaxImport()
+    {
+        $model =  new ImportBillCForm();
+        // ajax 校验
+        $this->activeFormValidate($model);
+        
+        if ($model->load(\Yii::$app->request->post())) {
+            
+            try{
+                $trans = \Yii::$app->db->beginTransaction();
+                
+                $model->file = UploadedFile::getInstance($model, 'file');
+                $model->bill_type = $this->billType;
+                
+                \Yii::$app->warehouseService->billC->importBillC($model);
+                $trans->commit();
+                return $this->message('导入成功', $this->redirect(Yii::$app->request->referrer), 'success');
+            }catch (\Exception $e){
+                $trans->rollBack();
+                return $this->message($e->getMessage(), $this->redirect(\Yii::$app->request->referrer), 'error');
+            }
+        }
+        return $this->renderAjax($this->action->id, [
+                'model' => $model,
+        ]);
+    }
+    /**
+     * 下载出库单单据模板
+     */
+    public function actionDownloadTpl()
+    {
+        $file = dirname(dirname(__FILE__)).'/resources/excel/其它出库单数据模板导入.xlsx';
+        $content = file_get_contents($file);
+        if (!empty($content)) {
+            header("Content-type:application/vnd.ms-excel");
+            header("Content-Disposition: attachment;filename=".basename($file));
+            header("Content-Transfer-Encoding: binary");
+            exit($content);
+        }
+    }
 
     /***
      * 导出Excel

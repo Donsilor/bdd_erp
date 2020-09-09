@@ -173,7 +173,14 @@ class GoldBillCController extends GoldBillController
             'model' => $model,
         ]);
     }
-
+    
+    /**
+     * 下载出库单单据模板
+     */
+    public function actionDownloadTpl()
+    {
+        echo Yii::$app->basePath;
+    }
     /**
      * @param null $ids
      * @return bool|mixed

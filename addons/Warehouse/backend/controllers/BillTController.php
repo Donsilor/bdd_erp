@@ -257,7 +257,7 @@ class BillTController extends BaseController
      * @return mixed|string|\yii\web\Response
      * @throws
      */
-    public function actionDownloadCsv()
+    public function actionDownloadTpl()
     {
         $model = new WarehouseBillTGoodsForm();
         list($values, $fields) = $model->getTitleList();

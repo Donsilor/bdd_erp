@@ -159,7 +159,8 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'filter' => false,
                             ],
                             [
-                                'attribute' => 'sale_price',
+                                'attribute' => 'chuku_price',
+                                'visible' => \common\helpers\Auth::verify(\common\enums\SpecialAuthEnum::VIEW_CHUKU_PRICE),
                                 'filter' => false,
                             ],
                             [

@@ -57,7 +57,7 @@ class WarehouseBillGoods extends BaseModel
         return [
             [['id', 'bill_id', 'goods_num', 'order_detail_id', 'source_detail_id', 'put_in_type', 'warehouse_id','from_warehouse_id','to_warehouse_id', 'status','creator_id', 'created_at', 'updated_at'], 'integer'],
             [['bill_no', 'bill_type', 'goods_name', 'style_sn'], 'required'],
-            [['gold_weight', 'gold_loss', 'diamond_carat', 'cost_price', 'sale_price', 'market_price', 'markup_rate'], 'number'],
+            [['gold_weight', 'gold_loss', 'diamond_carat', 'cost_price','chuku_price', 'sale_price', 'market_price', 'markup_rate'], 'number'],
             [['bill_no', 'goods_id', 'style_sn', 'diamond_cert_id'], 'string', 'max' => 30],
             [['bill_type'], 'string', 'max' => 3],
             [['goods_name'], 'string', 'max' => 160],
@@ -98,7 +98,8 @@ class WarehouseBillGoods extends BaseModel
             'diamond_clarity' => '钻石净度',
             'diamond_cert_id' => '证书号',
             'diamond_cert_type' => '证书类型',
-            'cost_price' => '成本价',
+            'cost_price' => '采购成本价',
+            'chuku_price' => '出库成本价',
             'sale_price' => '销售价',
             'market_price' => '市场价',
             'markup_rate' => '加价率',
@@ -109,7 +110,18 @@ class WarehouseBillGoods extends BaseModel
             'updated_at' => '更新时间',
         ];
     }
-
+    /**
+     * @param bool $insert
+     * @return bool
+     * @throws \yii\base\Exception
+     */
+    public function beforeSave($insert)
+    {
+        if ($this->isNewRecord) {
+            $this->creator_id = Yii::$app->user->identity->getId() ?? 0;
+        }
+        return parent::beforeSave($insert);
+    }
     /**
      * 仓库 一对一
      * @return \yii\db\ActiveQuery
