@@ -201,7 +201,7 @@ class WarehouseBillTService extends Service
         $i = 0;
         $flag = true;
         $error_off = true;
-        $error = $saveData = [];
+        $error = $saveData = $goods_ids = $style_sns = [];
         $bill = WarehouseBill::findOne($form->bill_id);
         while ($goods = fgetcsv($file)) {
             if ($i <= 1) {
@@ -217,13 +217,19 @@ class WarehouseBillTService extends Service
             if (empty($goods_id)) {
                 $goods_id = SnHelper::createGoodsId();
                 $auto_goods_id = 0;
+            } else {
+                if ($key = array_search($goods_id, $goods_ids)) {
+                    $flag = false;
+                    $error[$i][] = "货号与第" . ($key + 1) . "行货号重复";
+                }
+                $goods_ids[$i] = $goods_id;
             }
             $style_sn = $goods[1] ?? "";
             $qiban_sn = $goods[2] ?? "";
             if (!empty($style_sn)) {
-                $error[$i][] = "[" . $style_sn . "]";
+                $style_sns[$i] = "【" . $style_sn . "】";
             } else {
-                $error[$i][] = "[" . $qiban_sn . "]";
+                $style_sns[$i] = "【" . $qiban_sn . "】";
             }
             if (!empty($style_sn) && !empty($qiban_sn)) {
                 //throw new \Exception($row . "[款号]和[起版号]只能填其一");
@@ -902,14 +908,16 @@ class WarehouseBillTService extends Service
             }
             $i++;
         }
-        //echo '<pre>';
-        //print_r($saveData);die;
         if (!$flag) {
             //发生错误
             $message = "*注：填写属性值有误可能为以下情况：①填写格式有误 ②该款式属性下无此属性值<hr><hr>";
             foreach ($error as $k => $v) {
+                $style_sn = "";
+                if (isset($style_sns[$k]) && !empty($style_sns[$k])) {
+                    $style_sn = $style_sns[$k] ?? "";
+                }
                 $s = "【" . implode('】,【', $v) . '】';
-                $message .= '第' . ($k + 1) . '行：' . $s . '<hr>';
+                $message .= '第' . ($k + 1) . '行：款号' . $style_sn . $s . '<hr>';
             }
             if ($error_off && count($error) > 0 && $message) {
                 header("Content-Disposition: attachment;filename=错误提示" . date('YmdHis') . ".log");
