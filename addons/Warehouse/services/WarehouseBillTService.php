@@ -984,8 +984,9 @@ class WarehouseBillTService extends Service
      */
     public function calculateGoldWeight($form)
     {
-        $weight = bcsub($form->suttle_weight, $this->calculateMainStoneWeight($form), 3) ?? 0;
-        $weight = bcsub($weight, $this->calculateSecondStoneWeight($form), 3) ?? 0;
+        $stone_weight = bcadd($this->calculateMainStoneWeight($form), $this->calculateSecondStoneWeight($form));
+        $stone_weight = bcmul($stone_weight, 0.2, 5);//ct转换为克重
+        $weight = bcsub($form->suttle_weight, $stone_weight, 3) ?? 0;
         $weight = bcsub($weight, $this->calculatePartsWeight($form), 3) ?? 0;
 
         if ($weight < 0) {
@@ -996,7 +997,7 @@ class WarehouseBillTService extends Service
 
     /**
      *
-     * 含耗重(g)=(净重(g)*(1+损耗(%)))
+     * 含耗重(g)=(金重(g)*(1+损耗(%)))
      * @param WarehouseBillTGoodsForm $form
      * @return integer
      * @throws
