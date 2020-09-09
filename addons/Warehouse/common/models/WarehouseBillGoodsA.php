@@ -82,17 +82,17 @@ class WarehouseBillGoodsA extends BaseModel
     {
         return [
             [['bill_id'], 'required'],
-            [['bill_id', 'main_stone_num', 'second_stone_num1','second_stone_num2','auditor_id', 'audit_status', 'audit_time',], 'integer'],
+            [['bill_id', 'main_stone_num', 'second_stone_num1','second_stone_num2','second_stone_num3','auditor_id', 'audit_status', 'audit_time',], 'integer'],
             [['xiangkou', 'gold_weight', 'suttle_weight', 'gold_loss', 'gold_price', 'gold_amount', 'main_stone_price', 'diamond_carat',
-                'second_stone_weight1', 'second_stone_price1', 'second_stone_weight2', 'second_stone_price2', 'parts_gold_weight', 'parts_price',
+                'second_stone_weight1', 'second_stone_price1', 'second_stone_weight2','second_stone_weight3', 'second_stone_price2', 'parts_gold_weight', 'parts_price',
                 'gong_fee', 'bukou_fee', 'xianqian_fee', 'cert_fee','biaomiangongyi_fee', 'cost_price','peishi_weight','other_fee','parts_fee',
-                'fense_fee','penrasa_fee','edition_fee','xianqian_price','peishi_fee'], 'number'],
+                'fense_fee','penrasa_fee','edition_fee','xianqian_price','peishi_fee','piece_fee','pure_gold','lasha_fee','second_stone_price3'], 'number'],
             [['goods_id','style_sn'], 'string', 'max' => 30],
             [['goods_name', 'product_size'], 'string', 'max' => 100],
             [['finger', 'main_stone_type', 'diamond_shape', 'diamond_color', 'diamond_clarity', 'diamond_cut', 'diamond_polish', 'diamond_symmetry',
                 'diamond_fluorescence', 'diamond_cert_type', 'second_stone_type1', 'second_stone_shape1', 'second_stone_color1', 'second_stone_clarity1',
-                'second_stone_type2'], 'safe'],
-            [['main_stone_sn', 'diamond_cert_id', 'second_stone_sn1'], 'string', 'max' => 20],
+                'second_stone_type2','second_stone_type3',], 'safe'],
+            [['main_stone_sn', 'diamond_cert_id', 'second_stone_sn1','second_stone_sn2','second_stone_sn3'], 'string', 'max' => 20],
             [['audit_remark'], 'string', 'max' => 255]
 
         ];
@@ -163,6 +163,16 @@ class WarehouseBillGoodsA extends BaseModel
             'audit_status' => '审核状态',
             'audit_time' => '审核时间',
             'audit_remark' => '审核备注',
+            'pure_gold' => '折足',
+            'lasha_fee' => '拉沙费',
+            'second_stone_sn2' => '副石2编号',
+            'second_stone_sn3' => '副石3编号',
+            'second_stone_type3' => '副石3类型',
+            'second_stone_num3' => '副石3数量',
+            'second_stone_weight3' => '副石3重量(ct)',
+            'second_stone_price3' => '副石3买入单价',
+            'second_stone3_cost' => '副石3成本',
+            'piece_fee' => '件/工费',
         ];
     }
 

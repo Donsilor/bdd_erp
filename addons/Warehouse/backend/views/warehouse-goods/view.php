@@ -245,6 +245,10 @@ $this->params['breadcrumbs'][] = $this->title;
                             <td><?= $model->gold_amount ?></td>
                         </tr>
                         <tr>
+                            <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('pure_gold') ?>：</td>
+                            <td><?= $model->pure_gold ?></td>
+                        </tr>
+                        <tr>
                             <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('suttle_weight') ?>：</td>
                             <td><?= $model->suttle_weight ?></td>
                         </tr>
@@ -309,6 +313,22 @@ $this->params['breadcrumbs'][] = $this->title;
                             <td><?= $model->biaomiangongyi_fee ?></td>
                         </tr>
                         <tr>
+                            <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('edition_fee') ?>：</td>
+                            <td><?= $model->edition_fee ?></td>
+                        </tr>
+                        <tr>
+                            <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('penrasa_fee') ?>：</td>
+                            <td><?= $model->penrasa_fee ?></td>
+                        </tr>
+                        <tr>
+                            <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('lasha_fee') ?>：</td>
+                            <td><?= $model->lasha_fee ?></td>
+                        </tr>
+                        <tr>
+                            <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('piece_fee') ?>：</td>
+                            <td><?= $model->piece_fee ?></td>
+                        </tr>
+                        <tr>
                             <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('peishi_fee') ?>：</td>
                             <td><?= $model->peishi_fee ?></td>
                         </tr>
@@ -354,11 +374,6 @@ $this->params['breadcrumbs'][] = $this->title;
                             <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('kezi') ?>：</td>
                             <td><?= $model->kezi ?></td>
                         </tr>
-
-
-
-
-
 
                     </table>
                 </div>
@@ -446,7 +461,10 @@ $this->params['breadcrumbs'][] = $this->title;
                             <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('main_stone_size') ?>：</td>
                             <td><?= $model->main_stone_size ?></td>
                         </tr>
-
+                        <tr>
+                            <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('shiliao_remark') ?>：</td>
+                            <td><?= $model->shiliao_remark ?></td>
+                        </tr>
 
 
                     </table>
@@ -457,10 +475,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('second_peishi_way1') ?>：</td>
                             <td><?= \addons\Warehouse\common\enums\PeiShiWayEnum::getValue($model->second_peishi_way1) ?></td>
                         </tr>
-                        <tr>
-                            <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('second_peishi_type1') ?>：</td>
-                            <td><?= \addons\Supply\common\enums\PeishiTypeEnum::getValue($model->second_peishi_type1) ?></td>
-                        </tr>
+
                         <tr>
                             <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('main_stone_sn') ?>：</td>
                             <td><?= $model->main_stone_sn ?></td>
@@ -497,10 +512,6 @@ $this->params['breadcrumbs'][] = $this->title;
                             <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('second_peishi_way2') ?>：</td>
                             <td><?= \addons\Warehouse\common\enums\PeiShiWayEnum::getValue($model->second_peishi_way2) ?></td>
                         </tr>
-                        <tr>
-                            <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('second_peishi_type2') ?>：</td>
-                            <td><?= \addons\Supply\common\enums\PeishiTypeEnum::getValue($model->second_peishi_type2) ?></td>
-                        </tr>
 
                         <tr>
                             <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('second_stone_type2') ?>：</td>
@@ -530,9 +541,29 @@ $this->params['breadcrumbs'][] = $this->title;
                             <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('second_stone_price2') ?>：</td>
                             <td><?= $model->second_stone_price2 ?></td>
                         </tr>
+
+
                         <tr>
-                            <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('shiliao_remark') ?>：</td>
-                            <td><?= $model->shiliao_remark ?></td>
+                            <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('second_peishi_way3') ?>：</td>
+                            <td><?= \addons\Warehouse\common\enums\PeiShiWayEnum::getValue($model->second_peishi_way3) ?></td>
+                        </tr>
+
+                        <tr>
+                            <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('second_stone_type3') ?>：</td>
+                            <td><?= Yii::$app->attr->valueName($model->second_stone_type3) ?></td>
+                        </tr>
+
+                        <tr>
+                            <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('second_stone_num3') ?>：</td>
+                            <td><?= $model->second_stone_num3 ?></td>
+                        </tr>
+                        <tr>
+                            <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('second_stone_weight3') ?>：</td>
+                            <td><?= $model->second_stone_weight3 ?></td>
+                        </tr>
+                        <tr>
+                            <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('second_stone_price3') ?>：</td>
+                            <td><?= $model->second_stone_price3 ?></td>
                         </tr>
 
                     </table>
