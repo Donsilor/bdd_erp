@@ -23,7 +23,16 @@ $this->params['breadcrumbs'][] = $this->title;
                 <h6 style="color:red">*有款起版的商品（既有款号又有起版号的），下订单只能用起版号下单</h6>
             </div>
             <div >
-                    <?= Html::beginForm(Url::to(\common\helpers\ArrayHelper::merge([0 => 'index'], Yii::$app->request->get())), 'get') ?>
+<!--                    --><?//= Html::beginForm(Url::to(['index']), 'get') ?>
+                <?php
+                $get = Yii::$app->request->get();
+                if(isset($get['SearchModel'])){
+                    $url = \common\helpers\ArrayHelper::merge([0 => 'index'], ['SearchModel'=>$get['SearchModel']]);
+                }else{
+                    $url = ['index'];
+                }
+                ?>
+                <?= Html::beginForm(Url::to($url), 'get') ?>
                     <div class="modal-content">
                         <div class="modal-header">
                             <h4 class="modal-title">筛选查询</h4>
@@ -31,11 +40,22 @@ $this->params['breadcrumbs'][] = $this->title;
                         <div class="modal-body">
                             <div class="col-lg-3">
                                 <div class="form-group field-cate-sort">
-                                    <div class="col-sm-6 text-right">
-                                        <label class="control-label" for="cate-sort">条码号/款号/起版号：</label>
+                                    <div class="col-sm-4 text-right">
+                                        <label class="control-label" for="cate-sort">条码号：</label>
                                     </div>
-                                    <div class="col-sm-6">
-                                        <?= Html::textInput('goods_sn', $search->goods_sn, ['class' => 'form-control']) ?>
+                                    <div class="col-sm-8">
+                                        <?= Html::textInput('goods_id', $search->goods_id, ['class' => 'form-control']) ?>
+                                        <div class="help-block"></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-3">
+                                <div class="form-group field-cate-sort">
+                                    <div class="col-sm-4 text-right">
+                                        <label class="control-label" for="cate-sort">款号/起版号：</label>
+                                    </div>
+                                    <div class="col-sm-8">
+                                        <?= Html::textInput('goods_sn', $search->goods_sn, ['class' => 'form-control','placeholder'=>'']) ?>
                                         <div class="help-block"></div>
                                     </div>
                                 </div>
@@ -52,7 +72,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 </div>
                             </div>
 
-                            <div class="col-lg-6">
+                            <div class="col-lg-3">
                                 <div class="form-group field-cate-sort">
                                     <div class="col-sm-4 text-right">
                                         <label class="control-label" for="cate-sort">款式分类：</label>
@@ -72,42 +92,219 @@ $this->params['breadcrumbs'][] = $this->title;
                                     </div>
                                 </div>
                             </div>
-                            <!--                <div class="col-lg-6">-->
-                            <!--                    <div class="form-group field-cate-sort">-->
-                            <!--                        <div class="col-sm-4 text-right">-->
-                            <!--                            <label class="control-label" for="cate-sort">销量</label>-->
-                            <!--                        </div>-->
-                            <!--                        <div class="col-sm-8 ">-->
-                            <!--                            <div class="col-lg-12 input-group">-->
-                            <!--                                <div class="input-group">-->
-                            <!--                                    --><?//= Html::textInput('min_sales', $search->min_sales, ['class' => 'form-control', 'placeholder' => '最低销量']) ?>
-                            <!--                                    <span class="input-group-addon" style="border-color: #fff">-</span>-->
-                            <!--                                    --><?//= Html::textInput('max_sales', $search->max_sales, ['class' => 'form-control', 'placeholder' => '最高销量']) ?>
-                            <!--                                </div>-->
-                            <!--                                <div class="help-block"></div>-->
-                            <!--                            </div>-->
-                            <!--                        </div>-->
-                            <!--                    </div>-->
-                            <!--                </div>-->
-                            <!--                <div class="col-lg-6">-->
-                            <!--                    <div class="form-group field-cate-sort">-->
-                            <!--                        <div class="col-sm-4 text-right">-->
-                            <!--                            <label class="control-label" for="cate-sort">供应商</label>-->
-                            <!--                        </div>-->
-                            <!--                        <div class="col-sm-8">-->
-                            <!--                            --><?//= Html::dropDownList('supplier_id', $search->supplier_id, Yii::$app->tinyShopService->baseSupplier->getMapList(), [
-                            //                                'class' => 'form-control',
-                            //                                'prompt' => '全部',
-                            //                            ]) ?>
-                            <!--                            <div class="help-block"></div>-->
-                            <!--                        </div>-->
-                            <!--                    </div>-->
-                            <!--                </div>-->
 
+                            <div class="col-lg-3">
+                                <div class="form-group field-cate-sort">
+                                    <div class="col-sm-4 text-right">
+                                        <label class="control-label" for="cate-sort">产品线：</label>
+                                    </div>
+                                    <div class="col-sm-8">
+                                        <?= \kartik\select2\Select2::widget([
+                                            'name'=>'product_type_id',
+                                            'value'=>$search->product_type_id,
+                                            'data'=>Yii::$app->styleService->productType::getDropDown(),
+                                            'options' => ['placeholder' =>"请选择",'multiple'=>true,'style'=>"width:180px"],
+                                            'pluginOptions' => [
+                                                'allowClear' => true,
+                                            ],
+                                        ])
+                                        ?>
+                                        <div class="help-block"></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-3">
+                                <div class="form-group field-cate-sort">
+                                    <div class="col-sm-4 text-right">
+                                        <label class="control-label" for="cate-sort">商品状态</label>
+                                    </div>
+                                    <div class="col-sm-8">
+                                        <?= Html::dropDownList('goods_status', $search->goods_status, \addons\Warehouse\common\enums\GoodsStatusEnum::getMap(), [
+                                            'class' => 'form-control',
+                                            'prompt' => '全部',
+                                        ]) ?>
+                                        <div class="help-block"></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-3">
+                                <div class="form-group field-cate-sort">
+                                    <div class="col-sm-4 text-right">
+                                        <label class="control-label" for="cate-sort">材质</label>
+                                    </div>
+                                    <div class="col-sm-8">
+                                        <?= Html::dropDownList('material_type', $search->material_type, Yii::$app->attr->valueMap(AttrIdEnum::MATERIAL_TYPE), [
+                                            'class' => 'form-control',
+                                            'prompt' => '全部',
+                                        ]) ?>
+                                        <div class="help-block"></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-3">
+                                <div class="form-group field-cate-sort">
+                                    <div class="col-sm-4 text-right">
+                                        <label class="control-label" for="cate-sort">金托类型</label>
+                                    </div>
+                                    <div class="col-sm-8">
+                                        <?= Html::dropDownList('jintuo_type', $search->jintuo_type, \addons\Style\common\enums\JintuoTypeEnum::getMap(), [
+                                            'class' => 'form-control',
+                                            'prompt' => '全部',
+                                        ]) ?>
+                                        <div class="help-block"></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-3">
+                                <div class="form-group field-cate-sort">
+                                    <div class="col-sm-4 text-right">
+                                        <label class="control-label" for="cate-sort">主石类型</label>
+                                    </div>
+                                    <div class="col-sm-8">
+                                        <?= Html::dropDownList('main_stone_type', $search->main_stone_type, Yii::$app->attr->valueMap(AttrIdEnum::MAIN_STONE_TYPE), [
+                                            'class' => 'form-control',
+                                            'prompt' => '全部',
+                                        ]) ?>
+                                        <div class="help-block"></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-3">
+                                <div class="form-group field-cate-sort">
+                                    <div class="col-sm-4 text-right">
+                                        <label class="control-label" for="cate-sort">金重</label>
+                                    </div>
+                                    <div class="col-sm-8 ">
+                                        <div class="col-lg-12 input-group">
+                                            <div class="input-group">
+                                                <?= Html::textInput('min_gold_weight', $search->min_gold_weight, ['class' => 'form-control', 'placeholder' => '最低金重']) ?>
+                                                <span class="input-group-addon" style="border-color: #fff">-</span>
+                                                <?= Html::textInput('max_gold_weight', $search->max_gold_weight, ['class' => 'form-control', 'placeholder' => '最高金重']) ?>
+                                            </div>
+                                            <div class="help-block"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-3">
+                                <div class="form-group field-cate-sort">
+                                    <div class="col-sm-4 text-right">
+                                        <label class="control-label" for="cate-sort">连石重</label>
+                                    </div>
+                                    <div class="col-sm-8 ">
+                                        <div class="col-lg-12 input-group">
+                                            <div class="input-group">
+                                                <?= Html::textInput('min_suttle_weight', $search->min_suttle_weight, ['class' => 'form-control', 'placeholder' => '最低石重']) ?>
+                                                <span class="input-group-addon" style="border-color: #fff">-</span>
+                                                <?= Html::textInput('max_suttle_weight', $search->max_suttle_weight, ['class' => 'form-control', 'placeholder' => '最高石重']) ?>
+                                            </div>
+                                            <div class="help-block"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-3">
+                                <div class="form-group field-cate-sort">
+                                    <div class="col-sm-4 text-right">
+                                        <label class="control-label" for="cate-sort">主石重</label>
+                                    </div>
+                                    <div class="col-sm-8 ">
+                                        <div class="col-lg-12 input-group">
+                                            <div class="input-group">
+                                                <?= Html::textInput('min_diamond_carat', $search->min_diamond_carat, ['class' => 'form-control', 'placeholder' => '最低主石价']) ?>
+                                                <span class="input-group-addon" style="border-color: #fff">-</span>
+                                                <?= Html::textInput('max_diamond_carat', $search->max_diamond_carat, ['class' => 'form-control', 'placeholder' => '最高主石价']) ?>
+                                            </div>
+                                            <div class="help-block"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-lg-3">
+                                <div class="form-group field-cate-sort">
+                                    <div class="col-sm-4 text-right">
+                                        <label class="control-label" for="cate-sort">仓库：</label>
+                                    </div>
+                                    <div class="col-sm-8">
+                                        <?= \kartik\select2\Select2::widget([
+                                            'name'=>'warehouse_id',
+                                            'value'=>$search->warehouse_id,
+                                            'data'=>Yii::$app->warehouseService->warehouse::getDropDown(),
+                                            'options' => ['placeholder' =>"请选择",'multiple'=>true,'style'=>"width:180px"],
+                                            'pluginOptions' => [
+                                                'allowClear' => true,
+                                            ],
+                                        ])
+                                        ?>
+                                        <div class="help-block"></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-3">
+                                <div class="form-group field-cate-sort">
+                                    <div class="col-sm-4 text-right">
+                                        <label class="control-label" for="cate-sort">供应商</label>
+                                    </div>
+                                    <div class="col-sm-8">
+                                        <?= \kartik\select2\Select2::widget([
+                                            'name'=>'supplier_id',
+                                            'value'=>$search->supplier_id,
+                                            'data'=>Yii::$app->supplyService->supplier->getDropDown(),
+                                            'options' => ['placeholder' =>"请选择",'multiple'=>true,'style'=>"width:180px"],
+                                            'pluginOptions' => [
+                                                'allowClear' => true,
+                                            ],
+                                        ])
+                                        ?>
+                                        <div class="help-block"></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-3">
+                                <div class="form-group field-cate-sort">
+                                    <div class="col-sm-4 text-right">
+                                        <label class="control-label" for="cate-sort">所属渠道</label>
+                                    </div>
+                                    <div class="col-sm-8">
+                                        <?= \kartik\select2\Select2::widget([
+                                            'name'=>'style_channel_id',
+                                            'value'=>$search->style_channel_id,
+                                            'data'=>Yii::$app->salesService->saleChannel->getDropDown(),
+                                            'options' => ['placeholder' =>"请选择",'multiple'=>true,'style'=>"width:180px"],
+                                            'pluginOptions' => [
+                                                'allowClear' => true,
+                                            ],
+                                        ])
+                                        ?>
+                                        <div class="help-block"></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-3">
+                                <div class="form-group field-cate-sort">
+                                    <div class="col-sm-4 text-right">
+                                        <label class="control-label" for="cate-sort">库存来源</label>
+                                    </div>
+                                    <div class="col-sm-8">
+                                        <?= \kartik\select2\Select2::widget([
+                                            'name'=>'goods_source',
+                                            'value'=>$search->goods_source,
+                                            'data'=>\addons\Warehouse\common\enums\GoodSourceEnum::getMap(),
+                                            'options' => ['placeholder' =>"请选择",'multiple'=>true,'style'=>"width:180px"],
+                                            'pluginOptions' => [
+                                                'allowClear' => true,
+                                            ],
+                                        ])
+                                        ?>
+                                        <div class="help-block"></div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
-                        <div class="modal-footer">
-                            <button type="reset" class="btn btn-white">重置</button>
-                            <button class="btn btn-primary">确定</button>
+                        <div class="box-footer text-center">
+                            <button type="reset" class="btn btn-white btn-sm">重置</button>
+                            <button class="btn btn-primary btn-sm">确定</button>
                         </div>
                     </div>
                     <?= Html::endForm() ?>
