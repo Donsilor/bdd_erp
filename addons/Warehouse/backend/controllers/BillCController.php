@@ -194,9 +194,7 @@ class BillCController extends BaseController
         }
         if($model->goods_num<=0){
             return $this->message('单据明细不能为空', $this->redirect(\Yii::$app->request->referrer), 'error');
-        }
-
-        
+        }        
         try{
             
             $trans = \Yii::$app->db->beginTransaction();
@@ -210,7 +208,7 @@ class BillCController extends BaseController
                 'bill_id' => $model->id,
                 'log_type' => LogTypeEnum::ARTIFICIAL,
                 'log_module' => '提交审核',
-                'log_msg' => "单据申请审核"
+                'log_msg' => "其它出库单申请审核"
             ];
             \Yii::$app->warehouseService->billLog->createBillLog($log);
             $trans->commit();
@@ -253,7 +251,7 @@ class BillCController extends BaseController
                     'bill_id' => $model->id,
                     'log_type' => LogTypeEnum::ARTIFICIAL,
                     'log_module' => '其它出库单',
-                    'log_msg' => "单据审核, 审核状态：".AuditStatusEnum::getValue($model->audit_status).",审核备注：".$model->audit_remark
+                    'log_msg' => "其它出库单审核, 审核状态：".AuditStatusEnum::getValue($model->audit_status).",审核备注：".$model->audit_remark
                 ];
                 \Yii::$app->warehouseService->billLog->createBillLog($log);
 

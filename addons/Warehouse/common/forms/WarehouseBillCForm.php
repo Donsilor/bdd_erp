@@ -38,6 +38,7 @@ class WarehouseBillCForm extends WarehouseBill
             'order_sn'=>'参考编号/订单号',
             'channel_id'=>'出库渠道',
             'total_cost' =>'出库总成本',
+            'salesman_id'=>'销售人/接收人',
             'goods_ids'=>'货号',            
         ]);
     }
