@@ -140,7 +140,6 @@ return [
                                ['title' => '审核','name'  => 'style/ajax-audit'],                           
                                ['title' => '详情','name'  => 'style/view'],
                                ['title' => '批量导入','name'  => 'style/ajax-upload'],
-                               ['title' => '批量导入文件下载','name'  => 'style/download-csv'],
                                
                                ['title' => '款式属性(*)','name'  => 'style-attribute/*'],
                                ['title' => '款式商品(*)','name'  => 'style-goods/*'],
