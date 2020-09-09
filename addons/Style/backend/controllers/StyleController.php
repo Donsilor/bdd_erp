@@ -2,27 +2,17 @@
 
 namespace addons\Style\backend\controllers;
 
+use Yii;
+use common\helpers\Url;
+use common\traits\Curd;
+use common\models\base\SearchModel;
+use addons\Style\common\models\Style;
 use addons\Style\common\forms\StyleForm;
-use addons\Warehouse\common\forms\WarehouseBillTGoodsForm;
-use addons\Warehouse\common\models\WarehouseBill;
+use addons\Style\common\forms\StyleAuditForm;
+use common\enums\AuditStatusEnum;
 use common\enums\FlowStatusEnum;
 use common\enums\TargetTypeEnum;
-use Yii;
-use common\models\base\SearchModel;
-use common\traits\Curd;
-
-use addons\Style\backend\controllers\BaseController;
-use addons\Style\common\models\Style;
-use addons\Style\common\forms\StyleAttrForm;
-use addons\Style\common\forms\StyleGoodsForm;
-use common\helpers\Url;
-use common\enums\AuditStatusEnum;
-use addons\Style\common\forms\StyleAuditForm;
 use common\enums\StatusEnum;
-use yii\behaviors\AttributeTypecastBehavior;
-use addons\Style\common\enums\AttrTypeEnum;
-use common\helpers\SnHelper;
-use common\enums\AutoSnEnum;
 use yii\web\UploadedFile;
 
 /**
@@ -127,22 +117,6 @@ class StyleController extends BaseController
 
     /**
      *
-     * 文件格式导出
-     * @return mixed|string|\yii\web\Response
-     * @throws
-     */
-    public function actionDownloadCsv()
-    {
-        $model = new StyleForm();
-        list($values, $fields) = $model->getTitleList();
-        header("Content-Disposition: attachment;filename=【" . rand(000, 999) . "】款式数据(" . date('Ymd', time()) . ").csv");
-        $content = implode($values, ",") . "\n" . implode($fields, ",") . "\n";
-        echo iconv("utf-8", "gbk", $content);
-        exit();
-    }
-
-    /**
-     *
      * ajax批量导入
      * @return mixed|string|\yii\web\Response
      * @throws
@@ -150,6 +124,14 @@ class StyleController extends BaseController
     public function actionAjaxUpload()
     {
         $model = new StyleForm();
+        $download = \Yii::$app->request->get('download',0);
+        if($download){
+            list($values, $fields) = $model->getTitleList();
+            header("Content-Disposition: attachment;filename=【" . rand(000, 999) . "】款式数据导入(" . date('Ymd', time()) . ").csv");
+            $content = implode($values, ",") . "\n" . implode($fields, ",") . "\n";
+            echo iconv("utf-8", "gbk", $content);
+            exit();
+        }
         // ajax 校验
         $this->activeFormValidate($model);
         if (Yii::$app->request->isPost) {

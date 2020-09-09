@@ -7,7 +7,7 @@ use common\helpers\Url;
 $form = ActiveForm::begin([
     'id' => $model->formName(),
     'enableAjaxValidation' => true,
-    'validationUrl' => Url::to(['ajax-edit', 'id' => $model['id']]),
+    'validationUrl' => Url::to(['ajax-upload', 'id' => $model['id']]),
     'fieldConfig' => [
         //'template' => "<div class='col-sm-3 text-right'>{label}</div><div class='col-sm-9'>{input}\n{hint}\n{error}</div>",
     ]
@@ -21,7 +21,7 @@ $form = ActiveForm::begin([
 <div class="modal-body">
     <div class="col-sm-12">
         <?= $form->field($model, 'file')->fileInput() ?>
-        <?= Html::a("下载数据导入格式", ['download', 'bill_id' => $bill->id], ['style' => "text-decoration:underline;color:#3c8dbc"]) ?>
+        <?= Html::a("下载数据导入格式", ['ajax-upload', 'bill_id' => $bill->id, 'download' => 1], ['style' => "text-decoration:underline;color:#3c8dbc"]) ?>
     </div>
 </div>
 <div class="modal-footer">

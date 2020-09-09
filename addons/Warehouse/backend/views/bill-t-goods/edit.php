@@ -371,6 +371,9 @@ $this->params['breadcrumbs'][] = $this->title;
                         <?= $form->field($model, 'gong_fee')->textInput() ?>
                     </div>
                     <div class="col-lg-4">
+                        <?= $form->field($model, 'piece_fee')->textInput() ?>
+                    </div>
+                    <div class="col-lg-4">
                         <?= $form->field($model, 'peishi_weight')->textInput() ?>
                     </div>
                     <div class="col-lg-4">

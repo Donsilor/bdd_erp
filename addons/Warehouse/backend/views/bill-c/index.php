@@ -26,6 +26,10 @@ $params = $params ? "&".http_build_query($params) : '';
                         'data-toggle' => 'modal',
                         'data-target' => '#ajaxModal',
                     ]); ?>
+                    <?= Html::create(['ajax-import'], '批量导入', [
+                        'data-toggle' => 'modal',
+                        'data-target' => '#ajaxModal',
+                    ]); ?>
                     <?= Html::button('导出', [
                         'class'=>'btn btn-success btn-xs',
                         'onclick' => 'batchExport()',
@@ -105,13 +109,13 @@ $params = $params ? "&".http_build_query($params) : '';
                             ]),
                             'headerOptions' => ['class' => 'col-md-1'],
                         ],
-                        [
+                        /* [
                             'attribute'=>'total_sale',
                             'filter' => Html::activeTextInput($searchModel, 'total_sale', [
                                 'class' => 'form-control',
                             ]),
                             'headerOptions' => ['class' => 'col-md-1'],
-                        ],
+                        ], */
                         [
                             'attribute'=>'order_sn',
                             'filter' => Html::activeTextInput($searchModel, 'order_sn', [
@@ -140,7 +144,7 @@ $params = $params ? "&".http_build_query($params) : '';
                             'format' => 'raw',
                             'headerOptions' => ['class' => 'col-md-1'],
                         ],
-                        [
+                        /* [
                             'attribute' => 'supplier_id',
                             'value' =>"supplier.supplier_name",
                             'filter'=>Select2::widget([
@@ -154,7 +158,7 @@ $params = $params ? "&".http_build_query($params) : '';
                             ]),
                             'format' => 'raw',
                             'headerOptions' => ['class' => 'col-md-2'],
-                        ],
+                        ], */
                         [
                             'attribute' => 'creator_id',
                             'value' => 'creator.username',

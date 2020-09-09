@@ -26,6 +26,9 @@ use addons\Warehouse\common\forms\WarehouseBillBForm;
 use addons\Warehouse\common\enums\BillStatusEnum;
 use addons\Warehouse\common\enums\BillTypeEnum;
 use common\enums\AuditStatusEnum;
+use common\helpers\FileHelper;
+use addons\Warehouse\common\forms\ImportBillCForm;
+use yii\web\UploadedFile;
 
 /**
  * WarehouseBillBController implements the CRUD actions for WarehouseBillBController model.
@@ -182,18 +185,19 @@ class BillCController extends BaseController
      * @return mixed|string|\yii\web\Response
      * @throws \yii\base\ExitException
      */
-    public function actionAjaxApply(){
-        $id = \Yii::$app->request->get('id');
+    public function actionAjaxApply($id){
+        
+        $id = \Yii::$app->request->get('id');        
         $model = $this->findModel($id) ?? new WarehouseBillCForm();
         if($model->bill_status != BillStatusEnum::SAVE){
             return $this->message('单据不是保存状态', $this->redirect(\Yii::$app->request->referrer), 'error');
         }
         if($model->goods_num<=0){
             return $this->message('单据明细不能为空', $this->redirect(\Yii::$app->request->referrer), 'error');
-        }
-
-        $trans = \Yii::$app->db->beginTransaction();
+        }        
         try{
+            
+            $trans = \Yii::$app->db->beginTransaction();
             $model->bill_status = BillStatusEnum::PENDING;
             $model->audit_status = AuditStatusEnum::PENDING;
             if(false === $model->save()){
@@ -201,10 +205,10 @@ class BillCController extends BaseController
             }
             //日志
             $log = [
-                'gold_id' => $model->id,
+                'bill_id' => $model->id,
                 'log_type' => LogTypeEnum::ARTIFICIAL,
-                'log_module' => '其它出库单',
-                'log_msg' => '单据提审'
+                'log_module' => '提交审核',
+                'log_msg' => "其它出库单申请审核"
             ];
             \Yii::$app->warehouseService->billLog->createBillLog($log);
             $trans->commit();
@@ -244,10 +248,10 @@ class BillCController extends BaseController
 
                 //日志
                 $log = [
-                    'gold_id' => $model->id,
+                    'bill_id' => $model->id,
                     'log_type' => LogTypeEnum::ARTIFICIAL,
                     'log_module' => '其它出库单',
-                    'log_msg' => '单据审核'
+                    'log_msg' => "其它出库单审核, 审核状态：".AuditStatusEnum::getValue($model->audit_status).",审核备注：".$model->audit_remark
                 ];
                 \Yii::$app->warehouseService->billLog->createBillLog($log);
 
@@ -276,20 +280,12 @@ class BillCController extends BaseController
         $this->modelClass = WarehouseBill::class;
         if (!($model = $this->modelClass::findOne($id))) {
             return $this->message("找不到数据", $this->redirect(Yii::$app->request->referrer), 'error');
-        }
+        }        
         try{
             $trans = \Yii::$app->db->beginTransaction();
 
             \Yii::$app->warehouseService->billC->cancelBillC($model);
-
-            //日志
-            $log = [
-                'gold_id' => $model->id,
-                'log_type' => LogTypeEnum::ARTIFICIAL,
-                'log_module' => '其它出库单',
-                'log_msg' => '单据取消'
-            ];
-            \Yii::$app->warehouseService->billLog->createBillLog($log);
+            
             $trans->commit();
             $this->message('操作成功', $this->redirect(Yii::$app->request->referrer), 'success');
         }catch (\Exception $e){
@@ -328,8 +324,47 @@ class BillCController extends BaseController
             return $this->message($e->getMessage(), $this->redirect(\Yii::$app->request->referrer), 'error');
         }
     }
-
-
+    /**
+     * 其它出库单批量导入
+     */
+    public function actionAjaxImport()
+    {
+        if(Yii::$app->request->get('download')) {
+            $file = dirname(dirname(__FILE__)).'/resources/excel/其它出库单数据模板导入.xlsx';
+            $array = explode('/',$file);
+            $basename = end($array);
+            $content = file_get_contents($file);
+            if (!empty($content)) {
+                header("Content-type:application/vnd.ms-excel");
+                header("Content-Disposition: attachment;filename=".$basename);
+                header("Content-Transfer-Encoding: binary");
+                exit($content);
+            }
+        }
+        $model =  new ImportBillCForm();
+        // ajax 校验
+        $this->activeFormValidate($model);
+        
+        if ($model->load(\Yii::$app->request->post())) {
+            
+            try{
+                $trans = \Yii::$app->db->beginTransaction();
+                
+                $model->file = UploadedFile::getInstance($model, 'file');
+                $model->bill_type = $this->billType;
+                
+                \Yii::$app->warehouseService->billC->importBillC($model);
+                $trans->commit();
+                return $this->message('导入成功', $this->redirect(Yii::$app->request->referrer), 'success');
+            }catch (\Exception $e){
+                $trans->rollBack();
+                return $this->message($e->getMessage(), $this->redirect(\Yii::$app->request->referrer), 'error');
+            }
+        }
+        return $this->renderAjax($this->action->id, [
+                'model' => $model,
+        ]);
+    }
     /***
      * 导出Excel
      */
