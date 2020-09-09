@@ -247,11 +247,11 @@ class WarehouseBillTGoodsForm extends WarehouseBillGoodsL
             $this->formatTitle($this->getPartsMaterialMap()),//'配件材质' .
             '#', '#', '#',
 
-            '#', '#', '#', '#',
+            '#', '#', '#', '#', '#',
             $this->formatTitle($this->getXiangqianCraftMap()),//'镶嵌工艺' .
             '#',
             $this->formatTitle($this->getFaceCraftMap()),//'表面工艺' .
-            '#', '#', '#', '#', '#', '#', '#', '#', '#', '#',
+            '#', '#', '#', '#', '#', '#', '#', '#', '#',
             $this->formatTitle($this->getCertTypeMap()),//'主石证书类型' .
             '#',
             $this->formatTitle($this->getJietuoTypeMap()),//'金托类型' .
