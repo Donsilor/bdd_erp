@@ -61,7 +61,7 @@ class StyleController extends BaseController
             ],
             'pageSize' => $this->pageSize,
             'relations' => [
-                 
+                 'creator' => 'username',
             ]
         ]);
 
@@ -127,22 +127,6 @@ class StyleController extends BaseController
 
     /**
      *
-     * 文件格式导出
-     * @return mixed|string|\yii\web\Response
-     * @throws
-     */
-    public function actionDownloadCsv()
-    {
-        $model = new StyleForm();
-        list($values, $fields) = $model->getTitleList();
-        header("Content-Disposition: attachment;filename=【" . rand(000, 999) . "】款式数据(" . date('Ymd', time()) . ").csv");
-        $content = implode($values, ",") . "\n" . implode($fields, ",") . "\n";
-        echo iconv("utf-8", "gbk", $content);
-        exit();
-    }
-
-    /**
-     *
      * ajax批量导入
      * @return mixed|string|\yii\web\Response
      * @throws
@@ -150,6 +134,14 @@ class StyleController extends BaseController
     public function actionAjaxUpload()
     {
         $model = new StyleForm();
+        $download = \Yii::$app->request->get('download',0);
+        if($download){
+            list($values, $fields) = $model->getTitleList();
+            header("Content-Disposition: attachment;filename=【" . rand(000, 999) . "】款式数据导入(" . date('Ymd', time()) . ").csv");
+            $content = implode($values, ",") . "\n" . implode($fields, ",") . "\n";
+            echo iconv("utf-8", "gbk", $content);
+            exit();
+        }
         // ajax 校验
         $this->activeFormValidate($model);
         if (Yii::$app->request->isPost) {

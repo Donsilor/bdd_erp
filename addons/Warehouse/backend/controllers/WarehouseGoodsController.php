@@ -3,7 +3,9 @@
 namespace addons\Warehouse\backend\controllers;
 
 use addons\Style\common\enums\LogTypeEnum;
+use addons\Warehouse\common\enums\GoodsStatusEnum;
 use addons\Warehouse\common\forms\WarehouseGoodsForm;
+use addons\Warehouse\common\forms\WarehousGoodsSearchForm;
 use addons\Warehouse\common\models\WarehouseGoods;
 use common\enums\AuditStatusEnum;
 use common\enums\ConfirmEnum;
@@ -48,8 +50,31 @@ class WarehouseGoodsController extends BaseController
             ]
         ]);
 
+        $search = new WarehousGoodsSearchForm();
+        $search->attributes = Yii::$app->request->get();
         $dataProvider = $searchModel
             ->search(Yii::$app->request->queryParams,['updated_at']);
+
+
+        $dataProvider->query
+            ->andFilterWhere(['goods_id'=>$search->goods_id])
+            ->andFilterWhere(['goods_status'=>$search->goods_status])
+            ->andFilterWhere(['material_type'=>$search->material_type])
+            ->andFilterWhere(['jintuo_type'=>$search->jintuo_type])
+            ->andFilterWhere(['main_stone_type'=>$search->main_stone_type])
+            ->andFilterWhere(['in', 'style_cate_id', $search->styleCateIds()])
+            ->andFilterWhere(['in', 'product_type_id', $search->proTypeIds()])
+            ->andFilterWhere(['like', 'goods_name', $search->goods_name])
+            ->andFilterWhere($search->betweenGoldWeight())
+            ->andFilterWhere($search->betweenSuttleWeight())
+            ->andFilterWhere($search->betweenDiamondCarat())
+            ->andFilterWhere(['in', 'warehouse_id', $search->warehouse_id])
+            ->andFilterWhere(['in', 'supplier_id', $search->supplier_id])
+            ->andFilterWhere(['in', 'style_channel_id', $search->style_channel_id])
+            ->andFilterWhere(['in', 'goods_source', $search->goods_source])
+            ->andFilterWhere($search->goods_sn());
+
+
 
         $created_at = $searchModel->created_at;
         if (!empty($created_at)) {
@@ -67,6 +92,7 @@ class WarehouseGoodsController extends BaseController
         return $this->render($this->action->id, [
             'dataProvider' => $dataProvider,
             'searchModel' => $searchModel,
+            'search' => $search,
         ]);
 
 
