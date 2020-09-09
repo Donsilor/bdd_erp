@@ -284,15 +284,7 @@ class BillCController extends BaseController
             $trans = \Yii::$app->db->beginTransaction();
 
             \Yii::$app->warehouseService->billC->cancelBillC($model);
-
-            //日志
-            $log = [
-                'gold_id' => $model->id,
-                'log_type' => LogTypeEnum::ARTIFICIAL,
-                'log_module' => '其它出库单',
-                'log_msg' => '单据取消'
-            ];
-            \Yii::$app->warehouseService->billLog->createBillLog($log);
+            
             $trans->commit();
             $this->message('操作成功', $this->redirect(Yii::$app->request->referrer), 'success');
         }catch (\Exception $e){

@@ -50,7 +50,7 @@ class WarehouseBillLog extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
-            'bill_id' => '布产Id',
+            'bill_id' => '单据ID',
             'log_type' => '操作类型',
             'log_msg' => '文字描述',
             'bill_status' => '布产状态',

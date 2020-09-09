@@ -19,6 +19,7 @@ use common\helpers\UploadHelper;
 use common\helpers\ExcelHelper;
 use addons\Sales\common\models\SaleChannel;
 use common\helpers\SnHelper;
+use common\enums\LogTypeEnum;
 
 /**
  * 其它出库单
@@ -157,9 +158,18 @@ class WarehouseBillCService extends WarehouseBillService
             }
         } 
         $form->bill_status = BillStatusEnum::CANCEL;
-        if(false && false === $form->save()){
+        if(false === $form->save()){
             throw new \Exception($this->getError($form));
         }
+        
+        //日志
+        $log = [
+                'bill_id' => $form->id,
+                'log_type' => LogTypeEnum::ARTIFICIAL,
+                'log_module' => '其它出库单',
+                'log_msg' => '单据取消'
+        ];
+        \Yii::$app->warehouseService->billLog->createBillLog($log);
     }
 
     /**
