@@ -169,23 +169,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-lg-3">
-                                <div class="form-group field-cate-sort">
-                                    <div class="col-sm-4 text-right">
-                                        <label class="control-label" for="cate-sort">金重：</label>
-                                    </div>
-                                    <div class="col-sm-8 ">
-                                        <div class="col-lg-12 input-group">
-                                            <div class="input-group">
-                                                <?= Html::textInput('min_gold_weight', $search->min_gold_weight, ['class' => 'form-control', 'placeholder' => '最低金重']) ?>
-                                                <span class="input-group-addon" style="border-color: #fff">-</span>
-                                                <?= Html::textInput('max_gold_weight', $search->max_gold_weight, ['class' => 'form-control', 'placeholder' => '最高金重']) ?>
-                                            </div>
-                                            <div class="help-block"></div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
+
                             <div class="col-lg-3">
                                 <div class="form-group field-cate-sort">
                                     <div class="col-sm-4 text-right">
