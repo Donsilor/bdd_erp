@@ -114,24 +114,6 @@ class BillTGoodsController extends BaseController
 
     /**
      *
-     * 文件格式导出
-     * @return mixed|string|\yii\web\Response
-     * @throws
-     */
-    public function actionDownload()
-    {
-        $bill_id = \Yii::$app->request->get('bill_id');
-        $bill = WarehouseBill::findOne($bill_id);
-        $model = new WarehouseBillTGoodsForm();
-        list($values, $fields) = $model->getTitleList();
-        header("Content-Disposition: attachment;filename=【{$bill_id}】入库单明细导入($bill->bill_no).csv");
-        $content = implode($values, ",") . "\n" . implode($fields, ",") . "\n";
-        echo iconv("utf-8", "gbk", $content);
-        exit();
-    }
-
-    /**
-     *
      * ajax批量导入
      * @return mixed|string|\yii\web\Response
      * @throws
@@ -139,10 +121,23 @@ class BillTGoodsController extends BaseController
     public function actionAjaxUpload()
     {
         $id = \Yii::$app->request->get('id');
-        $bill_id = Yii::$app->request->get('bill_id');
+        $bill_id = \Yii::$app->request->get('bill_id');
+        $download = \Yii::$app->request->get('download',0);
+        $bill = WarehouseBill::findOne($bill_id);
+        if($download){
+            $model = new WarehouseBillTGoodsForm();
+            list($values, $fields) = $model->getTitleList();
+            if(empty($bill_id)){
+                header("Content-Disposition: attachment;filename=【".rand(100,999)."】入库单明细(".date('Ymd').").csv");
+            }else{
+                header("Content-Disposition: attachment;filename=【{$bill_id}】入库单明细导入($bill->bill_no).csv");
+            }
+            $content = implode($values, ",") . "\n" . implode($fields, ",") . "\n";
+            echo iconv("utf-8", "gbk", $content);
+            exit();
+        }
         $model = $this->findModel($id);
         $model = $model ?? new WarehouseBillTGoodsForm();
-        $bill = WarehouseBill::findOne($bill_id);
         // ajax 校验
         $this->activeFormValidate($model);
         if (Yii::$app->request->isPost) {

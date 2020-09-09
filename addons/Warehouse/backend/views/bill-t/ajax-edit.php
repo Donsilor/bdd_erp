@@ -60,7 +60,7 @@ $form = ActiveForm::begin([
             <?php if ($model->isNewRecord) { ?>
                 <div class="col-sm-4">
                     <?= $form->field($model, 'file')->fileInput() ?>
-                    <?= Html::a("下载数据导入格式", ['download-csv'], ['style' => "text-decoration:underline;color:#3c8dbc"]) ?>
+                    <?= Html::a("下载数据导入格式", ['bill-t-goods/ajax-upload', 'download' => 1], ['style' => "text-decoration:underline;color:#3c8dbc"]) ?>
                 </div>
             <?php } ?>
         </div>
