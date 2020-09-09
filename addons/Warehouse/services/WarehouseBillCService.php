@@ -207,7 +207,7 @@ class WarehouseBillCService extends WarehouseBillService
               1=>'goods_id',
               2=>'channel_id',
               3=>'order_sn',
-              4=>'saleman',  
+              4=>'salesman',  
         ];
         $requredColumns = [
             'goods_id',
@@ -247,10 +247,10 @@ class WarehouseBillCService extends WarehouseBillService
              }
              $goods_id = $row['goods_id'] ?? 0;
              $channel_id = $row['channel_id'] ?? 0;
-             $saleman  = $row['saleman'] ?? '';
+             $salesman  = $row['salesman'] ?? '';
              $groupKey = $channel_id;
-             if($saleman && !($saleman_id = $userMap[$saleman])) {
-                 throw new \Exception("[{$saleman}]销售人不存在");
+             if($salesman && !($salesman_id = $userMap[$salesman])) {
+                 throw new \Exception("[{$salesman}]销售人不存在");
              }
              $goods = WarehouseGoods::find()->where(['goods_id'=>$goods_id])->one();
              if(empty($goods)) {
@@ -261,7 +261,7 @@ class WarehouseBillCService extends WarehouseBillService
              $chuku_price = Yii::$app->warehouseService->warehouseGoods->calcChukuPrice($goods);
              $billGroup[$groupKey] = [
                   'channel_id'=>$channel_id,
-                  'saleman_id' =>$saleman_id,
+                  'salesman_id' =>$salesman_id,
              ];
              $billGoodsGroup[$groupKey][] = [ 
                 'goods_id'=>$goods_id,
@@ -321,7 +321,7 @@ class WarehouseBillCService extends WarehouseBillService
         $result = false;
         $sum = WarehouseBillGoods::find()
             ->select(['sum(1) as goods_num', 'sum(chuku_price) as total_cost', 'sum(sale_price) as total_sale', 'sum(market_price) as total_market'])
-            ->where(['bill_id' => $bill_id, 'status' => StatusEnum::ENABLED])
+            ->where(['bill_id' => $id, 'status' => StatusEnum::ENABLED])
             ->asArray()->one();
         if ($sum) {
             $result = WarehouseBill::updateAll(['goods_num' => $sum['goods_num'] / 1, 'total_cost' => $sum['total_cost'] / 1, 'total_sale' => $sum['total_sale'] / 1, 'total_market' => $sum['total_market'] / 1], ['id' => $bill_id]);
