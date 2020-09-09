@@ -211,11 +211,6 @@ class StyleService extends Service
                 throw new \Exception("数据格式不对");
             }
             $style_name = $form->formatValue($style['style_name'], "");
-            if (empty($style_name)) {
-                //$flag = false;
-                //$error[$i][] = "款式名称不能为空";
-                $style_name = StringHelper::strToChineseCharacters($style['style_cate_id']) ?? "1";
-            }
             $style_sn = $form->formatValue($style['style_sn'], "");
             if (!empty($style_sn)) {
                 if ($key = array_search($style_sn, $style_sns)) {
@@ -231,6 +226,12 @@ class StyleService extends Service
             } elseif (!is_numeric($style_cate_id)) {
                 $flag = false;
                 $error[$i][] = "款式分类填写有误";
+            }
+            if (empty($style_name)) {
+                //$flag = false;
+                //$error[$i][] = "款式名称不能为空";
+                $styleCate = StringHelper::strToChineseCharacters($style['style_cate_id']);
+                $style_name = $styleCate[0][0] ?? "1";
             }
             $product_type_id = $form->formatValue($style['product_type_id'], 0);
             if (empty($product_type_id)) {
@@ -271,7 +272,7 @@ class StyleService extends Service
                 $error[$i][] = "是否支持定制填写有误";
             }
             //$is_gift = $form->formatValue($style['is_gift'], 0);
-            $status = $form->formatValue($style['status'], 1);
+            $status = $form->formatValue($style['status'], 0);
             if (!is_numeric($status)) {
                 $flag = false;
                 $error[$i][] = "是否启用填写有误";
@@ -446,10 +447,12 @@ class StyleService extends Service
             $styleM->id = null;
             $styleM->setAttributes($item);
             if ($styleM->status == StatusEnum::ENABLED) {//启用即审核
-                $styleM->audit_status = AuditStatusEnum::PENDING;
+                $styleM->audit_status = AuditStatusEnum::PASS;
                 $styleM->auditor_id = \Yii::$app->user->identity->getId();
                 $styleM->audit_time = time();
                 $styleM->audit_remark = "批量导入";
+            }else{
+                $styleM->audit_status = AuditStatusEnum::PENDING;
             }
             if (empty($styleM->style_sn)) {
                 $styleM->is_autosn = AutoSnEnum::YES;
@@ -465,7 +468,9 @@ class StyleService extends Service
                 Yii::$app->styleService->style->createStyleSn($styleM);
             }
             //创建审批流程
-            Yii::$app->services->flowType->createFlow($this->targetType, $styleM->id, $styleM->style_sn);
+            if ($styleM->status != StatusEnum::ENABLED) {//未启用走审批流程
+                Yii::$app->services->flowType->createFlow($this->targetType, $styleM->id, $styleM->style_sn);
+            }
             //款式工厂信息
             if (isset($factoryList1[$k]) || isset($factoryList2[$k])) {
                 if (isset($factoryList1[$k]['factory_id'])
@@ -499,52 +504,56 @@ class StyleService extends Service
         }
 
         //创建款式工厂信息
-        $value = [];
-        $key = array_keys($saveFactory[0]);
-        foreach ($saveFactory as $item) {
-            $factoryM = new StyleFactory();
-            $factoryM->setAttributes($item);
-            if (!$factoryM->validate()) {
-                throw new \Exception($this->getError($factoryM));
-            }
-            $value[] = array_values($item);
-            if (count($value) >= 10) {
-                $res = Yii::$app->db->createCommand()->batchInsert(StyleFactory::tableName(), $key, $value)->execute();
-                if (false === $res) {
-                    throw new \Exception("创建工厂信息失败1");
+        if(!empty($saveFactory)){
+            $value = [];
+            $key = array_keys($saveFactory[0]);
+            foreach ($saveFactory as $item) {
+                $factoryM = new StyleFactory();
+                $factoryM->setAttributes($item);
+                if (!$factoryM->validate()) {
+                    throw new \Exception($this->getError($factoryM));
                 }
-                $value = [];
+                $value[] = array_values($item);
+                if (count($value) >= 10) {
+                    $res = Yii::$app->db->createCommand()->batchInsert(StyleFactory::tableName(), $key, $value)->execute();
+                    if (false === $res) {
+                        throw new \Exception("创建工厂信息失败1");
+                    }
+                    $value = [];
+                }
             }
-        }
-        if (!empty($value)) {
-            $res = \Yii::$app->db->createCommand()->batchInsert(StyleFactory::tableName(), $key, $value)->execute();
-            if (false === $res) {
-                throw new \Exception("创建工厂信息失败2");
+            if (!empty($value)) {
+                $res = \Yii::$app->db->createCommand()->batchInsert(StyleFactory::tableName(), $key, $value)->execute();
+                if (false === $res) {
+                    throw new \Exception("创建工厂信息失败2");
+                }
             }
         }
 
         //创建款式工费信息
-        $value = [];
-        $key = array_keys($saveFee[0]);
-        foreach ($saveFee as $item) {
-            $feeM = new StyleFactoryFee();
-            $feeM->setAttributes($item);
-            if (!$feeM->validate()) {
-                throw new \Exception($this->getError($feeM));
-            }
-            $value[] = array_values($item);
-            if (count($value) >= 10) {
-                $res = Yii::$app->db->createCommand()->batchInsert(StyleFactoryFee::tableName(), $key, $value)->execute();
-                if (false === $res) {
-                    throw new \Exception("创建工费信息失败1");
+        if(!empty($saveFee)) {
+            $value = [];
+            $key = array_keys($saveFee[0]);
+            foreach ($saveFee as $item) {
+                $feeM = new StyleFactoryFee();
+                $feeM->setAttributes($item);
+                if (!$feeM->validate()) {
+                    throw new \Exception($this->getError($feeM));
                 }
-                $value = [];
+                $value[] = array_values($item);
+                if (count($value) >= 10) {
+                    $res = Yii::$app->db->createCommand()->batchInsert(StyleFactoryFee::tableName(), $key, $value)->execute();
+                    if (false === $res) {
+                        throw new \Exception("创建工费信息失败1");
+                    }
+                    $value = [];
+                }
             }
-        }
-        if (!empty($value)) {
-            $res = \Yii::$app->db->createCommand()->batchInsert(StyleFactoryFee::tableName(), $key, $value)->execute();
-            if (false === $res) {
-                throw new \Exception("创建工费信息失败2");
+            if (!empty($value)) {
+                $res = \Yii::$app->db->createCommand()->batchInsert(StyleFactoryFee::tableName(), $key, $value)->execute();
+                if (false === $res) {
+                    throw new \Exception("创建工费信息失败2");
+                }
             }
         }
 
