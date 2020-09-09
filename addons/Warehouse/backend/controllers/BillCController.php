@@ -185,8 +185,9 @@ class BillCController extends BaseController
      * @return mixed|string|\yii\web\Response
      * @throws \yii\base\ExitException
      */
-    public function actionAjaxApply(){
-        $id = \Yii::$app->request->get('id');
+    public function actionAjaxApply($id){
+        
+        $id = \Yii::$app->request->get('id');        
         $model = $this->findModel($id) ?? new WarehouseBillCForm();
         if($model->bill_status != BillStatusEnum::SAVE){
             return $this->message('单据不是保存状态', $this->redirect(\Yii::$app->request->referrer), 'error');
@@ -195,8 +196,10 @@ class BillCController extends BaseController
             return $this->message('单据明细不能为空', $this->redirect(\Yii::$app->request->referrer), 'error');
         }
 
-        $trans = \Yii::$app->db->beginTransaction();
+        
         try{
+            
+            $trans = \Yii::$app->db->beginTransaction();
             $model->bill_status = BillStatusEnum::PENDING;
             $model->audit_status = AuditStatusEnum::PENDING;
             if(false === $model->save()){
@@ -204,10 +207,10 @@ class BillCController extends BaseController
             }
             //日志
             $log = [
-                'gold_id' => $model->id,
+                'bill_id' => $model->id,
                 'log_type' => LogTypeEnum::ARTIFICIAL,
-                'log_module' => '其它出库单',
-                'log_msg' => '单据提审'
+                'log_module' => '提交审核',
+                'log_msg' => "单据申请审核"
             ];
             \Yii::$app->warehouseService->billLog->createBillLog($log);
             $trans->commit();
@@ -247,10 +250,10 @@ class BillCController extends BaseController
 
                 //日志
                 $log = [
-                    'gold_id' => $model->id,
+                    'bill_id' => $model->id,
                     'log_type' => LogTypeEnum::ARTIFICIAL,
                     'log_module' => '其它出库单',
-                    'log_msg' => '单据审核'
+                    'log_msg' => "单据审核, 审核状态：".AuditStatusEnum::getValue($model->audit_status).",审核备注：".$model->audit_remark
                 ];
                 \Yii::$app->warehouseService->billLog->createBillLog($log);
 
