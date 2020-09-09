@@ -328,6 +328,7 @@ class WarehouseBillTService extends Service
             }
             $finger_hk = $goods[6] ?? "";
             if (!empty($finger_hk)) {
+                $finger_hk = StringHelper::findNum($finger_hk);
                 $attr_id = $form->getAttrIdByAttrValue($style_sn, $finger_hk, AttrIdEnum::PORT_NO);
                 if (empty($attr_id)) {
                     $flag = false;
@@ -339,6 +340,7 @@ class WarehouseBillTService extends Service
             }
             $finger = $goods[7] ?? "";
             if (!empty($finger)) {
+                $finger = StringHelper::findNum($finger);
                 $attr_id = $form->getAttrIdByAttrValue($style_sn, $finger, AttrIdEnum::FINGER);
                 if (empty($attr_id)) {
                     $flag = false;
@@ -407,6 +409,7 @@ class WarehouseBillTService extends Service
             }
             $suttle_weight = $form->formatValue($goods[16], 0) ?? 0;
             $gold_loss = $form->formatValue($goods[17], 0) ?? 0;
+            $gold_loss = StringHelper::findNum($gold_loss);
             $gold_price = $form->formatValue($goods[18], 0) ?? 0;
             $pure_gold = $form->formatValue($goods[19], 0) ?? 0;
 
