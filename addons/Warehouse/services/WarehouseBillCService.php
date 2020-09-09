@@ -316,12 +316,12 @@ class WarehouseBillCService extends WarehouseBillService
      * 出库单据汇总
      * @param unknown $id
      */
-    public function billCSummary($id)
+    public function billCSummary($bill_id)
     {
         $result = false;
         $sum = WarehouseBillGoods::find()
             ->select(['sum(1) as goods_num', 'sum(chuku_price) as total_cost', 'sum(sale_price) as total_sale', 'sum(market_price) as total_market'])
-            ->where(['bill_id' => $id, 'status' => StatusEnum::ENABLED])
+            ->where(['bill_id' => $bill_id, 'status' => StatusEnum::ENABLED])
             ->asArray()->one();
         if ($sum) {
             $result = WarehouseBill::updateAll(['goods_num' => $sum['goods_num'] / 1, 'total_cost' => $sum['total_cost'] / 1, 'total_sale' => $sum['total_sale'] / 1, 'total_market' => $sum['total_market'] / 1], ['id' => $bill_id]);
