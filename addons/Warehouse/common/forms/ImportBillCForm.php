@@ -35,6 +35,7 @@ class ImportBillCForm extends WarehouseBill
         //合并
         return ArrayHelper::merge(parent::attributeLabels() , [
                 'file'=>'上传文件',
+                'channel_id'=>'出库渠道',
         ]);
     }    
 }

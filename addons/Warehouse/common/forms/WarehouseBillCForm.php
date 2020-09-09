@@ -36,6 +36,7 @@ class WarehouseBillCForm extends WarehouseBill
         //合并
         return ArrayHelper::merge(parent::attributeLabels() , [
             'order_sn'=>'参考编号/订单号',
+            'channel_id'=>'出库渠道',   
             'goods_ids'=>'货号',
             'creator_id' => '制单人',
             'created_at' => '制单时间',
