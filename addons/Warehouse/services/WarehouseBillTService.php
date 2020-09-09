@@ -675,10 +675,10 @@ class WarehouseBillTService extends Service
             $second_stone_num3 = $form->formatValue($goods[51], 0) ?? 0;
             $second_stone_weight3 = $form->formatValue($goods[52], 0) ?? 0;
             if (!empty($second_pei_type3)) {
-                $second_pei_type3 = \addons\Warehouse\common\enums\PeiShiWayEnum::getIdByName($second_pei_type2);
+                $second_pei_type3 = \addons\Warehouse\common\enums\PeiShiWayEnum::getIdByName($second_pei_type3);
                 if (empty($second_pei_type3) && $second_pei_type3 === "") {
                     $flag = false;
-                    $error[$i][] = "副石2配石方式：录入值有误";
+                    $error[$i][] = "副石3配石方式：录入值有误";
                     $second_pei_type3 = 0;
                 }
             } else {
@@ -902,6 +902,8 @@ class WarehouseBillTService extends Service
             }
             $i++;
         }
+        //echo '<pre>';
+        //print_r($error);die;
         if (!$flag) {
             //发生错误
             $message = "*注：填写属性值有误可能为以下情况：①填写格式有误 ②该款式属性下无此属性值<hr><hr>";
