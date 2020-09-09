@@ -72,7 +72,7 @@ class StyleForm extends Style
             '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#',
         ];
         $fields = [
-            '(*)款式名称[style_name]', '款式编号[style_sn]', '(*)款式分类[style_cate_id]', '(*)产品线[product_type_id]', '是否启用[status]',
+            '款式名称[style_name]', '款式编号[style_sn]', '(*)款式分类[style_cate_id]', '(*)产品线[product_type_id]', '是否启用[status]',
             '(*)归属渠道[style_channel_id]', '款式来源[style_source_id]', '(*)款式材质[style_material]', '(*)款式性别[style_sex]',
             '是否支持定制[is_made]', '备注[remark]',
 

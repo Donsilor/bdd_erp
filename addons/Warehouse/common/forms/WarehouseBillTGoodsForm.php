@@ -106,6 +106,7 @@ class WarehouseBillTGoodsForm extends WarehouseBillGoodsL
             'goods_num' => 0,
             'suttle_weight' => 0,
             'gold_weight' => 0,
+            'pure_gold' => 0,
             'lncl_loss_weight' => 0,
             'gold_amount' => 0,
             'main_stone_num' => 0,
@@ -117,6 +118,9 @@ class WarehouseBillTGoodsForm extends WarehouseBillGoodsL
             'second_stone_num2' => 0,
             'second_stone_weight2' => 0,
             'second_stone_amount2' => 0,
+            'second_stone_num3' => 0,
+            'second_stone_weight3' => 0,
+            'second_stone_amount3' => 0,
             'peishi_weight' => 0,
             'peishi_fee' => 0,
             'parts_num' => 0,
@@ -128,6 +132,7 @@ class WarehouseBillTGoodsForm extends WarehouseBillGoodsL
             'biaomiangongyi_fee' => 0,
             'fense_fee' => 0,
             'penlasha_fee' => 0,
+            'lasha_fee' => 0,
             'bukou_fee' => 0,
             'templet_fee' => 0,
             'cert_fee' => 0,
@@ -142,6 +147,7 @@ class WarehouseBillTGoodsForm extends WarehouseBillGoodsL
                 $total['goods_num'] = bcadd($total['goods_num'], $good->goods_num);
                 $total['suttle_weight'] = bcadd($total['suttle_weight'], $good->suttle_weight, 3);
                 $total['gold_weight'] = bcadd($total['gold_weight'], $good->gold_weight, 3);
+                $total['pure_gold'] = bcadd($total['pure_gold'], $good->pure_gold, 3);
                 $total['lncl_loss_weight'] = bcadd($total['lncl_loss_weight'], $good->lncl_loss_weight, 3);
                 $total['gold_amount'] = bcadd($total['gold_amount'], $good->gold_amount, 2);
                 $total['main_stone_num'] = bcadd($total['main_stone_num'], $good->main_stone_num);
@@ -153,6 +159,9 @@ class WarehouseBillTGoodsForm extends WarehouseBillGoodsL
                 $total['second_stone_num2'] = bcadd($total['second_stone_num2'], $good->second_stone_num2);
                 $total['second_stone_weight2'] = bcadd($total['second_stone_weight2'], $good->second_stone_weight2, 3);
                 $total['second_stone_amount2'] = bcadd($total['second_stone_amount2'], $good->second_stone_amount2, 2);
+                $total['second_stone_num3'] = bcadd($total['second_stone_num3'], $good->second_stone_num3);
+                $total['second_stone_weight3'] = bcadd($total['second_stone_weight3'], $good->second_stone_weight3, 3);
+                $total['second_stone_amount3'] = bcadd($total['second_stone_amount3'], $good->second_stone_amount3, 2);
                 $total['peishi_weight'] = bcadd($total['peishi_weight'], $good->peishi_weight, 3);
                 $total['peishi_fee'] = bcadd($total['peishi_fee'], $good->peishi_fee, 2);
                 $total['parts_num'] = bcadd($total['parts_num'], $good->parts_num);
@@ -164,6 +173,7 @@ class WarehouseBillTGoodsForm extends WarehouseBillGoodsL
                 $total['biaomiangongyi_fee'] = bcadd($total['biaomiangongyi_fee'], $good->biaomiangongyi_fee, 2);
                 $total['fense_fee'] = bcadd($total['fense_fee'], $good->fense_fee, 2);
                 $total['penlasha_fee'] = bcadd($total['penlasha_fee'], $good->penlasha_fee, 2);
+                $total['lasha_fee'] = bcadd($total['lasha_fee'], $good->lasha_fee, 2);
                 $total['bukou_fee'] = bcadd($total['bukou_fee'], $good->bukou_fee, 2);
                 $total['templet_fee'] = bcadd($total['templet_fee'], $good->templet_fee, 2);
                 $total['cert_fee'] = bcadd($total['cert_fee'], $good->cert_fee, 2);
@@ -186,68 +196,74 @@ class WarehouseBillTGoodsForm extends WarehouseBillGoodsL
             '[非起版]和[有款起版]款号不能为空',
             '[起版号]和[款号]必填其一',
             '#',
-            '材质' . $this->formatTitle($this->getMaterialTypeMap()),
-            '材质颜色' . $this->formatTitle($this->getMaterialColorMap()),
-            '手寸(港号)' . $this->formatTitle($this->getPortNoMap()),
-            '手寸(美号)' . $this->formatTitle($this->getFingerMap()),
+            $this->formatTitle($this->getMaterialTypeMap()),//'材质' .
+            $this->formatTitle($this->getMaterialColorMap()),//'材质颜色' .
+            $this->formatTitle($this->getPortNoMap()),//'手寸(港号)' .
+            $this->formatTitle($this->getFingerMap()),//'手寸(美号)' .
             '#', '#',
-            '镶口' . $this->formatTitle($this->getXiangkouMap()),
+            $this->formatTitle($this->getXiangkouMap()),//'镶口' .
             '#',
-            '链类型' . $this->formatTitle($this->getChainTypeMap()),
-            '扣环' . $this->formatTitle($this->getCrampRingMap()),
-            '爪头形状' . $this->formatTitle($this->getTalonHeadTypeMap()),
+            $this->formatTitle($this->getChainTypeMap()),//'链类型' .
+            $this->formatTitle($this->getCrampRingMap()),//'扣环' .
+            $this->formatTitle($this->getTalonHeadTypeMap()),//'爪头形状' .
 
-            '配料方式' . $this->formatTitle($this->getPeiLiaoWayMap()),
+            $this->formatTitle($this->getPeiLiaoWayMap()),//'配料方式' .
             '#', '#', '#', '#',
 
-            '主石配石方式' . $this->formatTitle($this->getPeiShiWayMap()),
+            $this->formatTitle($this->getPeiShiWayMap()),//'主石配石方式' .
             '#',
-            '主石类型' . $this->formatTitle($this->getMainStoneTypeMap()),
+            $this->formatTitle($this->getMainStoneTypeMap()),//'主石类型' .
             '#', '#', '#',
-            '主石形状' . $this->formatTitle($this->getMainStoneShapeMap()),
-            '主石颜色' . $this->formatTitle($this->getMainStoneColorMap()),
-            '主石净度' . $this->formatTitle($this->getMainStoneClarityMap()),
-            '主石切工' . $this->formatTitle($this->getMainStoneCutMap()),
-            '主石色彩' . $this->formatTitle($this->getMainStoneColourMap()),
+            $this->formatTitle($this->getMainStoneShapeMap()),//'主石形状' .
+            $this->formatTitle($this->getMainStoneColorMap()),//'主石颜色' .
+            $this->formatTitle($this->getMainStoneClarityMap()),//'主石净度' .
+            $this->formatTitle($this->getMainStoneCutMap()),//'主石切工' .
+            $this->formatTitle($this->getMainStoneColourMap()),//'主石色彩' .
 
-            '副石1配石方式' . $this->formatTitle($this->getPeiShiWayMap()),
+            $this->formatTitle($this->getPeiShiWayMap()),//'副石1配石方式' .
             '#',
-            '副石1类型' . $this->formatTitle($this->getSecondStoneType1Map()),
+            $this->formatTitle($this->getSecondStoneType1Map()),//'副石1类型' .
             '#', '#', '#',
-            '副石1形状' . $this->formatTitle($this->getSecondStoneShape1Map()),
-            '副石1颜色' . $this->formatTitle($this->getSecondStoneColor1Map()),
-            '副石1净度' . $this->formatTitle($this->getSecondStoneClarity1Map()),
-            '副石1切工' . $this->formatTitle($this->getSecondStoneCut1Map()),
-            '副石1色彩' . $this->formatTitle($this->getSecondStoneColour1Map()),
+            $this->formatTitle($this->getSecondStoneShape1Map()),//'副石1形状' .
+            $this->formatTitle($this->getSecondStoneColor1Map()),//'副石1颜色' .
+            $this->formatTitle($this->getSecondStoneClarity1Map()),//'副石1净度' .
+            $this->formatTitle($this->getSecondStoneCut1Map()),//'副石1切工' .
+            $this->formatTitle($this->getSecondStoneColour1Map()),//'副石1色彩' .
 
-            '副石2配石方式' . $this->formatTitle($this->getPeiShiWayMap()),
+            $this->formatTitle($this->getPeiShiWayMap()),//'副石2配石方式' .
             '#',
-            '副石2类型' . $this->formatTitle($this->getSecondStoneType2Map()),
+            $this->formatTitle($this->getSecondStoneType2Map()),//'副石2类型' .
+            '#', '#', '#',
+
+            $this->formatTitle($this->getPeiShiWayMap()),//'副石3配石方式' .
+            '#',
+            $this->formatTitle($this->getSecondStoneType3Map()),//'副石3类型' .
             '#', '#', '#', '#',
 
-            '配件方式' . $this->formatTitle($this->getPeiJianWayMap()),
-            '配件类型' . $this->formatTitle($this->getPartsTypeMap()),
-            '配件材质' . $this->formatTitle($this->getPartsMaterialMap()),
+            $this->formatTitle($this->getPeiJianWayMap()),//'配件方式' .
+            $this->formatTitle($this->getPartsTypeMap()),//'配件类型' .
+            $this->formatTitle($this->getPartsMaterialMap()),//'配件材质' .
             '#', '#', '#',
 
             '#', '#', '#', '#',
-            '镶嵌工艺' . $this->formatTitle($this->getXiangqianCraftMap()),
+            $this->formatTitle($this->getXiangqianCraftMap()),//'镶嵌工艺' .
             '#',
-            '表面工艺' . $this->formatTitle($this->getFaceCraftMap()),
-            '#', '#', '#', '#', '#', '#', '#', '#',
-            '主石证书类型' . $this->formatTitle($this->getCertTypeMap()),
+            $this->formatTitle($this->getFaceCraftMap()),//'表面工艺' .
+            '#', '#', '#', '#', '#', '#', '#', '#', '#',
+            $this->formatTitle($this->getCertTypeMap()),//'主石证书类型' .
             '#',
-            '金托类型' . $this->formatTitle($this->getJietuoTypeMap()),
+            $this->formatTitle($this->getJietuoTypeMap()),//'金托类型' .
             '#',
         ];
         $fields = [
             '条码号(货号)', '(*)款号', '(*)起版号', '(*)商品名称', '材质', '材质颜色', '手寸(港号)', '手寸(美号)', '尺寸(cm)', '成品尺寸(mm)', '镶口(ct)', '刻字', '链类型', '扣环', '爪头形状',
-            '配料方式', '连石重(g)', '金重(g)', '损耗(%)', '金价/g',
+            '配料方式', '连石重(g)', '损耗(%)', '金价/g', '折足(g)',
             '主石配石方式', '主石编号', '主石类型', '主石粒数', '主石重(ct)', '主石单价/ct', '主石形状', '主石颜色', '主石净度', '主石切工', '主石色彩',
             '副石1配石方式', '副石1编号', '副石1类型', '副石1粒数', '副石1重(ct)', '副石1单价/ct', '副石1形状', '副石1颜色', '副石1净度', '副石1切工', '副石1色彩',
-            '副石2配石方式', '副石2编号', '副石2类型', '副石2粒数', '副石2重(ct)', '副石2单价/ct', '石料备注',
+            '副石2配石方式', '副石2编号', '副石2类型', '副石2粒数', '副石2重(ct)', '副石2单价/ct',
+            '副石3配石方式', '副石3编号', '副石3类型', '副石3粒数', '副石3重(ct)', '副石3单价/ct', '石料备注',
             '配件方式', '配件类型', '配件材质', '配件数量', '配件金重(g)', '配件金价/g',
-            '配石重量(ct)', '配石工费/ct', '配件工费', '克/工费', '镶嵌工艺', '镶石单价/颗', '表面工艺', '表面工艺费', '分色/分件费', '喷拉沙费', '补口费', '版费', '证书费',
+            '配石重量(ct)', '配石工费/ct', '配件工费', '克/工费', '镶嵌工艺', '镶石单价/颗', '表面工艺', '表面工艺费', '分色/分件费', '喷沙费', '拉沙费', '补口费', '版费', '证书费',
             '其它费用', '主石证书号', '主石证书类型', '(*)倍率(默认1)', '(*)金托类型', '备注',
         ];
         return [$values, $fields];

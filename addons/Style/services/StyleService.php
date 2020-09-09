@@ -4,6 +4,7 @@ namespace addons\Style\services;
 
 use addons\Style\common\enums\InlayEnum;
 use common\enums\AuditStatusEnum;
+use common\helpers\StringHelper;
 use Yii;
 use common\helpers\Url;
 use common\components\Service;
@@ -210,8 +211,9 @@ class StyleService extends Service
             }
             $style_name = $form->formatValue($style['style_name'], "");
             if (empty($style_name)) {
-                $flag = false;
-                $error[$i][] = "款式名称不能为空";
+                //$flag = false;
+                //$error[$i][] = "款式名称不能为空";
+                $style_name = StringHelper::strToChineseCharacters($style['style_cate_id']) ?? "1";
             }
             $style_sn = $form->formatValue($style['style_sn'], "");
             $style_cate_id = $form->formatValue($style['style_cate_id'], 0);
@@ -240,7 +242,7 @@ class StyleService extends Service
             }
             $style_source_id = $form->formatValue($style['style_source_id'], 0);
             $style_material = $form->formatValue($style['style_material'], 0);
-            if (empty($style_material)) {
+            if ($style_material === "") {
                 $flag = false;
                 $error[$i][] = "款式材质不能为空";
             } elseif (!is_numeric($style_material)) {
@@ -405,11 +407,12 @@ class StyleService extends Service
             foreach ($feeInfo as $type => $fee) {
                 if (!empty($fee) && !is_numeric($fee)) {
                     $flag = false;
-                    $error[$i][] = $form->getFeeTypeNameMap($type)."必须为数字";
+                    $error[$i][] = $form->getFeeTypeNameMap($type) . "必须为数字";
                 }
             }
             $i++;
         }
+
         if (!$flag) {
             //发生错误
             $message = "";
@@ -477,8 +480,7 @@ class StyleService extends Service
                 }
             }
             //创建款式工费信息
-            $styleFee = $styleFee[$k] ?? [];
-            foreach ($styleFee as $type => $fee) {
+            foreach ($styleFee[$k] as $type => $fee) {
                 $fee_type = $form->getFeeTypeMap($type);
                 if ($fee > 0 && !empty($fee) && !empty($fee_type)) {
                     $feeM = new StyleFactoryFee();

@@ -139,6 +139,7 @@ return [
                                ['title' => '提交审核','name'  => 'style/ajax-apply'],                           
                                ['title' => '审核','name'  => 'style/ajax-audit'],                           
                                ['title' => '详情','name'  => 'style/view'],
+                               ['title' => '批量导入','name'  => 'style/ajax-upload'],
                                
                                ['title' => '款式属性(*)','name'  => 'style-attribute/*'],
                                ['title' => '款式商品(*)','name'  => 'style-goods/*'],
