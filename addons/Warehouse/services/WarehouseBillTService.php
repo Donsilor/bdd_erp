@@ -969,6 +969,9 @@ class WarehouseBillTService extends Service
 
         //同步更新价格
         $this->syncUpdatePriceAll($bill);
+
+        //同步更新单头信息
+        $this->warehouseBillTSummary($form->bill_id);
     }
 
     /**

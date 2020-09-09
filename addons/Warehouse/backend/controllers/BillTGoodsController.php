@@ -145,7 +145,7 @@ class BillTGoodsController extends BaseController
                 $trans = \Yii::$app->db->beginTransaction();
                 $model->bill_id = $bill_id;
                 $model->file = UploadedFile::getInstance($model, 'file');
-                Yii::$app->warehouseService->billT->uploadGoods($model);
+                \Yii::$app->warehouseService->billT->uploadGoods($model);
                 $trans->commit();
                 \Yii::$app->getSession()->setFlash('success', '保存成功');
                 return $this->redirect(['edit-all', 'bill_id' => $bill_id]);
