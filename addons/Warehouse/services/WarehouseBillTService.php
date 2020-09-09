@@ -903,7 +903,7 @@ class WarehouseBillTService extends Service
             $i++;
         }
         //echo '<pre>';
-        //print_r($error);die;
+        //print_r($saveData);die;
         if (!$flag) {
             //发生错误
             $message = "*注：填写属性值有误可能为以下情况：①填写格式有误 ②该款式属性下无此属性值<hr><hr>";
