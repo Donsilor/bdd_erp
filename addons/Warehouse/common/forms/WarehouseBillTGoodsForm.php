@@ -128,6 +128,7 @@ class WarehouseBillTGoodsForm extends WarehouseBillGoodsL
             'parts_amount' => 0,
             'parts_fee' => 0,
             'basic_gong_fee' => 0,
+            'piece_fee' => 0,
             'xianqian_fee' => 0,
             'biaomiangongyi_fee' => 0,
             'fense_fee' => 0,
@@ -168,6 +169,7 @@ class WarehouseBillTGoodsForm extends WarehouseBillGoodsL
                 $total['parts_gold_weight'] = bcadd($total['parts_gold_weight'], $good->parts_gold_weight, 3);
                 $total['parts_amount'] = bcadd($total['parts_amount'], $good->parts_amount, 2);
                 $total['parts_fee'] = bcadd($total['parts_fee'], $good->parts_fee, 2);
+                $total['piece_fee'] = bcadd($total['piece_fee'], $good->piece_fee, 2);
                 $total['basic_gong_fee'] = bcadd($total['basic_gong_fee'], $good->basic_gong_fee, 2);
                 $total['xianqian_fee'] = bcadd($total['xianqian_fee'], $good->xianqian_fee, 2);
                 $total['biaomiangongyi_fee'] = bcadd($total['biaomiangongyi_fee'], $good->biaomiangongyi_fee, 2);
@@ -249,7 +251,7 @@ class WarehouseBillTGoodsForm extends WarehouseBillGoodsL
             $this->formatTitle($this->getXiangqianCraftMap()),//'镶嵌工艺' .
             '#',
             $this->formatTitle($this->getFaceCraftMap()),//'表面工艺' .
-            '#', '#', '#', '#', '#', '#', '#', '#', '#',
+            '#', '#', '#', '#', '#', '#', '#', '#', '#', '#',
             $this->formatTitle($this->getCertTypeMap()),//'主石证书类型' .
             '#',
             $this->formatTitle($this->getJietuoTypeMap()),//'金托类型' .
@@ -263,7 +265,7 @@ class WarehouseBillTGoodsForm extends WarehouseBillGoodsL
             '副石2配石方式', '副石2编号', '副石2类型', '副石2粒数', '副石2重(ct)', '副石2单价/ct',
             '副石3配石方式', '副石3编号', '副石3类型', '副石3粒数', '副石3重(ct)', '副石3单价/ct', '石料备注',
             '配件方式', '配件类型', '配件材质', '配件数量', '配件金重(g)', '配件金价/g',
-            '配石重量(ct)', '配石工费/ct', '配件工费', '克/工费', '镶嵌工艺', '镶石单价/颗', '表面工艺', '表面工艺费', '分色/分件费', '喷沙费', '拉沙费', '补口费', '版费', '证书费',
+            '配石重量(ct)', '配石工费/ct', '配件工费', '克/工费', '件/工费', '镶嵌工艺', '镶石单价/颗', '表面工艺', '表面工艺费', '分色/分件费', '喷沙费', '拉沙费', '补口费', '版费', '证书费',
             '其它费用', '主石证书号', '主石证书类型', '(*)倍率(默认1)', '(*)金托类型', '备注',
         ];
         return [$values, $fields];

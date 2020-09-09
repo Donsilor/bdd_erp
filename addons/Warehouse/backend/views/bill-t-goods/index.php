@@ -1526,6 +1526,21 @@ $this->params['breadcrumbs'][] = $this->title;
 //                                ]),
                             ],
                             [
+                                'attribute' => 'piece_fee',
+                                //'format' => 'raw',
+                                'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#b7ba6b;'],
+                                'footerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#b7ba6b;'],
+                                'value' => function ($model, $key, $index, $widget) {
+                                    $widget->footer = $model->getAttributeLabel('piece_fee');
+                                    return $model->piece_fee ?? "0.00";
+                                },
+                                'filter' => false,
+//                                'filter' => Html::activeTextInput($searchModel, 'piece_fee', [
+//                                    'class' => 'form-control',
+//                                    'style' => 'width:80px;'
+//                                ]),
+                            ],
+                            [
                                 'attribute' => 'basic_gong_fee',
                                 //'format' => 'raw',
                                 'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#b7ba6b;'],

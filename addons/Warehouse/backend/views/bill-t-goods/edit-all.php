@@ -1727,6 +1727,21 @@ $this->params['breadcrumbs'][] = $this->title;
 //                                    'style' => 'width:80px;'
 //                                ]),
                             ],
+                            [
+                                'attribute' => 'piece_fee',
+                                'format' => 'raw',
+                                'headerOptions' => ['class' => 'col-md-1 batch_full', 'attr-name' => 'piece_fee', 'style' => 'background-color:#FFA500;'],
+                                'footerOptions' => ['class' => 'col-md-1 batch_full2', 'attr-name' => 'piece_fee', 'style' => 'background-color:#FFA500;'],
+                                'value' => function ($model, $key, $index, $widget) {
+                                    $widget->footer = $model->getAttributeLabel('piece_fee');
+                                    return Html::ajaxInput('piece_fee', $model->piece_fee, ['data-id' => $model->id, 'onfocus' => 'rfClearVal(this)', 'data-type' => 'number']);
+                                },
+                                'filter' => false,
+//                                'filter' => Html::activeTextInput($searchModel, 'piece_fee', [
+//                                    'class' => 'form-control',
+//                                    'style' => 'width:80px;'
+//                                ]),
+                            ],
 //                            [
 //                                'attribute' => 'peishi_num',
 //                                'format' => 'raw',
