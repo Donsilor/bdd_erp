@@ -118,6 +118,9 @@ class WarehouseBillTGoodsForm extends WarehouseBillGoodsL
             'second_stone_num2' => 0,
             'second_stone_weight2' => 0,
             'second_stone_amount2' => 0,
+            'second_stone_num3' => 0,
+            'second_stone_weight3' => 0,
+            'second_stone_amount3' => 0,
             'peishi_weight' => 0,
             'peishi_fee' => 0,
             'parts_num' => 0,
@@ -156,6 +159,9 @@ class WarehouseBillTGoodsForm extends WarehouseBillGoodsL
                 $total['second_stone_num2'] = bcadd($total['second_stone_num2'], $good->second_stone_num2);
                 $total['second_stone_weight2'] = bcadd($total['second_stone_weight2'], $good->second_stone_weight2, 3);
                 $total['second_stone_amount2'] = bcadd($total['second_stone_amount2'], $good->second_stone_amount2, 2);
+                $total['second_stone_num3'] = bcadd($total['second_stone_num3'], $good->second_stone_num3);
+                $total['second_stone_weight3'] = bcadd($total['second_stone_weight3'], $good->second_stone_weight3, 3);
+                $total['second_stone_amount3'] = bcadd($total['second_stone_amount3'], $good->second_stone_amount3, 2);
                 $total['peishi_weight'] = bcadd($total['peishi_weight'], $good->peishi_weight, 3);
                 $total['peishi_fee'] = bcadd($total['peishi_fee'], $good->peishi_fee, 2);
                 $total['parts_num'] = bcadd($total['parts_num'], $good->parts_num);
@@ -227,6 +233,11 @@ class WarehouseBillTGoodsForm extends WarehouseBillGoodsL
             '副石2配石方式' . $this->formatTitle($this->getPeiShiWayMap()),
             '#',
             '副石2类型' . $this->formatTitle($this->getSecondStoneType2Map()),
+            '#', '#', '#',
+
+            '副石3配石方式' . $this->formatTitle($this->getPeiShiWayMap()),
+            '#',
+            '副石3类型' . $this->formatTitle($this->getSecondStoneType3Map()),
             '#', '#', '#', '#',
 
             '配件方式' . $this->formatTitle($this->getPeiJianWayMap()),
@@ -238,7 +249,7 @@ class WarehouseBillTGoodsForm extends WarehouseBillGoodsL
             '镶嵌工艺' . $this->formatTitle($this->getXiangqianCraftMap()),
             '#',
             '表面工艺' . $this->formatTitle($this->getFaceCraftMap()),
-            '#', '#', '#', '#', '#', '#', '#', '#',
+            '#', '#', '#', '#', '#', '#', '#', '#', '#',
             '主石证书类型' . $this->formatTitle($this->getCertTypeMap()),
             '#',
             '金托类型' . $this->formatTitle($this->getJietuoTypeMap()),
@@ -249,9 +260,10 @@ class WarehouseBillTGoodsForm extends WarehouseBillGoodsL
             '配料方式', '连石重(g)', '损耗(%)', '金价/g', '折足(g)',
             '主石配石方式', '主石编号', '主石类型', '主石粒数', '主石重(ct)', '主石单价/ct', '主石形状', '主石颜色', '主石净度', '主石切工', '主石色彩',
             '副石1配石方式', '副石1编号', '副石1类型', '副石1粒数', '副石1重(ct)', '副石1单价/ct', '副石1形状', '副石1颜色', '副石1净度', '副石1切工', '副石1色彩',
-            '副石2配石方式', '副石2编号', '副石2类型', '副石2粒数', '副石2重(ct)', '副石2单价/ct', '石料备注',
+            '副石2配石方式', '副石2编号', '副石2类型', '副石2粒数', '副石2重(ct)', '副石2单价/ct',
+            '副石3配石方式', '副石3编号', '副石3类型', '副石3粒数', '副石3重(ct)', '副石3单价/ct', '石料备注',
             '配件方式', '配件类型', '配件材质', '配件数量', '配件金重(g)', '配件金价/g',
-            '配石重量(ct)', '配石工费/ct', '配件工费', '克/工费', '镶嵌工艺', '镶石单价/颗', '表面工艺', '表面工艺费', '分色/分件费', '喷拉沙费', '补口费', '版费', '证书费',
+            '配石重量(ct)', '配石工费/ct', '配件工费', '克/工费', '镶嵌工艺', '镶石单价/颗', '表面工艺', '表面工艺费', '分色/分件费', '喷沙费', '拉沙费', '补口费', '版费', '证书费',
             '其它费用', '主石证书号', '主石证书类型', '(*)倍率(默认1)', '(*)金托类型', '备注',
         ];
         return [$values, $fields];
