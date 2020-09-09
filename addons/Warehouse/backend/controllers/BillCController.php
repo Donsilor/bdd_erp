@@ -328,6 +328,18 @@ class BillCController extends BaseController
      */
     public function actionAjaxImport()
     {
+        if(Yii::$app->request->get('download')) {
+            $file = dirname(dirname(__FILE__)).'/resources/excel/其它出库单数据模板导入.xlsx';
+            echo $file,'--',basename($file);
+            exit;
+            $content = file_get_contents($file);
+            if (!empty($content)) {
+                header("Content-type:application/vnd.ms-excel");
+                header("Content-Disposition: attachment;filename=".basename($file));
+                header("Content-Transfer-Encoding: binary");
+                exit($content);
+            }
+        }
         $model =  new ImportBillCForm();
         // ajax 校验
         $this->activeFormValidate($model);
@@ -352,21 +364,6 @@ class BillCController extends BaseController
                 'model' => $model,
         ]);
     }
-    /**
-     * 下载出库单单据模板
-     */
-    public function actionDownloadTpl()
-    {
-        $file = dirname(dirname(__FILE__)).'/resources/excel/其它出库单数据模板导入.xlsx';
-        $content = file_get_contents($file);
-        if (!empty($content)) {
-            header("Content-type:application/vnd.ms-excel");
-            header("Content-Disposition: attachment;filename=".basename($file));
-            header("Content-Transfer-Encoding: binary");
-            exit($content);
-        }
-    }
-
     /***
      * 导出Excel
      */
