@@ -180,8 +180,10 @@ $this->params['breadcrumbs'][] = $this->title;
                 'attribute' => 'creator_id',
                 'value' => 'creator.username',
                 'headerOptions' => ['class' => 'col-md-1'],
-                'filter' =>false,
-
+                'filter' => Html::activeTextInput($searchModel, 'creator.username', [
+                    'class' => 'form-control',
+                    'style'=> 'width:100px;'
+                ]),
             ],
            [
                     'attribute'=>'created_at',

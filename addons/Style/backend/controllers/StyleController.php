@@ -61,7 +61,7 @@ class StyleController extends BaseController
             ],
             'pageSize' => $this->pageSize,
             'relations' => [
-                 
+                 'creator' => 'username',
             ]
         ]);
 

@@ -4,6 +4,7 @@ namespace addons\Style\services;
 
 use addons\Style\common\enums\InlayEnum;
 use common\enums\AuditStatusEnum;
+use common\helpers\StringHelper;
 use Yii;
 use common\helpers\Url;
 use common\components\Service;
@@ -210,8 +211,9 @@ class StyleService extends Service
             }
             $style_name = $form->formatValue($style['style_name'], "");
             if (empty($style_name)) {
-                $flag = false;
-                $error[$i][] = "款式名称不能为空";
+                //$flag = false;
+                //$error[$i][] = "款式名称不能为空";
+                $style_name = StringHelper::strToChineseCharacters($style['style_cate_id']) ?? "1";
             }
             $style_sn = $form->formatValue($style['style_sn'], "");
             $style_cate_id = $form->formatValue($style['style_cate_id'], 0);
