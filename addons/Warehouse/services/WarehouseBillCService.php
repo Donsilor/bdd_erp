@@ -167,8 +167,8 @@ class WarehouseBillCService extends WarehouseBillService
         $log = [
                 'bill_id' => $form->id,
                 'log_type' => LogTypeEnum::ARTIFICIAL,
-                'log_module' => '其它出库单',
-                'log_msg' => '单据取消'
+                'log_module' => '取消单据',
+                'log_msg' => '取消其它出库单'
         ];
         \Yii::$app->warehouseService->billLog->createBillLog($log);
     }
@@ -310,6 +310,16 @@ class WarehouseBillCService extends WarehouseBillService
                 }
             }
             $this->billCSummary($bill->id);
+            
+            //日志
+            $log = [
+                    'bill_id' => $bill->id,
+                    'log_type' => LogTypeEnum::ARTIFICIAL,
+                    'log_module' => '批量导入',
+                    'log_msg' => '批量导入其它出库单，单据编号：'.$bill->bill_no
+            ];
+            \Yii::$app->warehouseService->billLog->createBillLog($log);
+            
         }
     }
     /**
