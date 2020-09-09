@@ -234,11 +234,11 @@ class WarehouseBillCService extends WarehouseBillService
              }
              foreach ($row as $colKey=> $colValue) {
                  //必填校验
-                 if(in_array($colKey,$requredColumns) && $colValue == '') {
+                 if(in_array($colKey,$requredColumns) && $colValue === '') {
                      throw new \Exception($rtitle[$colKey]."不能为空");
                  }
                  if(in_array($colKey,$specialColumns)) {
-                     if(preg_match("/^(\d+?)\.(.*)/is", $colValue,$matches) && count($matches) ==3) {
+                     if(preg_match("/^(\d+?)\.(.*)/is", $colValue,$matches) && count($matches) == 3) {
                          $row[$colKey] = $matches[1];
                      }else {
                          throw new \Exception($rtitle[$colKey]."填写格式错误");

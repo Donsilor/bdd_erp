@@ -36,12 +36,9 @@ class WarehouseBillCForm extends WarehouseBill
         //合并
         return ArrayHelper::merge(parent::attributeLabels() , [
             'order_sn'=>'参考编号/订单号',
-            'channel_id'=>'出库渠道',   
-            'goods_ids'=>'货号',
-            'creator_id' => '制单人',
-            'created_at' => '制单时间',
-            'returned_time' => '还货日期',
-            'goods_remark' => '质检备注',
+            'channel_id'=>'出库渠道',
+            'total_cost' =>'出库总成本',
+            'goods_ids'=>'货号',            
         ]);
     }
     /**
