@@ -208,7 +208,7 @@ class WarehouseBillTService extends Service
                 $i++;
                 continue;
             }
-            if (count($goods) != 74) {
+            if (count($goods) != 75) {
                 throw new \Exception("模板格式不正确，请下载最新模板");
             }
             $goods = $form->trimField($goods);
@@ -387,6 +387,7 @@ class WarehouseBillTService extends Service
                     $talon_head_type = $attr_id;
                 }
             }
+
             $peiliao_way = $form->formatValue($goods[15], 0) ?? "";
             if (!empty($peiliao_way)) {
                 $peiliao_way = \addons\Warehouse\common\enums\PeiLiaoWayEnum::getIdByName($peiliao_way);
@@ -397,9 +398,10 @@ class WarehouseBillTService extends Service
                 }
             }
             $suttle_weight = $form->formatValue($goods[16], 0) ?? 0;
-            $gold_weight = $form->formatValue($goods[17], 0) ?? 0;
-            $gold_loss = $form->formatValue($goods[18], 0) ?? 0;
-            $gold_price = $form->formatValue($goods[19], 0) ?? 0;
+            $gold_loss = $form->formatValue($goods[17], 0) ?? 0;
+            $gold_price = $form->formatValue($goods[18], 0) ?? 0;
+            $pure_gold = $form->formatValue($goods[19], 0) ?? 0;
+
             $main_pei_type = $form->formatValue($goods[20], 0) ?? 0;
             $main_stone_sn = $goods[21] ?? "";
             $stone = null;
@@ -728,15 +730,16 @@ class WarehouseBillTService extends Service
             $biaomiangongyi_fee = $form->formatValue($goods[62], 0) ?? 0;
             $fense_fee = $form->formatValue($goods[63], 0) ?? 0;
             $penlasha_fee = $form->formatValue($goods[64], 0) ?? 0;
-            $bukou_fee = $form->formatValue($goods[65], 0) ?? 0;
-            $templet_fee = $form->formatValue($goods[66], 0) ?? 0;
-            $cert_fee = $form->formatValue($goods[67], 0) ?? 0;
-            $other_fee = $form->formatValue($goods[68], 0) ?? 0;
-            $main_cert_id = $goods[69] ?? "";
+            $lasha_fee = $form->formatValue($goods[65], 0) ?? 0;
+            $bukou_fee = $form->formatValue($goods[66], 0) ?? 0;
+            $templet_fee = $form->formatValue($goods[67], 0) ?? 0;
+            $cert_fee = $form->formatValue($goods[68], 0) ?? 0;
+            $other_fee = $form->formatValue($goods[69], 0) ?? 0;
+            $main_cert_id = $goods[70] ?? "";
             if (empty($main_cert_id)) {
                 $main_cert_id = $cert_id;
             }
-            $main_cert_type = $goods[70] ?? "";
+            $main_cert_type = $goods[71] ?? "";
             if (!empty($main_cert_type)) {
                 $attr_id = $form->getAttrIdByAttrValue($style_sn, $main_cert_type, AttrIdEnum::DIA_CERT_TYPE);
                 if (empty($attr_id)) {
@@ -749,8 +752,8 @@ class WarehouseBillTService extends Service
             } else {
                 $main_cert_type = $cert_type;
             }
-            $markup_rate = $form->formatValue($goods[71], 1) ?? 1;
-            $jintuo_type = $goods[72] ?? "";
+            $markup_rate = $form->formatValue($goods[72], 1) ?? 1;
+            $jintuo_type = $goods[73] ?? "";
             if (!empty($jintuo_type)) {
                 $jintuo_type = JintuoTypeEnum::getIdByName($jintuo_type);
                 if (empty($jintuo_type)) {
@@ -759,7 +762,7 @@ class WarehouseBillTService extends Service
                     $jintuo_type = "";
                 }
             }
-            $remark = $goods[73] ?? "";
+            $remark = $goods[74] ?? "";
             $saveData[] = $item = [
                 'bill_id' => $bill->id,
                 'bill_no' => $bill->bill_no,
@@ -792,9 +795,10 @@ class WarehouseBillTService extends Service
                 'talon_head_type' => $talon_head_type,
                 'peiliao_way' => $peiliao_way,
                 'suttle_weight' => $suttle_weight,
-                'gold_weight' => $gold_weight,
+                //'gold_weight' => $gold_weight,
                 'gold_loss' => $gold_loss,
                 'gold_price' => $gold_price,
+                'pure_gold' => $pure_gold,
                 'main_pei_type' => $main_pei_type,
                 'main_stone_sn' => $main_stone_sn,
                 'main_stone_type' => $main_stone_type,
@@ -844,6 +848,7 @@ class WarehouseBillTService extends Service
                 'biaomiangongyi_fee' => $biaomiangongyi_fee,
                 'fense_fee' => $fense_fee,
                 'penlasha_fee' => $penlasha_fee,
+                'lasha_fee' => $lasha_fee,
                 'bukou_fee' => $bukou_fee,
                 'templet_fee' => $templet_fee,
                 'cert_fee' => $cert_fee,
