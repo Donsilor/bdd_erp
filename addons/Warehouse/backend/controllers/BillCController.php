@@ -7,7 +7,6 @@ use addons\Style\common\models\ProductType;
 use addons\Style\common\models\StyleCate;
 use addons\Supply\common\models\Supplier;
 use addons\Warehouse\common\enums\DeliveryTypeEnum;
-use addons\Warehouse\common\enums\PutInTypeEnum;
 use addons\Warehouse\common\forms\WarehouseBillCForm;
 use addons\Warehouse\common\models\Warehouse;
 use addons\Warehouse\common\models\WarehouseBillGoods;
@@ -22,13 +21,13 @@ use common\helpers\SnHelper;
 use common\helpers\ExcelHelper;
 use common\models\base\SearchModel;
 use addons\Warehouse\common\models\WarehouseBill;
-use addons\Warehouse\common\forms\WarehouseBillBForm;
 use addons\Warehouse\common\enums\BillStatusEnum;
 use addons\Warehouse\common\enums\BillTypeEnum;
 use common\enums\AuditStatusEnum;
-use common\helpers\FileHelper;
+use common\helpers\ResultHelper;
 use addons\Warehouse\common\forms\ImportBillCForm;
 use yii\web\UploadedFile;
+use addons\Warehouse\common\enums\GoodsStatusEnum;
 
 /**
  * WarehouseBillBController implements the CRUD actions for WarehouseBillBController model.
@@ -197,7 +196,7 @@ class BillCController extends BaseController
         }        
         try{
             
-            $trans = \Yii::$app->db->beginTransaction();
+            $trans = \Yii::$app->trans->beginTransaction();
             $model->bill_status = BillStatusEnum::PENDING;
             $model->audit_status = AuditStatusEnum::PENDING;
             if(false === $model->save()){
@@ -282,7 +281,7 @@ class BillCController extends BaseController
             return $this->message("找不到数据", $this->redirect(Yii::$app->request->referrer), 'error');
         }        
         try{
-            $trans = \Yii::$app->db->beginTransaction();
+            $trans = \Yii::$app->trans->beginTransaction();
 
             \Yii::$app->warehouseService->billC->cancelBillC($model);
             
@@ -307,7 +306,7 @@ class BillCController extends BaseController
             return $this->message("找不到数据", $this->redirect(Yii::$app->request->referrer), 'error');
         }
         try{
-            $trans = \Yii::$app->db->beginTransaction();
+            $trans = \Yii::$app->trans->beginTransaction();
 
             \Yii::$app->warehouseService->billC->deleteBillC($model);
             $log = [
@@ -348,7 +347,7 @@ class BillCController extends BaseController
         if ($model->load(\Yii::$app->request->post())) {
             
             try{
-                $trans = \Yii::$app->db->beginTransaction();
+                $trans = \Yii::$app->trans->beginTransaction();
                 
                 $model->file = UploadedFile::getInstance($model, 'file');
                 $model->bill_type = $this->billType;
@@ -363,6 +362,45 @@ class BillCController extends BaseController
         }
         return $this->renderAjax($this->action->id, [
                 'model' => $model,
+        ]);
+    }
+    
+    /**
+     * 快捷出库 创建
+     */
+    public function actionQuick()
+    {
+        $this->layout = '@backend/views/layouts/iframe';
+        
+         
+        if(\Yii::$app->request->get('popCheck')) {
+            $ids = StringHelper::explodeIds(Yii::$app->request->get('ids'));
+            foreach ($ids as $id) {
+                $goods = WarehouseGoods::find()->where(['id'=>$id])->select(['goods_id','goods_status'])->one();
+                if($goods->goods_status != GoodsStatusEnum::IN_STOCK) {
+                    return ResultHelper::json(422, "[{$goods->goods_id}]条码号不是库存状态");
+                }
+            }
+            return ResultHelper::json(200, "success");
+        }
+        
+        $form = new WarehouseBillCForm();
+        if ($form->load(\Yii::$app->request->post())) {
+            try{
+                $trans = \Yii::$app->trans->beginTransaction();
+                $form->goods_ids = Yii::$app->request->get('ids');
+                $form->bill_type = $this->billType;
+                $model = Yii::$app->warehouseService->billC->quickBillC($form);
+                $trans->commit();
+                Yii::$app->getSession()->setFlash('success','保存成功');
+                return ResultHelper::json(200,'保存成功', "success");
+            }catch (\Exception $e){
+                $trans->rollBack();
+                return ResultHelper::json(423,$e->getMessage(), "error");
+            }
+        }        
+        return $this->render($this->action->id, [
+                'model' => $form,
         ]);
     }
     /***

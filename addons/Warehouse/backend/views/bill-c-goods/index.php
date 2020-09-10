@@ -30,7 +30,8 @@ $this->params['breadcrumbs'][] = $this->title;
                 'data-offset'=>'20px',
             ]);
             echo '&nbsp;';
-//            echo Html::edit(['edit-all', 'bill_id' => $bill->id], '编辑货品', ['class'=>'btn btn-info btn-xs']);
+            echo Html::edit(['edit-all', 'bill_id' => $bill->id], '编辑货品', ['class'=>'btn btn-info btn-xs']);
+            echo '&nbsp;';
         }
         echo Html::a('导出', ['bill-c/export?ids='.$bill->id],[
             'class'=>'btn btn-success btn-xs'
@@ -79,7 +80,14 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'filter' => true,
                                 'headerOptions' => ['class' => 'col-md-2'],
                             ],
-                            
+                            [
+                                'attribute'=>'goods.goods_status',
+                                'value' => function($model){
+                                     return \addons\Warehouse\common\enums\GoodsStatusEnum::getValue($model->goods->goods_status);
+                                },
+                                'filter' => true,
+                                'headerOptions' => ['class' => 'col-md-1'],
+                            ],
                             [
                                 'attribute' => 'goods.style_cate_id',
                                 'value' => 'goods.styleCate.name',
@@ -96,7 +104,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             [
                                 'attribute' => 'warehouse_id',
                                 'value' =>"warehouse.name",
-                                'filter'=>Select2::widget([
+                                'filter'=>false/* Select2::widget([
                                     'name'=>'SearchModel[warehouse_id]',
                                     'value'=>$searchModel->warehouse_id,
                                     'data'=>Yii::$app->warehouseService->warehouse::getDropDown(),
@@ -105,7 +113,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                         'allowClear' => true,
 
                                     ],
-                                ]),
+                                ]) */,
                                 'headerOptions' => ['class' => 'col-md-2'],
                             ],
 

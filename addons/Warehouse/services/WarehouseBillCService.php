@@ -72,34 +72,98 @@ class WarehouseBillCService extends WarehouseBillService
                 throw new Exception('更新单据汇总失败2');
             }
         }
-        //更新商品库存状态
-        if(in_array($form->delivery_type, [DeliveryTypeEnum::QUICK_SALE, DeliveryTypeEnum::PLATFORM]))
-        {
-            $status = GoodsStatusEnum::IN_SALE;
-        }else{
-            //其它出库类型
-            $status = GoodsStatusEnum::IN_STOCK;//待定
-        }
-//        $execute_num = WarehouseGoods::updateAll(['goods_status'=> $status],['goods_id'=>$goods_ids, 'goods_status' => GoodsStatusEnum::IN_STOCK]);
-//        if($execute_num <> count($bill_goods)){
-//            throw new Exception("货品改变状态数量与明细数量不一致");
-//        }
-
         foreach ($goods_ids as $goods_id){
             $outbound_cost = Yii::$app->warehouseService->warehouseGoods->getOutboundCost($goods_id);
-            $res = WarehouseGoods::updateAll(['goods_status'=> $status,'outbound_cost'=>$outbound_cost],['goods_id'=>$goods_id, 'goods_status' => GoodsStatusEnum::IN_STOCK]);
+            $res = WarehouseGoods::updateAll(['goods_status'=> GoodsStatusEnum::IN_SALE,'outbound_cost'=>$outbound_cost],['goods_id'=>$goods_id, 'goods_status' => GoodsStatusEnum::IN_STOCK]);
             if(false === $res){
                 throw new Exception('更新库存信息失败');
             }
         }
 
         //更新收货单汇总：总金额和总数量
-        $res = \Yii::$app->warehouseService->bill->WarehouseBillSummary($form->id);
+        $res = $this->billCSummary($form->id);
         if(false === $res){
             throw new Exception('更新单据汇总失败');
         }
     }
-
+    /**
+     * 快捷创建出库单（先挑选商品）
+     * @param WarehouseBillCForm $form
+     */
+    public function quickBillC($form)
+    {
+        if(false === $form->validate()) {
+            throw new \Exception($this->getError($form));
+        }
+        $bill = new WarehouseBill();
+        $bill->attributes = $form->toArray();
+        $bill->bill_no = SnHelper::createBillSn($form->bill_type);
+        if(false === $bill->save()) {
+            throw new \Exception($this->getError($bill));
+        }
+        //商品主键id数组
+        $ids = $form->getGoodsIds();
+        foreach ($ids as $id) {
+            $goods = WarehouseGoods::find()->where(['id'=>$id])->one();
+            if(empty($goods)) {
+                throw new \Exception("[{$id}]商品查询失败");
+            }
+            $goods_id = $goods->goods_id;
+            if($goods->goods_status != GoodsStatusEnum::IN_STOCK) {
+                throw new \Exception("[{$goods_id}]条码货号不是库存状态");
+            }
+            
+            //出库成本价计算
+            $chuku_price = Yii::$app->warehouseService->warehouseGoods->calcChukuPrice($goods);     
+            
+            $billGoods = new WarehouseBillGoods();
+            $billGoods->attributes = [
+                    'bill_id' =>$bill->id,
+                    'bill_no' =>$bill->bill_no,
+                    'bill_type'=>$bill->bill_type,
+                    'goods_id'=>$goods_id,
+                    'goods_name'=>$goods->goods_name,
+                    'style_sn'=>$goods->style_sn,
+                    'goods_num'=>1,
+                    'put_in_type'=>$goods->put_in_type,
+                    'warehouse_id'=>$goods->warehouse_id,
+                    'material'=>$goods->material,
+                    'material_type'=>$goods->material_type,
+                    'material_color'=>$goods->material_color,
+                    'gold_weight'=>$goods->gold_weight,
+                    'gold_loss'=>$goods->gold_loss,
+                    'diamond_carat'=>$goods->diamond_carat,
+                    'diamond_color'=>$goods->diamond_color,
+                    'diamond_clarity'=>$goods->diamond_clarity,
+                    'diamond_cert_id'=>$goods->diamond_cert_id,
+                    'diamond_cert_type'=>$goods->diamond_cert_type,
+                    'cost_price'=>$goods->cost_price,//采购成本价
+                    'chuku_price'=>$chuku_price,//出库成本价
+                    'market_price'=>$goods->market_price,
+                    'markup_rate'=>$goods->markup_rate,     
+            ];
+            if(false === $billGoods->save()) {
+                throw new \Exception("[{$goods_id}]".$this->getError($billGoods));
+            }
+            $res = WarehouseGoods::updateAll(['outbound_cost'=>$billGoods->chuku_price,'goods_status'=>GoodsStatusEnum::IN_SALE],['goods_id'=>$billGoods->goods_id,'goods_status'=>GoodsStatusEnum::IN_STOCK]);
+            if(!$res) {
+                throw new \Exception("[{$billGoods->goods_id}]条码货号不是库存中");
+            }
+        }
+        //更新收货单汇总：总金额和总数量
+        $this->billCSummary($bill->id);
+        
+        //单据日志
+        $log = [
+                'bill_id' => $bill->id,
+                'log_type' => LogTypeEnum::ARTIFICIAL,
+                'log_module' => '快捷创建',
+                'log_msg' => '快捷创建其它出库单，单据编号：'.$bill->bill_no
+        ];
+        \Yii::$app->warehouseService->billLog->createBillLog($log);
+        
+        return $bill;
+    }
     /**
      * 其它出库单审核
      * @param WarehouseBillCForm $form
@@ -189,7 +253,6 @@ class WarehouseBillCService extends WarehouseBillService
             throw new \Exception($this->getError($form));
         }
     }
-    
     /**
      * 其它出库单导入
      * @param unknown $form

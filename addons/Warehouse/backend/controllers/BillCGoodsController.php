@@ -81,8 +81,8 @@ class BillCGoodsController extends BaseController
                 if(false === $model->save()){
                     throw new \Exception($this->getError($model));
                 }
-                //更新收货单汇总：总金额和总数量
-                $res = \Yii::$app->warehouseService->bill->WarehouseBillSummary($model->bill_id);
+                //汇总：总金额和总数量
+                $res = \Yii::$app->warehouseService->billC->billCSummary($model->bill_id);
                 if(false === $res){
                     throw new Exception('更新单据汇总失败');
                 }

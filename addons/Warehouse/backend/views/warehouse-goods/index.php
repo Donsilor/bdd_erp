@@ -23,7 +23,6 @@ $this->params['breadcrumbs'][] = $this->title;
                 <h6 style="color:red">*有款起版的商品（既有款号又有起版号的），下订单只能用起版号下单</h6>
             </div>
             <div >
-<!--                    --><?//= Html::beginForm(Url::to(['index']), 'get') ?>
                 <?php
                 $get = Yii::$app->request->get();
                 if(isset($get['SearchModel'])){
@@ -313,7 +312,18 @@ $this->params['breadcrumbs'][] = $this->title;
                     <?= Html::endForm() ?>
             </div>
             <div class="box-body table-responsive">
-                <?php echo Html::batchButtons(false)?>
+                <?php
+                    echo Html::a('批量出库', ['bill-c/quick'], [
+                        'class' => 'btn btn-success btn-sm',
+                        "onclick" => "batchPop(this);return false;",
+                        'data-grid' => 'grid',
+                        'data-width' => '50%',
+                        'data-height' => '80%',
+                        'data-offset' => '20px',
+                        'data-title' => '快捷出库',
+                    ]);
+                    echo '&nbsp;';
+                ?>
                 <?= GridView::widget([
                     'dataProvider' => $dataProvider,
                     'filterModel' => $searchModel,
