@@ -14,8 +14,6 @@ class WarehouseBillCForm extends WarehouseBill
 {
     public $ids;
     public $goods_ids;
-    public $returned_time;
-    public $goods_remark;
     public $file;
 
     /**
@@ -24,7 +22,7 @@ class WarehouseBillCForm extends WarehouseBill
     public function rules()
     {
          $rules = [
-            [['delivery_type'], 'required']                
+            [['delivery_type','channel_id'], 'required']                
          ];
          return array_merge(parent::rules() , $rules);
     }
