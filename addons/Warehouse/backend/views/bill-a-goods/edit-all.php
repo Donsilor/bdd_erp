@@ -188,6 +188,18 @@ $this->params['breadcrumbs'][] = $this->title;
                                 ]),
                             ],
                             [
+                                'attribute'=>'pure_gold',
+                                'headerOptions' => ['class' => 'col-md-1 batch_full', 'attr-name' => 'pure_gold'],
+                                'format' => 'raw',
+                                'value' => function ($model, $key, $index, $column){
+                                    return  Html::ajaxInput('pure_gold', $model->pure_gold, ['data-id'=>$model->id]);
+                                },
+                                'filter' => Html::activeTextInput($searchModel, 'pure_gold', [
+                                    'class' => 'form-control',
+                                    'style'=> 'width:80px;'
+                                ]),
+                            ],
+                            [
                                 'attribute'=>'gold_price',
                                 'headerOptions' => ['class' => 'col-md-1 batch_full', 'attr-name' => 'gold_price'],
                                 'format' => 'raw',
@@ -534,6 +546,19 @@ $this->params['breadcrumbs'][] = $this->title;
                                 ]),
                                 'headerOptions' => ['class' => 'col-md-1 batch_select_full','attr-name'=>'second_stone_shape1','attr-id'=>AttrIdEnum::DIA_SHAPE],
                             ],
+
+                            [
+                                'attribute'=>'second_stone_sn2',
+                                'format' => 'raw',
+                                'value' => function ($model, $key, $index, $column){
+                                    return  Html::ajaxInput('second_stone_sn2', $model->second_stone_sn2, ['data-id'=>$model->id]);
+                                },
+                                'headerOptions' => ['class' => 'col-md-1 batch_full', 'attr-name' => 'second_stone_sn2'],
+                                'filter' => Html::activeTextInput($searchModel, 'second_stone_sn2', [
+                                    'class' => 'form-control',
+                                    'style'=> 'width:100px;'
+                                ]),
+                            ],
                             [
                                 'attribute' => 'second_stone_type2',
                                 'format' => 'raw',
@@ -583,6 +608,59 @@ $this->params['breadcrumbs'][] = $this->title;
                                     'style'=> 'width:80px;'
                                 ]),
                             ],
+
+
+
+                            [
+                                'attribute' => 'second_stone_type3',
+                                'format' => 'raw',
+                                'value' => function ($model, $key, $index, $column){
+                                    return  Html::ajaxSelect($model,'second_stone_type3', Yii::$app->styleService->styleAttribute->getAttrValueListByStyle($model->goods->style_sn,AttrIdEnum::SIDE_STONE3_TYPE), ['data-id'=>$model->id, 'prompt'=>'请选择']);
+                                },
+                                'filter' => Html::activeDropDownList($searchModel, 'second_stone_type3',Yii::$app->attr->valueMap(\addons\Style\common\enums\AttrIdEnum::SIDE_STONE3_TYPE), [
+                                    'prompt' => '全部',
+                                    'class' => 'form-control',
+                                    'style'=> 'width:80px;'
+                                ]),
+                                'headerOptions' => ['class' => 'col-md-1 batch_select_full','attr-name'=>'second_stone_type3','attr-id'=>AttrIdEnum::SIDE_STONE3_TYPE],
+                            ],
+                            [
+                                'attribute'=>'second_stone_num3',
+                                'format' => 'raw',
+                                'value' => function ($model, $key, $index, $column){
+                                    return  Html::ajaxInput('second_stone_num3', $model->second_stone_num3, ['data-id'=>$model->id]);
+                                },
+                                'headerOptions' => ['class' => 'col-md-1 batch_full', 'attr-name' => 'second_stone_num3'],
+                                'filter' => Html::activeTextInput($searchModel, 'second_stone_num3', [
+                                    'class' => 'form-control',
+                                    'style'=> 'width:80px;'
+                                ]),
+                            ],
+                            [
+                                'attribute'=>'second_stone_weight3',
+                                'format' => 'raw',
+                                'value' => function ($model, $key, $index, $column){
+                                    return  Html::ajaxInput('second_stone_weight3', $model->second_stone_weight3, ['data-id'=>$model->id]);
+                                },
+                                'headerOptions' => ['class' => 'col-md-1 batch_full', 'attr-name' => 'second_stone_weight3'],
+                                'filter' => Html::activeTextInput($searchModel, 'second_stone_weight3', [
+                                    'class' => 'form-control',
+                                    'style'=> 'width:80px;'
+                                ]),
+                            ],
+                            [
+                                'attribute'=>'second_stone_price3',
+                                'format' => 'raw',
+                                'value' => function ($model, $key, $index, $column){
+                                    return  Html::ajaxInput('second_stone_price3', $model->second_stone_price3, ['data-id'=>$model->id]);
+                                },
+                                'headerOptions' => ['class' => 'col-md-1 batch_full', 'attr-name' => 'second_stone_price3'],
+                                'filter' => Html::activeTextInput($searchModel, 'second_stone_price3', [
+                                    'class' => 'form-control',
+                                    'style'=> 'width:80px;'
+                                ]),
+                            ],
+
                             [
                                 'attribute'=>'parts_gold_weight',
                                 'format' => 'raw',
@@ -692,6 +770,30 @@ $this->params['breadcrumbs'][] = $this->title;
                                 },
                                 'headerOptions' => ['class' => 'col-md-1 batch_full', 'attr-name' => 'penrasa_fee'],
                                 'filter' => Html::activeTextInput($searchModel, 'penrasa_fee', [
+                                    'class' => 'form-control',
+                                    'style'=> 'width:80px;'
+                                ]),
+                            ],
+                            [
+                                'attribute'=>'lasha_fee',
+                                'format' => 'raw',
+                                'value' => function ($model, $key, $index, $column){
+                                    return  Html::ajaxInput('lasha_fee', $model->lasha_fee, ['data-id'=>$model->id]);
+                                },
+                                'headerOptions' => ['class' => 'col-md-1 batch_full', 'attr-name' => 'lasha_fee'],
+                                'filter' => Html::activeTextInput($searchModel, 'lasha_fee', [
+                                    'class' => 'form-control',
+                                    'style'=> 'width:80px;'
+                                ]),
+                            ],
+                            [
+                                'attribute'=>'piece_fee',
+                                'format' => 'raw',
+                                'value' => function ($model, $key, $index, $column){
+                                    return  Html::ajaxInput('piece_fee', $model->piece_fee, ['data-id'=>$model->id]);
+                                },
+                                'headerOptions' => ['class' => 'col-md-1 batch_full', 'attr-name' => 'piece_fee'],
+                                'filter' => Html::activeTextInput($searchModel, 'piece_fee', [
                                     'class' => 'form-control',
                                     'style'=> 'width:80px;'
                                 ]),

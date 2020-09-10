@@ -2,7 +2,6 @@
 
 namespace addons\Style\services;
 
-use addons\Warehouse\common\models\WarehouseBillGoodsL;
 use Yii;
 use common\helpers\Url;
 use common\components\Service;
@@ -219,6 +218,7 @@ class StyleService extends Service
                 }
                 $style_sns[$i] = $style_sn;
             }
+            $styleAttr = $this->extendAttrByStyleSn($style_sn);
             $style_cate_id = $form->formatValue($style['style_cate_id'], 0);
             if (empty($style_cate_id)) {
                 $flag = false;
@@ -451,7 +451,7 @@ class StyleService extends Service
                 $styleM->auditor_id = \Yii::$app->user->identity->getId();
                 $styleM->audit_time = time();
                 $styleM->audit_remark = "批量导入";
-            }else{
+            } else {
                 $styleM->audit_status = AuditStatusEnum::PENDING;
             }
             if (empty($styleM->style_sn)) {
@@ -504,7 +504,7 @@ class StyleService extends Service
         }
 
         //创建款式工厂信息
-        if(!empty($saveFactory)){
+        if (!empty($saveFactory)) {
             $value = [];
             $key = array_keys($saveFactory[0]);
             foreach ($saveFactory as $item) {
@@ -531,7 +531,7 @@ class StyleService extends Service
         }
 
         //创建款式工费信息
-        if(!empty($saveFee)) {
+        if (!empty($saveFee)) {
             $value = [];
             $key = array_keys($saveFee[0]);
             foreach ($saveFee as $item) {
@@ -574,4 +574,17 @@ class StyleService extends Service
 //            }
 //        }
     }
+
+    /**
+     * 根据款号拆分款式信息
+     * @param string $style_sn
+     * @param bool $save
+     * @return array
+     * @throws
+     */
+    public function extendAttrByStyleSn($style_sn = null, $save = true)
+    {
+        return [];
+    }
+
 }

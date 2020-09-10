@@ -581,6 +581,65 @@ $this->params['breadcrumbs'][] = $this->title;
                                 }
                             ],
                             /**副石2结束**/
+                            /***副石3开始**/
+
+                            [
+                                'attribute'=>'second_peishi_way3',
+                                'value' => function($model){
+                                    return \addons\Warehouse\common\enums\PeiShiWayEnum::getValue($model->second_peishi_way3);
+                                },
+                                'filter' => Html::activeDropDownList($searchModel, 'second_peishi_way3',\addons\Warehouse\common\enums\PeiShiWayEnum::getMap(), [
+                                    'prompt' => '全部',
+                                    'class' => 'form-control',
+                                    'style'=> 'width:80px;'
+                                ]),
+                                'headerOptions' => [],
+                            ],
+
+
+                            [
+                                'label'=>'	副石3类型',
+                                'value'=> function($model){
+                                    return $model->attr[AttrIdEnum::SIDE_STONE3_TYPE] ?? "";
+                                }
+                            ],
+                            [
+                                'attribute'=>'second_stone_sn3',
+                                'filter' => Html::activeTextInput($searchModel, 'second_stone_sn3', [
+                                    'class' => 'form-control',
+                                    'style'=> 'width:60px;'
+                                ]),
+                                'headerOptions' => [],
+                            ],
+                            [
+                                'label'=>'	副石3粒数',
+                                'value'=> function($model){
+                                    return $model->attr[AttrIdEnum::SIDE_STONE3_NUM] ?? "";
+                                }
+                            ],
+
+                            [
+                                'label'=>'	副石3重',
+                                'value'=> function($model){
+                                    return $model->attr[AttrIdEnum::SIDE_STONE3_WEIGHT] ?? "";
+                                }
+                            ],
+                            [
+                                'label'=>'	副石3单价',
+                                'value'=> function($model){
+                                    return $model->attr[AttrIdEnum::SIDE_STONE3_PRICE] ?? "";
+                                }
+                            ],
+                            [
+                                'label'=>'副石3成本',
+                                'value' => function($model){
+                                    return $model->second_stone3_cost;
+                                },
+                                'filter' => false,
+                                'headerOptions' => [],
+                            ],
+
+                            /**副石3结束**/
 
                             [
                                 'attribute'=>'stone_info',
@@ -641,6 +700,11 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'headerOptions' => [],
                             ],
                             [
+                                'attribute'=>'pure_gold',
+                                'filter' => false,
+                                'headerOptions' => [],
+                            ],
+                            [
                                 'attribute'=>'parts_fee',
                                 'filter' => false,
                                 'headerOptions' => [],
@@ -695,6 +759,11 @@ $this->params['breadcrumbs'][] = $this->title;
                             ],
                             [
                                 'attribute'=>'fense_fee',
+                                'filter' => false,
+                                'headerOptions' => [],
+                            ],
+                            [
+                                'attribute'=>'lasha_fee',
                                 'filter' => false,
                                 'headerOptions' => [],
                             ],

@@ -95,6 +95,7 @@ class AttrIdEnum
     const SIDE_STONE3_WEIGHT = 999;//副石3重量(ct)
     const SIDE_STONE3_NUM = 999;//副石3数量
     const SIDE_STONE3_SPEC = 999;//副石3规格
+    const SIDE_STONE3_PRICE = 999;//副石3单价
 
     //其它信息
     const GOODS_COLOR = 77;//货品外部颜色

@@ -30,7 +30,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 'data-target' => '#ajaxModal',
             ]);
             echo '&nbsp;';
-            echo Html::a('返回列表', ['bill-t-goods/index', 'bill_id' => $bill->id], ['class' => 'btn btn-white btn-xs']);
+            echo Html::a('返回明细', ['bill-t-goods/index', 'bill_id' => $bill->id], ['class' => 'btn btn-white btn-xs']);
             echo '&nbsp;';
             echo Html::edit(['ajax-upload', 'bill_id' => $bill->id], '批量导入', [
                 'class' => 'btn btn-success btn-xs',

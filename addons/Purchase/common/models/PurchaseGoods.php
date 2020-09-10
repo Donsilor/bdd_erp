@@ -87,16 +87,16 @@ class PurchaseGoods extends BaseModel
             [['goods_name','purchase_id', 'jintuo_type','goods_num','cost_price'], 'required'],
 
             [['apply_detail_id','order_detail_id','purchase_id', 'style_id', 'qiban_type','peiliao_type','peishi_type','peijian_type','templet_type','product_type_id','style_channel_id', 'style_cate_id', 'style_sex', 'jintuo_type', 'goods_num','is_inlay' ,'produce_id',
-                'is_apply', 'status', 'created_at', 'updated_at','parts_num','peiliao_way','peijian_way','main_peishi_way','second_peishi_way1','second_peishi_way2','peijian_cate'], 'integer'],
+                'is_apply', 'status', 'created_at', 'updated_at','parts_num','peiliao_way','peijian_way','main_peishi_way','second_peishi_way1','second_peishi_way2','peijian_cate','second_peishi_way3'], 'integer'],
             [['cost_price', 'single_stone_weight','gold_loss', 'gold_price', 'gold_cost_price', 'jiagong_fee', 'xiangqian_fee', 'gong_fee', 'gaitu_fee', 'penla_fee', 'unit_cost_price', 'factory_cost_price',
                 'single_stone_weight','company_unit_cost','gold_amount','biaomiangongyi_fee','fense_fee','bukou_fee','cert_fee','parts_weight','parts_price','factory_total_price','company_total_price','parts_fee','suttle_weight','gross_weight','peishi_fee','peishi_amount',
-                'xianqian_price','penrasa_fee','edition_fee','ke_gong_fee','total_gong_fee','main_stone_cost','second_stone1_cost','second_stone2_cost','peishi_weight','other_fee'], 'number'],
+                'xianqian_price','penrasa_fee','edition_fee','ke_gong_fee','total_gong_fee','main_stone_cost','second_stone1_cost','second_stone2_cost','peishi_weight','other_fee','pure_gold','lasha_fee','second_stone3_cost','piece_fee'], 'number'],
             [['apply_info'], 'string'],
             [['goods_name', 'remark', 'stone_info', 'parts_remark'], 'string', 'max' => 255],
             [['goods_sn'], 'string', 'max' => 60],
             ['gold_loss','compare','compareValue' => 1, 'operator' => '<'],
             [['product_size','goods_color','goods_image'], 'string', 'max' => 100],
-            [['parts_material','main_stone_sn','second_stone_sn1','second_stone_sn2'], 'string', 'max' => 20],
+            [['parts_material','main_stone_sn','second_stone_sn1','second_stone_sn2','second_stone_sn3'], 'string', 'max' => 20],
             [['style_sn', 'qiban_sn','factory_mo'], 'string', 'max' => 30],
             [['parts_info'], 'safe'],
         ];
@@ -159,7 +159,7 @@ class PurchaseGoods extends BaseModel
             'factory_cost_price' => '工厂成本价/件',
             'product_size' => '成品尺寸',
             'goods_color' => '货品外部颜色',
-//            'single_stone_weight' => '连石重',
+            'single_stone_weight' => '单件连石重',
             'suttle_weight' => '连石重(g)',
             'gross_weight' => '含耗重(g)',
             'company_unit_cost' => '公司单件成本',
@@ -193,6 +193,12 @@ class PurchaseGoods extends BaseModel
             'main_stone_cost' => '主石成本',
             'second_stone1_cost' => '副石1成本',
             'second_stone2_cost' => '副石2成本',
+            'pure_gold' => '折足',
+            'lasha_fee' => '拉沙费',
+            'second_peishi_way3' => '副石3配石方式',
+            'second_stone_sn3' => '副石3编号',
+            'second_stone3_cost' => '副石3成本',
+            'piece_fee' => '件/工费',
         ];
     }
 

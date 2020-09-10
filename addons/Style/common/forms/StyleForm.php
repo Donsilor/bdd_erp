@@ -43,9 +43,25 @@ class StyleForm extends Style
     public function getTitleList()
     {
         $cate = $this->getCateList();
-        unset($cate[3], $cate[13], $cate[14], $cate[15], $cate[16], $cate[17]);
+        //unset($cate[3], $cate[13], $cate[14], $cate[15], $cate[16], $cate[17]);
+        $unCate = [3, 13, 14, 15, 16, 17];
+        if (!empty($cate)) {
+            foreach ($unCate as $id) {
+                if (isset($cate[$id])) {
+                    unset($cate[$id]);
+                }
+            }
+        }
         $product = $this->getProductList();
-        unset($product[1], $product[3], $product[4]);
+        //unset($product[1], $product[3], $product[4]);
+        $unProduct = [1, 3, 4];
+        if (!empty($product)) {
+            foreach ($unProduct as $id) {
+                if (isset($product[$id])) {
+                    unset($product[$id]);
+                }
+            }
+        }
         $values = [
             '#', '#',
             $this->formatTitleId($cate),
@@ -72,8 +88,8 @@ class StyleForm extends Style
             '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#',
         ];
         $fields = [
-            '款式名称[style_name]', '款式编号[style_sn]', '(*)款式分类[style_cate_id]', '(*)产品线[product_type_id]', '是否启用[status]',
-            '(*)归属渠道[style_channel_id]', '款式来源[style_source_id]', '(*)款式材质[style_material]', '(*)款式性别[style_sex]',
+            '款式名称[style_name]', '(*)款式编号[style_sn]', '款式分类[style_cate_id]', '(*)产品线[product_type_id]', '是否启用[status]',
+            '归属渠道[style_channel_id]', '款式来源[style_source_id]', '款式材质[style_material]', '款式性别[style_sex]',
             '是否支持定制[is_made]', '备注[remark]',
 
             '工厂名称1(默认工厂)[factory_id1]', '工厂模号1[factory_mo1]', '备注(计费方式)1[factory_remark1]', '出货时间(天)1[shipping_time1]', '是否支持定制1[factory_made1]', '是否启用1[factory_status1]',

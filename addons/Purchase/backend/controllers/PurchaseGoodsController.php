@@ -120,12 +120,13 @@ class PurchaseGoodsController extends BaseController
                 //计算费用
                 $model->setComputeFee();
 
-
                 if(false === $model->save()){
                     throw new \Exception($this->getError($model));
-                }     
+                }
+
                 //创建属性关系表数据
                 $model->createAttrs();
+
                 //更新采购汇总：总金额和总数量
                 Yii::$app->purchaseService->purchase->purchaseSummary($model->purchase_id);
                 $trans->commit();
@@ -139,6 +140,9 @@ class PurchaseGoodsController extends BaseController
         }
         //var_dump(1);die;
         $model->initAttrs();
+
+
+
         return $this->render($this->action->id, [
                 'model' => $model,
         ]);

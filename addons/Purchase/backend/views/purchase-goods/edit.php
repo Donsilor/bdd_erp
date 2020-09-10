@@ -144,14 +144,23 @@ $this->params['breadcrumbs'][] = $this->title;
                     </div>
                     <div class="row">
                         <div class="col-lg-4">
+                            <?= $form->field($model, 'second_peishi_way3')->textInput() ?>
+                        </div>
+                        <div class="col-lg-4">
                             <?= $form->field($model, 'main_stone_sn')->textInput() ?>
                         </div>
                         <div class="col-lg-4">
                             <?= $form->field($model, 'second_stone_sn1')->textInput() ?>
                         </div>
+                    </div>
+                    <div class="row">
                         <div class="col-lg-4">
                             <?= $form->field($model, 'second_stone_sn2')->textInput() ?>
                         </div>
+                        <div class="col-lg-4">
+                            <?= $form->field($model, 'second_stone_sn3')->textInput() ?>
+                        </div>
+
                     </div>
                     <div class="row">
                         <div class="col-lg-4">
@@ -171,6 +180,9 @@ $this->params['breadcrumbs'][] = $this->title;
                         </div>
                         <div class="col-lg-4">
                             <?= $form->field($model, 'suttle_weight')->textInput() ?>
+                        </div>
+                        <div class="col-lg-4">
+                            <?= $form->field($model, 'pure_gold')->textInput() ?>
                         </div>
 
                     </div>
@@ -262,8 +274,17 @@ $this->params['breadcrumbs'][] = $this->title;
                     </div>
                     <div class="row">
                         <div class="col-lg-4">
-                            <?= $form->field($model, 'other_fee')->textarea() ?>
+                            <?= $form->field($model, 'lasha_fee')->textarea() ?>
                         </div>
+                        <div class="col-lg-4">
+                            <?= $form->field($model, 'piece_fee')->textarea() ?>
+                        </div>
+                        <div class="col-lg-4">
+                            <?= $form->field($model, 'other_fee')->textInput() ?>
+                        </div>
+
+                    </div>
+                    <div class="row">
                         <div class="col-lg-4">
                             <?= $form->field($model, 'unit_cost_price')->textInput() ?>
                         </div>
