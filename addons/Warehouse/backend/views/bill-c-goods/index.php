@@ -174,17 +174,8 @@ $this->params['breadcrumbs'][] = $this->title;
                             [
                                 'class' => 'yii\grid\ActionColumn',
                                 'header' => '操作',
-                                'template' => '{edit} {delete}',
-                                'buttons' => [
-                                    'edit' => function($url, $model, $key) use($bill) {
-                                        if($bill->bill_status == BillStatusEnum::SAVE && $bill->delivery_type == DeliveryTypeEnum::QUICK_SALE) {
-                                            return Html::edit(['ajax-edit', 'id' => $model->id, 'returnUrl' => Url::getReturnUrl()], '编辑', [
-                                                'class'=>'btn btn-primary btn-xs',
-                                                'data-toggle' => 'modal',
-                                                'data-target' => '#ajaxModal',
-                                            ]);
-                                        }
-                                    },
+                                'template' => '{delete}',
+                                'buttons' => [ 
                                     'delete' => function($url, $model, $key) use($bill){
                                         if($bill->bill_status == BillStatusEnum::SAVE){
                                             return Html::delete(['delete', 'id' => $model->id],'删除',['class'=>'btn btn-danger btn-xs']);
