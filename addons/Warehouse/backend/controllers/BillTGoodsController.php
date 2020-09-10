@@ -128,7 +128,7 @@ class BillTGoodsController extends BaseController
             $model = new WarehouseBillTGoodsForm();
             list($values, $fields) = $model->getTitleList();
             if(empty($bill_id)){
-                header("Content-Disposition: attachment;filename=【".rand(100,999)."】入库单明细(".date('Ymd').").csv");
+                header("Content-Disposition: attachment;filename=【".rand(100,999)."】入库单明细导入(".date('Ymd').").csv");
             }else{
                 header("Content-Disposition: attachment;filename=【{$bill_id}】入库单明细导入($bill->bill_no).csv");
             }
@@ -148,7 +148,7 @@ class BillTGoodsController extends BaseController
                 \Yii::$app->warehouseService->billT->uploadGoods($model);
                 $trans->commit();
                 \Yii::$app->getSession()->setFlash('success', '保存成功');
-                return $this->redirect(['edit-all', 'bill_id' => $bill_id]);
+                return $this->redirect(['index', 'bill_id' => $bill_id]);
             } catch (\Exception $e) {
                 $trans->rollBack();
                 //var_dump($e->getTraceAsString());die;
