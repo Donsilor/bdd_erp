@@ -232,7 +232,7 @@ class StyleService extends Service
                 $flag = false;
                 $error[$i][] = "款号不能为空";
             }
-            $styleAttr = $this->extendAttrByStyleSn($style_sn);
+            $styleAttr = $this->extendAttrByStyleSn($style_sn);//款号获取款式属性
             $style_cate_id = $form->formatValue($style['style_cate_id'] ?? 0, 0);
             if (empty($style_cate_id)) {
                 $style_cate_id = $styleAttr['style_cate_id'] ?? "";
@@ -277,7 +277,7 @@ class StyleService extends Service
             $style_material = $form->formatValue($style['style_material'] ?? "", "");
             if ($style_material === "") {
                 $style_material = $styleAttr['style_material'] ?? "";
-                if (empty($style_material) && !empty($style_sn)) {
+                if ($style_material === "" && !empty($style_sn)) {
                     $flag = false;
                     $error[$i][] = "款号填写有误，无法获取款式材质";
                 }
