@@ -79,10 +79,15 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'value' => function ($model){
                                     return \addons\Style\common\enums\StoneEnum::getValue($model->stone_type,'getTypeMap');
                                 },
-                                'filter' => Html::activeDropDownList($searchModel, 'stone_type',\addons\Style\common\enums\StoneEnum::getTypeMap(), [
-                                    'prompt' => '全部',
-                                    'class' => 'form-control',
-
+                                'filter'=>\kartik\select2\Select2::widget([
+                                    'name'=>'SearchModel[stone_type]',
+                                    'value'=>$searchModel->stone_type,
+                                    'data'=>Yii::$app->attr->valueMap(\addons\Style\common\enums\AttrIdEnum::MAIN_STONE_TYPE),
+                                    'options' => ['placeholder' =>"请选择",'multiple'=>true],
+                                    'pluginOptions' => [
+                                        'allowClear' => true,
+                                        'width' => 200
+                                    ],
                                 ]),
                             ],
 

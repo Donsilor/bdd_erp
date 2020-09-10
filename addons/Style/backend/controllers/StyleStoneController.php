@@ -4,6 +4,7 @@ namespace addons\Style\backend\controllers;
 
 use addons\Style\common\models\Style;
 use addons\Style\common\models\StyleStone;
+use common\helpers\StringHelper;
 use common\helpers\Url;
 use Yii;
 use common\traits\Curd;
@@ -43,10 +44,16 @@ class StyleStoneController extends BaseController
         ]);
 
         $dataProvider = $searchModel
-            ->search(Yii::$app->request->queryParams);
+            ->search(Yii::$app->request->queryParams,['stone_type']);
 
         $dataProvider->query->andWhere(['>',StyleStone::tableName().'.status',-1]);
         $dataProvider->query->andWhere(['=',StyleStone::tableName().'.style_id',$style_id]);
+
+        $stone_type = $searchModel->stone_type;
+        if (!empty($stone_type)) {
+            $dataProvider->query->andFilterWhere(['in','stone_type',$stone_type]);
+        }
+
 
         return $this->render('index', [
             'dataProvider' => $dataProvider,
