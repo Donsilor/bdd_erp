@@ -26,10 +26,8 @@ $form = ActiveForm::begin([
                 'allowClear' => false
             ],
         ]);?>       
-        <div class="col-sm-12">
-            <?= $form->field($model, 'file')->fileInput() ?>
-            <?= Html::a("下载数据导入模板", ['ajax-import','download' => 1], ['style' => "text-decoration:underline;color:#3c8dbc"]) ?>
-        </div>
+        <?= $form->field($model, 'file')->fileInput() ?>
+        <?= Html::a("下载数据导入模板", ['ajax-import','download' => 1], ['style' => "text-decoration:underline;color:#3c8dbc"]).'<br/>' ?>        
         <?= $form->field($model, 'remark')->textArea(); ?>
     </div>
 </div>

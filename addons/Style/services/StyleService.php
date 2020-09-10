@@ -189,11 +189,11 @@ class StyleService extends Service
         $error_off = true;
         $error = $style_sns = $field = $styleList = $attrList = $factoryList1 = $factoryList2 = $styleFee = [];
         while ($style = fgetcsv($file)) {
-            if (count($style) != 35) {
+            if (count($style) != 36) {
                 throw new \Exception("模板格式不正确，请下载最新模板");
             }
-            if ($i >= 102) {
-                throw new \Exception("每次最多能导入100条数据");
+            if ($i >= 501) {
+                throw new \Exception("每次最多能导入500条数据");
             }
             if ($i <= 1) {
                 if ($i == 1) {
@@ -201,7 +201,7 @@ class StyleService extends Service
                     if ($field == false) {
                         throw new \Exception("表头格式不对[code=1]");
                     }
-                    if (count($field) != 35) {
+                    if (count($field) != 36) {
                         throw new \Exception("表头格式不对[code=2]");
                     }
                 }
@@ -209,6 +209,8 @@ class StyleService extends Service
                 continue;
             }
             $style = $form->trimField($style, $field);
+//            echo '<pre>';
+//            print_r($style);die;
             if ($style == false) {
                 throw new \Exception("数据格式不对");
             }

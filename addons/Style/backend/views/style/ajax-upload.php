@@ -20,7 +20,7 @@ $form = ActiveForm::begin([
 </div>
 <div class="modal-body">
     <div class="col-sm-12">
-        <?= $form->field($model, 'file')->fileInput()->label('文件上传(<span style="color:red">每次最多可上传100条数据)</span>') ?>
+        <?= $form->field($model, 'file')->fileInput()->label('文件上传(<span style="color:red">每次最多可上传500条数据)</span>') ?>
         <?= Html::a("下载数据导入格式", ['ajax-upload', 'download' => 1], ['style' => "text-decoration:underline;color:#3c8dbc"]) ?>
     </div>
 </div>

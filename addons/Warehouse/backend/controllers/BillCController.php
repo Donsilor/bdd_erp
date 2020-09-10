@@ -115,20 +115,11 @@ class BillCController extends BaseController
             if($model->isNewRecord){
                 $model->bill_no = SnHelper::createBillSn($this->billType);
             }
-            if(in_array($model->delivery_type, [DeliveryTypeEnum::QUICK_SALE, DeliveryTypeEnum::PLATFORM])){
-                if(!$model->channel_id){
-                    return $this->message("渠道不能为空", $this->redirect(\Yii::$app->request->referrer), 'error');
-                }
-                if(!$model->order_sn){
-                    return $this->message("订单号不能为空", $this->redirect(\Yii::$app->request->referrer), 'error');
-                }
-            }
             try{
                 $trans = \Yii::$app->db->beginTransaction();
                 if(false === $model->save()) {
                     throw new \Exception($this->getError($model));
                 }
-
                 if($isNewRecord){
                     $log_msg = "创建其它出库单{$model->bill_no}，出库类型：".DeliveryTypeEnum::getValue($model->delivery_type) ."，参考编号/订单号：{$model->order_sn} ";
                 }else{
@@ -330,12 +321,10 @@ class BillCController extends BaseController
     {
         if(Yii::$app->request->get('download')) {
             $file = dirname(dirname(__FILE__)).'/resources/excel/其它出库单数据模板导入.xlsx';
-            $array = explode('/',$file);
-            $basename = end($array);
             $content = file_get_contents($file);
             if (!empty($content)) {
                 header("Content-type:application/vnd.ms-excel");
-                header("Content-Disposition: attachment;filename=".$basename);
+                header("Content-Disposition: attachment;filename=其它出库单数据模板导入".date("Ymd").".xlsx");
                 header("Content-Transfer-Encoding: binary");
                 exit($content);
             }

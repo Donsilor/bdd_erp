@@ -116,7 +116,8 @@ class StyleForm extends Style
             $name = $field[$k] ?? "";
             if (!empty($name)) {
                 if (!empty($str)) {
-                    $str = str_replace('，', ',', $str);
+                    $str = str_replace(',', '，', $str);
+                    $str = str_replace('】', '', $str);
                 }
                 $res[$name] = $str;
             } else {
@@ -188,10 +189,10 @@ class StyleForm extends Style
         $title = "";
         if (!empty($data)) {
             foreach ($data as $id => $value) {
-                $title .= $value . "[" . $id . "]|";
+                $title .= $value . "[" . $id . "]】";
             }
         }
-        return rtrim($title, "】") ?? "";
+        return rtrim($title, "]") ?? "";
     }
 
     /**

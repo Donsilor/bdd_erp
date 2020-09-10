@@ -50,12 +50,13 @@ class WarehouseBillCService extends WarehouseBillService
             $goods_ids[] = $goods_id;
             $goods_info = WarehouseGoods::find()->where(['goods_id' => $goods_id, 'goods_status'=>GoodsStatusEnum::IN_STOCK])->one();
             if(empty($goods_info)){
-                throw new Exception("货号{$goods_id}不存在或者不是库存中");
+                throw new \Exception("货号{$goods_id}不存在或者不是库存中");
             }
             $goods['bill_id'] = $form->id;
             $goods['bill_no'] = $form->bill_no;
             $goods['bill_type'] = $form->bill_type;
             $goods['warehouse_id'] = $goods_info->warehouse_id;
+            $goods['from_warehouse_id'] = $goods_info->warehouse_id;
             $goods['put_in_type'] = $goods_info->put_in_type;
             $goods_val[] = array_values($goods);
             $goods_key = array_keys($goods);
@@ -320,6 +321,7 @@ class WarehouseBillCService extends WarehouseBillService
                 'goods_num'=>1,
                 'put_in_type'=>$goods->put_in_type,
                 'warehouse_id'=>$goods->warehouse_id,
+                'from_warehouse_id'=>$goods->warehouse_id,
                 'material'=>$goods->material,
                 'material_type'=>$goods->material_type,
                 'material_color'=>$goods->material_color,
@@ -416,6 +418,7 @@ class WarehouseBillCService extends WarehouseBillService
                 'goods_num'=>1,
                 'put_in_type'=>$goods->put_in_type,
                 'warehouse_id'=>$goods->warehouse_id,
+                'from_warehouse_id'=>$goods->warehouse_id,
                 'material'=>$goods->material,
                 'material_type'=>$goods->material_type,
                 'material_color'=>$goods->material_color,
