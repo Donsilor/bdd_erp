@@ -611,10 +611,7 @@ class StyleService extends Service
             }
         }
 
-        //创建款式属性信息(文本值)
-        //$saveAttr
-
-        //创建款式属性信息
+        //创建款式属性信息(属性值)
 //        if (!empty($style_ids)) {
 //            $styleIds = [];
 //            foreach ($style_ids as $style_id) {
@@ -630,6 +627,9 @@ class StyleService extends Service
 //                $command->execute();
 //            }
 //        }
+
+        //创建款式属性信息(写入文本值)
+        //$saveAttr
     }
 
     /**
