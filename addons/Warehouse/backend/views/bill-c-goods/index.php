@@ -28,10 +28,13 @@ $this->params['breadcrumbs'][] = $this->title;
                 'data-width'=>'90%',
                 'data-height'=>'90%',
                 'data-offset'=>'20px',
-            ]);
+            ]);            
+            echo '&nbsp;';
+            echo Html::edit(['edit-all', 'bill_id' => $bill->id,'scan'=>1], '扫码新增货品', ['class'=>'btn btn-success btn-xs']);
             echo '&nbsp;';
             echo Html::edit(['edit-all', 'bill_id' => $bill->id], '编辑货品', ['class'=>'btn btn-info btn-xs']);
             echo '&nbsp;';
+            
         }
         echo Html::a('导出', ['bill-c/export?ids='.$bill->id],[
             'class'=>'btn btn-success btn-xs'

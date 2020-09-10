@@ -6,6 +6,7 @@ use yii\grid\GridView;
 use kartik\select2\Select2;
 use addons\Warehouse\common\enums\BillStatusEnum;
 use addons\Warehouse\common\enums\DeliveryTypeEnum;
+use common\helpers\Url;
 
 /* @var $this yii\web\View */
 /* @var $dataProvider yii\data\ActiveDataProvider */
@@ -39,7 +40,47 @@ $this->params['breadcrumbs'][] = $this->title;
         <div class="row col-xs-12">
             <div class="box">
                 <div class="box-body table-responsive">
-                    <?php echo Html::batchButtons(false)?>
+                   <?php if(Yii::$app->request->get('scan')) {?>
+                   <div class="row">
+                        <div class="col-lg-8">
+                            <div class="form-group field-cate-sort">
+                                <div class="col-sm-6">
+                                    <?= Html::textInput('scan_goods_id', '', ['id'=>'scan_goods_id','on','class' => 'form-control','placeholder'=>'请输入货号或扫货品条码']).'<br/>' ?>
+                                </div>
+                                <div class="col-sm-2 text-left">
+                                    <button id="scan_submit" type="button" class="btn btn-primary" >保存</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <script type="text/javascript">
+                    $('#scan_goods_id').focus();
+                    $('#scan_goods_id').keydown(function(e){
+                        if(e.keyCode == 13){
+                        	scanGoods();
+                        }
+                    });
+                     $("#scan_submit").click(function(){
+                    	 scanGoods();
+                     });
+                     function scanGoods(){
+                    	 var goods_id = $("#scan_goods_id").val();
+                         $.ajax({
+                             type: "post",
+                             url: '<?php echo Url::to(['ajax-scan'])?>',
+                             dataType: "json",
+                             data: {
+                                 bill_id: '<?php echo $bill->id?>',
+                                 goods_id:goods_id,
+                             },
+                             success: function (data) {
+                                 window.location.href='<?= \Yii::$app->request->referrer; ?>';
+                             }
+                         });
+                     }                       
+                    </script>
+                   <?php }?>
+
                     <?= GridView::widget([
                         'dataProvider' => $dataProvider,
                         'filterModel' => $searchModel,

@@ -16,7 +16,7 @@ use addons\Warehouse\common\forms\WarehouseBillCGoodsForm;
 use addons\Warehouse\common\enums\GoodsStatusEnum;
 use addons\Warehouse\common\models\WarehouseGoods;
 use yii\base\Exception;
-
+use common\helpers\ResultHelper;
 /**
  * WarehouseBillBGoodsController implements the CRUD actions for WarehouseBillBGoodsController model.
  */
@@ -84,7 +84,7 @@ class BillCGoodsController extends BaseController
                 //汇总：总金额和总数量
                 $res = \Yii::$app->warehouseService->billC->billCSummary($model->bill_id);
                 if(false === $res){
-                    throw new Exception('更新单据汇总失败');
+                    throw new \Exception('更新单据汇总失败');
                 }
                 $trans->commit();
                 \Yii::$app->getSession()->setFlash('success', '保存成功');
@@ -98,7 +98,31 @@ class BillCGoodsController extends BaseController
             'model' => $model,
         ]);
     }
-
+    /**
+     * 扫码添加
+     */
+    public function actionAjaxScan()
+    {
+        $bill_id  = Yii::$app->request->post('bill_id');
+        $goods_id = Yii::$app->request->post('goods_id');
+        if($goods_id == "") {
+            \Yii::$app->getSession()->setFlash('error', '条码货号不能为空');
+            return ResultHelper::json(422, "条码货号不能为空");
+        }
+        try{
+            $trans = \Yii::$app->db->beginTransaction();
+            \Yii::$app->warehouseService->billC->scanGoods($bill_id,[$goods_id]);            
+            $trans->commit();
+            
+            \Yii::$app->getSession()->setFlash('success', '添加成功');
+            return ResultHelper::json(200, "添加成功");
+        }catch (\Exception $e){
+            $trans->rollBack();
+            
+            \Yii::$app->getSession()->setFlash('error', $e->getMessage());
+            return ResultHelper::json(422, $e->getMessage());
+        }
+    }
     /**
      * 编辑/创建
      * @property WarehouseBillBForm $model
