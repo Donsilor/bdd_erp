@@ -196,7 +196,7 @@ class BillCController extends BaseController
         }        
         try{
             
-            $trans = \Yii::$app->db->beginTransaction();
+            $trans = \Yii::$app->trans->beginTransaction();
             $model->bill_status = BillStatusEnum::PENDING;
             $model->audit_status = AuditStatusEnum::PENDING;
             if(false === $model->save()){
@@ -281,7 +281,7 @@ class BillCController extends BaseController
             return $this->message("找不到数据", $this->redirect(Yii::$app->request->referrer), 'error');
         }        
         try{
-            $trans = \Yii::$app->db->beginTransaction();
+            $trans = \Yii::$app->trans->beginTransaction();
 
             \Yii::$app->warehouseService->billC->cancelBillC($model);
             
@@ -306,7 +306,7 @@ class BillCController extends BaseController
             return $this->message("找不到数据", $this->redirect(Yii::$app->request->referrer), 'error');
         }
         try{
-            $trans = \Yii::$app->db->beginTransaction();
+            $trans = \Yii::$app->trans->beginTransaction();
 
             \Yii::$app->warehouseService->billC->deleteBillC($model);
             $log = [
@@ -347,7 +347,7 @@ class BillCController extends BaseController
         if ($model->load(\Yii::$app->request->post())) {
             
             try{
-                $trans = \Yii::$app->db->beginTransaction();
+                $trans = \Yii::$app->trans->beginTransaction();
                 
                 $model->file = UploadedFile::getInstance($model, 'file');
                 $model->bill_type = $this->billType;
@@ -378,7 +378,7 @@ class BillCController extends BaseController
             foreach ($ids as $id) {
                 $goods = WarehouseGoods::find()->where(['id'=>$id])->select(['goods_id','goods_status'])->one();
                 if($goods->goods_status != GoodsStatusEnum::IN_STOCK) {
-                    return ResultHelper::json(422, "[{$goods->goods_id}]条码货号不是库存状态");
+                    return ResultHelper::json(422, "[{$goods->goods_id}]条码号不是库存状态");
                 }
             }
             return ResultHelper::json(200, "success");
@@ -387,7 +387,7 @@ class BillCController extends BaseController
         $form = new WarehouseBillCForm();
         if ($form->load(\Yii::$app->request->post())) {
             try{
-                $trans = \Yii::$app->db->beginTransaction();
+                $trans = \Yii::$app->trans->beginTransaction();
                 $form->goods_ids = Yii::$app->request->get('ids');
                 $form->bill_type = $this->billType;
                 $model = Yii::$app->warehouseService->billC->quickBillC($form);
