@@ -47,7 +47,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         <div class="col-lg-8">
                             <div class="form-group field-cate-sort">
                                 <div class="col-sm-6">
-                                    <?= Html::textInput('scan_goods_id', '', ['id'=>'scan_goods_id','on','class' => 'form-control','placeholder'=>'请输入货号录入 或 扫商品条码录入']).'<br/>' ?>
+                                    <?= Html::textInput('scan_goods_id', '', ['id'=>'scan_goods_id','on','class' => 'form-control','placeholder'=>'请输入货号 或 扫商品条码录入']).'<br/>' ?>
                                 </div>
                                 <div class="col-sm-2 text-left">
                                     <button id="scan_submit" type="button" class="btn btn-primary" >保存</button>
