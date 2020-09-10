@@ -209,8 +209,8 @@ class StyleService extends Service
                 continue;
             }
             $style = $form->trimField($style, $field);
-            echo '<pre>';
-            print_r($style);die;
+//            echo '<pre>';
+//            print_r($style);die;
             if ($style == false) {
                 throw new \Exception("数据格式不对");
             }
