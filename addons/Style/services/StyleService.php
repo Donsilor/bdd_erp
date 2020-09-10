@@ -2,6 +2,7 @@
 
 namespace addons\Style\services;
 
+use addons\Style\common\enums\StyleCateEnum;
 use Yii;
 use common\helpers\Url;
 use common\components\Service;
@@ -584,7 +585,25 @@ class StyleService extends Service
      */
     public function extendAttrByStyleSn($style_sn = null, $save = true)
     {
-        return [];
+        $model = new StyleForm();
+        $style_material = "";//款式材质
+        $cate_type_id = $style_sex = $style_channel_id = 0;
+        if (!empty($style_sn)) {
+            $styleArr = str_split(strtoupper($style_sn));
+            $cateCode = $styleArr[1] ?? "";
+            //1.产品分类,//2.款式性别
+            list($cate_type_id, $style_sex) = $model->getCateCodeId($cateCode);
+            //3.款式渠道
+            $style_channel_id = 1;
+            //4.款式材质
+            $style_material = 1;
+        }
+        return [
+            'cate_type_id' => $cate_type_id,
+            'style_sex' => $style_sex,
+            'style_channel_id' => $style_channel_id,
+            'style_material' => $style_material,
+        ];
     }
 
 }

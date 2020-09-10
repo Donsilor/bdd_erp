@@ -2,6 +2,8 @@
 
 namespace addons\Style\common\forms;
 
+use addons\Style\common\enums\StyleCateEnum;
+use addons\Style\common\enums\StyleSexEnum;
 use Yii;
 use addons\Style\common\models\Style;
 use addons\Style\common\enums\FactoryFeeEnum;
@@ -187,7 +189,34 @@ class StyleForm extends Style
                 $title .= $value . "[" . $id . "]|";
             }
         }
-        return rtrim($title, "|") ?? "";
+        return rtrim($title, "】") ?? "";
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getCateCodeId($cate)
+    {
+        $cate_type_id = 0;
+        $style_sex = 0;
+        $codeInfo = StyleCateEnum::getCodeMap();
+        foreach ($codeInfo as $id => $code) {
+            if ($sex = array_search($cate, $code) !== false) {
+                $cate_type_id = $id;
+                switch ($sex) {
+                    case StyleSexEnum::MAN:
+                        $style_sex = StyleSexEnum::MAN;
+                        break;
+                    case StyleSexEnum::WOMEN:
+                        $style_sex = StyleSexEnum::WOMEN;
+                        break;
+                    default:
+                        $style_sex = StyleSexEnum::COMMON;
+                }
+                break;
+            }
+        }
+        return [$cate_type_id, $style_sex];
     }
 
     /**
