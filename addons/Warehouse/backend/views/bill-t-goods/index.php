@@ -22,6 +22,8 @@ $this->params['breadcrumbs'][] = $this->title;
     <?php echo Html::menuTab($tabList, $tab) ?>
     <div class="box-tools" style="float:right;margin-top:-40px; margin-right: 20px;">
         <?php
+        echo Html::a('返回列表', ['bill-t/index'], ['class' => 'btn btn-white btn-xs']);
+        echo '&nbsp;';
         if ($bill->bill_status == \addons\Warehouse\common\enums\BillStatusEnum::SAVE) {
             echo Html::create(['ajax-edit', 'bill_id' => $bill->id], '新增货品', [
                 'class' => 'btn btn-primary btn-xs',
@@ -37,8 +39,10 @@ $this->params['breadcrumbs'][] = $this->title;
                 'data-target' => '#ajaxModal',
             ]);
             echo '&nbsp;';
-            echo Html::tag('span', '刷新价格', ["class" => "btn btn-warning btn-xs jsBatchStatus", "data-grid" => "grid", "data-url" => Url::to(['update-price']),]);
-            echo '&nbsp;';
+        }
+        echo Html::tag('span', '刷新价格', ["class" => "btn btn-warning btn-xs jsBatchStatus", "data-grid" => "grid", "data-url" => Url::to(['update-price']),]);
+        echo '&nbsp;';
+        if ($bill->bill_status == \addons\Warehouse\common\enums\BillStatusEnum::SAVE) {
             echo Html::tag('span', '批量删除', ["class" => "btn btn-danger btn-xs jsBatchStatus", "data-grid" => "grid", "data-url" => Url::to(['batch-delete']),]);
         }
         ?>
