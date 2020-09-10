@@ -62,7 +62,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         'options' => ['style' => 'white-space:nowrap;'],
                         'rowOptions' => function ($model, $key, $index) {
                             if ($index % 2 === 0) {
-                                return ['style' => 'background:#E1FFFF'];
+                                return ['style' => 'background:#fffef9'];
                             }
                         },
                         'showFooter' => true,//显示footer行

@@ -35,7 +35,7 @@ class WarehouseBillTGoodsForm extends WarehouseBillGoodsL
     {
         //合并
         return ArrayHelper::merge(parent::attributeLabels(), [
-            'is_wholesale' => '是否批发(批发入库时出库销售不可拆分)',
+            'is_wholesale' => '是否批发',
             'file' => '文件上传',
         ]);
     }

@@ -20,7 +20,7 @@ $form = ActiveForm::begin([
         <?= $form->field($model, 'goods_sn')->textInput(["placeholder"=>"请输入款号/起版号"]) ?>
         <div class="row">
             <div class="col-sm-7">
-                <?= $form->field($model, 'is_wholesale')->radioList(addons\Warehouse\common\enums\IsWholeSaleEnum::getMap())?>
+                <?= $form->field($model, 'is_wholesale')->radioList(addons\Warehouse\common\enums\IsWholeSaleEnum::getMap())->label('是否批发(<span style="color: red;">批发入库时出库销售不可拆分</span>)')?>
             </div>
             <div class="col-sm-5">
                 <?= $form->field($model, 'auto_goods_id')->radioList(\common\enums\ConfirmEnum::getMap()) ?>
