@@ -21,7 +21,7 @@ $form = ActiveForm::begin([
     <div class="modal-body">
             <?= $form->field($model, 'position')->dropDownList(\addons\Style\common\enums\StoneEnum::getPositionMap(),['prompt'=>'请选择']);?>
             <?= $form->field($model, 'stone_type')->widget(kartik\select2\Select2::class, [
-                'data' => Yii::$app->attr->valueMap(\addons\Style\common\enums\AttrIdEnum::MAIN_STONE_TYPE),
+                'data' => Yii::$app->attr->valueMap(\addons\Style\common\enums\AttrIdEnum::MAIN_STONE_TYPE, $key = 'id', $value = "name", $language = null,true),
                 'options' => ['placeholder' => '请选择','multiple'=>$model->isNewRecord ? true : false],
                 'pluginOptions' => [
                     'allowClear' => true
