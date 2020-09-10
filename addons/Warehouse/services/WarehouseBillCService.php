@@ -50,7 +50,7 @@ class WarehouseBillCService extends WarehouseBillService
             $goods_ids[] = $goods_id;
             $goods_info = WarehouseGoods::find()->where(['goods_id' => $goods_id, 'goods_status'=>GoodsStatusEnum::IN_STOCK])->one();
             if(empty($goods_info)){
-                throw new Exception("货号{$goods_id}不存在或者不是库存中");
+                throw new \Exception("货号{$goods_id}不存在或者不是库存中");
             }
             $goods['bill_id'] = $form->id;
             $goods['bill_no'] = $form->bill_no;
