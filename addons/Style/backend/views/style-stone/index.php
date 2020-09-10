@@ -79,7 +79,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'value' => function ($model){
                                     return Yii::$app->attr->valueName($model->stone_type);
                                 },
-                                'filter' => Html::activeDropDownList($searchModel, 'stone_type',Yii::$app->attr->valueMap(\addons\Style\common\enums\AttrIdEnum::MAIN_STONE_TYPE), [
+                                'filter' => Html::activeDropDownList($searchModel, 'stone_type',Yii::$app->attr->valueMap(\addons\Style\common\enums\AttrIdEnum::MAIN_STONE_TYPE,$key = 'id', $value = "name", $language = null,true), [
                                     'prompt' => '全部',
                                     'class' => 'form-control',
 
