@@ -58,7 +58,12 @@ class WarehouseBillTGoodsForm extends WarehouseBillGoodsL
     {
         $res = [];
         foreach ($data as $k => $v) {
-            $res[$k] = StringHelper::strIconv($v);
+            if($v !== ""){
+                $str = StringHelper::strIconv($v);
+                $str = str_replace(',', '，', $str);
+                $str = str_replace('】', '', $str);
+                $res[$k] = $str;
+            }
         }
         return $res ?? [];
     }
@@ -82,7 +87,7 @@ class WarehouseBillTGoodsForm extends WarehouseBillGoodsL
     {
         $title = "";
         if (!empty($values)) {
-            $title = "[" . implode('|', $values) . "]";
+            $title = implode('】', $values) . "】";
         }
         return $title ?? "";
     }
