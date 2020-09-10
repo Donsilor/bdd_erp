@@ -47,7 +47,7 @@ class MemberWorksController extends BaseController
         $searchModel = new SearchModel([
             'model' => $this->modelClass,
             'scenario' => 'default',
-            'partialMatchAttributes' => [], // 模糊查询
+            'partialMatchAttributes' => ['member.username'], // 模糊查询
             'defaultOrder' => [
                 'id' => SORT_DESC
             ],
@@ -81,17 +81,13 @@ class MemberWorksController extends BaseController
             $queryIds = $dataProvider->query->select(MemberWorks::tableName().'.id');
             $this->actionExport($queryIds);
         }
-
-
-        //查询当天未提交日志人姓名
-        $workMember = MemberWorks::find()->where(['date'=>date('Y-m-d'),'type'=>WorksTypeEnum::DAY_SUMMARY])->select(['creator_id'])->asArray()->all();
-        $workMember = array_column($workMember,'creator_id');
-        $workMember = array_merge($workMember,[1,23,25]);  //过滤 admin 曲洪良、张鹏飞
-        $noWorksMember = Member::find()->where(['not in','id', $workMember])->andWhere(['status'=>StatusEnum::ENABLED])->select(['username'])->all();
+        list($noWorksCount,$noWorksMembers) = $this->getNoWorksMember();
         return $this->render('index', [
             'dataProvider' => $dataProvider,
             'searchModel' => $searchModel,
-            'noWorksMember'=>$noWorksMember
+            'noWorksMembers'=>$noWorksMembers,
+            'noWorksCount'=>$noWorksCount,
+
         ]);
     }
     /**
@@ -425,6 +421,27 @@ class MemberWorksController extends BaseController
 
         exit();
     }
+
+    public function getNoWorksMember(){
+
+        //查询当天未提交日志人姓名
+        $workMember = MemberWorks::find()->where(['date'=>date('Y-m-d'),'type'=>WorksTypeEnum::DAY_SUMMARY])->select(['creator_id'])->asArray()->all();
+        $workMember = array_column($workMember,'creator_id');
+        $workMember = array_merge($workMember,[1,23,25]);  //过滤 admin 曲洪良、张鹏飞
+        $dept_ids = Member::find()->where(['not in','id', $workMember])->andWhere(['status'=>StatusEnum::ENABLED])->distinct('dept_id')->select(['dept_id',])->all();
+        $noWorksMember = [];
+        $noWorksCount = 0;
+        foreach ($dept_ids as $dept_model){
+            $dept_name = $dept_model->department->name;
+            $no_works_member = Member::find()->where(['not in','id', $workMember])->andWhere(['dept_id'=>$dept_model->dept_id,'status'=>StatusEnum::ENABLED])->select(['username'])->all();
+            $noWorksMember[$dept_name] = $no_works_member;
+            $noWorksCount += count($no_works_member);
+        }
+        return [$noWorksCount,$noWorksMember];
+    }
+
+
+
 
 
 

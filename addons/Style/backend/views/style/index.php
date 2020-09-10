@@ -23,6 +23,11 @@ $this->params['breadcrumbs'][] = $this->title;
                         'data-toggle' => 'modal',
                         'data-target' => '#ajaxModalLg',
                     ]); ?>
+                    <?= Html::edit(['ajax-upload'], '批量导入', [
+                        'class' => 'btn btn-primary btn-xs',
+                        'data-toggle' => 'modal',
+                        'data-target' => '#ajaxModal',
+                    ]); ?>
                 </div>
             </div>
             <div class="box-body table-responsive">  
@@ -175,8 +180,10 @@ $this->params['breadcrumbs'][] = $this->title;
                 'attribute' => 'creator_id',
                 'value' => 'creator.username',
                 'headerOptions' => ['class' => 'col-md-1'],
-                'filter' =>false,
-
+                'filter' => Html::activeTextInput($searchModel, 'creator.username', [
+                    'class' => 'form-control',
+                    'style'=> 'width:100px;'
+                ]),
             ],
            [
                     'attribute'=>'created_at',

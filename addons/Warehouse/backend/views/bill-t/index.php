@@ -10,7 +10,7 @@ use kartik\daterange\DateRangePicker;
 /* @var $this yii\web\View */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = Yii::t('bill_t', '其他入库单列表');
+$this->title = Yii::t('bill_t', '其它入库单列表');
 $this->params['breadcrumbs'][] = $this->title;
 $params = Yii::$app->request->queryParams;
 $params = $params ? "&".http_build_query($params) : '';
@@ -24,7 +24,7 @@ $params = $params ? "&".http_build_query($params) : '';
                 <div class="box-tools">
                     <?= Html::create(['ajax-edit'], '创建', [
                         'data-toggle' => 'modal',
-                        'data-target' => '#ajaxModal',
+                        'data-target' => '#ajaxModalLg',
                     ]); ?>
                     <?= Html::button('导出', [
                         'class'=>'btn btn-success btn-xs',
@@ -250,7 +250,7 @@ $params = $params ? "&".http_build_query($params) : '';
                                     if($model->bill_status == BillStatusEnum::SAVE) {
                                         return Html::edit(['ajax-edit', 'id' => $model->id, 'returnUrl' => Url::getReturnUrl()], '编辑', [
                                             'data-toggle' => 'modal',
-                                            'data-target' => '#ajaxModal',
+                                            'data-target' => '#ajaxModalLg',
                                         ]);
                                     }
                                 },

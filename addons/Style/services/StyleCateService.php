@@ -2,6 +2,7 @@
 
 namespace addons\Style\services;
 
+use common\helpers\TreeHelper;
 use Yii;
 use common\components\Service;
 use common\enums\StatusEnum;
@@ -77,5 +78,68 @@ class StyleCateService extends Service
             ->all();
 
         return  ArrayHelper::itemsMergeGrpDropDown($models,0,'id','name','pid',$treeStat);
+    }
+
+    /**
+     * 产品分类列表
+     */
+    public static function getList($pid = null, $key = 'id', $value = 'name')
+    {
+        $list = StyleCate::find()
+            ->where(['=', 'status', StatusEnum::ENABLED])
+            ->andFilterWhere(['<>', 'id', $pid])
+            ->select(['id', 'name'])
+            ->orderBy('sort asc')
+            ->asArray()
+            ->all();
+        return array_column($list, $value, $key);
+    }
+
+    /**
+     * 获取所有下级
+     *
+     * @param $tree
+     * @return array|\yii\db\ActiveRecord[]
+     */
+    public function getChilds($tree)
+    {
+        return StyleCate::find()
+            ->where(['like', 'tree', $tree . '%', false])
+            ->andWhere(['>=', 'status', StatusEnum::DISABLED])
+            ->andFilterWhere(['merchant_id' => $this->getMerchantId()])
+            ->asArray()
+            ->all();
+    }
+
+
+    /**
+     * @param $id
+     * @return array|\yii\db\ActiveRecord|null|Cate
+     */
+    public function findById($id)
+    {
+        return StyleCate::find()
+            ->where(['id' => $id])
+            ->andWhere(['>=', 'status', StatusEnum::DISABLED])
+            ->andFilterWhere(['merchant_id' => $this->getMerchantId()])
+            ->asArray()
+            ->one();
+    }
+
+    /**
+     * 获取所有下级id
+     *
+     * @param $id
+     * @return array
+     */
+    public function findChildIdsById($id)
+    {
+        if ($model = $this->findById($id)) {
+            $tree = $model['tree'] .  TreeHelper::prefixTreeKey($id);
+            $list = $this->getChilds($tree);
+            return ArrayHelper::merge([$id], array_column($list, 'id'));
+        }
+
+        return [];
     }
 }

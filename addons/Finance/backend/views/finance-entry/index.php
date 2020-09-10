@@ -224,6 +224,7 @@ $params = $params ? "&".http_build_query($params) : '';
                             [
                                 'label' => '成本价',
                                 'attribute'=>'goods.cost_price',
+								'visible' => \common\helpers\Auth::verify(\common\enums\SpecialAuthEnum::VIEW_CAIGOU_PRICE),
                                 'filter' =>false,
                                 'headerOptions' => ['width'=>'80'],
                             ],

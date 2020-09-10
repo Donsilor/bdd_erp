@@ -10,7 +10,7 @@ use addons\Warehouse\common\enums\BillStatusEnum;
 /* @var $this yii\web\View */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = Yii::t('bill_c', '其他出库单列表');
+$this->title = Yii::t('bill_c', '其它出库单');
 $this->params['breadcrumbs'][] = $this->title;
 $params = Yii::$app->request->queryParams;
 $params = $params ? "&".http_build_query($params) : '';
@@ -23,6 +23,10 @@ $params = $params ? "&".http_build_query($params) : '';
                 <h3 class="box-title"><?= Html::encode($this->title) ?></h3>
                 <div class="box-tools">
                     <?= Html::create(['ajax-edit'], '创建', [
+                        'data-toggle' => 'modal',
+                        'data-target' => '#ajaxModal',
+                    ]); ?>
+                    <?= Html::create(['ajax-import'], '批量导入', [
                         'data-toggle' => 'modal',
                         'data-target' => '#ajaxModal',
                     ]); ?>
@@ -105,13 +109,13 @@ $params = $params ? "&".http_build_query($params) : '';
                             ]),
                             'headerOptions' => ['class' => 'col-md-1'],
                         ],
-                        [
+                        /* [
                             'attribute'=>'total_sale',
                             'filter' => Html::activeTextInput($searchModel, 'total_sale', [
                                 'class' => 'form-control',
                             ]),
                             'headerOptions' => ['class' => 'col-md-1'],
-                        ],
+                        ], */
                         [
                             'attribute'=>'order_sn',
                             'filter' => Html::activeTextInput($searchModel, 'order_sn', [
@@ -140,7 +144,7 @@ $params = $params ? "&".http_build_query($params) : '';
                             'format' => 'raw',
                             'headerOptions' => ['class' => 'col-md-1'],
                         ],
-                        [
+                        /* [
                             'attribute' => 'supplier_id',
                             'value' =>"supplier.supplier_name",
                             'filter'=>Select2::widget([
@@ -154,7 +158,7 @@ $params = $params ? "&".http_build_query($params) : '';
                             ]),
                             'format' => 'raw',
                             'headerOptions' => ['class' => 'col-md-2'],
-                        ],
+                        ], */
                         [
                             'attribute' => 'creator_id',
                             'value' => 'creator.username',

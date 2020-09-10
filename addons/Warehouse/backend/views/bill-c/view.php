@@ -8,7 +8,7 @@ use addons\Warehouse\common\enums\BillStatusEnum;
 /* @var $model common\models\WarehouseBill */
 /* @var $form yii\widgets\ActiveForm */
 
-$this->title = '其他出库单详情';
+$this->title = '其它出库单详情';
 $this->params['breadcrumbs'][] = ['label' => $this->title, 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
@@ -29,17 +29,13 @@ $this->params['breadcrumbs'][] = $this->title;
                             <td><?= \addons\Warehouse\common\enums\BillTypeEnum::getValue($model->bill_type)?></td>
                         </tr>
                         <tr>
-                            <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('channel_id') ?>：</td>
-                            <td><?= $model->channel->name??"" ?></td>
-                        </tr>
-                        <tr>
-                            <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('supplier_id') ?>：</td>
-                            <td><?= $model->supplier->supplier_name??"" ?></td>
-                        </tr>
-                        <tr>
                             <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('bill_status') ?>：</td>
                             <td><?= \addons\Warehouse\common\enums\BillStatusEnum::getValue($model->bill_status)?></td>
                         </tr>
+                        <tr>
+                            <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('channel_id') ?>：</td>
+                            <td><?= $model->channel->name??"" ?></td>
+                        </tr>                        
                         <tr>
                             <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('delivery_type') ?>：</td>
                             <td><?= \addons\Warehouse\common\enums\DeliveryTypeEnum::getValue($model->delivery_type) ?></td>
@@ -63,10 +59,6 @@ $this->params['breadcrumbs'][] = $this->title;
                         <tr>
                             <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('order_sn') ?>：</td>
                             <td><?= $model->order_sn ?></td>
-                        </tr>
-                        <tr>
-                            <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('status') ?>：</td>
-                            <td><?= \common\enums\StatusEnum::getValue($model->status)?></td>
                         </tr>
                         <tr>
                             <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('audit_status') ?>：</td>

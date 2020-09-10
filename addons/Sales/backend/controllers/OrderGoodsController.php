@@ -323,7 +323,7 @@ class OrderGoodsController extends BaseController
                 $model->goods_price = $diamond_goods->sale_price;
                 $model->goods_pay_price = $diamond_goods->sale_price;
                 $model->goods_discount = $model->goods_price - $model->goods_pay_price;
-                $model->style_sn = '';
+                $model->style_sn = \Yii::$app->styleService->stone->getStoneSn(234,$diamond_goods->carat);
                 $model->qiban_sn = '';
                 $model->goods_image = $diamond_goods->goods_image;
                 $model->cert_id = $diamond_goods->cert_id;
@@ -398,13 +398,13 @@ class OrderGoodsController extends BaseController
                 $model->is_stock = $diamond_goods->is_stock;
                 $model->goods_pay_price = $diamond_goods->sale_price;
                 //$model->goods_price = $diamond_goods->sale_price;
-                $model->style_sn = '';
+                $model->style_sn = \Yii::$app->styleService->stone->getStoneSn(234,$diamond_goods->carat);
                 $model->qiban_sn = '';
                 $model->goods_image = $diamond_goods->goods_image;
                 $model->cert_id = $cert_id;
                 $model->order_id = $order_id;
                 $model->currency = $model->order->currency;
-                $model->goods_id = (string)$diamond_goods->goods_id;
+                $model->goods_id = (string)$diamond_goods->goods_sn;
             }
 
         }else{
@@ -473,13 +473,14 @@ class OrderGoodsController extends BaseController
                 $model->is_stock = $diamond_goods->is_stock;
                 $model->goods_pay_price = $diamond_goods->sale_price;
                 //$model->goods_price = $diamond_goods->sale_price;
-                $model->style_sn = '';
+                echo \Yii::$app->styleService->stone->getStoneSn(234,$diamond_goods->carat);exit;
+                $model->style_sn = \Yii::$app->styleService->stone->getStoneSn(234,$diamond_goods->carat);
                 $model->qiban_sn = '';
                 $model->goods_image = $diamond_goods->goods_image;
                 $model->cert_id = $cert_id;
                 $model->order_id = $order_id;
                 $model->currency = $model->order->currency;
-                $model->goods_id = (string)$diamond_goods->goods_id;
+                $model->goods_id = (string)$diamond_goods->goods_sn;
             }
 
         }else{

@@ -2,6 +2,7 @@
 
 namespace addons\Style\services;
 
+use common\enums\AuditStatusEnum;
 use common\helpers\Url;
 use Yii;
 use common\components\Service;
@@ -46,4 +47,17 @@ class StoneService extends Service
         return ArrayHelper::map($model,'style_sn', 'style_sn');
 
     }
+
+
+    /**
+     * 获取石头款号
+     */
+    public function getStoneSn($type, $carat){
+        $style_stone = StoneStyle::find()->where(['stone_type'=>$type, 'audit_status'=>AuditStatusEnum::PASS])->andWhere(['and',['<=','stone_weight_min',$carat],['>=','stone_weight_max',$carat]])->select(['style_sn'])->one();
+        return $style_stone['style_sn'] ?? '';
+    }
+
+
+
+
 }

@@ -36,7 +36,8 @@ use common\helpers\Url;
                     <div class="row">
 
                         <div class="col-lg-4">
-                            <?= $form->field($model, 'project_name')->dropDownList(\addons\Finance\common\enums\ProjectEnum::getMap(),['prompt'=>'请选择']) ?>
+<!--                            --><?//= $form->field($model, 'project_name')->dropDownList(\addons\Finance\common\enums\ProjectEnum::getMap(),['prompt'=>'请选择']) ?>
+                            <?= $form->field($model, 'project_name')->textInput()?>
                         </div>
                         <div class="col-lg-4">
                             <?= $form->field($model, 'budget_year')->textInput()?>
@@ -74,7 +75,7 @@ use common\helpers\Url;
                     </div>
                     <div class="row">
                         <div class="col-lg-12">
-                           <?= $form->field($model, 'usage')->textArea(['options'=>['maxlength' => true]])?>
+                           <?= $form->field($model, 'usage')->textArea()?>
                         </div>
                     </div>
                     <div class="col-lg-12">
@@ -136,4 +137,13 @@ use common\helpers\Url;
         }
         return head + s.replace(/(零.)*零圆/, '圆').replace(/(零.)+/g, '零').replace(/^$/, '零圆');
     }
+
+    //文本域自动换行
+    $('textarea').each(function () {
+        this.setAttribute('style', 'height:' + (this.scrollHeight) + 'px;overflow-y:hidden;');
+    }).on('input', function () {
+        this.style.height = 'auto';
+        this.style.height = (this.scrollHeight) + 'px';
+    });
+
 </script>

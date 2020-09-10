@@ -48,11 +48,11 @@ class StyleImageController extends Controller
     public function actionImport()
     {
         $dir = dirname(dirname(dirname(__FILE__)));
-        $newDir = $dir.'/upload/2020/08/14';
-        $imageUrlDir = 'https://cdn-erp.bddco.cn/images/2020/08/14';
+        $newDir = $dir.'/upload/2020/09/03';
+        $imageUrlDir = 'https://cdn-erp.bddco.cn/images/2020/09/03';
         FileHelper::createDirectory($newDir);
         
-        $list = FileHelper::findFiles($dir."/upload/styleImages02/");
+        $list = FileHelper::findFiles($dir."/upload/styleImages03/");
         $style_image_list = [];
         foreach ($list as $file){
             if(!preg_match("/\.db$/is", $file)){

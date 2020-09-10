@@ -4,6 +4,7 @@ namespace addons\Finance\common\models;
 
 use addons\Sales\common\models\Order;
 use common\models\backend\Member;
+
 use Yii;
 
 /**
@@ -38,10 +39,12 @@ class OrderPay extends BaseModel
     public function rules()
     {
         return [
-            [['order_id', 'pay_type', 'pay_status', 'creator_id', 'created_at', 'updated_at'], 'integer'],
+            [['order_id', 'pay_type', 'pay_status', 'creator_id', 'created_at', 'updated_at','arrive_type','arrive_status'], 'integer'],
             [['pay_amount', 'exchange_rate'], 'number'],
             [['pay_sn', 'creator'], 'string', 'max' => 30],
+            [['remark'], 'string', 'max' => 255],
             [['currency'], 'string', 'max' => 3],
+            ['arrival_time','safe']
         ];
     }
 
@@ -60,11 +63,16 @@ class OrderPay extends BaseModel
             'currency' => '货币',
             'exchange_rate' => '汇率',
             'creator' => '点款人',
+            'arrive_type' => '到账方式',
+            'arrive_status' => '到账状态',
+            'arrival_time' => '到账时间',
+            'remark' => '备注',
             'creator_id' => '点款人ID',
             'created_at' => '点款时间',
             'updated_at' => '更新时间',
         ];
     }
+
 
     /**
      * 订单

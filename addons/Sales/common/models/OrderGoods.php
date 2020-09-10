@@ -33,6 +33,8 @@ use Yii;
  * @property int $is_stock 是否现货(1是0否)
  * @property int $is_gift 是否赠品
  * @property int $is_return 是否退款
+ * @property int $return_id 退款ID
+ * @property string $return_no 退款编号
  * @property int $created_at 创建时间
  * @property int $updated_at 更新时间
  */
@@ -52,16 +54,17 @@ class OrderGoods extends BaseModel
     public function rules()
     {
         return [
-            [['merchant_id', 'order_id', 'style_cate_id', 'product_type_id', 'is_inlay','style_channel_id','jintuo_type', 'qiban_type','style_sex' ,'goods_num', 'delivery_status', 'distribute_status', 'bc_status','is_stock', 'is_gift', 'is_return', 'created_at', 'updated_at','is_apply','is_bc'], 'integer'],
+            [['merchant_id', 'order_id', 'style_cate_id', 'product_type_id', 'is_inlay','style_channel_id','jintuo_type', 'qiban_type','style_sex' ,'goods_num', 'delivery_status', 'distribute_status', 'bc_status','is_stock', 'is_gift', 'is_return', 'return_id', 'created_at', 'updated_at','is_apply','is_bc'], 'integer'],
             [['order_id','jintuo_type','goods_name','goods_num','goods_price','goods_pay_price'],'required'],
             [['goods_price', 'goods_pay_price', 'goods_discount', 'exchange_rate','assess_cost'], 'number'],
             [['style_sn', 'goods_sn','qiban_sn'], 'string', 'max' => 50],
             [['goods_id'], 'string', 'max' => 20],
             [['goods_name'], 'string', 'max' => 300],
             [['goods_image'], 'string', 'max' => 100],
-            [['goods_spec','remark'], 'string', 'max' => 255],
+            [['remark'], 'string', 'max' => 255],
+            [['goods_spec'], 'string', 'max' => 1024],
             [['currency'], 'string', 'max' => 5],
-            [['produce_sn','out_sku_id'], 'string', 'max' => 30],
+            [['produce_sn', 'return_no', 'out_sku_id','out_ware_id'], 'string', 'max' => 30],
             [['apply_info'], 'string'],
         ];
     }
@@ -93,7 +96,7 @@ class OrderGoods extends BaseModel
             'assess_cost' => '预估成本',
             'goods_pay_price' => '实际成交价',
             'goods_discount' => '优惠金额',
-            'goods_spec' => '商品规格',
+            'goods_spec' => '商品参数',
             'currency' => '货币',
             'exchange_rate' => '汇率',
             'delivery_status' => '发货状态',
@@ -104,11 +107,14 @@ class OrderGoods extends BaseModel
             'is_gift' => '是否赠品',
             'is_bc' => '是否布产',
             'is_return' => '是否退款',
+            'return_id' => '退款ID',
+            'return_no' => '退款编号',
             'created_at' => '创建时间',
             'updated_at' => '更新时间',
             'is_apply' => '是否申请修改',
             'remark' => '备注',
-            'out_sku_id' => '外部SKU',
+            'out_sku_id' => '外部商品SKU',
+            'out_ware_id' => '外部商品编号',
 
         ];
     }
@@ -157,5 +163,29 @@ class OrderGoods extends BaseModel
     public function getAttrs()
     {
         return $this->hasMany(OrderGoodsAttribute::class, ['id'=>'id'])->alias('attrs')->orderBy('sort asc');
+    }
+    /**
+     * 商品规格
+     * @return string
+     */
+    public function getGoodsSpec()
+    {
+        $spec_list = [];
+        //销售属性
+        $goods_name_pices = [];
+        if($this->out_ware_id) {
+            $goods_name_pices = explode(' ',$this->goods_name);
+            if(count($goods_name_pices) >1) {
+                unset($goods_name_pices[0]);
+                $spec_list['销售属性'] = implode(' ',$goods_name_pices);
+            }
+        } 
+        //商品规格
+        $spec_list = $spec_list + (json_decode($this->goods_spec,true) ?? []);        
+        $str = '';
+        foreach ($spec_list as $key=>$value) {
+            $str .= $key.':'.$value."<br/>";
+        }
+        return $str;
     }
 }

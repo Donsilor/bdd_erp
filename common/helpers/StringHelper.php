@@ -573,4 +573,33 @@ class StringHelper extends BaseStringHelper
             return $c . "整";
         }
     }
+
+    /**
+     * 字符串乱码转换
+     * {@inheritdoc}
+     */
+    public static function strIconv($str)
+    {
+        return  trim(iconv('gbk', 'utf-8', $str));
+    }
+
+    /**
+     * 提取字符串中数字及小数
+     * {@inheritdoc}
+     */
+    public static function findNum($str = '')
+    {
+        $str = trim($str);
+        if (empty($str)) {
+            return '';
+        }
+        $temp = array('1', '2', '3', '4', '5', '6', '7', '8', '9', '0', '.');
+        $result = '';
+        for ($i = 0; $i < strlen($str); $i++) {
+            if (in_array($str[$i], $temp)) {
+                $result .= $str[$i];
+            }
+        }
+        return $result;
+    }
 }

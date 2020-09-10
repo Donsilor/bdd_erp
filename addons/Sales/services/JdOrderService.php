@@ -5,6 +5,7 @@ namespace addons\Sales\services;
 
 use Yii;
 use common\components\Service;
+use addons\Sales\common\enums\JdAttrEnum;
 
 /**
  * Bdd 订单同步
@@ -38,7 +39,7 @@ class JdOrderService extends Service
         //exit;
         try{
             $trans = Yii::$app->trans->beginTransaction();
-            Yii::$app->salesService->order->createSyncOrder($orderInfo, $accountInfo, $goodsList, $customerInfo, $addressInfo, $invoiceInfo);            
+            Yii::$app->salesService->order->syncOrder($orderInfo, $accountInfo, $goodsList, $customerInfo, $addressInfo, $invoiceInfo);            
             $trans->commit();
         }catch (\Exception $e){
             $trans->rollback();
@@ -46,11 +47,48 @@ class JdOrderService extends Service
         }
     }
     /**
+     * 同步订单到erp
+     * @param int $order_id 订单Id
+     */
+    public function syncOrderGoods($ware,$order_ids = [])
+    {
+        if(!$ware) {
+            throw new \Exception("ware不能为空");
+        }
+        if(!$ware->multiCateProps) {
+            throw new \Exception("ware->multiCateProps不能为空");
+        }
+        $goods_attrs = [];
+        $goods_specs = [];
+        foreach ($ware->multiCateProps as $prop) {
+             $attr_list = \Yii::$app->jdSdk->getAttrList($ware->multiCategoryId);
+             $attrName = JdAttrEnum::getAttrName($prop->attrId,$attr_list); 
+             if($attrName && count($prop->attrValueAlias)==1) {
+                 $goods_specs[$attrName] = implode(',',$prop->attrValueAlias);
+             }
+             /* $attr_id = JdAttrEnum::getAttrId($prop->attrId);
+             if($attr_id) {
+                 $attr_value_id = JdAttrEnum::getValueId($prop->attrId,$prop->attrValueAlias[0]);
+                 if($attr_value_id) {
+                     $goods_attrs[] = ['attr_id'=>$attr_id,'attr_value_id'=>$attr_value_id,'attr_value'=>''];
+                 }
+             } */
+             
+        }     
+        if(!empty($goods_specs)) {
+            Yii::$app->salesService->order->syncOrderGoodsSpec($ware->wareId,$goods_specs);
+        }
+        if(!empty($goods_attrs)) {
+            Yii::$app->salesService->order->syncOrderGoodsAttr($ware->wareId,$goods_attrs,$order_ids);
+        }
+    }    
+    /**
      * ERP订单主表表单
      * @param Order $order
      */
     public function getErpOrderData($order)
     {
+        //$store_remark = ($order->venderRemark ?? '').';京东买家账户:'.($order->open_id_buyer ?? '');
         return [
             "language"=>'zh-CN',
             "currency"=>'CNY',
@@ -78,7 +116,7 @@ class JdOrderService extends Service
             "customer_mobile"=>$this->getErpCustomerMobile($order),
             //"customer_email"=>$order->consigneeInfo->email,
             "customer_message"=>$order->orderRemark,
-            "store_remark"=>$order->venderRemark ?? '',
+            "store_remark"=>($order->venderRemark ?? ''),
             'order_time'=>strtotime($order->orderStartTime),
         ];
     }
@@ -167,7 +205,7 @@ class JdOrderService extends Service
         $title_type = null;
         $invoice_type = null;
         $is_invoice = 0;
-        
+        $invoice_title = null;
         if($order->invoiceEasyInfo->invoiceType > 0) {
             if($order->invoiceEasyInfo->invoiceTitle != '个人') {
                 $title_type = \addons\Sales\common\enums\InvoiceTitleTypeEnum::ENTERPRISE;
@@ -176,15 +214,16 @@ class JdOrderService extends Service
             } 
             $invoice_type = $order->invoiceEasyInfo->invoiceType;
             $is_invoice = 1;
+            $invoice_title = $order->invoiceEasyInfo->invoiceTitle ?? '';
         }              
         return [
+                'is_invoice' =>$is_invoice,
                 'title_type' =>$title_type,
                 'invoice_type'=>$invoice_type,
-                'invoice_title'=>$order->invoiceEasyInfo->invoiceTitle ?? '',
+                'invoice_title'=>$invoice_title,
                 'tax_number'=>$order->invoiceEasyInfo->invoiceCode ?? '',
                 'email'=> $order->invoiceEasyInfo->invoiceConsigneeEmail ?? '',
-                'mobile'=> $order->invoiceEasyInfo->invoiceConsigneePhone ?? '',  
-                'is_invoice' =>$is_invoice,
+                'mobile'=> $order->invoiceEasyInfo->invoiceConsigneePhone ?? ''              
         ];
     }
     /**
@@ -198,30 +237,36 @@ class JdOrderService extends Service
             if(!$model->productNo) {
                 continue;
             }
-            $goods_discount = 0;
-            foreach ($order->couponDetailList ?? [] as $coupon) {
-                if(($coupon->skuId ?? '') == $model->skuId) {
-                    $goods_discount += $coupon->couponPrice;
+            for($i =1; $i<= $model->itemTotal; $i++) {
+                $goods_discount = 0;
+                foreach ($order->couponDetailList ?? [] as $coupon) {
+                    if(($coupon->skuId ?? '') == $model->skuId) {
+                        $goods_discount += ($coupon->couponPrice/$model->itemTotal);
+                    }
                 }
+                if(!$model->skuId || !$model->wareId) {
+                    throw new \Exception($model->productNo." skuId or wareId is empty");
+                }
+                $erpGoods = [
+                    "goods_name" => $model->skuName,
+                    "goods_image"=> null,
+                    "style_sn"=> $model->productNo,
+                    "out_sku_id"=> $model->skuId,
+                    "out_ware_id"=> $model->wareId,
+                    "jintuo_type"=> $this->getErpJintuoType($model),
+                    "goods_num"=> 1,
+                    "goods_price"=> $model->jdPrice,
+                    "goods_pay_price"=> $model->jdPrice - $goods_discount,
+                    "goods_discount"=> $goods_discount,
+                    "currency"=> 'CNY',
+                    "exchange_rate"=> 1,
+                    "delivery_status"=> $this->getErpDeliveryStatus($order),
+                    "is_stock"=>0,
+                    "is_gift"=>$model->productNo ? 0:1,
+                    //"goods_attrs"=>$this->getErpOrderGoodsAttrsData($model),
+                ];
+                $erpGoodsList[] = $erpGoods;
             }
-            $erpGoods = [
-                "goods_name" => $model->skuName,
-                "goods_image"=> null,
-                "style_sn"=> $model->productNo,
-                "out_sku_id"=> $model->skuId,
-                "jintuo_type"=> $this->getErpJintuoType($model),
-                "goods_num"=> $model->itemTotal,
-                "goods_price"=> $model->jdPrice,
-                "goods_pay_price"=> $model->jdPrice - $goods_discount,
-                "goods_discount"=> $goods_discount,
-                "currency"=> 'CNY',
-                "exchange_rate"=> 1,
-                "delivery_status"=> $this->getErpDeliveryStatus($order),
-                "is_stock"=>$model->productNo ? 1:0,
-                "is_gift"=>$model->productNo ? 0:1,
-                "goods_attrs"=>$this->getErpOrderGoodsAttrsData($model),
-            ];
-            $erpGoodsList[] = $erpGoods;
         }
         
         return $erpGoodsList;
@@ -229,11 +274,17 @@ class JdOrderService extends Service
     
     /**
      * ERP订单商品属性表单
+     * <ul class="pop-select-dropdown-list"><li class="pop-select-item" style="display: none;">FL/无暇</li>
+     * <li class="pop-select-item" style="display: none;">IF/镜下无暇</li>
+     * <li class="pop-select-item" style="display: none;">VVS/极微瑕</li>
+     * <li class="pop-select-item" style="display: none;">VS/微瑕</li>
+     * <li class="pop-select-item pop-select-item-selected">SI/小瑕</li>
+     * <li class="pop-select-item" style="display: none;">P/不洁净</li><li class="pop-select-item" style="display: none;">不分级</li></ul>
      * @param OrderGoods $model 订单商品Model
      */
-    public function getErpOrderGoodsAttrsData($model)
-    {
-        return [];
+    public function getErpOrderGoodsAttrsData($ware)
+    {       
+         return [];
     }
     
     /**
@@ -304,7 +355,6 @@ class JdOrderService extends Service
         }
         return [$material_type,$material_color];
     }
-    
     /**
      * 获取商品总金额
      * @param unknown $order
@@ -391,7 +441,9 @@ class JdOrderService extends Service
     {
         $erp_express_id = 5;//京东快递
         $map = [
-            2087=>5
+            2087=>5,//京东快递
+            1499=>6,//中通快递
+            467=>2//顺丰快递
         ];
         return $map[$order->logisticsId] ?? $erp_express_id;
     }

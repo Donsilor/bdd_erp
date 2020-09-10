@@ -423,9 +423,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             [
                                 'label'=>'主石成本',
                                 'value' => function($model){
-                                    $main_stone_price = $model->attr[AttrIdEnum::MAIN_STONE_PRICE] ?? 0;
-                                    $main_stone_weight = $model->attr[AttrIdEnum::MAIN_STONE_WEIGHT] ?? 0;
-                                    return round($main_stone_weight * $main_stone_price,2);
+                                    return $model->main_stone_cost;
                                 },
                                 'filter' => false,
                                 'headerOptions' => [],
@@ -497,10 +495,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             [
                                 'label'=>'副石1成本',
                                 'value' => function($model){
-                                    $side_stone1_price = $model->attr[AttrIdEnum::SIDE_STONE1_PRICE] ?? 0;
-                                    $side_stone1_weight = $model->attr[AttrIdEnum::SIDE_STONE1_WEIGHT] ?? 0;
-                                    $side_stone1_weight = $side_stone1_weight == ''? 0:$side_stone1_weight;
-                                    return round($side_stone1_weight * $side_stone1_price,2);
+                                    return $model->second_stone1_cost;
                                 },
                                 'filter' => false,
                                 'headerOptions' => [],
@@ -571,10 +566,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             [
                                 'label'=>'副石2成本',
                                 'value' => function($model){
-                                    $side_stone2_price = $model->attr[AttrIdEnum::SIDE_STONE2_PRICE] ?? 0;
-                                    $side_stone2_weight = $model->attr[AttrIdEnum::SIDE_STONE2_WEIGHT] ?? 0;
-                                    $side_stone2_weight = $side_stone2_weight == ''? 0:$side_stone2_weight;
-                                    return round($side_stone2_weight * $side_stone2_price,2);
+                                    return $model->second_stone2_cost;
                                 },
                                 'filter' => false,
                                 'headerOptions' => [],
@@ -589,6 +581,65 @@ $this->params['breadcrumbs'][] = $this->title;
                                 }
                             ],
                             /**副石2结束**/
+                            /***副石3开始**/
+
+                            [
+                                'attribute'=>'second_peishi_way3',
+                                'value' => function($model){
+                                    return \addons\Warehouse\common\enums\PeiShiWayEnum::getValue($model->second_peishi_way3);
+                                },
+                                'filter' => Html::activeDropDownList($searchModel, 'second_peishi_way3',\addons\Warehouse\common\enums\PeiShiWayEnum::getMap(), [
+                                    'prompt' => '全部',
+                                    'class' => 'form-control',
+                                    'style'=> 'width:80px;'
+                                ]),
+                                'headerOptions' => [],
+                            ],
+
+
+                            [
+                                'label'=>'	副石3类型',
+                                'value'=> function($model){
+                                    return $model->attr[AttrIdEnum::SIDE_STONE3_TYPE] ?? "";
+                                }
+                            ],
+                            [
+                                'attribute'=>'second_stone_sn3',
+                                'filter' => Html::activeTextInput($searchModel, 'second_stone_sn3', [
+                                    'class' => 'form-control',
+                                    'style'=> 'width:60px;'
+                                ]),
+                                'headerOptions' => [],
+                            ],
+                            [
+                                'label'=>'	副石3粒数',
+                                'value'=> function($model){
+                                    return $model->attr[AttrIdEnum::SIDE_STONE3_NUM] ?? "";
+                                }
+                            ],
+
+                            [
+                                'label'=>'	副石3重',
+                                'value'=> function($model){
+                                    return $model->attr[AttrIdEnum::SIDE_STONE3_WEIGHT] ?? "";
+                                }
+                            ],
+                            [
+                                'label'=>'	副石3单价',
+                                'value'=> function($model){
+                                    return $model->attr[AttrIdEnum::SIDE_STONE3_PRICE] ?? "";
+                                }
+                            ],
+                            [
+                                'label'=>'副石3成本',
+                                'value' => function($model){
+                                    return $model->second_stone3_cost;
+                                },
+                                'filter' => false,
+                                'headerOptions' => [],
+                            ],
+
+                            /**副石3结束**/
 
                             [
                                 'attribute'=>'stone_info',
@@ -649,6 +700,11 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'headerOptions' => [],
                             ],
                             [
+                                'attribute'=>'pure_gold',
+                                'filter' => false,
+                                'headerOptions' => [],
+                            ],
+                            [
                                 'attribute'=>'parts_fee',
                                 'filter' => false,
                                 'headerOptions' => [],
@@ -703,6 +759,11 @@ $this->params['breadcrumbs'][] = $this->title;
                             ],
                             [
                                 'attribute'=>'fense_fee',
+                                'filter' => false,
+                                'headerOptions' => [],
+                            ],
+                            [
+                                'attribute'=>'lasha_fee',
                                 'filter' => false,
                                 'headerOptions' => [],
                             ],

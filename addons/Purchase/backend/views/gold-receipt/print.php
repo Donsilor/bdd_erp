@@ -68,7 +68,7 @@ $create_time = $datetime->format('Y-m-d H:i:s');
             <td>主副石总重量</td>
             <td>工费</td>
             <td>超石费</td>
-            <td>其他<br />工费</td>
+            <td>其它<br />工费</td>
             <td>配件<br />成本</td>
             <td>成本</td>
             <td>税费</td>

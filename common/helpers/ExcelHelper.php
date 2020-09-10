@@ -194,7 +194,7 @@ class ExcelHelper
      * @throws \PhpOffice\PhpSpreadsheet\Exception
      * @throws \PhpOffice\PhpSpreadsheet\Reader\Exception
      */
-    public static function import($filePath, $startRow = 1)
+    public static function import($filePath, $startRow = 1,$endColumn = 0,$columnMap = [])
     {
         $reader = new \PhpOffice\PhpSpreadsheet\Reader\Xlsx();
         $reader->setReadDataOnly(true);
@@ -218,6 +218,9 @@ class ExcelHelper
             $currentSheet = $spreadsheet->getSheet($i); // 读取excel文件中的第一个工作表
             $allColumn = $currentSheet->getHighestColumn(); // 取得最大的列号
             $allColumn = Coordinate::columnIndexFromString($allColumn); // 由列名转为列数('AB'->28)
+            if($endColumn && $endColumn < $allColumn) {
+                $allColumn = $endColumn;
+            }
             $allRow = $currentSheet->getHighestRow(); // 取得一共有多少行
 
             $arr = [];
@@ -225,7 +228,8 @@ class ExcelHelper
                 // 从第1列开始输出
                 for ($currentColumn = 1; $currentColumn <= $allColumn; $currentColumn++) {
                     $val = $currentSheet->getCellByColumnAndRow($currentColumn, $currentRow)->getValue();
-                    $arr[$currentRow][] = trim($val);
+                    $columnKey = $columnMap[$currentColumn] ?? $currentColumn;
+                    $arr[$currentRow][$columnKey] = trim($val);
                 }
 
                 // $arr[$currentRow] = array_filter($arr[$currentRow]);

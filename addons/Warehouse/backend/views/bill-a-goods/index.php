@@ -35,6 +35,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         'dataProvider' => $dataProvider,
                         'filterModel' => $searchModel,
                         'tableOptions' => ['class' => 'table table-hover'],
+                        'options' => ['style'=>' width:100%;white-space:nowrap;' ],
                         'showFooter' => false,//显示footer行
                         'id'=>'grid',
                         'columns' => [
@@ -193,6 +194,14 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'attribute'=>'suttle_weight',
                                 'headerOptions' => [],
                                 'filter' => Html::activeTextInput($searchModel, 'suttle_weight', [
+                                    'class' => 'form-control',
+                                    'style'=> 'width:80px;'
+                                ]),
+                            ],
+                            [
+                                'attribute'=>'pure_gold',
+                                'headerOptions' => [],
+                                'filter' => Html::activeTextInput($searchModel, 'pure_gold', [
                                     'class' => 'form-control',
                                     'style'=> 'width:80px;'
                                 ]),
@@ -500,6 +509,15 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'headerOptions' => [],
                             ],
                             [
+                                'attribute'=>'second_stone_sn2',
+                                'format' => 'raw',
+                                'headerOptions' => ['class' => 'col-md-1'],
+                                'filter' => Html::activeTextInput($searchModel, 'second_stone_sn2', [
+                                    'class' => 'form-control',
+                                    'style'=> 'width:100px;'
+                                ]),
+                            ],
+                            [
                                 'attribute' => 'second_stone_type2',
                                 'value' => function($model){
                                     return Yii::$app->attr->valueName($model->second_stone_type2);
@@ -538,6 +556,56 @@ $this->params['breadcrumbs'][] = $this->title;
                                     'style'=> 'width:80px;'
                                 ]),
                             ],
+
+
+                            [
+                                'attribute'=>'second_stone_sn3',
+                                'format' => 'raw',
+                                'headerOptions' => ['class' => 'col-md-1'],
+                                'filter' => Html::activeTextInput($searchModel, 'second_stone_sn3', [
+                                    'class' => 'form-control',
+                                    'style'=> 'width:100px;'
+                                ]),
+                            ],
+                            [
+                                'attribute' => 'second_stone_type3',
+                                'value' => function($model){
+                                    return Yii::$app->attr->valueName($model->second_stone_type3);
+                                },
+                                'filter' => Html::activeDropDownList($searchModel, 'second_stone_type3',Yii::$app->attr->valueMap(\addons\Style\common\enums\AttrIdEnum::SIDE_STONE3_TYPE), [
+                                    'prompt' => '全部',
+                                    'class' => 'form-control',
+                                    'style'=> 'width:80px;'
+                                ]),
+                                'headerOptions' => [],
+                            ],
+                            [
+                                'attribute'=>'second_stone_num3',
+                                'format' => 'raw',
+                                'headerOptions' => ['class' => 'col-md-1'],
+                                'filter' => Html::activeTextInput($searchModel, 'second_stone_num3', [
+                                    'class' => 'form-control',
+                                    'style'=> 'width:80px;'
+                                ]),
+                            ],
+                            [
+                                'attribute'=>'second_stone_weight3',
+                                'format' => 'raw',
+                                'headerOptions' => ['class' => 'col-md-1'],
+                                'filter' => Html::activeTextInput($searchModel, 'second_stone_weight3', [
+                                    'class' => 'form-control',
+                                    'style'=> 'width:80px;'
+                                ]),
+                            ],
+                            [
+                                'attribute'=>'second_stone_price3',
+                                'format' => 'raw',
+                                'headerOptions' => ['class' => 'col-md-1'],
+                                'filter' => Html::activeTextInput($searchModel, 'second_stone_price3', [
+                                    'class' => 'form-control',
+                                    'style'=> 'width:80px;'
+                                ]),
+                            ],
                             [
                                 'attribute' => 'goods.jintuo_type',
                                 'value' => function ($model){
@@ -550,17 +618,6 @@ $this->params['breadcrumbs'][] = $this->title;
                                 ]),
                                 'headerOptions' => [],
                             ],
-                            [
-                                'attribute'=>'cost_price',
-                                'format' => 'raw',
-                                'headerOptions' => ['class' => 'col-md-1'],
-                                'filter' => Html::activeTextInput($searchModel, 'cost_price', [
-                                    'class' => 'form-control',
-                                    'style'=> 'width:100px;'
-                                ]),
-                            ],
-
-
                             [
                                 'attribute'=>'parts_gold_weight',
                                 'format' => 'raw',
@@ -628,6 +685,97 @@ $this->params['breadcrumbs'][] = $this->title;
                                     'style'=> 'width:80px;'
                                 ]),
                             ],
+                            [
+                                'attribute'=>'parts_fee',
+                                'format' => 'raw',
+                                'headerOptions' => ['class' => 'col-md-1'],
+                                'filter' => Html::activeTextInput($searchModel, 'parts_fee', [
+                                    'class' => 'form-control',
+                                    'style'=> 'width:80px;'
+                                ]),
+                            ],
+                            [
+                                'attribute'=>'fense_fee',
+                                'format' => 'raw',
+                                'headerOptions' => ['class' => 'col-md-1'],
+                                'filter' => Html::activeTextInput($searchModel, 'fense_fee', [
+                                    'class' => 'form-control',
+                                    'style'=> 'width:80px;'
+                                ]),
+                            ],
+                            [
+                                'attribute'=>'penrasa_fee',
+                                'format' => 'raw',
+                                'headerOptions' => ['class' => 'col-md-1'],
+                                'filter' => Html::activeTextInput($searchModel, 'penrasa_fee', [
+                                    'class' => 'form-control',
+                                    'style'=> 'width:80px;'
+                                ]),
+                            ],
+                            [
+                                'attribute'=>'lasha_fee',
+                                'format' => 'raw',
+                                'headerOptions' => ['class' => 'col-md-1'],
+                                'filter' => Html::activeTextInput($searchModel, 'lasha_fee', [
+                                    'class' => 'form-control',
+                                    'style'=> 'width:80px;'
+                                ]),
+                            ],
+                            [
+                                'attribute'=>'piece_fee',
+                                'format' => 'raw',
+                                'headerOptions' => ['class' => 'col-md-1'],
+                                'filter' => Html::activeTextInput($searchModel, 'piece_fee', [
+                                    'class' => 'form-control',
+                                    'style'=> 'width:80px;'
+                                ]),
+                            ],
+                            [
+                                'attribute'=>'edition_fee',
+                                'format' => 'raw',
+                                'headerOptions' => ['class' => 'col-md-1'],
+                                'filter' => Html::activeTextInput($searchModel, 'edition_fee', [
+                                    'class' => 'form-control',
+                                    'style'=> 'width:80px;'
+                                ]),
+                            ],
+                            [
+                                'attribute'=>'xianqian_price',
+                                'format' => 'raw',
+                                'headerOptions' => ['class' => 'col-md-1'],
+                                'filter' => Html::activeTextInput($searchModel, 'xianqian_price', [
+                                    'class' => 'form-control',
+                                    'style'=> 'width:80px;'
+                                ]),
+                            ],
+                            [
+                                'attribute'=>'other_fee',
+                                'format' => 'raw',
+                                'headerOptions' => ['class' => 'col-md-1'],
+                                'filter' => Html::activeTextInput($searchModel, 'other_fee', [
+                                    'class' => 'form-control',
+                                    'style'=> 'width:80px;'
+                                ]),
+                            ],
+                            [
+                                'attribute'=>'peishi_fee',
+                                'format' => 'raw',
+                                'headerOptions' => ['class' => 'col-md-1'],
+                                'filter' => Html::activeTextInput($searchModel, 'peishi_fee', [
+                                    'class' => 'form-control',
+                                    'style'=> 'width:80px;'
+                                ]),
+                            ],
+                            [
+                                'attribute'=>'peishi_weight',
+                                'format' => 'raw',
+                                'headerOptions' => ['class' => 'col-md-1'],
+                                'filter' => Html::activeTextInput($searchModel, 'peishi_weight', [
+                                    'class' => 'form-control',
+                                    'style'=> 'width:80px;'
+                                ]),
+                            ],
+
                             [
                                 'attribute' => 'auditor_id',
                                 'value' => 'auditor.username',

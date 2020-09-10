@@ -23,7 +23,7 @@ class SettlementWayEnum extends \common\enums\BaseEnum
                 self::ACCOUNT => "对公账户",
                 self::CASH => "现金",
                 self::TRANSFER => "转账",
-                self::OTHER => "其他",
+                self::OTHER => "其它",
         ];
     }
     

@@ -3,6 +3,7 @@
 namespace addons\Style\services;
 
 use addons\Style\common\models\ProductType;
+use common\helpers\TreeHelper;
 use Yii;
 use common\components\Service;
 use common\enums\StatusEnum;
@@ -105,5 +106,71 @@ class ProductTypeService extends Service
             ->asArray()
             ->one();
         return $model['name'];
+    }
+
+    /**
+     * 产品线列表
+     */
+    public static function getList($pid = null, $key = 'id', $value = 'name')
+    {
+        $list = ProductType::find()
+            ->where(['=', 'status', StatusEnum::ENABLED])
+            ->andFilterWhere(['<>', 'id', $pid])
+            ->select(['id', 'name'])
+            ->orderBy('sort asc')
+            ->asArray()
+            ->all();
+        return array_column($list, $value, $key);
+    }
+
+
+
+
+    /**
+     * 获取所有下级
+     *
+     * @param $tree
+     * @return array|\yii\db\ActiveRecord[]
+     */
+    public function getChilds($tree)
+    {
+        return ProductType::find()
+            ->where(['like', 'tree', $tree . '%', false])
+            ->andWhere(['>=', 'status', StatusEnum::DISABLED])
+            ->andFilterWhere(['merchant_id' => $this->getMerchantId()])
+            ->asArray()
+            ->all();
+    }
+
+
+    /**
+     * @param $id
+     * @return array|\yii\db\ActiveRecord|null|Cate
+     */
+    public function findById($id)
+    {
+        return ProductType::find()
+            ->where(['id' => $id])
+            ->andWhere(['>=', 'status', StatusEnum::DISABLED])
+            ->andFilterWhere(['merchant_id' => $this->getMerchantId()])
+            ->asArray()
+            ->one();
+    }
+
+    /**
+     * 获取所有下级id
+     *
+     * @param $id
+     * @return array
+     */
+    public function findChildIdsById($id)
+    {
+        if ($model = $this->findById($id)) {
+            $tree = $model['tree'] .  TreeHelper::prefixTreeKey($id);
+            $list = $this->getChilds($tree);
+            return ArrayHelper::merge([$id], array_column($list, 'id'));
+        }
+
+        return [];
     }
 }

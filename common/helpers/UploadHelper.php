@@ -691,4 +691,14 @@ class UploadHelper
 
         return $upload_type;
     }
+
+    /**
+     * @param $file_name
+     * @return array|mixed
+     */
+    public static function getExt($file_name){
+        $ext = explode('.', strtolower($file_name));
+        $ext = end($ext);
+        return $ext;
+    }
 }

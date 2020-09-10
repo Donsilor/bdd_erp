@@ -153,8 +153,15 @@ $params = $params ? "&".http_build_query($params) : '';
                                 'headerOptions' => ['width'=>'120'],
                             ],
                             [
+                                'label' => '工厂成本',
+                                'attribute'=>'goods.factory_cost',
+                                'filter' =>false,
+                                'headerOptions' => ['width'=>'120'],
+                            ],
+                            [
                                 'label' => '商品成本价',
                                 'attribute'=>'goods.cost_price',
+                                'visible' => \common\helpers\Auth::verify(\common\enums\SpecialAuthEnum::VIEW_CAIGOU_PRICE),
                                 'filter' =>false,
                                 'headerOptions' => ['width'=>'120'],
                             ],

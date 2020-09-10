@@ -1,5 +1,6 @@
 <?php
 
+use addons\Sales\common\enums\DistributeStatusEnum;
 use addons\Sales\common\enums\PayStatusEnum;
 use common\helpers\Html;
 use addons\Sales\common\enums\OrderStatusEnum;
@@ -103,13 +104,21 @@ $this->params['breadcrumbs'][] = $this->title;
                             <td></td>
                         </tr>
                         <tr>
+                            <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('customer_message') ?>：</td>
+                            <td colspan="5"><?= $model->customer_message ?></td>
+                        </tr>
+                        <tr>
+                            <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('store_remark') ?>：</td>
+                            <td colspan="5"><?= $model->store_remark ?></td>
+                        </tr>
+                        <tr>
                             <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('pay_remark') ?>：</td>
                             <td colspan="5"><?= $model->pay_remark ?></td>
                         </tr>
                         <tr>
                             <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('remark') ?>：</td>
                             <td colspan="5"><?= $model->remark ?></td>
-                        </tr>
+                        </tr>                        
                     </table>
                 </div>
                 <div class="box-footer text-center">
@@ -162,13 +171,31 @@ $this->params['breadcrumbs'][] = $this->title;
                     }
                     ?>
                     <?php
-                    if ($model->pay_status == \addons\Sales\common\enums\PayStatusEnum::HAS_PAY) {
+                    if ($model->pay_status == \addons\Sales\common\enums\PayStatusEnum::HAS_PAY
+                        && !in_array($model->refund_status, [\addons\Sales\common\enums\RefundStatusEnum::HAS_RETURN])) {
                         echo Html::edit(['return', 'id' => $model->id], '退款', [
                             //'data-toggle' => 'modal',
                             'class' => 'btn btn-warning btn-ms openIframe',
                             //'data-target' => '#ajaxModalLg',
                             'data-width' => '90%', 'data-height' => '90%', 'data-offset' => '20px'
                         ]);
+                    }
+                    ?>
+                    <?php
+                    if ($model->distribute_status == DistributeStatusEnum::ALLOWED) {
+                        echo Html::edit(['distribution/account-sales', 'id' => $model->id, 'returnUrl' => Url::getReturnUrl()], '配货', [
+                            'class' => 'btn btn-primary btn-ms',
+                        ]);
+                    }
+                    ?>
+                    <?php
+                    if ($model->distribute_status == DistributeStatusEnum::HAS_PEIHUO && $model->delivery_status == \addons\Sales\common\enums\DeliveryStatusEnum::SAVE) {
+                        echo Html::a('发货质检', ['order-fqc/view', 'id' => $model->id, 'returnUrl' => Url::getReturnUrl()], ['class' => 'btn btn-primary btn-ms']);
+                    }
+                    ?>
+                    <?php
+                    if ($model->delivery_status == \addons\Sales\common\enums\DeliveryStatusEnum::TO_SEND) {
+                        echo Html::a('发货', ['shipping/view', 'id' => $model->id, 'returnUrl' => Url::getReturnUrl()], ['class' => 'btn btn-primary btn-ms']);
                     }
                     ?>
                 </div>
@@ -249,9 +276,18 @@ $this->params['breadcrumbs'][] = $this->title;
                             ],
                             [
                                 'attribute' => 'goods_name',
-                                'value' => 'goods_name',
-                                'contentOptions' => ['style' => 'width:200px;word-wrap:break-word;'],
+                                'value' => function ($model) {
+                                    return "<div style='width:200px;white-space:pre-wrap;'>" . $model->goods_name . "</div>";
+                                },
+                                'format' => 'raw',
                             ],
+                            [
+                                'attribute' => 'goods_spec',
+                                'value' => function ($model) {
+                                    return $model->getGoodsSpec();
+                                },
+                                'format' => 'raw',
+                           ],
                             [
                                 'attribute' => 'goods_id',
                                 'value' => 'goods_id',
@@ -268,7 +304,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                     $style_sn = $model->style_sn;
                                     $is_exist = Yii::$app->styleService->style->isExist($style_sn);
                                     if (!$is_exist && $style_sn) {
-                                        $style_sn = "<font color='red'>{$style_sn}（erp无此款）</font>";
+                                        $style_sn = "<font color='red'>{$style_sn}(erp无此款)</font>";
                                     }
                                     return $style_sn;
                                 },
@@ -347,6 +383,11 @@ $this->params['breadcrumbs'][] = $this->title;
                                     return common\helpers\AmountHelper::outputAmount($model->goods_pay_price, 2, $model->currency);
                                 }
                             ],
+                            [
+                                'class' => 'yii\grid\CheckboxColumn',
+                                'name' => 'id',  //设置每行数据的复选框属性
+                                'headerOptions' => ['width' => '30'],
+                            ],
                             /* [
                                     'attribute'=>'produce_sn',
                                     'value' => 'produce_sn'
@@ -361,7 +402,13 @@ $this->params['breadcrumbs'][] = $this->title;
                             [
                                 'attribute' => 'is_return',
                                 'value' => function ($model) {
-                                    return \addons\Sales\common\enums\IsReturnEnum::getValue($model->is_return) ?? '未操作';
+                                    $str = "";
+                                    if (in_array($model->is_return,
+                                            [\addons\Sales\common\enums\IsReturnEnum::APPLY, \addons\Sales\common\enums\IsReturnEnum::HAS_RETURN])
+                                    && !empty($model->return_id)) {
+                                        $str .= Html::a("(" .$model->return_no. ")", ['return/view', 'id' => $model->return_id, 'returnUrl' => Url::getReturnUrl()], ['style' => "text-decoration:underline;color:#3c8dbc"]);
+                                    }
+                                    return \addons\Sales\common\enums\IsReturnEnum::getValue($model->is_return) . $str ?? '未操作';
                                 },
                                 'format' => 'raw',
                             ],
@@ -479,12 +526,32 @@ $this->params['breadcrumbs'][] = $this->title;
                                 },
 
                             ],
+                            [
+                                    'label' => '外部商品SKU/编号',
+                                    'value' => function ($model) {
+                                        $str = '';
+                                        if($model->out_sku_id) {
+                                            $str.= '商品SKU：'.$model->out_sku_id."<br/>";
+                                        }
+                                        if($model->out_sku_id) {
+                                            $str.= '商品编号：'.$model->out_ware_id."<br/>";
+                                        }
+                                        return $str;
+                                    },
+                                    'format' => 'raw',
+                                
+                            ],
                             'remark',
+                             [
+                                'class' => 'yii\grid\CheckboxColumn',
+                                'name' => 'id',  //设置每行数据的复选框属性
+                                'headerOptions' => ['width' => '30'],
+                            ],
                             [
                                 'class' => 'yii\grid\ActionColumn',
                                 'header' => '操作',
                                 //'headerOptions' => ['width' => '150'],
-                                'template' => '{view} {edit} {stock} {untie} {apply-edit} {delete}',
+                                'template' => '{view} {edit} {delete} <br/>{stock} {untie} {apply-edit} ',
                                 'buttons' => [
                                     'view' => function ($url, $model, $key) {
                                         return Html::edit(['order-goods/view', 'id' => $model->id, 'order_id' => $model->order_id, 'returnUrl' => Url::getReturnUrl()], '详情', [
@@ -497,12 +564,11 @@ $this->params['breadcrumbs'][] = $this->title;
                                                 return Html::edit(['order-goods/edit-diamond', 'id' => $model->id], '编辑', ['class' => 'btn btn-primary btn-xs openIframe', 'data-width' => '90%', 'data-height' => '90%', 'data-offset' => '20px']);
                                             } elseif ($model->is_gift == \addons\Sales\common\enums\IsGiftEnum::YES) {
                                                 return Html::edit(['order-goods/edit-gift', 'id' => $model->id], '编辑', ['class' => 'btn btn-primary btn-xs openIframe', 'data-width' => '90%', 'data-height' => '90%', 'data-offset' => '20px']);
-                                            } elseif ($model->is_stock == IsStockEnum::NO) {
-                                                return Html::edit(['order-goods/edit', 'id' => $model->id], '编辑', ['class' => 'btn btn-primary btn-xs openIframe', 'data-width' => '90%', 'data-height' => '90%', 'data-offset' => '20px']);
-                                            } else {
+                                            }elseif ($model->is_stock == IsStockEnum::YES && $model->goods_id) {
                                                 return Html::edit(['order-goods/edit-stock', 'id' => $model->id], '编辑', ['class' => 'btn btn-primary btn-xs openIframe', 'data-width' => '90%', 'data-height' => '90%', 'data-offset' => '20px']);
+                                            }else {
+                                                return Html::edit(['order-goods/edit', 'id' => $model->id], '编辑', ['class' => 'btn btn-primary btn-xs openIframe', 'data-width' => '90%', 'data-height' => '90%', 'data-offset' => '20px']);
                                             }
-
                                         }
                                     },
                                     'stock' => function ($url, $model, $key) use ($order) {
@@ -579,15 +645,15 @@ $this->params['breadcrumbs'][] = $this->title;
                         </div>
                         <div class="row">
                             <div class="col-lg-8 text-right">
-                                <label><?= $model->getAttributeLabel('account.refund_amount') ?>：</label></div>
-                            <div class="col-lg-4"
-                                 style="color:red"><?= AmountHelper::outputAmount($model->account->refund_amount ?? 0, 2, $model->currency) ?></div>
-                        </div>
-                        <div class="row">
-                            <div class="col-lg-8 text-right">
                                 <label><?= $model->getAttributeLabel('account.paid_amount') ?>：</label></div>
                             <div class="col-lg-4"
                                  style="color:red"><?= AmountHelper::outputAmount($model->account->paid_amount ?? 0, 2, $model->currency) ?></div>
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-8 text-right">
+                                <label><?= $model->getAttributeLabel('account.refund_amount') ?>：</label></div>
+                            <div class="col-lg-4"
+                                 style="color:red"><?= AmountHelper::outputAmount($model->account->refund_amount ?? 0, 2, $model->currency) ?></div>
                         </div>
                     </div><!-- end col-lg-6 -->
                 </div><!-- end footer -->
@@ -674,7 +740,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             <td><?= addons\Sales\common\enums\IsInvoiceEnum::getValue($model->invoice->is_invoice ?? '') ?></td>
                             <td><?= $model->invoice->invoice_title ?? '' ?></td>
                             <td><?= $model->invoice->tax_number ?? '' ?></td>
-                             <td><?= addons\Sales\common\enums\InvoiceTypeEnum::getValue($model->invoice->invoice_type ?? '') ?></td>
+                            <td><?= addons\Sales\common\enums\InvoiceTypeEnum::getValue($model->invoice->invoice_type ?? '') ?></td>
                             <td><?= $model->invoice->email ?? '' ?></td>
                             <td><?= $model->invoice->send_num ?? '' ?></td>
                             <td><?= Html::edit(['ajax-edit-invoice', 'id' => $model->id, 'returnUrl' => $returnUrl], '编辑', [

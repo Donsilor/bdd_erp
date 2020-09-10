@@ -28,16 +28,7 @@ $form = ActiveForm::begin([
                 'allowClear' => false
             ],
         ]);?>
-        <div style="display: none" id="div1">
-            <?= $form->field($model, 'supplier_id')->widget(\kartik\select2\Select2::class, [
-                'data' => \Yii::$app->supplyService->supplier->getDropDown(),
-                'options' => ['placeholder' => '请选择'],
-                'pluginOptions' => [
-                    'allowClear' => false
-                ],
-            ]);?>
-        </div>
-        <div class="row" style="display: none" id="div2">
+        <div class="row">
             <div class="col-sm-6">
                 <?= $form->field($model, 'channel_id')->widget(\kartik\select2\Select2::class, [
                     'data' => \Yii::$app->salesService->saleChannel->getDropDown(),
@@ -69,29 +60,3 @@ $form = ActiveForm::begin([
     <button class="btn btn-primary" type="submit">保存</button>
 </div>
 <?php ActiveForm::end(); ?>
-<script>
-    var formId = 'warehousebillcform';
-    $(document).ready(function(){
-        var id = $("#"+formId+"-delivery_type").find(':checked').val();
-        load(id);
-        $("#"+formId+"-delivery_type").change(function(){
-            var id = $(this).find(':checked').val();
-            load(id);
-        })
-    });
-    function load(id) {
-        if($.inArray(id,['2','3','4'])>=0){
-            $("#div1").show();
-        }else {
-            $("#"+formId+"-supplier_id").select2("val",'');
-            $("#div1").hide();
-        }
-        if($.inArray(id,['1','5'])>=0){
-            $("#div2").show();
-        }else {
-            $("#"+formId+"-channel_id").select2("val",'');
-            $("#"+formId+"-salesman_id").select2("val",'');
-            $("#div2").hide();
-        }
-    }
-</script>

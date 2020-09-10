@@ -41,7 +41,7 @@ class BusinessScopeEnum extends BaseEnum
             self::YSP => '银饰品',
             self::GOLD => '金料',
             self::STONE => '石料',
-            self::QT => '其他',
+            self::QT => '其它',
 		];
 	}
 }

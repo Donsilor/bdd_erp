@@ -17,11 +17,7 @@ $this->params['breadcrumbs'][] = $this->title;
     <div class="tab-content">
         <div class="row col-xs-12" style="padding-left: 0px;padding-right: 0px;">
             <div class="box">
-                <div class="box-header">
-                    <h3 class="box-title"><?= Html::encode($this->title) ?></h3>
-                </div>
-                <div class="box-body table-responsive" style="padding-left: 0px;padding-right: 0px;">
-                    <?php echo Html::batchButtons(false)?>
+                <div class="box-body table-responsive">
                     <?= GridView::widget([
                         'dataProvider' => $dataProvider,
                         'filterModel' => $searchModel,

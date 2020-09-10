@@ -9,7 +9,9 @@ namespace addons\Style\common\enums;
 class StoneEnum extends BaseEnum
 {
     const POSITION_MAIN = 1;
-    const POSITION_DEPUTY = 2;
+    const POSITION_DEPUTY_1 = 2;
+    const POSITION_DEPUTY_2 = 3;
+    const POSITION_DEPUTY_3 = 4;
 
     const NOTHING = 1;
     const ROUND_DRILL = 2;
@@ -36,7 +38,9 @@ class StoneEnum extends BaseEnum
     {
         return [
             self::POSITION_MAIN => '主石',
-            self::POSITION_DEPUTY => '副石',
+            self::POSITION_DEPUTY_1 => '副石1',
+            self::POSITION_DEPUTY_2 => '副石2',
+            self::POSITION_DEPUTY_3 => '副石3',
 
         ];
     }

@@ -151,6 +151,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             [
                                 'label'=>'退货价',
                                 'attribute' => 'cost_price',
+                                'visible' => \common\helpers\Auth::verify(\common\enums\SpecialAuthEnum::VIEW_CAIGOU_PRICE),
                                 'filter' => false,
                             ],
                             [

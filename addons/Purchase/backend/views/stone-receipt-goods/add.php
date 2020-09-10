@@ -568,7 +568,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             ],
                             [
                                 'name' => "other_fee",
-                                'title'=>"其他费用",
+                                'title'=>"其它费用",
                                 'enableError'=>false,
                                 'defaultValue' => '0.00',
                                 'options' => [

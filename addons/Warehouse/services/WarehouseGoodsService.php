@@ -92,21 +92,53 @@ class WarehouseGoodsService extends Service
     }
 
 
-    /****
-     * @param $warehouse_goods
-     * 获取计算出库成本
+    /**
+     * 根据货号查询出库成本
+     * @param unknown $goods_id
+     * @return number
      */
     public function getOutboundCost($goods_id){
-        $warehouse_goods = WarehouseGoods::find()->where(['goods_id'=>$goods_id])->one();
+        $model = WarehouseGoods::find()->where(['goods_id'=>$goods_id])->one();
+        return $this->calcChukuPrice($model);
+    }
+    /**
+     * 计算出库成本价
+     * @param WarehouseGoods $model
+     */
+    public function calcChukuPrice($model) {
         //产品线是Au990 ，Au999，Au9999
-        if(in_array($warehouse_goods->product_type_id,[9,28,34])){
+        if(in_array($model->product_type_id,[9,28,34])){
             $gold_price = \Yii::$app->goldTool->getGoldPrice('XAU');
-            $outbound_cost = $warehouse_goods->gold_weight * $gold_price * (1 + 0.03);
+            $outbound_cost = $model->gold_weight * $gold_price * (1 + 0.03);
         }else{
-            $outbound_cost = $warehouse_goods->cost_price * (1 + 0.05);
+            $outbound_cost = $model->cost_price * (1 + 0.05);
         }
         return round ($outbound_cost,2);
+    }
+    /**
+     * 同步数据到库存
+     * @param array $goods
+     * @param array $applyGoodsList
+     * @throws \Exception
+     * @return \addons\Purchase\common\models\PurchaseApply $apply
+     */
+    public function createWarehouseGoods($goods)
+    {
+        try{
+            $warehouseGoods = new WarehouseGoods();
+            $warehouseGoods->attributes = $goods;
+            $warehouseGoods->created_at = time();
+            $warehouseGoods->updated_at = time();
+            $warehouseGoods->creator_id = \Yii::$app->user->id;
+            if(false === $warehouseGoods->save()) {
+                throw new \Exception($this->getError($warehouseGoods));
+            }
+            return $warehouseGoods;
+        }catch (\Exception $e){
+            throw $e;
+        }
 
     }
+
 
 }

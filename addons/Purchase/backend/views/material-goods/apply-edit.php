@@ -43,9 +43,13 @@ $this->params['breadcrumbs'][] = $this->title;
         			 <div class="col-lg-4">
         			 	<?= $form->field($model, 'goods_num')->textInput() ?>
         			 </div>
+					<?php
+                    if(\common\helpers\Auth::verify(\common\enums\SpecialAuthEnum::VIEW_CAIGOU_PRICE)){
+                    ?>
         			 <div class="col-lg-4">
         			 	<?= $form->field($model, 'cost_price')->textInput() ?>
         			 </div> 
+					<?php } ?>
     			 </div>
             	<?php
             	  $attr_list = $model->getAttrList();
@@ -86,7 +90,7 @@ $this->params['breadcrumbs'][] = $this->title;
                ?>            
                <!-- ./box-body -->
                    <div style="margin: 0px 0 20px 0;">
-                        <h3 class="box-title"> 其他信息</h3>
+                        <h3 class="box-title"> 其它信息</h3>
                     </div>
                     <div class="row">
                         <div class="col-lg-4">

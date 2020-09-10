@@ -37,40 +37,12 @@ $this->params['breadcrumbs'][] = $this->title;
                             'class' => 'yii\grid\SerialColumn',
                             'visible' => false,
                         ],
-                        [
-                            'attribute' => 'id',
-                            'filter' => true,
-                            'format' => 'raw',
-                            'headerOptions' => ['width'=>'80'],
-                        ],
-                        [
-                            'attribute' => 'order_sn',
-                            'value'=>function($model) {
-                                return Html::a($model->order_sn, ['order/view', 'id' => $model->order_id,'returnUrl'=>Url::getReturnUrl()], ['style'=>"text-decoration:underline;color:#3c8dbc"]);
-                            },
-                            'filter' => Html::activeTextInput($searchModel, 'order_sn', [
-                                'class' => 'form-control',
-                                'style'=> 'width:150px;'
-                            ]),
-                            'format' => 'raw',
-                            'headerOptions' => ['class' => 'col-md-1'],
-                        ],
-                        [
-                            'label' => '质检问题',
-                            'attribute' => 'fqc.name',
-                            'format' => 'raw',
-                            'value' => 'fqc.name',
-                            'filter' => Html::activeDropDownList($searchModel, 'problem',\Yii::$app->salesService->fqc->getDropDown(), [
-                                'prompt' => '全部',
-                                'class' => 'form-control',
-                            ]),
-                            'headerOptions' => ['class' => 'col-md-1'],
-                        ],
-                        [
-                            'attribute'=>'remark',
-                            'filter' => true,
-                            'headerOptions' => [],
-                        ],
+//                        [
+//                            'attribute' => 'id',
+//                            'filter' => true,
+//                            'format' => 'raw',
+//                            'headerOptions' => ['width'=>'80'],
+//                        ],
                         [
                             'attribute' => 'is_pass',
                             'format' => 'raw',
@@ -79,14 +51,6 @@ $this->params['breadcrumbs'][] = $this->title;
                             },
                             'filter' => Html::activeDropDownList($searchModel, 'is_pass',\addons\Sales\common\enums\IsPassEnum::getMap(), [
                                 'prompt' => '全部',
-                                'class' => 'form-control',
-                            ]),
-                            'headerOptions' => ['class' => 'col-md-1'],
-                        ],
-                        [
-                            'attribute' => 'creator_id',
-                            'value' => "creator.username",
-                            'filter' => Html::activeTextInput($searchModel, 'creator.username', [
                                 'class' => 'form-control',
                             ]),
                             'headerOptions' => ['class' => 'col-md-1'],
@@ -115,6 +79,54 @@ $this->params['breadcrumbs'][] = $this->title;
                             },
                             'format' => 'raw',
                             'headerOptions' => ['class' => 'col-md-2'],
+                        ],
+                        [
+                            'attribute' => 'creator_id',
+                            'value' => "creator.username",
+                            'filter' => Html::activeTextInput($searchModel, 'creator.username', [
+                                'class' => 'form-control',
+                            ]),
+                            'headerOptions' => ['class' => 'col-md-1'],
+                        ],
+                        [
+                            'attribute' => 'order_sn',
+                            'value'=>function($model) {
+                                return Html::a($model->order_sn, ['order/view', 'id' => $model->order_id,'returnUrl'=>Url::getReturnUrl()], ['style'=>"text-decoration:underline;color:#3c8dbc"]);
+                            },
+                            'filter' => Html::activeTextInput($searchModel, 'order_sn', [
+                                'class' => 'form-control',
+                                'style'=> 'width:150px;'
+                            ]),
+                            'format' => 'raw',
+                            'headerOptions' => ['class' => 'col-md-1'],
+                        ],
+                        [
+                            'attribute' => 'problem_type',
+                            'format' => 'raw',
+                            'value' =>function($model){
+                                return \addons\Sales\common\enums\ProblemTypeEnum::getValue($model->problem_type);
+                            },
+                            'filter' => Html::activeDropDownList($searchModel, 'problem_type',\addons\Sales\common\enums\ProblemTypeEnum::getMap(), [
+                                'prompt' => '全部',
+                                'class' => 'form-control',
+                            ]),
+                            'headerOptions' => ['class' => 'col-md-1'],
+                        ],
+                        [
+                            'label' => '质检问题',
+                            'attribute' => 'fqc.name',
+                            'format' => 'raw',
+                            'value' => 'fqc.name',
+                            'filter' => Html::activeDropDownList($searchModel, 'problem',\Yii::$app->salesService->fqc->getDropDown(), [
+                                'prompt' => '全部',
+                                'class' => 'form-control',
+                            ]),
+                            'headerOptions' => ['class' => 'col-md-1'],
+                        ],
+                        [
+                            'attribute'=>'remark',
+                            'filter' => true,
+                            'headerOptions' => [],
                         ],
                     ]
                 ]); ?>

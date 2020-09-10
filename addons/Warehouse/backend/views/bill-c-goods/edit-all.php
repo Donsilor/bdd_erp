@@ -4,6 +4,9 @@
 use common\helpers\Html;
 use yii\grid\GridView;
 use kartik\select2\Select2;
+use addons\Warehouse\common\enums\BillStatusEnum;
+use addons\Warehouse\common\enums\DeliveryTypeEnum;
+use common\helpers\Url;
 
 /* @var $this yii\web\View */
 /* @var $dataProvider yii\data\ActiveDataProvider */
@@ -12,7 +15,7 @@ use kartik\select2\Select2;
 /* @var $tab yii\data\ActiveDataProvider */
 /* @var $bill yii\data\ActiveDataProvider */
 
-$this->title = Yii::t('bill_b_goods', '其他出库单明细');
+$this->title = Yii::t('bill_b_goods', '其它出库单明细');
 $this->params['breadcrumbs'][] = ['label' => $this->title, 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
@@ -22,22 +25,64 @@ $this->params['breadcrumbs'][] = $this->title;
     <div class="box-tools" style="float:right;margin-top:-40px; margin-right: 20px;">
         <?php
         if($bill->bill_status == \addons\Warehouse\common\enums\BillStatusEnum::SAVE) {
-            echo Html::create(['add', 'bill_id' => $bill->id], '新增货品', [
+            echo Html::create(['add', 'bill_id' => $bill->id], '商品批量添加', [
                 'class' => 'btn btn-primary btn-xs openIframe',
                 'data-width'=>'90%',
                 'data-height'=>'90%',
                 'data-offset'=>'20px',
             ]);
             echo '&nbsp;';
+            echo Html::edit(['edit-all', 'bill_id' => $bill->id,'scan'=>1], '商品扫码添加', ['class'=>'btn btn-success btn-xs']);
+            echo '&nbsp;';
             echo Html::a('返回列表', ['bill-c-goods/index', 'bill_id' => $bill->id], ['class' => 'btn btn-info btn-xs']);
         }
         ?>
     </div>
     <div class="tab-content">
-        <div class="col-xs-12" style="padding-left: 0px;padding-right: 0px;">
+        <div class="row col-xs-12">
             <div class="box">
                 <div class="box-body table-responsive">
-                    <?php echo Html::batchButtons(false)?>
+                   <?php if(Yii::$app->request->get('scan')) {?>
+                   <div class="row">
+                        <div class="col-lg-8">
+                            <div class="form-group field-cate-sort">
+                                <div class="col-sm-6">
+                                    <?= Html::textInput('scan_goods_id', '', ['id'=>'scan_goods_id','on','class' => 'form-control','placeholder'=>'请输入货号 或 扫商品条码录入']).'<br/>' ?>
+                                </div>
+                                <div class="col-sm-2 text-left">
+                                    <button id="scan_submit" type="button" class="btn btn-primary" >保存</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <script type="text/javascript">
+                    $('#scan_goods_id').focus();
+                    $('#scan_goods_id').keydown(function(e){
+                        if(e.keyCode == 13){
+                        	scanGoods();
+                        }
+                    });
+                     $("#scan_submit").click(function(){
+                    	 scanGoods();
+                     });
+                     function scanGoods(){
+                    	 var goods_id = $("#scan_goods_id").val();
+                         $.ajax({
+                             type: "post",
+                             url: '<?php echo Url::to(['ajax-scan'])?>',
+                             dataType: "json",
+                             data: {
+                                 bill_id: '<?php echo $bill->id?>',
+                                 goods_id:goods_id,
+                             },
+                             success: function (data) {
+                                 window.location.href='<?= \Yii::$app->request->getUrl(); ?>';
+                             }
+                         });
+                     }                       
+                    </script>
+                   <?php }?>
+
                     <?= GridView::widget([
                         'dataProvider' => $dataProvider,
                         'filterModel' => $searchModel,
@@ -54,45 +99,31 @@ $this->params['breadcrumbs'][] = $this->title;
                             [
                                 'class'=>'yii\grid\CheckboxColumn',
                                 'name'=>'id',  //设置每行数据的复选框属性
-
                             ],
                             [
-                                'attribute'=>'id',
-                                'headerOptions' => [],
-                                'filter' => Html::activeTextInput($searchModel, 'id', [
-                                    'class' => 'form-control',
-                                    'style'=> 'width:60px;'
-                                ]),
+                                'attribute' => 'id',
+                                'filter' => false,
+                                'format' => 'raw',
                             ],
                             [
                                 'attribute'=>'goods_id',
+                                'filter' => true,
                                 'headerOptions' => ['class' => 'col-md-1'],
-                                'filter' => Html::activeTextInput($searchModel, 'goods_id', [
-                                    'class' => 'form-control',
-                                    'style'=> 'width:120px;'
-                                ]),
                             ],
                             [
-                                'attribute'=>'style_sn',
+                                'attribute' => 'style_sn',
                                 'headerOptions' => ['class' => 'col-md-1'],
-                                'filter' => Html::activeTextInput($searchModel, 'style_sn', [
-                                    'class' => 'form-control',
-                                    'style'=> 'width:120px;'
-                                ]),
+                                'filter' => true,
                             ],
                             [
-                                'attribute'=>'goods_name',
-                                'format' => 'raw',
-                                'headerOptions' => ['class' => 'col-md-1'],
-                                'filter' => Html::activeTextInput($searchModel, 'goods_name', [
-                                    'class' => 'form-control',
-                                    'style'=> 'width:260px;'
-                                ]),
+                                'attribute' => 'goods_name',
+                                'filter' => true,
+                                'headerOptions' => ['class' => 'col-md-2'],
                             ],
                             [
                                 'attribute'=>'goods.goods_status',
                                 'value' => function($model){
-                                    return \addons\Warehouse\common\enums\GoodsStatusEnum::getValue($model->goods->goods_status);
+                                     return \addons\Warehouse\common\enums\GoodsStatusEnum::getValue($model->goods->goods_status);
                                 },
                                 'filter' => true,
                                 'headerOptions' => ['class' => 'col-md-1'],
@@ -109,39 +140,14 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'filter' => true,
                                 'headerOptions' => ['class' => 'col-md-1'],
                             ],
-                            [
-                                'attribute' => 'put_in_type',
-                                'headerOptions' => ['class' => 'col-md-1'],
-                                'value' => function ($model){
-                                    return \addons\Warehouse\common\enums\PutInTypeEnum::getValue($model->put_in_type);
-                                },
-                                'filter' => Html::activeDropDownList($searchModel, 'put_in_type',\addons\Warehouse\common\enums\PutInTypeEnum::getMap(), [
-                                    'prompt' => '全部',
-                                    'class' => 'form-control',
 
-                                ]),
-                            ],
                             [
-                                'attribute' => 'from_warehouse_id',
-                                'value' =>"fromWarehouse.name",
-                                'filter'=>Select2::widget([
-                                    'name'=>'SearchModel[from_warehouse_id]',
-                                    'value'=>$searchModel->from_warehouse_id,
-                                    'data'=>Yii::$app->warehouseService->warehouse::getDropDown(),
-                                    'options' => ['placeholder' =>"请选择"],
-                                    'pluginOptions' => [
-                                        'allowClear' => true,
-
-                                    ],
-                                ]),
+                                'attribute' => 'warehouse_id',
+                                'value' =>"warehouse.name",
+                                'filter'=>false,
                                 'headerOptions' => ['class' => 'col-md-2'],
                             ],
-                            [
-                                'attribute' => 'to_warehouse_id',
-                                'value' =>"toWarehouse.name",
-                                'filter' => false,
-                                'headerOptions' => ['class' => 'col-md-1'],
-                            ],
+
                             [
                                 'attribute' => 'material',
                                 'value' => function($model){
@@ -154,81 +160,48 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'attribute' => 'gold_weight',
                                 'filter' => false,
                             ],
+
                             [
-                                'attribute' => 'gold_loss',
-                                'value' => function($model){
-                                    return $model->gold_loss;
-                                },
-                                'format' => 'raw',
+                                'attribute' => 'goods.main_stone_type',
                                 'filter' => false,
                             ],
                             [
-                                'attribute' => 'diamond_carat',
+                                'attribute' => 'goods.diamond_carat',
                                 'filter' => false,
                             ],
                             [
-                                'attribute' => 'diamond_color',
-                                'value' => function($model){
-                                    return Yii::$app->attr->valueName($model->diamond_color);
-                                },
+                                'attribute' => 'goods.main_stone_num',
                                 'filter' => false,
                             ],
                             [
-                                'attribute' => 'diamond_clarity',
-                                'value' => function($model){
-                                    return Yii::$app->attr->valueName($model->diamond_clarity);
-                                },
+                                'attribute' => 'goods.second_stone_weight1',
                                 'filter' => false,
                             ],
                             [
-                                'attribute' => 'diamond_cert_id',
+                                'attribute' => 'goods.second_stone_num1',
+                                'filter' => false,
+                            ],
+                            [
+                                'attribute' => 'goods.finger',
+                                'filter' => false,
+                            ],
+                            [
+                                'attribute' => 'goods.cert_id',
                                 'filter' => false,
                             ],
                             [
                                 'attribute' => 'cost_price',
-                                'value' => function($model){
-                                    return Html::ajaxInput('cost_price',$model->cost_price);
-                                },
+                                'visible' => \common\helpers\Auth::verify(\common\enums\SpecialAuthEnum::VIEW_CAIGOU_PRICE),
                                 'filter' => false,
-                                'format' => 'raw',
-                                'headerOptions' => ['class' => 'col-md-1'],
-
                             ],
                             [
-                                'attribute' => 'market_price',
-                                'value' => function($model){
-                                    return Html::ajaxInput('cost_price',$model->cost_price);
-                                },
+                                'attribute' => 'chuku_price',
+                                'visible' => \common\helpers\Auth::verify(\common\enums\SpecialAuthEnum::VIEW_CHUKU_PRICE),
                                 'filter' => false,
+                                'value' =>function($model){
+                                    return Html::ajaxInput('chuku_price', $model->chuku_price);
+                                },
                                 'format' => 'raw',
-                                'headerOptions' => ['class' => 'col-md-1'],
-                            ],
-                            [
-                                'attribute'=>'created_at',
-                                'filter' => \kartik\daterange\DateRangePicker::widget([    // 日期组件
-                                    'model' => $searchModel,
-                                    'attribute' => 'created_at',
-                                    'value' => $searchModel->created_at,
-                                    'options' => ['readonly' => false,'class'=>'form-control','style'=>'background-color:#fff;width:150px;'],
-                                    'pluginOptions' => [
-                                        'format' => 'yyyy-mm-dd',
-                                        'locale' => [
-                                            'separator' => '/',
-                                        ],
-                                        'endDate' => date('Y-m-d',time()),
-                                        'todayHighlight' => true,
-                                        'autoclose' => true,
-                                        'todayBtn' => 'linked',
-                                        'clearBtn' => true,
-
-
-                                    ],
-
-                                ]),
-                                'value'=>function($model){
-                                    return Yii::$app->formatter->asDatetime($model->updated_at);
-                                }
-
                             ],
                             [
                                 'class' => 'yii\grid\ActionColumn',
@@ -236,19 +209,17 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'template' => '{delete}',
                                 'buttons' => [
                                     'delete' => function($url, $model, $key) use($bill){
-                                        if($bill->audit_status == \common\enums\AuditStatusEnum::PENDING){
-                                            return Html::delete(['delete', 'id' => $model->id]);
+                                        if($bill->bill_status == BillStatusEnum::SAVE){
+                                            return Html::delete(['delete', 'id' => $model->id],'删除',['class'=>'btn btn-danger btn-xs']);
                                         }
                                     },
                                 ],
-                                'headerOptions' => [],
+                                'headerOptions' => ['class' => 'col-md-3'],
                             ]
                         ]
                     ]); ?>
                 </div>
             </div>
         </div>
-        <!-- box end -->
     </div>
-    <!-- tab-content end -->
 </div>

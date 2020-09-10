@@ -11,7 +11,7 @@ use addons\Warehouse\common\models\WarehouseBillGoodsL;
 use addons\Warehouse\common\forms\WarehouseBillTGoodsForm;
 use addons\Warehouse\common\enums\BillTypeEnum;
 use common\helpers\ResultHelper;
-use yii\base\Exception;
+use yii\web\UploadedFile;
 
 /**
  * WarehouseBillGoodsController implements the CRUD actions for WarehouseBillGoodsController model.
@@ -35,7 +35,7 @@ class BillTGoodsController extends BaseController
         $searchModel = new SearchModel([
             'model' => $this->modelClass,
             'scenario' => 'default',
-            'partialMatchAttributes' => [], // 模糊查询
+            'partialMatchAttributes' => ['goods_name', 'stone_remark', 'remark'], // 模糊查询
             'defaultOrder' => [
                 'id' => SORT_DESC
             ],
@@ -45,16 +45,18 @@ class BillTGoodsController extends BaseController
                 'styleCate' => ['name'],
             ]
         ]);
-
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
         $dataProvider->query->andWhere(['=', 'bill_id', $bill_id]);
         $dataProvider->query->andWhere(['>', WarehouseBillGoodsL::tableName() . '.status', -1]);
         $bill = WarehouseBill::find()->where(['id' => $bill_id])->one();
+        $model = new WarehouseBillTGoodsForm();
+        $total = $model->goodsSummary($bill_id, Yii::$app->request->queryParams);
         return $this->render($this->action->id, [
-            'model' => new WarehouseBillTGoodsForm(),
+            'model' => $model,
             'dataProvider' => $dataProvider,
             'searchModel' => $searchModel,
             'bill' => $bill,
+            'total' => $total,
             'tabList' => \Yii::$app->warehouseService->bill->menuTabList($bill_id, $this->billType, $returnUrl),
             'tab' => $tab,
         ]);
@@ -89,6 +91,71 @@ class BillTGoodsController extends BaseController
         }
         return $this->renderAjax($this->action->id, [
             'model' => $model,
+        ]);
+    }
+
+    /**
+     *
+     * ajax查看图片
+     * @return mixed|string|\yii\web\Response
+     * @throws
+     */
+    public function actionAjaxImage()
+    {
+        $id = \Yii::$app->request->get('id');
+        $model = $this->findModel($id);
+        $model = $model ?? new WarehouseBillTGoodsForm();
+        return $this->renderAjax($this->action->id, [
+            'model' => $model,
+        ]);
+    }
+
+    /**
+     *
+     * ajax批量导入
+     * @return mixed|string|\yii\web\Response
+     * @throws
+     */
+    public function actionAjaxUpload()
+    {
+        $id = \Yii::$app->request->get('id');
+        $bill_id = \Yii::$app->request->get('bill_id');
+        $download = \Yii::$app->request->get('download',0);
+        $bill = WarehouseBill::findOne($bill_id);
+        if($download){
+            $model = new WarehouseBillTGoodsForm();
+            list($values, $fields) = $model->getTitleList();
+            if(empty($bill_id)){
+                header("Content-Disposition: attachment;filename=【".rand(100,999)."】入库单明细导入(".date('Ymd').").csv");
+            }else{
+                header("Content-Disposition: attachment;filename=【{$bill_id}】入库单明细导入($bill->bill_no).csv");
+            }
+            $content = implode($values, ",") . "\n" . implode($fields, ",") . "\n";
+            echo iconv("utf-8", "gbk", $content);
+            exit();
+        }
+        $model = $this->findModel($id);
+        $model = $model ?? new WarehouseBillTGoodsForm();
+        // ajax 校验
+        $this->activeFormValidate($model);
+        if (Yii::$app->request->isPost) {
+            try {
+                $trans = \Yii::$app->db->beginTransaction();
+                $model->bill_id = $bill_id;
+                $model->file = UploadedFile::getInstance($model, 'file');
+                \Yii::$app->warehouseService->billT->uploadGoods($model);
+                $trans->commit();
+                \Yii::$app->getSession()->setFlash('success', '保存成功');
+                return $this->redirect(['index', 'bill_id' => $bill_id]);
+            } catch (\Exception $e) {
+                $trans->rollBack();
+                //var_dump($e->getTraceAsString());die;
+                return $this->message($e->getMessage(), $this->redirect(\Yii::$app->request->referrer), 'error');
+            }
+        }
+        return $this->renderAjax($this->action->id, [
+            'model' => $model,
+            'bill' => $bill,
         ]);
     }
 
@@ -132,7 +199,7 @@ class BillTGoodsController extends BaseController
 
     /**
      *
-     * ajax批量编辑
+     * ajax批量填充
      * @return mixed|string|\yii\web\Response
      * @throws
      */
@@ -184,13 +251,13 @@ class BillTGoodsController extends BaseController
         if (!$attr_id) {
             return ResultHelper::json(422, '参数错误');
         }
-        $check = Yii::$app->request->get('check', null);
-        if ($check) {
-            return ResultHelper::json(200, '', ['url' => Url::to([$this->action->id, 'ids' => $ids, 'name' => $name, 'attr_id' => $attr_id])]);
-        }
         $style_arr = $model::find()->where(['id' => $id_arr])->select(['style_sn'])->asArray()->distinct('style_sn')->all();
         if (count($style_arr) != 1) {
             return ResultHelper::json(422, '请选择同款的商品进行操作');
+        }
+        $check = Yii::$app->request->get('check', null);
+        if ($check) {
+            return ResultHelper::json(200, '', ['url' => Url::to([$this->action->id, 'ids' => $ids, 'name' => $name, 'attr_id' => $attr_id])]);
         }
         $style_sn = $style_arr[0]['style_sn'] ?? "";
         $attr_arr = Yii::$app->styleService->styleAttribute->getAttrValueListByStyle($style_sn, $attr_id);
@@ -205,7 +272,7 @@ class BillTGoodsController extends BaseController
 
     /**
      *
-     * 收货单-编辑
+     * 收货单-批量编辑
      * @return mixed
      * @throws
      */
@@ -217,7 +284,7 @@ class BillTGoodsController extends BaseController
         $searchModel = new SearchModel([
             'model' => $this->modelClass,
             'scenario' => 'default',
-            'partialMatchAttributes' => [], // 模糊查询
+            'partialMatchAttributes' => ['goods_name', 'stone_remark', 'remark'], // 模糊查询
             'defaultOrder' => [
                 'id' => SORT_DESC
             ],
@@ -228,11 +295,14 @@ class BillTGoodsController extends BaseController
         $dataProvider->query->andWhere(['=', 'bill_id', $bill_id]);
         //$dataProvider->query->andWhere(['>',WarehouseBillGoodsT::tableName().'.status',-1]);
         $bill = WarehouseBill::find()->where(['id' => $bill_id])->one();
+        $model = new WarehouseBillTGoodsForm();
+        $total = $model->goodsSummary($bill_id);
         return $this->render($this->action->id, [
-            'model' => new WarehouseBillTGoodsForm(),
+            'model' => $model,
             'dataProvider' => $dataProvider,
             'searchModel' => $searchModel,
             'bill' => $bill,
+            'total' => $total,
             'tabList' => \Yii::$app->warehouseService->bill->menuTabList($bill_id, $this->billType, $returnUrl, $tab),
             'tab' => $tab,
         ]);
@@ -312,7 +382,7 @@ class BillTGoodsController extends BaseController
             $trans = \Yii::$app->db->beginTransaction();
             foreach ($ids as $id) {
                 $model = WarehouseBillTGoodsForm::findOne($id);
-                if(!empty($model)){
+                if (!empty($model)) {
                     \Yii::$app->warehouseService->billT->syncUpdatePrice($model);
                 }
             }

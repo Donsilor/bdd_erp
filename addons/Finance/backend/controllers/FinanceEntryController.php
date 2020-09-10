@@ -133,8 +133,12 @@ class FinanceEntryController extends BaseController
             ['副石单价', 'second_stone_price1' , 'text'],
             ['工费', 'gong_fee' , 'text'],
             ['证书费', 'cert_fee' , 'text'],
-            ['成本价', 'cost_price' , 'text'],
         ];
+		if(\common\helpers\Auth::verify(\common\enums\SpecialAuthEnum::VIEW_CAIGOU_PRICE)){
+			array_splice($header,0,0,['成本价', 'cost_price' , 'text']);
+		}
+
+
 
         return ExcelHelper::exportData($list, $header, $name.'数据导出_' . date('YmdHis',time()));
     }

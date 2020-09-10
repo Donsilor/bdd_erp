@@ -13,7 +13,7 @@ use yii\web\View;
 /* @var $this yii\web\View */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = Yii::t('bill_c_goods', '其他出库单明细');
+$this->title = Yii::t('bill_c_goods', '其它出库单明细');
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 
@@ -23,14 +23,18 @@ $this->params['breadcrumbs'][] = $this->title;
     <div style="float:right;margin-top:-40px;margin-right: 20px;">
         <?php
         if($bill->bill_status == BillStatusEnum::SAVE){
-            echo Html::create(['add', 'bill_id' => $bill->id], '新增货品', [
+            echo Html::create(['add', 'bill_id' => $bill->id], '商品批量添加', [
                 'class' => 'btn btn-primary btn-xs openIframe',
                 'data-width'=>'90%',
                 'data-height'=>'90%',
                 'data-offset'=>'20px',
-            ]);
+            ]);            
             echo '&nbsp;';
-//            echo Html::edit(['edit-all', 'bill_id' => $bill->id], '编辑货品', ['class'=>'btn btn-info btn-xs']);
+            echo Html::edit(['edit-all', 'bill_id' => $bill->id,'scan'=>1], '商品扫码添加', ['class'=>'btn btn-success btn-xs']);
+            echo '&nbsp;';
+            echo Html::edit(['edit-all', 'bill_id' => $bill->id], '编辑货品', ['class'=>'btn btn-info btn-xs']);
+            echo '&nbsp;';
+            
         }
         echo Html::a('导出', ['bill-c/export?ids='.$bill->id],[
             'class'=>'btn btn-success btn-xs'
@@ -40,9 +44,6 @@ $this->params['breadcrumbs'][] = $this->title;
     <div class="tab-content">
         <div class="row col-xs-12">
             <div class="box">
-                <div class="box-header">
-                    <h3 class="box-title"><?= Html::encode($this->title) ?></h3>
-                </div>
                 <div class="box-body table-responsive">
                     <?php echo Html::batchButtons(false)?>
                     <?= GridView::widget([
@@ -82,7 +83,14 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'filter' => true,
                                 'headerOptions' => ['class' => 'col-md-2'],
                             ],
-                            
+                            [
+                                'attribute'=>'goods.goods_status',
+                                'value' => function($model){
+                                     return \addons\Warehouse\common\enums\GoodsStatusEnum::getValue($model->goods->goods_status);
+                                },
+                                'filter' => true,
+                                'headerOptions' => ['class' => 'col-md-1'],
+                            ],
                             [
                                 'attribute' => 'goods.style_cate_id',
                                 'value' => 'goods.styleCate.name',
@@ -99,7 +107,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             [
                                 'attribute' => 'warehouse_id',
                                 'value' =>"warehouse.name",
-                                'filter'=>Select2::widget([
+                                'filter'=>false/* Select2::widget([
                                     'name'=>'SearchModel[warehouse_id]',
                                     'value'=>$searchModel->warehouse_id,
                                     'data'=>Yii::$app->warehouseService->warehouse::getDropDown(),
@@ -108,7 +116,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                         'allowClear' => true,
 
                                     ],
-                                ]),
+                                ]) */,
                                 'headerOptions' => ['class' => 'col-md-2'],
                             ],
 
@@ -155,26 +163,19 @@ $this->params['breadcrumbs'][] = $this->title;
                             ],
                             [
                                 'attribute' => 'cost_price',
+                                'visible' => \common\helpers\Auth::verify(\common\enums\SpecialAuthEnum::VIEW_CAIGOU_PRICE),
                                 'filter' => false,
                             ],
                             [
-                                'attribute' => 'sale_price',
+                                'attribute' => 'chuku_price',
+                                'visible' => \common\helpers\Auth::verify(\common\enums\SpecialAuthEnum::VIEW_CHUKU_PRICE),
                                 'filter' => false,
                             ],
                             [
                                 'class' => 'yii\grid\ActionColumn',
                                 'header' => '操作',
-                                'template' => '{edit} {delete}',
-                                'buttons' => [
-                                    'edit' => function($url, $model, $key) use($bill) {
-                                        if($bill->bill_status == BillStatusEnum::SAVE && $bill->delivery_type == DeliveryTypeEnum::QUICK_SALE) {
-                                            return Html::edit(['ajax-edit', 'id' => $model->id, 'returnUrl' => Url::getReturnUrl()], '编辑', [
-                                                'class'=>'btn btn-primary btn-xs',
-                                                'data-toggle' => 'modal',
-                                                'data-target' => '#ajaxModal',
-                                            ]);
-                                        }
-                                    },
+                                'template' => '{delete}',
+                                'buttons' => [ 
                                     'delete' => function($url, $model, $key) use($bill){
                                         if($bill->bill_status == BillStatusEnum::SAVE){
                                             return Html::delete(['delete', 'id' => $model->id],'删除',['class'=>'btn btn-danger btn-xs']);

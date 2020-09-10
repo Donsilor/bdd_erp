@@ -58,9 +58,9 @@ $this->params['breadcrumbs'][] = $this->title;
             			 <div class="col-lg-4">
             			 	<?= $form->field($model, 'goods_num')->textInput() ?>
             			 </div>
-            			 <div class="col-lg-4">
-            			 	<?= $form->field($model, 'cost_price')->textInput() ?>
-            			 </div> 
+                         <div class="col-lg-4">
+                             <?= $form->field($model, 'templet_type')->dropDownList(TempletTypeEnum::getMap(), ['prompt' => '请选择'])?>
+                         </div>
         			 </div>
                      <div class="row">
                          <div class="col-lg-4">
@@ -73,11 +73,6 @@ $this->params['breadcrumbs'][] = $this->title;
                              <?= $form->field($model, 'peijian_type')->dropDownList(PeijianTypeEnum::getMap(), ['prompt' => '请选择'])?>
                          </div>
 
-                     </div>
-                     <div class="row">
-                         <div class="col-lg-4">
-                             <?= $form->field($model, 'templet_type')->dropDownList(TempletTypeEnum::getMap(), ['prompt' => '请选择'])?>
-                         </div>
                      </div>
 					<div style="margin-bottom:20px;">
                         <h3 class="box-title"> 属性信息</h3>
@@ -134,7 +129,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 <?php if($model->style_id) {?>
 
                     <div style="margin: 0px 0 20px 0;">
-                        <h3 class="box-title"> 其他信息<span style="font-size: 16px;color:grey;">（单据导出需填信息）</span></h3>
+                        <h3 class="box-title"> 其它信息<span style="font-size: 16px;color:grey;">（单据导出需填信息）</span></h3>
                     </div>
                     <div class="row">
                         <div class="col-lg-4">
@@ -149,14 +144,23 @@ $this->params['breadcrumbs'][] = $this->title;
                     </div>
                     <div class="row">
                         <div class="col-lg-4">
+                            <?= $form->field($model, 'second_peishi_way3')->textInput() ?>
+                        </div>
+                        <div class="col-lg-4">
                             <?= $form->field($model, 'main_stone_sn')->textInput() ?>
                         </div>
                         <div class="col-lg-4">
                             <?= $form->field($model, 'second_stone_sn1')->textInput() ?>
                         </div>
+                    </div>
+                    <div class="row">
                         <div class="col-lg-4">
                             <?= $form->field($model, 'second_stone_sn2')->textInput() ?>
                         </div>
+                        <div class="col-lg-4">
+                            <?= $form->field($model, 'second_stone_sn3')->textInput() ?>
+                        </div>
+
                     </div>
                     <div class="row">
                         <div class="col-lg-4">
@@ -176,6 +180,9 @@ $this->params['breadcrumbs'][] = $this->title;
                         </div>
                         <div class="col-lg-4">
                             <?= $form->field($model, 'suttle_weight')->textInput() ?>
+                        </div>
+                        <div class="col-lg-4">
+                            <?= $form->field($model, 'pure_gold')->textInput() ?>
                         </div>
 
                     </div>
@@ -210,9 +217,8 @@ $this->params['breadcrumbs'][] = $this->title;
                         <div class="col-lg-4">
                             <?= $form->field($model, 'peishi_fee')->textInput() ?>
                         </div>
-
                         <div class="col-lg-4">
-                            <?= $form->field($model, 'peishi_amount')->textInput() ?>
+                            <?= $form->field($model, 'peishi_weight')->textInput() ?>
                         </div>
                         <div class="col-lg-4">
                             <?= $form->field($model, 'jiagong_fee')->textInput() ?>
@@ -224,11 +230,10 @@ $this->params['breadcrumbs'][] = $this->title;
                             <?= $form->field($model, 'factory_mo')->textInput() ?>
                         </div>
                         <div class="col-lg-4">
-                            <?= $form->field($model, 'factory_cost_price')->textInput() ?>
-                        </div>
-
-                        <div class="col-lg-4">
                             <?= $form->field($model, 'ke_gong_fee')->textInput() ?>
+                        </div>
+                        <div class="col-lg-4">
+                            <?= $form->field($model, 'xianqian_price')->textInput() ?>
                         </div>
                     </div>
 
@@ -269,20 +274,21 @@ $this->params['breadcrumbs'][] = $this->title;
                     </div>
                     <div class="row">
                         <div class="col-lg-4">
-                            <?= $form->field($model, 'unit_cost_price')->textInput() ?>
+                            <?= $form->field($model, 'lasha_fee')->textarea() ?>
                         </div>
                         <div class="col-lg-4">
-                            <?= $form->field($model, 'factory_total_price')->textInput() ?>
+                            <?= $form->field($model, 'piece_fee')->textarea() ?>
                         </div>
                         <div class="col-lg-4">
-                            <?= $form->field($model, 'company_total_price')->textInput() ?>
+                            <?= $form->field($model, 'other_fee')->textInput() ?>
                         </div>
+
                     </div>
                     <div class="row">
-
                         <div class="col-lg-4">
-                            <?= $form->field($model, 'xianqian_price')->textInput() ?>
+                            <?= $form->field($model, 'unit_cost_price')->textInput() ?>
                         </div>
+
                     </div>
                     <div class="row">
                         <div class="col-lg-4">

@@ -101,7 +101,7 @@ class SalesReturn extends BaseModel
             'order_id' => '订单ID',
             'order_sn' => '订单号',
             'channel_id' => '所属渠道',
-            'goods_num' => '商品数量',
+            'goods_num' => '退款数量',
             'should_amount' => '应退金额',
             'apply_amount' => '申请退款金额',
             'real_amount' => '实退金额',

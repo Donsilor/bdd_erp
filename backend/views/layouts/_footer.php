@@ -423,12 +423,13 @@ $this->registerJs($script);
         }
         if($.isArray(ids)){
             ids = ids.join(',');
-        }
+        }        
         $.ajax({
             type: "get",
             url: url,
             dataType: "json",
             data: {
+            	popCheck:1,
                 ids: ids
             },
             success: function (data) {
@@ -473,12 +474,12 @@ $this->registerJs($script);
             if(code !== "defeat") {
                 return;
             }
-
             $.ajax({
                 type: "post",
                 url: url,
                 dataType: "json",
                 data: {
+                    check:1,
                     ids: ids
                 },
                 success: function (data) {
@@ -492,6 +493,56 @@ $this->registerJs($script);
         });
     }
 
+    //确认弹窗-Iframe
+    function batchPop3(obj) {
+    	let $e = $(obj);
+        let url = $e.attr('href');
+        let text = $e.text();
+        let grid = $e.data('grid') || 'grid';
+        let id = $e.closest("tr").data("key");
+        let ids = [];
+        if(id) {
+            ids.push(id);
+        }
+        else if($("#"+grid).length>0) {
+            ids = $("#"+grid).yiiGridView("getSelectedRows");
+        }        
+        if(ids.length===0) {
+            rfInfo('未选中数据！','');
+            return false;
+        }
+        if($.isArray(ids)){
+            ids = ids.join(',');
+        } 
+        appConfirm("确定要"+text+"吗?", '', function (code) {
+            if(code !== "defeat") {
+                return;
+            }
+            $.ajax({
+                type: "get",
+                url: url,
+                dataType: "json",
+                data: {
+                    ids: ids
+                },
+                success: function (data) {
+                    if (parseInt(data.code) !== 200) {
+                        rfAffirm(data.message);
+                    } else {
+                        var title = $e.data('title') || '基本信息';
+                        var width = $e.data('width') || '90%';
+                        var height = $e.data('height') || '90%';
+                        var offset = $e.data('offset') || '20px';
+                        url = data.data.url || url+"?ids="+ids;
+                        openIframe(title, width, height, url, offset);
+                        //$e.preventDefault();
+                        return false;
+                    }
+                }
+            });
+        });       
+        
+    }
     //批量填充
     function rfBatchFull(obj) {
         let $e = $(obj);
@@ -527,6 +578,7 @@ $this->registerJs($script);
                     attr_id:attr_id,
                 },
                 success: function (data) {
+                    console.log(data);
                     if (parseInt(data.code) !== 200) {
                         rfAffirm(data.message);
                     } else {
@@ -542,7 +594,10 @@ $this->registerJs($script);
                 }
             });
         }else{
-            rfPrompt("请输入["+name+"]", function (fromValue) {
+            if(name){
+                name = "["+name+"]";
+            }
+            rfPrompt("请输入"+name, function (fromValue) {
                 $.ajax({
                     type: "post",
                     url: url,

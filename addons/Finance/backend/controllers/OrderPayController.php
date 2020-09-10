@@ -2,6 +2,8 @@
 
 namespace addons\Finance\backend\controllers;
 
+use addons\Finance\common\enums\ArriveStatusEnum;
+use addons\Finance\common\forms\PayConfirmForm;
 use addons\Finance\common\models\OrderPay;
 use addons\Sales\common\models\OrderAccount;
 use addons\Sales\common\models\Payment;
@@ -59,7 +61,8 @@ class OrderPayController extends BaseController
                 'pageSize' => $this->getPageSize(),
                 'relations' => [
                     'account'=>["order_amount","pay_amount","paid_amount","currency"] ,
-                    'payLogs'=>["pay_sn"]
+                    'payLogs'=>["pay_sn","arrive_type","arrive_status"],
+
                 ]
         ]);
         
@@ -97,7 +100,7 @@ class OrderPayController extends BaseController
         if ($model->load(Yii::$app->request->post())) {
             try{
                 $trans = Yii::$app->db->beginTransaction();                
-                $orderPay = \Yii::$app->financeService->orderPay->pay($model);                
+                $orderPay = \Yii::$app->financeService->orderPay->pay($model);
                 $trans->commit();
                 return $this->message('点款成功,交易号：'.$orderPay->pay_sn, $this->redirect(['index']), 'success');
             }catch (\Exception $e){
@@ -113,6 +116,44 @@ class OrderPayController extends BaseController
     }
 
 
+
+
+    /**
+     * ajax确认到账
+     *
+     * @return mixed|string|\yii\web\Response
+     * @throws \yii\base\ExitException
+     */
+    public function actionAjaxConfirm()
+    {
+        $id = Yii::$app->request->get('id');
+        $this->modelClass = PayConfirmForm::class;
+        $model = $this->findModel($id);
+        $model = $model ?? new PayConfirmForm();
+
+        // ajax 校验
+        $this->activeFormValidate($model);
+        if ($model->load(Yii::$app->request->post())) {
+            try{
+                $trans = Yii::$app->db->beginTransaction();
+                $model->arrive_status = ArriveStatusEnum::HAS_ARRIVED;
+//                print_r($model->arrival_time);exit;
+                if(false === $model->save()){
+                    return $this->message($this->getError($model), $this->redirect(\Yii::$app->request->referrer), 'error');
+                }
+                $trans->commit();
+                return $this->message('操作成功', $this->redirect(['index']), 'success');
+            }catch (\Exception $e){
+                $trans->rollBack();
+                return $this->message($e->getMessage(), $this->redirect(Yii::$app->request->referrer), 'error');
+            }
+
+        }
+
+        return $this->renderAjax($this->action->id, [
+            'model' => $model,
+        ]);
+    }
     /***
      * 导出Excel
      */

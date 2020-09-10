@@ -68,6 +68,18 @@ return [
                 ],
 
         ],
+        [
+                'title' => '功能配置',
+                'route' => 'indexConfigFinance',
+                'icon' => 'fa fa-superpowers',
+                'child' => [
+                    [
+                        'title' => '结账账期管理',
+                        'route' => 'accounts-date/index',
+                    ]
+                ],
+
+        ],
     ],
 
     // ----------------------- 权限配置 ----------------------- //

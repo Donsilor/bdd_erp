@@ -10,6 +10,7 @@ namespace addons\Warehouse\common\enums;
  */
 class PeiJianWayEnum extends \common\enums\BaseEnum
 {
+    const NO_PEI = 0;
     const COMPANY = 1;
     const FACTORY = 2;
 
@@ -19,9 +20,19 @@ class PeiJianWayEnum extends \common\enums\BaseEnum
     public static function getMap(): array
     {
         return [
+            self::NO_PEI => '不需配件',
             self::COMPANY => '公司配',
             self::FACTORY => '工厂配',
         ];
     }
 
+    /**
+     * @param string $name
+     * @return int
+     */
+    public static function getIdByName($name)
+    {
+        $data = array_flip(PeiJianWayEnum::getMap());
+        return $data[$name] ?? "";
+    }
 }

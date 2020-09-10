@@ -120,11 +120,11 @@ class DistributionOrderService extends Service
         \Yii::$app->warehouseService->billS->createBillS($bill, $bill_goods);
 
         //2.更新商品库存状态
-        /*$condition = ['goods_id'=>$form->goods_ids, 'goods_status' => GoodsStatusEnum::IN_STOCK];
+        $condition = ['goods_id'=>$form->goods_ids, 'goods_status' => GoodsStatusEnum::IN_STOCK];
         $execute_num = WarehouseGoods::updateAll(['goods_status'=> GoodsStatusEnum::IN_SALE], $condition);
         if($execute_num <> count($bill_goods)){
-            throw new Exception("货品改变状态数量与明细数量不一致");
-        }*/
+            //throw new Exception("货品改变状态数量与明细数量不一致");
+        }
         //3.更新订单配货状态
         $form->distribute_status = DistributeStatusEnum::HAS_PEIHUO;
         if(false === $form->save()){

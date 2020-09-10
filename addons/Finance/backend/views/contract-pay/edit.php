@@ -150,4 +150,13 @@ use common\helpers\Url;
         }
         return head + s.replace(/(零.)*零圆/, '圆').replace(/(零.)+/g, '零').replace(/^$/, '零圆');
     }
+
+
+    //文本域自动换行
+    $('textarea').each(function () {
+        this.setAttribute('style', 'height:' + (this.scrollHeight) + 'px;overflow-y:hidden;');
+    }).on('input', function () {
+        this.style.height = 'auto';
+        this.style.height = (this.scrollHeight) + 'px';
+    });
 </script>

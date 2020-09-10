@@ -140,4 +140,17 @@ class SnHelper
         $number_max = substr('99999999',0, $number_len);
         return $prefix.date('ymd').mt_rand(3,9).str_pad(mt_rand(1, $number_max),$number_len,'0',STR_PAD_LEFT);
     }
+
+
+    /**
+     * 供应商编号
+     * @param string $prefix
+     * @return string
+     */
+    public static function createSupplierSn($prefix = 'GYS')
+    {
+        $number_len = 10 - strlen($prefix);
+        $number_max = substr('99999999',0, $number_len);
+        return $prefix.date('ymd').mt_rand(3,9).str_pad(mt_rand(1, $number_max),$number_len,'0',STR_PAD_LEFT);
+    }
 }

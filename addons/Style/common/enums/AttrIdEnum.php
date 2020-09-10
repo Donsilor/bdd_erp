@@ -74,6 +74,7 @@ class AttrIdEnum
     const SIDE_STONE1_CLARITY = 47;//副石1净度
     const SIDE_STONE1_WEIGHT = 44;//副石1重量(ct)
     const SIDE_STONE1_NUM = 45;//副石1数量
+    const SIDE_STONE1_CUT = 97;//副石1切工
     const SIDE_STONE1_SPEC = 999;//副石1规格
     const SIDE_STONE1_COLOUR = 88;//副石1色彩
 
@@ -90,16 +91,18 @@ class AttrIdEnum
     const SIDE_STONE2_COLOUR = 89;//副石2色彩
     
     //副石3信息
-    const SIDE_STONE3_TYPE = 999;//副石3类型
-    const SIDE_STONE3_WEIGHT = 999;//副石3重量(ct)
-    const SIDE_STONE3_NUM = 999;//副石3数量
+    const SIDE_STONE3_TYPE = 98;//副石3类型
+    const SIDE_STONE3_WEIGHT = 102;//副石3重量(ct)
+    const SIDE_STONE3_NUM = 103;//副石3数量
     const SIDE_STONE3_SPEC = 999;//副石3规格
+    const SIDE_STONE3_PRICE = 99;//副石3单价
 
-    //其他信息
+    //其它信息
     const GOODS_COLOR = 77;//货品外部颜色
     const PRODUCT_SIZE = 75;//成品尺寸(mm)
     const TALON_HEAD_TYPE = 90;//爪头形状
     const XIANGQIAN_CRAFT = 81;//镶嵌工艺
     const STONE_TYPE_MO = 241;//莫桑石
     const KEZI = 83;//刻字内容
+    const SUTTLE_WEIGHT = 91;//连石重(净重)
 }

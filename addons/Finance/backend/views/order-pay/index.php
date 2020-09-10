@@ -5,6 +5,7 @@ use common\helpers\Url;
 use yii\grid\GridView;
 use addons\Sales\common\enums\PayStatusEnum;
 use common\helpers\AmountHelper;
+use addons\Finance\common\enums\ArriveTypeEnum;
 
 /* @var $this yii\web\View */
 /* @var $dataProvider yii\data\ActiveDataProvider */
@@ -142,7 +143,7 @@ $params = $params ? "&".http_build_query($params) : '';
                     'headerOptions' => ['width'=>'100'],
             ],
             [
-                    'attribute' => 'account.unpay_amount',
+                    'attribute' => '剩余尾款',
                     'value' => function ($model){
                         $unpay_amount = $model->account->pay_amount - $model->account->paid_amount;                       
                         $unpay_amount_str = AmountHelper::outputAmount($unpay_amount,2,$model->account->currency);
@@ -167,8 +168,42 @@ $params = $params ? "&".http_build_query($params) : '';
                    ]),
                    'format' => 'raw',
                    'headerOptions' => ['width'=>'100'],
-           ], 
-           [
+           ],
+            [
+                'attribute' => '到账方式',
+                'value'=>function($model) {
+                    $arrive_type = '';
+                    foreach ($model->payLogs ??[] as $payLog){
+                        $arrive_type .= \addons\Finance\common\enums\ArriveTypeEnum::getValue($payLog->arrive_type);
+                    }
+                    return $arrive_type;
+                },
+                'filter' => Html::activeDropDownList($searchModel, 'payLogs.arrive_type',\addons\Finance\common\enums\ArriveTypeEnum::getMap(), [
+                    'prompt' => '全部',
+                    'class' => 'form-control',
+                    'style' =>'width:100px'
+                ]),
+                'format' => 'raw',
+                'headerOptions' => ['width'=>'100'],
+            ],
+            [
+                'attribute' => '到账状态',
+                'value'=>function($model) {
+                    $arrive_status = '';
+                    foreach ($model->payLogs ??[] as $payLog){
+                        $arrive_status .= \addons\Finance\common\enums\ArriveStatusEnum::getValue($payLog->arrive_status);
+                    }
+                    return $arrive_status;
+                },
+                'filter' => Html::activeDropDownList($searchModel, 'payLogs.arrive_status',\addons\Finance\common\enums\ArriveStatusEnum::getMap(), [
+                    'prompt' => '全部',
+                    'class' => 'form-control',
+                    'style' =>'width:100px'
+                ]),
+                'format' => 'raw',
+                'headerOptions' => ['width'=>'100'],
+            ],
+            [
                    'attribute' => 'pay_type',
                    'value' => function ($model){
                         return $model->payType->name ?? '未知';
@@ -231,7 +266,12 @@ $params = $params ? "&".http_build_query($params) : '';
             [
                 'label'=>'点款时间',
                 'value'=>function($model){
-                    return Yii::$app->formatter->asDatetime($model->pay_time);
+                    if($model->pay_time){
+                        return Yii::$app->formatter->asDatetime($model->pay_time);
+                    }else{
+                        return '';
+                    }
+
                 },
                 'filter' => \kartik\daterange\DateRangePicker::widget([    // 日期组件
                     'model' => $searchModel,
@@ -253,10 +293,28 @@ $params = $params ? "&".http_build_query($params) : '';
                 'headerOptions' => ['class' => 'col-md-1'],
 
             ],
+            [
+                'label'=>'（预估）到账时间',
+                'value'=>function($model){
+                    $arrival_time = '';
+                    foreach ($model->payLogs ??[] as $payLog){
+                        if($payLog->arrival_time){
+                            $arrival_time .= Yii::$app->formatter->asDate($payLog->arrival_time);
+                        }else{
+                            $arrival_time .= '';
+                        }
+                    }
+                    return $arrival_time;
+
+                },
+
+                'headerOptions' => ['class' => 'col-md-1'],
+
+            ],
            [
                 'class' => 'yii\grid\ActionColumn',
                 'header' => '操作',
-                'template' => '{edit}',
+                'template' => '{edit} {confirm}',
                 'buttons' => [
                     'edit' => function($url, $model, $key){
                            if($model->pay_status == PayStatusEnum::NO_PAY) {
@@ -266,7 +324,20 @@ $params = $params ? "&".http_build_query($params) : '';
                                     'class' => 'btn btn-primary btn-sm',
                                 ]);
                            }
-                    }, 
+                    },
+                    'confirm'=>function($url, $model, $key){
+                        foreach ($model->payLogs ??[] as $payLog){
+                            $arrive_type = $payLog->arrive_type;
+                            if($payLog->arrive_status == \addons\Finance\common\enums\ArriveStatusEnum::NOT_ARRIVED &&  $arrive_type === ArriveTypeEnum::POSTPONED){
+                                return Html::edit(['ajax-confirm', 'id' => $payLog->id, 'returnUrl' => Url::getReturnUrl()], '确认到账', [
+                                    'data-toggle' => 'modal',
+                                    'data-target' => '#ajaxModalLg',
+                                    'class' => 'btn btn-primary btn-sm',
+                                ]);
+                            }
+                        }
+
+                    }
                 ]
             ]
         ]

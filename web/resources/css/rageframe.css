@@ -355,7 +355,7 @@ a.desc:after {
 .form-group.has-success .input-group-addon {
     border-color: rgb(17, 194, 109);
 }
-
+.form-group label{ margin-top:5px}
 .has-error .form-control,
 .has-error .form-control:focus,
 .form-group.has-error .form-control,
@@ -885,6 +885,7 @@ h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6 {
 label {
     color: rgb(55, 71, 79);
     font-weight: 500;
+	margin-top:5px
 }
 
 button, select {

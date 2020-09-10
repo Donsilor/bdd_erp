@@ -2,24 +2,18 @@
 
 namespace addons\Style\backend\controllers;
 
+use Yii;
+use common\helpers\Url;
+use common\traits\Curd;
+use common\models\base\SearchModel;
+use addons\Style\common\models\Style;
+use addons\Style\common\forms\StyleForm;
+use addons\Style\common\forms\StyleAuditForm;
+use common\enums\AuditStatusEnum;
 use common\enums\FlowStatusEnum;
 use common\enums\TargetTypeEnum;
-use Yii;
-use common\models\base\SearchModel;
-use common\traits\Curd;
-
-use addons\Style\backend\controllers\BaseController;
-use addons\Style\common\models\Style;
-use addons\Style\common\forms\StyleAttrForm;
-use addons\Style\common\forms\StyleGoodsForm;
-use common\helpers\Url;
-use common\enums\AuditStatusEnum;
-use addons\Style\common\forms\StyleAuditForm;
 use common\enums\StatusEnum;
-use yii\behaviors\AttributeTypecastBehavior;
-use addons\Style\common\enums\AttrTypeEnum;
-use common\helpers\SnHelper;
-use common\enums\AutoSnEnum;
+use yii\web\UploadedFile;
 
 /**
 * Style
@@ -57,7 +51,7 @@ class StyleController extends BaseController
             ],
             'pageSize' => $this->pageSize,
             'relations' => [
-                 
+                 'creator' => 'username',
             ]
         ]);
 
@@ -67,6 +61,7 @@ class StyleController extends BaseController
             $dataProvider->query->andFilterWhere(['>=',Style::tableName().'.created_at', strtotime($created_ats[0])]);//起始时间
             $dataProvider->query->andFilterWhere(['<',Style::tableName().'.created_at', (strtotime($created_ats[1]) + 86400)] );//结束时间
         }
+
         return $this->render('index', [
             'dataProvider' => $dataProvider,
             'searchModel' => $searchModel, 
@@ -120,6 +115,45 @@ class StyleController extends BaseController
                 'model' => $model,
         ]);
     }
+
+    /**
+     *
+     * ajax批量导入
+     * @return mixed|string|\yii\web\Response
+     * @throws
+     */
+    public function actionAjaxUpload()
+    {
+        $model = new StyleForm();
+        $download = \Yii::$app->request->get('download',0);
+        if($download){
+            list($values, $fields) = $model->getTitleList();
+            header("Content-Disposition: attachment;filename=【" . rand(000, 999) . "】款式数据导入(" . date('Ymd', time()) . ").csv");
+            $content = implode($values, ",") . "\n" . implode($fields, ",") . "\n";
+            echo iconv("utf-8", "gbk", $content);
+            exit();
+        }
+        // ajax 校验
+        $this->activeFormValidate($model);
+        if (Yii::$app->request->isPost) {
+            try {
+                $trans = \Yii::$app->db->beginTransaction();
+                $model->file = UploadedFile::getInstance($model, 'file');
+                \Yii::$app->styleService->style->uploadStyles($model);
+                $trans->commit();
+                \Yii::$app->getSession()->setFlash('success', '保存成功');
+                return $this->redirect(\Yii::$app->request->referrer);
+            } catch (\Exception $e) {
+                $trans->rollBack();
+                //var_dump($e->getTraceAsString());die;
+                return $this->message($e->getMessage(), $this->redirect(\Yii::$app->request->referrer), 'error');
+            }
+        }
+        return $this->renderAjax($this->action->id, [
+            'model' => $model,
+        ]);
+    }
+
     /**
      * 详情展示页
      * @return string
