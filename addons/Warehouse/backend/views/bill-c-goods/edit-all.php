@@ -32,6 +32,8 @@ $this->params['breadcrumbs'][] = $this->title;
                 'data-offset'=>'20px',
             ]);
             echo '&nbsp;';
+            echo Html::edit(['edit-all', 'bill_id' => $bill->id,'scan'=>1], '商品扫码添加', ['class'=>'btn btn-success btn-xs']);
+            echo '&nbsp;';
             echo Html::a('返回列表', ['bill-c-goods/index', 'bill_id' => $bill->id], ['class' => 'btn btn-info btn-xs']);
         }
         ?>
