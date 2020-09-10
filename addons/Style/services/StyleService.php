@@ -381,7 +381,7 @@ class StyleService extends Service
                 'style_channel_id' => $style_channel_id,
                 'style_sex' => $style_sex,
                 'style_material' => $style_material,
-                'is_autosn' => 1,
+                'is_autosn' => 0,
                 'is_made' => $is_made,
                 //'is_gift' => $is_gift,
                 'status' => $status,
