@@ -104,4 +104,5 @@ class AttrIdEnum
     const XIANGQIAN_CRAFT = 81;//镶嵌工艺
     const STONE_TYPE_MO = 241;//莫桑石
     const KEZI = 83;//刻字内容
+    const SUTTLE_WEIGHT = 83;//连石重(净重)
 }

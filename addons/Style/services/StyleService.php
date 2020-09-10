@@ -2,6 +2,7 @@
 
 namespace addons\Style\services;
 
+use addons\Style\common\enums\AttrIdEnum;
 use addons\Style\common\enums\StyleCateEnum;
 use addons\Style\common\enums\StyleMaterialEnum;
 use Yii;
@@ -186,7 +187,7 @@ class StyleService extends Service
         $i = 0;
         $flag = true;
         $error_off = true;
-        $error = $style_sns = $field = $styleList = $factoryList1 = $factoryList2 = $styleFee = [];
+        $error = $style_sns = $field = $styleList = $attrList = $factoryList1 = $factoryList2 = $styleFee = [];
         while ($style = fgetcsv($file)) {
             if (count($style) != 35) {
                 throw new \Exception("模板格式不正确，请下载最新模板");
@@ -220,12 +221,12 @@ class StyleService extends Service
                 }
                 $style_sns[$i] = $style_sn;
 
-                $styleModel = Style::findOne(['style_sn'=>$style_sn]);
-                if(!empty($styleModel)){
+                $styleModel = Style::findOne(['style_sn' => $style_sn]);
+                if (!empty($styleModel)) {
                     $flag = false;
                     $error[$i][] = "款号在系统已存在，不能重复";
                 }
-            }else{
+            } else {
                 $flag = false;
                 $error[$i][] = "款号不能为空";
             }
@@ -247,7 +248,7 @@ class StyleService extends Service
                 //$flag = false;
                 //$error[$i][] = "款式名称不能为空";
                 $styleCate = StringHelper::strToChineseCharacters($style['style_cate_id']);
-                $style_name = $styleCate[0][0] ?? "未定";
+                $style_name = $styleCate[0][0] ?? "待定";
             }
             $product_type_id = $form->formatValue($style['product_type_id'], 0);
             if (empty($product_type_id)) {
@@ -271,7 +272,7 @@ class StyleService extends Service
                 $error[$i][] = "归属渠道填写有误";
             }
             $style_source_id = $form->formatValue($style['style_source_id'], 0);
-            $style_material = $form->formatValue($style['style_material'], 0);
+            $style_material = $form->formatValue($style['style_material'], "");
             if ($style_material === "") {
                 $style_material = $styleAttr['style_material'] ?? "";
                 if (empty($style_material) && !empty($style_sn)) {
@@ -296,6 +297,11 @@ class StyleService extends Service
             } elseif (!is_numeric($style_sex)) {
                 $flag = false;
                 $error[$i][] = "款式性别填写有误";
+            }
+            $suttle_weight = $form->formatValue($style['suttle_weight'], 0);
+            if (!empty($suttle_weight) && !is_numeric($suttle_weight)) {
+                $flag = false;
+                $error[$i][] = "连石重填写有误";
             }
             $is_made = $form->formatValue($style['is_made'], 1);
             if (!is_numeric($is_made)) {
@@ -364,6 +370,7 @@ class StyleService extends Service
             $other_fee = $form->formatValue($style['other_fee'], '0.00');
 
             $creator_id = \Yii::$app->user->identity->getId();
+            //款式信息
             $styleList[] = $styleInfo = [
                 'style_sn' => $style_sn,
                 'style_name' => $style_name,
@@ -382,6 +389,12 @@ class StyleService extends Service
                 'created_at' => time(),
             ];
 
+            //属性信息
+            $attrList[] = [
+                AttrIdEnum::SUTTLE_WEIGHT => $suttle_weight,
+            ];
+
+            //工厂1信息
             $factoryList1[] = $factoryInfo1 = [
                 'factory_id' => $factory_id1,
                 'factory_mo' => $factory_mo1,
@@ -394,6 +407,7 @@ class StyleService extends Service
                 'created_at' => time(),
             ];
 
+            //工厂2信息
             $factoryList2[] = $factoryInfo2 = [
                 'factory_id' => $factory_id2,
                 'factory_mo' => $factory_mo2,
@@ -405,6 +419,7 @@ class StyleService extends Service
                 'created_at' => time(),
             ];
 
+            //工费信息
             $styleFee[] = $feeInfo = [
                 'peishi_fee' => $peishi_fee,
                 'peijian_fee' => $peijian_fee,
@@ -471,7 +486,7 @@ class StyleService extends Service
         if (empty($styleList)) {
             throw new \Exception("导入数据不能为空");
         }
-        $style_ids = $saveFactory = $saveFee = [];
+        $style_ids = $saveFactory = $saveFee = $saveAttr = [];
         foreach ($styleList as $k => $item) {
             //创建款式信息
             $styleM = new Style();
@@ -501,6 +516,14 @@ class StyleService extends Service
             //创建审批流程
             if ($styleM->status != StatusEnum::ENABLED) {//未启用走审批流程
                 Yii::$app->services->flowType->createFlow($this->targetType, $styleM->id, $styleM->style_sn);
+            }
+            //款式属性信息
+            foreach ($attrList as $attrId => $val) {
+                if (!is_array($val)) {
+                    if ($val !== "") {
+                        $saveAttr[$styleM->id][$attrId] = $val;
+                    }
+                }
             }
             //款式工厂信息
             if (isset($factoryList1[$k]) || isset($factoryList2[$k])) {
@@ -587,6 +610,9 @@ class StyleService extends Service
                 }
             }
         }
+
+        //创建款式属性信息(文本值)
+        //$saveAttr
 
         //创建款式属性信息
 //        if (!empty($style_ids)) {
