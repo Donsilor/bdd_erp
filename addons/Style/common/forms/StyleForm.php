@@ -43,9 +43,25 @@ class StyleForm extends Style
     public function getTitleList()
     {
         $cate = $this->getCateList();
-        unset($cate[3], $cate[13], $cate[14], $cate[15], $cate[16], $cate[17]);
+        //unset($cate[3], $cate[13], $cate[14], $cate[15], $cate[16], $cate[17]);
+        $unCate = [3, 13, 14, 15, 16, 17];
+        if (!empty($cate)) {
+            foreach ($unCate as $id) {
+                if (isset($cate[$id])) {
+                    unset($cate[$id]);
+                }
+            }
+        }
         $product = $this->getProductList();
-        unset($product[1], $product[3], $product[4]);
+        //unset($product[1], $product[3], $product[4]);
+        $unProduct = [1, 3, 4];
+        if (!empty($product)) {
+            foreach ($unProduct as $id) {
+                if (isset($product[$id])) {
+                    unset($product[$id]);
+                }
+            }
+        }
         $values = [
             '#', '#',
             $this->formatTitleId($cate),
