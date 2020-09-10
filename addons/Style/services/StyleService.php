@@ -192,8 +192,8 @@ class StyleService extends Service
             if (count($style) != 36) {
                 throw new \Exception("模板格式不正确，请下载最新模板");
             }
-            if ($i >= 102) {
-                throw new \Exception("每次最多能导入100条数据");
+            if ($i >= 501) {
+                throw new \Exception("每次最多能导入500条数据");
             }
             if ($i <= 1) {
                 if ($i == 1) {
