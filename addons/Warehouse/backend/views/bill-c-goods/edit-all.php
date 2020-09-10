@@ -25,12 +25,14 @@ $this->params['breadcrumbs'][] = $this->title;
     <div class="box-tools" style="float:right;margin-top:-40px; margin-right: 20px;">
         <?php
         if($bill->bill_status == \addons\Warehouse\common\enums\BillStatusEnum::SAVE) {
-            echo Html::create(['add', 'bill_id' => $bill->id], '新增货品', [
+            echo Html::create(['add', 'bill_id' => $bill->id], '商品批量添加', [
                 'class' => 'btn btn-primary btn-xs openIframe',
                 'data-width'=>'90%',
                 'data-height'=>'90%',
                 'data-offset'=>'20px',
             ]);
+            echo '&nbsp;';
+            echo Html::edit(['edit-all', 'bill_id' => $bill->id,'scan'=>1], '商品扫码添加', ['class'=>'btn btn-success btn-xs']);
             echo '&nbsp;';
             echo Html::a('返回列表', ['bill-c-goods/index', 'bill_id' => $bill->id], ['class' => 'btn btn-info btn-xs']);
         }
@@ -45,7 +47,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         <div class="col-lg-8">
                             <div class="form-group field-cate-sort">
                                 <div class="col-sm-6">
-                                    <?= Html::textInput('scan_goods_id', '', ['id'=>'scan_goods_id','on','class' => 'form-control','placeholder'=>'请输入货号或扫货品条码']).'<br/>' ?>
+                                    <?= Html::textInput('scan_goods_id', '', ['id'=>'scan_goods_id','on','class' => 'form-control','placeholder'=>'请输入货号 或 扫商品条码录入']).'<br/>' ?>
                                 </div>
                                 <div class="col-sm-2 text-left">
                                     <button id="scan_submit" type="button" class="btn btn-primary" >保存</button>

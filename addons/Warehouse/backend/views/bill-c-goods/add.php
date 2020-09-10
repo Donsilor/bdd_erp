@@ -19,8 +19,8 @@ $this->params['breadcrumbs'][] = $this->title;
             <div class="box-body" style="padding:20px 50px">
                  <?= $form->field($model, 'id')->hiddenInput()->label(false) ?>
                  <div class="row">
-                     <div class="col-lg-3">
-                        <?= $form->field($model, 'goods_ids')->textInput(["placeholder"=>"批量输入请使用逗号或空格或换行符隔开"]) ?>
+                     <div class="col-lg-4">
+                        <?= $form->field($model, 'goods_ids')->textarea(["placeholder"=>"请输入货号，多个请用用逗号/空格/换行符隔开",'style'=>'height:100px']) ?>
                      </div>
                      <div class="col-lg-1">
                         <?= Html::button('查询',['class'=>'btn btn-info btn-sm','style'=>'margin-top:27px;','onclick'=>"searchWarehouseGoods()"]) ?>
