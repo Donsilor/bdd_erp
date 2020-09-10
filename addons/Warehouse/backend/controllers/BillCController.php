@@ -382,7 +382,7 @@ class BillCController extends BaseController
                 $model = Yii::$app->warehouseService->billC->quickBillC($form);
                 $trans->commit();
                 Yii::$app->getSession()->setFlash('success','操作成功，出库单号:'.$model->bill_no);
-                return ResultHelper::json(200,'保存成功', ['jumpUrl'=>Url::to('bill-c-goods/index',['bill_id'=>$model->id])]);
+                return ResultHelper::json(200,'保存成功', ['jumpUrl'=>Url::to(['bill-c-goods/index','bill_id'=>$model->id])]);
             }catch (\Exception $e){
                 $trans->rollBack();
                 return ResultHelper::json(423,$e->getMessage());
