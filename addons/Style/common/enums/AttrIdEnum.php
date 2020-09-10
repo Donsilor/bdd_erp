@@ -92,10 +92,10 @@ class AttrIdEnum
     
     //副石3信息
     const SIDE_STONE3_TYPE = 98;//副石3类型
-    const SIDE_STONE3_WEIGHT = 999;//副石3重量(ct)
-    const SIDE_STONE3_NUM = 999;//副石3数量
+    const SIDE_STONE3_WEIGHT = 102;//副石3重量(ct)
+    const SIDE_STONE3_NUM = 103;//副石3数量
     const SIDE_STONE3_SPEC = 999;//副石3规格
-    const SIDE_STONE3_PRICE = 999;//副石3单价
+    const SIDE_STONE3_PRICE = 99;//副石3单价
 
     //其它信息
     const GOODS_COLOR = 77;//货品外部颜色
@@ -104,5 +104,5 @@ class AttrIdEnum
     const XIANGQIAN_CRAFT = 81;//镶嵌工艺
     const STONE_TYPE_MO = 241;//莫桑石
     const KEZI = 83;//刻字内容
-    const SUTTLE_WEIGHT = 83;//连石重(净重)
+    const SUTTLE_WEIGHT = 91;//连石重(净重)
 }
