@@ -313,7 +313,7 @@ $this->params['breadcrumbs'][] = $this->title;
             </div>
             <div class="box-body table-responsive">
                 <?php
-                    echo Html::a('商品出库', ['bill-c/quick'], [
+                    echo Html::a('批量出库', ['bill-c/quick'], [
                         'class' => 'btn btn-success btn-xs',
                         "onclick" => "batchPop(this);return false;",
                         'data-grid' => 'grid',
