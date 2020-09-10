@@ -3,6 +3,7 @@
 namespace addons\Warehouse\common\forms;
 
 use common\helpers\ArrayHelper;
+use common\helpers\StringHelper;
 use Yii;
 use yii\base\Model;
 
@@ -56,6 +57,13 @@ class WarehousGoodsSearchForm extends Model
         return $where;
     }
 
+    /**
+     * @return array
+     */
+    public function goods_ids(){
+        $goods_arr = StringHelper::explodeIds($this->goods_id);
+        return $goods_arr;
+    }
 
     /**
      * @return array

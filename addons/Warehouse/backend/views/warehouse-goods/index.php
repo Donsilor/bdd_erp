@@ -60,14 +60,21 @@ $this->params['breadcrumbs'][] = $this->title;
                                     </div>
                                 </div>
                             </div>
+
                             <div class="col-lg-3">
                                 <div class="form-group field-cate-sort">
                                     <div class="col-sm-4 text-right">
-                                        <label class="control-label" for="cate-sort">商品名称：</label>
+                                        <label class="control-label" for="cate-sort">连石重：</label>
                                     </div>
-                                    <div class="col-sm-8">
-                                        <?= Html::textInput('goods_name', $search->goods_name, ['class' => 'form-control']) ?>
-                                        <div class="help-block"></div>
+                                    <div class="col-sm-8 ">
+                                        <div class="col-lg-12 input-group">
+                                            <div class="input-group">
+                                                <?= Html::textInput('min_suttle_weight', $search->min_suttle_weight, ['class' => 'form-control', 'placeholder' => '最低石重']) ?>
+                                                <span class="input-group-addon" style="border-color: #fff">-</span>
+                                                <?= Html::textInput('max_suttle_weight', $search->max_suttle_weight, ['class' => 'form-control', 'placeholder' => '最高石重']) ?>
+                                            </div>
+                                            <div class="help-block"></div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -75,7 +82,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             <div class="col-lg-3">
                                 <div class="form-group field-cate-sort">
                                     <div class="col-sm-4 text-right">
-                                        <label class="control-label" for="cate-sort">款式分类：</label>
+                                        <label class="control-label" for="cate-sort">商品分类：</label>
                                     </div>
                                     <div class="col-sm-8">
                                         <?= \kartik\select2\Select2::widget([
@@ -89,6 +96,48 @@ $this->params['breadcrumbs'][] = $this->title;
                                         ])
                                         ?>
                                         <div class="help-block"></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-3">
+                                <div class="form-group field-cate-sort">
+                                    <div class="col-sm-4 text-right">
+                                        <label class="control-label" for="cate-sort">商品名称：</label>
+                                    </div>
+                                    <div class="col-sm-8">
+                                        <?= Html::textInput('goods_name', $search->goods_name, ['class' => 'form-control']) ?>
+                                        <div class="help-block"></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-3">
+                                <div class="form-group field-cate-sort">
+                                    <div class="col-sm-4 text-right">
+                                        <label class="control-label" for="cate-sort">商品状态：</label>
+                                    </div>
+                                    <div class="col-sm-8">
+                                        <?= Html::dropDownList('goods_status', $search->goods_status, \addons\Warehouse\common\enums\GoodsStatusEnum::getMap(), [
+                                            'class' => 'form-control',
+                                            'prompt' => '全部',
+                                        ]) ?>
+                                        <div class="help-block"></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-3">
+                                <div class="form-group field-cate-sort">
+                                    <div class="col-sm-4 text-right">
+                                        <label class="control-label" for="cate-sort">主石重：</label>
+                                    </div>
+                                    <div class="col-sm-8 ">
+                                        <div class="col-lg-12 input-group">
+                                            <div class="input-group">
+                                                <?= Html::textInput('min_diamond_carat', $search->min_diamond_carat, ['class' => 'form-control', 'placeholder' => '最低主石价']) ?>
+                                                <span class="input-group-addon" style="border-color: #fff">-</span>
+                                                <?= Html::textInput('max_diamond_carat', $search->max_diamond_carat, ['class' => 'form-control', 'placeholder' => '最高主石价']) ?>
+                                            </div>
+                                            <div class="help-block"></div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -116,10 +165,10 @@ $this->params['breadcrumbs'][] = $this->title;
                             <div class="col-lg-3">
                                 <div class="form-group field-cate-sort">
                                     <div class="col-sm-4 text-right">
-                                        <label class="control-label" for="cate-sort">商品状态：</label>
+                                        <label class="control-label" for="cate-sort">金托类型：</label>
                                     </div>
                                     <div class="col-sm-8">
-                                        <?= Html::dropDownList('goods_status', $search->goods_status, \addons\Warehouse\common\enums\GoodsStatusEnum::getMap(), [
+                                        <?= Html::dropDownList('jintuo_type', $search->jintuo_type, \addons\Style\common\enums\JintuoTypeEnum::getMap(), [
                                             'class' => 'form-control',
                                             'prompt' => '全部',
                                         ]) ?>
@@ -141,20 +190,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-lg-3">
-                                <div class="form-group field-cate-sort">
-                                    <div class="col-sm-4 text-right">
-                                        <label class="control-label" for="cate-sort">金托类型：</label>
-                                    </div>
-                                    <div class="col-sm-8">
-                                        <?= Html::dropDownList('jintuo_type', $search->jintuo_type, \addons\Style\common\enums\JintuoTypeEnum::getMap(), [
-                                            'class' => 'form-control',
-                                            'prompt' => '全部',
-                                        ]) ?>
-                                        <div class="help-block"></div>
-                                    </div>
-                                </div>
-                            </div>
+
                             <div class="col-lg-3">
                                 <div class="form-group field-cate-sort">
                                     <div class="col-sm-4 text-right">
@@ -170,40 +206,8 @@ $this->params['breadcrumbs'][] = $this->title;
                                 </div>
                             </div>
 
-                            <div class="col-lg-3">
-                                <div class="form-group field-cate-sort">
-                                    <div class="col-sm-4 text-right">
-                                        <label class="control-label" for="cate-sort">连石重：</label>
-                                    </div>
-                                    <div class="col-sm-8 ">
-                                        <div class="col-lg-12 input-group">
-                                            <div class="input-group">
-                                                <?= Html::textInput('min_suttle_weight', $search->min_suttle_weight, ['class' => 'form-control', 'placeholder' => '最低石重']) ?>
-                                                <span class="input-group-addon" style="border-color: #fff">-</span>
-                                                <?= Html::textInput('max_suttle_weight', $search->max_suttle_weight, ['class' => 'form-control', 'placeholder' => '最高石重']) ?>
-                                            </div>
-                                            <div class="help-block"></div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-lg-3">
-                                <div class="form-group field-cate-sort">
-                                    <div class="col-sm-4 text-right">
-                                        <label class="control-label" for="cate-sort">主石重：</label>
-                                    </div>
-                                    <div class="col-sm-8 ">
-                                        <div class="col-lg-12 input-group">
-                                            <div class="input-group">
-                                                <?= Html::textInput('min_diamond_carat', $search->min_diamond_carat, ['class' => 'form-control', 'placeholder' => '最低主石价']) ?>
-                                                <span class="input-group-addon" style="border-color: #fff">-</span>
-                                                <?= Html::textInput('max_diamond_carat', $search->max_diamond_carat, ['class' => 'form-control', 'placeholder' => '最高主石价']) ?>
-                                            </div>
-                                            <div class="help-block"></div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
+
+
 
                             <div class="col-lg-3">
                                 <div class="form-group field-cate-sort">
@@ -235,7 +239,28 @@ $this->params['breadcrumbs'][] = $this->title;
                                             'name'=>'supplier_id',
                                             'value'=>$search->supplier_id,
                                             'data'=>Yii::$app->supplyService->supplier->getDropDown(),
-                                            'options' => ['placeholder' =>"请选择",'multiple'=>true,'style'=>"width:180px"],
+                                            'options' => ['placeholder' =>"请选择",'multiple'=>false,'style'=>"width:180px"],
+                                            'pluginOptions' => [
+                                                'allowClear' => true,
+                                            ],
+                                        ])
+                                        ?>
+                                        <div class="help-block"></div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-lg-3">
+                                <div class="form-group field-cate-sort">
+                                    <div class="col-sm-4 text-right">
+                                        <label class="control-label" for="cate-sort">库存来源：</label>
+                                    </div>
+                                    <div class="col-sm-8">
+                                        <?= \kartik\select2\Select2::widget([
+                                            'name'=>'goods_source',
+                                            'value'=>$search->goods_source,
+                                            'data'=>\addons\Warehouse\common\enums\GoodSourceEnum::getMap(),
+                                            'options' => ['placeholder' =>"请选择",'multiple'=>false,'style'=>"width:180px"],
                                             'pluginOptions' => [
                                                 'allowClear' => true,
                                             ],
@@ -255,26 +280,6 @@ $this->params['breadcrumbs'][] = $this->title;
                                             'name'=>'style_channel_id',
                                             'value'=>$search->style_channel_id,
                                             'data'=>Yii::$app->salesService->saleChannel->getDropDown(),
-                                            'options' => ['placeholder' =>"请选择",'multiple'=>true,'style'=>"width:180px"],
-                                            'pluginOptions' => [
-                                                'allowClear' => true,
-                                            ],
-                                        ])
-                                        ?>
-                                        <div class="help-block"></div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-lg-3">
-                                <div class="form-group field-cate-sort">
-                                    <div class="col-sm-4 text-right">
-                                        <label class="control-label" for="cate-sort">库存来源：</label>
-                                    </div>
-                                    <div class="col-sm-8">
-                                        <?= \kartik\select2\Select2::widget([
-                                            'name'=>'goods_source',
-                                            'value'=>$search->goods_source,
-                                            'data'=>\addons\Warehouse\common\enums\GoodSourceEnum::getMap(),
                                             'options' => ['placeholder' =>"请选择",'multiple'=>true,'style'=>"width:180px"],
                                             'pluginOptions' => [
                                                 'allowClear' => true,

@@ -57,11 +57,12 @@ class WarehouseGoodsController extends BaseController
 
 
         $dataProvider->query
-            ->andFilterWhere(['goods_id'=>$search->goods_id])
+
             ->andFilterWhere(['goods_status'=>$search->goods_status])
             ->andFilterWhere(['material_type'=>$search->material_type])
             ->andFilterWhere(['jintuo_type'=>$search->jintuo_type])
             ->andFilterWhere(['main_stone_type'=>$search->main_stone_type])
+            ->andFilterWhere(['in', 'goods_id', $search->goods_ids()])
             ->andFilterWhere(['in', 'style_cate_id', $search->styleCateIds()])
             ->andFilterWhere(['in', 'product_type_id', $search->proTypeIds()])
             ->andFilterWhere(['like', 'goods_name', $search->goods_name])
