@@ -61,5 +61,33 @@ class StyleAttributeService extends Service
         }
         return Yii::$app->styleService->attribute->getValuesByValueIds($model->attr_values);
     }
+
+    public function installOne($style_id,$style_cate_id,$attr_id,$attr_value){
+        $attr = AttributeSpec::find()->where(['style_cate_id'=>$style_cate_id,'attr_id'=>$attr_id,'status'=>StatusEnum::ENABLED])
+            ->select(['input_type','is_require','attr_type','is_inlay'])->asArray()->one();
+        if($attr){
+            $styleAttr = StyleAttribute::find()->where(['style_id'=>$style_id,'attr_id'=>$attr_id])->one();
+            if(!$styleAttr){
+                $styleAttr = new StyleAttribute();
+                $style_attr = [
+                    'style_id' => $style_id,
+                    'attr_id' => $attr_id,
+                    'input_type' => $attr['input_type'],
+                    'is_require' => $attr['is_require'],
+                    'attr_type' => $attr['attr_type'],
+                    'is_inlay' => $attr['is_inlay'],
+                    'attr_values' => (string)$attr_value,
+                ];
+                $styleAttr->attributes = $style_attr;
+
+            }else{
+                $styleAttr->attr_values = (string)$attr_value;
+            }
+            if(false === $styleAttr->save()){
+                throw new \Exception($this->getError($styleAttr));
+            }
+        }
+
+    }
     
 }

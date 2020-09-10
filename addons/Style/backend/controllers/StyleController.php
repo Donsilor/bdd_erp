@@ -61,6 +61,7 @@ class StyleController extends BaseController
             $dataProvider->query->andFilterWhere(['>=',Style::tableName().'.created_at', strtotime($created_ats[0])]);//起始时间
             $dataProvider->query->andFilterWhere(['<',Style::tableName().'.created_at', (strtotime($created_ats[1]) + 86400)] );//结束时间
         }
+
         return $this->render('index', [
             'dataProvider' => $dataProvider,
             'searchModel' => $searchModel, 

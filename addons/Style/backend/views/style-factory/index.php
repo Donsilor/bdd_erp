@@ -77,28 +77,8 @@ $this->params['breadcrumbs'][] = $this->title;
 
                             [
                                 'attribute'=>'shipping_time',
-                                'filter' => DateRangePicker::widget([    // 日期组件
-                                    'model' => $searchModel,
-                                    'attribute' => 'shipping_time',
-                                    'value' => $searchModel->shipping_time,
-                                    'options' => ['readonly' => false,'class'=>'form-control','style'=>'background-color:#fff;width:200px;'],
-                                    'pluginOptions' => [
-                                        'format' => 'yyyy-mm-dd',
-                                        'locale' => [
-                                            'separator' => '/',
-                                        ],
-                                        'endDate' => date('Y-m-d',time()),
-                                        'todayHighlight' => true,
-                                        'autoclose' => true,
-                                        'todayBtn' => 'linked',
-                                        'clearBtn' => true,
-
-
-                                    ],
-
-                                ]),
                                 'value'=>function($model){
-                                    return Yii::$app->formatter->asDatetime($model->updated_at);
+                                    return $model->shipping_time;
                                 }
 
                             ],
