@@ -20,8 +20,13 @@ $form = ActiveForm::begin([
     </div>
     <div class="modal-body">
             <?= $form->field($model, 'position')->dropDownList(\addons\Style\common\enums\StoneEnum::getPositionMap(),['prompt'=>'请选择']);?>
-            <?= $form->field($model, 'stone_type')->dropDownList(Yii::$app->attr->valueMap(\addons\Style\common\enums\AttrIdEnum::MAIN_STONE_TYPE),['prompt'=>'请选择']);?>
-
+            <?= $form->field($model, 'stone_type')->widget(kartik\select2\Select2::class, [
+                'data' => Yii::$app->attr->valueMap(\addons\Style\common\enums\AttrIdEnum::MAIN_STONE_TYPE),
+                'options' => ['placeholder' => '请选择','multiple'=>$model->isNewRecord ? true : false],
+                'pluginOptions' => [
+                    'allowClear' => true
+                ],
+            ]);?>
             <?= $form->field($model, 'sort')->textInput() ?>
             <?= $form->field($model, 'status')->radioList(common\enums\StatusEnum::getMap())?>
             <?= \yii\helpers\Html::activeHiddenInput($model,'style_id',array('value'=>$style_id)) ?>

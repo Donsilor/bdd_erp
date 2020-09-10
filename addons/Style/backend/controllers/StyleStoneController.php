@@ -4,7 +4,6 @@ namespace addons\Style\backend\controllers;
 
 use addons\Style\common\models\Style;
 use addons\Style\common\models\StyleStone;
-use common\helpers\StringHelper;
 use common\helpers\Url;
 use Yii;
 use common\traits\Curd;
@@ -44,16 +43,10 @@ class StyleStoneController extends BaseController
         ]);
 
         $dataProvider = $searchModel
-            ->search(Yii::$app->request->queryParams,['stone_type']);
+            ->search(Yii::$app->request->queryParams);
 
         $dataProvider->query->andWhere(['>',StyleStone::tableName().'.status',-1]);
         $dataProvider->query->andWhere(['=',StyleStone::tableName().'.style_id',$style_id]);
-
-        $stone_type = $searchModel->stone_type;
-        if (!empty($stone_type)) {
-            $dataProvider->query->andFilterWhere(['in','stone_type',$stone_type]);
-        }
-
 
         return $this->render('index', [
             'dataProvider' => $dataProvider,
@@ -62,6 +55,55 @@ class StyleStoneController extends BaseController
             'style_id' => $style_id,
             'tabList'=>\Yii::$app->styleService->style->menuTabList($style_id,$returnUrl),
             'style' => $style,
+        ]);
+    }
+
+
+    /**
+     * ajax编辑/创建
+     *
+     * @return mixed|string|\yii\web\Response
+     * @throws \yii\base\ExitException
+     */
+    public function actionAjaxEdit()
+    {
+        $id = Yii::$app->request->get('id');
+        $model = $this->findModel($id);
+        // ajax 校验
+        $this->activeFormValidate($model);
+        if ($model->load(Yii::$app->request->post())) {
+            try{
+                $trans = Yii::$app->db->beginTransaction();
+                if($model->isNewRecord){
+                    $stone_types = $model->stone_type;
+                    foreach ($stone_types as $stone_type){
+                        $new_model = new StyleStone();
+                        $new_model->attributes = $model->attributes;
+                        $new_model['stone_type'] = $stone_type;
+                        $count = StyleStone::find()->where(['style_id'=>$model->style_id,'position'=>$model->position,'stone_type'=>$stone_type])->count();
+                        if($count){
+                            return $this->message(\addons\Style\common\enums\StoneEnum::getValue($model->position,'getPositionMap').'和'.Yii::$app->attr->valueName($stone_type).'已经存在', $this->redirect(Yii::$app->request->referrer), 'error');
+                        }
+                        if(false === $new_model->save()){
+                            throw new \Exception($this->getError($new_model));
+                        }
+                    }
+
+                }else{
+                    if(false === $model->save()){
+                        throw new \Exception($this->getError($model));
+                    }
+                }
+                $trans->commit();
+                return $this->message("保存成功", $this->redirect(Yii::$app->request->referrer), 'success');
+            }catch (\Exception $e){
+                $trans->rollBack();
+                return $this->message($e->getMessage(), $this->redirect(Yii::$app->request->referrer), 'error');
+            }
+        }
+
+        return $this->renderAjax($this->action->id, [
+            'model' => $model,
         ]);
     }
 

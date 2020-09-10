@@ -35,8 +35,9 @@ class StyleStone extends BaseModel
     public function rules()
     {
         return [
-            [['style_id','position'], 'required'],
-            [[ 'style_id','position','stone_type', 'creator_id', 'sort', 'status', 'created_at', 'updated_at'], 'integer'],
+            [['style_id','position','stone_type'], 'required'],
+            [[ 'style_id','position', 'creator_id', 'sort', 'status', 'created_at', 'updated_at'], 'integer'],
+//            [['style_id','position','stone_type'],'unique','targetAttribute' => ['style_id', 'position','stone_type'],'comboNotUnique'=>'已经存在'],
 
         ];
     }
