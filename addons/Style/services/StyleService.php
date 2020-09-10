@@ -212,8 +212,8 @@ class StyleService extends Service
             if ($style == false) {
                 throw new \Exception("数据格式不对");
             }
-            $style_name = $form->formatValue($style['style_name'], "");
-            $style_sn = $form->formatValue($style['style_sn'], "");
+            $style_name = $form->formatValue($style['style_name'] ?? "", "");
+            $style_sn = $form->formatValue($style['style_sn'] ?? "", "");
             if (!empty($style_sn)) {
                 if ($key = array_search($style_sn, $style_sns)) {
                     $flag = false;
@@ -231,7 +231,7 @@ class StyleService extends Service
                 $error[$i][] = "款号不能为空";
             }
             $styleAttr = $this->extendAttrByStyleSn($style_sn);
-            $style_cate_id = $form->formatValue($style['style_cate_id'], 0);
+            $style_cate_id = $form->formatValue($style['style_cate_id'] ?? 0, 0);
             if (empty($style_cate_id)) {
                 $style_cate_id = $styleAttr['style_cate_id'] ?? "";
                 if (empty($style_cate_id) && !empty($style_sn)) {
@@ -247,10 +247,10 @@ class StyleService extends Service
             if (empty($style_name)) {
                 //$flag = false;
                 //$error[$i][] = "款式名称不能为空";
-                $styleCate = StringHelper::strToChineseCharacters($style['style_cate_id']);
+                $styleCate = StringHelper::strToChineseCharacters($style['style_cate_id'] ?? "");
                 $style_name = $styleCate[0][0] ?? "待定";
             }
-            $product_type_id = $form->formatValue($style['product_type_id'], 0);
+            $product_type_id = $form->formatValue($style['product_type_id'] ?? 0, 0);
             if (empty($product_type_id)) {
                 $flag = false;
                 $error[$i][] = "产品线不能为空";
@@ -258,7 +258,7 @@ class StyleService extends Service
                 $flag = false;
                 $error[$i][] = "产品线填写有误";
             }
-            $style_channel_id = $form->formatValue($style['style_channel_id'], 0);
+            $style_channel_id = $form->formatValue($style['style_channel_id'] ?? 0, 0);
             if (empty($style_channel_id)) {
                 $style_channel_id = $styleAttr['style_channel_id'] ?? "";
                 if (empty($style_channel_id) && !empty($style_sn)) {
@@ -271,8 +271,8 @@ class StyleService extends Service
                 $flag = false;
                 $error[$i][] = "归属渠道填写有误";
             }
-            $style_source_id = $form->formatValue($style['style_source_id'], 0);
-            $style_material = $form->formatValue($style['style_material'], "");
+            $style_source_id = $form->formatValue($style['style_source_id'] ?? 0, 0);
+            $style_material = $form->formatValue($style['style_material'] ?? "", "");
             if ($style_material === "") {
                 $style_material = $styleAttr['style_material'] ?? "";
                 if (empty($style_material) && !empty($style_sn)) {
@@ -285,7 +285,7 @@ class StyleService extends Service
                 $flag = false;
                 $error[$i][] = "款式材质填写有误";
             }
-            $style_sex = $form->formatValue($style['style_sex'], 0);
+            $style_sex = $form->formatValue($style['style_sex'] ?? "", 0);
             if (empty($style_sex)) {
                 $style_sex = $styleAttr['style_sex'] ?? "";
                 if (empty($style_sex) && !empty($style_sn)) {
@@ -298,76 +298,76 @@ class StyleService extends Service
                 $flag = false;
                 $error[$i][] = "款式性别填写有误";
             }
-            $suttle_weight = $form->formatValue($style['suttle_weight'], 0);
+            $suttle_weight = $form->formatValue($style['suttle_weight'] ?? 0, 0);
             if (!empty($suttle_weight) && !is_numeric($suttle_weight)) {
                 $flag = false;
                 $error[$i][] = "连石重填写有误";
             }
-            $is_made = $form->formatValue($style['is_made'], 1);
+            $is_made = $form->formatValue($style['is_made'] ?? "", 1);
             if (!is_numeric($is_made)) {
                 $flag = false;
                 $error[$i][] = "是否支持定制填写有误";
             }
             //$is_gift = $form->formatValue($style['is_gift'], 0);
-            $status = $form->formatValue($style['status'], 0);
+            $status = $form->formatValue($style['status'] ?? "", 0);
             if (!is_numeric($status)) {
                 $flag = false;
                 $error[$i][] = "是否启用填写有误";
             }
-            $remark = $form->formatValue($style['remark'], "");
+            $remark = $form->formatValue($style['remark'] ?? "", "");
 
-            $factory_name1 = $form->formatValue($style['factory_id1'], 0);
+            $factory_name1 = $form->formatValue($style['factory_id1'] ?? 0, 0);
             $factory_id1 = $factory_name1;
             if (!is_numeric($factory_id1)) {
                 $flag = false;
                 $error[$i][] = "工厂1名称填写有误";
             }
-            $factory_mo1 = $form->formatValue($style['factory_mo1'], "");
-            $factory_remark1 = $form->formatValue($style['factory_remark1'], "");
-            $shipping_time1 = $form->formatValue($style['shipping_time1'], "");
-            $factory_made1 = $form->formatValue($style['factory_made1'], 1);
+            $factory_mo1 = $form->formatValue($style['factory_mo1'] ?? "", "");
+            $factory_remark1 = $form->formatValue($style['factory_remark1'] ?? "", "");
+            $shipping_time1 = $form->formatValue($style['shipping_time1'] ?? "", "");
+            $factory_made1 = $form->formatValue($style['factory_made1'] ?? "", 1);
             if (!is_numeric($factory_made1)) {
                 $flag = false;
                 $error[$i][] = "工厂1是否支持定制填写有误";
             }
-            $factory_status1 = $form->formatValue($style['factory_status2'], 1);
+            $factory_status1 = $form->formatValue($style['factory_status2'] ?? "", 1);
             if (!is_numeric($factory_status1)) {
                 $flag = false;
                 $error[$i][] = "工厂1是否启用填写有误";
             }
 
-            $factory_name2 = $form->formatValue($style['factory_id2'], 0);
+            $factory_name2 = $form->formatValue($style['factory_id2'] ?? 0, 0);
             $factory_id2 = $factory_name2;
             if (!is_numeric($factory_id2)) {
                 $flag = false;
                 $error[$i][] = "工厂2名称填写有误";
             }
-            $factory_mo2 = $form->formatValue($style['factory_mo2'], "");
-            $factory_remark2 = $form->formatValue($style['factory_remark2'], "");
-            $shipping_time2 = $form->formatValue($style['shipping_time2'], "");
-            $factory_made2 = $form->formatValue($style['factory_made2'], 1);
+            $factory_mo2 = $form->formatValue($style['factory_mo2'] ?? "", "");
+            $factory_remark2 = $form->formatValue($style['factory_remark2'] ?? "", "");
+            $shipping_time2 = $form->formatValue($style['shipping_time2'] ?? "", "");
+            $factory_made2 = $form->formatValue($style['factory_made2'] ?? "", 1);
             if (!is_numeric($factory_made2)) {
                 $flag = false;
                 $error[$i][] = "工厂2是否支持定制填写有误";
             }
-            $factory_status2 = $form->formatValue($style['factory_status2'], 1);
+            $factory_status2 = $form->formatValue($style['factory_status2'] ?? "", 1);
             if (!is_numeric($factory_status2)) {
                 $flag = false;
                 $error[$i][] = "工厂2是否启用填写有误";
             }
 
-            $peishi_fee = $form->formatValue($style['peishi_fee'], '0.00');
-            $peijian_fee = $form->formatValue($style['peijian_fee'], '0.00');
-            $gram_fee = $form->formatValue($style['gram_fee'], '0.00');
-            $basic_fee = $form->formatValue($style['basic_fee'], '0.00');
-            $xiangshi_fee = $form->formatValue($style['xiangshi_fee'], '0.00');
-            $technology_fee = $form->formatValue($style['technology_fee'], '0.00');
-            $fense_fee = $form->formatValue($style['fense_fee'], '0.00');
-            $penlasa_fee = $form->formatValue($style['penlasa_fee'], '0.00');
-            $bukou_fee = $form->formatValue($style['bukou_fee'], '0.00');
-            $templet_fee = $form->formatValue($style['templet_fee'], '0.00');
-            $cert_fee = $form->formatValue($style['cert_fee'], '0.00');
-            $other_fee = $form->formatValue($style['other_fee'], '0.00');
+            $peishi_fee = $form->formatValue($style['peishi_fee'] ?? "", '0.00');
+            $peijian_fee = $form->formatValue($style['peijian_fee'] ?? "", '0.00');
+            $gram_fee = $form->formatValue($style['gram_fee'] ?? "", '0.00');
+            $basic_fee = $form->formatValue($style['basic_fee'] ?? "", '0.00');
+            $xiangshi_fee = $form->formatValue($style['xiangshi_fee'] ?? "", '0.00');
+            $technology_fee = $form->formatValue($style['technology_fee'] ?? "", '0.00');
+            $fense_fee = $form->formatValue($style['fense_fee'] ?? "", '0.00');
+            $penlasa_fee = $form->formatValue($style['penlasa_fee'] ?? "", '0.00');
+            $bukou_fee = $form->formatValue($style['bukou_fee'] ?? "", '0.00');
+            $templet_fee = $form->formatValue($style['templet_fee'] ?? "", '0.00');
+            $cert_fee = $form->formatValue($style['cert_fee'] ?? "", '0.00');
+            $other_fee = $form->formatValue($style['other_fee'] ?? "", '0.00');
 
             $creator_id = \Yii::$app->user->identity->getId();
             //款式信息
@@ -655,7 +655,12 @@ class StyleService extends Service
             //4.款式材质
             $material_id = $styleArr[8] ?? "";
             $materialArr = StyleMaterialEnum::getMap();
-            $style_material = $materialArr[$material_id] ?? "";
+            if(!in_array($material_id, array_keys($materialArr))){
+                $style_material = "";
+            }else{
+                $style_material = $material_id;
+            }
+            //$style_material = $materialArr[$material_id] ?? "";
         }
         return [
             'style_cate_id' => $style_cate_id,
