@@ -138,7 +138,7 @@ class StyleController extends BaseController
             try {
                 $trans = \Yii::$app->db->beginTransaction();
                 $model->file = UploadedFile::getInstance($model, 'file');
-                Yii::$app->styleService->style->uploadStyles($model);
+                \Yii::$app->styleService->style->uploadStyles($model);
                 $trans->commit();
                 \Yii::$app->getSession()->setFlash('success', '保存成功');
                 return $this->redirect(\Yii::$app->request->referrer);

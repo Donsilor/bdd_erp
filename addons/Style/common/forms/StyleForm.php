@@ -3,6 +3,7 @@
 namespace addons\Style\common\forms;
 
 use addons\Style\common\enums\StyleCateEnum;
+use addons\Style\common\enums\StyleChannelEnum;
 use addons\Style\common\enums\StyleSexEnum;
 use Yii;
 use addons\Style\common\models\Style;
@@ -195,13 +196,13 @@ class StyleForm extends Style
     /**
      * {@inheritdoc}
      */
-    public function getCateCodeId($cate)
+    public function getCateCodeId($cateCode)
     {
         $cate_type_id = 0;
         $style_sex = 0;
         $codeInfo = StyleCateEnum::getCodeMap();
         foreach ($codeInfo as $id => $code) {
-            if ($sex = array_search($cate, $code) !== false) {
+            if ($sex = array_search($cateCode, $code) !== false) {
                 $cate_type_id = $id;
                 switch ($sex) {
                     case StyleSexEnum::MAN:
@@ -217,6 +218,15 @@ class StyleForm extends Style
             }
         }
         return [$cate_type_id, $style_sex];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getChannelCodeId($channelCode)
+    {
+        $codeInfo = array_flip(StyleChannelEnum::getCodeMap());
+        return $codeInfo[$channelCode] ?? 0;
     }
 
     /**

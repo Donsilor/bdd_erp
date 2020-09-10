@@ -3,6 +3,7 @@
 namespace addons\Style\services;
 
 use addons\Style\common\enums\StyleCateEnum;
+use addons\Style\common\enums\StyleMaterialEnum;
 use Yii;
 use common\helpers\Url;
 use common\components\Service;
@@ -218,12 +219,26 @@ class StyleService extends Service
                     $error[$i][] = "款号与第" . ($key + 1) . "行款号重复";
                 }
                 $style_sns[$i] = $style_sn;
+
+                $styleModel = Style::findOne(['style_sn'=>$style_sn]);
+                if(!empty($styleModel)){
+                    $flag = false;
+                    $error[$i][] = "款号在系统已存在，不能重复";
+                }
+            }else{
+                $flag = false;
+                $error[$i][] = "款号不能为空";
             }
             $styleAttr = $this->extendAttrByStyleSn($style_sn);
             $style_cate_id = $form->formatValue($style['style_cate_id'], 0);
             if (empty($style_cate_id)) {
-                $flag = false;
-                $error[$i][] = "款式分类不能为空";
+                $style_cate_id = $styleAttr['style_cate_id'] ?? "";
+                if (empty($style_cate_id) && !empty($style_sn)) {
+                    $flag = false;
+                    $error[$i][] = "款号填写有误，无法获取款式分类";
+                }
+//                $flag = false;
+//                $error[$i][] = "款式分类不能为空";
             } elseif (!is_numeric($style_cate_id)) {
                 $flag = false;
                 $error[$i][] = "款式分类填写有误";
@@ -232,7 +247,7 @@ class StyleService extends Service
                 //$flag = false;
                 //$error[$i][] = "款式名称不能为空";
                 $styleCate = StringHelper::strToChineseCharacters($style['style_cate_id']);
-                $style_name = $styleCate[0][0] ?? "1";
+                $style_name = $styleCate[0][0] ?? "未定";
             }
             $product_type_id = $form->formatValue($style['product_type_id'], 0);
             if (empty($product_type_id)) {
@@ -244,8 +259,13 @@ class StyleService extends Service
             }
             $style_channel_id = $form->formatValue($style['style_channel_id'], 0);
             if (empty($style_channel_id)) {
-                $flag = false;
-                $error[$i][] = "归属渠道不能为空";
+                $style_channel_id = $styleAttr['style_channel_id'] ?? "";
+                if (empty($style_channel_id) && !empty($style_sn)) {
+                    $flag = false;
+                    $error[$i][] = "款号填写有误，无法获取款式渠道";
+                }
+//                $flag = false;
+//                $error[$i][] = "归属渠道不能为空";
             } elseif (!is_numeric($style_channel_id)) {
                 $flag = false;
                 $error[$i][] = "归属渠道填写有误";
@@ -253,16 +273,26 @@ class StyleService extends Service
             $style_source_id = $form->formatValue($style['style_source_id'], 0);
             $style_material = $form->formatValue($style['style_material'], 0);
             if ($style_material === "") {
-                $flag = false;
-                $error[$i][] = "款式材质不能为空";
+                $style_material = $styleAttr['style_material'] ?? "";
+                if (empty($style_material) && !empty($style_sn)) {
+                    $flag = false;
+                    $error[$i][] = "款号填写有误，无法获取款式材质";
+                }
+//                $flag = false;
+//                $error[$i][] = "款式材质不能为空";
             } elseif (!is_numeric($style_material)) {
                 $flag = false;
                 $error[$i][] = "款式材质填写有误";
             }
             $style_sex = $form->formatValue($style['style_sex'], 0);
             if (empty($style_sex)) {
-                $flag = false;
-                $error[$i][] = "款式性别不能为空";
+                $style_sex = $styleAttr['style_sex'] ?? "";
+                if (empty($style_sex) && !empty($style_sn)) {
+                    $flag = false;
+                    $error[$i][] = "款号填写有误，无法获取款式性别";
+                }
+//                $flag = false;
+//                $error[$i][] = "款式性别不能为空";
             } elseif (!is_numeric($style_sex)) {
                 $flag = false;
                 $error[$i][] = "款式性别填写有误";
@@ -587,19 +617,22 @@ class StyleService extends Service
     {
         $model = new StyleForm();
         $style_material = "";//款式材质
-        $cate_type_id = $style_sex = $style_channel_id = 0;
+        $style_cate_id = $style_sex = $style_channel_id = 0;
         if (!empty($style_sn)) {
             $styleArr = str_split(strtoupper($style_sn));
-            $cateCode = $styleArr[1] ?? "";
             //1.产品分类,//2.款式性别
-            list($cate_type_id, $style_sex) = $model->getCateCodeId($cateCode);
+            $cateCode = $styleArr[1] ?? "";
+            list($style_cate_id, $style_sex) = $model->getCateCodeId($cateCode);
             //3.款式渠道
-            $style_channel_id = 1;
+            $channelCode = $styleArr[0] ?? "";
+            $style_channel_id = $model->getChannelCodeId($channelCode);;
             //4.款式材质
-            $style_material = 1;
+            $material_id = $styleArr[8] ?? "";
+            $materialArr = StyleMaterialEnum::getMap();
+            $style_material = $materialArr[$material_id] ?? "";
         }
         return [
-            'cate_type_id' => $cate_type_id,
+            'style_cate_id' => $style_cate_id,
             'style_sex' => $style_sex,
             'style_channel_id' => $style_channel_id,
             'style_material' => $style_material,

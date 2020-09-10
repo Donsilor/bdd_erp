@@ -1029,7 +1029,7 @@ class WarehouseBillTService extends Service
 
     /**
      *
-     * 金料额=(金价*净重*(1+损耗))
+     * 金料额=(金价*金重*(1+损耗))
      * @param WarehouseBillTGoodsForm $form
      * @return integer
      * @throws
@@ -1189,7 +1189,7 @@ class WarehouseBillTService extends Service
 
     /**
      *
-     * 总工费=(配石费+基本工费+配件工费+镶石费+表面工艺费+分色分件费+喷拉砂费+补口费+版费+证书费+其它费用)
+     * 总工费=(配石费+基本工费+配件工费+镶石费+表面工艺费+分色分件费+喷砂费+拉砂费+补口费+版费+证书费+其它费用)
      * @param WarehouseBillTGoodsForm $form
      * @return integer
      * @throws
@@ -1204,7 +1204,8 @@ class WarehouseBillTService extends Service
         $total_gong_fee = bcadd($total_gong_fee, $this->calculateXiangshiFee($form), 3);
         $total_gong_fee = bcadd($total_gong_fee, $form->biaomiangongyi_fee, 3);//表面工艺费
         $total_gong_fee = bcadd($total_gong_fee, $form->fense_fee, 3);//分件/分色费
-        $total_gong_fee = bcadd($total_gong_fee, $form->penlasha_fee, 3);//喷拉砂费
+        $total_gong_fee = bcadd($total_gong_fee, $form->penlasha_fee, 3);//喷砂费
+        $total_gong_fee = bcadd($total_gong_fee, $form->lasha_fee, 3);//拉砂费
         $total_gong_fee = bcadd($total_gong_fee, $form->bukou_fee, 3);//补口费
         //$total_gong_fee = bcadd($total_gong_fee, $form->extra_stone_fee, 3);//超石费
         $total_gong_fee = bcadd($total_gong_fee, $form->templet_fee, 3);//样板工费
@@ -1216,7 +1217,7 @@ class WarehouseBillTService extends Service
 
     /**
      *
-     * 工厂成本=(主副石成本(厂配)+总工费)
+     * 工厂成本=(配料(厂配)+主副石成本(厂配)+配件(厂配)+总工费)
      * @param WarehouseBillTGoodsForm $form
      * @return integer
      * @throws
