@@ -496,7 +496,7 @@ class StyleService extends Service
                 $styleM->audit_status = AuditStatusEnum::PASS;
                 $styleM->auditor_id = \Yii::$app->user->identity->getId();
                 $styleM->audit_time = time();
-                $styleM->audit_remark = "批量导入";
+                $styleM->audit_remark = "批量导入系统自动审核";
             } else {
                 $styleM->audit_status = AuditStatusEnum::PENDING;
             }
