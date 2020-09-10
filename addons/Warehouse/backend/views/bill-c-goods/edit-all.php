@@ -74,7 +74,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                  goods_id:goods_id,
                              },
                              success: function (data) {
-                                 window.location.href='<?= \Yii::app()->request->getUrl(); ?>';
+                                 window.location.href='<?= \Yii::$app->request->getUrl(); ?>';
                              }
                          });
                      }                       
