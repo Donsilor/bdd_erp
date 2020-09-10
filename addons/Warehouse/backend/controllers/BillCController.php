@@ -321,12 +321,10 @@ class BillCController extends BaseController
     {
         if(Yii::$app->request->get('download')) {
             $file = dirname(dirname(__FILE__)).'/resources/excel/其它出库单数据模板导入.xlsx';
-            $array = explode('/',$file);
-            $basename = end($array);
             $content = file_get_contents($file);
             if (!empty($content)) {
                 header("Content-type:application/vnd.ms-excel");
-                header("Content-Disposition: attachment;filename=".$basename);
+                header("Content-Disposition: attachment;filename=其它出库单数据模板导入".date("Ymd").".xlsx");
                 header("Content-Transfer-Encoding: binary");
                 exit($content);
             }
