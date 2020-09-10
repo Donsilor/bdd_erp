@@ -222,7 +222,11 @@ function openIframe(title, width, height, content, offset) {
                         rfMsg(data.message);
                     } else {
                         layer.close(index);
-                        location.reload();
+                        if(data.data.jumpUrl) {
+                        	window.location.href = data.data.jumpUrl;
+                        }else{
+                        	location.reload();
+                        }
                     }
                 }
             });

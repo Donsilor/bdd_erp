@@ -232,7 +232,7 @@ class StyleService extends Service
                 $flag = false;
                 $error[$i][] = "款号不能为空";
             }
-            $styleAttr = $this->extendAttrByStyleSn($style_sn);
+            $styleAttr = $this->extendAttrByStyleSn($style_sn);//款号获取款式属性
             $style_cate_id = $form->formatValue($style['style_cate_id'] ?? 0, 0);
             if (empty($style_cate_id)) {
                 $style_cate_id = $styleAttr['style_cate_id'] ?? "";
@@ -277,7 +277,7 @@ class StyleService extends Service
             $style_material = $form->formatValue($style['style_material'] ?? "", "");
             if ($style_material === "") {
                 $style_material = $styleAttr['style_material'] ?? "";
-                if (empty($style_material) && !empty($style_sn)) {
+                if ($style_material === "" && !empty($style_sn)) {
                     $flag = false;
                     $error[$i][] = "款号填写有误，无法获取款式材质";
                 }
@@ -402,7 +402,7 @@ class StyleService extends Service
                 'factory_mo' => $factory_mo1,
                 'shipping_time' => $shipping_time1,
                 'is_made' => $factory_made1,
-                'is_default' => 1,
+                'is_default' => ConfirmEnum::YES,
                 'remark' => $factory_remark1,
                 'status' => $factory_status1,
                 'creator_id' => $creator_id,
@@ -415,6 +415,7 @@ class StyleService extends Service
                 'factory_mo' => $factory_mo2,
                 'shipping_time' => $shipping_time2,
                 'is_made' => $factory_made2,
+                'is_default' => ConfirmEnum::NO,
                 'remark' => $factory_remark2,
                 'status' => $factory_status2,
                 'creator_id' => $creator_id,
@@ -547,18 +548,16 @@ class StyleService extends Service
                     $saveFee[] = $feeData;
                 }
             }
-
             $command = \Yii::$app->db->createCommand("call sp_create_style_attributes(" . $styleM->id . ");");
             $command->execute();
-
 
             //款式属性信息
             foreach ($attrList[$k] as $attrId => $val) {
                 if (!is_array($val)) {
                     if ($val !== "") {
                         //$saveAttr[$styleM->id][$attrId] = $val;
-                        $attr = Yii::$app->styleService->attribute->getSpecAttrList($attrId,$styleM->style_cate_id);
-                        if($attr){
+                        $attr = Yii::$app->styleService->attribute->getSpecAttrList($attrId, $styleM->style_cate_id);
+                        if ($attr) {
                             $attr = $attr[0];
                             $attr_list = [
                                 'style_id' => $styleM->id,
@@ -572,27 +571,22 @@ class StyleService extends Service
 
                             ];
 
-                            $styleAttr = StyleAttribute::find()->where(['style_id'=>$styleM->id,'attr_id'=>$attrId])->one();
-                            if(!$styleAttr){
+                            $styleAttr = StyleAttribute::find()->where(['style_id' => $styleM->id, 'attr_id' => $attrId])->one();
+                            if (!$styleAttr) {
                                 $styleAttr = new StyleAttribute();
                             }
                             $styleAttr->attributes = $attr_list;
-                            if(false === $styleAttr->save()){
+                            if (false === $styleAttr->save()) {
                                 throw new \Exception($this->getError($styleAttr));
                             }
 //                            $saveAttr[] = $attr_list;
-                        }else{
+                        } else {
                             continue;
                         }
-
-
                     }
                 }
             }
-
-
         }
-
         //创建款式工厂信息
         if (!empty($saveFactory)) {
             $value = [];
@@ -619,7 +613,6 @@ class StyleService extends Service
                 }
             }
         }
-
         //创建款式工费信息
         if (!empty($saveFee)) {
             $value = [];
@@ -717,9 +710,9 @@ class StyleService extends Service
             //4.款式材质
             $material_id = $styleArr[8] ?? "";
             $materialArr = StyleMaterialEnum::getMap();
-            if(!in_array($material_id, array_keys($materialArr))){
+            if (!in_array($material_id, array_keys($materialArr))) {
                 $style_material = "";
-            }else{
+            } else {
                 $style_material = $material_id;
             }
             //$style_material = $materialArr[$material_id] ?? "";
