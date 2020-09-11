@@ -2,7 +2,6 @@
 
 namespace addons\Warehouse\services;
 
-use common\enums\ConfirmEnum;
 use Yii;
 use common\components\Service;
 use common\helpers\SnHelper;
@@ -23,6 +22,7 @@ use common\enums\AuditStatusEnum;
 use common\helpers\UploadHelper;
 use common\enums\StatusEnum;
 use common\helpers\StringHelper;
+use common\enums\ConfirmEnum;
 use yii\helpers\Url;
 
 /**
