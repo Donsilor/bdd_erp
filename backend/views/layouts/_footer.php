@@ -492,57 +492,6 @@ $this->registerJs($script);
             });
         });
     }
-
-    //确认弹窗-Iframe
-    function batchPop3(obj) {
-    	let $e = $(obj);
-        let url = $e.attr('href');
-        let text = $e.text();
-        let grid = $e.data('grid') || 'grid';
-        let id = $e.closest("tr").data("key");
-        let ids = [];
-        if(id) {
-            ids.push(id);
-        }
-        else if($("#"+grid).length>0) {
-            ids = $("#"+grid).yiiGridView("getSelectedRows");
-        }        
-        if(ids.length===0) {
-            rfInfo('未选中数据！','');
-            return false;
-        }
-        if($.isArray(ids)){
-            ids = ids.join(',');
-        } 
-        appConfirm("确定要"+text+"吗?", '', function (code) {
-            if(code !== "defeat") {
-                return;
-            }
-            $.ajax({
-                type: "get",
-                url: url,
-                dataType: "json",
-                data: {
-                    ids: ids
-                },
-                success: function (data) {
-                    if (parseInt(data.code) !== 200) {
-                        rfAffirm(data.message);
-                    } else {
-                        var title = $e.data('title') || '基本信息';
-                        var width = $e.data('width') || '90%';
-                        var height = $e.data('height') || '90%';
-                        var offset = $e.data('offset') || '20px';
-                        url = data.data.url || url+"?ids="+ids;
-                        openIframe(title, width, height, url, offset);
-                        //$e.preventDefault();
-                        return false;
-                    }
-                }
-            });
-        });       
-        
-    }
     //批量填充
     function rfBatchFull(obj) {
         let $e = $(obj);
@@ -620,6 +569,55 @@ $this->registerJs($script);
         }
 
     }
+    /**
+     * 一键粘贴
+     * @param  {String} id [需要粘贴的内容]
+     * @param  {String} attr [需要 copy 的属性，默认是 innerText，主要用途例如赋值 a 标签上的 href 链接]
+     *
+     * range + selection
+     *
+     * 1.创建一个 range
+     * 2.把内容放入 range
+     * 3.把 range 放入 selection
+     *
+     * 注意：参数 attr 不能是自定义属性
+     * 注意：对于 user-select: none 的元素无效
+     * 注意：当 id 为 false 且 attr 不会空，会直接复制 attr 的内容
+     */
+    function copy (id, attr = null) {
+        let target = null;
+        if (attr) {
+            target = document.createElement('div');
+            target.id = 'tempTarget';
+            target.style.opacity = '0';
+            if (id) {
+                let curNode = document.querySelector('#' + id);
+                target.innerText = curNode[attr];
+            } else {
+                target.innerText = attr;
+            }
+            document.body.appendChild(target);
+        } else {
+            target = document.querySelector('#' + id);
+        }
 
+        try {
+            let range = document.createRange();
+            range.selectNode(target);
+            window.getSelection().removeAllRanges();
+            window.getSelection().addRange(range);
+            document.execCommand('copy');
+            window.getSelection().removeAllRanges();
+            rfMsg('复制成功');
+            console.log('复制成功')
+        } catch (e) {
+            console.log('复制失败')
+        }
+
+        if (attr) {
+            // remove temp target
+            target.parentElement.removeChild(target);
+        }
+    }
 
 </script>
