@@ -111,7 +111,7 @@ class AuthItemChildService extends Service
             $res = Yii::$app->db->createCommand()->batchInsert(AuthItem::tableName(), $field, $rows)->execute();
             
             $sql = "update ".AuthItemChild::tableName()." child inner join ".AuthItem::tableName()." item on child.item_key=item.key set child.item_id=item.id where item.addons_name='{$name}'";
-            $res = Yii::$app->db->createCommand($sql)->getRawSql();
+            $res = Yii::$app->db->createCommand($sql)->execute();
         }        
         unset($data, $allAuth, $installData, $defaultAuth);
     }
