@@ -117,10 +117,10 @@ class WarehouseBillLService extends Service
             foreach ($billGoods as $good) {
                 $goods_ids[] = $good->goods_id;
                 //$good  = new WarehouseBillGoodsL();
-                if(empty($good->goods_name)){
+                if (empty($good->goods_name)) {
                     $good->goods_name = "待定";
                 }
-                if(empty($good->jintuo_type)){
+                if (empty($good->jintuo_type)) {
                     $good->jintuo_type = JintuoTypeEnum::Chengpin;
                 }
                 $goods[] = [
@@ -259,7 +259,7 @@ class WarehouseBillLService extends Service
 
                     //配件信息
                     'peijian_way' => $good->parts_way,//配件方式
-                    'peijian_type' => $good->parts_type,//配件类型
+                    //'peijian_type' => $good->parts_type,//配件类型
                     //'peijian_cate' => $good->parts_way,
                     'parts_num' => $good->parts_num,//配件数量
                     'parts_material' => $good->parts_material,//配件材质
@@ -304,18 +304,18 @@ class WarehouseBillLService extends Service
                     'created_at' => time(),
                 ];
                 $bill_goods[] = [
-                    'bill_id' => $good->bill_id,
-                    'bill_no' => $bill->bill_no,
-                    'bill_type' => $bill->bill_type,
-                    'goods_id' => $good->goods_id,
-                    'goods_name' => $good->goods_name,
-                    'style_sn' => $good->style_sn,
-                    'goods_num' => 1,
-                    'put_in_type' => $bill->put_in_type,
-                    'cost_price' => $good->cost_price,
-                    //'sale_price' => $good->sale_price,
-                    //'market_price' => $good->market_price,
-                    'status' => StatusEnum::ENABLED,
+                    'bill_id' => $good->bill_id,//单据ID
+                    'bill_no' => $bill->bill_no,//单据编号
+                    'bill_type' => $bill->bill_type,//单据类型
+                    'goods_id' => $good->goods_id,//货号
+                    'goods_name' => $good->goods_name,//商品名称
+                    'style_sn' => $good->style_sn,//款式编号
+                    'goods_num' => $good->goods_num,//商品数量
+                    'put_in_type' => $bill->put_in_type,//入库方式
+                    'cost_price' => $good->cost_price,//成本价
+                    //'sale_price' => $good->sale_price,//销售价
+                    //'market_price' => $good->market_price,//市场价
+                    'status' => StatusEnum::ENABLED,//状态
                     'creator_id' => \Yii::$app->user->identity->getId(),
                     'created_at' => time(),
                 ];
