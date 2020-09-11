@@ -2,6 +2,7 @@
 
 namespace addons\Warehouse\backend\controllers;
 
+use addons\Warehouse\common\enums\BillStatusEnum;
 use Yii;
 use common\traits\Curd;
 use common\helpers\Url;
@@ -294,6 +295,9 @@ class BillTGoodsController extends BaseController
         $dataProvider->query->andWhere(['=', 'bill_id', $bill_id]);
         //$dataProvider->query->andWhere(['>',WarehouseBillGoodsT::tableName().'.status',-1]);
         $bill = WarehouseBill::find()->where(['id' => $bill_id])->one();
+        if ($bill->bill_status != BillStatusEnum::SAVE) {
+            exit("单据不是保存状态");
+        }
         $model = new WarehouseBillTGoodsForm();
         $total = $model->goodsSummary($bill_id);
         return $this->render($this->action->id, [
