@@ -416,7 +416,7 @@ class WarehouseGoods extends BaseModel
         if($this->chuku_time && $this->chuku_time >= $this->created_at) {
             return bcsub ($this->chuku_time,$this->created_at);
         }else{
-            return 0;
+            return bcsub (time(),$this->created_at);
         }        
     }
     /**
