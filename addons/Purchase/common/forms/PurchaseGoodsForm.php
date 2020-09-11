@@ -193,11 +193,11 @@ class PurchaseGoodsForm extends PurchaseGoods
 
             if(InputTypeEnum::isText($spec->input_type)) {
                 $model->attr_value_id  = 0;
-                $model->attr_value = $attr_value_id;
+                $model->attr_value = (string)$attr_value_id;
             }else if(is_numeric($attr_value_id)){
                 $attr_value = \Yii::$app->attr->valueName($attr_value_id);
                 $model->attr_value_id  = $attr_value_id; 
-                $model->attr_value = $attr_value;
+                $model->attr_value = (string)$attr_value;
                 /* $pices = explode('-',$attr_value);
                 if(count($pices)==2) {
                     if(is_numeric($pices[0]) && is_numeric($pices[1])) {
@@ -322,10 +322,9 @@ class PurchaseGoodsForm extends PurchaseGoods
         if($this->isNewRecord){
             $gold_weight = $this->suttle_weight - ($main_stone_weight * $main_stone_num + $side_stone1_weight +
                     $side_stone2_weight + $side_stone3_weight) * 0.2 - $this->parts_weight;
-
-            //print_r($this->attr_custom);
-            //$this->attr_custom[AttrIdEnum::JINZHONG] = $gold_weight;
-            //print_r($this->attr_custom);exit;
+            $gold_weight = $gold_weight < 0 ? 0 : $gold_weight;
+            $this->attr_custom[AttrIdEnum::JINZHONG] = $gold_weight;
+//            print_r($this->attr_custom);exit;
         }else{
             $gold_weight = $atts[AttrIdEnum::JINZHONG];
         }
