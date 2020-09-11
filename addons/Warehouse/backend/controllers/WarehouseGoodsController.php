@@ -54,14 +54,12 @@ class WarehouseGoodsController extends BaseController
         $search->attributes = Yii::$app->request->get();
         $dataProvider = $searchModel
             ->search(Yii::$app->request->queryParams,['updated_at']);
-
-        if(!$search->goods_status && !$searchModel->goods_status){
+        if(!Yii::$app->request->get()){
             $search->goods_status = GoodsStatusEnum::IN_STOCK;
             $searchModel->goods_status = GoodsStatusEnum::IN_STOCK;
         }
 
         $dataProvider->query
-
             ->andFilterWhere(['goods_status'=>$search->goods_status])
             ->andFilterWhere(['material_type'=>$search->material_type])
             ->andFilterWhere(['jintuo_type'=>$search->jintuo_type])
@@ -70,7 +68,7 @@ class WarehouseGoodsController extends BaseController
             ->andFilterWhere(['in', 'style_cate_id', $search->styleCateIds()])
             ->andFilterWhere(['in', 'product_type_id', $search->proTypeIds()])
             ->andFilterWhere(['like', 'goods_name', $search->goods_name])
-            ->andFilterWhere($search->betweenGoldWeight())
+//            ->andFilterWhere($search->betweenGoldWeight())
             ->andFilterWhere($search->betweenSuttleWeight())
             ->andFilterWhere($search->betweenDiamondCarat())
             ->andFilterWhere(['in', 'warehouse_id', $search->warehouse_id])
@@ -78,7 +76,6 @@ class WarehouseGoodsController extends BaseController
             ->andFilterWhere(['in', 'style_channel_id', $search->style_channel_id])
             ->andFilterWhere(['in', 'goods_source', $search->goods_source])
             ->andFilterWhere($search->goods_sn());
-
 
 
         $created_at = $searchModel->created_at;
@@ -329,6 +326,8 @@ class WarehouseGoodsController extends BaseController
         return ExcelHelper::exportData($list, $header, '数据导出_' . time());
 
     }
+
+
 
 
 }
