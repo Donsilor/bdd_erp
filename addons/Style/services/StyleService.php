@@ -554,35 +554,7 @@ class StyleService extends Service
 //            $command = \Yii::$app->db->createCommand("call sp_create_style_attributes(" . $styleM->id . ");");
 //            $command->execute();
 
-            //款式属性信息
-            foreach ($attrList[$k] as $attrId => $val) {
-                //$saveAttr[$styleM->id][$attrId] = $val;
-                $attr = Yii::$app->styleService->attribute->getSpecAttrList($attrId, $styleM->style_cate_id);
-                if ($attr) {
-                    $attr = $attr[0] ?? [];
-                    $attr_list = [
-                        'style_id' => $styleM->id,
-                        'attr_id' => $attrId,
-                        'input_type' => $attr['input_type'] ?? 0,
-                        'is_require' => $attr['is_require'] ?? 0,
-                        'attr_type' => $attr['attr_type'] ?? 0,
-                        'is_inlay' => $attr['is_inlay'] ?? 0,
-                        'sort' => $attr['sort'] ?? 0,
-                        'attr_values' => (string)$val,
-                    ];
-                    $styleAttr = StyleAttribute::find()->where(['style_id' => $styleM->id, 'attr_id' => $attrId])->one();
-                    if (!$styleAttr) {
-                        $styleAttr = new StyleAttribute();
-                    }
-                    $styleAttr->attributes = $attr_list;
-                    if (false === $styleAttr->save()) {
-                        throw new \Exception($this->getError($styleAttr));
-                    }
-//                  $saveAttr[] = $attr_list;
-                } else {
-                    continue;
-                }
-            }
+
         }
         //创建款式工厂信息
         if (!empty($saveFactory)) {
@@ -653,6 +625,42 @@ class StyleService extends Service
                 $command->execute();
             }
         }
+
+        //款式属性信息
+        foreach ($style_ids as $style_id){
+            $styleM = Style::find()->where(['id'=>$style_id])->one();
+            foreach ($attrList[$k] as $attrId => $val) {
+                //$saveAttr[$styleM->id][$attrId] = $val;
+                $attr = Yii::$app->styleService->attribute->getSpecAttrList($attrId, $styleM->style_cate_id);
+                if ($attr) {
+                    $attr = $attr[0] ?? [];
+                    $attr_list = [
+                        'style_id' => $styleM->id,
+                        'attr_id' => $attrId,
+                        'input_type' => $attr['input_type'] ?? 0,
+                        'is_require' => $attr['is_require'] ?? 0,
+                        'attr_type' => $attr['attr_type'] ?? 0,
+                        'is_inlay' => $attr['is_inlay'] ?? 0,
+                        'sort' => $attr['sort'] ?? 0,
+                        'attr_values' => (string)$val,
+                    ];
+                    $styleAttr = StyleAttribute::find()->where(['style_id' => $styleM->id, 'attr_id' => $attrId])->one();
+                    if (!$styleAttr) {
+                        $styleAttr = new StyleAttribute();
+                    }
+                    $styleAttr->attributes = $attr_list;
+                    if (false === $styleAttr->save()) {
+                        throw new \Exception($this->getError($styleAttr));
+                    }
+//                  $saveAttr[] = $attr_list;
+                } else {
+                    continue;
+                }
+            }
+        }
+
+
+
 
         //创建款式属性信息(写入文本值)
         //$saveAttr
