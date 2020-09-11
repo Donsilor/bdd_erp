@@ -190,9 +190,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         <div class="col-lg-4">
                             <?= $form->field($model, 'peijian_way')->dropDownList(\addons\Warehouse\common\enums\PeiJianWayEnum::getMap(), ['prompt' => '请选择'])?>
                         </div>
-                        <div class="col-lg-4">
-                            <?= $form->field($model, 'peijian_cate')->dropDownList(\addons\Warehouse\common\enums\PeiJianCateEnum::getMap(), ['prompt' => '请选择'])?>
-                        </div>
+
                         <div class="col-lg-4">
                             <?= $form->field($model, 'parts_material')->textInput() ?>
                         </div>

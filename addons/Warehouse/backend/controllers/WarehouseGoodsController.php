@@ -7,7 +7,9 @@ use addons\Style\common\enums\LogTypeEnum;
 use addons\Style\common\enums\StyleSexEnum;
 use addons\Style\common\models\ProductType;
 use addons\Style\common\models\StyleCate;
+use addons\Supply\common\enums\PeishiTypeEnum;
 use addons\Warehouse\common\enums\GoodsStatusEnum;
+use addons\Warehouse\common\enums\PeiLiaoWayEnum;
 use addons\Warehouse\common\enums\PutInTypeEnum;
 use addons\Warehouse\common\forms\WarehouseGoodsForm;
 use addons\Warehouse\common\forms\WarehousGoodsSearchForm;
@@ -43,7 +45,7 @@ class WarehouseGoodsController extends BaseController
             'scenario' => 'default',
             'partialMatchAttributes' => ['goods_name'], // 模糊查询
             'defaultOrder' => [
-                'id' => SORT_DESC
+                'id' => SORT_DESC,
             ],
             'pageSize' => $this->getPageSize(),
             'relations' => [
@@ -361,11 +363,26 @@ class WarehouseGoodsController extends BaseController
             ['扣环', 'cramp_ring' ,  'text'],
             ['爪头形状	', 'talon_head_type' ,  'text'],
             ['配料方式	', 'peiliao_way' ,  'text'],
+            ['连石重(g)', 'suttle_weight' , 'text'],
+            ['金重(g)', 'gold_weight' , 'text'],
+            ['损耗(%)', 'gold_loss' , 'text'],
+            ['含耗重(g)	', 'gross_weight' , 'text'],
+            ['折足(g)', 'pure_gold' , 'text'],
+            ['金价', 'gold_price' , 'text'],
+            ['金料额', 'gold_amount' , 'text'],
+            ['主石配石类型', 'main_peishi_type' , 'text'],
+            ['主石编号', 'main_stone_sn' , 'text'],
+            ['主石配石方式', 'main_peishi_way' , 'text'],
+            ['主石类型	', 'main_stone_type' , 'text'],
+            ['主石编号	', 'main_stone_num' , 'text'],
+
+
+
 
             ['款式性别', 'style_sex' , 'text'],
             ['材质颜色', 'goods_color' ,  'text'],
             ['货重', 'gold_weight' , 'text'],
-            ['净重', 'suttle_weight' , 'text'],
+
             ['损耗', 'gold_loss' , 'text'],
             ['含耗重', 'gold_weight_sum' , 'text'],
             ['金价', 'gold_price' , 'text'],
@@ -466,8 +483,14 @@ class WarehouseGoodsController extends BaseController
             $list['style_sex'] = StyleSexEnum::getValue($list['style_sex']);
 
             //入库方式
-            $list['peiliao_way'] = PutInTypeEnum::getValue($list['put_in_type']);
-
+            $list['peiliao_way'] = PeiLiaoWayEnum::getValue($list['peiliao_way']);
+            //主石配石类型
+            $list['main_peishi_type'] = PeishiTypeEnum::getValue($list['main_peishi_type']);
+            //主石配石方式
+            $list['main_peishi_way'] = PeishiTypeEnum::getValue($list['main_peishi_type']);
+            //主石类型
+            $main_stone_type = empty($list['main_stone_type']) ? '' : $list['main_stone_type'];
+            $list['main_stone_type'] = \Yii::$app->attr->valueName($main_stone_type);
 
 
             //钻石净度
