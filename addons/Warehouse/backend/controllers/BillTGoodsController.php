@@ -181,9 +181,9 @@ class BillTGoodsController extends BaseController
 
                 \Yii::$app->warehouseService->billT->syncUpdatePrice($model);
                 \Yii::$app->warehouseService->billT->WarehouseBillTSummary($model->bill_id);
-//                if (false === $model->save()) {
-//                    throw new \Exception($this->getError($model));
-//                }
+                if (false === $model->save()) {
+                    throw new \Exception($this->getError($model));
+                }
                 $trans->commit();
                 Yii::$app->getSession()->setFlash('success', '保存成功');
                 return ResultHelper::json(200, '保存成功');

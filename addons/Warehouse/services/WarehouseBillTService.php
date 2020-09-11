@@ -1025,6 +1025,9 @@ class WarehouseBillTService extends Service
      */
     public function calculateLossWeight($form)
     {
+        if(!$form->gold_loss){
+            $form->gold_loss = 0;
+        }
         return bcmul($this->calculateGoldWeight($form), 1 + ($form->gold_loss / 100), 3) ?? 0;
     }
 
