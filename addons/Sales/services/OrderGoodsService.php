@@ -81,10 +81,9 @@ class OrderGoodsService extends Service
 
             $wareshouse_goods->goods_status = GoodsStatusEnum::IN_SALE;
             //销售后更新出库成本
-            $outbound_cost = \Yii::$app->warehouseService->warehouseGoods->getOutboundCost($wareshouse_goods->goods_id);
-            $wareshouse_goods->sales_time = time();
-            $wareshouse_goods->outbound_cost = $outbound_cost;
-            if(false === $wareshouse_goods->save(true,['goods_status','outbound_cost','sales_time'])){
+            $chuku_price = \Yii::$app->warehouseService->warehouseGoods->getChukuPrice($wareshouse_goods->goods_id);
+            $wareshouse_goods->chuku_price = $chuku_price;
+            if(false === $wareshouse_goods->save(true,['goods_status','chuku_price'])){
                 throw new \Exception($this->getError($wareshouse_goods));
             }
 

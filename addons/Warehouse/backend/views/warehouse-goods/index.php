@@ -67,10 +67,16 @@ $this->params['breadcrumbs'][] = $this->title;
                                             <label class="control-label" for="cate-sort">金托类型：</label>
                                         </div>
                                         <div class="col-sm-8">
-                                            <?= Html::dropDownList('jintuo_type', $search->jintuo_type, \addons\Style\common\enums\JintuoTypeEnum::getMap(), [
-                                                'class' => 'form-control',
-                                                'prompt' => '全部',
-                                            ]) ?>
+                                            <?= \kartik\select2\Select2::widget([
+                                                'name'=>'jintuo_type',
+                                                'value'=>$search->jintuo_type,
+                                                'data'=>\addons\Style\common\enums\JintuoTypeEnum::getMap(),
+                                                'options' => ['placeholder' =>"请选择",'multiple'=>false,'style'=>"width:180px"],
+                                                'pluginOptions' => [
+                                                    'allowClear' => true,
+                                                ],
+                                            ])
+                                            ?>
                                             <div class="help-block"></div>
                                         </div>
                                     </div>
@@ -116,10 +122,16 @@ $this->params['breadcrumbs'][] = $this->title;
                                             <label class="control-label" for="cate-sort">商品状态：</label>
                                         </div>
                                         <div class="col-sm-8">
-                                            <?= Html::dropDownList('goods_status', $search->goods_status, \addons\Warehouse\common\enums\GoodsStatusEnum::getMap(), [
-                                                'class' => 'form-control',
-                                                'prompt' => '全部',
-                                            ]) ?>
+                                            <?= \kartik\select2\Select2::widget([
+                                                'name'=>'goods_status',
+                                                'value'=>$search->goods_status,
+                                                'data'=>\addons\Warehouse\common\enums\GoodsStatusEnum::getMap(),
+                                                'options' => ['placeholder' =>"请选择",'multiple'=>false,'style'=>"width:180px"],
+                                                'pluginOptions' => [
+                                                    'allowClear' => true,
+                                                ],
+                                            ])
+                                            ?>
                                             <div class="help-block"></div>
                                         </div>
                                     </div>
@@ -130,10 +142,17 @@ $this->params['breadcrumbs'][] = $this->title;
                                             <label class="control-label" for="cate-sort">材质：</label>
                                         </div>
                                         <div class="col-sm-8">
-                                            <?= Html::dropDownList('material_type', $search->material_type, Yii::$app->attr->valueMap(AttrIdEnum::MATERIAL_TYPE), [
-                                                'class' => 'form-control',
-                                                'prompt' => '全部',
-                                            ]) ?>
+                                            <?= \kartik\select2\Select2::widget([
+                                                'name'=>'material_type',
+                                                'value'=>$search->material_type,
+                                                'data'=>Yii::$app->attr->valueMap(AttrIdEnum::MATERIAL_TYPE),
+                                                'options' => ['placeholder' =>"请选择",'multiple'=>false,'style'=>"width:180px"],
+                                                'pluginOptions' => [
+                                                    'allowClear' => true,
+                                                ],
+                                            ])
+                                            ?>
+
                                             <div class="help-block"></div>
                                         </div>
                                     </div>
@@ -326,7 +345,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 ?>
                 <?= GridView::widget([
                     'dataProvider' => $dataProvider,
-                    'filterModel' => $searchModel,
+//                    'filterModel' => $searchModel,
                     'tableOptions' => ['class' => 'table table-hover'],
                     'options' => ['style'=>'white-space:nowrap;' ],
                     'showFooter' => false,//显示footer行
@@ -1288,21 +1307,12 @@ $this->params['breadcrumbs'][] = $this->title;
                             ]),
                             'headerOptions' => [],
                         ],
-
-
-
                         [
-                            'attribute'=>'outbound_cost',
-                            'value'=> function($model){
-                                if($model->goods_status == GoodsStatusEnum::IN_SALE || $model->goods_status == GoodsStatusEnum::HAS_SOLD){
-                                    return $model->outbound_cost;
-                                }else{
-                                    return Yii::$app->warehouseService->warehouseGoods->getOutboundCost($model->goods_id);
-
-                                }
-
+                            'attribute'=>'chuku_price',
+                            'value'=> function($model){                                
+                                 return $model->getChukuPrice();                                
                             },
-                            'filter' => Html::activeTextInput($searchModel, 'outbound_cost', [
+                            'filter' => Html::activeTextInput($searchModel, 'chuku_price', [
                                 'class' => 'form-control',
                                 'style'=> 'width:100px;'
                             ]),
@@ -1444,7 +1454,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'model' => $searchModel,
                                 'attribute' => 'created_at',
                                 'value' => $searchModel->created_at,
-                                'options' => ['readonly' => false,'class'=>'form-control','style'=>'background-color:#fff;width:200px;'],
+                                'options' => ['readonly' => false,'class'=>'form-control','style'=>'background-color:#fff;width:150px;'],
                                 'pluginOptions' => [
                                     'format' => 'yyyy-mm-dd',
                                     'locale' => [
@@ -1459,19 +1469,39 @@ $this->params['breadcrumbs'][] = $this->title;
 
                             ]),
                             'value'=>function($model){
-                                return Yii::$app->formatter->asDate($model->created_at);
+                                return Yii::$app->formatter->asDatetime($model->created_at);
                             }
 
                         ],
                         [
+                            'attribute'=>'chuku_time',
+                            'filter' => DateRangePicker::widget([    // 日期组件
+                                    'model' => $searchModel,
+                                    'attribute' => 'chuku_time',
+                                    'value' => $searchModel->chuku_time,
+                                    'options' => ['readonly' => false,'class'=>'form-control','style'=>'background-color:#fff;width:150px;'],
+                                    'pluginOptions' => [
+                                            'format' => 'yyyy-mm-dd',
+                                            'locale' => [
+                                                    'separator' => '/',
+                                            ],
+                                            'endDate' => date('Y-m-d',time()),
+                                            'todayHighlight' => true,
+                                            'autoclose' => true,
+                                            'todayBtn' => 'linked',
+                                            'clearBtn' => true,
+                                    ],
+                                    
+                            ]),
+                            'value'=>function($model){
+                                return Yii::$app->formatter->asDatetime($model->chuku_time);
+                            }
+                        
+                        ],
+                        [
                             'label'=>'库龄',
                             'value'=>function($model){
-                                if($model->goods_status == GoodsStatusEnum::IN_SALE || $model->goods_status == GoodsStatusEnum::HAS_SOLD){
-                                    return Yii::$app->formatter->asDuration(bcsub ($model->sales_time,$model->created_at));
-                                }else{
-                                    return Yii::$app->formatter->asDuration(bcsub (time(),$model->created_at));
-                                }
-
+                                 return Yii::$app->formatter->asDuration($model->getGoodsAge());
                             },
                             'filter' => false,
                             'headerOptions' => [],

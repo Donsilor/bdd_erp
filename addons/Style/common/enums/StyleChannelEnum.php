@@ -10,7 +10,7 @@ class StyleChannelEnum extends \common\enums\BaseEnum
 {
     const WHOLESALE = 3;
     const CROSS_BORDER = 9;
-    const INLAND = 16;
+    const INLAND = 12;
 
 
     /**
