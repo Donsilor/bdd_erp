@@ -800,7 +800,7 @@ class WarehouseBillTService extends Service
                 $jintuo_type = JintuoTypeEnum::getIdByName($jintuo_type);
                 if (empty($jintuo_type)) {
                     $flag = false;
-                    $error[$i][] = "金托类型：[" . $jintuo_type . "]录入值有误";
+                    $error[$i][] = "金托类型：录入值有误";
                     $jintuo_type = "";
                 }
             }else{
