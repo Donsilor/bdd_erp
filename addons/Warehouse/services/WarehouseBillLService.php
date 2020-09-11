@@ -254,7 +254,7 @@ class WarehouseBillLService extends Service
                     'second_stone_num3' => $good->second_stone_num3,//副石3粒数
                     'second_stone_weight3' => $good->second_stone_weight3,//副石3重量
                     'second_stone_price3' => $good->second_stone_price3,//副石3单价
-                    //'second_stone3_cost' => $good->second_stone_amount3,//副石3成本价
+                    'second_stone3_cost' => $good->second_stone_amount3,//副石3成本价
                     'shiliao_remark' => $good->stone_remark,
 
                     //配件信息
