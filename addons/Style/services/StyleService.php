@@ -551,8 +551,8 @@ class StyleService extends Service
                     $saveFee[] = $feeData;
                 }
             }
-            $command = \Yii::$app->db->createCommand("call sp_create_style_attributes(" . $styleM->id . ");");
-            $command->execute();
+//            $command = \Yii::$app->db->createCommand("call sp_create_style_attributes(" . $styleM->id . ");");
+//            $command->execute();
 
             //款式属性信息
             foreach ($attrList[$k] as $attrId => $val) {
@@ -638,50 +638,49 @@ class StyleService extends Service
         }
 
         //创建款式属性信息(属性值)
-//        if (!empty($style_ids)) {
-//            $styleIds = [];
-//            foreach ($style_ids as $style_id) {
-//                $styleIds[] = $style_id;
-//                if (count($styleIds) >= 10) {
-//                    $command = \Yii::$app->db->createCommand("call sp_create_style_attributes(" . implode(',', $styleIds) . ");");
-//                    $command->execute();
-//                    $styleIds = [];
-//                }
-//            }
-//            if (!empty($styleIds)) {
-//                $command = \Yii::$app->db->createCommand("call sp_create_style_attributes(" . implode(',', $styleIds) . ");");
-//                $command->execute();
-//            }
-//        }
+        if (!empty($style_ids)) {
+            $styleIds = [];
+            foreach ($style_ids as $style_id) {
+                $styleIds[] = $style_id;
+                if (count($styleIds) >= 1000) {
+                    $command = \Yii::$app->db->createCommand("call sp_create_style_attributes('" . implode(',', $styleIds) . "');");
+                    $command->execute();
+                    $styleIds = [];
+                }
+            }
+            if (!empty($styleIds)) {
+                $command = \Yii::$app->db->createCommand("call sp_create_style_attributes('" . implode(',', $styleIds) . "');");
+                $command->execute();
+            }
+        }
 
         //创建款式属性信息(写入文本值)
         //$saveAttr
-//        if (!empty($saveAttr)) {
-//            $value = [];
-//            $key = array_keys($saveAttr[0]);
-//            foreach ($saveAttr as $item) {
-//                $styleAttrM = new StyleAttribute();
-//                $styleAttrM->setAttributes($item);
-//                if (!$styleAttrM->validate()) {
-//                    throw new \Exception($this->getError($styleAttrM));
-//                }
-//                print_r($item);exit;
-//                $value[] = array_values($item);
-//                if (count($value) >= 10) {
-//                    $res = Yii::$app->db->createCommand()->batchInsert($styleAttrM::tableName(), $key, $value)->execute();
-//                    if (false === $res) {
-//                        throw new \Exception("创建款式属性信息失败1");
-//                    }
-//                    $value = [];
-//                }
-//            }
-//            if (!empty($value)) {
-//                $res = \Yii::$app->db->createCommand()->batchInsert($styleAttrM::tableName(), $key, $value)->execute();
-//                if (false === $res) {
-//                    throw new \Exception("创建款式属性信息失败2");
-//                }
-//            }
-//        }
+        if (!empty($saveAttr)) {
+            $value = [];
+            $key = array_keys($saveAttr[0]);
+            foreach ($saveAttr as $item) {
+                $styleAttrM = new StyleAttribute();
+                $styleAttrM->setAttributes($item);
+                if (!$styleAttrM->validate()) {
+                    throw new \Exception($this->getError($styleAttrM));
+                }
+                $value[] = array_values($item);
+                if (count($value) >= 10) {
+                    $res = Yii::$app->db->createCommand()->batchInsert($styleAttrM::tableName(), $key, $value)->execute();
+                    if (false === $res) {
+                        throw new \Exception("创建款式属性信息失败1");
+                    }
+                    $value = [];
+                }
+            }
+            if (!empty($value)) {
+                $res = \Yii::$app->db->createCommand()->batchInsert($styleAttrM::tableName(), $key, $value)->execute();
+                if (false === $res) {
+                    throw new \Exception("创建款式属性信息失败2");
+                }
+            }
+        }
     }
 
     /**
