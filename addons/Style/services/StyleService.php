@@ -556,33 +556,31 @@ class StyleService extends Service
 
             //款式属性信息
             foreach ($attrList[$k] as $attrId => $val) {
-                if ($val !== "" && !is_array($val)) {
-                    //$saveAttr[$styleM->id][$attrId] = $val;
-                    $attr = Yii::$app->styleService->attribute->getSpecAttrList($attrId, $styleM->style_cate_id);
-                    if ($attr) {
-                        $attr = $attr[0] ?? [];
-                        $attr_list = [
-                            'style_id' => $styleM->id,
-                            'attr_id' => $attrId,
-                            'input_type' => $attr['input_type'] ?? 0,
-                            'is_require' => $attr['is_require'] ?? 0,
-                            'attr_type' => $attr['attr_type'] ?? 0,
-                            'is_inlay' => $attr['is_inlay'] ?? 0,
-                            'sort' => $attr['sort'] ?? 0,
-                            'attr_values' => (string)$val,
-                        ];
-                        $styleAttr = StyleAttribute::find()->where(['style_id' => $styleM->id, 'attr_id' => $attrId])->one();
-                        if (!$styleAttr) {
-                            $styleAttr = new StyleAttribute();
-                        }
-                        $styleAttr->attributes = $attr_list;
-                        if (false === $styleAttr->save()) {
-                            throw new \Exception($this->getError($styleAttr));
-                        }
-//                            $saveAttr[] = $attr_list;
-                    } else {
-                        continue;
+                //$saveAttr[$styleM->id][$attrId] = $val;
+                $attr = Yii::$app->styleService->attribute->getSpecAttrList($attrId, $styleM->style_cate_id);
+                if ($attr) {
+                    $attr = $attr[0] ?? [];
+                    $attr_list = [
+                        'style_id' => $styleM->id,
+                        'attr_id' => $attrId,
+                        'input_type' => $attr['input_type'] ?? 0,
+                        'is_require' => $attr['is_require'] ?? 0,
+                        'attr_type' => $attr['attr_type'] ?? 0,
+                        'is_inlay' => $attr['is_inlay'] ?? 0,
+                        'sort' => $attr['sort'] ?? 0,
+                        'attr_values' => (string)$val,
+                    ];
+                    $styleAttr = StyleAttribute::find()->where(['style_id' => $styleM->id, 'attr_id' => $attrId])->one();
+                    if (!$styleAttr) {
+                        $styleAttr = new StyleAttribute();
                     }
+                    $styleAttr->attributes = $attr_list;
+                    if (false === $styleAttr->save()) {
+                        throw new \Exception($this->getError($styleAttr));
+                    }
+//                  $saveAttr[] = $attr_list;
+                } else {
+                    continue;
                 }
             }
         }
