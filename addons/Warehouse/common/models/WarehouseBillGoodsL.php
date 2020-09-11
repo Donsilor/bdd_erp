@@ -329,10 +329,10 @@ class WarehouseBillGoodsL extends BaseModel
             //配件信息
             'parts_way' => '配件方式',
             'parts_type' => '配件类型',
-            'parts_material' => '配件材质',
             'parts_num' => '配件数量',
-            'parts_price' => '配件金价/g',
+            'parts_material' => '配件材质',
             'parts_gold_weight' => '配件金重(g)',
+            'parts_price' => '配件金价/g',
             'parts_amount' => '配件总额',
 
             //工费信息
