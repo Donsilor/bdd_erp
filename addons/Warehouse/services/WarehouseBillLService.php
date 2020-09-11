@@ -117,99 +117,97 @@ class WarehouseBillLService extends Service
                 $goods_ids[] = $good->goods_id;
                 $good  = new WarehouseBillGoodsL();
                 $goods[] = [
-                    'goods_id' => $good->goods_id,
-                    'goods_name' => $good->goods_name,
-                    'goods_image' => $good->goods_image,
-                    'style_sn' => $good->style_sn,
-                    'product_type_id' => $good->product_type_id,
-                    'style_cate_id' => $good->style_cate_id,
-                    'style_sex' => $good->style_sex,
-                    'style_channel_id' => $good->style_channel_id,
-                    'qiban_sn' => $good->qiban_sn,
-                    'qiban_type' => $good->qiban_type,
-                    'goods_status' => GoodsStatusEnum::IN_STOCK,
-                    'goods_source' => GoodSourceEnum::QUICK_STORAGE,
-                    'supplier_id' => $bill->supplier_id,
-                    'put_in_type' => $bill->put_in_type,
-                    'company_id' => 1,//暂时为1
-                    'warehouse_id' => $bill->to_warehouse_id ?: 0,
-                    'order_detail_id' => (string)$good->order_detail_id ?? "",
-                    'order_sn' => $good->order_sn ?? "",
-                    'produce_sn' => $good->produce_sn,
-                    'factory_mo' => $good->factory_mo,
-                    'kezi' => $good->kezi,
-                    'biaomiangongyi' => $good->biaomiangongyi,
-                    'is_inlay' => $good->is_inlay,
-                    'chain_long' => $good->chain_long,
-                    'chain_type' => $good->chain_type,
-                    'cramp_ring' => $good->cramp_ring,
-                    'talon_head_type' => $good->talon_head_type,
-                    'xiangqian_craft' => $good->xiangqian_craft,
-                    'parts_gold_weight' => $good->parts_gold_weight,
-                    'xiangkou' => $good->xiangkou,
-                    'length' => $good->length,
-                    'parts_num' => $good->parts_num,
-                    'peijian_type' => $good->parts_type,
-                    'peijian_cate' => $good->parts_way,
-                    'parts_material' => $good->parts_material,
-                    'parts_price' => $good->parts_price,
-                    'parts_amount' => $good->parts_amount,
-                    'xianqian_price' => $good->xianqian_price,
+                    //基本信息
+                    'goods_id' => $good->goods_id,//条码号
+                    'goods_name' => $good->goods_name,//商品名称
+                    'goods_image' => $good->goods_image,//商品图片
+                    'style_sn' => $good->style_sn,//款号
+                    'style_cate_id' => $good->style_cate_id,//产品分类
+                    'product_type_id' => $good->product_type_id,//产品线
+                    'style_sex' => $good->style_sex,//款式性别
+                    'style_channel_id' => $good->style_channel_id,//款式渠道
+                    'qiban_sn' => $good->qiban_sn,//起版号
+                    'qiban_type' => $good->qiban_type,//起版类型
+                    'goods_num' => $good->goods_num,//商品数量
+                    'goods_status' => GoodsStatusEnum::IN_STOCK,//库存状态
+                    'goods_source' => GoodSourceEnum::QUICK_STORAGE,//入库存方式
+                    'supplier_id' => $bill->supplier_id,//供应商
+                    'put_in_type' => $bill->put_in_type,//入库方式
+                    'company_id' => 1,//所在公司(默认1)
+                    'warehouse_id' => $bill->to_warehouse_id ?: 0,//入库仓库
+                    'order_sn' => $good->order_sn ?? "",//订单号
+                    'order_detail_id' => (string)$good->order_detail_id ?? "",//订单明细ID
+                    'produce_sn' => $good->produce_sn,//布产号
+
+                    //属性信息
+                    'material' => $good->material,//主成色
+                    'material_type' => $good->material_type,//材质
+                    'material_color' => $good->material_color,//材质颜色
+                    'xiangkou' => $good->xiangkou,//戒托镶口
+                    'finger' => $good->finger,//手寸(美号)
+                    'finger_hk' => $good->finger_hk,//手寸(港号)
+                    'length' => $good->length,//尺寸
+                    'product_size' => $good->product_size,//成品尺寸
+                    'chain_long' => $good->chain_long,//链长
+                    'chain_type' => $good->chain_type,//链类型
+                    'cramp_ring' => $good->cramp_ring,//扣环
+                    'talon_head_type' => $good->talon_head_type,//爪头形状
+                    'kezi' => $good->kezi,//刻字
+
+                    //配件信息
+                    'peijian_way' => $good->parts_way,//配件方式
+                    'peijian_type' => $good->parts_type,//配件类型
+                    //'peijian_cate' => $good->parts_way,
+                    'parts_num' => $good->parts_num,//配件数量
+                    'parts_material' => $good->parts_material,//配件材质
+                    'parts_gold_weight' => $good->parts_gold_weight,//配件金重
+                    'parts_price' => $good->parts_price,//配件金料单价
+                    'parts_amount' => $good->parts_amount,//配件成本
+
                     //金料信息
-                    //'peiliao_type' => $good->peiliao_type,
-                    'gold_weight' => $good->gold_weight,
-                    'suttle_weight' => $good->suttle_weight,
+                    'peiliao_way' => $good->peiliao_way,//配料方式
+                    'gold_weight' => $good->gold_weight,//金重
+                    'suttle_weight' => $good->suttle_weight,//净重(连石重)
                     'gold_loss' => $good->gold_loss,
                     'gold_price' => $good->gold_price,
                     'gold_amount' => $good->gold_amount,
                     'gross_weight' => $good->gross_weight,
-                    'finger' => $good->finger,
-                    'finger_hk' => $good->finger_hk,
-                    'product_size' => $good->product_size,
-                    'cert_type' => $good->cert_type,
-                    'cert_id' => $good->cert_id,
-                    'goods_num' => $good->goods_num,
-                    //材质信息
-                    'material' => $good->material,
-                    'material_type' => $good->material_type,
-                    'material_color' => $good->material_color,
-                    'jintuo_type' => $good->jintuo_type,
-                    //石头信息
-                    'diamond_carat' => $good->diamond_carat,
-                    'diamond_clarity' => $good->diamond_clarity,
-                    'diamond_cut' => $good->diamond_cut,
-                    'diamond_shape' => $good->diamond_shape,
-                    'diamond_color' => $good->diamond_color,
+                    'pure_gold' => $good->pure_gold,
+
+                    //钻石信息
+//                    'diamond_carat' => $good->diamond_carat,
+//                    'diamond_clarity' => $good->diamond_clarity,
+//                    'diamond_cut' => $good->diamond_cut,
+//                    'diamond_shape' => $good->diamond_shape,
+//                    'diamond_color' => $good->diamond_color,
                     'diamond_polish' => $good->diamond_polish,
                     'diamond_symmetry' => $good->diamond_symmetry,
                     'diamond_fluorescence' => $good->diamond_fluorescence,
                     'diamond_discount' => $good->diamond_discount,
-                    'diamond_cert_type' => $good->diamond_cert_type,
-                    'diamond_cert_id' => $good->diamond_cert_id,
-                    //费用信息
-                    'market_price' => $good->market_price,
-                    'cost_price' => $good->cost_price,
-                    'bukou_fee' => $good->bukou_fee,
-                    'biaomiangongyi_fee' => $good->biaomiangongyi_fee,
-                    'xianqian_fee' => $good->xianqian_fee,
-                    'gong_fee' => $good->gong_fee,
-                    'total_gong_fee' => $good->total_gong_fee,
-                    'penrasa_fee' => $good->penlasha_fee,
-                    'edition_fee' => $good->templet_fee,
+//                    'diamond_cert_type' => $good->diamond_cert_type,
+//                    'diamond_cert_id' => $good->diamond_cert_id,
+
                     //主石
-                    'main_peishi_type' => $good->main_pei_type,
+                    'main_peishi_way' => $good->main_pei_type,
+                    //'main_peishi_type' => $good->main_pei_type,
                     'main_stone_sn' => $good->main_stone_sn,
                     'main_stone_type' => $good->main_stone_type,
                     'main_stone_num' => $good->main_stone_num,
                     'main_stone_price' => $good->main_stone_price,
                     'main_stone_colour' => $good->main_stone_colour,
                     'main_stone_size' => $good->main_stone_size,
-                    'shiliao_remark' => $good->stone_remark,
-                    'peishi_fee' => $good->peishi_gong_fee,
-                    'peishi_amount' => $good->peishi_fee,
+                    'main_stone_cost' => $good->main_stone_amount,
+                    //-----------------------------------
+                    'diamond_carat' => $good->main_stone_weight,
+                    'diamond_clarity' => $good->main_stone_clarity,
+                    'diamond_cut' => $good->main_stone_cut,
+                    'diamond_shape' => $good->diamond_shape,
+                    'diamond_color' => $good->diamond_color,
+                    'diamond_cert_type' => $good->main_cert_type,
+                    'diamond_cert_id' => $good->main_cert_id,
+
                     //副石1
-                    'second_peishi_type1' => $good->second_pei_type,
-                    'second_cert_id1' => $good->second_cert_id1,
+                    'second_peishi_way1' => $good->second_pei_type,
                     'second_stone_sn1' => $good->second_stone_sn1,
                     'second_stone_type1' => $good->second_stone_type1,
                     'second_stone_num1' => $good->second_stone_num1,
@@ -220,8 +218,13 @@ class WarehouseBillLService extends Service
                     'second_stone_shape1' => $good->second_stone_shape1,
                     'second_stone_size1' => $good->second_stone_size1,
                     'second_stone_colour1' => $good->second_stone_colour1,
+                    'second_cert_id1' => $good->second_cert_id1,
+                    'second_stone1_cost' => $good->second_stone_amount1,
+
+
                     //副石2
                     'second_peishi_type2' => $good->second_pei_type2,
+                    'second_stone_sn2' => $good->second_stone_sn2,
                     'second_stone_type2' => $good->second_stone_type2,
                     'second_stone_num2' => $good->second_stone_num2,
                     'second_stone_weight2' => $good->second_stone_weight2,
@@ -231,11 +234,45 @@ class WarehouseBillLService extends Service
                     'second_stone_shape2' => $good->second_stone_shape2,
                     'second_stone_size2' => $good->second_stone_size2,
                     //'second_stone_colour2' => $good->second_stone_colour2,
+                    'second_stone2_cost' => $good->second_stone_amount2,
+
                     //副石3
+                    'second_peishi_way3' => $good->second_pei_type3,
                     'second_stone_type3' => $good->second_stone_type3,
                     'second_stone_num3' => $good->second_stone_num3,
                     'second_stone_weight3' => $good->second_stone_weight3,
                     'second_stone_price3' => $good->second_stone_price3,
+                    'shiliao_remark' => $good->stone_remark,
+
+                    //工费信息
+                    'ke_gong_fee' => $good->gong_fee,
+                    'piece_fee' => $good->piece_fee,
+                    'peishi_fee' => $good->peishi_gong_fee,
+                    'peishi_amount' => $good->peishi_fee,
+                    'parts_fee' => $good->parts_fee,
+                    'bukou_fee' => $good->bukou_fee,
+                    'xianqian_price' => $good->xianqian_price,
+                    'biaomiangongyi_fee' => $good->biaomiangongyi_fee,
+                    'xianqian_fee' => $good->xianqian_fee,
+                    'gong_fee' => $good->gong_fee,
+                    'penrasa_fee' => $good->penlasha_fee,
+                    'lasha_fee' => $good->lasha_fee,
+                    'edition_fee' => $good->templet_fee,
+                    'total_gong_fee' => $good->total_gong_fee,
+
+                    //价格信息
+                    'cost_price' => $good->cost_price,
+                    'market_price' => $good->market_price,
+                    'markup_rate' => $good->markup_rate,
+
+                    //其他
+                    'cert_id' => $good->cert_id,
+                    'cert_type' => $good->cert_type,
+                    'jintuo_type' => $good->jintuo_type,
+                    'xiangqian_craft' => $good->xiangqian_craft,
+                    'biaomiangongyi' => $good->biaomiangongyi,
+                    'is_inlay' => $good->is_inlay,
+                    'factory_mo' => $good->factory_mo,
                     'remark' => $good->remark,
                     'creator_id' => \Yii::$app->user->identity->getId(),
                     'created_at' => time(),

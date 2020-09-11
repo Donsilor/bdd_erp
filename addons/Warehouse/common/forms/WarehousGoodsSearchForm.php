@@ -53,10 +53,16 @@ class WarehousGoodsSearchForm extends Model
      * @return array
      */
     public function goods_sn(){
-        $where = ['or',['=','style_sn',$this->goods_sn],['=','qiban_sn',$this->goods_sn]];
+        $where = ['or',['=','style_sn',trim($this->goods_sn)],['=','qiban_sn',trim($this->goods_sn)]];
         return $where;
     }
 
+    /**
+     * @return array
+     */
+    public function goods_name(){
+        return trim($this->goods_name);
+    }
     /**
      * @return array
      */
