@@ -2,6 +2,7 @@
 
 namespace addons\Warehouse\services;
 
+use common\enums\ConfirmEnum;
 use Yii;
 use common\components\Service;
 use common\helpers\SnHelper;
@@ -215,10 +216,10 @@ class WarehouseBillTService extends Service
             }
             $goods = $form->trimField($goods);
             $goods_id = $goods[0] ?? "";
-            $auto_goods_id = 1;//是否自动货号 默认手填
+            $auto_goods_id = ConfirmEnum::YES;//是否自动货号 默认手填
             if (empty($goods_id)) {
                 $goods_id = SnHelper::createGoodsId();
-                $auto_goods_id = 0;
+                $auto_goods_id = ConfirmEnum::NO;
             } else {
                 if ($key = array_search($goods_id, $goods_ids)) {
                     $flag = false;

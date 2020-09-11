@@ -2,12 +2,12 @@
 
 namespace addons\Style\common\forms;
 
-use addons\Style\common\enums\StyleCateEnum;
-use addons\Style\common\enums\StyleChannelEnum;
-use addons\Style\common\enums\StyleSexEnum;
 use Yii;
 use addons\Style\common\models\Style;
 use addons\Style\common\enums\FactoryFeeEnum;
+use addons\Style\common\enums\StyleCateEnum;
+use addons\Style\common\enums\StyleChannelEnum;
+use addons\Style\common\enums\StyleSexEnum;
 use common\helpers\StringHelper;
 use common\helpers\ArrayHelper;
 
@@ -204,7 +204,8 @@ class StyleForm extends Style
         $style_sex = 0;
         $codeInfo = StyleCateEnum::getCodeMap();
         foreach ($codeInfo as $id => $code) {
-            if ($sex = array_search($cateCode, $code) !== false) {
+            if (array_search($cateCode, $code) !== false) {
+                $sex = array_search($cateCode, $code);
                 $cate_type_id = $id;
                 switch ($sex) {
                     case StyleSexEnum::MAN:

@@ -115,7 +115,7 @@ class WarehouseBillLService extends Service
             $goods = $bill_goods = $goods_ids = [];
             foreach ($billGoods as $good) {
                 $goods_ids[] = $good->goods_id;
-                //$good  = new WarehouseBillGoodsL();
+                $good  = new WarehouseBillGoodsL();
                 $goods[] = [
                     'goods_id' => $good->goods_id,
                     'goods_name' => $good->goods_name,
