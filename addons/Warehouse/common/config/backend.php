@@ -250,9 +250,14 @@ return [
 
     'authItem' => [
         [
+            'title' => '所有权限',
+            'name' => '*',
+        ],
+        [
+                
             'title' => '仓储管理',
-            'name' => 'warehouse',
-            'child' => [
+            'name' => 'indexWarehouse',
+            'child' => [                
                 [
                     'title' =>'其他收货单',
                     'name'  => 'bill-t/index',
@@ -263,8 +268,6 @@ return [
                         ['title' => '审核','name'  => 'bill-t/ajax-audit'],
                         ['title' => '详情','name'  => 'bill-t/view'],
                         ['title' => '批量导入','name'  => 'bill-t/ajax-upload'],
-                        ['title' => '批量导入文件下载','name'  => 'bill-t/download-csv'],
-
                         ['title' => '单据明细(*)','name'  => 'bill-t-goods/*'],
                         ['title' => '结算商信息(*)','name'  => 'bill-pay/*'],
                         ['title' => '日志列表(*)','name'  => 'bill-log/*'],
