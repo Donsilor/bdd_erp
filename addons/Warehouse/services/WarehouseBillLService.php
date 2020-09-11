@@ -259,7 +259,7 @@ class WarehouseBillLService extends Service
 
                     //配件信息
                     'peijian_way' => $good->parts_way,//配件方式
-                    //'peijian_type' => $good->parts_type,//配件类型
+                    'peijian_type' => $good->parts_type,//配件类型
                     //'peijian_cate' => $good->parts_way,
                     'parts_num' => $good->parts_num,//配件数量
                     'parts_material' => $good->parts_material,//配件材质
