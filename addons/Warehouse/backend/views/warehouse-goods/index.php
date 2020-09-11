@@ -345,7 +345,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 ?>
                 <?= GridView::widget([
                     'dataProvider' => $dataProvider,
-                    'filterModel' => $searchModel,
+//                    'filterModel' => $searchModel,
                     'tableOptions' => ['class' => 'table table-hover'],
                     'options' => ['style'=>'white-space:nowrap;' ],
                     'showFooter' => false,//显示footer行
