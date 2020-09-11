@@ -58,10 +58,14 @@ class WarehouseBillTGoodsForm extends WarehouseBillGoodsL
     {
         $res = [];
         foreach ($data as $k => $v) {
-            $str = StringHelper::strIconv($v);
-            $str = str_replace(',', '，', $str);
-            $str = str_replace('】', '', $str);
-            $res[$k] = $str;
+            if($v !== ""){
+                $str = StringHelper::strIconv($v);
+                $str = str_replace(',', '，', $str);
+                $str = str_replace('】', '', $str);
+                $res[$k] = $str;
+            }else{
+                $res[$k] = "";
+            }
         }
         return $res ?? [];
     }
