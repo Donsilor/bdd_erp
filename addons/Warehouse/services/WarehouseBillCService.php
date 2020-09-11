@@ -572,9 +572,6 @@ class WarehouseBillCService extends WarehouseBillService
             throw new \Exception("[{$goods_id}]条码货号不是库存状态");
         }
         
-        //出库成本价计算
-        $chuku_price = Yii::$app->warehouseService->warehouseGoods->calcChukuPrice($goods);
-        
         $billGoods = new WarehouseBillGoods();
         $billGoods->attributes = [
                 'bill_id' =>$bill->id,
