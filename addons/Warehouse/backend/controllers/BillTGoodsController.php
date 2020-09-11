@@ -172,18 +172,17 @@ class BillTGoodsController extends BaseController
         $id = \Yii::$app->request->get('id');
         //$bill_id = Yii::$app->request->get('bill_id');
         $model = $this->findModel($id);
-        $model = $model ?? new WarehouseBillGoodsL();
+        $model = $model ?? new WarehouseBillTGoodsForm();
         // ajax 校验
         //$this->activeFormValidate($model);
         if ($model->load(\Yii::$app->request->post())) {
             try {
                 $trans = \Yii::$app->db->beginTransaction();
-
-                \Yii::$app->warehouseService->billT->syncUpdatePrice($model);
-                \Yii::$app->warehouseService->billT->WarehouseBillTSummary($model->bill_id);
                 if (false === $model->save()) {
                     throw new \Exception($this->getError($model));
                 }
+                \Yii::$app->warehouseService->billT->syncUpdatePrice($model);
+                \Yii::$app->warehouseService->billT->WarehouseBillTSummary($model->bill_id);
                 $trans->commit();
                 Yii::$app->getSession()->setFlash('success', '保存成功');
                 return ResultHelper::json(200, '保存成功');
