@@ -97,24 +97,24 @@ class WarehouseGoodsService extends Service
      * @param unknown $goods_id
      * @return number
      */
-    public function getOutboundCost($goods_id){
+    public function getChukuPrice($goods_id){
         $model = WarehouseGoods::find()->where(['goods_id'=>$goods_id])->one();
-        return $this->calcChukuPrice($model);
+        return $model->getChukuPrice();
     }
     /**
      * 计算出库成本价
      * @param WarehouseGoods $model
      */
-    public function calcChukuPrice($model) {
+    /* public function calcChukuPrice($model) {
         //产品线是Au990 ，Au999，Au9999
         if(in_array($model->product_type_id,[9,28,34])){
             $gold_price = \Yii::$app->goldTool->getGoldPrice('XAU');
-            $outbound_cost = $model->gold_weight * $gold_price * (1 + 0.03);
+            $chuku_price = $model->gold_weight * $gold_price * (1 + 0.03);
         }else{
-            $outbound_cost = $model->cost_price * (1 + 0.05);
+            $chuku_price = $model->cost_price * (1 + 0.05);
         }
-        return round ($outbound_cost,2);
-    }
+        return round ($chuku_price,2);
+    } */
     /**
      * 同步数据到库存
      * @param array $goods

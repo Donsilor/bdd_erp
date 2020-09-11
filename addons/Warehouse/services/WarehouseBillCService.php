@@ -75,16 +75,20 @@ class WarehouseBillCService extends WarehouseBillService
             }
         }
         foreach ($goods_ids as $goods_id){
-            $outbound_cost = Yii::$app->warehouseService->warehouseGoods->getOutboundCost($goods_id);
-            $res = WarehouseGoods::updateAll(['goods_status'=> GoodsStatusEnum::IN_SALE,'outbound_cost'=>$outbound_cost],['goods_id'=>$goods_id, 'goods_status' => GoodsStatusEnum::IN_STOCK]);
-            if(false === $res){
+            $goods = WarehouseGoods::find()->where(['goods_id'=>$goods_id])->one();
+            if($goods->goods_status != GoodsStatusEnum::IN_STOCK) {
+                throw new \Exception("[{$goods_id}]货号条码不是库存状态");
+            }
+            $goods->chuku_price = $goods->getChukuPrice();
+            $goods->chuku_time = time();
+            $goods->goods_status = GoodsStatusEnum::IN_SALE;            
+            if(false === $goods->save()){
                 throw new Exception('更新库存信息失败');
             }
         }
 
         //更新收货单汇总：总金额和总数量
-        $res = $this->billCSummary($form->id);
-        if(false === $res){
+        if(false === $this->billCSummary($form->id)){
             throw new Exception('更新单据汇总失败');
         }
     }
@@ -161,32 +165,30 @@ class WarehouseBillCService extends WarehouseBillService
         if(false === $form->validate()) {
             throw new \Exception($this->getError($form));
         }
+        
+        if($form->bill_status != BillStatusEnum::PENDING) {
+            throw new \Exception("单据不是待审核状态");
+        }
+        
         if($form->audit_status == AuditStatusEnum::PASS){
-            $form->bill_status = BillStatusEnum::CONFIRM;
+            
+            $form->bill_status = BillStatusEnum::CONFIRM;            
+            //更新库存状态
+            $billGoods = WarehouseBillGoods::find()->where(['bill_id' => $form->id])->select(['goods_id'])->all();
+            if(empty($billGoods)) {
+                throw new \Exception("单据明细不能为空");
+            }
+            
+            foreach ($billGoods as $goods){
+                $res = WarehouseGoods::updateAll(['goods_status' => GoodsStatusEnum::HAS_SOLD,'chuku_time'=>time()],['goods_id' => $goods->goods_id]);
+                if(!$res){
+                    throw new Exception("商品{$goods->goods_id}不存在，请查看原因");
+                }
+            }
+            
         }else{
             $form->bill_status = BillStatusEnum::SAVE;
-        }
-        $billGoods = WarehouseBillGoods::find()->select(['id', 'goods_id'])->where(['bill_id' => $form->id])->asArray()->all();
-        if(empty($billGoods)){
-            throw new \Exception("单据明细不能为空");
-        }
-        if($form->audit_status == AuditStatusEnum::PASS){
-            $goods_ids = ArrayHelper::getColumn($billGoods, 'goods_id');
-            //更新商品库存状态
-            if(in_array($form->delivery_type, [DeliveryTypeEnum::QUICK_SALE, DeliveryTypeEnum::PLATFORM])){
-                $status = GoodsStatusEnum::HAS_SOLD;
-                $conStatus = GoodsStatusEnum::IN_SALE;
-            }else{
-                //其它出库类型
-                $status = GoodsStatusEnum::IN_STOCK;//待定
-                $conStatus = GoodsStatusEnum::IN_STOCK;//待定
-            }
-            $condition = ['goods_status' => $conStatus, 'goods_id' => $goods_ids];
-            $res = WarehouseGoods::updateAll(['goods_status' => $status], $condition);
-            if(false === $res){
-                throw new \Exception("更新货品状态失败");
-            }
-        }
+        } 
         if(false === $form->save()) {
             throw new \Exception($this->getError($form));
         }
@@ -200,16 +202,17 @@ class WarehouseBillCService extends WarehouseBillService
     public function cancelBillC($form)
     {
         //更新库存状态
-        $billGoods = WarehouseBillGoods::find()->where(['bill_id' => $form->id])->select(['goods_id'])->all();
+        $billGoods = WarehouseBillGoods::find()->select(['goods_id'])->where(['bill_id' => $form->id])->all();
         if($billGoods){
-            foreach ($billGoods as $goods){
-                $res = WarehouseGoods::updateAll(['goods_status' => GoodsStatusEnum::IN_STOCK],['goods_id' => $goods->goods_id]);
+            foreach ($billGoods as $goods){                
+                $res = WarehouseGoods::updateAll(['goods_status' => GoodsStatusEnum::IN_STOCK,'chuku_time'=>null],['goods_id' => $goods->goods_id]);
                 if(!$res){
-                    throw new Exception("商品{$goods->goods_id}不存在，请查看原因");
+                    throw new \Exception("商品{$goods->goods_id}不存在，请查看原因");
                 }
             }
         } 
         $form->bill_status = BillStatusEnum::CANCEL;
+        
         if(false === $form->save()){
             throw new \Exception($this->getError($form));
         }
@@ -217,6 +220,7 @@ class WarehouseBillCService extends WarehouseBillService
         //日志
         $log = [
                 'bill_id' => $form->id,
+                'bill_status'=>$form->bill_status,
                 'log_type' => LogTypeEnum::ARTIFICIAL,
                 'log_module' => '取消单据',
                 'log_msg' => '取消其它出库单'
@@ -308,8 +312,7 @@ class WarehouseBillCService extends WarehouseBillService
                  throw new \Exception("[{$goods_id}]条码货号不存在");
              }else if($goods->goods_status != GoodsStatusEnum::IN_STOCK) {
                  throw new \Exception("[{$goods_id}]条码货号不是库存状态");
-             }  
-             $chuku_price = Yii::$app->warehouseService->warehouseGoods->calcChukuPrice($goods);
+             }
              $billGroup[$groupKey] = [
                   'channel_id'=>$channel_id,
                   'salesman_id' =>$salesman_id,
@@ -333,7 +336,7 @@ class WarehouseBillCService extends WarehouseBillService
                 'diamond_cert_id'=>$goods->diamond_cert_id,
                 'diamond_cert_type'=>$goods->diamond_cert_type,
                 'cost_price'=>$goods->cost_price,//采购成本价
-                'chuku_price'=>$chuku_price,//出库成本价
+                'chuku_price'=>$goods->calcChukuPrice(),//出库成本价
                 'market_price'=>$goods->market_price,
                 'markup_rate'=>$goods->markup_rate,                   
              ];
@@ -343,7 +346,9 @@ class WarehouseBillCService extends WarehouseBillService
             $billInfo = ArrayHelper::merge($billInfo, $form->toArray());
             $bill = new WarehouseBill();            
             $bill->attributes = $billInfo;
+            $bill->bill_type = BillTypeEnum::BILL_TYPE_C;
             $bill->bill_no = SnHelper::createBillSn($form->bill_type);
+            $bill->bill_status = BillStatusEnum::SAVE;
             if(false == $bill->save()){
                 throw new \Exception("导入失败:".$this->getError($bill));
             }            
@@ -356,7 +361,7 @@ class WarehouseBillCService extends WarehouseBillService
                 if(false == $billGoods->save()) {
                     throw new \Exception("导入失败:".$this->getError($billGoods));
                 }
-                $res = WarehouseGoods::updateAll(['outbound_cost'=>$billGoods->chuku_price,'goods_status'=>GoodsStatusEnum::IN_SALE],['goods_id'=>$billGoods->goods_id,'goods_status'=>GoodsStatusEnum::IN_STOCK]);
+                $res = WarehouseGoods::updateAll(['chuku_price'=>$billGoods->chuku_price,'chuku_time'=>time(),'goods_status'=>GoodsStatusEnum::IN_SALE],['goods_id'=>$billGoods->goods_id,'goods_status'=>GoodsStatusEnum::IN_STOCK]);
                 if(!$res) {
                     throw new \Exception("[{$billGoods->goods_id}]条码货号不是库存中");
                 }
@@ -366,6 +371,7 @@ class WarehouseBillCService extends WarehouseBillService
             //日志
             $log = [
                     'bill_id' => $bill->id,
+                    'bill_status'=>$bill->bill_status,
                     'log_type' => LogTypeEnum::ARTIFICIAL,
                     'log_module' => '批量导入',
                     'log_msg' => '批量导入其它出库单，单据编号：'.$bill->bill_no
@@ -430,14 +436,14 @@ class WarehouseBillCService extends WarehouseBillService
                 'diamond_cert_id'=>$goods->diamond_cert_id,
                 'diamond_cert_type'=>$goods->diamond_cert_type,
                 'cost_price'=>$goods->cost_price,//采购成本价
-                'chuku_price'=>$chuku_price,//出库成本价
+                'chuku_price'=>$goods->calcChukuPrice(),//计算出库成本价
                 'market_price'=>$goods->market_price,
                 'markup_rate'=>$goods->markup_rate,
         ];
         if(false === $billGoods->save()) {
             throw new \Exception("[{$goods_id}]".$this->getError($billGoods));
         }
-        $res = WarehouseGoods::updateAll(['outbound_cost'=>$billGoods->chuku_price,'goods_status'=>GoodsStatusEnum::IN_SALE],['goods_id'=>$billGoods->goods_id,'goods_status'=>GoodsStatusEnum::IN_STOCK]);
+        $res = WarehouseGoods::updateAll(['chuku_price'=>$billGoods->chuku_price,'chuku_time'=>time(),'goods_status'=>GoodsStatusEnum::IN_SALE],['goods_id'=>$billGoods->goods_id,'goods_status'=>GoodsStatusEnum::IN_STOCK]);
         if(!$res) {
             throw new \Exception("[{$billGoods->goods_id}]条码货号不是库存中");
         }

@@ -10,6 +10,7 @@ use addons\Supply\common\models\Supplier;
 use common\models\backend\Member;
 use common\models\base\BaseModel;
 use Yii;
+use addons\Warehouse\common\enums\GoodsStatusEnum;
 
 /**
  * This is the model class for table "warehouse_goods".
@@ -149,9 +150,9 @@ class WarehouseGoods extends BaseModel
         return [
             [['product_type_id','style_sex' ,'style_cate_id', 'style_channel_id','goods_status', 'supplier_id', 'put_in_type','qiban_type', 'company_id', 'warehouse_id', 'goods_num', 'jintuo_type', 'weixiu_status', 'weixiu_warehouse_id', 'parts_num', 'main_stone_type',
                 'main_stone_num', 'second_stone_num1', 'second_stone_num2','second_stone_num3', 'creator_id','apply_id','auditor_id','audit_time','audit_status', 'created_at', 'updated_at','is_inlay','goods_source','main_peishi_type','peiliao_type','peijian_type',
-                'peijian_cate','second_peishi_type1','second_peishi_type2','parts_num','sales_time','peiliao_way','peijian_way','main_peishi_way','second_peishi_way1','second_peishi_way2','second_peishi_way3'], 'integer'],
+                'peijian_cate','second_peishi_type1','second_peishi_type2','parts_num','sales_time','peiliao_way','peijian_way','main_peishi_way','second_peishi_way1','second_peishi_way2','second_peishi_way3','chuku_time'], 'integer'],
             [['goods_id','warehouse_id', 'jintuo_type'], 'required'],
-            [['gold_weight','suttle_weight', 'gold_loss', 'diamond_carat', 'market_price','cost_price','outbound_cost', 'factory_cost', 'xiangkou', 'bukou_fee','gong_fee','biaomiangongyi_fee','parts_gold_weight','main_stone_price', 'second_stone_weight1', 'second_stone_price1', 'second_stone_weight2',
+            [['gold_weight','suttle_weight', 'gold_loss', 'diamond_carat', 'market_price','cost_price','chuku_price', 'factory_cost', 'xiangkou', 'bukou_fee','gong_fee','biaomiangongyi_fee','parts_gold_weight','main_stone_price', 'second_stone_weight1', 'second_stone_price1', 'second_stone_weight2',
                 'second_stone_price2','second_stone_weight3','second_stone_price3' ,'gold_price','gold_amount','markup_rate','parts_fee','fense_fee','cert_fee','extra_stone_fee','tax_fee','other_fee','total_gong_fee','parts_price','xianqian_price','peishi_fee','peishi_amount','penrasa_fee',
                 'edition_fee','parts_amount','ke_gong_fee','main_stone_cost','second_stone1_cost','second_stone2_cost','peishi_weight','pure_gold','lasha_fee','piece_fee'], 'number'],
             [['goods_name', 'cert_id', 'length','kezi', 'main_stone_size','second_stone_size1','goods_color'], 'string', 'max' => 100],
@@ -222,8 +223,9 @@ class WarehouseGoods extends BaseModel
             'diamond_cert_id' => '主石证书号',
             'jintuo_type' => '金托类型',
             'market_price' => '市场价(标签价)',
-            'cost_price' => '成本价',
-            'outbound_cost' => '出库成本',
+            'cost_price' => '采购成本价',
+            'chuku_price' => '出库成本价',
+            'chuku_time' => '出库时间',
             'xiangkou' => '戒托镶口',
             'factory_cost' => '工厂成本',
             'bukou_fee' => '补口费',
@@ -404,5 +406,44 @@ class WarehouseGoods extends BaseModel
     public function getApply()
     {
         return $this->hasOne(Member::class, ['id'=>'apply_id'])->alias('apply');
+    }
+    /**
+     * 商品库龄
+     * @return string|number
+     */
+    public function getGoodsAge()
+    {
+        if($this->chuku_time && $this->chuku_time >= $this->created_at) {
+            return bcsub ($this->chuku_time,$this->created_at);
+        }else{
+            return 0;
+        }        
+    }
+    /**
+     * 获取 出库成本价
+     * @return number
+     */
+    public function getChukuPrice()
+    {
+        if(in_array($this->goods_status ,[GoodsStatusEnum::IN_SALE,GoodsStatusEnum::HAS_SOLD])) {
+            return $this->chuku_price;
+        }else{
+            return $this->calcChukuPrice();
+        }
+    }
+    /**
+     * 计算出库成本价
+     * @return number
+     */
+    public function calcChukuPrice()
+    {
+        //产品线是Au990 ，Au999，Au9999
+        if(in_array($this->product_type_id,[9,28,34])){
+            $gold_price = \Yii::$app->goldTool->getGoldPrice('XAU');
+            $chuku_price = $this->gold_weight * $gold_price * (1 + 0.03);
+        }else{
+            $chuku_price = $this->cost_price * (1 + 0.05);
+        }        
+        return round ($chuku_price,2);
     }
 }
