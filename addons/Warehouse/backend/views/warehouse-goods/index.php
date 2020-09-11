@@ -1307,21 +1307,12 @@ $this->params['breadcrumbs'][] = $this->title;
                             ]),
                             'headerOptions' => [],
                         ],
-
-
-
                         [
-                            'attribute'=>'outbound_cost',
-                            'value'=> function($model){
-                                if($model->goods_status == GoodsStatusEnum::IN_SALE || $model->goods_status == GoodsStatusEnum::HAS_SOLD){
-                                    return $model->outbound_cost;
-                                }else{
-                                    return Yii::$app->warehouseService->warehouseGoods->getOutboundCost($model->goods_id);
-
-                                }
-
+                            'attribute'=>'chuku_price',
+                            'value'=> function($model){                                
+                                 return $model->getChukuPrice();                                
                             },
-                            'filter' => Html::activeTextInput($searchModel, 'outbound_cost', [
+                            'filter' => Html::activeTextInput($searchModel, 'chuku_price', [
                                 'class' => 'form-control',
                                 'style'=> 'width:100px;'
                             ]),
@@ -1463,7 +1454,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'model' => $searchModel,
                                 'attribute' => 'created_at',
                                 'value' => $searchModel->created_at,
-                                'options' => ['readonly' => false,'class'=>'form-control','style'=>'background-color:#fff;width:200px;'],
+                                'options' => ['readonly' => false,'class'=>'form-control','style'=>'background-color:#fff;width:150px;'],
                                 'pluginOptions' => [
                                     'format' => 'yyyy-mm-dd',
                                     'locale' => [
@@ -1478,19 +1469,39 @@ $this->params['breadcrumbs'][] = $this->title;
 
                             ]),
                             'value'=>function($model){
-                                return Yii::$app->formatter->asDate($model->created_at);
+                                return Yii::$app->formatter->asDatetime($model->created_at);
                             }
 
                         ],
                         [
+                            'attribute'=>'chuku_time',
+                            'filter' => DateRangePicker::widget([    // 日期组件
+                                    'model' => $searchModel,
+                                    'attribute' => 'chuku_time',
+                                    'value' => $searchModel->chuku_time,
+                                    'options' => ['readonly' => false,'class'=>'form-control','style'=>'background-color:#fff;width:150px;'],
+                                    'pluginOptions' => [
+                                            'format' => 'yyyy-mm-dd',
+                                            'locale' => [
+                                                    'separator' => '/',
+                                            ],
+                                            'endDate' => date('Y-m-d',time()),
+                                            'todayHighlight' => true,
+                                            'autoclose' => true,
+                                            'todayBtn' => 'linked',
+                                            'clearBtn' => true,
+                                    ],
+                                    
+                            ]),
+                            'value'=>function($model){
+                                return Yii::$app->formatter->asDatetime($model->chuku_time);
+                            }
+                        
+                        ],
+                        [
                             'label'=>'库龄',
                             'value'=>function($model){
-                                if($model->goods_status == GoodsStatusEnum::IN_SALE || $model->goods_status == GoodsStatusEnum::HAS_SOLD){
-                                    return Yii::$app->formatter->asDuration(bcsub ($model->sales_time,$model->created_at));
-                                }else{
-                                    return Yii::$app->formatter->asDuration(bcsub (time(),$model->created_at));
-                                }
-
+                                 return Yii::$app->formatter->asDuration($model->getGoodsAge());
                             },
                             'filter' => false,
                             'headerOptions' => [],
