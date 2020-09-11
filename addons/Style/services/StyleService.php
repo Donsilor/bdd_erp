@@ -227,9 +227,11 @@ class StyleService extends Service
                     $flag = false;
                     $error[$i][] = "款号在系统已存在，不能重复";
                 }
+                $is_autosn = ConfirmEnum::NO;
             } else {
                 $flag = false;
                 $error[$i][] = "款号不能为空";
+                $is_autosn = ConfirmEnum::YES;
             }
             $styleAttr = $this->extendAttrByStyleSn($style_sn);//款号获取款式属性
             $style_cate_id = $form->formatValue($style['style_cate_id'] ?? 0, 0);
@@ -381,7 +383,7 @@ class StyleService extends Service
                 'style_channel_id' => $style_channel_id,
                 'style_sex' => $style_sex,
                 'style_material' => $style_material,
-                'is_autosn' => 0,
+                'is_autosn' => $is_autosn,
                 'is_made' => $is_made,
                 //'is_gift' => $is_gift,
                 'status' => $status,
