@@ -13,6 +13,8 @@ use addons\Warehouse\common\enums\GoodsStatusEnum;
 
 $this->title = Yii::t('warehouse_goods', '商品管理');
 $this->params['breadcrumbs'][] = $this->title;
+$params = Yii::$app->request->queryParams;
+$params = $params ? "&".http_build_query($params) : '';
 ?>
 
 <div class="row">
@@ -342,6 +344,11 @@ $this->params['breadcrumbs'][] = $this->title;
                         'data-title' => '快捷出库',
                     ]);
                     echo '&nbsp;';
+
+                    echo Html::button('导出', [
+                        'class'=>'btn btn-success btn-sm',
+                        'onclick' => 'batchExport()',
+                    ]);
                 ?>
                 <?= GridView::widget([
                     'dataProvider' => $dataProvider,
@@ -439,7 +446,6 @@ $this->params['breadcrumbs'][] = $this->title;
                             ]),
                         ],
 
-
                         [
                             'attribute'=>'goods_name',
                             'format' => 'raw',
@@ -466,8 +472,6 @@ $this->params['breadcrumbs'][] = $this->title;
 
                             ]),
                         ],
-
-
                         [
                             'attribute' => 'jintuo_type',
                             'format' => 'raw',
@@ -1136,11 +1140,11 @@ $this->params['breadcrumbs'][] = $this->title;
                         ],
 
                         [
-                            'attribute'=>'peijian_cate',
+                            'attribute'=>'peijian_type',
                             'value' => function($model){
-                                return \addons\Warehouse\common\enums\PeiJianCateEnum::getValue($model->peijian_cate);
+                                return Yii::$app->attr->valueName($model->peijian_type);
                             },
-                            'filter' => Html::activeDropDownList($searchModel, 'peijian_cate',\addons\Warehouse\common\enums\PeiJianCateEnum::getMap(), [
+                            'filter' => Html::activeDropDownList($searchModel, 'peijian_type',Yii::$app->attr->valueMap(AttrIdEnum::MAT_PARTS_TYPE), [
                                 'prompt' => '全部',
                                 'class' => 'form-control',
                                 'style'=> 'width:80px;'
@@ -1570,4 +1574,16 @@ $this->params['breadcrumbs'][] = $this->title;
     }
 </script>
 
+<script>
+    function batchExport() {
+        var ids = $("#grid").yiiGridView("getSelectedRows");
+        if(ids.length == 0){
+            var url = "<?= Url::to('index?action=export'.$params);?>";
+            rfExport(url)
+        }else{
+            window.location.href = "<?= Url::buildUrl('export',[],['ids'])?>?ids=" + ids;
+        }
 
+    }
+
+</script>

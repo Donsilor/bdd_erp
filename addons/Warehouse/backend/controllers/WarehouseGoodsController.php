@@ -2,15 +2,22 @@
 
 namespace addons\Warehouse\backend\controllers;
 
+use addons\Style\common\enums\JintuoTypeEnum;
 use addons\Style\common\enums\LogTypeEnum;
+use addons\Style\common\enums\StyleSexEnum;
+use addons\Style\common\models\ProductType;
+use addons\Style\common\models\StyleCate;
 use addons\Warehouse\common\enums\GoodsStatusEnum;
+use addons\Warehouse\common\enums\PutInTypeEnum;
 use addons\Warehouse\common\forms\WarehouseGoodsForm;
 use addons\Warehouse\common\forms\WarehousGoodsSearchForm;
 use addons\Warehouse\common\models\WarehouseGoods;
 use common\enums\AuditStatusEnum;
 use common\enums\ConfirmEnum;
 use common\helpers\ExcelHelper;
+use common\helpers\PageHelper;
 use common\helpers\ResultHelper;
+use common\helpers\StringHelper;
 use common\helpers\Url;
 use Yii;
 use common\traits\Curd;
@@ -86,8 +93,9 @@ class WarehouseGoodsController extends BaseController
 
 
         //导出
-        if(Yii::$app->request->get('action') === 'export'){
-            $this->getExport($dataProvider);
+        if(\Yii::$app->request->get('action') === 'export'){
+            $queryIds = $dataProvider->query->select(WarehouseGoods::tableName().'.id');
+            $this->actionExport($queryIds);
         }
 
 
@@ -316,15 +324,228 @@ class WarehouseGoodsController extends BaseController
     }
 
 
-    public function getExport($dataProvider)
-    {
-        $list = $dataProvider->models;
-        $header = [
-            ['ID', 'id'],
-            ['渠道名称', 'name', 'text'],
-        ];
-        return ExcelHelper::exportData($list, $header, '数据导出_' . time());
+    /**
+     * @param null $ids
+     * @return bool|mixed
+     * @throws \PhpOffice\PhpSpreadsheet\Exception
+     * @throws \PhpOffice\PhpSpreadsheet\Writer\Exception
+     */
+    public function actionExport($ids=null){
+        $name = '库存';
+        if(!is_array($ids)){
+            $ids = StringHelper::explodeIds($ids);
+        }
+        if(!$ids){
+            return $this->message('库存ID不为空', $this->redirect(['index']), 'warning');
+        }
 
+        list($list,) = $this->getData($ids);
+        $header = [
+            ['条码号', 'goods_id' , 'text'],
+            ['款号', 'style_sn' , 'text'],
+            ['起版号', 'qiban_sn' , 'text'],
+            ['产品分类', 'style_cate_name' , 'text'],
+            ['产品线', 'product_type_name' , 'text'],
+            ['商品名称', 'goods_name' , 'text'],
+            ['商品状态', 'goods_status' , 'text'],
+            ['金托类型', 'jintuo_type' , 'text'],
+            ['材质', 'material_type' , 'text'],
+            ['商品数量', 'goods_num' , 'text'],
+            ['手寸（美）', 'finger' , 'text'],
+            ['手寸（港）', 'finger_hk' , 'text'],
+            ['尺寸', 'length' , 'text'],
+            ['成品尺寸', 'product_size' , 'text'],
+            ['镶口', 'xiangkou' ,  'text'],
+            ['刻字', 'kezi' ,  'text'],
+            ['链类型', 'chain_type' ,  'text'],
+            ['扣环', 'cramp_ring' ,  'text'],
+            ['爪头形状	', 'talon_head_type' ,  'text'],
+            ['配料方式	', 'peiliao_way' ,  'text'],
+
+            ['款式性别', 'style_sex' , 'text'],
+            ['材质颜色', 'goods_color' ,  'text'],
+            ['货重', 'gold_weight' , 'text'],
+            ['净重', 'suttle_weight' , 'text'],
+            ['损耗', 'gold_loss' , 'text'],
+            ['含耗重', 'gold_weight_sum' , 'text'],
+            ['金价', 'gold_price' , 'text'],
+            ['金料额', 'gold_amount' , 'text'],
+            ['石号', 'main_stone_sn' , 'text'],
+            ['粒数', 'main_stone_num' , 'text'],
+            ['主石类型', 'main_stone_type' , 'text'],
+            ['主石形状', 'diamond_shape' , 'text'],
+            ['石重', 'diamond_carat' , 'text'],
+            ['颜色', 'diamond_color' ,'text'],
+            ['净度', 'diamond_clarity' , 'text'],
+            ['切工', 'diamond_cut' , 'text'],
+            ['抛光', 'diamond_polish' , 'text'],
+            ['对称', 'diamond_symmetry' , 'text'],
+            ['荧光', 'diamond_fluorescence' , 'text'],
+            ['单价', 'main_stone_price' , 'text'],
+            ['金额', 'main_stone_price_sum','text'],
+            ['钻石证书类型', 'diamond_cert_type','text'],
+            ['钻石证书号', 'diamond_cert_id','text'],
+            ['副石1类型	', 'second_stone_type1' , 'text'],
+            ['副石1形状', 'second_stone_shape1' , 'text'],
+            ['副石1粒数', 'second_stone_num1' , 'text'],
+            ['副石1石重', 'second_stone_weight1' , 'text'],
+            ['副石1颜色', 'second_stone_color1' , 'text'],
+            ['副石1净度', 'second_stone_clarity1' , 'text'],
+            ['副石1总计价', 'second_stone_price1' , 'text'],
+            ['副石2类型', 'second_stone_type2' , 'text'],
+            ['副石2粒数', 'second_stone_num2' , 'text'],
+            ['副石2重', 'second_stone_weight2' , 'text'],
+            ['工费', 'gong_fee' , 'text'],
+            ['补口费', 'bukou_fee' , 'text'],
+            ['镶石费', 'xianqian_fee' , 'text'],
+            ['证书费', 'cert_fee' , 'text'],
+            ['工艺费', 'biaomiangongyi_fee' , 'text'],
+            ['总单价', 'price_sum' , 'text'],
+            ['备注', 'goods_remark' , 'text']
+
+        ];
+
+        return ExcelHelper::exportData($list, $header, $name.'数据导出_' . date('YmdHis',time()));
+    }
+    private function getData($ids){
+        $select = ['g.*','type.name as product_type_name','cate.name as style_cate_name'];
+        $query = WarehouseGoods::find()->alias('g')
+            ->leftJoin(ProductType::tableName().' type','type.id=g.product_type_id')
+            ->leftJoin(StyleCate::tableName().' cate','cate.id=g.style_cate_id')
+            ->where(['w.id' => $ids])
+            ->select($select);
+        $lists = PageHelper::findAll($query, 100);
+        //统计
+        $total = [
+            'goods_num_count' => 0,
+            'gold_weight_count' => 0,
+            'suttle_weight_count' => 0,
+            'gold_amount_count' => 0,
+            'main_stone_weight_count' => 0,
+            'main_stone_price_sum_count' => 0,
+            'second_stone_weight1_count' => 0,
+            'second_stone_price1_sum_count' => 0,
+            'price_count' => 0,
+            'price_sum_count' => 0,
+            'cert_fee_count' => 0,
+
+        ];
+        foreach ($lists as &$list){
+            //商品状态
+            $list['goods_status'] = GoodsStatusEnum::getValue($list['goods_status']);
+            //材质
+            $material_type = empty($list['material_type']) ? '' : $list['material_type'];
+            $list['material_type'] = \Yii::$app->attr->valueName($material_type);
+            //材质颜色
+            $material_color = empty($list['material_color']) ? '' : $list['material_color'];
+            $list['material_color'] = \Yii::$app->attr->valueName($material_color);
+
+            //手寸（美）
+            $finger = empty($list['finger']) ? '' : $list['finger'];
+            $list['finger'] = \Yii::$app->attr->valueName($finger);
+            //手寸（港）
+            $finger_hk = empty($list['finger_hk']) ? '' : $list['finger_hk'];
+            $list['finger_hk'] = \Yii::$app->attr->valueName($finger_hk);
+            //镶口
+            $xiangkou = empty($list['xiangkou']) ? '' : $list['xiangkou'];
+            $list['xiangkou'] = \Yii::$app->attr->valueName($xiangkou);
+            //链类型
+            $chain_type = empty($list['chain_type']) ? '' : $list['chain_type'];
+            $list['chain_type'] = \Yii::$app->attr->valueName($chain_type);
+            //扣环
+            $cramp_ring = empty($list['cramp_ring']) ? '' : $list['cramp_ring'];
+            $list['cramp_ring'] = \Yii::$app->attr->valueName($cramp_ring);
+            //扣环
+            $talon_head_type = empty($list['talon_head_type']) ? '' : $list['talon_head_type'];
+            $list['talon_head_type'] = \Yii::$app->attr->valueName($talon_head_type);
+            //入库方式
+            $list['put_in_type'] = PutInTypeEnum::getValue($list['put_in_type']);
+            //金托类型
+            $list['jintuo_type'] = JintuoTypeEnum::getValue($list['jintuo_type']);
+            //款式性别
+            $list['style_sex'] = StyleSexEnum::getValue($list['style_sex']);
+
+            //入库方式
+            $list['peiliao_way'] = PutInTypeEnum::getValue($list['put_in_type']);
+
+
+
+            //钻石净度
+            $diamond_clarity = empty($list['diamond_clarity']) ? 0 : $list['diamond_clarity'];
+            $list['diamond_clarity'] = \Yii::$app->attr->valueName($diamond_clarity);
+            //钻石形状
+            $diamond_shape = empty($list['diamond_shape']) ? 0 : $list['diamond_shape'];
+            $list['diamond_shape'] = \Yii::$app->attr->valueName($diamond_shape);
+            //钻石切工
+            $diamond_cut = empty($list['diamond_cut']) ? 0 : $list['diamond_cut'];
+            $list['diamond_cut'] = \Yii::$app->attr->valueName($diamond_cut);
+            //钻石抛光
+            $diamond_polish = empty($list['diamond_polish']) ? 0 : $list['diamond_polish'];
+            $list['diamond_polish'] = \Yii::$app->attr->valueName($diamond_polish);
+            //钻石对称
+            $diamond_symmetry = empty($list['diamond_symmetry']) ? 0 : $list['diamond_symmetry'];
+            $list['diamond_symmetry'] = \Yii::$app->attr->valueName($diamond_symmetry);
+            //钻石荧光
+            $diamond_fluorescence = empty($list['diamond_fluorescence']) ? 0 : $list['diamond_fluorescence'];
+            $list['diamond_fluorescence'] = \Yii::$app->attr->valueName($diamond_fluorescence);
+            //钻石证书类型
+            $diamond_cert_type = empty($list['diamond_cert_type']) ? 0 : $list['diamond_cert_type'];
+            $list['diamond_cert_type'] = \Yii::$app->attr->valueName($diamond_cert_type);
+            //主石类型
+            $main_stone_type = empty($list['main_stone_type']) ? 0 : $list['main_stone_type'];
+            $list['main_stone_type'] = \Yii::$app->attr->valueName($main_stone_type);
+            //主石金额
+            $main_stone_price = empty($list['main_stone_price']) ? 0 : $list['main_stone_price'];
+            $list['main_stone_price_sum'] = $main_stone_price * $list['main_stone_num'];
+            //副石1类型
+            $second_stone_type1 = empty($list['second_stone_type1']) ? 0 : $list['second_stone_type1'];
+            $list['second_stone_type1'] = \Yii::$app->attr->valueName($second_stone_type1);
+            //副石1颜色
+            $second_stone_color1 = empty($list['second_stone_color1']) ? 0 : $list['second_stone_color1'];
+            $list['second_stone_color1'] = \Yii::$app->attr->valueName($second_stone_color1);
+            //副石1净度
+            $second_stone_clarity1 = empty($list['second_stone_clarity1']) ? 0 : $list['second_stone_clarity1'];
+            $list['second_stone_clarity1'] = \Yii::$app->attr->valueName($second_stone_clarity1);
+            //副石1形状
+            $second_stone_shape1 = empty($list['second_stone_shape1']) ? 0 : $list['second_stone_shape1'];
+            $list['second_stone_shape1'] = \Yii::$app->attr->valueName($second_stone_shape1);
+            //副石1金额
+            $second_stone_price1 = empty($list['second_stone_price1']) ? 0 : $list['second_stone_price1'];
+            $list['second_stone_price1_sum'] = $second_stone_price1 * $list['second_stone_num1'];
+            //副石2类型
+            $second_stone_type2 = empty($list['second_stone_type2']) ? 0 : $list['second_stone_type2'];
+            $list['second_stone_type2'] = \Yii::$app->attr->valueName($second_stone_type2);
+            //副石2重
+            $second_stone_weight2 = empty($list['second_stone_weight2']) ? 0 : $list['second_stone_weight2'];
+            $list['second_stone_weight2'] = \Yii::$app->attr->valueName($second_stone_weight2);
+            //副石1形状
+            $second_stone_weight2 = empty($list['second_stone_weight2']) ? 0 : $list['second_stone_weight2'];
+            $list['second_stone_weight2'] = \Yii::$app->attr->valueName($second_stone_weight2);
+            //单价
+            $list['price'] = $list['cost_price'] + $list['main_stone_price_sum'] + $list['gong_fee']
+                + $list['bukou_fee'] + $list['biaomiangongyi_fee'];
+            //总额
+            $list['price_sum'] = $list['price'] * $list['goods_num'];
+            //含耗重
+            $gold_loss = empty($list['gold_loss']) ? 0 : $list['gold_loss'];
+            $suttle_weight = empty($list['suttle_weight']) ? 0 : $list['suttle_weight'];
+            $list['gold_weight_sum'] = $suttle_weight + $gold_loss;
+
+            //统计
+            $total['goods_num_count'] += $list['goods_num'];  //件数
+            $total['gold_weight_count'] += $list['gold_weight']; //货重
+            $total['suttle_weight_count'] += $list['suttle_weight']; //净重
+            $total['gold_amount_count'] += $list['gold_amount']; //金料额
+            $total['main_stone_weight_count'] += $list['diamond_carat']; //石重
+            $total['main_stone_price_sum_count'] += $list['main_stone_price_sum']; //主石金额
+            $total['second_stone_weight1_count'] += $list['second_stone_weight1']; //副石石重
+            $total['second_stone_price1_sum_count'] += $list['second_stone_price1_sum']; //副石金额
+            $total['price_count'] += $list['price']; //单价
+            $total['price_sum_count'] += $list['price_sum']; //总额
+            $total['cert_fee_count'] += $list['price_sum']; //证书费
+
+        }
+        return [$lists,$total];
     }
 
 

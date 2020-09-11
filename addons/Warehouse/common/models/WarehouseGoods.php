@@ -149,8 +149,8 @@ class WarehouseGoods extends BaseModel
     {
         return [
             [['product_type_id','style_sex' ,'style_cate_id', 'style_channel_id','goods_status', 'supplier_id', 'put_in_type','qiban_type', 'company_id', 'warehouse_id', 'goods_num', 'jintuo_type', 'weixiu_status', 'weixiu_warehouse_id', 'parts_num', 'main_stone_type',
-                'main_stone_num', 'second_stone_num1', 'second_stone_num2','second_stone_num3', 'creator_id','apply_id','auditor_id','audit_time','audit_status', 'created_at', 'updated_at','is_inlay','goods_source','main_peishi_type','peiliao_type','peijian_type',
-                'peijian_cate','second_peishi_type1','second_peishi_type2','parts_num','sales_time','peiliao_way','peijian_way','main_peishi_way','second_peishi_way1','second_peishi_way2','second_peishi_way3','chuku_time'], 'integer'],
+                'main_stone_num', 'second_stone_num1', 'second_stone_num2','second_stone_num3', 'creator_id','apply_id','auditor_id','audit_time','audit_status', 'created_at', 'updated_at','is_inlay','goods_source','main_peishi_type','peiliao_type',
+                'second_peishi_type1','second_peishi_type2','parts_num','sales_time','peiliao_way','peijian_way','main_peishi_way','second_peishi_way1','second_peishi_way2','second_peishi_way3','chuku_time'], 'integer'],
             [['goods_id','warehouse_id', 'jintuo_type'], 'required'],
             [['gold_weight','suttle_weight', 'gold_loss', 'diamond_carat', 'market_price','cost_price','chuku_price', 'factory_cost', 'xiangkou', 'bukou_fee','gong_fee','biaomiangongyi_fee','parts_gold_weight','main_stone_price', 'second_stone_weight1', 'second_stone_price1', 'second_stone_weight2',
                 'second_stone_price2','second_stone_weight3','second_stone_price3' ,'gold_price','gold_amount','markup_rate','parts_fee','fense_fee','cert_fee','extra_stone_fee','tax_fee','other_fee','total_gong_fee','parts_price','xianqian_price','peishi_fee','peishi_amount','penrasa_fee',
@@ -160,7 +160,7 @@ class WarehouseGoods extends BaseModel
             [['gross_weight', 'produce_sn', 'diamond_cert_id','second_cert_id1','second_stone_sn1','main_stone_sn','parts_material'], 'string', 'max' => 20],
             [['finger','finger_hk','order_detail_id', 'material', 'material_type', 'material_color', 'diamond_clarity','diamond_shape','diamond_color', 'diamond_cut', 'diamond_polish', 'diamond_symmetry', 'diamond_fluorescence', 'diamond_discount', 'diamond_cert_type', 'second_stone_type1',
                 'second_stone_color1', 'second_stone_clarity1', 'second_stone_shape1', 'second_stone_type2','second_stone_sn2','second_stone_sn3','chain_type','cramp_ring','talon_head_type','xiangqian_craft' ,'main_stone_colour','second_stone_shape2','second_stone_color2','second_stone_clarity2',
-                'second_stone_type3','biaomiangongyi','second_stone_colour1','second_stone_colour2'], 'string', 'max' => 10],
+                'second_stone_type3','biaomiangongyi','second_stone_colour1','second_stone_colour2','peijian_type'], 'string', 'max' => 10],
             [['order_sn'], 'string', 'max' => 40],
             [['cert_type','factory_mo','chain_long'], 'string', 'max' => 50],
             [['audit_remark','remark','shiliao_remark'], 'string', 'max' => 255],
@@ -301,7 +301,6 @@ class WarehouseGoods extends BaseModel
             'peiliao_type' => '配料类型',
             'peijian_type' => '配件类型',
             'shiliao_remark' => '石料备注',
-            'peijian_cate' => '配件分类',
             'parts_material' => '配件材质',
             'parts_amount' => '配件额',
             'parts_price' => '配件金价',
