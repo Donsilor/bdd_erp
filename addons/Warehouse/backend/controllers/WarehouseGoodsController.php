@@ -67,7 +67,7 @@ class WarehouseGoodsController extends BaseController
             ->andFilterWhere(['in', 'goods_id', $search->goods_ids()])
             ->andFilterWhere(['in', 'style_cate_id', $search->styleCateIds()])
             ->andFilterWhere(['in', 'product_type_id', $search->proTypeIds()])
-            ->andFilterWhere(['like', 'goods_name', $search->goods_name])
+            ->andFilterWhere(['like', 'goods_name', $search->goods_name()])
 //            ->andFilterWhere($search->betweenGoldWeight())
             ->andFilterWhere($search->betweenSuttleWeight())
             ->andFilterWhere($search->betweenDiamondCarat())

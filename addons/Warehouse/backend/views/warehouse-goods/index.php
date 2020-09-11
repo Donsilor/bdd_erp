@@ -386,7 +386,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         [
                             'attribute' => 'style_sn',
                             'value' => function($model){
-                                return "<span id='{$model->style_sn}'>".$model->style_sn."</span>".' <i class="fa fa-copy" onclick="copy(\''. $model->style_sn .'\')"></i>';
+                                return "<span id='{$model->style_sn}_{$model->id}'>".$model->style_sn."</span>".' <i class="fa fa-copy" onclick="copy(\''. $model->style_sn.'_'.$model->id .'\')"></i>';
                             },
                             'filter' => Html::activeTextInput($searchModel, 'style_sn', [
                                 'class' => 'form-control',
