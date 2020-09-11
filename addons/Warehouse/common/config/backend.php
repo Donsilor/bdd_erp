@@ -256,7 +256,7 @@ return [
         [
                 
             'title' => '仓储管理',
-            'name' => 'warehouse',
+            'name' => 'indexWarehouse',
             'child' => [                
                 [
                     'title' =>'其他收货单',
