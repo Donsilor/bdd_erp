@@ -54,13 +54,17 @@ class StyleController extends BaseController
                  'creator' => 'username',
             ]
         ]);
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams,['created_at','updated_at','style_sn','style_name']);
 
-        $dataProvider = $searchModel->search(Yii::$app->request->queryParams,['created_at','updated_at']);
+
         $created_at = $searchModel->created_at;
         if (count($created_ats = explode('/', $created_at)) == 2) {
             $dataProvider->query->andFilterWhere(['>=',Style::tableName().'.created_at', strtotime($created_ats[0])]);//起始时间
             $dataProvider->query->andFilterWhere(['<',Style::tableName().'.created_at', (strtotime($created_ats[1]) + 86400)] );//结束时间
         }
+
+        $dataProvider->query->andFilterWhere(['=',Style::tableName().'.style_sn', trim($searchModel->style_sn)]);
+        $dataProvider->query->andFilterWhere(['=',Style::tableName().'.style_name', trim($searchModel->style_name)]);
 
         return $this->render('index', [
             'dataProvider' => $dataProvider,
