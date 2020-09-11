@@ -2,6 +2,7 @@
 
 namespace addons\Warehouse\services;
 
+use addons\Style\common\enums\JintuoTypeEnum;
 use addons\Warehouse\common\enums\GoodSourceEnum;
 use Yii;
 use common\components\Service;
@@ -115,7 +116,13 @@ class WarehouseBillLService extends Service
             $goods = $bill_goods = $goods_ids = [];
             foreach ($billGoods as $good) {
                 $goods_ids[] = $good->goods_id;
-                $good  = new WarehouseBillGoodsL();
+                //$good  = new WarehouseBillGoodsL();
+                if(empty($good->goods_name)){
+                    $good->goods_name = "待定";
+                }
+                if(empty($good->jintuo_type)){
+                    $good->jintuo_type = JintuoTypeEnum::Chengpin;
+                }
                 $goods[] = [
                     //基本信息
                     'goods_id' => $good->goods_id,//条码号
