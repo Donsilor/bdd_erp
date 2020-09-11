@@ -254,6 +254,10 @@ return [
             'name' => 'warehouse',
             'child' => [
                 [
+                        'title' => '所有权限',
+                        'name' => '*',
+                ],
+                [
                     'title' =>'其他收货单',
                     'name'  => 'bill-t/index',
                     'child' =>[
