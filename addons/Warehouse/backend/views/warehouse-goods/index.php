@@ -67,10 +67,16 @@ $this->params['breadcrumbs'][] = $this->title;
                                             <label class="control-label" for="cate-sort">金托类型：</label>
                                         </div>
                                         <div class="col-sm-8">
-                                            <?= Html::dropDownList('jintuo_type', $search->jintuo_type, \addons\Style\common\enums\JintuoTypeEnum::getMap(), [
-                                                'class' => 'form-control',
-                                                'prompt' => '全部',
-                                            ]) ?>
+                                            <?= \kartik\select2\Select2::widget([
+                                                'name'=>'jintuo_type',
+                                                'value'=>$search->jintuo_type,
+                                                'data'=>\addons\Style\common\enums\JintuoTypeEnum::getMap(),
+                                                'options' => ['placeholder' =>"请选择",'multiple'=>false,'style'=>"width:180px"],
+                                                'pluginOptions' => [
+                                                    'allowClear' => true,
+                                                ],
+                                            ])
+                                            ?>
                                             <div class="help-block"></div>
                                         </div>
                                     </div>
@@ -116,10 +122,16 @@ $this->params['breadcrumbs'][] = $this->title;
                                             <label class="control-label" for="cate-sort">商品状态：</label>
                                         </div>
                                         <div class="col-sm-8">
-                                            <?= Html::dropDownList('goods_status', $search->goods_status, \addons\Warehouse\common\enums\GoodsStatusEnum::getMap(), [
-                                                'class' => 'form-control',
-                                                'prompt' => '全部',
-                                            ]) ?>
+                                            <?= \kartik\select2\Select2::widget([
+                                                'name'=>'goods_status',
+                                                'value'=>$search->goods_status,
+                                                'data'=>\addons\Warehouse\common\enums\GoodsStatusEnum::getMap(),
+                                                'options' => ['placeholder' =>"请选择",'multiple'=>false,'style'=>"width:180px"],
+                                                'pluginOptions' => [
+                                                    'allowClear' => true,
+                                                ],
+                                            ])
+                                            ?>
                                             <div class="help-block"></div>
                                         </div>
                                     </div>
@@ -130,10 +142,17 @@ $this->params['breadcrumbs'][] = $this->title;
                                             <label class="control-label" for="cate-sort">材质：</label>
                                         </div>
                                         <div class="col-sm-8">
-                                            <?= Html::dropDownList('material_type', $search->material_type, Yii::$app->attr->valueMap(AttrIdEnum::MATERIAL_TYPE), [
-                                                'class' => 'form-control',
-                                                'prompt' => '全部',
-                                            ]) ?>
+                                            <?= \kartik\select2\Select2::widget([
+                                                'name'=>'material_type',
+                                                'value'=>$search->material_type,
+                                                'data'=>Yii::$app->attr->valueMap(AttrIdEnum::MATERIAL_TYPE),
+                                                'options' => ['placeholder' =>"请选择",'multiple'=>false,'style'=>"width:180px"],
+                                                'pluginOptions' => [
+                                                    'allowClear' => true,
+                                                ],
+                                            ])
+                                            ?>
+
                                             <div class="help-block"></div>
                                         </div>
                                     </div>
