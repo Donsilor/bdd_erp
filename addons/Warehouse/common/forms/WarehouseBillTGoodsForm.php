@@ -63,6 +63,8 @@ class WarehouseBillTGoodsForm extends WarehouseBillGoodsL
                 $str = str_replace(',', '，', $str);
                 $str = str_replace('】', '', $str);
                 $res[$k] = $str;
+            }else{
+                $res[$k] = "";
             }
         }
         return $res ?? [];
