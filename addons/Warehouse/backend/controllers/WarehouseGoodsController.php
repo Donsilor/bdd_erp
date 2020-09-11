@@ -55,12 +55,11 @@ class WarehouseGoodsController extends BaseController
         $dataProvider = $searchModel
             ->search(Yii::$app->request->queryParams,['updated_at']);
 
-        if(!$search->goods_status){
+        if(!$search->goods_status && !$searchModel->goods_status){
             $search->goods_status = GoodsStatusEnum::IN_STOCK;
-        }
-        if(!$searchModel->goods_status){
             $searchModel->goods_status = GoodsStatusEnum::IN_STOCK;
         }
+
         $dataProvider->query
 
             ->andFilterWhere(['goods_status'=>$search->goods_status])
