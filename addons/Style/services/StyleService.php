@@ -2,6 +2,7 @@
 
 namespace addons\Style\services;
 
+use addons\Style\common\enums\AttrValueIdEnum;
 use Yii;
 use common\helpers\Url;
 use common\components\Service;
@@ -395,6 +396,7 @@ class StyleService extends Service
             //属性信息
             $attrList[] = [
                 AttrIdEnum::SUTTLE_WEIGHT => $suttle_weight,
+                AttrIdEnum::MATERIAL_TYPE => $this->getMaterialTypeValues($style_material),
             ];
 
             //工厂1信息
@@ -504,9 +506,9 @@ class StyleService extends Service
             } else {
                 $styleM->audit_status = AuditStatusEnum::PENDING;
             }
-            if (empty($styleM->style_sn)) {
-                $styleM->is_autosn = AutoSnEnum::YES;
-            }
+//            if (empty($styleM->style_sn)) {
+//                $styleM->is_autosn = AutoSnEnum::YES;
+//            }
             if ($styleM->type) {
                 $styleM->is_inlay = $styleM->type->is_inlay;
             }
@@ -554,36 +556,32 @@ class StyleService extends Service
 
             //款式属性信息
             foreach ($attrList[$k] as $attrId => $val) {
-                if (!is_array($val)) {
-                    if ($val !== "") {
-                        //$saveAttr[$styleM->id][$attrId] = $val;
-                        $attr = Yii::$app->styleService->attribute->getSpecAttrList($attrId, $styleM->style_cate_id);
-                        if ($attr) {
-                            $attr = $attr[0];
-                            $attr_list = [
-                                'style_id' => $styleM->id,
-                                'attr_id' => $attrId,
-                                'input_type' => $attr['input_type'],
-                                'is_require' => $attr['is_require'],
-                                'attr_type' => $attr['attr_type'],
-                                'is_inlay' => $attr['is_inlay'],
-                                'sort' => $attr['sort'],
-                                'attr_values' => (string)$val,
-
-                            ];
-
-                            $styleAttr = StyleAttribute::find()->where(['style_id' => $styleM->id, 'attr_id' => $attrId])->one();
-                            if (!$styleAttr) {
-                                $styleAttr = new StyleAttribute();
-                            }
-                            $styleAttr->attributes = $attr_list;
-                            if (false === $styleAttr->save()) {
-                                throw new \Exception($this->getError($styleAttr));
-                            }
-//                            $saveAttr[] = $attr_list;
-                        } else {
-                            continue;
+                if ($val !== "" && !is_array($val)) {
+                    //$saveAttr[$styleM->id][$attrId] = $val;
+                    $attr = Yii::$app->styleService->attribute->getSpecAttrList($attrId, $styleM->style_cate_id);
+                    if ($attr) {
+                        $attr = $attr[0] ?? [];
+                        $attr_list = [
+                            'style_id' => $styleM->id,
+                            'attr_id' => $attrId,
+                            'input_type' => $attr['input_type'] ?? 0,
+                            'is_require' => $attr['is_require'] ?? 0,
+                            'attr_type' => $attr['attr_type'] ?? 0,
+                            'is_inlay' => $attr['is_inlay'] ?? 0,
+                            'sort' => $attr['sort'] ?? 0,
+                            'attr_values' => (string)$val,
+                        ];
+                        $styleAttr = StyleAttribute::find()->where(['style_id' => $styleM->id, 'attr_id' => $attrId])->one();
+                        if (!$styleAttr) {
+                            $styleAttr = new StyleAttribute();
                         }
+                        $styleAttr->attributes = $attr_list;
+                        if (false === $styleAttr->save()) {
+                            throw new \Exception($this->getError($styleAttr));
+                        }
+//                            $saveAttr[] = $attr_list;
+                    } else {
+                        continue;
                     }
                 }
             }
@@ -724,6 +722,57 @@ class StyleService extends Service
             'style_channel_id' => $style_channel_id,
             'style_material' => $style_material,
         ];
+    }
+
+    /**
+     * 获取材质属性信息
+     * @param int $style_material
+     * @return string
+     * @throws
+     */
+    public function getMaterialTypeValues($style_material)
+    {
+        switch ($style_material) {
+            case StyleMaterialEnum::GOLD:
+                $materialType = [
+                    AttrValueIdEnum::K1,
+                    AttrValueIdEnum::K9,
+                    AttrValueIdEnum::K10,
+                    AttrValueIdEnum::K14,
+                    AttrValueIdEnum::K18,
+                    AttrValueIdEnum::AU990,
+                    AttrValueIdEnum::AU999,
+                    AttrValueIdEnum::AU9999,
+                    AttrValueIdEnum::PT950,
+                    AttrValueIdEnum::PT900,
+                    AttrValueIdEnum::PT990,
+                    AttrValueIdEnum::PD,
+                ];
+                break;
+            case StyleMaterialEnum::SILVER:
+                $materialType = [
+                    AttrValueIdEnum::AG925,
+                    AttrValueIdEnum::AG999,
+                ];
+                break;
+            case StyleMaterialEnum::COPPER:
+                $materialType = [
+                    AttrValueIdEnum::COPPER,
+                ];
+                break;
+            case StyleMaterialEnum::ALLOY:
+                $materialType = [
+                    AttrValueIdEnum::ALLOY,
+                    AttrValueIdEnum::STEEL,
+                ];
+                break;
+            case StyleMaterialEnum::OTHER:
+                $materialType = [];
+                break;
+            default:
+                $materialType = [];
+        }
+        return implode(",", $materialType) ?? "";
     }
 
 }
