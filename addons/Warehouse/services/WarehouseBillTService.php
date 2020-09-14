@@ -1364,7 +1364,7 @@ class WarehouseBillTService extends Service
             $stone_colour = $colour[$stone_colour] ?? [];
             switch ($stone_position) {
                 case StonePositionEnum::MAIN_STONE:
-                    $stoneAttr['stone_type'] = $stone->stone_type ?? "";
+                    $stoneAttr['stone_type'] = $stone_type[0] ?? "";
                     $stoneAttr['stone_shape'] = $stone_shape[0] ?? "";
                     $stoneAttr['stone_color'] = $stone_color[0] ?? "";
                     $stoneAttr['stone_clarity'] = $stone_clarity[0] ?? "";
