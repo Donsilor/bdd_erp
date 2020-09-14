@@ -817,8 +817,9 @@ class WarehouseBillTService extends Service
             } else {
                 $main_cert_type = $cert_type;
             }
-            $markup_rate = $form->formatValue($goods[81], 1) ?? 1;
-            $jintuo_type = $goods[82] ?? "";
+            $cost_price = $form->formatValue($goods[81], 0) ?? 0;
+            $markup_rate = $form->formatValue($goods[82], 1) ?? 1;
+            $jintuo_type = $goods[83] ?? "";
             if (!empty($jintuo_type)) {
                 $jintuo_type = JintuoTypeEnum::getIdByName($jintuo_type);
                 if (empty($jintuo_type)) {
@@ -830,7 +831,7 @@ class WarehouseBillTService extends Service
                 $flag = false;
                 $error[$i][] = "金托类型不能为空";
             }
-            $remark = $goods[83] ?? "";
+            $remark = $goods[84] ?? "";
             $saveData[] = $item = [
                 'bill_id' => $bill->id,
                 'bill_no' => $bill->bill_no,
@@ -933,6 +934,7 @@ class WarehouseBillTService extends Service
                 'other_fee' => $other_fee,
                 'main_cert_id' => $main_cert_id,
                 'main_cert_type' => $main_cert_type,
+                'cost_price' => $cost_price,
                 'markup_rate' => $markup_rate,
                 'jintuo_type' => $jintuo_type,
                 'auto_goods_id' => $auto_goods_id,
@@ -973,7 +975,7 @@ class WarehouseBillTService extends Service
         if (empty($saveData)) {
             throw new \Exception("数据不能为空");
         }
-        $value = [];
+        $value = $ids = [];
         $key = array_keys($saveData[0]);
         foreach ($saveData as $item) {
             $goodsM = new WarehouseBillGoodsL();
@@ -981,6 +983,7 @@ class WarehouseBillTService extends Service
             if (!$goodsM->validate()) {
                 throw new \Exception($this->getError($goodsM));
             }
+            $ids[] = $goodsM->id;
             $value[] = array_values($item);
             if (count($value) >= 10) {
                 $res = Yii::$app->db->createCommand()->batchInsert(WarehouseBillGoodsL::tableName(), $key, $value)->execute();
@@ -998,7 +1001,7 @@ class WarehouseBillTService extends Service
         }
 
         //同步更新价格
-        $this->syncUpdatePriceAll($bill);
+        $this->syncUpdatePriceAll($bill, $ids);
 
         //同步更新单头信息
         $this->warehouseBillTSummary($form->bill_id);
@@ -1007,13 +1010,18 @@ class WarehouseBillTService extends Service
     /**
      *
      * 同步更新单据商品价格
+     * @param $ids
      * @param WarehouseBillTForm $form
      * @return object
      * @throws
      */
-    public function syncUpdatePriceAll($form)
+    public function syncUpdatePriceAll($form, $ids = [])
     {
-        $goods = WarehouseBillTGoodsForm::findAll(['bill_id' => $form->id]);
+        $where = ['bill_id' => $form->id];
+        if (!empty($ids)) {
+            $where = [['bill_id' => $form->id], 'id' => $ids];
+        }
+        $goods = WarehouseBillTGoodsForm::findAll($where);
         if (!empty($goods)) {
             foreach ($goods as $good) {
                 $this->syncUpdatePrice($good);
