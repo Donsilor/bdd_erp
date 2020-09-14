@@ -165,6 +165,7 @@ class WarehouseGoods extends BaseModel
             [['cert_type','factory_mo','chain_long'], 'string', 'max' => 50],
             [['audit_remark','remark','shiliao_remark'], 'string', 'max' => 255],
             [['goods_id'], 'unique'],
+            [['id'], 'safe'],
         ];
     }
 

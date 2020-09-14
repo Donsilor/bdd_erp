@@ -882,21 +882,6 @@ $this->params['breadcrumbs'][] = $this->title;
                                 ]),
                             ],
                             [
-                                'attribute' => 'main_stone_color',
-                                'format' => 'raw',
-                                'headerOptions' => ['class' => 'col-md-1 batch_select_full', 'attr-name' => 'main_stone_color', 'attr-id' => AttrIdEnum::MAIN_STONE_COLOR, 'style' => 'background-color:#afb4db;'],
-                                'footerOptions' => ['class' => 'col-md-1 batch_select_full2', 'attr-name' => 'main_stone_color', 'attr-id' => AttrIdEnum::MAIN_STONE_COLOR, 'style' => 'background-color:#afb4db;'],
-                                'value' => function ($model, $key, $index, $widget) {
-                                    $widget->footer = $model->getAttributeLabel('main_stone_color');
-                                    return Html::ajaxSelect($model, 'main_stone_color', $model->getMainStoneColorDrop($model), ['data-id' => $model->id, 'prompt' => '请选择']);
-                                },
-                                'filter' => Html::activeDropDownList($searchModel, 'main_stone_color', $model->getMainStoneColorMap(), [
-                                    'prompt' => '全部',
-                                    'class' => 'form-control',
-                                    'style' => 'width:80px;'
-                                ]),
-                            ],
-                            [
                                 'attribute' => 'main_stone_shape',
                                 'format' => 'raw',
                                 'headerOptions' => ['class' => 'col-md-1 batch_select_full', 'attr-name' => 'main_stone_shape', 'attr-id' => AttrIdEnum::MAIN_STONE_SHAPE, 'style' => 'background-color:#afb4db;'],
@@ -906,6 +891,21 @@ $this->params['breadcrumbs'][] = $this->title;
                                     return Html::ajaxSelect($model, 'main_stone_shape', $model->getMainStoneShapeDrop($model), ['data-id' => $model->id, 'prompt' => '请选择']);
                                 },
                                 'filter' => Html::activeDropDownList($searchModel, 'main_stone_shape', $model->getMainStoneShapeMap(), [
+                                    'prompt' => '全部',
+                                    'class' => 'form-control',
+                                    'style' => 'width:80px;'
+                                ]),
+                            ],
+                            [
+                                'attribute' => 'main_stone_color',
+                                'format' => 'raw',
+                                'headerOptions' => ['class' => 'col-md-1 batch_select_full', 'attr-name' => 'main_stone_color', 'attr-id' => AttrIdEnum::MAIN_STONE_COLOR, 'style' => 'background-color:#afb4db;'],
+                                'footerOptions' => ['class' => 'col-md-1 batch_select_full2', 'attr-name' => 'main_stone_color', 'attr-id' => AttrIdEnum::MAIN_STONE_COLOR, 'style' => 'background-color:#afb4db;'],
+                                'value' => function ($model, $key, $index, $widget) {
+                                    $widget->footer = $model->getAttributeLabel('main_stone_color');
+                                    return Html::ajaxSelect($model, 'main_stone_color', $model->getMainStoneColorDrop($model), ['data-id' => $model->id, 'prompt' => '请选择']);
+                                },
+                                'filter' => Html::activeDropDownList($searchModel, 'main_stone_color', $model->getMainStoneColorMap(), [
                                     'prompt' => '全部',
                                     'class' => 'form-control',
                                     'style' => 'width:80px;'
@@ -1078,21 +1078,6 @@ $this->params['breadcrumbs'][] = $this->title;
                                 ]),
                             ],
                             [
-                                'attribute' => 'second_stone_color1',
-                                'format' => 'raw',
-                                'headerOptions' => ['class' => 'col-md-1 batch_select_full', 'attr-name' => 'second_stone_color1', 'attr-id' => AttrIdEnum::SIDE_STONE1_COLOR, 'style' => 'background-color:#dec674;'],
-                                'footerOptions' => ['class' => 'col-md-1 batch_select_full2', 'attr-name' => 'second_stone_color1', 'attr-id' => AttrIdEnum::SIDE_STONE1_COLOR, 'style' => 'background-color:#dec674;'],
-                                'value' => function ($model, $key, $index, $widget) {
-                                    $widget->footer = $model->getAttributeLabel('second_stone_color1');
-                                    return Html::ajaxSelect($model, 'second_stone_color1', $model->getSecondStoneColor1Drop($model), ['data-id' => $model->id, 'prompt' => '请选择']);
-                                },
-                                'filter' => Html::activeDropDownList($searchModel, 'second_stone_color1', $model->getSecondStoneColor1Map(), [
-                                    'prompt' => '全部',
-                                    'class' => 'form-control',
-                                    'style' => 'width:80px;'
-                                ]),
-                            ],
-                            [
                                 'attribute' => 'second_stone_shape1',
                                 'format' => 'raw',
                                 'headerOptions' => ['class' => 'col-md-1 batch_select_full', 'attr-name' => 'second_stone_shape1', 'attr-id' => AttrIdEnum::SIDE_STONE1_SHAPE, 'style' => 'background-color:#dec674;'],
@@ -1102,6 +1087,21 @@ $this->params['breadcrumbs'][] = $this->title;
                                     return Html::ajaxSelect($model, 'second_stone_shape1', $model->getSecondStoneShape1Drop($model), ['data-id' => $model->id, 'prompt' => '请选择']);
                                 },
                                 'filter' => Html::activeDropDownList($searchModel, 'second_stone_shape1', $model->getSecondStoneShape1Map(), [
+                                    'prompt' => '全部',
+                                    'class' => 'form-control',
+                                    'style' => 'width:80px;'
+                                ]),
+                            ],
+                            [
+                                'attribute' => 'second_stone_color1',
+                                'format' => 'raw',
+                                'headerOptions' => ['class' => 'col-md-1 batch_select_full', 'attr-name' => 'second_stone_color1', 'attr-id' => AttrIdEnum::SIDE_STONE1_COLOR, 'style' => 'background-color:#dec674;'],
+                                'footerOptions' => ['class' => 'col-md-1 batch_select_full2', 'attr-name' => 'second_stone_color1', 'attr-id' => AttrIdEnum::SIDE_STONE1_COLOR, 'style' => 'background-color:#dec674;'],
+                                'value' => function ($model, $key, $index, $widget) {
+                                    $widget->footer = $model->getAttributeLabel('second_stone_color1');
+                                    return Html::ajaxSelect($model, 'second_stone_color1', $model->getSecondStoneColor1Drop($model), ['data-id' => $model->id, 'prompt' => '请选择']);
+                                },
+                                'filter' => Html::activeDropDownList($searchModel, 'second_stone_color1', $model->getSecondStoneColor1Map(), [
                                     'prompt' => '全部',
                                     'class' => 'form-control',
                                     'style' => 'width:80px;'
@@ -2052,21 +2052,21 @@ $this->params['breadcrumbs'][] = $this->title;
 ////                                    'style' => 'width:100px;'
 ////                                ]),
 //                            ],
-                            [
-                                'attribute' => 'style_sex',
-                                'format' => 'raw',
-                                'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#b7ba6b;'],
-                                'footerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#b7ba6b;'],
-                                'value' => function ($model, $key, $index, $widget) {
-                                    $widget->footer = $model->getAttributeLabel('style_sex');
-                                    return \addons\Style\common\enums\StyleSexEnum::getValue($model->style_sex);
-                                },
-                                'filter' => Html::activeDropDownList($searchModel, 'style_sex', $model->getStyleSexMap(), [
-                                    'prompt' => '全部',
-                                    'class' => 'form-control',
-                                    'style' => 'width:80px;'
-                                ]),
-                            ],
+//                            [
+//                                'attribute' => 'style_sex',
+//                                'format' => 'raw',
+//                                'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#b7ba6b;'],
+//                                'footerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#b7ba6b;'],
+//                                'value' => function ($model, $key, $index, $widget) {
+//                                    $widget->footer = $model->getAttributeLabel('style_sex');
+//                                    return \addons\Style\common\enums\StyleSexEnum::getValue($model->style_sex);
+//                                },
+//                                'filter' => Html::activeDropDownList($searchModel, 'style_sex', $model->getStyleSexMap(), [
+//                                    'prompt' => '全部',
+//                                    'class' => 'form-control',
+//                                    'style' => 'width:80px;'
+//                                ]),
+//                            ],
                             [
                                 'attribute' => 'jintuo_type',
                                 'format' => 'raw',
@@ -2082,37 +2082,37 @@ $this->params['breadcrumbs'][] = $this->title;
                                     'style' => 'width:100px;'
                                 ]),
                             ],
-                            [
-                                'attribute' => 'qiban_type',
-                                'format' => 'raw',
-                                'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#b7ba6b;'],
-                                'footerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#b7ba6b;'],
-                                'value' => function ($model, $key, $index, $widget) {
-                                    $widget->footer = $model->getAttributeLabel('qiban_type');
-                                    return \addons\Style\common\enums\QibanTypeEnum::getValue($model->qiban_type);
-                                },
-                                'filter' => Html::activeDropDownList($searchModel, 'qiban_type', $model->getQibanTypeMap(), [
-                                    'prompt' => '全部',
-                                    'class' => 'form-control',
-                                    'style' => 'width:80px;'
-                                ]),
-                            ],
-                            [
-                                'attribute' => 'is_inlay',
-                                'format' => 'raw',
-                                'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#b7ba6b;'],
-                                'footerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#b7ba6b;'],
-                                'value' => function ($model, $key, $index, $widget) {
-                                    $widget->footer = $model->getAttributeLabel('is_inlay');
-                                    //return \addons\Style\common\enums\InlayEnum::getValue($model->is_inlay);
-                                    return Html::ajaxSelect($model, 'is_inlay', $model->getIsInlayMap(), ['data-id' => $model->id, 'prompt' => '请选择']);
-                                },
-                                'filter' => Html::activeDropDownList($searchModel, 'is_inlay', $model->getIsInlayMap(), [
-                                    'prompt' => '全部',
-                                    'class' => 'form-control',
-                                    'style' => 'width:80px;'
-                                ]),
-                            ],
+//                            [
+//                                'attribute' => 'qiban_type',
+//                                'format' => 'raw',
+//                                'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#b7ba6b;'],
+//                                'footerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#b7ba6b;'],
+//                                'value' => function ($model, $key, $index, $widget) {
+//                                    $widget->footer = $model->getAttributeLabel('qiban_type');
+//                                    return \addons\Style\common\enums\QibanTypeEnum::getValue($model->qiban_type);
+//                                },
+//                                'filter' => Html::activeDropDownList($searchModel, 'qiban_type', $model->getQibanTypeMap(), [
+//                                    'prompt' => '全部',
+//                                    'class' => 'form-control',
+//                                    'style' => 'width:80px;'
+//                                ]),
+//                            ],
+//                            [
+//                                'attribute' => 'is_inlay',
+//                                'format' => 'raw',
+//                                'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#b7ba6b;'],
+//                                'footerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#b7ba6b;'],
+//                                'value' => function ($model, $key, $index, $widget) {
+//                                    $widget->footer = $model->getAttributeLabel('is_inlay');
+//                                    //return \addons\Style\common\enums\InlayEnum::getValue($model->is_inlay);
+//                                    return Html::ajaxSelect($model, 'is_inlay', $model->getIsInlayMap(), ['data-id' => $model->id, 'prompt' => '请选择']);
+//                                },
+//                                'filter' => Html::activeDropDownList($searchModel, 'is_inlay', $model->getIsInlayMap(), [
+//                                    'prompt' => '全部',
+//                                    'class' => 'form-control',
+//                                    'style' => 'width:80px;'
+//                                ]),
+//                            ],
                             [
                                 'attribute' => 'main_cert_type',
                                 'format' => 'raw',

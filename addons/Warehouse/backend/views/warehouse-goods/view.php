@@ -153,7 +153,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         </tr>
                         <tr>
                             <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('goods_image') ?>：</td>
-                            <td><?= \common\helpers\ImageHelper::fancyBox($model->goods_image,60,60) ?></td>
+                            <td><?= \common\helpers\ImageHelper::fancyBox($model->goods_image,120,120) ?></td>
                         </tr>
                     </table>
                 </div>

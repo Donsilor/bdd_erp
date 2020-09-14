@@ -988,21 +988,6 @@ $this->params['breadcrumbs'][] = $this->title;
 //                                ]),
                             ],
                             [
-                                'attribute' => 'second_stone_color1',
-                                'format' => 'raw',
-                                'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#dec674;'],
-                                'footerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#dec674;'],
-                                'value' => function ($model, $key, $index, $widget) {
-                                    $widget->footer = $model->getAttributeLabel('second_stone_color1');
-                                    return Yii::$app->attr->valueName($model->second_stone_color1) ?? "";
-                                },
-                                'filter' => Html::activeDropDownList($searchModel, 'second_stone_color1', $model->getSecondStoneColor1Map(), [
-                                    'prompt' => '全部',
-                                    'class' => 'form-control',
-                                    'style' => 'width:80px;'
-                                ]),
-                            ],
-                            [
                                 'attribute' => 'second_stone_shape1',
                                 'format' => 'raw',
                                 'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#dec674;'],
@@ -1018,15 +1003,15 @@ $this->params['breadcrumbs'][] = $this->title;
                                 ]),
                             ],
                             [
-                                'attribute' => 'second_stone_cut1',
+                                'attribute' => 'second_stone_color1',
                                 'format' => 'raw',
                                 'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#dec674;'],
                                 'footerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#dec674;'],
                                 'value' => function ($model, $key, $index, $widget) {
-                                    $widget->footer = $model->getAttributeLabel('second_stone_cut1');
-                                    return Yii::$app->attr->valueName($model->second_stone_cut1) ?? "";
+                                    $widget->footer = $model->getAttributeLabel('second_stone_color1');
+                                    return Yii::$app->attr->valueName($model->second_stone_color1) ?? "";
                                 },
-                                'filter' => Html::activeDropDownList($searchModel, 'second_stone_cut1', $model->getSecondStoneCut1Map(), [
+                                'filter' => Html::activeDropDownList($searchModel, 'second_stone_color1', $model->getSecondStoneColor1Map(), [
                                     'prompt' => '全部',
                                     'class' => 'form-control',
                                     'style' => 'width:80px;'
@@ -1042,6 +1027,21 @@ $this->params['breadcrumbs'][] = $this->title;
                                     return Yii::$app->attr->valueName($model->second_stone_clarity1) ?? "";
                                 },
                                 'filter' => Html::activeDropDownList($searchModel, 'second_stone_clarity1', $model->getSecondStoneClarity1Map(), [
+                                    'prompt' => '全部',
+                                    'class' => 'form-control',
+                                    'style' => 'width:80px;'
+                                ]),
+                            ],
+                            [
+                                'attribute' => 'second_stone_cut1',
+                                'format' => 'raw',
+                                'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#dec674;'],
+                                'footerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#dec674;'],
+                                'value' => function ($model, $key, $index, $widget) {
+                                    $widget->footer = $model->getAttributeLabel('second_stone_cut1');
+                                    return Yii::$app->attr->valueName($model->second_stone_cut1) ?? "";
+                                },
+                                'filter' => Html::activeDropDownList($searchModel, 'second_stone_cut1', $model->getSecondStoneCut1Map(), [
                                     'prompt' => '全部',
                                     'class' => 'form-control',
                                     'style' => 'width:80px;'
