@@ -4,6 +4,7 @@ namespace addons\Warehouse\services;
 
 use addons\Style\common\enums\JintuoTypeEnum;
 use addons\Warehouse\common\enums\GoodSourceEnum;
+use common\enums\LogTypeEnum;
 use Yii;
 use common\components\Service;
 use common\helpers\SnHelper;
@@ -337,6 +338,7 @@ class WarehouseBillLService extends Service
                     }
                     $value = [];
                 }
+
             }
             if (!empty($value)) {
                 $res = Yii::$app->db->createCommand()->batchInsert(WarehouseGoods::tableName(), $key, $value)->execute();
@@ -385,6 +387,15 @@ class WarehouseBillLService extends Service
                             throw new \Exception($this->getError($goodsL));
                         }
                     }
+
+                    //插入商品日志
+                    $log = [
+                        'goods_id' => $id,
+                        'goods_status' => GoodsStatusEnum::IN_STOCK,
+                        'log_type' => LogTypeEnum::ARTIFICIAL,
+                        'log_msg' => '入库单：'.$form->bill_no.";货品状态:“".GoodsStatusEnum::getValue(GoodsStatusEnum::IN_STOCK)."”"
+                    ];
+                    Yii::$app->warehouseService->goodsLog->createGoodsLog($log);
                 }
             }
             if ($form->order_type == OrderTypeEnum::ORDER_L

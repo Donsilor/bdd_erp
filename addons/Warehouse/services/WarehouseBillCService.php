@@ -184,7 +184,19 @@ class WarehouseBillCService extends WarehouseBillService
                 if(!$res){
                     throw new Exception("商品{$goods->goods_id}不存在，请查看原因");
                 }
+
+                //插入商品日志
+                $log = [
+                    'goods_id' => $goods->goods->id,
+                    'goods_status' => GoodsStatusEnum::HAS_SOLD,
+                    'log_type' => LogTypeEnum::ARTIFICIAL,
+                    'log_msg' => '其他出库单：'.$form->bill_no.";货品状态:“".GoodsStatusEnum::getValue(GoodsStatusEnum::IN_STOCK)."”变更为：“".GoodsStatusEnum::getValue(GoodsStatusEnum::HAS_SOLD)."”"
+                ];
+                Yii::$app->warehouseService->goodsLog->createGoodsLog($log);
+
             }
+
+
             
         }else{
             $form->bill_status = BillStatusEnum::SAVE;
