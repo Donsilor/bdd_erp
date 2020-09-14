@@ -445,7 +445,7 @@ class WarehouseBillTService extends Service
                     $main_stone_type = $attr_id;
                 }
             } elseif (!empty($stone)) {
-                $main_stone_type = $mainAttr->stone_type ?? "";
+                $main_stone_type = $mainAttr['stone_type'] ?? "";
             }
             $main_stone_num = $form->formatValue($goods[23], 0) ?? 0;
             $main_stone_weight = $form->formatValue($goods[24], 0) ?? 0;
@@ -471,7 +471,7 @@ class WarehouseBillTService extends Service
                     $main_stone_shape = $attr_id;
                 }
             } elseif (!empty($stone)) {
-                $main_stone_shape = $mainAttr->stone_shape ?? "";
+                $main_stone_shape = $mainAttr['stone_shape'] ?? "";
             }
             $main_stone_color = $goods[27] ?? "";
             if (!empty($main_stone_color)) {
@@ -484,7 +484,7 @@ class WarehouseBillTService extends Service
                     $main_stone_color = $attr_id;
                 }
             } elseif (!empty($stone)) {
-                $main_stone_color = $mainAttr->stone_color ?? "";
+                $main_stone_color = $mainAttr['stone_color'] ?? "";
             }
             $main_stone_clarity = $goods[28] ?? "";
             if (!empty($main_stone_clarity)) {
@@ -497,7 +497,7 @@ class WarehouseBillTService extends Service
                     $main_stone_clarity = $attr_id;
                 }
             } elseif (!empty($stone)) {
-                $main_stone_clarity = $mainAttr->stone_clarity ?? "";
+                $main_stone_clarity = $mainAttr['stone_clarity'] ?? "";
             }
             $main_stone_cut = $goods[29] ?? "";
             if (!empty($main_stone_cut)) {
@@ -510,7 +510,7 @@ class WarehouseBillTService extends Service
                     $main_stone_cut = $attr_id;
                 }
             } elseif (!empty($stone)) {
-                $main_stone_cut = $mainAttr->stone_cut ?? "";
+                $main_stone_cut = $mainAttr['stone_cut'] ?? "";
             }
             $main_stone_colour = $goods[30] ?? "";
             if (!empty($main_stone_colour)) {
@@ -523,7 +523,7 @@ class WarehouseBillTService extends Service
                     $main_stone_colour = $attr_id;
                 }
             } elseif (!empty($stone)) {
-                $main_stone_colour = $mainAttr->stone_colour ?? "";
+                $main_stone_colour = $mainAttr['stone_colour'] ?? "";
             }
 //            $main_stone_size = $goods[31] ?? "";
 //            if (empty($main_stone_size)) {
@@ -552,7 +552,7 @@ class WarehouseBillTService extends Service
                     $second_stone_type1 = $attr_id;
                 }
             } elseif (!empty($stone)) {
-                $second_stone_type1 = $second1Attr->stone_type ?? "";
+                $second_stone_type1 = $second1Attr['stone_type'] ?? "";
             }
             $second_stone_num1 = $form->formatValue($goods[34], 0) ?? 0;
             $second_stone_weight1 = $form->formatValue($goods[35], 0) ?? 0;
@@ -578,7 +578,7 @@ class WarehouseBillTService extends Service
                     $second_stone_shape1 = $attr_id;
                 }
             } elseif (!empty($stone)) {
-                $second_stone_shape1 = $second1Attr->stone_shape ?? "";
+                $second_stone_shape1 = $second1Attr['stone_shape'] ?? "";
             }
             $second_stone_color1 = $goods[38] ?? "";
             if (!empty($second_stone_color1)) {
@@ -591,7 +591,7 @@ class WarehouseBillTService extends Service
                     $second_stone_color1 = $attr_id;
                 }
             } elseif (!empty($stone)) {
-                $second_stone_color1 = $second1Attr->stone_color ?? "";
+                $second_stone_color1 = $second1Attr['stone_color'] ?? "";
             }
             $second_stone_clarity1 = $goods[39] ?? "";
             if (!empty($second_stone_clarity1)) {
@@ -604,7 +604,7 @@ class WarehouseBillTService extends Service
                     $second_stone_clarity1 = $attr_id;
                 }
             } elseif (!empty($stone)) {
-                $second_stone_clarity1 = $second1Attr->stone_clarity ?? "";
+                $second_stone_clarity1 = $second1Attr['stone_clarity'] ?? "";
             }
             $second_stone_cut1 = $goods[40] ?? "";
             if (!empty($second_stone_cut1)) {
@@ -617,7 +617,7 @@ class WarehouseBillTService extends Service
                     $second_stone_cut1 = $attr_id;
                 }
             } elseif (!empty($stone)) {
-                $second_stone_cut1 = $second1Attr->stone_cut ?? "";
+                $second_stone_cut1 = $second1Attr['stone_cut'] ?? "";
             }
             $second_stone_colour1 = $goods[41] ?? "";
             if (!empty($second_stone_colour1)) {
@@ -630,7 +630,7 @@ class WarehouseBillTService extends Service
                     $second_stone_colour1 = $attr_id;
                 }
             } elseif (!empty($stone)) {
-                $second_stone_colour1 = $second1Attr->stone_colour ?? "";
+                $second_stone_colour1 = $second1Attr['stone_colour'] ?? "";
             }
             $second_pei_type2 = $form->formatValue($goods[42], 0) ?? 0;
             $second_stone_sn2 = $goods[43] ?? "";
@@ -655,7 +655,7 @@ class WarehouseBillTService extends Service
                     $second_stone_type2 = $attr_id;
                 }
             } elseif (!empty($stone)) {
-                $second_stone_type2 = $second2Attr->stone_type ?? "";
+                $second_stone_type2 = $second2Attr['stone_type'] ?? "";
             }
             $second_stone_num2 = $form->formatValue($goods[45], 0) ?? 0;
             $second_stone_weight2 = $form->formatValue($goods[46], 0) ?? 0;
@@ -694,7 +694,7 @@ class WarehouseBillTService extends Service
                     $second_stone_type3 = $attr_id;
                 }
             } elseif (!empty($stone)) {
-                $second_stone_type3 = $second3Attr->stone_type ?? "";
+                $second_stone_type3 = $second3Attr['stone_type'] ?? "";
             }
             $second_stone_num3 = $form->formatValue($goods[51], 0) ?? 0;
             $second_stone_weight3 = $form->formatValue($goods[52], 0) ?? 0;
@@ -1341,7 +1341,6 @@ class WarehouseBillTService extends Service
      */
     public function stoneAttrValueMap($stone, $stone_position)
     {
-        $type = $this->getStoneTypeMap();
         $shape = $this->getStoneShapeMap();
         $color = $this->getStoneColorMap();
         $clarity = $this->getStoneClarityMap();
@@ -1362,8 +1361,7 @@ class WarehouseBillTService extends Service
             $stone_colour = $colour[$stone_colour] ?? [];
             switch ($stone_position) {
                 case StonePositionEnum::MAIN_STONE:
-                    $stoneAttr['stone_type'] = $stone_type[0] ?? "";
-                    $stoneAttr['stone_shape'] = $stone_shape[0] ?? "";
+                    $stoneAttr['stone_type'] = $stone['stone_type'] ?? "";
                     $stoneAttr['stone_color'] = $stone_color[0] ?? "";
                     $stoneAttr['stone_clarity'] = $stone_clarity[0] ?? "";
                     $stoneAttr['stone_cut'] = $stone_cut[0] ?? "";
@@ -1386,6 +1384,13 @@ class WarehouseBillTService extends Service
                     break;
                 default:
                     break;
+            }
+            if (!empty($stoneAttr)) {
+                foreach ($stoneAttr as $k => &$item) {
+                    if ($item) {
+                        $stoneAttr[$k] = (string)$item;
+                    }
+                }
             }
         }
         return $stoneAttr ?? [];
@@ -1443,11 +1448,11 @@ class WarehouseBillTService extends Service
             54 => [363, 381],//公主方形
             55 => [364, 382],//八角梯形
             56 => [365, 383],//心形
-            57 => [0, 0],//马眼形
+            57 => ["", ""],//马眼形
             58 => [367, 385],//枕形
             452 => [453, 454],//祖母绿形
             59 => [368, 386],//水滴形
-            450 => [0, 0],//阿斯切
+            450 => ["", ""],//阿斯切
             60 => [369, 387],//雷迪恩形
             61 => [370, 388],//圆三角形
             315 => [371, 389],//圆形(弧面)
@@ -1475,11 +1480,11 @@ class WarehouseBillTService extends Service
             19 => [332],//E
             22 => [133],//F
             50 => [134],//G
-            444 => [0],//GH
+            444 => [""],//GH
             51 => [135],//H
             52 => [136],//I
             53 => [137],//J
-            447 => [0],//IJ
+            447 => [""],//IJ
             153 => [131],//K
             154 => [331],//L
             155 => [333],//M
