@@ -13,6 +13,12 @@ $form = ActiveForm::begin([
         'template' => "<div class='col-sm-2 text-right'>{label}</div><div class='col-sm-10'>{input}\n{hint}\n{error}</div>",
     ]
 ]);
+if(!$model->type) {
+    $model->type = \addons\Style\common\enums\ImageTypeEnum::ORIGINAL;
+}
+if(!$model->position) {
+    $model->position = \addons\Style\common\enums\ImagePositionEnum::POSITIVE;
+}
 ?>
 
     <div class="modal-header">
