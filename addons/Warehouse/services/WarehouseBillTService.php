@@ -934,7 +934,7 @@ class WarehouseBillTService extends Service
                 'other_fee' => $other_fee,
                 'main_cert_id' => $main_cert_id,
                 'main_cert_type' => $main_cert_type,
-                'cost_price' => $cost_price,
+                //'cost_price' => $cost_price,
                 'markup_rate' => $markup_rate,
                 'jintuo_type' => $jintuo_type,
                 'auto_goods_id' => $auto_goods_id,
@@ -1018,9 +1018,9 @@ class WarehouseBillTService extends Service
     public function syncUpdatePriceAll($form, $ids = [])
     {
         $where = ['bill_id' => $form->id];
-        if (!empty($ids)) {
-            $where = [['bill_id' => $form->id], 'id' => $ids];
-        }
+//        if(!empty($ids)){
+//            $where = ['bill_id' => $form->id, 'id' => $ids];
+//        }
         $goods = WarehouseBillTGoodsForm::findAll($where);
         if (!empty($goods)) {
             foreach ($goods as $good) {
