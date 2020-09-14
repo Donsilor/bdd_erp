@@ -278,16 +278,16 @@ $this->params['breadcrumbs'][] = $this->title;
                         </tr>
 
                         <tr>
-                            <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('second_stone1_cost') ?>：</td>
-                            <td><?= $model->second_stone1_cost ?></td>
+                            <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('second_stone_cost1') ?>：</td>
+                            <td><?= $model->second_stone_cost1 ?></td>
                         </tr>
                         <tr>
-                            <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('second_stone2_cost') ?>：</td>
-                            <td><?= $model->second_stone2_cost ?></td>
+                            <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('second_stone_cost2') ?>：</td>
+                            <td><?= $model->second_stone_cost2 ?></td>
                         </tr>
                         <tr>
-                            <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('second_stone3_cost') ?>：</td>
-                            <td><?= $model->second_stone3_cost ?></td>
+                            <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('second_stone_cost3') ?>：</td>
+                            <td><?= $model->second_stone_cost3 ?></td>
                         </tr>
                     </table>
                 </div>

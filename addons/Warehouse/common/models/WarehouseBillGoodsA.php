@@ -171,7 +171,7 @@ class WarehouseBillGoodsA extends BaseModel
             'second_stone_num3' => '副石3数量',
             'second_stone_weight3' => '副石3重量(ct)',
             'second_stone_price3' => '副石3买入单价',
-            'second_stone3_cost' => '副石3成本',
+            'second_stone_cost3' => '副石3成本',
             'piece_fee' => '件/工费',
         ];
     }

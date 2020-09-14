@@ -495,7 +495,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             [
                                 'label'=>'副石1成本',
                                 'value' => function($model){
-                                    return $model->second_stone1_cost;
+                                    return $model->second_stone_cost1;
                                 },
                                 'filter' => false,
                                 'headerOptions' => [],
@@ -566,7 +566,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             [
                                 'label'=>'副石2成本',
                                 'value' => function($model){
-                                    return $model->second_stone2_cost;
+                                    return $model->second_stone_cost2;
                                 },
                                 'filter' => false,
                                 'headerOptions' => [],
@@ -633,7 +633,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             [
                                 'label'=>'副石3成本',
                                 'value' => function($model){
-                                    return $model->second_stone3_cost;
+                                    return $model->second_stone_cost3;
                                 },
                                 'filter' => false,
                                 'headerOptions' => [],

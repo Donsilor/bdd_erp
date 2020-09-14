@@ -154,7 +154,7 @@ class WarehouseGoods extends BaseModel
             [['goods_id','warehouse_id', 'jintuo_type'], 'required'],
             [['gold_weight','suttle_weight', 'gold_loss', 'diamond_carat', 'market_price','cost_price','chuku_price', 'factory_cost', 'xiangkou', 'bukou_fee','gong_fee','biaomiangongyi_fee','parts_gold_weight','main_stone_price', 'second_stone_weight1', 'second_stone_price1', 'second_stone_weight2',
                 'second_stone_price2','second_stone_weight3','second_stone_price3' ,'gold_price','gold_amount','markup_rate','parts_fee','fense_fee','cert_fee','extra_stone_fee','tax_fee','other_fee','total_gong_fee','parts_price','xianqian_price','peishi_fee','peishi_amount','penrasa_fee',
-                'edition_fee','parts_amount','second_stone3_cost','ke_gong_fee','main_stone_cost','second_stone1_cost','second_stone2_cost','peishi_weight','pure_gold','lasha_fee','piece_fee'], 'number'],
+                'edition_fee','parts_amount','second_stone_cost3','ke_gong_fee','main_stone_cost','second_stone_cost1','second_stone_cost2','peishi_weight','pure_gold','lasha_fee','piece_fee'], 'number'],
             [['goods_name', 'cert_id', 'length','kezi', 'main_stone_size','second_stone_size1','goods_color'], 'string', 'max' => 100],
             [['style_sn','goods_id','qiban_sn'], 'string', 'max' => 30],
             [['gross_weight', 'produce_sn', 'diamond_cert_id','second_cert_id1','second_stone_sn1','main_stone_sn','parts_material'], 'string', 'max' => 20],
@@ -275,7 +275,7 @@ class WarehouseGoods extends BaseModel
             'second_stone_num3' => '副石3数量',
             'second_stone_weight3' => '副石3重量(ct)',
             'second_stone_price3' => '副石3买入单价',
-            'second_stone3_cost' => '副石3成本',
+            'second_stone_cost3' => '副石3成本',
             'is_inlay' => '是否镶嵌',
             'chain_long' => '链长(mm)',
             'chain_type' => '链类型',
@@ -321,8 +321,8 @@ class WarehouseGoods extends BaseModel
             'second_peishi_way2' => '副石2配石方式',
             'second_peishi_way3' => '副石3配石方式',
             'main_stone_cost' => '主石成本',
-            'second_stone1_cost' => '副石1成本',
-            'second_stone2_cost' => '副石2成本',
+            'second_stone_cost1' => '副石1成本',
+            'second_stone_cost2' => '副石2成本',
         ];
     }
 
