@@ -188,6 +188,7 @@ class StyleService extends Service
         $flag = true;
         $error_off = true;
         $error = $style_sns = $field = $styleList = $attrList = $factoryList1 = $factoryList2 = $styleFee = [];
+        $creator_id = \Yii::$app->user->identity->getId();
         while ($style = fgetcsv($file)) {
             if (count($style) != 36) {
                 throw new \Exception("模板格式不正确，请下载最新模板");
@@ -373,7 +374,7 @@ class StyleService extends Service
             $cert_fee = $form->formatValue($style['cert_fee'] ?? "", '0.00');
             $other_fee = $form->formatValue($style['other_fee'] ?? "", '0.00');
 
-            $creator_id = \Yii::$app->user->identity->getId();
+            //$creator_id = \Yii::$app->user->identity->getId();
             //款式信息
             $styleList[] = $styleInfo = [
                 'style_sn' => $style_sn,
@@ -500,7 +501,7 @@ class StyleService extends Service
             $styleM->setAttributes($item);
             if ($styleM->status == StatusEnum::ENABLED) {//启用即审核
                 $styleM->audit_status = AuditStatusEnum::PASS;
-                $styleM->auditor_id = \Yii::$app->user->identity->getId();
+                $styleM->auditor_id = $creator_id;
                 $styleM->audit_time = time();
                 $styleM->audit_remark = "批量导入系统自动审核";
             } else {
@@ -546,7 +547,7 @@ class StyleService extends Service
                     $feeData['style_id'] = $styleM->id;
                     $feeData['fee_type'] = $fee_type;
                     $feeData['fee_price'] = sprintf("%.2f", round($fee, 2));
-                    $feeData['creator_id'] = \Yii::$app->user->identity->getId();
+                    $feeData['creator_id'] = $creator_id;
                     $feeData['created_at'] = time();
                     $saveFee[] = $feeData;
                 }
@@ -658,9 +659,6 @@ class StyleService extends Service
                 }
             }
         }
-
-
-
 
         //创建款式属性信息(写入文本值)
         //$saveAttr
