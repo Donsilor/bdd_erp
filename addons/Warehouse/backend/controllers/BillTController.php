@@ -258,7 +258,7 @@ class BillTController extends BaseController
      * @param $id
      * @return mixed
      */
-    public function actionSyncUpdatePrice($id)
+    /* public function actionSyncUpdatePrice($id)
     {
         if (!($model = $this->modelClass::findOne($id))) {
             return $this->message("找不到数据", $this->redirect(['index']), 'error');
@@ -269,7 +269,7 @@ class BillTController extends BaseController
             \Yii::$app->warehouseService->billT->syncUpdatePriceAll($id);
 
             //更新收货单汇总：总金额和总数量
-            $res = \Yii::$app->warehouseService->billT->WarehouseBillTSummary($id);
+            $res = \Yii::$app->warehouseService->billT->warehouseBillTSummary($id);
             if (false === $res) {
                 throw new \yii\db\Exception('更新单据汇总失败');
             }
@@ -280,7 +280,7 @@ class BillTController extends BaseController
             $trans->rollBack();
             return $this->message($e->getMessage(), $this->redirect(\Yii::$app->request->referrer), 'error');
         }
-    }
+    } */
 
     /**
      *
@@ -304,8 +304,8 @@ class BillTController extends BaseController
             $log = [
                 'bill_id' => $model->id,
                 'log_type' => LogTypeEnum::ARTIFICIAL,
-                'log_module' => '其它收货单',
-                'log_msg' => '单据取消'
+                'log_module' => '单据取消',
+                'log_msg' => '取消其它收货单'
             ];
             \Yii::$app->warehouseService->billLog->createBillLog($log);
             \Yii::$app->getSession()->setFlash('success', '操作成功');
@@ -331,23 +331,18 @@ class BillTController extends BaseController
         }
         try {
             $trans = \Yii::$app->db->beginTransaction();
-            //更新库存状态
-            $billGoods = WarehouseBillGoodsL::find()->where(['bill_id' => $id])->all();
-            if (!$billGoods) {
-                throw new \Exception("单据明细为空");
-            }
-            $ids = ArrayHelper::getColumn($billGoods, 'id');
-            if (!WarehouseBillGoodsL::deleteAll(['id' => $ids])) {
-                throw new \Exception("删除明细失败");
-            }
+            
+            if(false === WarehouseBillGoodsL::deleteAll(['bill_id' => $id])){
+                throw new \Exception("单据明细删除失败");
+            }            
             if (false === $model->delete()) {
                 throw new \Exception($this->getError($model));
             }
             $log = [
                 'bill_id' => $model->id,
                 'log_type' => LogTypeEnum::ARTIFICIAL,
-                'log_module' => '其它出库单',
-                'log_msg' => '单据删除'
+                'log_module' => '单据删除',
+                'log_msg' => '删除其它入库单'
             ];
             \Yii::$app->warehouseService->billLog->createBillLog($log);
             \Yii::$app->getSession()->setFlash('success', '操作成功');

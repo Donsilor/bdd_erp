@@ -200,7 +200,13 @@ $this->params['breadcrumbs'][] = $this->title;
                         <?= $form->field($model, 'other_fee')->textInput() ?>
                     </div>
                     <div class="col-lg-4">
-                        <?= $form->field($model, 'xianqian_price')->textInput() ?>
+                        <?= $form->field($model, 'second_stone_fee1')->textInput() ?>
+                    </div>
+                    <div class="col-lg-4">
+                        <?= $form->field($model, 'second_stone_fee2')->textInput() ?>
+                    </div>
+                    <div class="col-lg-4">
+                        <?= $form->field($model, 'second_stone_fee3')->textInput() ?>
                     </div>
                     <div class="col-lg-4">
                         <?= $form->field($model, 'peishi_fee')->textInput() ?>

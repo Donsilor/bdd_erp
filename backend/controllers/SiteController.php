@@ -101,7 +101,10 @@ class SiteController extends Controller
     {        
         if(preg_match("/:\/\/work/is",Yii::$app->getRequest()->absoluteUrl)) {
             Yii::$app->params['adminTitle'] = '恒得利Work';
+        }else if(preg_match("/:\/\/gdzb/is",Yii::$app->getRequest()->absoluteUrl)){
+            Yii::$app->params['adminTitle'] = '高端珠宝后台';
         }
+        
         if (!Yii::$app->user->isGuest) {
             // 记录行为日志
             Yii::$app->services->actionLog->create('login', '自动登录', false);

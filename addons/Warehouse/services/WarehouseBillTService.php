@@ -15,6 +15,7 @@ use addons\Style\common\models\Qiban;
 use addons\Warehouse\common\enums\PeiJianWayEnum;
 use addons\Warehouse\common\enums\PeiLiaoWayEnum;
 use addons\Warehouse\common\enums\PeiShiWayEnum;
+use addons\Style\common\enums\StonePositionEnum;
 use addons\Style\common\enums\JintuoTypeEnum;
 use addons\Style\common\enums\QibanTypeEnum;
 use addons\Style\common\enums\AttrIdEnum;
@@ -211,7 +212,7 @@ class WarehouseBillTService extends Service
                 $i++;
                 continue;
             }
-            if (count($goods) != 82) {
+            if (count($goods) != 84) {
                 throw new \Exception("模板格式不正确，请下载最新模板");
             }
             $goods = $form->trimField($goods);
@@ -413,13 +414,13 @@ class WarehouseBillTService extends Service
             $gold_loss = StringHelper::findNum($gold_loss);
             $gold_price = $form->formatValue($goods[18], 0) ?? 0;
             $pure_gold = $form->formatValue($goods[19], 0) ?? 0;
-            if(empty($peiliao_way) && $pure_gold>0){
+            if (empty($peiliao_way) && $pure_gold > 0) {
                 $peiliao_way = PeiLiaoWayEnum::LAILIAO;
             }
 
             $main_pei_type = $form->formatValue($goods[20], 0) ?? 0;
             $main_stone_sn = $goods[21] ?? "";
-            $stone = null;
+            $stone = $mainAttr = null;
             $cert_id = $cert_type = "";
             if (!empty($main_stone_sn)) {
                 $stone = WarehouseStone::findOne(['stone_sn' => $main_stone_sn]);
@@ -429,6 +430,8 @@ class WarehouseBillTService extends Service
                 } else {
                     $cert_id = $stone->cert_id ?? "";
                     $cert_type = $stone->cert_type ?? "";
+
+                    $mainAttr = $this->stoneAttrValueMap($stone, StonePositionEnum::MAIN_STONE);
                 }
             }
             $main_stone_type = $goods[22] ?? "";
@@ -442,7 +445,7 @@ class WarehouseBillTService extends Service
                     $main_stone_type = $attr_id;
                 }
             } elseif (!empty($stone)) {
-                $main_stone_type = $stone->stone_type ?? "";
+                $main_stone_type = $mainAttr['stone_type'] ?? "";
             }
             $main_stone_num = $form->formatValue($goods[23], 0) ?? 0;
             $main_stone_weight = $form->formatValue($goods[24], 0) ?? 0;
@@ -457,6 +460,9 @@ class WarehouseBillTService extends Service
                 $main_pei_type = $form->getPeiType($main_stone_sn, $main_stone_num, $main_stone_weight);
             }
             $main_stone_price = $form->formatValue($goods[25], 0) ?? 0;
+            if (empty($main_stone_price) && !empty($stone)) {
+                $main_stone_price = $stone->stone_price ?? 0;
+            }
             $main_stone_shape = $goods[26] ?? "";
             if (!empty($main_stone_shape)) {
                 $attr_id = $form->getAttrIdByAttrValue($style_sn, $main_stone_shape, AttrIdEnum::MAIN_STONE_SHAPE);
@@ -468,7 +474,7 @@ class WarehouseBillTService extends Service
                     $main_stone_shape = $attr_id;
                 }
             } elseif (!empty($stone)) {
-                $main_stone_shape = $stone->stone_shape ?? "";
+                $main_stone_shape = $mainAttr['stone_shape'] ?? "";
             }
             $main_stone_color = $goods[27] ?? "";
             if (!empty($main_stone_color)) {
@@ -481,7 +487,7 @@ class WarehouseBillTService extends Service
                     $main_stone_color = $attr_id;
                 }
             } elseif (!empty($stone)) {
-                $main_stone_color = $stone->stone_color ?? "";
+                $main_stone_color = $mainAttr['stone_color'] ?? "";
             }
             $main_stone_clarity = $goods[28] ?? "";
             if (!empty($main_stone_clarity)) {
@@ -494,7 +500,7 @@ class WarehouseBillTService extends Service
                     $main_stone_clarity = $attr_id;
                 }
             } elseif (!empty($stone)) {
-                $main_stone_clarity = $stone->stone_clarity ?? "";
+                $main_stone_clarity = $mainAttr['stone_clarity'] ?? "";
             }
             $main_stone_cut = $goods[29] ?? "";
             if (!empty($main_stone_cut)) {
@@ -507,7 +513,7 @@ class WarehouseBillTService extends Service
                     $main_stone_cut = $attr_id;
                 }
             } elseif (!empty($stone)) {
-                $main_stone_cut = $stone->stone_cut ?? "";
+                $main_stone_cut = $mainAttr['stone_cut'] ?? "";
             }
             $main_stone_colour = $goods[30] ?? "";
             if (!empty($main_stone_colour)) {
@@ -520,7 +526,7 @@ class WarehouseBillTService extends Service
                     $main_stone_colour = $attr_id;
                 }
             } elseif (!empty($stone)) {
-                $main_stone_colour = $stone->stone_colour ?? "";
+                $main_stone_colour = $mainAttr['stone_colour'] ?? "";
             }
 //            $main_stone_size = $goods[31] ?? "";
 //            if (empty($main_stone_size)) {
@@ -528,12 +534,15 @@ class WarehouseBillTService extends Service
 //            }
             $second_pei_type = $form->formatValue($goods[31], 0) ?? 0;
             $second_stone_sn1 = $goods[32] ?? "";
-            $stone = null;
+            $stone = $second1Attr = null;
             if (!empty($second_stone_sn1)) {
                 $stone = WarehouseStone::findOne(['stone_sn' => $second_stone_sn1]);
                 if (empty($stone)) {
 //                    $flag = false;
 //                    $error[$i][] = "副石1编号：[" . $second_stone_sn1 . "]录入值有误";
+                } else {
+                    //var_dump($stone);die;
+                    $second1Attr = $this->stoneAttrValueMap($stone, StonePositionEnum::SECOND_STONE1);
                 }
             }
             $second_stone_type1 = $goods[33] ?? "";
@@ -547,7 +556,7 @@ class WarehouseBillTService extends Service
                     $second_stone_type1 = $attr_id;
                 }
             } elseif (!empty($stone)) {
-                $second_stone_type1 = $stone->stone_type ?? "";
+                $second_stone_type1 = $second1Attr['stone_type'] ?? "";
             }
             $second_stone_num1 = $form->formatValue($goods[34], 0) ?? 0;
             $second_stone_weight1 = $form->formatValue($goods[35], 0) ?? 0;
@@ -562,6 +571,9 @@ class WarehouseBillTService extends Service
                 $second_pei_type = $form->getPeiType($second_stone_sn1, $second_stone_num1, $second_stone_weight1);
             }
             $second_stone_price1 = $form->formatValue($goods[36], 0) ?? 0;
+            if (empty($second_stone_price1) && !empty($stone)) {
+                $second_stone_price1 = $stone->stone_price ?? 0;
+            }
             $second_stone_shape1 = $goods[37] ?? "";
             if (!empty($second_stone_shape1)) {
                 $attr_id = $form->getAttrIdByAttrValue($style_sn, $second_stone_shape1, AttrIdEnum::SIDE_STONE1_SHAPE);
@@ -573,7 +585,7 @@ class WarehouseBillTService extends Service
                     $second_stone_shape1 = $attr_id;
                 }
             } elseif (!empty($stone)) {
-                $second_stone_shape1 = $stone->stone_shape ?? "";
+                $second_stone_shape1 = $second1Attr['stone_shape'] ?? "";
             }
             $second_stone_color1 = $goods[38] ?? "";
             if (!empty($second_stone_color1)) {
@@ -586,7 +598,7 @@ class WarehouseBillTService extends Service
                     $second_stone_color1 = $attr_id;
                 }
             } elseif (!empty($stone)) {
-                $second_stone_color1 = $stone->stone_color ?? "";
+                $second_stone_color1 = $second1Attr['stone_color'] ?? "";
             }
             $second_stone_clarity1 = $goods[39] ?? "";
             if (!empty($second_stone_clarity1)) {
@@ -599,7 +611,7 @@ class WarehouseBillTService extends Service
                     $second_stone_clarity1 = $attr_id;
                 }
             } elseif (!empty($stone)) {
-                $second_stone_clarity1 = $stone->stone_clarity ?? "";
+                $second_stone_clarity1 = $second1Attr['stone_clarity'] ?? "";
             }
             $second_stone_cut1 = $goods[40] ?? "";
             if (!empty($second_stone_cut1)) {
@@ -612,7 +624,7 @@ class WarehouseBillTService extends Service
                     $second_stone_cut1 = $attr_id;
                 }
             } elseif (!empty($stone)) {
-                $second_stone_cut1 = $stone->stone_cut ?? "";
+                $second_stone_cut1 = $second1Attr['stone_cut'] ?? "";
             }
             $second_stone_colour1 = $goods[41] ?? "";
             if (!empty($second_stone_colour1)) {
@@ -625,16 +637,18 @@ class WarehouseBillTService extends Service
                     $second_stone_colour1 = $attr_id;
                 }
             } elseif (!empty($stone)) {
-                $second_stone_colour1 = $stone->stone_colour ?? "";
+                $second_stone_colour1 = $second1Attr['stone_colour'] ?? "";
             }
             $second_pei_type2 = $form->formatValue($goods[42], 0) ?? 0;
             $second_stone_sn2 = $goods[43] ?? "";
-            $stone = null;
+            $stone = $second2Attr = null;
             if (!empty($second_stone_sn2)) {
                 $stone = WarehouseStone::findOne(['stone_sn' => $second_stone_sn2]);
                 if (empty($stone)) {
 //                    $flag = false;
 //                    $error[$i][] = "副石2编号：[" . $second_stone_sn2 . "]录入值有误";
+                } else {
+                    $second2Attr = $this->stoneAttrValueMap($stone, StonePositionEnum::SECOND_STONE2);
                 }
             }
             $second_stone_type2 = $goods[44] ?? "";
@@ -648,7 +662,7 @@ class WarehouseBillTService extends Service
                     $second_stone_type2 = $attr_id;
                 }
             } elseif (!empty($stone)) {
-                $second_stone_type2 = $stone->stone_type ?? "";
+                $second_stone_type2 = $second2Attr['stone_type'] ?? "";
             }
             $second_stone_num2 = $form->formatValue($goods[45], 0) ?? 0;
             $second_stone_weight2 = $form->formatValue($goods[46], 0) ?? 0;
@@ -663,15 +677,19 @@ class WarehouseBillTService extends Service
                 $second_pei_type2 = $form->getPeiType($second_stone_sn2, $second_stone_num2, $second_stone_weight2);
             }
             $second_stone_price2 = $form->formatValue($goods[47], 0) ?? 0;
-
+            if (empty($second_stone_price2) && !empty($stone)) {
+                $second_stone_price2 = $stone->stone_price ?? 0;
+            }
             $second_pei_type3 = $form->formatValue($goods[48], 0) ?? 0;
             $second_stone_sn3 = $goods[49] ?? "";
-            $stone = null;
+            $stone = $second3Attr = null;
             if (!empty($second_stone_sn3)) {
                 $stone = WarehouseStone::findOne(['stone_sn' => $second_stone_sn3]);
                 if (empty($stone)) {
 //                    $flag = false;
 //                    $error[$i][] = "副石3编号：[" . $second_stone_sn3 . "]录入值有误";
+                } else {
+                    $second3Attr = $this->stoneAttrValueMap($stone, StonePositionEnum::SECOND_STONE3);
                 }
             }
             $second_stone_type3 = $goods[50] ?? "";
@@ -685,7 +703,7 @@ class WarehouseBillTService extends Service
                     $second_stone_type3 = $attr_id;
                 }
             } elseif (!empty($stone)) {
-                $second_stone_type3 = $stone->stone_type ?? "";
+                $second_stone_type3 = $second3Attr['stone_type'] ?? "";
             }
             $second_stone_num3 = $form->formatValue($goods[51], 0) ?? 0;
             $second_stone_weight3 = $form->formatValue($goods[52], 0) ?? 0;
@@ -700,6 +718,9 @@ class WarehouseBillTService extends Service
                 $second_pei_type3 = $form->getPeiType($second_stone_sn3, $second_stone_num3, $second_stone_weight3);
             }
             $second_stone_price3 = $form->formatValue($goods[53], 0) ?? 0;
+            if (empty($second_stone_price3) && !empty($stone)) {
+                $second_stone_price3 = $stone->stone_price ?? 0;
+            }
             $stone_remark = $goods[54] ?? "";
 
             $parts_way = $form->formatValue($goods[55], 0) ?? "";
@@ -757,8 +778,10 @@ class WarehouseBillTService extends Service
                     $xiangqian_craft = $attr_id;
                 }
             }
-            $xianqian_price = $form->formatValue($goods[67], 0) ?? 0;
-            $biaomiangongyi = $goods[68] ?? "";
+            $second_stone_fee1 = $form->formatValue($goods[67], 0) ?? 0;
+            $second_stone_fee2 = $form->formatValue($goods[68], 0) ?? 0;
+            $second_stone_fee3 = $form->formatValue($goods[69], 0) ?? 0;
+            $biaomiangongyi = $goods[70] ?? "";
             if (!empty($biaomiangongyi)) {
                 $attr_id = $form->getAttrIdByAttrValue($style_sn, $biaomiangongyi, AttrIdEnum::FACEWORK);
                 if (empty($attr_id)) {
@@ -769,19 +792,19 @@ class WarehouseBillTService extends Service
                     $biaomiangongyi = $attr_id;
                 }
             }
-            $biaomiangongyi_fee = $form->formatValue($goods[69], 0) ?? 0;
-            $fense_fee = $form->formatValue($goods[70], 0) ?? 0;
-            $penlasha_fee = $form->formatValue($goods[71], 0) ?? 0;
-            $lasha_fee = $form->formatValue($goods[72], 0) ?? 0;
-            $bukou_fee = $form->formatValue($goods[73], 0) ?? 0;
-            $templet_fee = $form->formatValue($goods[74], 0) ?? 0;
-            $cert_fee = $form->formatValue($goods[75], 0) ?? 0;
-            $other_fee = $form->formatValue($goods[76], 0) ?? 0;
-            $main_cert_id = $goods[77] ?? "";
+            $biaomiangongyi_fee = $form->formatValue($goods[71], 0) ?? 0;
+            $fense_fee = $form->formatValue($goods[72], 0) ?? 0;
+            $penlasha_fee = $form->formatValue($goods[73], 0) ?? 0;
+            $lasha_fee = $form->formatValue($goods[74], 0) ?? 0;
+            $bukou_fee = $form->formatValue($goods[75], 0) ?? 0;
+            $templet_fee = $form->formatValue($goods[76], 0) ?? 0;
+            $cert_fee = $form->formatValue($goods[77], 0) ?? 0;
+            $other_fee = $form->formatValue($goods[78], 0) ?? 0;
+            $main_cert_id = $goods[79] ?? "";
             if (empty($main_cert_id)) {
                 $main_cert_id = $cert_id;
             }
-            $main_cert_type = $goods[78] ?? "";
+            $main_cert_type = $goods[80] ?? "";
             if (!empty($main_cert_type)) {
                 $attr_id = $form->getAttrIdByAttrValue($style_sn, $main_cert_type, AttrIdEnum::DIA_CERT_TYPE);
                 if (empty($attr_id)) {
@@ -794,8 +817,8 @@ class WarehouseBillTService extends Service
             } else {
                 $main_cert_type = $cert_type;
             }
-            $markup_rate = $form->formatValue($goods[79], 1) ?? 1;
-            $jintuo_type = $goods[80] ?? "";
+            $markup_rate = $form->formatValue($goods[81], 1) ?? 1;
+            $jintuo_type = $goods[82] ?? "";
             if (!empty($jintuo_type)) {
                 $jintuo_type = JintuoTypeEnum::getIdByName($jintuo_type);
                 if (empty($jintuo_type)) {
@@ -803,11 +826,11 @@ class WarehouseBillTService extends Service
                     $error[$i][] = "金托类型：录入值有误";
                     $jintuo_type = "";
                 }
-            }else{
+            } else {
                 $flag = false;
                 $error[$i][] = "金托类型不能为空";
             }
-            $remark = $goods[81] ?? "";
+            $remark = $goods[83] ?? "";
             $saveData[] = $item = [
                 'bill_id' => $bill->id,
                 'bill_no' => $bill->bill_no,
@@ -895,7 +918,10 @@ class WarehouseBillTService extends Service
                 'gong_fee' => $gong_fee,
                 'piece_fee' => $piece_fee,
                 'xiangqian_craft' => $xiangqian_craft,
-                'xianqian_price' => $xianqian_price,
+                //'xianqian_price' => $xianqian_price,
+                'second_stone_fee1' => $second_stone_fee1,
+                'second_stone_fee2' => $second_stone_fee2,
+                'second_stone_fee3' => $second_stone_fee3,
                 'biaomiangongyi' => $biaomiangongyi,
                 'biaomiangongyi_fee' => $biaomiangongyi_fee,
                 'fense_fee' => $fense_fee,
@@ -1025,7 +1051,7 @@ class WarehouseBillTService extends Service
      */
     public function calculateLossWeight($form)
     {
-        if(!$form->gold_loss){
+        if (!$form->gold_loss) {
             $form->gold_loss = 0;
         }
         return bcmul($this->calculateGoldWeight($form), 1 + ($form->gold_loss / 100), 3) ?? 0;
@@ -1173,7 +1199,7 @@ class WarehouseBillTService extends Service
      */
     public function calculateBasicGongFee($form)
     {
-        if(bccomp($form->piece_fee, 0, 5)>0){
+        if (bccomp($form->piece_fee, 0, 5) > 0) {
             return $form->piece_fee ?? 0;
         }
         return bcmul($form->gong_fee, $this->calculateLossWeight($form), 3) ?? 0;
@@ -1181,14 +1207,18 @@ class WarehouseBillTService extends Service
 
     /**
      *
-     * 镶石费=(镶石单价*总副石数量)
+     * 镶石费=镶石1费+镶石2费+镶石3费
+     * 【镶石1费=镶石1单价/颗*副石1数量；镶石2费=镶石2单价/颗*副石2数量；镶石3费=镶石3单价/颗*副石3数量；】
      * @param WarehouseBillTGoodsForm $form
      * @return integer
      * @throws
      */
     public function calculateXiangshiFee($form)
     {
-        return bcmul($form->xianqian_price, $this->calculateSecondStoneNum($form), 3) ?? 0;
+        $second_stone_fee1 = bcmul($form->second_stone_fee1, $form->second_stone_num1, 3) ?? 0;
+        $second_stone_fee2 = bcmul($form->second_stone_fee2, $form->second_stone_num2, 3) ?? 0;
+        $second_stone_fee3 = bcmul($form->second_stone_fee3, $form->second_stone_num3, 3) ?? 0;
+        return bcadd($second_stone_fee1, bcadd($second_stone_fee2, $second_stone_fee3, 3), 3) ?? 0;
     }
 
     /**
@@ -1322,4 +1352,244 @@ class WarehouseBillTService extends Service
         return $form;
     }
 
+    /**
+     *
+     * 石料属性值映射
+     * @param WarehouseStone $stone
+     * @param int $stone_position
+     * @return array
+     * @throws
+     */
+    public function stoneAttrValueMap($stone, $stone_position)
+    {
+        $type = $this->getStoneTypeMap();
+        $shape = $this->getStoneShapeMap();
+        $color = $this->getStoneColorMap();
+        $clarity = $this->getStoneClarityMap();
+        $cut = $this->getStoneCutMap();
+        $colour = $this->getStoneColourMap();
+        $stoneAttr = [];
+        if (!empty($stone)) {
+            $stone_type = $stone->stone_type ?? "";
+            $stone_type = $type[$stone_type] ?? [];
+            $stone_shape = $stone->stone_shape ?? "";
+            $stone_shape = $shape[$stone_shape] ?? [];
+            $stone_color = $stone->stone_color ?? "";
+            $stone_color = $color[$stone_color] ?? [];
+            $stone_clarity = $stone->stone_clarity ?? "";
+            $stone_clarity = $clarity[$stone_clarity] ?? [];
+            $stone_cut = $stone->stone_cut ?? "";
+            $stone_cut = $cut[$stone_cut] ?? [];
+            $stone_colour = $stone->stone_colour ?? "";
+            $stone_colour = $colour[$stone_colour] ?? [];
+            switch ($stone_position) {
+                case StonePositionEnum::MAIN_STONE:
+                    $stoneAttr['stone_type'] = $stone_type[0] ?? "";
+                    $stoneAttr['stone_shape'] = $stone_shape[0] ?? "";
+                    $stoneAttr['stone_color'] = $stone_color[0] ?? "";
+                    $stoneAttr['stone_clarity'] = $stone_clarity[0] ?? "";
+                    $stoneAttr['stone_cut'] = $stone_cut[0] ?? "";
+                    $stoneAttr['stone_colour'] = $stone_colour[0] ?? "";
+                    break;
+                case StonePositionEnum::SECOND_STONE1:
+                    $stoneAttr['stone_type'] = $stone_type[1] ?? "";
+                    $stoneAttr['stone_shape'] = $stone_shape[1] ?? "";
+                    $stoneAttr['stone_color'] = $stone_color[0] ?? "";
+                    $stoneAttr['stone_clarity'] = $stone_clarity[0] ?? "";
+                    $stoneAttr['stone_cut'] = $stone_cut[0] ?? "";
+                    $stoneAttr['stone_colour'] = $stone_colour[1] ?? "";
+                    break;
+                case StonePositionEnum::SECOND_STONE2:
+                    $stoneAttr['stone_type'] = $stone_type[2] ?? "";
+                    $stoneAttr['stone_shape'] = $stone_shape[1] ?? "";
+                    $stoneAttr['stone_color'] = $stone_color[0] ?? "";
+                    $stoneAttr['stone_clarity'] = $stone_clarity[0] ?? "";
+                    break;
+                case StonePositionEnum::SECOND_STONE3:
+                    $stoneAttr['stone_type'] = $stone_type[3] ?? "";
+                    break;
+                default:
+                    break;
+            }
+            if (!empty($stoneAttr)) {
+                foreach ($stoneAttr as $k => &$item) {
+                    if ($item) {
+                        $stoneAttr[$k] = (string)$item;
+                    }
+                }
+            }
+        }
+        return $stoneAttr ?? [];
+    }
+
+    /**
+     * 石头类型
+     * 主石 => [副石1, 副石2, 副石3]
+     * @return array
+     */
+    public function getStoneTypeMap()
+    {
+        return [
+            241 => [193, 217, 227, 482],//莫桑石
+            234 => [169, 211, 225, 480],//钻石
+            235 => [192, 216, 226, 481],//锆石
+        ];
+    }
+
+    /**
+     * 石头类型
+     * 主石 => [副石1, 副石2, 副石3]
+     * @return array
+     */
+    public function getStoneType1Map()
+    {
+        return [
+            530 => [534, 538, 542],//拖帕石
+            529 => [533, 537, 541],//黑陶瓷
+            528 => [532, 536, 540],//葡萄石
+            527 => [531, 535, 539],//蜜蜡
+            506 => [214, 507, 517],//玉石
+            497 => [505, 516, 526],//猫眼石
+            496 => [504, 515, 525],//珊瑚
+            495 => [503, 514, 524],//砗磲
+            494 => [502, 513, 523],//青金石
+            493 => [501, 512, 522],//立方氧化锆
+            473 => [500, 511, 521],//绿松石
+            472 => [499, 510, 520],//和田玉
+            169 => [211, 225, 480],//钻石
+            192 => [216, 226, 481],//锆石
+            193 => [217, 227, 482],//莫桑石
+            194 => [212, 228, 483],//红宝石
+            426 => [432, 509, 519],//蓝宝石
+            195 => [252, 229, 485],//翡翠
+            196 => [213, 230, 484],//珍珠
+            231 => [358, 232, 486],//贝母
+            427 => [433, 357, 487],//晶石(水晶)
+            428 => [434, 438, 488],//玉髓
+            429 => [435, 439, 489],//碧玺
+            430 => [436, 440, 490],//玛瑙
+            431 => [437, 441, 491],//琥珀
+            470 => [498, 508, 518],//石榴石
+            424 => [215, 356, 492],//其它
+        ];
+    }
+
+
+    /**
+     * 形状
+     * 主石 => [副石1, 副石2]
+     * @return array
+     */
+    public function getStoneShapeMap()
+    {
+        return [
+            16 => [361, 379],//圆形
+            17 => [362, 380],//椭圆形
+            54 => [363, 381],//公主方形
+            55 => [364, 382],//八角梯形
+            56 => [365, 383],//心形
+            57 => ["", ""],//马眼形
+            58 => [367, 385],//枕形
+            452 => [453, 454],//祖母绿形
+            59 => [368, 386],//水滴形
+            450 => ["", ""],//阿斯切
+            60 => [369, 387],//雷迪恩形
+            61 => [370, 388],//圆三角形
+            315 => [371, 389],//圆形(弧面)
+            316 => [372, 390],//椭圆(蛋形-弧面)
+            317 => [373, 391],//异形(弧面)
+            318 => [374, 392],//球体(弧面)
+            319 => [375, 393],//心形(弧面)
+            320 => [376, 394],//不规则(弧面)
+            455 => [458, 461],//三角形
+            456 => [459, 462],//梯方形
+            457 => [460, 463],//长方形
+            377 => [378, 395],//其它
+        ];
+    }
+
+    /**
+     * 颜色
+     * 主石 => (副石1, 副石2)
+     * @return array
+     */
+    public function getStoneColorMap()
+    {
+        return [
+            18 => [132],//D
+            19 => [332],//E
+            22 => [133],//F
+            50 => [134],//G
+            444 => [""],//GH
+            51 => [135],//H
+            52 => [136],//I
+            53 => [137],//J
+            447 => [""],//IJ
+            153 => [131],//K
+            154 => [331],//L
+            155 => [333],//M
+            156 => [334],//N
+            242 => [335],//不分级
+            157 => [0],//其它
+        ];
+    }
+
+    /**
+     * 净度
+     * 主石 => (副石1, 副石2)
+     * @return array
+     */
+    public function getStoneClarityMap()
+    {
+        return [
+            6 => [123],//FL
+            7 => [124],//IF
+            8 => [125],//VVS1
+            62 => [126],//VVS2
+            63 => [127],//VS1
+            64 => [128],//VS2
+            65 => [129],//SI1
+            66 => [130],//SI2
+            448 => [327],//SI
+            324 => [328],//P1
+            325 => [328],//P2
+            326 => [329],//P3
+            243 => [330],//不分级
+        ];
+    }
+
+    /**
+     * 切工
+     * 主石 => (副石1, 副石2)
+     * @return array
+     */
+    public function getStoneCutMap()
+    {
+        return [
+            337 => [479],//Poor
+            336 => [478],//Fair
+            13 => [475],//EX
+            14 => [476],//VG
+            15 => [477],//GD
+        ];
+    }
+
+    /**
+     * 色彩
+     * 主石 => [副石1, 副石2]
+     * @return array
+     */
+    public function getStoneColourMap()
+    {
+        return [
+            396 => [404, 412],//白色
+            397 => [405, 413],//黑色
+            398 => [406, 414],//红色
+            399 => [407, 415],//绿色
+            400 => [408, 416],//蓝色
+            401 => [409, 417],//红色
+            402 => [411, 418],//粉色
+            403 => [411, 419],//紫色
+        ];
+    }
 }

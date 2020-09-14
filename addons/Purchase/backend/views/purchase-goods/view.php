@@ -278,16 +278,16 @@ $this->params['breadcrumbs'][] = $this->title;
                         </tr>
 
                         <tr>
-                            <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('second_stone1_cost') ?>：</td>
-                            <td><?= $model->second_stone1_cost ?></td>
+                            <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('second_stone_cost1') ?>：</td>
+                            <td><?= $model->second_stone_cost1 ?></td>
                         </tr>
                         <tr>
-                            <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('second_stone2_cost') ?>：</td>
-                            <td><?= $model->second_stone2_cost ?></td>
+                            <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('second_stone_cost2') ?>：</td>
+                            <td><?= $model->second_stone_cost2 ?></td>
                         </tr>
                         <tr>
-                            <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('second_stone3_cost') ?>：</td>
-                            <td><?= $model->second_stone3_cost ?></td>
+                            <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('second_stone_cost3') ?>：</td>
+                            <td><?= $model->second_stone_cost3 ?></td>
                         </tr>
                     </table>
                 </div>
@@ -298,8 +298,16 @@ $this->params['breadcrumbs'][] = $this->title;
                             <td><?= $model->peishi_amount ?></td>
                         </tr>
                         <tr>
-                            <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('xianqian_price') ?>：</td>
-                            <td><?= $model->xianqian_price ?></td>
+                            <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('second_stone_fee1') ?>：</td>
+                            <td><?= $model->second_stone_fee1 ?></td>
+                        </tr>
+                        <tr>
+                            <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('second_stone_fee2') ?>：</td>
+                            <td><?= $model->second_stone_fee2 ?></td>
+                        </tr>
+                        <tr>
+                            <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('second_stone_fee3') ?>：</td>
+                            <td><?= $model->second_stone_fee3 ?></td>
                         </tr>
                         <tr>
                             <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('factory_cost_price') ?>：</td>

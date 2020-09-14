@@ -2,6 +2,7 @@
 
 namespace addons\Warehouse\services;
 
+use common\enums\LogTypeEnum;
 use Yii;
 use yii\db\Exception;
 use addons\Warehouse\common\models\WarehouseGoods;
@@ -272,6 +273,17 @@ class WarehouseBillJService extends WarehouseBillService
             if(!$res){
                 throw new \Exception("商品{$goods->goods_id}状态不是借货中或者不存在，请查看原因");
             }
+
+            //插入商品日志
+            $log = [
+                'goods_id' => $goods->goods->id,
+                'goods_status' => GoodsStatusEnum::HAS_LEND,
+                'log_type' => LogTypeEnum::ARTIFICIAL,
+                'log_msg' => '接货单：'.$form->bill_no.";;货品状态:“".GoodsStatusEnum::getValue(GoodsStatusEnum::IN_STOCK)."”变更为：“".GoodsStatusEnum::getValue(GoodsStatusEnum::HAS_LEND)."”"
+            ];
+            Yii::$app->warehouseService->goodsLog->createGoodsLog($log);
+
+
         }
     }
 

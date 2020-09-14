@@ -17,12 +17,15 @@ use addons\Warehouse\common\enums\GoodsStatusEnum;
 use addons\Warehouse\common\models\WarehouseGoods;
 use yii\base\Exception;
 use common\helpers\ResultHelper;
+use common\helpers\ArrayHelper;
 /**
  * WarehouseBillBGoodsController implements the CRUD actions for WarehouseBillBGoodsController model.
  */
 class BillCGoodsController extends BaseController
 {
     use Curd;
+    
+    
     public $modelClass = WarehouseBillCGoodsForm::class;
     public $billType = BillTypeEnum::BILL_TYPE_C;
 
@@ -123,6 +126,34 @@ class BillCGoodsController extends BaseController
             return ResultHelper::json(422, $e->getMessage());
         }
     }
+    /**
+     * ajax 更新商品明细
+     *
+     * @param $id
+     * @return array
+     */
+    public function actionAjaxUpdate($id)
+    {
+        if (!($model = $this->modelClass::findOne($id))) {
+            return ResultHelper::json(404, '找不到数据');
+        }
+        $data = Yii::$app->request->get();
+        $model->attributes = ArrayHelper::filter($data, array_keys($data));
+        try{
+            $trans = Yii::$app->trans->beginTransaction();
+            if (!$model->save()) {
+                return ResultHelper::json(422, $this->getError($model));
+            }
+            \Yii::$app->warehouseService->billC->billCSummary($model->bill_id);
+            $trans->commit();
+            return ResultHelper::json(200, '修改成功');
+        }catch (\Exception $e) {
+            $trans->rollback();
+            return ResultHelper::json(404, '找不到数据');
+        }
+        
+    }
+    
     /**
      * 编辑/创建
      * @property WarehouseBillBForm $model

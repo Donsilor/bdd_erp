@@ -80,6 +80,21 @@ class ShippingService extends Service
         if($execute_num <> count($goods_ids)){
             throw new \Exception("货品改变状态数量与明细数量不一致");
         }
+
+        //销售单 - 发货-- 插入商品日志
+        foreach ($goods_ids as $goods_id){
+            $log = [
+                'goods_id' => $goods_id,
+                'goods_status' => GoodsStatusEnum::HAS_SOLD,
+                'log_type' => LogTypeEnum::ARTIFICIAL,
+                'log_msg' => '销售单：'.$bill->bill_no.";货品状态:“".GoodsStatusEnum::getValue(GoodsStatusEnum::IN_STOCK)."”变更为：“".GoodsStatusEnum::getValue(GoodsStatusEnum::HAS_SOLD)."”"
+            ];
+            Yii::$app->warehouseService->goodsLog->createGoodsLog($log);
+        }
+
+
+
+
         //更新订单信息
         $order->delivery_status = DeliveryStatusEnum::HAS_SEND;
         $order->delivery_time = time();

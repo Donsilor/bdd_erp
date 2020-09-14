@@ -4,6 +4,7 @@ namespace addons\Warehouse\services;
 
 use addons\Style\common\enums\JintuoTypeEnum;
 use addons\Warehouse\common\enums\GoodSourceEnum;
+use common\enums\LogTypeEnum;
 use Yii;
 use common\components\Service;
 use common\helpers\SnHelper;
@@ -230,7 +231,7 @@ class WarehouseBillLService extends Service
                     'second_stone_size1' => $good->second_stone_size1,//副石1规格
                     'second_cert_id1' => $good->second_cert_id1,//副石1证书号
                     'second_stone_price1' => $good->second_stone_price1,//副石1单价
-                    'second_stone1_cost' => $good->second_stone_amount1,//副石1成本价
+                    'second_stone_cost1' => $good->second_stone_amount1,//副石1成本价
 
                     //副石2
                     'second_peishi_type2' => $good->second_pei_type2,//副石2配石方式
@@ -245,7 +246,7 @@ class WarehouseBillLService extends Service
                     'second_stone_size2' => $good->second_stone_size2,//副石2规格
                     //'second_cert_id2' => $good->second_cert_id2,//副石2证书号
                     'second_stone_price2' => $good->second_stone_price2,//副石2单价
-                    'second_stone2_cost' => $good->second_stone_amount2,//副石2成本价
+                    'second_stone_cost2' => $good->second_stone_amount2,//副石2成本价
 
                     //副石3
                     'second_peishi_way3' => $good->second_pei_type3,//副石3配石方式
@@ -254,7 +255,7 @@ class WarehouseBillLService extends Service
                     'second_stone_num3' => $good->second_stone_num3,//副石3粒数
                     'second_stone_weight3' => $good->second_stone_weight3,//副石3重量
                     'second_stone_price3' => $good->second_stone_price3,//副石3单价
-                    'second_stone3_cost' => $good->second_stone_amount3,//副石3成本价
+                    'second_stone_cost3' => $good->second_stone_amount3,//副石3成本价
                     'shiliao_remark' => $good->stone_remark,
 
                     //配件信息
@@ -337,6 +338,7 @@ class WarehouseBillLService extends Service
                     }
                     $value = [];
                 }
+
             }
             if (!empty($value)) {
                 $res = Yii::$app->db->createCommand()->batchInsert(WarehouseGoods::tableName(), $key, $value)->execute();
@@ -385,6 +387,15 @@ class WarehouseBillLService extends Service
                             throw new \Exception($this->getError($goodsL));
                         }
                     }
+
+                    //插入商品日志
+                    $log = [
+                        'goods_id' => $id,
+                        'goods_status' => GoodsStatusEnum::IN_STOCK,
+                        'log_type' => LogTypeEnum::ARTIFICIAL,
+                        'log_msg' => '入库单：'.$form->bill_no.";货品状态:“".GoodsStatusEnum::getValue(GoodsStatusEnum::IN_STOCK)."”"
+                    ];
+                    Yii::$app->warehouseService->goodsLog->createGoodsLog($log);
                 }
             }
             if ($form->order_type == OrderTypeEnum::ORDER_L

@@ -260,7 +260,8 @@ class PurchaseGoodsForm extends PurchaseGoods
                 'jiagong_fee','gong_fee','biaomiangongyi_fee','fense_fee','bukou_fee','penrasa_fee','edition_fee','gaitu_fee',
                 'penla_fee','parts_fee','cert_fee','unit_cost_price','factory_total_price','company_total_price','stone_info','parts_remark',
                 'remark','main_stone_sn','second_stone_sn1','second_stone_sn2','ke_gong_fee','peiliao_way','peijian_way','main_peishi_way',
-                'second_peishi_way1','second_peishi_way2','pure_gold','lasha_fee','second_peishi_way3','second_stone_sn3','piece_fee'
+                'second_peishi_way1','second_peishi_way2','pure_gold','lasha_fee','second_peishi_way3','second_stone_sn3','piece_fee','second_stone_fee1',
+                'second_stone_fee2','second_stone_fee3'
         );
         foreach ($fields as $field) {
             $apply_info[] = array(
@@ -284,19 +285,19 @@ class PurchaseGoodsForm extends PurchaseGoods
      */
     public function setComputeFee(){
 
-        //【镶石费=镶石单价*总副石数量】
-        $second_stone_num = 0;
+        //【镶石费=镶石1费+镶石2费+镶石3费】
+        $xiangqian_fee = 0;
         $atts = $this->getPostAttrs();
         if(isset($atts[AttrIdEnum::SIDE_STONE1_NUM]) && !empty($atts[AttrIdEnum::SIDE_STONE1_NUM])){
-            $second_stone_num += $atts[AttrIdEnum::SIDE_STONE1_NUM];
+            $xiangqian_fee += $this->second_stone_fee1 * $atts[AttrIdEnum::SIDE_STONE1_NUM];
         }
         if(isset($atts[AttrIdEnum::SIDE_STONE2_NUM]) && !empty($atts[AttrIdEnum::SIDE_STONE2_NUM])){
-            $second_stone_num += $atts[AttrIdEnum::SIDE_STONE2_NUM];
+            $xiangqian_fee += $this->second_stone_fee2 * $atts[AttrIdEnum::SIDE_STONE2_NUM];
         }
         if(isset($atts[AttrIdEnum::SIDE_STONE3_NUM]) && !empty($atts[AttrIdEnum::SIDE_STONE3_NUM])){
-            $second_stone_num += $atts[AttrIdEnum::SIDE_STONE3_NUM];
+            $xiangqian_fee += $this->second_stone_fee3 * $atts[AttrIdEnum::SIDE_STONE3_NUM];
         }
-        $this->xiangqian_fee = $this->xianqian_price * $second_stone_num;
+        $this->xiangqian_fee = $xiangqian_fee;
 
         //1.金重计算规则：金重=连石重-【（主石重*数量）+副石1重+副石2重+副石3重】*0.2-配件重
         $main_stone_num = 0;
@@ -361,23 +362,23 @@ class PurchaseGoodsForm extends PurchaseGoods
         $side_stone1_price = $atts[AttrIdEnum::SIDE_STONE1_PRICE] ?? 0;
         $side_stone1_weight = $atts[AttrIdEnum::SIDE_STONE1_WEIGHT] ?? 0;
         $side_stone1_weight = $side_stone1_weight == ''? 0:$side_stone1_weight;
-        $this->second_stone1_cost = round($side_stone1_weight * $side_stone1_price,2);
+        $this->second_stone_cost1 = round($side_stone1_weight * $side_stone1_price,2);
 
         //副石2成本 = 副石2重 * 副石2买入单价
         $side_stone2_price = $atts[AttrIdEnum::SIDE_STONE2_PRICE] ?? 0;
         $side_stone2_weight = $atts[AttrIdEnum::SIDE_STONE2_WEIGHT] ?? 0;
         $side_stone2_weight = $side_stone2_weight == ''? 0:$side_stone2_weight;
-        $this->second_stone2_cost = round($side_stone2_weight * $side_stone2_price,2);
+        $this->second_stone_cost2 = round($side_stone2_weight * $side_stone2_price,2);
 
         //副石3成本 = 副石3重 * 副石3买入单价
         $side_stone3_price = $atts[AttrIdEnum::SIDE_STONE3_PRICE] ?? 0;
         $side_stone3_weight = $atts[AttrIdEnum::SIDE_STONE3_WEIGHT] ?? 0;
         $side_stone3_weight = $side_stone3_weight == ''? 0:$side_stone3_weight;
-        $this->second_stone3_cost = round($side_stone3_weight * $side_stone3_price,2);
+        $this->second_stone_cost3 = round($side_stone3_weight * $side_stone3_price,2);
 
         //公司成本 = 金料成本 + 主石成本 + 副石1成本 + 副石2成本 + 配件额 + 总工费
-        $this->cost_price = $this->gold_amount + $this->main_stone_cost + $this->second_stone1_cost +
-            $this->second_stone2_cost + $this->second_stone3_cost + $this->parts_amount + $this->total_gong_fee ;
+        $this->cost_price = $this->gold_amount + $this->main_stone_cost + $this->second_stone_cost1 +
+            $this->second_stone_cost2 + $this->second_stone_cost3 + $this->parts_amount + $this->total_gong_fee ;
 
         $this->company_total_price = $this->cost_price * $this->goods_num;
 
@@ -387,13 +388,13 @@ class PurchaseGoodsForm extends PurchaseGoods
             $this->factory_cost_price += $this->main_stone_cost;
         }
         if($this->second_peishi_way1 == PeiShiWayEnum::FACTORY){
-            $this->factory_cost_price += $this->second_stone1_cost;
+            $this->factory_cost_price += $this->second_stone_cost1;
         }
         if($this->second_peishi_way2 == PeiShiWayEnum::FACTORY){
-            $this->factory_cost_price += $this->second_stone2_cost;
+            $this->factory_cost_price += $this->second_stone_cost2;
         }
         if($this->second_peishi_way3 == PeiShiWayEnum::FACTORY){
-            $this->factory_cost_price += $this->second_stone3_cost;
+            $this->factory_cost_price += $this->second_stone_cost3;
         }
         if($this->peiliao_way == PeiLiaoWayEnum::FACTORY){
             $this->factory_cost_price += $this->gold_amount;
@@ -401,6 +402,8 @@ class PurchaseGoodsForm extends PurchaseGoods
         if($this->peijian_way == PeiJianWayEnum::FACTORY){
             $this->factory_cost_price += $this->parts_amount;
         }
+        $this->factory_cost_price += $this->total_gong_fee;
+
         $this->factory_total_price = $this->factory_cost_price * $this->goods_num;
 
 

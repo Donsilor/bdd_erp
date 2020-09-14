@@ -164,9 +164,6 @@ $this->params['breadcrumbs'][] = $this->title;
                         <?= $form->field($model, 'peijian_way')->dropDownList(\addons\Warehouse\common\enums\PeiJianWayEnum::getMap(), ['prompt' => '请选择'])?>
                     </div>
                     <div class="col-lg-4">
-                        <?= $form->field($model, 'peijian_cate')->dropDownList(\addons\Warehouse\common\enums\PeiJianCateEnum::getMap(), ['prompt' => '请选择'])?>
-                    </div>
-                    <div class="col-lg-4">
                         <?= $form->field($model, 'parts_material')->textInput() ?>
                     </div>
 
@@ -201,14 +198,13 @@ $this->params['breadcrumbs'][] = $this->title;
 
                 <div class="row">
                     <div class="col-lg-4">
-                        <?= $form->field($model, 'factory_mo')->textInput() ?>
-                    </div>
-
-                    <div class="col-lg-4">
-                        <?= $form->field($model, 'ke_gong_fee')->textInput() ?>
+                        <?= $form->field($model, 'second_stone_fee1')->textInput() ?>
                     </div>
                     <div class="col-lg-4">
-                        <?= $form->field($model, 'xianqian_price')->textInput() ?>
+                        <?= $form->field($model, 'second_stone_fee2')->textInput() ?>
+                    </div>
+                    <div class="col-lg-4">
+                        <?= $form->field($model, 'second_stone_fee3')->textInput() ?>
                     </div>
                 </div>
                 <div class="row">
@@ -259,7 +255,13 @@ $this->params['breadcrumbs'][] = $this->title;
                 </div>
                 <div class="row">
                     <div class="col-lg-4">
+                        <?= $form->field($model, 'ke_gong_fee')->textInput() ?>
+                    </div>
+                    <div class="col-lg-4">
                         <?= $form->field($model, 'unit_cost_price')->textInput() ?>
+                    </div>
+                    <div class="col-lg-4">
+                        <?= $form->field($model, 'factory_mo')->textInput() ?>
                     </div>
 
                 </div>
