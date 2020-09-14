@@ -460,6 +460,9 @@ class WarehouseBillTService extends Service
                 $main_pei_type = $form->getPeiType($main_stone_sn, $main_stone_num, $main_stone_weight);
             }
             $main_stone_price = $form->formatValue($goods[25], 0) ?? 0;
+            if(empty($main_stone_price) && !empty($stone)){
+                $main_stone_price = $stone->stone_price ?? 0;
+            }
             $main_stone_shape = $goods[26] ?? "";
             if (!empty($main_stone_shape)) {
                 $attr_id = $form->getAttrIdByAttrValue($style_sn, $main_stone_shape, AttrIdEnum::MAIN_STONE_SHAPE);
@@ -568,6 +571,9 @@ class WarehouseBillTService extends Service
                 $second_pei_type = $form->getPeiType($second_stone_sn1, $second_stone_num1, $second_stone_weight1);
             }
             $second_stone_price1 = $form->formatValue($goods[36], 0) ?? 0;
+            if(empty($second_stone_price1) && !empty($stone)){
+                $second_stone_price1 = $stone->stone_price ?? 0;
+            }
             $second_stone_shape1 = $goods[37] ?? "";
             if (!empty($second_stone_shape1)) {
                 $attr_id = $form->getAttrIdByAttrValue($style_sn, $second_stone_shape1, AttrIdEnum::SIDE_STONE1_SHAPE);
@@ -671,7 +677,9 @@ class WarehouseBillTService extends Service
                 $second_pei_type2 = $form->getPeiType($second_stone_sn2, $second_stone_num2, $second_stone_weight2);
             }
             $second_stone_price2 = $form->formatValue($goods[47], 0) ?? 0;
-
+            if(empty($second_stone_price2) && !empty($stone)){
+                $second_stone_price2 = $stone->stone_price ?? 0;
+            }
             $second_pei_type3 = $form->formatValue($goods[48], 0) ?? 0;
             $second_stone_sn3 = $goods[49] ?? "";
             $stone = $second3Attr = null;
@@ -710,6 +718,9 @@ class WarehouseBillTService extends Service
                 $second_pei_type3 = $form->getPeiType($second_stone_sn3, $second_stone_num3, $second_stone_weight3);
             }
             $second_stone_price3 = $form->formatValue($goods[53], 0) ?? 0;
+            if(empty($second_stone_price3) && !empty($stone)){
+                $second_stone_price3 = $stone->stone_price ?? 0;
+            }
             $stone_remark = $goods[54] ?? "";
 
             $parts_way = $form->formatValue($goods[55], 0) ?? "";
