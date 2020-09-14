@@ -1831,40 +1831,89 @@ $this->params['breadcrumbs'][] = $this->title;
                                 ]),
                             ],
                             [
-                                'attribute' => 'xianqian_price',
+                                'attribute' => 'second_stone_fee1',
                                 'format' => 'raw',
                                 'headerOptions' => ['class' => 'col-md-1 batch_full', 'attr-name' => 'xianqian_price', 'style' => 'background-color:#FFA500;'],
                                 'footerOptions' => ['class' => 'col-md-1 batch_full2', 'attr-name' => 'xianqian_price', 'style' => 'background-color:#FFA500;'],
                                 'value' => function ($model, $key, $index, $widget) {
-                                    $widget->footer = $model->getAttributeLabel('xianqian_price');
-                                    return Html::ajaxInput('xianqian_price', $model->xianqian_price, ['data-id' => $model->id, 'onfocus' => 'rfClearVal(this)', 'data-type' => 'number']);
+                                    $widget->footer = $model->getAttributeLabel('second_stone_fee1');
+                                    return Html::ajaxInput('second_stone_fee1', $model->second_stone_fee1, ['data-id' => $model->id, 'onfocus' => 'rfClearVal(this)', 'data-type' => 'number']);
                                 },
                                 'filter' => false,
-//                                'filter' => Html::activeTextInput($searchModel, 'xianqian_price', [
+//                                'filter' => Html::activeTextInput($searchModel, 'second_stone_fee1', [
 //                                    'class' => 'form-control',
 //                                    'style' => 'width:80px;'
 //                                ]),
                             ],
                             [
-                                'attribute' => 'biaomiangongyi',
+                                'attribute' => 'second_stone_fee2',
                                 'format' => 'raw',
-                                'headerOptions' => ['class' => 'col-md-1 batch_select_full', 'attr-name' => 'biaomiangongyi', 'attr-id' => AttrIdEnum::FACEWORK, 'style' => 'background-color:#FFA500;'],
-                                'footerOptions' => ['class' => 'col-md-1 batch_select_full2', 'attr-name' => 'biaomiangongyi', 'attr-id' => AttrIdEnum::FACEWORK, 'style' => 'background-color:#FFA500;'],
+                                'headerOptions' => ['class' => 'col-md-1 batch_full', 'attr-name' => 'xianqian_price', 'style' => 'background-color:#FFA500;'],
+                                'footerOptions' => ['class' => 'col-md-1 batch_full2', 'attr-name' => 'xianqian_price', 'style' => 'background-color:#FFA500;'],
                                 'value' => function ($model, $key, $index, $widget) {
-                                    $widget->footer = $model->getAttributeLabel('biaomiangongyi');
-                                    return Html::ajaxSelect($model, 'biaomiangongyi', $model->getFaceCraftDrop($model), ['data-id' => $model->id, 'prompt' => '请选择']);
+                                    $widget->footer = $model->getAttributeLabel('second_stone_fee2');
+                                    return Html::ajaxInput('second_stone_fee2', $model->second_stone_fee2, ['data-id' => $model->id, 'onfocus' => 'rfClearVal(this)', 'data-type' => 'number']);
                                 },
-                                'filter' => Html::activeDropDownList($searchModel, 'biaomiangongyi', $model->getFaceCraftMap(), [
-                                    'prompt' => '全部',
-                                    'class' => 'form-control',
-                                    'style' => 'width:100px;'
-                                ]),
+                                'filter' => false,
+//                                'filter' => Html::activeTextInput($searchModel, 'second_stone_fee2', [
+//                                    'class' => 'form-control',
+//                                    'style' => 'width:80px;'
+//                                ]),
+                            ],
+                            [
+                                'attribute' => 'second_stone_fee3',
+                                'format' => 'raw',
+                                'headerOptions' => ['class' => 'col-md-1 batch_full', 'attr-name' => 'xianqian_price', 'style' => 'background-color:#FFA500;'],
+                                'footerOptions' => ['class' => 'col-md-1 batch_full2', 'attr-name' => 'xianqian_price', 'style' => 'background-color:#FFA500;'],
+                                'value' => function ($model, $key, $index, $widget) {
+                                    $widget->footer = $model->getAttributeLabel('second_stone_fee3');
+                                    return Html::ajaxInput('second_stone_fee3', $model->second_stone_fee3, ['data-id' => $model->id, 'onfocus' => 'rfClearVal(this)', 'data-type' => 'number']);
+                                },
+                                'filter' => false,
+//                                'filter' => Html::activeTextInput($searchModel, 'second_stone_fee3', [
+//                                    'class' => 'form-control',
+//                                    'style' => 'width:80px;'
+//                                ]),
+                            ],
+//                            [
+//                                'attribute' => 'xianqian_price',
+//                                'format' => 'raw',
+//                                'headerOptions' => ['class' => 'col-md-1 batch_full', 'attr-name' => 'xianqian_price', 'style' => 'background-color:#FFA500;'],
+//                                'footerOptions' => ['class' => 'col-md-1 batch_full2', 'attr-name' => 'xianqian_price', 'style' => 'background-color:#FFA500;'],
+//                                'value' => function ($model, $key, $index, $widget) {
+//                                    $widget->footer = $model->getAttributeLabel('xianqian_price');
+//                                    return Html::ajaxInput('xianqian_price', $model->xianqian_price, ['data-id' => $model->id, 'onfocus' => 'rfClearVal(this)', 'data-type' => 'number']);
+//                                },
+//                                'filter' => false,
+////                                'filter' => Html::activeTextInput($searchModel, 'xianqian_price', [
+////                                    'class' => 'form-control',
+////                                    'style' => 'width:80px;'
+////                                ]),
+//                            ],
+//                            [
+//                                'attribute' => 'biaomiangongyi',
+//                                'format' => 'raw',
+//                                'headerOptions' => ['class' => 'col-md-1 batch_select_full', 'attr-name' => 'biaomiangongyi', 'attr-id' => AttrIdEnum::FACEWORK, 'style' => 'background-color:#FFA500;'],
+//                                'footerOptions' => ['class' => 'col-md-1 batch_select_full2', 'attr-name' => 'biaomiangongyi', 'attr-id' => AttrIdEnum::FACEWORK, 'style' => 'background-color:#FFA500;'],
+//                                'value' => function ($model, $key, $index, $widget) {
+//                                    $widget->footer = $model->getAttributeLabel('biaomiangongyi');
+//                                    return Html::ajaxSelect($model, 'biaomiangongyi', $model->getFaceCraftDrop($model), ['data-id' => $model->id, 'prompt' => '请选择']);
+//                                },
+//                                'filter' => Html::activeDropDownList($searchModel, 'biaomiangongyi', $model->getFaceCraftMap(), [
+//                                    'prompt' => '全部',
+//                                    'class' => 'form-control',
+//                                    'style' => 'width:100px;'
+//                                ]),
+//                            ],
+                            [
+                                'class' => 'yii\grid\CheckboxColumn',
+                                'name' => 'id',  //设置每行数据的复选框属性
                             ],
                             [
                                 'attribute' => 'biaomiangongyi_fee',
                                 'format' => 'raw',
-                                'headerOptions' => ['class' => 'col-md-1 batch_full', 'attr-name' => 'biaomiangongyi_fee', 'style' => 'background-color:#FFA500;'],
-                                'footerOptions' => ['class' => 'col-md-1 batch_full2', 'attr-name' => 'biaomiangongyi_fee', 'style' => 'background-color:#FFA500;'],
+                                'headerOptions' => ['class' => 'col-md-1 batch_full', 'attr-name' => 'biaomiangongyi_fee', 'style' => 'background-color:#E6E6FA;'],
+                                'footerOptions' => ['class' => 'col-md-1 batch_full2', 'attr-name' => 'biaomiangongyi_fee', 'style' => 'background-color:#E6E6FA;'],
                                 'value' => function ($model, $key, $index, $widget) use($total){
                                     $widget->footer = $model->getFooterValues('biaomiangongyi_fee', $total, "0.00");
                                     return Html::ajaxInput('biaomiangongyi_fee', $model->biaomiangongyi_fee, ['data-id' => $model->id, 'onfocus' => 'rfClearVal(this)', 'data-type' => 'number']);
@@ -1878,8 +1927,8 @@ $this->params['breadcrumbs'][] = $this->title;
                             [
                                 'attribute' => 'fense_fee',
                                 'format' => 'raw',
-                                'headerOptions' => ['class' => 'col-md-1 batch_full', 'attr-name' => 'fense_fee', 'style' => 'background-color:#FFA500;'],
-                                'footerOptions' => ['class' => 'col-md-1 batch_full2', 'attr-name' => 'fense_fee', 'style' => 'background-color:#FFA500;'],
+                                'headerOptions' => ['class' => 'col-md-1 batch_full', 'attr-name' => 'fense_fee', 'style' => 'background-color:#E6E6FA;'],
+                                'footerOptions' => ['class' => 'col-md-1 batch_full2', 'attr-name' => 'fense_fee', 'style' => 'background-color:#E6E6FA;'],
                                 'value' => function ($model, $key, $index, $widget) use($total){
                                     $widget->footer = $model->getFooterValues('fense_fee', $total, "0.00");
                                     return Html::ajaxInput('fense_fee', $model->fense_fee, ['data-id' => $model->id, 'onfocus' => 'rfClearVal(this)', 'data-type' => 'number']);
@@ -1893,8 +1942,8 @@ $this->params['breadcrumbs'][] = $this->title;
                             [
                                 'attribute' => 'penlasha_fee',
                                 'format' => 'raw',
-                                'headerOptions' => ['class' => 'col-md-1 batch_full', 'attr-name' => 'penlasha_fee', 'style' => 'background-color:#FFA500;'],
-                                'footerOptions' => ['class' => 'col-md-1 batch_full2', 'attr-name' => 'penlasha_fee', 'style' => 'background-color:#FFA500;'],
+                                'headerOptions' => ['class' => 'col-md-1 batch_full', 'attr-name' => 'penlasha_fee', 'style' => 'background-color:#E6E6FA;'],
+                                'footerOptions' => ['class' => 'col-md-1 batch_full2', 'attr-name' => 'penlasha_fee', 'style' => 'background-color:#E6E6FA;'],
                                 'value' => function ($model, $key, $index, $widget) use($total){
                                     $widget->footer = $model->getFooterValues('penlasha_fee', $total, "0.00");
                                     return Html::ajaxInput('penlasha_fee', $model->penlasha_fee, ['data-id' => $model->id, 'onfocus' => 'rfClearVal(this)', 'data-type' => 'number']);
@@ -1908,8 +1957,8 @@ $this->params['breadcrumbs'][] = $this->title;
                             [
                                 'attribute' => 'lasha_fee',
                                 'format' => 'raw',
-                                'headerOptions' => ['class' => 'col-md-1 batch_full', 'attr-name' => 'lasha_fee', 'style' => 'background-color:#FFA500;'],
-                                'footerOptions' => ['class' => 'col-md-1 batch_full2', 'attr-name' => 'lasha_fee', 'style' => 'background-color:#FFA500;'],
+                                'headerOptions' => ['class' => 'col-md-1 batch_full', 'attr-name' => 'lasha_fee', 'style' => 'background-color:#E6E6FA;'],
+                                'footerOptions' => ['class' => 'col-md-1 batch_full2', 'attr-name' => 'lasha_fee', 'style' => 'background-color:#E6E6FA;'],
                                 'value' => function ($model, $key, $index, $widget) use($total){
                                     $widget->footer = $model->getFooterValues('lasha_fee', $total, "0.00");
                                     return Html::ajaxInput('lasha_fee', $model->lasha_fee, ['data-id' => $model->id, 'onfocus' => 'rfClearVal(this)', 'data-type' => 'number']);
@@ -1923,8 +1972,8 @@ $this->params['breadcrumbs'][] = $this->title;
                             [
                                 'attribute' => 'bukou_fee',
                                 'format' => 'raw',
-                                'headerOptions' => ['class' => 'col-md-1 batch_full', 'attr-name' => 'bukou_fee', 'style' => 'background-color:#FFA500;'],
-                                'footerOptions' => ['class' => 'col-md-1 batch_full2', 'attr-name' => 'bukou_fee', 'style' => 'background-color:#FFA500;'],
+                                'headerOptions' => ['class' => 'col-md-1 batch_full', 'attr-name' => 'bukou_fee', 'style' => 'background-color:#E6E6FA;'],
+                                'footerOptions' => ['class' => 'col-md-1 batch_full2', 'attr-name' => 'bukou_fee', 'style' => 'background-color:#E6E6FA;'],
                                 'value' => function ($model, $key, $index, $widget) use($total){
                                     $widget->footer = $model->getFooterValues('bukou_fee', $total, "0.00");
                                     return Html::ajaxInput('bukou_fee', $model->bukou_fee, ['data-id' => $model->id, 'onfocus' => 'rfClearVal(this)', 'data-type' => 'number']);
@@ -1938,8 +1987,8 @@ $this->params['breadcrumbs'][] = $this->title;
                             [
                                 'attribute' => 'templet_fee',
                                 'format' => 'raw',
-                                'headerOptions' => ['class' => 'col-md-1 batch_full', 'attr-name' => 'templet_fee', 'style' => 'background-color:#FFA500;'],
-                                'footerOptions' => ['class' => 'col-md-1 batch_full2', 'attr-name' => 'templet_fee', 'style' => 'background-color:#FFA500;'],
+                                'headerOptions' => ['class' => 'col-md-1 batch_full', 'attr-name' => 'templet_fee', 'style' => 'background-color:#E6E6FA;'],
+                                'footerOptions' => ['class' => 'col-md-1 batch_full2', 'attr-name' => 'templet_fee', 'style' => 'background-color:#E6E6FA;'],
                                 'value' => function ($model, $key, $index, $widget) use($total){
                                     $widget->footer = $model->getFooterValues('templet_fee', $total, "0.00");
                                     return Html::ajaxInput('templet_fee', $model->templet_fee, ['data-id' => $model->id, 'onfocus' => 'rfClearVal(this)', 'data-type' => 'number']);
@@ -1953,8 +2002,8 @@ $this->params['breadcrumbs'][] = $this->title;
                             [
                                 'attribute' => 'cert_fee',
                                 'format' => 'raw',
-                                'headerOptions' => ['class' => 'col-md-1 batch_full', 'attr-name' => 'cert_fee', 'style' => 'background-color:#FFA500;'],
-                                'footerOptions' => ['class' => 'col-md-1 batch_full2', 'attr-name' => 'cert_fee', 'style' => 'background-color:#FFA500;'],
+                                'headerOptions' => ['class' => 'col-md-1 batch_full', 'attr-name' => 'cert_fee', 'style' => 'background-color:#E6E6FA;'],
+                                'footerOptions' => ['class' => 'col-md-1 batch_full2', 'attr-name' => 'cert_fee', 'style' => 'background-color:#E6E6FA;'],
                                 'value' => function ($model, $key, $index, $widget) use($total){
                                     $widget->footer = $model->getFooterValues('cert_fee', $total, "0.00");
                                     return Html::ajaxInput('cert_fee', $model->cert_fee, ['data-id' => $model->id, 'onfocus' => 'rfClearVal(this)', 'data-type' => 'number']);
@@ -1968,8 +2017,8 @@ $this->params['breadcrumbs'][] = $this->title;
                             [
                                 'attribute' => 'other_fee',
                                 'format' => 'raw',
-                                'headerOptions' => ['class' => 'col-md-1 batch_full', 'attr-name' => 'other_fee', 'style' => 'background-color:#FFA500;'],
-                                'footerOptions' => ['class' => 'col-md-1 batch_full2', 'attr-name' => 'other_fee', 'style' => 'background-color:#FFA500;'],
+                                'headerOptions' => ['class' => 'col-md-1 batch_full', 'attr-name' => 'other_fee', 'style' => 'background-color:#E6E6FA;'],
+                                'footerOptions' => ['class' => 'col-md-1 batch_full2', 'attr-name' => 'other_fee', 'style' => 'background-color:#E6E6FA;'],
                                 'value' => function ($model, $key, $index, $widget) use($total){
                                     $widget->footer = $model->getFooterValues('other_fee', $total, "0.00");
                                     return Html::ajaxInput('other_fee', $model->other_fee, ['data-id' => $model->id, 'onfocus' => 'rfClearVal(this)', 'data-type' => 'number']);
