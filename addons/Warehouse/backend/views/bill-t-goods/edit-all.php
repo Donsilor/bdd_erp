@@ -1890,21 +1890,21 @@ $this->params['breadcrumbs'][] = $this->title;
 ////                                    'style' => 'width:80px;'
 ////                                ]),
 //                            ],
-                            [
-                                'attribute' => 'biaomiangongyi',
-                                'format' => 'raw',
-                                'headerOptions' => ['class' => 'col-md-1 batch_select_full', 'attr-name' => 'biaomiangongyi', 'attr-id' => AttrIdEnum::FACEWORK, 'style' => 'background-color:#FFA500;'],
-                                'footerOptions' => ['class' => 'col-md-1 batch_select_full2', 'attr-name' => 'biaomiangongyi', 'attr-id' => AttrIdEnum::FACEWORK, 'style' => 'background-color:#FFA500;'],
-                                'value' => function ($model, $key, $index, $widget) {
-                                    $widget->footer = $model->getAttributeLabel('biaomiangongyi');
-                                    return Html::ajaxSelect($model, 'biaomiangongyi', $model->getFaceCraftDrop($model), ['data-id' => $model->id, 'prompt' => '请选择']);
-                                },
-                                'filter' => Html::activeDropDownList($searchModel, 'biaomiangongyi', $model->getFaceCraftMap(), [
-                                    'prompt' => '全部',
-                                    'class' => 'form-control',
-                                    'style' => 'width:100px;'
-                                ]),
-                            ],
+//                            [
+//                                'attribute' => 'biaomiangongyi',
+//                                'format' => 'raw',
+//                                'headerOptions' => ['class' => 'col-md-1 batch_select_full', 'attr-name' => 'biaomiangongyi', 'attr-id' => AttrIdEnum::FACEWORK, 'style' => 'background-color:#FFA500;'],
+//                                'footerOptions' => ['class' => 'col-md-1 batch_select_full2', 'attr-name' => 'biaomiangongyi', 'attr-id' => AttrIdEnum::FACEWORK, 'style' => 'background-color:#FFA500;'],
+//                                'value' => function ($model, $key, $index, $widget) {
+//                                    $widget->footer = $model->getAttributeLabel('biaomiangongyi');
+//                                    return Html::ajaxSelect($model, 'biaomiangongyi', $model->getFaceCraftDrop($model), ['data-id' => $model->id, 'prompt' => '请选择']);
+//                                },
+//                                'filter' => Html::activeDropDownList($searchModel, 'biaomiangongyi', $model->getFaceCraftMap(), [
+//                                    'prompt' => '全部',
+//                                    'class' => 'form-control',
+//                                    'style' => 'width:100px;'
+//                                ]),
+//                            ],
                             [
                                 'attribute' => 'biaomiangongyi_fee',
                                 'format' => 'raw',
