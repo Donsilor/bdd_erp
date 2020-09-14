@@ -77,6 +77,28 @@ $this->params['breadcrumbs'][] = $this->title;
                               $input = $form->field($model,$field)->textInput()->label($attr_name);
                               break;
                           }
+                          case common\enums\InputTypeEnum::INPUT_MUlTI:{
+                              if($model->qiban_type == \addons\Style\common\enums\QibanTypeEnum::NON_VERSION) {
+                                  //获取款式属性值列表
+                                  $attr_values = Yii::$app->styleService->styleAttribute->getDropdowns($model->style_id,$attr_id);
+                              }else{
+                                  //获取起版属性值列表
+                                  $attr_values = Yii::$app->styleService->qibanAttribute->getDropdowns($model->style_id,$attr_id);
+                              }
+                              if(empty($attr_values)) {
+                                  $attr_values = Yii::$app->styleService->attribute->getValuesByAttrId($attr_id);
+                              }
+//                              $input = $form->field($model,$field)->checkboxList($attr_values)->label($attr_name);
+                              $input = $form->field($model, $field)->widget(kartik\select2\Select2::class, [
+                                  'data' => $attr_values,
+                                  'options' => ['placeholder' => '请选择','multiple'=>true],
+                                  'pluginOptions' => [
+                                      'allowClear' => true,
+                                      'multiple'=>true
+                                  ],
+                              ])->label($attr_name);
+                              break;
+                          }
                           default:{
                               if($model->qiban_type == \addons\Style\common\enums\QibanTypeEnum::NON_VERSION) {
                                   //获取款式属性值列表

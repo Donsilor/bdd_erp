@@ -91,7 +91,13 @@ $this->params['breadcrumbs'][] = $this->title;
                         <?= $form->field($model, 'xiangqian_craft')->dropDownList($model->getXiangqianCraftDrop($model), ['prompt' => '请选择']) ?>
                     </div>
                     <div class="col-lg-4">
-                        <?= $form->field($model, 'biaomiangongyi')->dropDownList($model->getFaceCraftDrop($model), ['prompt' => '请选择']) ?>
+                        <?= $form->field($model, 'biaomiangongyi')->widget(kartik\select2\Select2::class, [
+                            'data' => $model->getFaceCraftDrop($model),
+                            'options' => ['placeholder' => '请选择','multiple'=>true],
+                            'pluginOptions' => [
+                                'allowClear' => true
+                            ],
+                        ]);?>
                     </div>
                     <div class="col-lg-4">
                         <?= $form->field($model, 'jintuo_type')->dropDownList($model->getJietuoTypeMap($model), ['prompt' => '请选择']) ?>
