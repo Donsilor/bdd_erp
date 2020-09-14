@@ -1387,6 +1387,8 @@ class WarehouseBillTService extends Service
                     $stoneAttr['stone_shape'] = $stone_shape[1] ?? "";
                     $stoneAttr['stone_color'] = $stone_color[0] ?? "";
                     $stoneAttr['stone_clarity'] = $stone_clarity[0] ?? "";
+                    $stoneAttr['stone_cut'] = $stone_cut[0] ?? "";
+                    $stoneAttr['stone_colour'] = $stone_colour[1] ?? "";
                     break;
                 case StonePositionEnum::SECOND_STONE2:
                     $stoneAttr['stone_type'] = $stone_type[2] ?? "";

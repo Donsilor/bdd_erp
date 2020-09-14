@@ -50,6 +50,10 @@ $this->params['breadcrumbs'][] = $this->title;
                                     <td><?= Yii::$app->attr->valueName($model->stone_type)??"" ?></td>
                                 </tr>
                                 <tr>
+                                    <td class="col-xs-3 text-right"><?= $model->getAttributeLabel('stone_shape') ?>：</td>
+                                    <td><?= Yii::$app->attr->valueName($model->stone_shape)??"" ?></td>
+                                </tr>
+                                <tr>
                                     <td class="col-xs-3 text-right"><?= $model->getAttributeLabel('stone_color') ?>：</td>
                                     <td><?= Yii::$app->attr->valueName($model->stone_color)??"" ?></td>
                                 </tr>
