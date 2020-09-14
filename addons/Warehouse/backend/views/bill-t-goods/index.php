@@ -1728,11 +1728,12 @@ $this->params['breadcrumbs'][] = $this->title;
                                     }
                                     return "";
                                 },
-                                'filter' => Html::activeDropDownList($searchModel, 'biaomiangongyi', $model->getFaceCraftMap(), [
-                                    'prompt' => '全部',
-                                    'class' => 'form-control',
-                                    'style' => 'width:100px;'
-                                ]),
+                                'filter' => false,
+//                                'filter' => Html::activeDropDownList($searchModel, 'biaomiangongyi', $model->getFaceCraftMap(), [
+//                                    'prompt' => '全部',
+//                                    'class' => 'form-control',
+//                                    'style' => 'width:100px;'
+//                                ]),
                             ],
                             [
                                 'attribute' => 'biaomiangongyi_fee',
