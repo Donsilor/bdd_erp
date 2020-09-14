@@ -194,7 +194,7 @@ class WarehouseBillGoodsL extends BaseModel
             [['kezi', 'cert_type', 'factory_mo'], 'string', 'max' => 50],
             [['stone_remark', 'remark'], 'string', 'max' => 255],
             [['goods_id'], 'unique'],
-            [['biaomiangongyi'],'safe']
+            [['biaomiangongyi'], 'parseFaceCraft'],
         ];
     }
 
@@ -383,6 +383,16 @@ class WarehouseBillGoodsL extends BaseModel
             'created_at' => '创建时间',
             'updated_at' => '更新时间',
         ];
+    }
+    /**
+     * 表面工艺
+     */
+    public function parseFaceCraft()
+    {
+        if(is_array($this->biaomiangongyi)){
+            $this->biaomiangongyi = ','.implode(',',$this->biaomiangongyi).',';
+        }
+        return $this->biaomiangongyi;
     }
     /**
      * 关联产品线分类一对一
