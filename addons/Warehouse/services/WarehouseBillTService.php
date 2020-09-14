@@ -212,7 +212,7 @@ class WarehouseBillTService extends Service
                 $i++;
                 continue;
             }
-            if (count($goods) != 82) {
+            if (count($goods) != 84) {
                 throw new \Exception("模板格式不正确，请下载最新模板");
             }
             $goods = $form->trimField($goods);
@@ -778,8 +778,10 @@ class WarehouseBillTService extends Service
                     $xiangqian_craft = $attr_id;
                 }
             }
-            $xianqian_price = $form->formatValue($goods[67], 0) ?? 0;
-            $biaomiangongyi = $goods[68] ?? "";
+            $second_stone_fee1 = $form->formatValue($goods[67], 0) ?? 0;
+            $second_stone_fee2 = $form->formatValue($goods[68], 0) ?? 0;
+            $second_stone_fee3 = $form->formatValue($goods[69], 0) ?? 0;
+            $biaomiangongyi = $goods[70] ?? "";
             if (!empty($biaomiangongyi)) {
                 $attr_id = $form->getAttrIdByAttrValue($style_sn, $biaomiangongyi, AttrIdEnum::FACEWORK);
                 if (empty($attr_id)) {
@@ -790,19 +792,19 @@ class WarehouseBillTService extends Service
                     $biaomiangongyi = $attr_id;
                 }
             }
-            $biaomiangongyi_fee = $form->formatValue($goods[69], 0) ?? 0;
-            $fense_fee = $form->formatValue($goods[70], 0) ?? 0;
-            $penlasha_fee = $form->formatValue($goods[71], 0) ?? 0;
-            $lasha_fee = $form->formatValue($goods[72], 0) ?? 0;
-            $bukou_fee = $form->formatValue($goods[73], 0) ?? 0;
-            $templet_fee = $form->formatValue($goods[74], 0) ?? 0;
-            $cert_fee = $form->formatValue($goods[75], 0) ?? 0;
-            $other_fee = $form->formatValue($goods[76], 0) ?? 0;
-            $main_cert_id = $goods[77] ?? "";
+            $biaomiangongyi_fee = $form->formatValue($goods[71], 0) ?? 0;
+            $fense_fee = $form->formatValue($goods[72], 0) ?? 0;
+            $penlasha_fee = $form->formatValue($goods[73], 0) ?? 0;
+            $lasha_fee = $form->formatValue($goods[74], 0) ?? 0;
+            $bukou_fee = $form->formatValue($goods[75], 0) ?? 0;
+            $templet_fee = $form->formatValue($goods[76], 0) ?? 0;
+            $cert_fee = $form->formatValue($goods[77], 0) ?? 0;
+            $other_fee = $form->formatValue($goods[78], 0) ?? 0;
+            $main_cert_id = $goods[79] ?? "";
             if (empty($main_cert_id)) {
                 $main_cert_id = $cert_id;
             }
-            $main_cert_type = $goods[78] ?? "";
+            $main_cert_type = $goods[80] ?? "";
             if (!empty($main_cert_type)) {
                 $attr_id = $form->getAttrIdByAttrValue($style_sn, $main_cert_type, AttrIdEnum::DIA_CERT_TYPE);
                 if (empty($attr_id)) {
@@ -815,8 +817,8 @@ class WarehouseBillTService extends Service
             } else {
                 $main_cert_type = $cert_type;
             }
-            $markup_rate = $form->formatValue($goods[79], 1) ?? 1;
-            $jintuo_type = $goods[80] ?? "";
+            $markup_rate = $form->formatValue($goods[81], 1) ?? 1;
+            $jintuo_type = $goods[82] ?? "";
             if (!empty($jintuo_type)) {
                 $jintuo_type = JintuoTypeEnum::getIdByName($jintuo_type);
                 if (empty($jintuo_type)) {
@@ -828,7 +830,7 @@ class WarehouseBillTService extends Service
                 $flag = false;
                 $error[$i][] = "金托类型不能为空";
             }
-            $remark = $goods[81] ?? "";
+            $remark = $goods[83] ?? "";
             $saveData[] = $item = [
                 'bill_id' => $bill->id,
                 'bill_no' => $bill->bill_no,
@@ -916,7 +918,10 @@ class WarehouseBillTService extends Service
                 'gong_fee' => $gong_fee,
                 'piece_fee' => $piece_fee,
                 'xiangqian_craft' => $xiangqian_craft,
-                'xianqian_price' => $xianqian_price,
+                //'xianqian_price' => $xianqian_price,
+                'second_stone_fee1' => $second_stone_fee1,
+                'second_stone_fee2' => $second_stone_fee2,
+                'second_stone_fee3' => $second_stone_fee3,
                 'biaomiangongyi' => $biaomiangongyi,
                 'biaomiangongyi_fee' => $biaomiangongyi_fee,
                 'fense_fee' => $fense_fee,
