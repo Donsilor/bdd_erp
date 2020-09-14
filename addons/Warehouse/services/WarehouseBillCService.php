@@ -234,7 +234,7 @@ class WarehouseBillCService extends WarehouseBillService
                 'bill_id' => $form->id,
                 'bill_status'=>$form->bill_status,
                 'log_type' => LogTypeEnum::ARTIFICIAL,
-                'log_module' => '取消单据',
+                'log_module' => '单据取消',
                 'log_msg' => '取消其它出库单'
         ];
         \Yii::$app->warehouseService->billLog->createBillLog($log);
@@ -248,13 +248,18 @@ class WarehouseBillCService extends WarehouseBillService
     public function deleteBillC($form)
     {
         //删除明细
-        $res = WarehouseBillGoods::deleteAll(['bill_id' => $form->id]);
-        if(false === $res){
-            throw new \Exception("删除明细失败");
-        }
+        WarehouseBillGoods::deleteAll(['bill_id' => $form->id]);
         if(false === $form->delete()){
             throw new \Exception($this->getError($form));
         }
+        
+        $log = [
+                'bill_id' => $form->id,
+                'log_type' => LogTypeEnum::ARTIFICIAL,
+                'log_module' => '单据删除',
+                'log_msg' => '取消其它出库单'
+        ];
+        \Yii::$app->warehouseService->billLog->createBillLog($log);
     }    
     
     /**
@@ -422,138 +427,7 @@ class WarehouseBillCService extends WarehouseBillService
             \Yii::$app->warehouseService->billLog->createBillLog($log);
             
         }
-    }
-    
-    public function importBillC2($form)
-    {
-        if (!($form->file->tempName ?? true)) {
-            throw new \Exception("请上传文件");
-        }
-        if (UploadHelper::getExt($form->file->name) != 'xlsx') {
-            throw new \Exception("请上传xlsx格式文件");
-        }
-        $columnMap = [
-                1=>'goods_id',
-                2=>'channel_id',
-                3=>'order_sn',
-                4=>'salesman',
-        ];
-        $requredColumns = [
-                'goods_id',
-                'channel_id',
-        ];
-        $specialColumns = [
-                'channel_id',
-        ];
-        
-        $userMap = \Yii::$app->services->backendMember->getDropDown();
-        $userMap = array_flip($userMap);
-        
-        $startRow = 2;
-        $endColumn = 4;
-        $rows = ExcelHelper::import($form->file->tempName, $startRow,$endColumn,$columnMap);//从第1行开始,第4列结束取值
-        if(!isset($rows[3])) {
-            throw new \Exception("导入数据不能为空");
-        }
-        //1.数据校验及格式化
-        foreach ($rows as $rowKey=> & $row) {
-            if($rowKey == $startRow) {
-                $rtitle = $row;
-                continue;
-            }
-            foreach ($row as $colKey=> $colValue) {
-                //必填校验
-                if(in_array($colKey,$requredColumns) && $colValue === '') {
-                    throw new \Exception($rtitle[$colKey]."不能为空");
-                }
-                if(in_array($colKey,$specialColumns)) {
-                    if(preg_match("/^(\d+?)\.(.*)/is", $colValue,$matches) && count($matches) == 3) {
-                        $row[$colKey] = $matches[1];
-                    }else {
-                        throw new \Exception($rtitle[$colKey]."填写格式错误");
-                    }
-                }
-            }
-            $goods_id = $row['goods_id'] ?? 0;
-            $channel_id = $row['channel_id'] ?? 0;
-            $salesman  = $row['salesman'] ?? '';
-            $groupKey = $channel_id;
-            if($salesman && !($salesman_id = $userMap[$salesman])) {
-                throw new \Exception("[{$salesman}]销售人不存在");
-            }
-            $goods = WarehouseGoods::find()->where(['goods_id'=>$goods_id])->one();
-            if(empty($goods)) {
-                throw new \Exception("[{$goods_id}]条码货号不存在");
-            }else if($goods->goods_status != GoodsStatusEnum::IN_STOCK) {
-                throw new \Exception("[{$goods_id}]条码货号不是库存状态");
-            }
-            $billGroup[$groupKey] = [
-                    'channel_id'=>$channel_id,
-                    'salesman_id' =>$salesman_id,
-            ];
-            $billGoodsGroup[$groupKey][] = [
-                    'goods_id'=>$goods_id,
-                    'goods_name'=>$goods->goods_name,
-                    'style_sn'=>$goods->style_sn,
-                    'goods_num'=>1,
-                    'put_in_type'=>$goods->put_in_type,
-                    'warehouse_id'=>$goods->warehouse_id,
-                    'from_warehouse_id'=>$goods->warehouse_id,
-                    'material'=>$goods->material,
-                    'material_type'=>$goods->material_type,
-                    'material_color'=>$goods->material_color,
-                    'gold_weight'=>$goods->gold_weight,
-                    'gold_loss'=>$goods->gold_loss,
-                    'diamond_carat'=>$goods->diamond_carat,
-                    'diamond_color'=>$goods->diamond_color,
-                    'diamond_clarity'=>$goods->diamond_clarity,
-                    'diamond_cert_id'=>$goods->diamond_cert_id,
-                    'diamond_cert_type'=>$goods->diamond_cert_type,
-                    'cost_price'=>$goods->cost_price,//采购成本价
-                    'chuku_price'=>$goods->calcChukuPrice(),//出库成本价
-                    'market_price'=>$goods->market_price,
-                    'markup_rate'=>$goods->markup_rate,
-            ];
-        }
-        
-        foreach ($billGroup as $groupKey=>$billInfo) {
-            $billInfo = ArrayHelper::merge($billInfo, $form->toArray());
-            $bill = new WarehouseBill();
-            $bill->attributes = $billInfo;
-            $bill->bill_type = BillTypeEnum::BILL_TYPE_C;
-            $bill->bill_no = SnHelper::createBillSn($form->bill_type);
-            $bill->bill_status = BillStatusEnum::SAVE;
-            if(false == $bill->save()){
-                throw new \Exception("导入失败:".$this->getError($bill));
-            }
-            foreach ($billGoodsGroup[$groupKey]??[] as $goodsInfo) {
-                $billGoods = new WarehouseBillGoods();
-                $billGoods->attributes = $goodsInfo;
-                $billGoods->bill_id= $bill->id;
-                $billGoods->bill_no = $bill->bill_no;
-                $billGoods->bill_type = $bill->bill_type;
-                if(false == $billGoods->save()) {
-                    throw new \Exception("导入失败:".$this->getError($billGoods));
-                }
-                $res = WarehouseGoods::updateAll(['chuku_price'=>$billGoods->chuku_price,'chuku_time'=>time(),'goods_status'=>GoodsStatusEnum::IN_SALE],['goods_id'=>$billGoods->goods_id,'goods_status'=>GoodsStatusEnum::IN_STOCK]);
-                if(!$res) {
-                    throw new \Exception("[{$billGoods->goods_id}]条码货号不是库存中");
-                }
-            }
-            $this->billCSummary($bill->id);
-            
-            //日志
-            $log = [
-                    'bill_id' => $bill->id,
-                    'bill_status'=>$bill->bill_status,
-                    'log_type' => LogTypeEnum::ARTIFICIAL,
-                    'log_module' => '批量导入',
-                    'log_msg' => '批量导入其它出库单，单据编号：'.$bill->bill_no
-            ];
-            \Yii::$app->warehouseService->billLog->createBillLog($log);
-            
-        }
-    }
+    }    
     /**
      * 出库单据汇总
      * @param unknown $id

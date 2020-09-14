@@ -298,15 +298,7 @@ class BillCController extends BaseController
         }
         try{
             $trans = \Yii::$app->trans->beginTransaction();
-
-            \Yii::$app->warehouseService->billC->deleteBillC($model);
-            $log = [
-                'bill_id' => $model->id,
-                'log_type' => LogTypeEnum::ARTIFICIAL,
-                'log_module' => '其它出库单',
-                'log_msg' => '单据删除'
-            ];
-            \Yii::$app->warehouseService->billLog->createBillLog($log);
+            \Yii::$app->warehouseService->billC->deleteBillC($model);            
             $trans->commit();
             $this->message('操作成功', $this->redirect(Yii::$app->request->referrer), 'success');
         }catch (\Exception $e){

@@ -2052,21 +2052,21 @@ $this->params['breadcrumbs'][] = $this->title;
 ////                                    'style' => 'width:100px;'
 ////                                ]),
 //                            ],
-                            [
-                                'attribute' => 'style_sex',
-                                'format' => 'raw',
-                                'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#b7ba6b;'],
-                                'footerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#b7ba6b;'],
-                                'value' => function ($model, $key, $index, $widget) {
-                                    $widget->footer = $model->getAttributeLabel('style_sex');
-                                    return \addons\Style\common\enums\StyleSexEnum::getValue($model->style_sex);
-                                },
-                                'filter' => Html::activeDropDownList($searchModel, 'style_sex', $model->getStyleSexMap(), [
-                                    'prompt' => '全部',
-                                    'class' => 'form-control',
-                                    'style' => 'width:80px;'
-                                ]),
-                            ],
+//                            [
+//                                'attribute' => 'style_sex',
+//                                'format' => 'raw',
+//                                'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#b7ba6b;'],
+//                                'footerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#b7ba6b;'],
+//                                'value' => function ($model, $key, $index, $widget) {
+//                                    $widget->footer = $model->getAttributeLabel('style_sex');
+//                                    return \addons\Style\common\enums\StyleSexEnum::getValue($model->style_sex);
+//                                },
+//                                'filter' => Html::activeDropDownList($searchModel, 'style_sex', $model->getStyleSexMap(), [
+//                                    'prompt' => '全部',
+//                                    'class' => 'form-control',
+//                                    'style' => 'width:80px;'
+//                                ]),
+//                            ],
                             [
                                 'attribute' => 'jintuo_type',
                                 'format' => 'raw',
@@ -2082,37 +2082,37 @@ $this->params['breadcrumbs'][] = $this->title;
                                     'style' => 'width:100px;'
                                 ]),
                             ],
-                            [
-                                'attribute' => 'qiban_type',
-                                'format' => 'raw',
-                                'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#b7ba6b;'],
-                                'footerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#b7ba6b;'],
-                                'value' => function ($model, $key, $index, $widget) {
-                                    $widget->footer = $model->getAttributeLabel('qiban_type');
-                                    return \addons\Style\common\enums\QibanTypeEnum::getValue($model->qiban_type);
-                                },
-                                'filter' => Html::activeDropDownList($searchModel, 'qiban_type', $model->getQibanTypeMap(), [
-                                    'prompt' => '全部',
-                                    'class' => 'form-control',
-                                    'style' => 'width:80px;'
-                                ]),
-                            ],
-                            [
-                                'attribute' => 'is_inlay',
-                                'format' => 'raw',
-                                'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#b7ba6b;'],
-                                'footerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#b7ba6b;'],
-                                'value' => function ($model, $key, $index, $widget) {
-                                    $widget->footer = $model->getAttributeLabel('is_inlay');
-                                    //return \addons\Style\common\enums\InlayEnum::getValue($model->is_inlay);
-                                    return Html::ajaxSelect($model, 'is_inlay', $model->getIsInlayMap(), ['data-id' => $model->id, 'prompt' => '请选择']);
-                                },
-                                'filter' => Html::activeDropDownList($searchModel, 'is_inlay', $model->getIsInlayMap(), [
-                                    'prompt' => '全部',
-                                    'class' => 'form-control',
-                                    'style' => 'width:80px;'
-                                ]),
-                            ],
+//                            [
+//                                'attribute' => 'qiban_type',
+//                                'format' => 'raw',
+//                                'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#b7ba6b;'],
+//                                'footerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#b7ba6b;'],
+//                                'value' => function ($model, $key, $index, $widget) {
+//                                    $widget->footer = $model->getAttributeLabel('qiban_type');
+//                                    return \addons\Style\common\enums\QibanTypeEnum::getValue($model->qiban_type);
+//                                },
+//                                'filter' => Html::activeDropDownList($searchModel, 'qiban_type', $model->getQibanTypeMap(), [
+//                                    'prompt' => '全部',
+//                                    'class' => 'form-control',
+//                                    'style' => 'width:80px;'
+//                                ]),
+//                            ],
+//                            [
+//                                'attribute' => 'is_inlay',
+//                                'format' => 'raw',
+//                                'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#b7ba6b;'],
+//                                'footerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#b7ba6b;'],
+//                                'value' => function ($model, $key, $index, $widget) {
+//                                    $widget->footer = $model->getAttributeLabel('is_inlay');
+//                                    //return \addons\Style\common\enums\InlayEnum::getValue($model->is_inlay);
+//                                    return Html::ajaxSelect($model, 'is_inlay', $model->getIsInlayMap(), ['data-id' => $model->id, 'prompt' => '请选择']);
+//                                },
+//                                'filter' => Html::activeDropDownList($searchModel, 'is_inlay', $model->getIsInlayMap(), [
+//                                    'prompt' => '全部',
+//                                    'class' => 'form-control',
+//                                    'style' => 'width:80px;'
+//                                ]),
+//                            ],
                             [
                                 'attribute' => 'main_cert_type',
                                 'format' => 'raw',
