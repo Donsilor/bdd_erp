@@ -538,6 +538,7 @@ class WarehouseBillTService extends Service
 //                    $flag = false;
 //                    $error[$i][] = "副石1编号：[" . $second_stone_sn1 . "]录入值有误";
                 } else {
+                    //var_dump($stone);die;
                     $second1Attr = $this->stoneAttrValueMap($stone, StonePositionEnum::SECOND_STONE1);
                 }
             }
@@ -1341,27 +1342,30 @@ class WarehouseBillTService extends Service
      */
     public function stoneAttrValueMap($stone, $stone_position)
     {
+        $type = $this->getStoneTypeMap();
         $shape = $this->getStoneShapeMap();
         $color = $this->getStoneColorMap();
         $clarity = $this->getStoneClarityMap();
         $cut = $this->getStoneCutMap();
         $colour = $this->getStoneColourMap();
+        $stoneAttr = [];
         if (!empty($stone)) {
-            $stone_type = $stone['stone_shape'] ?? "";
+            $stone_type = $stone->stone_type ?? "";
             $stone_type = $type[$stone_type] ?? [];
-            $stone_shape = $stone['stone_shape'] ?? "";
+            $stone_shape = $stone->stone_shape ?? "";
             $stone_shape = $shape[$stone_shape] ?? [];
-            $stone_color = $stone['stone_color'] ?? "";
+            $stone_color = $stone->stone_color ?? "";
             $stone_color = $color[$stone_color] ?? [];
-            $stone_clarity = $stone['stone_clarity'] ?? "";
+            $stone_clarity = $stone->stone_clarity ?? "";
             $stone_clarity = $clarity[$stone_clarity] ?? [];
-            $stone_cut = $stone['stone_cut'] ?? "";
+            $stone_cut = $stone->stone_cut ?? "";
             $stone_cut = $cut[$stone_cut] ?? [];
-            $stone_colour = $stone['stone_colour'] ?? "";
+            $stone_colour = $stone->stone_colour ?? "";
             $stone_colour = $colour[$stone_colour] ?? [];
             switch ($stone_position) {
                 case StonePositionEnum::MAIN_STONE:
-                    $stoneAttr['stone_type'] = $stone['stone_type'] ?? "";
+                    $stoneAttr['stone_type'] = $stone_type[0] ?? "";
+                    $stoneAttr['stone_shape'] = $stone_shape[0] ?? "";
                     $stoneAttr['stone_color'] = $stone_color[0] ?? "";
                     $stoneAttr['stone_clarity'] = $stone_clarity[0] ?? "";
                     $stoneAttr['stone_cut'] = $stone_cut[0] ?? "";
@@ -1370,14 +1374,14 @@ class WarehouseBillTService extends Service
                 case StonePositionEnum::SECOND_STONE1:
                     $stoneAttr['stone_type'] = $stone_type[1] ?? "";
                     $stoneAttr['stone_shape'] = $stone_shape[1] ?? "";
-                    $stoneAttr['stone_color'] = $stone_color[1] ?? "";
-                    $stoneAttr['stone_clarity'] = $stone_clarity[1] ?? "";
+                    $stoneAttr['stone_color'] = $stone_color[0] ?? "";
+                    $stoneAttr['stone_clarity'] = $stone_clarity[0] ?? "";
                     break;
                 case StonePositionEnum::SECOND_STONE2:
                     $stoneAttr['stone_type'] = $stone_type[2] ?? "";
                     $stoneAttr['stone_shape'] = $stone_shape[1] ?? "";
-                    $stoneAttr['stone_color'] = $stone_color[1] ?? "";
-                    $stoneAttr['stone_clarity'] = $stone_clarity[1] ?? "";
+                    $stoneAttr['stone_color'] = $stone_color[0] ?? "";
+                    $stoneAttr['stone_clarity'] = $stone_clarity[0] ?? "";
                     break;
                 case StonePositionEnum::SECOND_STONE3:
                     $stoneAttr['stone_type'] = $stone_type[3] ?? "";
@@ -1402,6 +1406,20 @@ class WarehouseBillTService extends Service
      * @return array
      */
     public function getStoneTypeMap()
+    {
+        return [
+            241 => [193, 217, 227, 482],//莫桑石
+            234 => [169, 211, 225, 480],//钻石
+            235 => [192, 216, 226, 481],//锆石
+        ];
+    }
+
+    /**
+     * 石头类型
+     * 主石 => [副石1, 副石2, 副石3]
+     * @return array
+     */
+    public function getStoneType1Map()
     {
         return [
             530 => [534, 538, 542],//拖帕石
