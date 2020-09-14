@@ -86,7 +86,8 @@ class WarehouseBillGoodsA extends BaseModel
             [['xiangkou', 'gold_weight', 'suttle_weight', 'gold_loss', 'gold_price', 'gold_amount', 'main_stone_price', 'diamond_carat',
                 'second_stone_weight1', 'second_stone_price1', 'second_stone_weight2','second_stone_weight3', 'second_stone_price2', 'parts_gold_weight', 'parts_price',
                 'gong_fee', 'bukou_fee', 'xianqian_fee', 'cert_fee','biaomiangongyi_fee', 'cost_price','peishi_weight','other_fee','parts_fee',
-                'fense_fee','penrasa_fee','edition_fee','xianqian_price','peishi_fee','piece_fee','pure_gold','lasha_fee','second_stone_price3'], 'number'],
+                'fense_fee','penrasa_fee','edition_fee','xianqian_price','peishi_fee','piece_fee','pure_gold','lasha_fee','second_stone_price3',
+                'second_stone_fee1','second_stone_fee2','second_stone_fee3'], 'number'],
             [['goods_id','style_sn'], 'string', 'max' => 30],
             [['goods_name', 'product_size'], 'string', 'max' => 100],
             [['finger', 'main_stone_type', 'diamond_shape', 'diamond_color', 'diamond_clarity', 'diamond_cut', 'diamond_polish', 'diamond_symmetry',
@@ -173,6 +174,9 @@ class WarehouseBillGoodsA extends BaseModel
             'second_stone_price3' => '副石3买入单价',
             'second_stone_cost3' => '副石3成本',
             'piece_fee' => '件/工费',
+            'second_stone_fee1' => '镶石1工费/单颗',
+            'second_stone_fee2' => '镶石2工费/单颗',
+            'second_stone_fee3' => '镶石3工费/单颗',
         ];
     }
 

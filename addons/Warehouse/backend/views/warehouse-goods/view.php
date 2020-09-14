@@ -292,8 +292,16 @@ $this->params['breadcrumbs'][] = $this->title;
                             <td><?= $model->bukou_fee ?></td>
                         </tr>
                         <tr>
-                            <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('xianqian_price') ?>：</td>
-                            <td><?= $model->xianqian_price ?></td>
+                            <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('second_stone_fee1') ?>：</td>
+                            <td><?= $model->second_stone_fee1 ?></td>
+                        </tr>
+                        <tr>
+                            <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('second_stone_fee2') ?>：</td>
+                            <td><?= $model->second_stone_fee2 ?></td>
+                        </tr>
+                        <tr>
+                            <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('second_stone_fee3') ?>：</td>
+                            <td><?= $model->second_stone_fee3 ?></td>
                         </tr>
                         <tr>
                             <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('xianqian_fee') ?>：</td>

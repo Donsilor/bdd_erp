@@ -107,8 +107,10 @@ class WarehouseBillAGoodsForm extends WarehouseBillGoodsA
         $goods->parts_amount = $this->parts_price * $this->parts_gold_weight;
         //配石费 = 配石工费 * 配石重量
         $goods->peishi_amount = $this->peishi_fee * $this->peishi_weight;
-        //【镶石费=镶石单价*总副石数量】
-        $goods->xianqian_fee = $this->xianqian_price * ($this->second_stone_num1 + $this->second_stone_num2 + $this->second_stone_num3);
+        //【镶石1费=镶石1单价/颗*副石1费用；镶石2费=镶石2单价/颗*副石2费用；镶石3费=镶石3单价/颗*副石3费用】
+        // 镶石费=镶石1费+镶石2费+镶石3费
+        $goods->xianqian_fee = $this->second_stone_fee1 * $this->second_stone_num1 + $this->second_stone_fee2 * $this->second_stone_num2
+            + $this->second_stone_fee3 * $this->second_stone_num3;
 
         //总工费【自动计算】=所有工费【基本工费+配件工费+配石工费+镶石费+表面工艺费+分色费+喷砂费+补口工费+版费 + 证书费 + 其它费用】
         $goods->total_gong_fee = $this->gong_fee + $this->parts_fee + $goods->peishi_amount + $goods->xianqian_fee + $this->biaomiangongyi_fee
@@ -139,6 +141,7 @@ class WarehouseBillAGoodsForm extends WarehouseBillGoodsA
         if($goods->peijian_way == PeiJianWayEnum::FACTORY){
             $goods->factory_cost += $goods->parts_amount;
         }
+        $goods->factory_cost += $goods->total_gong_fee;
 
         $goods->goods_status = GoodsStatusEnum::IN_STOCK;
         //$goods->save();
@@ -226,7 +229,9 @@ class WarehouseBillAGoodsForm extends WarehouseBillGoodsA
             'xianqian_price' => 'xianqian_price',
             'peishi_weight' => 'peishi_weight',
             'bukou_fee'  => 'bukou_fee',
-            'xianqian_fee' => 'xianqian_fee',
+            'second_stone_fee1' => 'second_stone_fee1',
+            'second_stone_fee2' => 'second_stone_fee2',
+            'second_stone_fee3' => 'second_stone_fee3',
             'cert_fee' => 'cert_fee',
             'biaomiangongyi_fee' => 'biaomiangongyi_fee',
             'cost_price' => 'cost_price',
