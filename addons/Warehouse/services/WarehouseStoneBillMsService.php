@@ -108,6 +108,7 @@ class WarehouseStoneBillMsService extends Service
                     'ms_cnt' => $billGoods->stone_num,
                     'stock_weight' => $billGoods->stone_weight,
                     'ms_weight' => $billGoods->stone_weight,
+                    'stone_price' => $billGoods->stone_price,
                     'cost_price' => $billGoods->cost_price,
                     'sale_price' => $billGoods->sale_price,
                     'remark' => $billGoods->remark,
