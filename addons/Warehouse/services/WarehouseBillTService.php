@@ -1408,6 +1408,20 @@ class WarehouseBillTService extends Service
     public function getStoneTypeMap()
     {
         return [
+            241 => [193, 217, 227, 482],//莫桑石
+            234 => [169, 211, 225, 480],//钻石
+            235 => [192, 216, 226, 481],//锆石
+        ];
+    }
+
+    /**
+     * 石头类型
+     * 主石 => [副石1, 副石2, 副石3]
+     * @return array
+     */
+    public function getStoneType1Map()
+    {
+        return [
             530 => [534, 538, 542],//拖帕石
             529 => [533, 537, 541],//黑陶瓷
             528 => [532, 536, 540],//葡萄石
