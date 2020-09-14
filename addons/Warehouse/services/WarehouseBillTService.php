@@ -212,7 +212,7 @@ class WarehouseBillTService extends Service
                 $i++;
                 continue;
             }
-            if (count($goods) != 84) {
+            if (count($goods) != 85) {
                 throw new \Exception("模板格式不正确，请下载最新模板");
             }
             $goods = $form->trimField($goods);
@@ -783,13 +783,20 @@ class WarehouseBillTService extends Service
             $second_stone_fee3 = $form->formatValue($goods[69], 0) ?? 0;
             $biaomiangongyi = $goods[70] ?? "";
             if (!empty($biaomiangongyi)) {
-                $attr_id = $form->getAttrIdByAttrValue($style_sn, $biaomiangongyi, AttrIdEnum::FACEWORK);
-                if (empty($attr_id)) {
-                    $flag = false;
-                    $error[$i][] = "表面工艺：[" . $biaomiangongyi . "]录入值有误";
-                    $biaomiangongyi = "";
-                } else {
-                    $biaomiangongyi = $attr_id;
+                $biaomiangongyi = StringHelper::explode($biaomiangongyi, "|");
+                $attr_str = "";
+                foreach ($biaomiangongyi as $item) {
+                    $attr_id = $form->getAttrIdByAttrValue($style_sn, $item, AttrIdEnum::FACEWORK);
+                    if (empty($attr_id)) {
+                        $flag = false;
+                        $error[$i][] = "表面工艺：[" . $item . "]录入值有误";
+                        $biaomiangongyi = "";
+                    } else {
+                        $attr_str.= $attr_id.",";
+                    }
+                }
+                if(!empty($attr_str)){
+                    $biaomiangongyi = ",".$attr_str;
                 }
             }
             $biaomiangongyi_fee = $form->formatValue($goods[71], 0) ?? 0;
