@@ -460,7 +460,7 @@ class WarehouseBillTService extends Service
                 $main_pei_type = $form->getPeiType($main_stone_sn, $main_stone_num, $main_stone_weight);
             }
             $main_stone_price = $form->formatValue($goods[25], 0) ?? 0;
-            if(empty($main_stone_price) && !empty($stone)){
+            if (empty($main_stone_price) && !empty($stone)) {
                 $main_stone_price = $stone->stone_price ?? 0;
             }
             $main_stone_shape = $goods[26] ?? "";
@@ -571,7 +571,7 @@ class WarehouseBillTService extends Service
                 $second_pei_type = $form->getPeiType($second_stone_sn1, $second_stone_num1, $second_stone_weight1);
             }
             $second_stone_price1 = $form->formatValue($goods[36], 0) ?? 0;
-            if(empty($second_stone_price1) && !empty($stone)){
+            if (empty($second_stone_price1) && !empty($stone)) {
                 $second_stone_price1 = $stone->stone_price ?? 0;
             }
             $second_stone_shape1 = $goods[37] ?? "";
@@ -677,7 +677,7 @@ class WarehouseBillTService extends Service
                 $second_pei_type2 = $form->getPeiType($second_stone_sn2, $second_stone_num2, $second_stone_weight2);
             }
             $second_stone_price2 = $form->formatValue($goods[47], 0) ?? 0;
-            if(empty($second_stone_price2) && !empty($stone)){
+            if (empty($second_stone_price2) && !empty($stone)) {
                 $second_stone_price2 = $stone->stone_price ?? 0;
             }
             $second_pei_type3 = $form->formatValue($goods[48], 0) ?? 0;
@@ -718,7 +718,7 @@ class WarehouseBillTService extends Service
                 $second_pei_type3 = $form->getPeiType($second_stone_sn3, $second_stone_num3, $second_stone_weight3);
             }
             $second_stone_price3 = $form->formatValue($goods[53], 0) ?? 0;
-            if(empty($second_stone_price3) && !empty($stone)){
+            if (empty($second_stone_price3) && !empty($stone)) {
                 $second_stone_price3 = $stone->stone_price ?? 0;
             }
             $stone_remark = $goods[54] ?? "";
@@ -1202,14 +1202,18 @@ class WarehouseBillTService extends Service
 
     /**
      *
-     * 镶石费=(镶石单价*总副石数量)
+     * 镶石费=镶石1费+镶石2费+镶石3费
+     * 【镶石1费=镶石1单价/颗*副石1数量；镶石2费=镶石2单价/颗*副石2数量；镶石3费=镶石3单价/颗*副石3数量；】
      * @param WarehouseBillTGoodsForm $form
      * @return integer
      * @throws
      */
     public function calculateXiangshiFee($form)
     {
-        return bcmul($form->xianqian_price, $this->calculateSecondStoneNum($form), 3) ?? 0;
+        $second_stone_fee1 = bcmul($form->second_stone_fee1, $form->second_stone_num1, 3) ?? 0;
+        $second_stone_fee2 = bcmul($form->second_stone_fee2, $form->second_stone_num2, 3) ?? 0;
+        $second_stone_fee3 = bcmul($form->second_stone_fee3, $form->second_stone_num3, 3) ?? 0;
+        return bcadd($second_stone_fee1, bcadd($second_stone_fee2, $second_stone_fee3, 3), 3) ?? 0;
     }
 
     /**

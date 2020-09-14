@@ -1831,20 +1831,65 @@ $this->params['breadcrumbs'][] = $this->title;
                                 ]),
                             ],
                             [
-                                'attribute' => 'xianqian_price',
+                                'attribute' => 'second_stone_fee1',
                                 'format' => 'raw',
                                 'headerOptions' => ['class' => 'col-md-1 batch_full', 'attr-name' => 'xianqian_price', 'style' => 'background-color:#FFA500;'],
                                 'footerOptions' => ['class' => 'col-md-1 batch_full2', 'attr-name' => 'xianqian_price', 'style' => 'background-color:#FFA500;'],
                                 'value' => function ($model, $key, $index, $widget) {
-                                    $widget->footer = $model->getAttributeLabel('xianqian_price');
-                                    return Html::ajaxInput('xianqian_price', $model->xianqian_price, ['data-id' => $model->id, 'onfocus' => 'rfClearVal(this)', 'data-type' => 'number']);
+                                    $widget->footer = $model->getAttributeLabel('second_stone_fee1');
+                                    return Html::ajaxInput('second_stone_fee1', $model->second_stone_fee1, ['data-id' => $model->id, 'onfocus' => 'rfClearVal(this)', 'data-type' => 'number']);
                                 },
                                 'filter' => false,
-//                                'filter' => Html::activeTextInput($searchModel, 'xianqian_price', [
+//                                'filter' => Html::activeTextInput($searchModel, 'second_stone_fee1', [
 //                                    'class' => 'form-control',
 //                                    'style' => 'width:80px;'
 //                                ]),
                             ],
+                            [
+                                'attribute' => 'second_stone_fee2',
+                                'format' => 'raw',
+                                'headerOptions' => ['class' => 'col-md-1 batch_full', 'attr-name' => 'xianqian_price', 'style' => 'background-color:#FFA500;'],
+                                'footerOptions' => ['class' => 'col-md-1 batch_full2', 'attr-name' => 'xianqian_price', 'style' => 'background-color:#FFA500;'],
+                                'value' => function ($model, $key, $index, $widget) {
+                                    $widget->footer = $model->getAttributeLabel('second_stone_fee2');
+                                    return Html::ajaxInput('second_stone_fee2', $model->second_stone_fee2, ['data-id' => $model->id, 'onfocus' => 'rfClearVal(this)', 'data-type' => 'number']);
+                                },
+                                'filter' => false,
+//                                'filter' => Html::activeTextInput($searchModel, 'second_stone_fee2', [
+//                                    'class' => 'form-control',
+//                                    'style' => 'width:80px;'
+//                                ]),
+                            ],
+                            [
+                                'attribute' => 'second_stone_fee3',
+                                'format' => 'raw',
+                                'headerOptions' => ['class' => 'col-md-1 batch_full', 'attr-name' => 'xianqian_price', 'style' => 'background-color:#FFA500;'],
+                                'footerOptions' => ['class' => 'col-md-1 batch_full2', 'attr-name' => 'xianqian_price', 'style' => 'background-color:#FFA500;'],
+                                'value' => function ($model, $key, $index, $widget) {
+                                    $widget->footer = $model->getAttributeLabel('second_stone_fee3');
+                                    return Html::ajaxInput('second_stone_fee3', $model->second_stone_fee3, ['data-id' => $model->id, 'onfocus' => 'rfClearVal(this)', 'data-type' => 'number']);
+                                },
+                                'filter' => false,
+//                                'filter' => Html::activeTextInput($searchModel, 'second_stone_fee3', [
+//                                    'class' => 'form-control',
+//                                    'style' => 'width:80px;'
+//                                ]),
+                            ],
+//                            [
+//                                'attribute' => 'xianqian_price',
+//                                'format' => 'raw',
+//                                'headerOptions' => ['class' => 'col-md-1 batch_full', 'attr-name' => 'xianqian_price', 'style' => 'background-color:#FFA500;'],
+//                                'footerOptions' => ['class' => 'col-md-1 batch_full2', 'attr-name' => 'xianqian_price', 'style' => 'background-color:#FFA500;'],
+//                                'value' => function ($model, $key, $index, $widget) {
+//                                    $widget->footer = $model->getAttributeLabel('xianqian_price');
+//                                    return Html::ajaxInput('xianqian_price', $model->xianqian_price, ['data-id' => $model->id, 'onfocus' => 'rfClearVal(this)', 'data-type' => 'number']);
+//                                },
+//                                'filter' => false,
+////                                'filter' => Html::activeTextInput($searchModel, 'xianqian_price', [
+////                                    'class' => 'form-control',
+////                                    'style' => 'width:80px;'
+////                                ]),
+//                            ],
                             [
                                 'attribute' => 'biaomiangongyi',
                                 'format' => 'raw',
