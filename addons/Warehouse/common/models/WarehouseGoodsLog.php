@@ -36,7 +36,7 @@ class WarehouseGoodsLog extends BaseModel
     {
         return [
             [['goods_id', 'log_msg'], 'required'],
-            [['log_type', 'creator_id', 'created_at'], 'integer'],
+            [['log_type', 'creator_id', 'created_at','goods_status'], 'integer'],
             [['goods_id','creator'], 'string', 'max' => 30],
             [['log_msg'], 'string', 'max' => 255],
         ];
@@ -58,6 +58,7 @@ class WarehouseGoodsLog extends BaseModel
             'goods_id' => '货号',
             'log_type' => '操作类型',
             'log_msg' => '日志信息',
+            'goods_status' => '商品状态',
             'creator_id' => '操作人',
             'creator' => '操作人',
             'created_at' => '操作时间',

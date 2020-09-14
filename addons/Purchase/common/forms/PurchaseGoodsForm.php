@@ -361,23 +361,23 @@ class PurchaseGoodsForm extends PurchaseGoods
         $side_stone1_price = $atts[AttrIdEnum::SIDE_STONE1_PRICE] ?? 0;
         $side_stone1_weight = $atts[AttrIdEnum::SIDE_STONE1_WEIGHT] ?? 0;
         $side_stone1_weight = $side_stone1_weight == ''? 0:$side_stone1_weight;
-        $this->second_stone1_cost = round($side_stone1_weight * $side_stone1_price,2);
+        $this->second_stone_cost1 = round($side_stone1_weight * $side_stone1_price,2);
 
         //副石2成本 = 副石2重 * 副石2买入单价
         $side_stone2_price = $atts[AttrIdEnum::SIDE_STONE2_PRICE] ?? 0;
         $side_stone2_weight = $atts[AttrIdEnum::SIDE_STONE2_WEIGHT] ?? 0;
         $side_stone2_weight = $side_stone2_weight == ''? 0:$side_stone2_weight;
-        $this->second_stone2_cost = round($side_stone2_weight * $side_stone2_price,2);
+        $this->second_stone_cost2 = round($side_stone2_weight * $side_stone2_price,2);
 
         //副石3成本 = 副石3重 * 副石3买入单价
         $side_stone3_price = $atts[AttrIdEnum::SIDE_STONE3_PRICE] ?? 0;
         $side_stone3_weight = $atts[AttrIdEnum::SIDE_STONE3_WEIGHT] ?? 0;
         $side_stone3_weight = $side_stone3_weight == ''? 0:$side_stone3_weight;
-        $this->second_stone3_cost = round($side_stone3_weight * $side_stone3_price,2);
+        $this->second_stone_cost3 = round($side_stone3_weight * $side_stone3_price,2);
 
         //公司成本 = 金料成本 + 主石成本 + 副石1成本 + 副石2成本 + 配件额 + 总工费
-        $this->cost_price = $this->gold_amount + $this->main_stone_cost + $this->second_stone1_cost +
-            $this->second_stone2_cost + $this->second_stone3_cost + $this->parts_amount + $this->total_gong_fee ;
+        $this->cost_price = $this->gold_amount + $this->main_stone_cost + $this->second_stone_cost1 +
+            $this->second_stone_cost2 + $this->second_stone_cost3 + $this->parts_amount + $this->total_gong_fee ;
 
         $this->company_total_price = $this->cost_price * $this->goods_num;
 
@@ -387,13 +387,13 @@ class PurchaseGoodsForm extends PurchaseGoods
             $this->factory_cost_price += $this->main_stone_cost;
         }
         if($this->second_peishi_way1 == PeiShiWayEnum::FACTORY){
-            $this->factory_cost_price += $this->second_stone1_cost;
+            $this->factory_cost_price += $this->second_stone_cost1;
         }
         if($this->second_peishi_way2 == PeiShiWayEnum::FACTORY){
-            $this->factory_cost_price += $this->second_stone2_cost;
+            $this->factory_cost_price += $this->second_stone_cost2;
         }
         if($this->second_peishi_way3 == PeiShiWayEnum::FACTORY){
-            $this->factory_cost_price += $this->second_stone3_cost;
+            $this->factory_cost_price += $this->second_stone_cost3;
         }
         if($this->peiliao_way == PeiLiaoWayEnum::FACTORY){
             $this->factory_cost_price += $this->gold_amount;

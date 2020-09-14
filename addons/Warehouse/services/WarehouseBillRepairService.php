@@ -155,6 +155,18 @@ class WarehouseBillRepairService extends Service
         if(false === $goods->save()){
             throw new Exception($this->getError($goods));
         }
+
+        //插入商品日志
+        $log = [
+            'goods_id' => $goods->id,
+            'goods_status' => $goods->goods_status,
+            'log_type' => LogTypeEnum::ARTIFICIAL,
+            'log_msg' => '维修单：'.$form->repair_no.";维修状态:“".WeixiuStatusEnum::getValue(WeixiuStatusEnum::SAVE)."”变更为：“".WeixiuStatusEnum::getValue(WeixiuStatusEnum::ACCEPT)."”"
+        ];
+        Yii::$app->warehouseService->goodsLog->createGoodsLog($log);
+
+
+
         if(false === $form->save()) {
             throw new \Exception($this->getError($form));
         }

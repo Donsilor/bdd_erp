@@ -3,6 +3,7 @@
 namespace addons\Warehouse\services;
 
 
+use common\enums\LogTypeEnum;
 use common\helpers\ArrayHelper;
 use common\helpers\Url;
 use Yii;
@@ -95,6 +96,20 @@ class WarehouseBillBService extends WarehouseBillService
         if(false === $res){
             throw new \Exception("更新货品状态失败");
         }
+
+        foreach ($goods_ids as $goods_id){
+            $warehouseGoods = WarehouseGoods::find()->select(['id'])->where(['goods_id'=>$goods_id])->one();
+            //插入商品日志
+            $log = [
+                'goods_id' => $warehouseGoods->id,
+                'goods_status' => GoodsStatusEnum::HAS_RETURN_FACTORY,
+                'log_type' => LogTypeEnum::ARTIFICIAL,
+                'log_msg' => '返厂单：'.$form->bill_no.";;货品状态:“".GoodsStatusEnum::getValue(GoodsStatusEnum::IN_STOCK)."”变更为：“".GoodsStatusEnum::getValue(GoodsStatusEnum::HAS_RETURN_FACTORY)."”"
+            ];
+            Yii::$app->warehouseService->goodsLog->createGoodsLog($log);
+        }
+
+
     }
 
     /**

@@ -13,7 +13,7 @@ $this->params['breadcrumbs'][] = $this->title;
 //
 ?>
 <div class="box-body nav-tabs-custom">
-    <h2 class="page-header">商品详情 - <?php echo $model->goods_id?></h2>
+    <h2 class="page-header">商品详情 - <span id="goods_id"><?php echo $model->goods_id?></span> <i class="fa fa-copy" onclick="copy('goods_id')"></i> - <?= GoodsStatusEnum::getValue($model->goods_status)?></h2>
     <?php echo Html::menuTab($tabList,$tab)?>
 </div>
 <div class="row">
@@ -153,7 +153,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         </tr>
                         <tr>
                             <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('goods_image') ?>：</td>
-                            <td><?= \common\helpers\ImageHelper::fancyBox($model->goods_image,120,120) ?></td>
+                            <td><?= \common\helpers\ImageHelper::fancyBox($model->goods_image,120,120,['style'=>'border:1px solid blue']) ?></td>
                         </tr>
                     </table>
                 </div>
@@ -389,10 +389,7 @@ $this->params['breadcrumbs'][] = $this->title;
             <div class="box-body table-responsive" style="margin-top:0px; ">
                 <div class="col-xs-6">
                     <table class="table table-hover">
-                        <tr>
-                            <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('main_peishi_type') ?>：</td>
-                            <td><?= \addons\Supply\common\enums\PeishiTypeEnum::getValue($model->main_peishi_type) ?></td>
-                        </tr>
+
                         <tr>
                             <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('main_stone_type') ?>：</td>
                             <td><?= Yii::$app->attr->valueName($model->main_stone_type) ?></td>

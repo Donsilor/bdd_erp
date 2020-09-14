@@ -98,11 +98,11 @@ class WarehouseBillAGoodsForm extends WarehouseBillGoodsA
         //主石成本 = 主石重 * 主石买入单价
         $goods->main_stone_cost = $this->main_stone_price * $this->diamond_carat;
         //副石1成本 = 副石1重 * 副石1买入单价
-        $goods->second_stone1_cost = $this->second_stone_price1 * $this->second_stone_weight1;
+        $goods->second_stone_cost1 = $this->second_stone_price1 * $this->second_stone_weight1;
         //副石2成本 = 副石2重 * 副石2买入单价
-        $goods->second_stone2_cost = $this->second_stone_price2 * $this->second_stone_weight2;
+        $goods->second_stone_cost2 = $this->second_stone_price2 * $this->second_stone_weight2;
         //副石3成本 = 副石2重 * 副石2买入单价
-        $goods->second_stone3_cost = $this->second_stone_price3 * $this->second_stone_weight3;
+        $goods->second_stone_cost3 = $this->second_stone_price3 * $this->second_stone_weight3;
         //【配件额=配件重*配件金价】
         $goods->parts_amount = $this->parts_price * $this->parts_gold_weight;
         //配石费 = 配石工费 * 配石重量
@@ -116,7 +116,7 @@ class WarehouseBillAGoodsForm extends WarehouseBillGoodsA
             + $this->lasha_fee + $this->piece_fee;
 
         //公司成本 = 金料成本 + 主石成本 + 副石1成本 + 副石2成本 + 配件额 + 总工费
-        $goods->cost_price = $goods->gold_amount + $goods->main_stone_cost + $goods->second_stone1_cost + $goods->second_stone2_cost +
+        $goods->cost_price = $goods->gold_amount + $goods->main_stone_cost + $goods->second_stone_cost1 + $goods->second_stone_cost2 +
                             $goods->parts_amount + $goods->total_gong_fee;
 
         //工厂成本
@@ -125,13 +125,13 @@ class WarehouseBillAGoodsForm extends WarehouseBillGoodsA
             $goods->factory_cost += $goods->main_stone_cost;
         }
         if($goods->second_peishi_way1 == PeiShiWayEnum::FACTORY){
-            $goods->factory_cost += $goods->second_stone1_cost;
+            $goods->factory_cost += $goods->second_stone_cost1;
         }
         if($goods->second_peishi_way2 == PeiShiWayEnum::FACTORY){
-            $goods->factory_cost += $goods->second_stone2_cost;
+            $goods->factory_cost += $goods->second_stone_cost2;
         }
         if($goods->second_peishi_way3 == PeiShiWayEnum::FACTORY){
-            $goods->factory_cost += $goods->second_stone3_cost;
+            $goods->factory_cost += $goods->second_stone_cost3;
         }
         if($goods->peiliao_way == PeiLiaoWayEnum::FACTORY){
             $this->factory_cost += $goods->gold_amount;
