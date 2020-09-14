@@ -278,6 +278,9 @@ class WarehouseBillLService extends Service
                     'peishi_amount' => $good->peishi_fee,//配石费
                     'xianqian_price' => $good->xianqian_price,//镶石单价/颗
                     'xianqian_fee' => $good->xianqian_fee,//镶石费
+                    'second_stone_fee1' => $good->second_stone_fee1,//镶石1工费
+                    'second_stone_fee2' => $good->second_stone_fee2,//镶石2工费
+                    'second_stone_fee3' => $good->second_stone_fee3,//镶石3工费
                     'parts_fee' => $good->parts_fee,//配件工费
                     'edition_fee' => $good->templet_fee,//版费
                     'penrasa_fee' => $good->penlasha_fee,//喷沙费
