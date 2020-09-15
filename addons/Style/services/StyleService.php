@@ -190,7 +190,7 @@ class StyleService extends Service
         $error = $style_sns = $field = $styleList = $attrList = $factoryList1 = $factoryList2 = $styleFee = [];
         $creator_id = \Yii::$app->user->identity->getId();
         while ($style = fgetcsv($file)) {
-            if (count($style) != 36) {
+            if (count($style) != 38) {
                 throw new \Exception("模板格式不正确，请下载最新模板");
             }
             if ($i >= 501) {
@@ -202,7 +202,7 @@ class StyleService extends Service
                     if ($field == false) {
                         throw new \Exception("表头格式不对[code=1]");
                     }
-                    if (count($field) != 36) {
+                    if (count($field) != 38) {
                         throw new \Exception("表头格式不对[code=2]");
                     }
                 }
@@ -210,8 +210,6 @@ class StyleService extends Service
                 continue;
             }
             $style = $form->trimField($style, $field);
-//            echo '<pre>';
-//            print_r($style);die;
             if ($style == false) {
                 throw new \Exception("数据格式不对");
             }
@@ -308,6 +306,16 @@ class StyleService extends Service
                 $flag = false;
                 $error[$i][] = "连石重填写有误";
             }
+            $inlay_craft = $form->formatMultipleValue($style['inlay_craft'] ?? "", "");
+            if (!empty($style['inlay_craft']) && empty($inlay_craft)) {
+                $flag = false;
+                $error[$i][] = "镶嵌工艺填写有误";
+            }
+            $product_craft = $form->formatValue($style['product_craft'] ?? "", "");
+            if (!empty($style['product_craft']) && empty($product_craft)) {
+                $flag = false;
+                $error[$i][] = "生产工艺填写有误";
+            }
             $is_made = $form->formatValue($style['is_made'] ?? "", 1);
             if (!is_numeric($is_made)) {
                 $flag = false;
@@ -398,6 +406,8 @@ class StyleService extends Service
             $attrList[] = [
                 AttrIdEnum::SUTTLE_WEIGHT => $suttle_weight,
                 AttrIdEnum::MATERIAL_TYPE => $this->getMaterialTypeValues($style_material),
+                AttrIdEnum::XIANGQIAN_CRAFT => $inlay_craft,
+                AttrIdEnum::PRODUCT_CRAFT => $product_craft,
             ];
 
             //工厂1信息
@@ -626,14 +636,16 @@ class StyleService extends Service
                 $command->execute();
             }
         }
-
         //款式属性信息
         foreach ($style_ids as $style_id){
             $styleM = Style::find()->where(['id'=>$style_id])->one();
             foreach ($attrList[$k] as $attrId => $val) {
+                if(empty($val)){
+                    continue;
+                }
                 //$saveAttr[$styleM->id][$attrId] = $val;
                 $attr = Yii::$app->styleService->attribute->getSpecAttrList($attrId, $styleM->style_cate_id);
-                if ($attr) {
+                if (!empty($attr)) {
                     $attr = $attr[0] ?? [];
                     $attr_list = [
                         'style_id' => $styleM->id,
