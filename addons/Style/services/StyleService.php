@@ -2,7 +2,6 @@
 
 namespace addons\Style\services;
 
-use addons\Style\common\enums\AttrValueIdEnum;
 use Yii;
 use common\helpers\Url;
 use common\components\Service;
@@ -14,6 +13,7 @@ use addons\Style\common\models\StyleImages;
 use addons\Style\common\models\StyleGift;
 use addons\Style\common\forms\StyleForm;
 use addons\Style\common\enums\StyleMaterialEnum;
+use addons\Style\common\enums\AttrValueIdEnum;
 use addons\Style\common\enums\StyleSexEnum;
 use addons\Style\common\enums\AttrIdEnum;
 use common\enums\AuditStatusEnum;
