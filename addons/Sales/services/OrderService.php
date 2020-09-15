@@ -437,7 +437,8 @@ class OrderService extends Service
         if(!$model->id) {
             throw new \Exception("创建订单号失败：ID不能为空");
         }
-        $order_sn = date("Ymd").str_pad($model->id,8,'0',STR_PAD_LEFT);
+        $order_time = $model->order_time ? $model->order_time: time();        
+        $order_sn = date("Ymd",$order_time).str_pad($model->id,8,'0',STR_PAD_LEFT);
         $model->order_sn = $order_sn;
         if($save === true) {            
             $result = $model->save(true,['id','order_sn']);
