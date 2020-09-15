@@ -36,7 +36,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     'dataProvider' => $dataProvider,
                     'filterModel' => $searchModel,
                     'tableOptions' => ['class' => 'table table-hover'],
-                    //'options' => ['style'=>'width:100%;white-space:nowrap;' ],
+                    'options' => ['style'=>'width:100%;white-space:nowrap;' ],
                     'showFooter' => false,//显示footer行
                     'id' => 'grid',
                     'columns' => [
@@ -242,14 +242,22 @@ $this->params['breadcrumbs'][] = $this->title;
                         [
                             'class' => 'yii\grid\ActionColumn',
                             'header' => '操作',
-                            'template' => '{edit} {ajax-apply} {audit} {status}',
+                            'template' => '{edit} {image} {ajax-apply} {audit} {status} {delete}',
                             'buttons' => [
                                 'edit' => function ($url, $model, $key) {
-                                    return Html::edit(['ajax-edit', 'id' => $model->id, 'returnUrl' => Url::getReturnUrl()], '编辑', [
+                                    return Html::edit(['style-attribute/edit', 'style_id' => $model->id, 'returnUrl' => Url::getReturnUrl()], '属性编辑', [
+                                        'class' => 'btn btn-primary btn-sm openIframe',
+                                        'data-width' => '90%',
+                                        'data-height' => '90%',
+                                        'data-offset' => '20px',
+                                    ]);
+
+                                },
+                                'image' => function($url, $model, $key){
+                                    return Html::edit(['style-image/ajax-edit-multe','style_id' => $model->id,'returnUrl' => Url::getReturnUrl(),'returnUrl' => Url::getReturnUrl()], '批量上传', [
                                         'data-toggle' => 'modal',
                                         'data-target' => '#ajaxModalLg',
                                     ]);
-
                                 },
                                 'ajax-apply' => function ($url, $model, $key) {
                                     if ($model->audit_status == AuditStatusEnum::SAVE) {
@@ -276,9 +284,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                     }
                                 },
                                 'delete' => function ($url, $model, $key) {
-                                    if ($model->audit_status == 0) {
-                                        return Html::delete(['delete', 'id' => $model->id]);
-                                    }
+                                    return Html::delete(['delete', 'id' => $model->id]);
                                 },
                             ]
                         ]

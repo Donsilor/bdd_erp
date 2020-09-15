@@ -2,6 +2,16 @@
 
 namespace addons\Style\backend\controllers;
 
+use addons\Style\common\models\StyleAttribute;
+use addons\Style\common\models\StyleFactory;
+use addons\Style\common\models\StyleFactoryFee;
+use addons\Style\common\models\StyleGoods;
+use addons\Style\common\models\StyleGoodsAttribute;
+use addons\Style\common\models\StyleImages;
+use addons\Style\common\models\StyleLog;
+use addons\Style\common\models\StyleStone;
+use common\helpers\ArrayHelper;
+use common\helpers\StringHelper;
 use Yii;
 use common\helpers\Url;
 use common\traits\Curd;
@@ -271,5 +281,47 @@ class StyleController extends BaseController
             'current_detail_id'=> $current_detail_id
         ]);
     }
-    
+
+
+    /**
+     * 删除
+     *
+     * @param $id
+     * @return mixed
+     * @throws \Throwable
+     * @throws \yii\db\StaleObjectException
+     */
+    public function actionDelete($id)
+    {
+        try{
+            $trans = Yii::$app->trans->beginTransaction();
+            if ($this->findModel($id)->delete()) {
+                //属性删除
+                StyleAttribute::deleteAll(['style_id' => $id]);
+                //商品删除
+                $styleGoods = StyleGoods::find()->where(['style_id' => $id])->select(['id'])->asArray()->all();
+                $styleGoodsIds = array_column($styleGoods,'id');
+                StyleGoodsAttribute::deleteAll(['goods_id' => $styleGoodsIds]);
+                $a = StyleGoods::deleteAll(['style_id' => $id]);
+                // 石头信息删除
+                StyleStone::deleteAll(['style_id' => $id]);
+                //工厂信息删除
+                StyleFactory::deleteAll(['style_id' => $id]);
+                // 工费信息删除
+                StyleFactoryFee::deleteAll(['style_id' => $id]);
+                //图片信息
+                StyleImages::deleteAll(['style_id' => $id]);
+                //日志信息
+                StyleLog::deleteAll(['style_id' => $id]);
+            }
+
+            $trans->commit();
+            return $this->message("删除成功", $this->redirect(['index']));
+        }catch (\Exception $e){
+            $trans->rollBack();
+            return $this->message("删除失败:". $e->getMessage(),  $this->redirect(Yii::$app->request->referrer), 'error');
+        }
+
+        return $this->message("删除失败", $this->redirect(['index']), 'error');
+    }
 }
