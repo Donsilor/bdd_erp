@@ -179,9 +179,7 @@ class BillTGoodsController extends BaseController
         if ($model->load(\Yii::$app->request->post())) {
             try {
                 $trans = \Yii::$app->db->beginTransaction();
-                $model->biaomiangongyi = join(',',$model->biaomiangongyi);
-
-
+                //$model->biaomiangongyi = join(',',$model->biaomiangongyi);
                 if (false === $model->save()) {
                     throw new \Exception($this->getError($model));
                 }

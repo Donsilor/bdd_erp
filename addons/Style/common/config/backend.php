@@ -135,6 +135,7 @@ return [
                        'name'  => 'style/index',
                        'child' =>[
                                ['title' => '新增/编辑','name'  => 'style/ajax-edit'],
+                               ['title' => '删除','name'  => 'style/delete'],
                                ['title' => '启用/禁用','name'  => 'style/ajax-update'],
                                ['title' => '提交审核','name'  => 'style/ajax-apply'],                           
                                ['title' => '审核','name'  => 'style/ajax-audit'],                           
@@ -147,6 +148,7 @@ return [
                                ['title' => '工厂信息(*)','name'  => 'style-factory/*'],
                                ['title' => '工费信息(*)','name'  => 'style-factory-fee/*'],
                                ['title' => '款式图片(*)','name'  => 'style-image/*'],
+                               ['title' => '日志(*)','name'  => 'style-log/*'],
                        ],
                  ],
                  [
