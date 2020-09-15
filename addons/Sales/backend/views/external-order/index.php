@@ -6,7 +6,7 @@ use yii\grid\GridView;
 
 /* @var $this yii\web\View */
 /* @var $dataProvider yii\data\ActiveDataProvider */
-$this->title = '订单列表';
+$this->title = '外部订单列表';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 
@@ -77,13 +77,23 @@ $this->params['breadcrumbs'][] = $this->title;
             
             ],
             [
-                    'attribute' => 'order_sn',
+                    'attribute' => 'out_trade_no',
                     'value'=>function($model) {
-                        return Html::a($model->order_sn, ['view', 'id' => $model->id,'returnUrl'=>Url::getReturnUrl()], ['style'=>"text-decoration:underline;color:#3c8dbc"]);
+                        return Html::a($model->out_trade_no, ['view', 'id' => $model->id,'returnUrl'=>Url::getReturnUrl()], ['style'=>"text-decoration:underline;color:#3c8dbc"]);
                     },
+                    'filter' => Html::activeTextInput($searchModel, 'out_trade_no', [
+                            'class' => 'form-control',
+                            'style'=> 'width:150px;'
+                    ]),
+                    'format' => 'raw',
+                    'headerOptions' => ['class' => 'col-md-1'],
+            ], 
+            [
+                    'attribute' => 'order_sn',
+                    'value'=>"order_sn",
                     'filter' => Html::activeTextInput($searchModel, 'order_sn', [
-                        'class' => 'form-control',
-                        'style'=> 'width:150px;'
+                            'class' => 'form-control',
+                            'style'=> 'width:150px;'
                     ]),
                     'format' => 'raw',
                     'headerOptions' => ['class' => 'col-md-1'],
@@ -107,12 +117,9 @@ $this->params['breadcrumbs'][] = $this->title;
                           $str .= $model->customer_email ? $model->customer_email."<br/>":'';
                           return $str;
                     },
-                    'filter' => html::activeTextInput($searchModel, 'customer_name', [
-                            'class' => 'form-control',
-                            'style'=> 'width:110px;'
-                    ]),
+                    'filter' => false,
                     'format' => 'raw',
-                    'headerOptions' => ['width'=>'110'],
+                    'headerOptions' => ['width'=>'80'],
             ],
 /*                
             [
@@ -208,13 +215,7 @@ $this->params['breadcrumbs'][] = $this->title;
             [
                     'attribute' => 'order_status',
                     'value' => function ($model){
-                        $model->getTargetType();
-                        $audit_name_str = '';
-                        if($model->targetType){
-                            $audit_name = Yii::$app->services->flowType->getCurrentUsersName($model->targetType,$model->id);
-                            $audit_name_str = $audit_name ? "({$audit_name})" : "";
-                        }
-                         return \addons\Sales\common\enums\OrderStatusEnum::getValue($model->order_status).$audit_name_str;
+                         return \addons\Sales\common\enums\OrderStatusEnum::getValue($model->order_status);
                     },
                     'filter' => Html::activeDropDownList($searchModel, 'order_status',\addons\Sales\common\enums\OrderStatusEnum::getMap(), [
                             'prompt' => '全部',
@@ -249,17 +250,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     ]),
                     'format' => 'raw',
                     'headerOptions' => ['width'=>'100'],
-            ], 
-            [
-                    'attribute' => 'out_trade_no',
-                    'value'=>"out_trade_no",
-                    'filter' => Html::activeTextInput($searchModel, 'out_trade_no', [
-                            'class' => 'form-control',
-                            'style'=> 'width:150px;'
-                    ]),
-                    'format' => 'raw',
-                    'headerOptions' => ['class' => 'col-md-1'],
-           ],
+            ],            
             [
                 'attribute' => 'creator_id',
                 'value' => 'creator.username',
@@ -293,16 +284,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     return Yii::$app->formatter->asDatetime($model->created_at);
                 }
 
-            ],
-            /* [
-                    'attribute' => 'follower_id',
-                    'value' => function($model){
-                        return $model->follower->username ?? '';
-                    },
-                    'filter' => false,
-                    'format' => 'raw',
-                    'headerOptions' => ['width'=>'100'],
-            ], */
+            ],            
             [
                 'class' => 'yii\grid\ActionColumn',
                 'header' => '操作',
@@ -326,13 +308,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         }
                     },
                     'audit' => function($url, $model, $key){
-                        $model->getTargetType();
-                        if($model->targetType){
-                            $isAudit = Yii::$app->services->flowType->isAudit($model->targetType,$model->id);
-                        }else{
-                            $isAudit = true;
-                        }
-                        if($model->order_status == \addons\Sales\common\enums\OrderStatusEnum::PENDING && $isAudit) {
+                        if($model->order_status == \addons\Sales\common\enums\OrderStatusEnum::PENDING) {
                             return Html::edit(['ajax-audit', 'id' => $model->id], '审核', [
                                 'class' => 'btn btn-success btn-sm',
                                 'data-toggle' => 'modal',

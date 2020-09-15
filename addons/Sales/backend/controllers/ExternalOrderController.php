@@ -4,14 +4,12 @@ namespace addons\Sales\backend\controllers;
 
 use addons\Sales\common\enums\IsReturnEnum;
 use addons\Sales\common\enums\OrderStatusEnum;
-use addons\Sales\common\enums\ReturnByEnum;
 use addons\Sales\common\enums\ReturnTypeEnum;
 use addons\Sales\common\forms\OrderForm;
 use addons\Sales\common\forms\OrderGoodsForm;
 use addons\Sales\common\forms\ReturnForm;
 use addons\Sales\common\models\OrderAccount;
 use addons\Sales\common\models\SalesReturn;
-use addons\Sales\common\models\SalesReturnLog;
 use common\enums\AuditStatusEnum;
 use common\enums\ConfirmEnum;
 use common\enums\FlowStatusEnum;
@@ -26,28 +24,20 @@ use addons\Sales\common\models\OrderInvoice;
 use addons\Sales\common\models\OrderAddress;
 use addons\Sales\common\models\Customer;
 use common\enums\LogTypeEnum;
-use common\helpers\Auth;
+use addons\Sales\common\forms\ExternalOrderForm;
 
 /**
  * Default controller for the `order` module
  */
-class OrderController extends BaseController
+class ExternalOrderController extends BaseController
 {
     use Curd;
     
     /**
      * @var Order
      */
-    public $modelClass = OrderForm::class;
-
-    public function actionTest()
-    {   
-        $res = Auth::verify('special:1001');
-        var_dump($res);exit;
-        $order_no = '130311942049';
-        Yii::$app->jdSdk->getOrderInfo($order_no);
-        exit;
-    }    
+    public $modelClass = ExternalOrderForm::class;    
+    
     /**
      * Renders the index view for the module
      * @return string
@@ -55,13 +45,13 @@ class OrderController extends BaseController
      */
     public function actionIndex()
     {
-        $order_status = Yii::$app->request->get('order_status', -1);        
+        $order_status = Yii::$app->request->get('order_status', -1);
         $searchModel = new SearchModel([
                 'model' => $this->modelClass,
                 'scenario' => 'default',
                 'partialMatchAttributes' => [], // 模糊查询
                 'defaultOrder' => [
-                        'order_sn' => SORT_DESC,
+                        'id' => SORT_DESC,
                 ],
                 'pageSize' => $this->pageSize,
                 'relations' => [
@@ -81,14 +71,14 @@ class OrderController extends BaseController
             $where = [ 'or',
                     ['like', Order::tableName().'.customer_mobile', $searchParams['customer_mobile']],
                     ['like', Order::tableName().'.customer_email', $searchParams['customer_mobile']]
-            ];            
+            ];
             $dataProvider->query->andWhere($where);
-        }        
+        }
         //创建时间过滤
         if (!empty($searchParams['order_time'])) {
             list($start_date, $end_date) = explode('/', $searchParams['order_time']);
             $dataProvider->query->andFilterWhere(['between', Order::tableName().'.order_time', strtotime($start_date), strtotime($end_date) + 86400]);
-        }        
+        }
         return $this->render($this->action->id, [
                 'dataProvider' => $dataProvider,
                 'searchModel' => $searchModel,
@@ -98,60 +88,38 @@ class OrderController extends BaseController
      * 创建订单
      * @return array|mixed
      */
-    public function actionAjaxEdit()
+    public function actionEdit()
     {
+        $this->layout = '@backend/views/layouts/iframe';
+        
         $id = Yii::$app->request->get('id');
         $model = $this->findModel($id);
         // ajax 校验
-        $this->activeFormValidate($model);
+        //$this->activeFormValidate($model);
         if ($model->load(Yii::$app->request->post())) {
-            $isNewRecord = $model->isNewRecord;            
-            try{                
+            $isNewRecord = $model->isNewRecord;
+            try{
                 $trans = Yii::$app->trans->beginTransaction();
-                $model = Yii::$app->salesService->order->createOrder($model);                
+                
+                $model = Yii::$app->salesService->order->createOrder($model);
+                
+                
                 $trans->commit();
-                return $isNewRecord  
-                    ? $this->message("创建成功", $this->redirect(['view', 'id' => $model->id]), 'success')
-                    : $this->message("保存成功", $this->redirect(Yii::$app->request->referrer), 'success');
+                return $isNewRecord
+                ? $this->message("创建成功", $this->redirect(['view', 'id' => $model->id]), 'success')
+                : $this->message("保存成功", $this->redirect(Yii::$app->request->referrer), 'success');
                 
             }catch (\Exception $e) {
                 $trans->rollback();
                 return $this->message($e->getMessage(), $this->redirect(Yii::$app->request->referrer), 'error');
             }
         }
-        //初始化 默认值
-        $model->customer_email_1 = $model->customer_email;
-        $model->customer_email_2 = $model->customer_email;
-        $model->customer_mobile_1 = $model->customer_mobile;
-        $model->customer_mobile_2 = $model->customer_mobile;
-        $model->customer_source = $model->customer->source_id ?? '';
-        $model->customer_level = $model->customer->level ?? '';
-        return $this->renderAjax($this->action->id, [
+        
+        return $this->render($this->action->id, [
                 'model' => $model,
         ]);
         
-    }   
-    /**
-     * 查询客户信息
-     * @return array|\yii\db\ActiveRecord|NULL
-     */
-    public function actionAjaxGetCustomer()
-    {
-        Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
-        
-        $mobile = Yii::$app->request->get('mobile');
-        $email = Yii::$app->request->get('email');
-        $channel_id = Yii::$app->request->get('channel_id');
-        if(empty($mobile) && empty($email)) {
-            return ResultHelper::json(200,'查询成功',[]);
-        }        
-        $model = Customer::find()->select(['id','realname','mobile','email','level','source_id'])
-            ->where(['channel_id'=>$channel_id])
-            ->andFilterWhere(['=','mobile',$mobile])
-            ->andFilterWhere(['=','email',$email])
-            ->asArray()->one();
-        return ResultHelper::json(200,'查询成功',$model);
-    }
+    }    
     /**
      * 详情展示页
      * @return string
@@ -159,8 +127,8 @@ class OrderController extends BaseController
      */
     public function actionView()
     {
-        $id = Yii::$app->request->get('id');        
-        $model = $this->findModel($id); 
+        $id = Yii::$app->request->get('id');
+        $model = $this->findModel($id);
         $model->getTargetType();
         $dataProvider = null;
         if (!is_null($id)) {
@@ -169,7 +137,7 @@ class OrderController extends BaseController
                     'scenario' => 'default',
                     'partialMatchAttributes' => [], // 模糊查询
                     'defaultOrder' => [
-                         'id' => SORT_DESC
+                            'id' => SORT_DESC
                     ],
                     'pageSize' => 1000,
             ]);
@@ -184,7 +152,7 @@ class OrderController extends BaseController
             foreach ($models as & $goods){
                 $attrs = $goods->attrs ?? [];
                 $goods['attr'] = ArrayHelper::map($attrs,'attr_id','attr_value');
-
+                
                 if ($goods->is_return == IsReturnEnum::HAS_RETURN){
                     $return[] = $goods->id;
                 }
@@ -223,21 +191,21 @@ class OrderController extends BaseController
         $ids = Yii::$app->request->post("ids", []);
         if(empty($ids) || !is_array($ids)) {
             return ResultHelper::json(422, '提交数据异常');
-        } 
+        }
         
         try {
-            $trans = Yii::$app->db->beginTransaction();                      
+            $trans = Yii::$app->db->beginTransaction();
             foreach ($ids as $id) {
                 
             }
             $trans->commit();
-            return ResultHelper::json(200, '操作成功');   
+            return ResultHelper::json(200, '操作成功');
         } catch (\Exception $e) {
             $trans->rollBack();
             return ResultHelper::json(422, '取消失败！'.$e->getMessage());
-        }        
-              
-    }    
+        }
+        
+    }
     /**
      * 分配跟单人
      * @return mixed|string|\yii\web\Response
@@ -247,8 +215,8 @@ class OrderController extends BaseController
     {
         
     }
-
-
+    
+    
     /**
      * @return mixed
      * 申请审核
@@ -269,9 +237,9 @@ class OrderController extends BaseController
             $trans = Yii::$app->db->beginTransaction();
             if($model->targetType){
                 //审批流程
-                $flow = Yii::$app->services->flowType->createFlow($model->targetType,$id,$model->order_sn);               
+                $flow = Yii::$app->services->flowType->createFlow($model->targetType,$id,$model->order_sn);
             }
-
+            
             $model->order_status = OrderStatusEnum::PENDING;
             $model->audit_status = AuditStatusEnum::PENDING;
             if(false === $model->save()){
@@ -295,9 +263,9 @@ class OrderController extends BaseController
             $trans->rollBack();
             return $this->message($e->getMessage(), $this->redirect(Yii::$app->request->referrer), 'error');
         }
-
+        
     }
-
+    
     /**
      * 订单审核
      * @return array
@@ -313,17 +281,17 @@ class OrderController extends BaseController
         if ($model->load(Yii::$app->request->post())) {
             try{
                 $trans = Yii::$app->trans->beginTransaction();
-
+                
                 $model->getTargetType();
                 if($model->targetType){
                     $audit = [
-                        'audit_status' =>  $model->audit_status ,
-                        'audit_time' => time(),
-                        'audit_remark' => $model->audit_remark
+                            'audit_status' =>  $model->audit_status ,
+                            'audit_time' => time(),
+                            'audit_remark' => $model->audit_remark
                     ];
                     $flow = \Yii::$app->services->flowType->flowAudit($model->targetType,$id,$audit);
                     //审批完结或者审批不通过才会走下面
-					if($flow->flow_status == FlowStatusEnum::COMPLETE || $flow->flow_status == FlowStatusEnum::CANCEL){
+                    if($flow->flow_status == FlowStatusEnum::COMPLETE || $flow->flow_status == FlowStatusEnum::CANCEL){
                         $model->auditor_id = \Yii::$app->user->id;
                         $model->audit_time = time();
                         if($model->audit_status == AuditStatusEnum::PASS){
@@ -370,11 +338,11 @@ class OrderController extends BaseController
         }
         $model->audit_status = AuditStatusEnum::PASS;
         return $this->renderAjax($this->action->id, [
-            'model' => $model,
+                'model' => $model,
         ]);
     }
-
-
+    
+    
     /**
      * 修改费用
      * @return \yii\web\Response|mixed|string|string
@@ -399,7 +367,7 @@ class OrderController extends BaseController
                 //更新采购汇总：总金额和总数量
                 \Yii::$app->salesService->order->orderSummary($model->order_id);
                 $trans->commit();
-
+                
                 return $this->message("保存成功", $this->redirect(Yii::$app->request->referrer), 'success');
             }catch (\Exception $e) {
                 $trans->rollback();
@@ -407,10 +375,10 @@ class OrderController extends BaseController
             }
         }
         return $this->renderAjax($this->action->id, [
-            'model' => $model,
+                'model' => $model,
         ]);
     }
-
+    
     /**
      * 修改收货地址
      * @return \yii\web\Response|mixed|string|string
@@ -422,8 +390,8 @@ class OrderController extends BaseController
         $model = $this->findModel($id);
         $isNewRecord = $model->isNewRecord;
         if($isNewRecord) {
-            $model->order_id = $id;     
-        }        
+            $model->order_id = $id;
+        }
         // ajax 校验
         $this->activeFormValidate($model);
         if ($model->load(Yii::$app->request->post())) {
@@ -431,10 +399,10 @@ class OrderController extends BaseController
                 $trans = Yii::$app->trans->beginTransaction();
                 if(false === $model->save()) {
                     throw new \Exception($this->getError($model));
-                }                
+                }
                 $trans->commit();
                 
-                return $this->message("保存成功", $this->redirect(Yii::$app->request->referrer), 'success');                
+                return $this->message("保存成功", $this->redirect(Yii::$app->request->referrer), 'success');
             }catch (\Exception $e) {
                 $trans->rollback();
                 return $this->message($e->getMessage(), $this->redirect(Yii::$app->request->referrer), 'error');
@@ -479,7 +447,7 @@ class OrderController extends BaseController
                 $trans = Yii::$app->trans->beginTransaction();
                 if(false === $model->save()) {
                     throw new \Exception($this->getError($model));
-                }                
+                }
                 $trans->commit();
                 
                 return $this->message("保存成功", $this->redirect(Yii::$app->request->referrer), 'success');
@@ -508,13 +476,13 @@ class OrderController extends BaseController
             //订单日志
             $log_msg = "生成采购申请单。采购申请单号：{$apply->apply_sn}";
             $log = [
-                'order_id' => $model->id,
-                'order_sn' => $model->order_sn,
-                'order_status' => $model->order_status,
-                'log_type' => LogTypeEnum::ARTIFICIAL,
-                'log_time' => time(),
-                'log_module' => '生成采购申请单',
-                'log_msg' => $log_msg,
+                    'order_id' => $model->id,
+                    'order_sn' => $model->order_sn,
+                    'order_status' => $model->order_status,
+                    'log_type' => LogTypeEnum::ARTIFICIAL,
+                    'log_time' => time(),
+                    'log_module' => '生成采购申请单',
+                    'log_msg' => $log_msg,
             ];
             \Yii::$app->salesService->orderLog->createOrderLog($log);
             $trans->commit();
@@ -522,9 +490,9 @@ class OrderController extends BaseController
         } catch (\Exception $e) {
             $trans->rollBack();
             return $this->message($e->getMessage(), $this->redirect(Yii::$app->request->referrer), 'error');
-        }       
+        }
     }
-
+    
     /**
      * 退款
      * @var SalesReturn $model
@@ -545,7 +513,7 @@ class OrderController extends BaseController
             }
             try{
                 $trans = Yii::$app->trans->beginTransaction();
-
+                
                 \Yii::$app->salesService->return->createReturn($model, $order);
                 $trans->commit();
                 Yii::$app->getSession()->setFlash('success','保存成功');
@@ -558,13 +526,13 @@ class OrderController extends BaseController
         $dataProvider = null;
         if (!is_null($id)) {
             $searchModel = new SearchModel([
-                'model' => OrderGoodsForm::class,
-                'scenario' => 'default',
-                'partialMatchAttributes' => [], // 模糊查询
-                'defaultOrder' => [
-                    'id' => SORT_DESC
-                ],
-                'pageSize' => 1000,
+                    'model' => OrderGoodsForm::class,
+                    'scenario' => 'default',
+                    'partialMatchAttributes' => [], // 模糊查询
+                    'defaultOrder' => [
+                            'id' => SORT_DESC
+                    ],
+                    'pageSize' => 1000,
             ]);
             $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
             $dataProvider->query->andWhere(['=', 'order_id', $id]);
@@ -574,9 +542,9 @@ class OrderController extends BaseController
         $model->is_quick_refund = ConfirmEnum::NO;
         $model->return_type = ReturnTypeEnum::CARD;
         return $this->render($this->action->id, [
-            'model' => $model,
-            'order' => $order,
-            'dataProvider' => $dataProvider,
+                'model' => $model,
+                'order' => $order,
+                'dataProvider' => $dataProvider,
         ]);
     }
 }

@@ -25,37 +25,56 @@ $model = $model ?? new StyleAttrForm();
                         	<h3 class="box-title" style="font-weight: bold"><?= AttrTypeEnum::getValue($attr_type)?><span style="font-size:12px;color: red">（*点击属性标题即可全选）</span></h3>
                     	</div> 
                         <div class="box-body" style="margin-left:10px;">
-                        <?php
+                        <?php                          
+                          if($attr_type ==1 && $model->style_image) {
+                              $_attr_list = [];
+                              foreach ($attr_list as $k=>$attr){
+                                  if($k == 2) {
+                                      $_attr_list[] = $model->style_image;
+                                  }
+                                  $_attr_list[] = $attr;
+                              }
+                              $attr_list = $_attr_list;
+                          } 
                           foreach ($attr_list as $k=>$attr){ 
-                              $attr_field = $attr['is_require'] == 1?'attr_require':'attr_custom';                                  
-                              $attr_field_name = "{$attr_field}[{$attr['id']}]";                                  
-                              //通用属性值列表
-                              $attr_values = Yii::$app->styleService->attribute->getValuesByAttrId($attr['id']);                                  
-                              switch ($attr['input_type']){
-                                  case common\enums\InputTypeEnum::INPUT_TEXT :{
-                                      $attr_field = 'attr_custom';
-                                      $attr_field_name = "{$attr_field}[{$attr['id']}]"; 
-                                      $input = $form->field($model,$attr_field_name)->textInput()->label($attr['attr_name']);
-                                      break;
-                                  }
-                                  case common\enums\InputTypeEnum::INPUT_RADIO :{
-                                      $input = $form->field($model,$attr_field_name)->radioList($attr_values)->label($attr['attr_name']);
-                                      break;
-                                  }
-                                  case common\enums\InputTypeEnum::INPUT_MUlTI :{
-                                      $input = $form->field($model,$attr_field_name)->checkboxList($attr_values)->label($attr['attr_name']);
-                                      break;
-                                  }
-                                  case common\enums\InputTypeEnum::INPUT_MUlTI_RANGE :{
-                                      $input = $form->field($model,$attr_field_name)->checkboxList($attr_values)->label($attr['attr_name']);
-                                      break;
-                                  }
-                                  default:{
-                                      $input = $form->field($model,$attr_field_name)->dropDownList($attr_values,['prompt'=>'请选择'])->label($attr['attr_name']);
-                                      break;
-                                  }
-                              }//end switch
-                    
+                              if($attr_type == 1 && $k==2 && $model->style_image) {
+                                  $input = common\helpers\ImageHelper::fancyBox($model->style_image,150,150);
+                              }else{
+                                  $attr_field = $attr['is_require'] == 1?'attr_require':'attr_custom';                                  
+                                  $attr_field_name = "{$attr_field}[{$attr['id']}]";
+                                  switch ($attr['input_type']){
+                                      case common\enums\InputTypeEnum::INPUT_TEXT :{
+                                          $attr_field = 'attr_custom';
+                                          $attr_field_name = "{$attr_field}[{$attr['id']}]"; 
+                                          $input = $form->field($model,$attr_field_name)->textInput()->label($attr['attr_name']);
+                                          break;
+                                      }
+                                      case common\enums\InputTypeEnum::INPUT_RADIO :{
+                                          //通用属性值列表
+                                          $attr_values = Yii::$app->styleService->attribute->getValuesByAttrId($attr['id']);   
+                                          $input = $form->field($model,$attr_field_name)->radioList($attr_values)->label($attr['attr_name']);
+                                          break;
+                                      }
+                                      case common\enums\InputTypeEnum::INPUT_MUlTI :{
+                                          //通用属性值列表
+                                          $attr_values = Yii::$app->styleService->attribute->getValuesByAttrId($attr['id']);   
+                                          $input = $form->field($model,$attr_field_name)->checkboxList($attr_values)->label($attr['attr_name']);
+                                          break;
+                                      }
+                                      case common\enums\InputTypeEnum::INPUT_MUlTI_RANGE :{
+                                          //通用属性值列表
+                                          $attr_values = Yii::$app->styleService->attribute->getValuesByAttrId($attr['id']);   
+                                          $input = $form->field($model,$attr_field_name)->checkboxList($attr_values)->label($attr['attr_name']);
+                                          break;
+                                      }
+                                      default:{
+                                          //通用属性值列表
+                                          $attr_values = Yii::$app->styleService->attribute->getValuesByAttrId($attr['id']);   
+                                          $input = $form->field($model,$attr_field_name)->dropDownList($attr_values,['prompt'=>'请选择'])->label($attr['attr_name']);
+                                          break;
+                                      }
+                                  }//end switch
+                           }
                            $collLg = 4;
                         ?>
                         <?php if ($k % 3 ==0){ ?><div class="row"><?php }?>
