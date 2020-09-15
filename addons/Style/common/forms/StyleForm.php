@@ -2,6 +2,7 @@
 
 namespace addons\Style\common\forms;
 
+use addons\Style\common\enums\AttrIdEnum;
 use Yii;
 use addons\Style\common\models\Style;
 use addons\Style\common\enums\FactoryFeeEnum;
@@ -75,6 +76,8 @@ class StyleForm extends Style
             $this->formatTitleId($this->getMaterialList()),
             $this->formatTitleId($this->getSexList()),
             '#',
+            $this->formatTitleId($this->getInlayCraftMap()),
+            $this->formatTitleId($this->getProductCraftMap()),
             $this->formatTitleId($this->getIsMadeList()),
             //$this->getAttributeLabel('is_gift') . $this->formatTitleId($this->getIsGiftList()),
             '#',
@@ -164,6 +167,37 @@ class StyleForm extends Style
             } else {
                 return $value;
             }
+        } else {
+            return $defaultValue;
+        }
+    }
+
+    /**
+     * 多选
+     * {@inheritdoc}
+     */
+    public function formatMultipleValue($value = null, $defaultValue = null)
+    {
+
+        if (!empty($value)) {
+            $arr = StringHelper::explode($value, "|");
+            $values = "";
+            foreach ($arr as $item) {
+                $result = array();
+                preg_match_all("/(?:\[)(.*)(?:\])/i", $item, $result);
+                if (isset($result[1][0])) {
+                    if ($result[1][0] === 0) {
+                        return $defaultValue;
+                    } elseif (!empty($result[1][0])) {
+                        $values.= $result[1][0].",";
+                    } else {
+                        return $defaultValue;
+                    }
+                } else {
+                    return $item;
+                }
+            }
+            return rtrim($values,",") ?? "";
         } else {
             return $defaultValue;
         }
@@ -320,6 +354,23 @@ class StyleForm extends Style
     public function getSupplierList()
     {
         return Yii::$app->supplyService->supplier->getDropDown() ?? [];
+    }
+
+    /**
+     * 镶嵌工艺
+     * @return array
+     */
+    public function getInlayCraftMap()
+    {
+        return \Yii::$app->attr->valueMap(AttrIdEnum::XIANGQIAN_CRAFT) ?? [];
+    }
+    /**
+     * 生产工艺
+     * @return array
+     */
+    public function getProductCraftMap()
+    {
+        return \Yii::$app->attr->valueMap(AttrIdEnum::PRODUCT_CRAFT) ?? [];
     }
 
     /**

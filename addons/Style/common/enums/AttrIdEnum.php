@@ -102,6 +102,7 @@ class AttrIdEnum
     const PRODUCT_SIZE = 75;//成品尺寸(mm)
     const TALON_HEAD_TYPE = 90;//爪头形状
     const XIANGQIAN_CRAFT = 81;//镶嵌工艺
+    const PRODUCT_CRAFT = 80;//生产工艺
     const STONE_TYPE_MO = 241;//莫桑石
     const KEZI = 83;//刻字内容
     const SUTTLE_WEIGHT = 91;//连石重(净重)
