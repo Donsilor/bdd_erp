@@ -640,9 +640,12 @@ class StyleService extends Service
         foreach ($style_ids as $style_id){
             $styleM = Style::find()->where(['id'=>$style_id])->one();
             foreach ($attrList[$k] as $attrId => $val) {
+                if(empty($val)){
+                    continue;
+                }
                 //$saveAttr[$styleM->id][$attrId] = $val;
                 $attr = Yii::$app->styleService->attribute->getSpecAttrList($attrId, $styleM->style_cate_id);
-                if ($attr) {
+                if (!empty($attr)) {
                     $attr = $attr[0] ?? [];
                     $attr_list = [
                         'style_id' => $styleM->id,
