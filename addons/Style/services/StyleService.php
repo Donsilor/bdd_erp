@@ -190,7 +190,7 @@ class StyleService extends Service
         $error = $style_sns = $field = $styleList = $attrList = $factoryList1 = $factoryList2 = $styleFee = [];
         $creator_id = \Yii::$app->user->identity->getId();
         while ($style = fgetcsv($file)) {
-            if (count($style) != 38) {
+            if (count($style) != 42) {
                 throw new \Exception("模板格式不正确，请下载最新模板");
             }
             if ($i >= 501) {
@@ -202,7 +202,7 @@ class StyleService extends Service
                     if ($field == false) {
                         throw new \Exception("表头格式不对[code=1]");
                     }
-                    if (count($field) != 38) {
+                    if (count($field) != 42) {
                         throw new \Exception("表头格式不对[code=2]");
                     }
                 }
@@ -374,12 +374,16 @@ class StyleService extends Service
             $gram_fee = $form->formatValue($style['gram_fee'] ?? "", '0.00');
             $basic_fee = $form->formatValue($style['basic_fee'] ?? "", '0.00');
             $xiangshi_fee = $form->formatValue($style['xiangshi_fee'] ?? "", '0.00');
-            $technology_fee = $form->formatValue($style['technology_fee'] ?? "", '0.00');
             $fense_fee = $form->formatValue($style['fense_fee'] ?? "", '0.00');
-            $penlasa_fee = $form->formatValue($style['penlasa_fee'] ?? "", '0.00');
+            $pensa_fee = $form->formatValue($style['pensa_fee'] ?? "", '0.00');
+            $lasa_fee = $form->formatValue($style['lasa_fee'] ?? "", '0.00');
             $bukou_fee = $form->formatValue($style['bukou_fee'] ?? "", '0.00');
             $templet_fee = $form->formatValue($style['templet_fee'] ?? "", '0.00');
             $cert_fee = $form->formatValue($style['cert_fee'] ?? "", '0.00');
+            $technology_fee = $form->formatValue($style['technology_fee'] ?? "", '0.00');
+            $chehuapian_fee = $form->formatValue($style['chehuapian_fee'] ?? "", '0.00');
+            $fenjian_fee = $form->formatValue($style['fenjian_fee'] ?? "", '0.00');
+            $luzhubian_fee = $form->formatValue($style['luzhubian_fee'] ?? "", '0.00');
             $other_fee = $form->formatValue($style['other_fee'] ?? "", '0.00');
 
             //$creator_id = \Yii::$app->user->identity->getId();
@@ -435,7 +439,6 @@ class StyleService extends Service
                 'creator_id' => $creator_id,
                 'created_at' => time(),
             ];
-
             //工费信息
             $styleFee[] = $feeInfo = [
                 'peishi_fee' => $peishi_fee,
@@ -445,7 +448,11 @@ class StyleService extends Service
                 'xiangshi_fee' => $xiangshi_fee,
                 'technology_fee' => $technology_fee,
                 'fense_fee' => $fense_fee,
-                'penlasa_fee' => $penlasa_fee,
+                'pensa_fee' => $pensa_fee,
+                'lasa_fee' => $lasa_fee,
+                'chehuapian_fee' => $chehuapian_fee,
+                'fenjian_fee' => $fenjian_fee,
+                'luzhubian_fee' => $luzhubian_fee,
                 'bukou_fee' => $bukou_fee,
                 'templet_fee' => $templet_fee,
                 'cert_fee' => $cert_fee,
