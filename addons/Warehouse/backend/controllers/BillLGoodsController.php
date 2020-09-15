@@ -216,6 +216,22 @@ class BillLGoodsController extends BaseController
     }
 
     /**
+     *
+     * ajax查看图片
+     * @return mixed|string|\yii\web\Response
+     * @throws
+     */
+    public function actionAjaxImage()
+    {
+        $id = \Yii::$app->request->get('id');
+        $model = $this->findModel($id);
+        $model = $model ?? new WarehouseBillLGoodsForm();
+        return $this->renderAjax($this->action->id, [
+            'model' => $model,
+        ]);
+    }
+
+    /**
      * 删除/关闭
      *
      * @param $id
