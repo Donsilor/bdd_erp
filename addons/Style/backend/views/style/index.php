@@ -138,29 +138,29 @@ $this->params['breadcrumbs'][] = $this->title;
                             'format' => 'raw',
                             'headerOptions' => ['width' => '100'],
                         ],
-                        [
-                            'attribute' => 'is_autosn',
-                            'value' => function ($model) {
-                                return \common\enums\AutoSnEnum::getValue($model->is_autosn);
-                            },
-                            'filter' => Html::activeDropDownList($searchModel, 'is_autosn', \common\enums\AutoSnEnum::getMap(), [
-                                'prompt' => '全部',
-                                'class' => 'form-control',
-                                'style' => 'width:100px'
-                            ]),
-                            'format' => 'raw',
-                            'headerOptions' => ['width' => '100'],
-                        ],
-                        [
-                            'attribute' => 'goods_num',
-                            'value' => "goods_num",
-                            'filter' => Html::activeTextInput($searchModel, 'goods_num', [
-                                'class' => 'form-control',
-                                'style' => 'width:80px'
-                            ]),
-                            'format' => 'raw',
-                            'headerOptions' => ['width' => '80'],
-                        ],
+//                        [
+//                            'attribute' => 'is_autosn',
+//                            'value' => function ($model) {
+//                                return \common\enums\AutoSnEnum::getValue($model->is_autosn);
+//                            },
+//                            'filter' => Html::activeDropDownList($searchModel, 'is_autosn', \common\enums\AutoSnEnum::getMap(), [
+//                                'prompt' => '全部',
+//                                'class' => 'form-control',
+//                                'style' => 'width:100px'
+//                            ]),
+//                            'format' => 'raw',
+//                            'headerOptions' => ['width' => '100'],
+//                        ],
+//                        [
+//                            'attribute' => 'goods_num',
+//                            'value' => "goods_num",
+//                            'filter' => Html::activeTextInput($searchModel, 'goods_num', [
+//                                'class' => 'form-control',
+//                                'style' => 'width:80px'
+//                            ]),
+//                            'format' => 'raw',
+//                            'headerOptions' => ['width' => '80'],
+//                        ],
                         [
                             'attribute' => 'audit_status',
                             'value' => function ($model) {
@@ -198,7 +198,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 ],
                             ]),
                             'format' => 'raw',
-                            'headerOptions' => ['class' => 'col-md-1'],
+                            'headerOptions' => ['width' => '80'],
                         ],
                         [
                             'attribute' => 'created_at',
@@ -222,7 +222,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 ],
                             ]),
                             'value' => function ($model) {
-                                return Yii::$app->formatter->asDatetime($model->created_at);
+                                return Yii::$app->formatter->asDate($model->created_at);
                             }
 
                         ],
@@ -237,7 +237,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'style' => 'width:80px'
                             ]),
                             'format' => 'raw',
-                            'headerOptions' => ['width' => '80'],
+                            'headerOptions' => ['width' => '60'],
                         ],
                         [
                             'class' => 'yii\grid\ActionColumn',
@@ -245,7 +245,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             'template' => '{edit} {image} {ajax-apply} {audit} {status} {delete}',
                             'buttons' => [
                                 'edit' => function ($url, $model, $key) {
-                                    return Html::edit(['style-attribute/edit', 'style_id' => $model->id, 'returnUrl' => Url::getReturnUrl()], '属性编辑', [
+                                    return Html::edit(['style-attribute/edit', 'style_id' => $model->id, 'returnUrl' => Url::getReturnUrl()], '属性', [
                                         'class' => 'btn btn-primary btn-sm openIframe',
                                         'data-width' => '90%',
                                         'data-height' => '90%',
@@ -254,7 +254,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
                                 },
                                 'image' => function($url, $model, $key){
-                                    return Html::edit(['style-image/ajax-edit-multe','style_id' => $model->id,'returnUrl' => Url::getReturnUrl(),'returnUrl' => Url::getReturnUrl()], '批量上传', [
+                                    return Html::edit(['style-image/ajax-edit-multe','style_id' => $model->id,'returnUrl' => Url::getReturnUrl(),'returnUrl' => Url::getReturnUrl()], '传图', [
                                         'data-toggle' => 'modal',
                                         'data-target' => '#ajaxModalLg',
                                     ]);
