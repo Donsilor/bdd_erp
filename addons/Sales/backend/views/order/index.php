@@ -107,7 +107,7 @@ $this->params['breadcrumbs'][] = $this->title;
                           $str .= $model->customer_email ? $model->customer_email."<br/>":'';
                           return $str;
                     },
-                    'filter' => false,
+                    //'filter' => false,
                     'format' => 'raw',
                     'headerOptions' => ['width'=>'80'],
             ],
