@@ -180,7 +180,7 @@ class StyleForm extends Style
     {
         if (!empty($value)) {
             $arr = StringHelper::explode($value, "|");
-            $arr = array_filter($arr);
+            $arr = array_unique(array_filter($arr));
             $values = "";
             foreach ($arr as $item) {
                 $result = array();
