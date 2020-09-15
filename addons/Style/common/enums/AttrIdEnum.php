@@ -105,4 +105,12 @@ class AttrIdEnum
     const STONE_TYPE_MO = 241;//莫桑石
     const KEZI = 83;//刻字内容
     const SUTTLE_WEIGHT = 91;//连石重(净重)
+
+
+    //多选字段
+    static public function getMulteAttr(){
+        return [
+            self::FACEWORK,
+        ];
+    }
 }

@@ -103,28 +103,6 @@ $this->params['breadcrumbs'][] = $this->title;
                               break;
                           }
 
-                          case common\enums\InputTypeEnum::INPUT_MUlTI:{
-                              if($model->qiban_type == QibanTypeEnum::NON_VERSION) {
-                                  //获取款式属性值列表
-                                  $attr_values = Yii::$app->styleService->styleAttribute->getDropdowns($model->style_id,$attr_id);
-                              }else{
-                                  //获取起版属性值列表
-                                  $attr_values = Yii::$app->styleService->qibanAttribute->getDropdowns($model->style_id,$attr_id);
-                              }
-                              if(empty($attr_values)) {
-                                  $attr_values = Yii::$app->styleService->attribute->getValuesByAttrId($attr_id);
-                              }
-//                              $input = $form->field($model,$field)->checkboxList($attr_values)->label($attr_name);
-                              $input = $form->field($model, $field)->widget(kartik\select2\Select2::class, [
-                                  'data' => $attr_values,
-                                  'options' => ['placeholder' => '请选择','multiple'=>true],
-                                  'pluginOptions' => [
-                                      'allowClear' => true,
-                                      'multiple'=>true
-                                  ],
-                              ])->label($attr_name);
-                              break;
-                          }
                           default:{
                               if($model->qiban_type == QibanTypeEnum::NON_VERSION) {
                                   //获取款式属性值列表
@@ -136,7 +114,19 @@ $this->params['breadcrumbs'][] = $this->title;
                               if(empty($attr_values)) {
                                   $attr_values = Yii::$app->styleService->attribute->getValuesByAttrId($attr_id);
                               }
-                              $input = $form->field($model,$field)->dropDownList($attr_values,['prompt'=>'请选择'])->label($attr_name);
+                              if(in_array($attr_id,\addons\Style\common\enums\AttrIdEnum::getMulteAttr())){
+                                  $input = $form->field($model, $field)->widget(kartik\select2\Select2::class, [
+                                      'data' => $attr_values,
+                                      'options' => ['placeholder' => '请选择','multiple'=>true],
+                                      'pluginOptions' => [
+                                          'allowClear' => true,
+                                          'multiple'=>true
+                                      ],
+                                  ])->label($attr_name);
+                              }else{
+                                  $input = $form->field($model,$field)->dropDownList($attr_values,['prompt'=>'请选择'])->label($attr_name);
+                              }
+
                               break;
                           }
                       }//end switch               
