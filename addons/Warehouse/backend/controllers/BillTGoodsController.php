@@ -2,7 +2,6 @@
 
 namespace addons\Warehouse\backend\controllers;
 
-use addons\Warehouse\common\enums\BillStatusEnum;
 use Yii;
 use common\traits\Curd;
 use common\helpers\Url;
@@ -10,6 +9,7 @@ use common\models\base\SearchModel;
 use addons\Warehouse\common\models\WarehouseBill;
 use addons\Warehouse\common\models\WarehouseBillGoodsL;
 use addons\Warehouse\common\forms\WarehouseBillTGoodsForm;
+use addons\Warehouse\common\enums\BillStatusEnum;
 use addons\Warehouse\common\enums\BillTypeEnum;
 use common\helpers\ResultHelper;
 use yii\web\UploadedFile;
