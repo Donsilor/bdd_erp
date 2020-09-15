@@ -74,4 +74,32 @@ class StyleImageController extends BaseController
     }
 
 
+    public function actionAjaxEditMulte(){
+        $id = Yii::$app->request->get('id');
+        $model = $this->findModel($id);
+
+        // ajax 校验
+        $this->activeFormValidate($model);
+        if ($model->load(Yii::$app->request->post())) {
+            $images_list = $model->image;
+            foreach ($images_list as $image){
+                $new_model = new StyleImages();
+                $new_model->attributes = $model->attributes;
+                $new_model->image = $image;
+                $new_model->type = ImageTypeEnum::ORIGINAL;
+                $new_model->position = ImagePositionEnum::POSITIVE;
+                if(false === $new_model->save()){
+                    throw new \Exception($this->getError($new_model));
+                }
+            }
+            $this->redirect(Yii::$app->request->referrer);
+
+        }
+
+        return $this->renderAjax($this->action->id, [
+            'model' => $model,
+        ]);
+    }
+
+
 }
