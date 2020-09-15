@@ -38,8 +38,9 @@ class ProduceAttribute extends BaseModel
     {
         return [
             [['produce_id', 'attr_id'], 'required'],
-            [['produce_id', 'attr_id', 'attr_value_id','sort'], 'integer'],
+            [['produce_id', 'attr_id','sort','input_type'], 'integer'],
             [['attr_value'], 'string', 'max' => 255],
+            [['attr_value_id'], 'string', 'max' => 30],
             [['produce_id', 'attr_id'], 'unique', 'targetAttribute' => ['produce_id', 'attr_id']],
         ];
     }

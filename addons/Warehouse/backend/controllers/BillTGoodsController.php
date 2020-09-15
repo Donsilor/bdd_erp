@@ -179,6 +179,9 @@ class BillTGoodsController extends BaseController
         if ($model->load(\Yii::$app->request->post())) {
             try {
                 $trans = \Yii::$app->db->beginTransaction();
+                $model->biaomiangongyi = join(',',$model->biaomiangongyi);
+
+
                 if (false === $model->save()) {
                     throw new \Exception($this->getError($model));
                 }
@@ -192,6 +195,7 @@ class BillTGoodsController extends BaseController
                 return ResultHelper::json(422, $e->getMessage());
             }
         }
+        $model->biaomiangongyi = explode(',',$model->biaomiangongyi);
         return $this->render($this->action->id, [
             'model' => $model,
         ]);
@@ -284,7 +288,7 @@ class BillTGoodsController extends BaseController
         $searchModel = new SearchModel([
             'model' => $this->modelClass,
             'scenario' => 'default',
-            'partialMatchAttributes' => ['goods_name', 'stone_remark', 'remark'], // 模糊查询
+            'partialMatchAttributes' => ['goods_name', 'stone_remark', 'biaomiangongyi', 'remark'], // 模糊查询
             'defaultOrder' => [
                 'id' => SORT_DESC
             ],

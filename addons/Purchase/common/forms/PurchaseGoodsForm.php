@@ -89,12 +89,29 @@ class PurchaseGoodsForm extends PurchaseGoods
      */
     public function initAttrs()
     {
-        $attr_list = PurchaseGoodsAttribute::find()->select(['attr_id','if(attr_value_id=0,attr_value,attr_value_id) as attr_value'])->where(['id'=>$this->id])->asArray()->all();
-        if(!empty($attr_list)) {
-            $attr_list = array_column($attr_list,'attr_value','attr_id'); 
-            $this->attr_custom  = $attr_list;
-            $this->attr_require = $attr_list; 
-        }        
+        $models = PurchaseGoodsAttribute::find()->select(['attr_id','input_type','if(attr_value_id=0,attr_value,attr_value_id) as attr_value'])->where(['id'=>$this->id])->all();
+        if(empty($models)) {
+            return ;
+        }
+        $attr_list = [];
+        foreach ($models as $model){
+            $attr_values = $model->attr_value;
+
+            if($model->input_type != InputTypeEnum::INPUT_TEXT) {
+                $split_values = explode(",",$attr_values);
+                if(count($split_values) > 1) {
+                    $attr_values = $split_values;
+                }
+            }
+            $attr_list[$model->attr_id] = $attr_values;
+        }
+        $this->attr_custom  = $attr_list;
+        $this->attr_require = $attr_list;
+//        if(!empty($attr_list)) {
+//            $attr_list = array_column($attr_list,'attr_value','attr_id');
+//            $this->attr_custom  = $attr_list;
+//            $this->attr_require = $attr_list;
+//        }
     } 
     /**
      * 初始化 已填写属性数据
@@ -110,7 +127,7 @@ class PurchaseGoodsForm extends PurchaseGoods
         }else if(!is_array($this->apply_info)) {
             $this->apply_info  = json_decode($this->apply_info,true) ?? [];
         }
-
+//      print_r($this->apply_info);
         //$apply_info = [];
         foreach ($this->apply_info as $k=>$item) {
             $group = $item['group'];
@@ -122,6 +139,10 @@ class PurchaseGoodsForm extends PurchaseGoods
                 $this->$code = $value;               
             }else if($group == 'attr'){
                 $value = $item['value_id'];
+                $split_values = explode(",",$value);
+                if(count($split_values) > 1) {
+                    $value = $split_values;
+                }
                 //$org_value = $attr_list[$code]??'';
                 $attr_list[$code] = $value;
             }
@@ -143,9 +164,7 @@ class PurchaseGoodsForm extends PurchaseGoods
         }        
         $attrs = PurchaseGoodsAttribute::find()->select(['attr_id','attr_value','if(attr_value_id=0,attr_value,attr_value_id) as attr_value2'])->where(['id'=>$this->id])->asArray()->all();
         $attrs = array_column($attrs,'attr_value','attr_id');
-        
         $this->apply_info  = json_decode($this->apply_info,true) ?? [];
-
         foreach ($this->apply_info as $k=>$item) {
             $group = $item['group'];
             $code  = $item['code'];
@@ -189,14 +208,15 @@ class PurchaseGoodsForm extends PurchaseGoods
             $spec = AttributeSpec::find()->where(['attr_id'=>$attr_id,'style_cate_id'=>$this->style_cate_id])->one();
             $model = new PurchaseGoodsAttribute();
             $model->id = $this->id;
-            $model->attr_id  = $attr_id; 
+            $model->attr_id  = $attr_id;
+            $model->input_type = $spec->input_type;
 
             if(InputTypeEnum::isText($spec->input_type)) {
-                $model->attr_value_id  = 0;
+                $model->attr_value_id  = '0';
                 $model->attr_value = (string)$attr_value_id;
             }else if(is_numeric($attr_value_id)){
                 $attr_value = \Yii::$app->attr->valueName($attr_value_id);
-                $model->attr_value_id  = $attr_value_id; 
+                $model->attr_value_id  = (string)$attr_value_id;
                 $model->attr_value = (string)$attr_value;
                 /* $pices = explode('-',$attr_value);
                 if(count($pices)==2) {
@@ -205,6 +225,13 @@ class PurchaseGoodsForm extends PurchaseGoods
                         $model->attr_value_max = $pices[1];
                     }
                 } */
+            }else if(is_array($attr_value_id)){
+                $attr_value_arr = [];
+                foreach ($attr_value_id as $attr_id){
+                    $attr_value_arr[] = \Yii::$app->attr->valueName($attr_id);
+                }
+                $model->attr_value_id = implode(',',$attr_value_id);
+                $model->attr_value = implode(',',$attr_value_arr);
             }else{
                 continue;
             }   
@@ -240,14 +267,22 @@ class PurchaseGoodsForm extends PurchaseGoods
             }else if(is_numeric($attr_value_id)){
                 $value_id = $attr_value_id;
                 $value = Yii::$app->attr->valueName($attr_value_id);
-            }else{
+            }else if(is_array($attr_value_id)){
+                $attr_value_ids = $attr_value_id;
+                $attr_value_arr = [];
+                foreach ($attr_value_ids as $attr_value_id){
+                    $attr_value_arr[] = \Yii::$app->attr->valueName($attr_value_id);
+                }
+                $value_id = implode(',',$attr_value_ids);
+                $value = implode(',',$attr_value_arr);
+            } else{
                 $value_id = null;
                 $value = null;
             }
             $apply_info[] = array(
                     'code' => $attr_id,
                     'value' => $value,
-                    'value_id'=>$attr_value_id,
+                    'value_id'=>$value_id,
                     'label' => Yii::$app->attr->attrName($attr_id),
                     'group' =>'attr',
              );            

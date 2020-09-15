@@ -374,9 +374,21 @@ class WarehouseGoodsController extends BaseController
             ['主石编号', 'main_stone_sn' , 'text'],
             ['主石配石方式', 'main_peishi_way' , 'text'],
             ['主石类型	', 'main_stone_type' , 'text'],
-            ['主石编号	', 'main_stone_num' , 'text'],
-
-
+            ['主石数量	', 'main_stone_num' , 'text'],
+            ['主石形状	', 'diamond_shape' , 'text'],
+            ['主石重', 'diamond_carat' , 'text'],
+            ['主石单价', 'main_stone_price' , 'text'],
+            ['主石成本', 'main_stone_cost' , 'text'],
+            ['主石颜色', 'diamond_color' ,'text'],
+            ['主石净度', 'diamond_clarity' , 'text'],
+            ['主石切工', 'diamond_cut' , 'text'],
+            ['主石色彩', 'main_stone_colour' , 'text'],
+            ['副石1编号', 'second_stone_sn1' , 'text'],
+            ['副石1配石方式', 'second_peishi_way1' , 'text'],
+            ['副石1类型	', 'second_stone_type1' , 'text'],
+            ['副石1数量', 'second_stone_num1' , 'text'],
+            ['副石1形状', 'second_stone_shape1' , 'text'],
+            ['副石1重量', 'second_stone_weight1' , 'text'],
 
 
             ['款式性别', 'style_sex' , 'text'],
@@ -492,16 +504,34 @@ class WarehouseGoodsController extends BaseController
             $main_stone_type = empty($list['main_stone_type']) ? '' : $list['main_stone_type'];
             $list['main_stone_type'] = \Yii::$app->attr->valueName($main_stone_type);
 
+            //钻石形状
+            $diamond_shape = empty($list['diamond_shape']) ? 0 : $list['diamond_shape'];
+            $list['diamond_shape'] = \Yii::$app->attr->valueName($diamond_shape);
+
+            //主石成本
+            $main_stone_price = empty($list['main_stone_price']) ? 0 : $list['main_stone_price'];
+            $diamond_carat = empty($list['diamond_carat']) ? 0 : $list['diamond_carat'];
+            $list['main_stone_cost'] = $main_stone_price * $diamond_carat;
+
+            //钻石颜色
+            $diamond_color = empty($list['diamond_color']) ? 0 : $list['diamond_color'];
+            $list['diamond_color'] = \Yii::$app->attr->valueName($diamond_color);
 
             //钻石净度
             $diamond_clarity = empty($list['diamond_clarity']) ? 0 : $list['diamond_clarity'];
             $list['diamond_clarity'] = \Yii::$app->attr->valueName($diamond_clarity);
-            //钻石形状
-            $diamond_shape = empty($list['diamond_shape']) ? 0 : $list['diamond_shape'];
-            $list['diamond_shape'] = \Yii::$app->attr->valueName($diamond_shape);
             //钻石切工
             $diamond_cut = empty($list['diamond_cut']) ? 0 : $list['diamond_cut'];
             $list['diamond_cut'] = \Yii::$app->attr->valueName($diamond_cut);
+            //钻石色彩
+            $main_stone_colour = empty($list['main_stone_colour']) ? 0 : $list['main_stone_colour'];
+            $list['main_stone_colour'] = \Yii::$app->attr->valueName($main_stone_colour);
+
+
+
+
+
+
             //钻石抛光
             $diamond_polish = empty($list['diamond_polish']) ? 0 : $list['diamond_polish'];
             $list['diamond_polish'] = \Yii::$app->attr->valueName($diamond_polish);
@@ -517,9 +547,7 @@ class WarehouseGoodsController extends BaseController
             //主石类型
             $main_stone_type = empty($list['main_stone_type']) ? 0 : $list['main_stone_type'];
             $list['main_stone_type'] = \Yii::$app->attr->valueName($main_stone_type);
-            //主石金额
-            $main_stone_price = empty($list['main_stone_price']) ? 0 : $list['main_stone_price'];
-            $list['main_stone_price_sum'] = $main_stone_price * $list['main_stone_num'];
+
             //副石1类型
             $second_stone_type1 = empty($list['second_stone_type1']) ? 0 : $list['second_stone_type1'];
             $list['second_stone_type1'] = \Yii::$app->attr->valueName($second_stone_type1);

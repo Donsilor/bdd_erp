@@ -1717,13 +1717,23 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'footerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#b7ba6b;'],
                                 'value' => function ($model, $key, $index, $widget) {
                                     $widget->footer = $model->getAttributeLabel('biaomiangongyi');
-                                    return Yii::$app->attr->valueName($model->biaomiangongyi) ?? "0.00";
+                                    if(!empty($model->biaomiangongyi)){
+                                        $biaomiangongyi = explode(',', $model->biaomiangongyi);
+                                        $biaomiangongyi = array_filter($biaomiangongyi);
+                                        $arr = [];
+                                        foreach ($biaomiangongyi as $item) {
+                                            $arr[] = \Yii::$app->attr->valueName($item);
+                                        }
+                                        return implode(",",$arr) ?? "";
+                                    }
+                                    return "";
                                 },
-                                'filter' => Html::activeDropDownList($searchModel, 'biaomiangongyi', $model->getFaceCraftMap(), [
-                                    'prompt' => '全部',
-                                    'class' => 'form-control',
-                                    'style' => 'width:100px;'
-                                ]),
+                                'filter' => false,
+//                                'filter' => Html::activeDropDownList($searchModel, 'biaomiangongyi', $model->getFaceCraftMap(), [
+//                                    'prompt' => '全部',
+//                                    'class' => 'form-control',
+//                                    'style' => 'width:100px;'
+//                                ]),
                             ],
                             [
                                 'attribute' => 'biaomiangongyi_fee',
