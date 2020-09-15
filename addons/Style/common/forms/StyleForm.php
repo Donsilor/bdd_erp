@@ -76,7 +76,7 @@ class StyleForm extends Style
             $this->formatTitleId($this->getMaterialList()),
             $this->formatTitleId($this->getSexList()),
             '#',
-            $this->formatTitleId($this->getInlayCraftMap()),
+            $this->formatTitleId($this->getInlayCraftMap(), "|"),
             $this->formatTitleId($this->getProductCraftMap()),
             $this->formatTitleId($this->getIsMadeList()),
             //$this->getAttributeLabel('is_gift') . $this->formatTitleId($this->getIsGiftList()),
@@ -178,9 +178,9 @@ class StyleForm extends Style
      */
     public function formatMultipleValue($value = null, $defaultValue = null)
     {
-
         if (!empty($value)) {
             $arr = StringHelper::explode($value, "|");
+            $arr = array_filter($arr);
             $values = "";
             foreach ($arr as $item) {
                 $result = array();
@@ -218,12 +218,12 @@ class StyleForm extends Style
     /**
      * {@inheritdoc}
      */
-    public function formatTitleId($data)
+    public function formatTitleId($data, $str = "")
     {
         $title = "";
         if (!empty($data)) {
             foreach ($data as $id => $value) {
-                $title .= $value . "[" . $id . "]】";
+                $title .= $value . "[" . $id . "]{$str}】";
             }
         }
         return rtrim($title, "]") ?? "";
