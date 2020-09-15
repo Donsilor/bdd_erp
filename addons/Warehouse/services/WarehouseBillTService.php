@@ -212,7 +212,7 @@ class WarehouseBillTService extends Service
                 $i++;
                 continue;
             }
-            if (count($goods) != 85) {
+            if (count($goods) != 84) {
                 throw new \Exception("模板格式不正确，请下载最新模板");
             }
             $goods = $form->trimField($goods);
@@ -824,9 +824,9 @@ class WarehouseBillTService extends Service
             } else {
                 $main_cert_type = $cert_type;
             }
-            $cost_price = $form->formatValue($goods[81], 0) ?? 0;
-            $markup_rate = $form->formatValue($goods[82], 1) ?? 1;
-            $jintuo_type = $goods[83] ?? "";
+            //$cost_price = $form->formatValue($goods[81], 0) ?? 0;
+            $markup_rate = $form->formatValue($goods[81], 1) ?? 1;
+            $jintuo_type = $goods[82] ?? "";
             if (!empty($jintuo_type)) {
                 $jintuo_type = JintuoTypeEnum::getIdByName($jintuo_type);
                 if (empty($jintuo_type)) {
@@ -838,7 +838,7 @@ class WarehouseBillTService extends Service
                 $flag = false;
                 $error[$i][] = "金托类型不能为空";
             }
-            $remark = $goods[84] ?? "";
+            $remark = $goods[83] ?? "";
             $saveData[] = $item = [
                 'bill_id' => $bill->id,
                 'bill_no' => $bill->bill_no,
