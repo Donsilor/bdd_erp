@@ -33,6 +33,7 @@ class StyleAttrForm extends Model
     
     public $tuo_type;//金托类型
     public $is_inlay;//是否镶嵌
+    public $style_image;//款式图片
     /**
      * {@inheritdoc}
      */

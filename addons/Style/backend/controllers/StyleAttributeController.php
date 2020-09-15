@@ -92,7 +92,7 @@ class StyleAttributeController extends BaseController
         $model->style_cate_id = $style->style_cate_id;
         $model->style_sn = $style->style_sn;
         $model->is_inlay = $style->is_inlay;
-        
+        $model->style_image = $style->style_image;
         if ($model->load(Yii::$app->request->post())) {
             if(!$model->validate()) {
                 return ResultHelper::json(422, $this->getError($model));

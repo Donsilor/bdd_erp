@@ -107,9 +107,12 @@ $this->params['breadcrumbs'][] = $this->title;
                           $str .= $model->customer_email ? $model->customer_email."<br/>":'';
                           return $str;
                     },
-                    //'filter' => false,
+                    'filter' => html::activeTextInput($searchModel, 'customer_name', [
+                            'class' => 'form-control',
+                            'style'=> 'width:110px;'
+                    ]),
                     'format' => 'raw',
-                    'headerOptions' => ['width'=>'80'],
+                    'headerOptions' => ['width'=>'110'],
             ],
 /*                
             [
