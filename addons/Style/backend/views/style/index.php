@@ -36,7 +36,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     'dataProvider' => $dataProvider,
                     'filterModel' => $searchModel,
                     'tableOptions' => ['class' => 'table table-hover'],
-                    //'options' => ['style'=>'width:100%;white-space:nowrap;' ],
+                    'options' => ['style'=>'width:100%;white-space:nowrap;' ],
                     'showFooter' => false,//显示footer行
                     'id' => 'grid',
                     'columns' => [
@@ -242,7 +242,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         [
                             'class' => 'yii\grid\ActionColumn',
                             'header' => '操作',
-                            'template' => '{edit} {ajax-apply} {audit} {status}',
+                            'template' => '{edit} {ajax-apply} {audit} {status} {delete}',
                             'buttons' => [
                                 'edit' => function ($url, $model, $key) {
                                     return Html::edit(['ajax-edit', 'id' => $model->id, 'returnUrl' => Url::getReturnUrl()], '编辑', [
@@ -276,9 +276,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                     }
                                 },
                                 'delete' => function ($url, $model, $key) {
-                                    if ($model->audit_status == 0) {
-                                        return Html::delete(['delete', 'id' => $model->id]);
-                                    }
+                                    return Html::delete(['delete', 'id' => $model->id]);
                                 },
                             ]
                         ]
