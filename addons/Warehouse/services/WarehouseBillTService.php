@@ -212,7 +212,7 @@ class WarehouseBillTService extends Service
                 $i++;
                 continue;
             }
-            if (count($goods) != 82) {
+            if (count($goods) != 84) {
                 throw new \Exception("模板格式不正确，请下载最新模板");
             }
             $goods = $form->trimField($goods);
@@ -460,6 +460,9 @@ class WarehouseBillTService extends Service
                 $main_pei_type = $form->getPeiType($main_stone_sn, $main_stone_num, $main_stone_weight);
             }
             $main_stone_price = $form->formatValue($goods[25], 0) ?? 0;
+            if (empty($main_stone_price) && !empty($stone)) {
+                $main_stone_price = $stone->stone_price ?? 0;
+            }
             $main_stone_shape = $goods[26] ?? "";
             if (!empty($main_stone_shape)) {
                 $attr_id = $form->getAttrIdByAttrValue($style_sn, $main_stone_shape, AttrIdEnum::MAIN_STONE_SHAPE);
@@ -568,6 +571,9 @@ class WarehouseBillTService extends Service
                 $second_pei_type = $form->getPeiType($second_stone_sn1, $second_stone_num1, $second_stone_weight1);
             }
             $second_stone_price1 = $form->formatValue($goods[36], 0) ?? 0;
+            if (empty($second_stone_price1) && !empty($stone)) {
+                $second_stone_price1 = $stone->stone_price ?? 0;
+            }
             $second_stone_shape1 = $goods[37] ?? "";
             if (!empty($second_stone_shape1)) {
                 $attr_id = $form->getAttrIdByAttrValue($style_sn, $second_stone_shape1, AttrIdEnum::SIDE_STONE1_SHAPE);
@@ -671,7 +677,9 @@ class WarehouseBillTService extends Service
                 $second_pei_type2 = $form->getPeiType($second_stone_sn2, $second_stone_num2, $second_stone_weight2);
             }
             $second_stone_price2 = $form->formatValue($goods[47], 0) ?? 0;
-
+            if (empty($second_stone_price2) && !empty($stone)) {
+                $second_stone_price2 = $stone->stone_price ?? 0;
+            }
             $second_pei_type3 = $form->formatValue($goods[48], 0) ?? 0;
             $second_stone_sn3 = $goods[49] ?? "";
             $stone = $second3Attr = null;
@@ -710,6 +718,9 @@ class WarehouseBillTService extends Service
                 $second_pei_type3 = $form->getPeiType($second_stone_sn3, $second_stone_num3, $second_stone_weight3);
             }
             $second_stone_price3 = $form->formatValue($goods[53], 0) ?? 0;
+            if (empty($second_stone_price3) && !empty($stone)) {
+                $second_stone_price3 = $stone->stone_price ?? 0;
+            }
             $stone_remark = $goods[54] ?? "";
 
             $parts_way = $form->formatValue($goods[55], 0) ?? "";
@@ -767,31 +778,40 @@ class WarehouseBillTService extends Service
                     $xiangqian_craft = $attr_id;
                 }
             }
-            $xianqian_price = $form->formatValue($goods[67], 0) ?? 0;
-            $biaomiangongyi = $goods[68] ?? "";
+            $second_stone_fee1 = $form->formatValue($goods[67], 0) ?? 0;
+            $second_stone_fee2 = $form->formatValue($goods[68], 0) ?? 0;
+            $second_stone_fee3 = $form->formatValue($goods[69], 0) ?? 0;
+            $biaomiangongyi = $goods[70] ?? "";
             if (!empty($biaomiangongyi)) {
-                $attr_id = $form->getAttrIdByAttrValue($style_sn, $biaomiangongyi, AttrIdEnum::FACEWORK);
-                if (empty($attr_id)) {
-                    $flag = false;
-                    $error[$i][] = "表面工艺：[" . $biaomiangongyi . "]录入值有误";
-                    $biaomiangongyi = "";
-                } else {
-                    $biaomiangongyi = $attr_id;
+                $biaomiangongyi = StringHelper::explode($biaomiangongyi, "|");
+                $attr_str = "";
+                foreach ($biaomiangongyi as $item) {
+                    $attr_id = $form->getAttrIdByAttrValue($style_sn, $item, AttrIdEnum::FACEWORK);
+                    if (empty($attr_id)) {
+                        $flag = false;
+                        $error[$i][] = "表面工艺：[" . $item . "]录入值有误";
+                        $biaomiangongyi = "";
+                    } else {
+                        $attr_str.= $attr_id.",";
+                    }
+                }
+                if(!empty($attr_str)){
+                    $biaomiangongyi = ",".$attr_str;
                 }
             }
-            $biaomiangongyi_fee = $form->formatValue($goods[69], 0) ?? 0;
-            $fense_fee = $form->formatValue($goods[70], 0) ?? 0;
-            $penlasha_fee = $form->formatValue($goods[71], 0) ?? 0;
-            $lasha_fee = $form->formatValue($goods[72], 0) ?? 0;
-            $bukou_fee = $form->formatValue($goods[73], 0) ?? 0;
-            $templet_fee = $form->formatValue($goods[74], 0) ?? 0;
-            $cert_fee = $form->formatValue($goods[75], 0) ?? 0;
-            $other_fee = $form->formatValue($goods[76], 0) ?? 0;
-            $main_cert_id = $goods[77] ?? "";
+            $biaomiangongyi_fee = $form->formatValue($goods[71], 0) ?? 0;
+            $fense_fee = $form->formatValue($goods[72], 0) ?? 0;
+            $penlasha_fee = $form->formatValue($goods[73], 0) ?? 0;
+            $lasha_fee = $form->formatValue($goods[74], 0) ?? 0;
+            $bukou_fee = $form->formatValue($goods[75], 0) ?? 0;
+            $templet_fee = $form->formatValue($goods[76], 0) ?? 0;
+            $cert_fee = $form->formatValue($goods[77], 0) ?? 0;
+            $other_fee = $form->formatValue($goods[78], 0) ?? 0;
+            $main_cert_id = $goods[79] ?? "";
             if (empty($main_cert_id)) {
                 $main_cert_id = $cert_id;
             }
-            $main_cert_type = $goods[78] ?? "";
+            $main_cert_type = $goods[80] ?? "";
             if (!empty($main_cert_type)) {
                 $attr_id = $form->getAttrIdByAttrValue($style_sn, $main_cert_type, AttrIdEnum::DIA_CERT_TYPE);
                 if (empty($attr_id)) {
@@ -804,8 +824,9 @@ class WarehouseBillTService extends Service
             } else {
                 $main_cert_type = $cert_type;
             }
-            $markup_rate = $form->formatValue($goods[79], 1) ?? 1;
-            $jintuo_type = $goods[80] ?? "";
+            //$cost_price = $form->formatValue($goods[81], 0) ?? 0;
+            $markup_rate = $form->formatValue($goods[81], 1) ?? 1;
+            $jintuo_type = $goods[82] ?? "";
             if (!empty($jintuo_type)) {
                 $jintuo_type = JintuoTypeEnum::getIdByName($jintuo_type);
                 if (empty($jintuo_type)) {
@@ -817,7 +838,7 @@ class WarehouseBillTService extends Service
                 $flag = false;
                 $error[$i][] = "金托类型不能为空";
             }
-            $remark = $goods[81] ?? "";
+            $remark = $goods[83] ?? "";
             $saveData[] = $item = [
                 'bill_id' => $bill->id,
                 'bill_no' => $bill->bill_no,
@@ -905,7 +926,10 @@ class WarehouseBillTService extends Service
                 'gong_fee' => $gong_fee,
                 'piece_fee' => $piece_fee,
                 'xiangqian_craft' => $xiangqian_craft,
-                'xianqian_price' => $xianqian_price,
+                //'xianqian_price' => $xianqian_price,
+                'second_stone_fee1' => $second_stone_fee1,
+                'second_stone_fee2' => $second_stone_fee2,
+                'second_stone_fee3' => $second_stone_fee3,
                 'biaomiangongyi' => $biaomiangongyi,
                 'biaomiangongyi_fee' => $biaomiangongyi_fee,
                 'fense_fee' => $fense_fee,
@@ -917,6 +941,7 @@ class WarehouseBillTService extends Service
                 'other_fee' => $other_fee,
                 'main_cert_id' => $main_cert_id,
                 'main_cert_type' => $main_cert_type,
+                //'cost_price' => $cost_price,
                 'markup_rate' => $markup_rate,
                 'jintuo_type' => $jintuo_type,
                 'auto_goods_id' => $auto_goods_id,
@@ -957,7 +982,7 @@ class WarehouseBillTService extends Service
         if (empty($saveData)) {
             throw new \Exception("数据不能为空");
         }
-        $value = [];
+        $value = $ids = [];
         $key = array_keys($saveData[0]);
         foreach ($saveData as $item) {
             $goodsM = new WarehouseBillGoodsL();
@@ -965,6 +990,7 @@ class WarehouseBillTService extends Service
             if (!$goodsM->validate()) {
                 throw new \Exception($this->getError($goodsM));
             }
+            $ids[] = $goodsM->id;
             $value[] = array_values($item);
             if (count($value) >= 10) {
                 $res = Yii::$app->db->createCommand()->batchInsert(WarehouseBillGoodsL::tableName(), $key, $value)->execute();
@@ -982,7 +1008,7 @@ class WarehouseBillTService extends Service
         }
 
         //同步更新价格
-        $this->syncUpdatePriceAll($bill);
+        $this->syncUpdatePriceAll($bill, $ids);
 
         //同步更新单头信息
         $this->warehouseBillTSummary($form->bill_id);
@@ -991,13 +1017,18 @@ class WarehouseBillTService extends Service
     /**
      *
      * 同步更新单据商品价格
+     * @param $ids
      * @param WarehouseBillTForm $form
      * @return object
      * @throws
      */
-    public function syncUpdatePriceAll($form)
+    public function syncUpdatePriceAll($form, $ids = [])
     {
-        $goods = WarehouseBillTGoodsForm::findAll(['bill_id' => $form->id]);
+        $where = ['bill_id' => $form->id];
+//        if(!empty($ids)){
+//            $where = ['bill_id' => $form->id, 'id' => $ids];
+//        }
+        $goods = WarehouseBillTGoodsForm::findAll($where);
         if (!empty($goods)) {
             foreach ($goods as $good) {
                 $this->syncUpdatePrice($good);
@@ -1191,14 +1222,18 @@ class WarehouseBillTService extends Service
 
     /**
      *
-     * 镶石费=(镶石单价*总副石数量)
+     * 镶石费=镶石1费+镶石2费+镶石3费
+     * 【镶石1费=镶石1单价/颗*副石1数量；镶石2费=镶石2单价/颗*副石2数量；镶石3费=镶石3单价/颗*副石3数量；】
      * @param WarehouseBillTGoodsForm $form
      * @return integer
      * @throws
      */
     public function calculateXiangshiFee($form)
     {
-        return bcmul($form->xianqian_price, $this->calculateSecondStoneNum($form), 3) ?? 0;
+        $second_stone_fee1 = bcmul($form->second_stone_fee1, $form->second_stone_num1, 3) ?? 0;
+        $second_stone_fee2 = bcmul($form->second_stone_fee2, $form->second_stone_num2, 3) ?? 0;
+        $second_stone_fee3 = bcmul($form->second_stone_fee3, $form->second_stone_num3, 3) ?? 0;
+        return bcadd($second_stone_fee1, bcadd($second_stone_fee2, $second_stone_fee3, 3), 3) ?? 0;
     }
 
     /**
@@ -1376,6 +1411,8 @@ class WarehouseBillTService extends Service
                     $stoneAttr['stone_shape'] = $stone_shape[1] ?? "";
                     $stoneAttr['stone_color'] = $stone_color[0] ?? "";
                     $stoneAttr['stone_clarity'] = $stone_clarity[0] ?? "";
+                    $stoneAttr['stone_cut'] = $stone_cut[0] ?? "";
+                    $stoneAttr['stone_colour'] = $stone_colour[1] ?? "";
                     break;
                 case StonePositionEnum::SECOND_STONE2:
                     $stoneAttr['stone_type'] = $stone_type[2] ?? "";

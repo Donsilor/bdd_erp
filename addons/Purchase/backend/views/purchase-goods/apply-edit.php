@@ -88,7 +88,18 @@ $this->params['breadcrumbs'][] = $this->title;
                               if(empty($attr_values)) {
                                   $attr_values = Yii::$app->styleService->attribute->getValuesByAttrId($attr_id);
                               }
-                              $input = $form->field($model,$field)->dropDownList($attr_values,['prompt'=>'请选择'])->label($attr_name);
+                              if(in_array($attr_id,\addons\Style\common\enums\AttrIdEnum::getMulteAttr())){
+                                  $input = $form->field($model, $field)->widget(kartik\select2\Select2::class, [
+                                      'data' => $attr_values,
+                                      'options' => ['placeholder' => '请选择','multiple'=>true],
+                                      'pluginOptions' => [
+                                          'allowClear' => true,
+                                          'multiple'=>true
+                                      ],
+                                  ])->label($attr_name);
+                              }else{
+                                  $input = $form->field($model,$field)->dropDownList($attr_values,['prompt'=>'请选择'])->label($attr_name);
+                              }
                               break;
                           }
                       }//end switch               
@@ -198,14 +209,13 @@ $this->params['breadcrumbs'][] = $this->title;
 
                 <div class="row">
                     <div class="col-lg-4">
-                        <?= $form->field($model, 'factory_mo')->textInput() ?>
-                    </div>
-
-                    <div class="col-lg-4">
-                        <?= $form->field($model, 'ke_gong_fee')->textInput() ?>
+                        <?= $form->field($model, 'second_stone_fee1')->textInput() ?>
                     </div>
                     <div class="col-lg-4">
-                        <?= $form->field($model, 'xianqian_price')->textInput() ?>
+                        <?= $form->field($model, 'second_stone_fee2')->textInput() ?>
+                    </div>
+                    <div class="col-lg-4">
+                        <?= $form->field($model, 'second_stone_fee3')->textInput() ?>
                     </div>
                 </div>
                 <div class="row">
@@ -256,7 +266,13 @@ $this->params['breadcrumbs'][] = $this->title;
                 </div>
                 <div class="row">
                     <div class="col-lg-4">
+                        <?= $form->field($model, 'ke_gong_fee')->textInput() ?>
+                    </div>
+                    <div class="col-lg-4">
                         <?= $form->field($model, 'unit_cost_price')->textInput() ?>
+                    </div>
+                    <div class="col-lg-4">
+                        <?= $form->field($model, 'factory_mo')->textInput() ?>
                     </div>
 
                 </div>

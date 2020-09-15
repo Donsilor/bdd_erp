@@ -39,9 +39,10 @@ class PurchaseGoodsAttribute extends BaseModel
     {
         return [
                 [['id','attr_id','attr_value_id'], 'required'],
-                [['id','attr_id','attr_value_id'], 'integer'],
+                [['id','attr_id','input_type'], 'integer'],
                 [['attr_value_min', 'attr_value_max'], 'number'],
-                [['attr_value'], 'string','max'=>255]
+                [['attr_value'], 'string','max'=>255],
+                [['attr_value_id'], 'string','max'=>30]
         ];
     }
     

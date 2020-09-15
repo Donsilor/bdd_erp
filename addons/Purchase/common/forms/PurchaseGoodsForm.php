@@ -89,12 +89,29 @@ class PurchaseGoodsForm extends PurchaseGoods
      */
     public function initAttrs()
     {
-        $attr_list = PurchaseGoodsAttribute::find()->select(['attr_id','if(attr_value_id=0,attr_value,attr_value_id) as attr_value'])->where(['id'=>$this->id])->asArray()->all();
-        if(!empty($attr_list)) {
-            $attr_list = array_column($attr_list,'attr_value','attr_id'); 
-            $this->attr_custom  = $attr_list;
-            $this->attr_require = $attr_list; 
-        }        
+        $models = PurchaseGoodsAttribute::find()->select(['attr_id','input_type','if(attr_value_id=0,attr_value,attr_value_id) as attr_value'])->where(['id'=>$this->id])->all();
+        if(empty($models)) {
+            return ;
+        }
+        $attr_list = [];
+        foreach ($models as $model){
+            $attr_values = $model->attr_value;
+
+            if($model->input_type != InputTypeEnum::INPUT_TEXT) {
+                $split_values = explode(",",$attr_values);
+                if(count($split_values) > 1) {
+                    $attr_values = $split_values;
+                }
+            }
+            $attr_list[$model->attr_id] = $attr_values;
+        }
+        $this->attr_custom  = $attr_list;
+        $this->attr_require = $attr_list;
+//        if(!empty($attr_list)) {
+//            $attr_list = array_column($attr_list,'attr_value','attr_id');
+//            $this->attr_custom  = $attr_list;
+//            $this->attr_require = $attr_list;
+//        }
     } 
     /**
      * 初始化 已填写属性数据
@@ -110,7 +127,7 @@ class PurchaseGoodsForm extends PurchaseGoods
         }else if(!is_array($this->apply_info)) {
             $this->apply_info  = json_decode($this->apply_info,true) ?? [];
         }
-
+//      print_r($this->apply_info);
         //$apply_info = [];
         foreach ($this->apply_info as $k=>$item) {
             $group = $item['group'];
@@ -122,6 +139,10 @@ class PurchaseGoodsForm extends PurchaseGoods
                 $this->$code = $value;               
             }else if($group == 'attr'){
                 $value = $item['value_id'];
+                $split_values = explode(",",$value);
+                if(count($split_values) > 1) {
+                    $value = $split_values;
+                }
                 //$org_value = $attr_list[$code]??'';
                 $attr_list[$code] = $value;
             }
@@ -143,9 +164,7 @@ class PurchaseGoodsForm extends PurchaseGoods
         }        
         $attrs = PurchaseGoodsAttribute::find()->select(['attr_id','attr_value','if(attr_value_id=0,attr_value,attr_value_id) as attr_value2'])->where(['id'=>$this->id])->asArray()->all();
         $attrs = array_column($attrs,'attr_value','attr_id');
-        
         $this->apply_info  = json_decode($this->apply_info,true) ?? [];
-
         foreach ($this->apply_info as $k=>$item) {
             $group = $item['group'];
             $code  = $item['code'];
@@ -189,14 +208,15 @@ class PurchaseGoodsForm extends PurchaseGoods
             $spec = AttributeSpec::find()->where(['attr_id'=>$attr_id,'style_cate_id'=>$this->style_cate_id])->one();
             $model = new PurchaseGoodsAttribute();
             $model->id = $this->id;
-            $model->attr_id  = $attr_id; 
+            $model->attr_id  = $attr_id;
+            $model->input_type = $spec->input_type;
 
             if(InputTypeEnum::isText($spec->input_type)) {
-                $model->attr_value_id  = 0;
+                $model->attr_value_id  = '0';
                 $model->attr_value = (string)$attr_value_id;
             }else if(is_numeric($attr_value_id)){
                 $attr_value = \Yii::$app->attr->valueName($attr_value_id);
-                $model->attr_value_id  = $attr_value_id; 
+                $model->attr_value_id  = (string)$attr_value_id;
                 $model->attr_value = (string)$attr_value;
                 /* $pices = explode('-',$attr_value);
                 if(count($pices)==2) {
@@ -205,6 +225,13 @@ class PurchaseGoodsForm extends PurchaseGoods
                         $model->attr_value_max = $pices[1];
                     }
                 } */
+            }else if(is_array($attr_value_id)){
+                $attr_value_arr = [];
+                foreach ($attr_value_id as $attr_id){
+                    $attr_value_arr[] = \Yii::$app->attr->valueName($attr_id);
+                }
+                $model->attr_value_id = implode(',',$attr_value_id);
+                $model->attr_value = implode(',',$attr_value_arr);
             }else{
                 continue;
             }   
@@ -240,14 +267,22 @@ class PurchaseGoodsForm extends PurchaseGoods
             }else if(is_numeric($attr_value_id)){
                 $value_id = $attr_value_id;
                 $value = Yii::$app->attr->valueName($attr_value_id);
-            }else{
+            }else if(is_array($attr_value_id)){
+                $attr_value_ids = $attr_value_id;
+                $attr_value_arr = [];
+                foreach ($attr_value_ids as $attr_value_id){
+                    $attr_value_arr[] = \Yii::$app->attr->valueName($attr_value_id);
+                }
+                $value_id = implode(',',$attr_value_ids);
+                $value = implode(',',$attr_value_arr);
+            } else{
                 $value_id = null;
                 $value = null;
             }
             $apply_info[] = array(
                     'code' => $attr_id,
                     'value' => $value,
-                    'value_id'=>$attr_value_id,
+                    'value_id'=>$value_id,
                     'label' => Yii::$app->attr->attrName($attr_id),
                     'group' =>'attr',
              );            
@@ -260,7 +295,8 @@ class PurchaseGoodsForm extends PurchaseGoods
                 'jiagong_fee','gong_fee','biaomiangongyi_fee','fense_fee','bukou_fee','penrasa_fee','edition_fee','gaitu_fee',
                 'penla_fee','parts_fee','cert_fee','unit_cost_price','factory_total_price','company_total_price','stone_info','parts_remark',
                 'remark','main_stone_sn','second_stone_sn1','second_stone_sn2','ke_gong_fee','peiliao_way','peijian_way','main_peishi_way',
-                'second_peishi_way1','second_peishi_way2','pure_gold','lasha_fee','second_peishi_way3','second_stone_sn3','piece_fee'
+                'second_peishi_way1','second_peishi_way2','pure_gold','lasha_fee','second_peishi_way3','second_stone_sn3','piece_fee','second_stone_fee1',
+                'second_stone_fee2','second_stone_fee3'
         );
         foreach ($fields as $field) {
             $apply_info[] = array(
@@ -284,19 +320,19 @@ class PurchaseGoodsForm extends PurchaseGoods
      */
     public function setComputeFee(){
 
-        //【镶石费=镶石单价*总副石数量】
-        $second_stone_num = 0;
+        //【镶石费=镶石1费+镶石2费+镶石3费】
+        $xiangqian_fee = 0;
         $atts = $this->getPostAttrs();
         if(isset($atts[AttrIdEnum::SIDE_STONE1_NUM]) && !empty($atts[AttrIdEnum::SIDE_STONE1_NUM])){
-            $second_stone_num += $atts[AttrIdEnum::SIDE_STONE1_NUM];
+            $xiangqian_fee += $this->second_stone_fee1 * $atts[AttrIdEnum::SIDE_STONE1_NUM];
         }
         if(isset($atts[AttrIdEnum::SIDE_STONE2_NUM]) && !empty($atts[AttrIdEnum::SIDE_STONE2_NUM])){
-            $second_stone_num += $atts[AttrIdEnum::SIDE_STONE2_NUM];
+            $xiangqian_fee += $this->second_stone_fee2 * $atts[AttrIdEnum::SIDE_STONE2_NUM];
         }
         if(isset($atts[AttrIdEnum::SIDE_STONE3_NUM]) && !empty($atts[AttrIdEnum::SIDE_STONE3_NUM])){
-            $second_stone_num += $atts[AttrIdEnum::SIDE_STONE3_NUM];
+            $xiangqian_fee += $this->second_stone_fee3 * $atts[AttrIdEnum::SIDE_STONE3_NUM];
         }
-        $this->xiangqian_fee = $this->xianqian_price * $second_stone_num;
+        $this->xiangqian_fee = $xiangqian_fee;
 
         //1.金重计算规则：金重=连石重-【（主石重*数量）+副石1重+副石2重+副石3重】*0.2-配件重
         $main_stone_num = 0;
@@ -401,6 +437,8 @@ class PurchaseGoodsForm extends PurchaseGoods
         if($this->peijian_way == PeiJianWayEnum::FACTORY){
             $this->factory_cost_price += $this->parts_amount;
         }
+        $this->factory_cost_price += $this->total_gong_fee;
+
         $this->factory_total_price = $this->factory_cost_price * $this->goods_num;
 
 

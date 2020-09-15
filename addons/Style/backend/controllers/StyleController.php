@@ -81,6 +81,7 @@ class StyleController extends BaseController
     {
         $id = Yii::$app->request->get('id');
         $model = $this->findModel($id);
+        $model = $model ?? new Style();
         // ajax 校验
         $this->activeFormValidate($model);
         if ($model->load(Yii::$app->request->post())) {
@@ -103,6 +104,10 @@ class StyleController extends BaseController
                 if($isNewRecord && trim($model->style_sn) == "") {
                     Yii::$app->styleService->style->createStyleSn($model);                    
                 }
+                //自定义属性值
+                $command = \Yii::$app->db->createCommand("call sp_create_style_attributes(" . $model->id . ");");
+                $command->execute();
+
                 $trans->commit();
                 if($isNewRecord) {
                     return $this->message("保存成功", $this->redirect(['view', 'id' => $model->id]), 'success');

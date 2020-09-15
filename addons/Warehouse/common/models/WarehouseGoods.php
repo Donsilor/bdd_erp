@@ -323,6 +323,9 @@ class WarehouseGoods extends BaseModel
             'main_stone_cost' => '主石成本',
             'second_stone_cost1' => '副石1成本',
             'second_stone_cost2' => '副石2成本',
+            'second_stone_fee1' => '镶石1工费/单颗',
+            'second_stone_fee2' => '镶石2工费/单颗',
+            'second_stone_fee3' => '镶石3工费/单颗',
         ];
     }
 

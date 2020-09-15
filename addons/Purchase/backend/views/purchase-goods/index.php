@@ -736,7 +736,17 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'headerOptions' => [],
                             ],
                             [
-                                'attribute'=>'xianqian_price',
+                                'attribute'=>'second_stone_fee1',
+                                'filter' => false,
+                                'headerOptions' => [],
+                            ],
+                            [
+                                'attribute'=>'second_stone_fee2',
+                                'filter' => false,
+                                'headerOptions' => [],
+                            ],
+                            [
+                                'attribute'=>'second_stone_fee3',
                                 'filter' => false,
                                 'headerOptions' => [],
                             ],
