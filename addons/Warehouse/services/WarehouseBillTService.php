@@ -190,8 +190,6 @@ class WarehouseBillTService extends Service
      */
     public function uploadGoods($form)
     {
-        //echo '<pre>';
-        //print_r(\Yii::$app->attr->valueMap($attr_id));
         if (empty($form->file) && !isset($form->file)) {
             throw new \Exception("请上传文件");
         }
