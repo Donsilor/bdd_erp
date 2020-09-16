@@ -55,8 +55,8 @@ $this->params['breadcrumbs'][] = $this->title;
                     <span style="color:red;">Ctrl+F键可快速查找字段名</span>
                     <span style="font-size:16px">
                         <!--<span style="font-weight:bold;">明细汇总：</span>-->
-                        货品总数：<span style="color:green;"><?= $bill->goods_num?></span>
-                        总成本价：<span style="color:green;"><?= $bill->total_cost?></span>
+                        货品总数：<span style="color:green;"><?= $bill->goods_num ?></span>
+                        总成本价：<span style="color:green;"><?= $bill->total_cost ?></span>
                     </span>
                     <?= GridView::widget([
                         'dataProvider' => $dataProvider,
@@ -1741,14 +1741,14 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'footerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#b7ba6b;'],
                                 'value' => function ($model, $key, $index, $widget) {
                                     $widget->footer = $model->getAttributeLabel('biaomiangongyi');
-                                    if(!empty($model->biaomiangongyi)){
+                                    if (!empty($model->biaomiangongyi)) {
                                         $biaomiangongyi = explode(',', $model->biaomiangongyi);
                                         $biaomiangongyi = array_filter($biaomiangongyi);
                                         $arr = [];
                                         foreach ($biaomiangongyi as $item) {
                                             $arr[] = \Yii::$app->attr->valueName($item);
                                         }
-                                        return implode(",",$arr) ?? "";
+                                        return implode(",", $arr) ?? "";
                                     }
                                     return "";
                                 },
@@ -1914,7 +1914,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'attribute' => 'cost_price',
                                 //'format' => 'raw',
                                 'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#9b95c9;'],
-                                'contentOptions' => ['style'=>'color:red'],
+                                'contentOptions' => ['style' => 'color:red'],
                                 'footerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#9b95c9;'],
                                 'value' => function ($model, $key, $index, $widget) use ($total) {
                                     $widget->footer = $model->getFooterValues('cost_price', $total, "0.00");
@@ -2125,7 +2125,7 @@ $this->params['breadcrumbs'][] = $this->title;
      * 注意：对于 user-select: none 的元素无效
      * 注意：当 id 为 false 且 attr 不会空，会直接复制 attr 的内容
      */
-    function copy (id, attr = null) {
+    function copy(id, attr = null) {
         let target = null;
         if (attr) {
             target = document.createElement('div');
@@ -2141,7 +2141,6 @@ $this->params['breadcrumbs'][] = $this->title;
         } else {
             target = document.querySelector('#' + id);
         }
-
         try {
             let range = document.createRange();
             range.selectNode(target);
@@ -2154,7 +2153,6 @@ $this->params['breadcrumbs'][] = $this->title;
         } catch (e) {
             console.log('复制失败')
         }
-
         if (attr) {
             // remove temp target
             target.parentElement.removeChild(target);

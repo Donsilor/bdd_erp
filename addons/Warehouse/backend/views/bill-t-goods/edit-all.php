@@ -2337,7 +2337,7 @@ $this->params['breadcrumbs'][] = $this->title;
      * 注意：对于 user-select: none 的元素无效
      * 注意：当 id 为 false 且 attr 不会空，会直接复制 attr 的内容
      */
-    function copy (id, attr = null) {
+    function copy(id, attr = null) {
         let target = null;
         if (attr) {
             target = document.createElement('div');
@@ -2353,7 +2353,6 @@ $this->params['breadcrumbs'][] = $this->title;
         } else {
             target = document.querySelector('#' + id);
         }
-
         try {
             let range = document.createRange();
             range.selectNode(target);
@@ -2366,7 +2365,6 @@ $this->params['breadcrumbs'][] = $this->title;
         } catch (e) {
             console.log('复制失败')
         }
-
         if (attr) {
             // remove temp target
             target.parentElement.removeChild(target);
