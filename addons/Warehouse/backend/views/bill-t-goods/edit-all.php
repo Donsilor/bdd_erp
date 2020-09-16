@@ -199,7 +199,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                         return Html::a($model->style_sn, ['/style/view', 'id' => $model->id, 'returnUrl' => Url::getReturnUrl()], ['style' => "text-decoration:underline;color:#3c8dbc", 'id' => $model->style_sn]) . ' <i class="fa fa-copy" onclick="copy(\'' . $model->style_sn . '\')"></i>';
                                     } else {
                                         if ($model->style_sn) {
-                                            $model->style_sn = $model->style_sn . ' <i class="fa fa-copy" onclick="copy(\'' . $model->style_sn . '\')"></i>';
+                                            return "<span id='{$model->style_sn}_{$model->id}'>".$model->style_sn."</span>".' <i class="fa fa-copy" onclick="copy(\''. $model->style_sn.'_'.$model->id .'\')"></i>';
                                         }
                                         return $model->style_sn ?? "";
                                     }

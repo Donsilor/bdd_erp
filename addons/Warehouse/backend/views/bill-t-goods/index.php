@@ -195,7 +195,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                         return Html::a($model->style_sn, ['/style/view', 'id' => $model->id, 'returnUrl' => Url::getReturnUrl()], ['style' => "text-decoration:underline;color:#3c8dbc", 'id' => $model->style_sn]) . ' <i class="fa fa-copy" onclick="copy(\'' . $model->style_sn . '\')"></i>';
                                     } else {
                                         if ($model->style_sn) {
-                                            $model->style_sn = $model->style_sn . ' <i class="fa fa-copy" onclick="copy(\'' . $model->style_sn . '\')"></i>';
+                                            return "<span id='{$model->style_sn}_{$model->id}'>".$model->style_sn."</span>".' <i class="fa fa-copy" onclick="copy(\''. $model->style_sn.'_'.$model->id .'\')"></i>';
                                         }
                                         return $model->style_sn ?? "";
                                     }
@@ -1911,15 +1911,14 @@ $this->params['breadcrumbs'][] = $this->title;
                                 ]),
                             ],
                             [
-                                'label' => "单件成本价",
                                 'attribute' => 'cost_price',
                                 //'format' => 'raw',
                                 'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#9b95c9;'],
                                 'contentOptions' => ['style' => 'color:red'],
                                 'footerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#9b95c9;'],
                                 'value' => function ($model, $key, $index, $widget) use ($total) {
-                                    $widget->footer = "单件成本价";
-                                    return bcdiv($model->cost_price, $model->goods_num, 3) ?? "0.00";
+                                    $widget->footer = $model->getFooterValues('cost_price', $total, "0.00");
+                                    return $model->cost_price ?? "0.00";
                                 },
                                 'visible' => \common\helpers\Auth::verify(\common\enums\SpecialAuthEnum::VIEW_CAIGOU_PRICE),
                                 'filter' => false,
@@ -1929,14 +1928,15 @@ $this->params['breadcrumbs'][] = $this->title;
 //                                ]),
                             ],
                             [
+                                'label' => "总成本价",
                                 'attribute' => 'cost_price',
                                 //'format' => 'raw',
                                 'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#9b95c9;'],
                                 'contentOptions' => ['style' => 'color:red'],
                                 'footerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#9b95c9;'],
                                 'value' => function ($model, $key, $index, $widget) use ($total) {
-                                    $widget->footer = $model->getFooterValues('cost_price', $total, "0.00");
-                                    return $model->cost_price ?? "0.00";
+                                    $widget->footer = "总成本价";
+                                    return bcmul($model->cost_price, $model->goods_num, 3) ?? "0.00";
                                 },
                                 'visible' => \common\helpers\Auth::verify(\common\enums\SpecialAuthEnum::VIEW_CAIGOU_PRICE),
                                 'filter' => false,
