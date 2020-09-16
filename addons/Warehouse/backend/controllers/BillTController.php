@@ -109,12 +109,12 @@ class BillTController extends BaseController
                     $model->bill_no = SnHelper::createBillSn($this->billType);
                     $model->bill_type = $this->billType;
                 }
-//                if (false === $model->save()) {
-//                    throw new \Exception($this->getError($model));
-//                }
+                if (false === $model->save()) {
+                    throw new \Exception($this->getError($model));
+                }
                 if ($isNewRecord) {
                     $gModel = new WarehouseBillTGoodsForm();
-                    //$gModel->bill_id = $model->id;
+                    $gModel->bill_id = $model->id;
                     $gModel->supplier_id = $model->supplier_id;
                     $gModel->put_in_type = $model->put_in_type;
                     $gModel->supplier_id = $model->supplier_id;

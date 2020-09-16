@@ -200,7 +200,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                         return Html::a($model->style_sn, ['/style/view', 'id' => $model->id, 'returnUrl' => Url::getReturnUrl()], ['style' => "text-decoration:underline;color:#3c8dbc", 'id' => $model->style_sn]) . ' <i class="fa fa-copy" onclick="copy(\'' . $model->style_sn . '\')"></i>';
                                     } else {
                                         if ($model->style_sn) {
-                                            $model->style_sn = $model->style_sn . ' <i class="fa fa-copy" onclick="copy(\'' . $model->style_sn . '\')"></i>';
+                                            return "<span id='{$model->style_sn}_{$model->id}'>".$model->style_sn."</span>".' <i class="fa fa-copy" onclick="copy(\''. $model->style_sn.'_'.$model->id .'\')"></i>';
                                         }
                                         return $model->style_sn ?? "";
                                     }
@@ -1933,6 +1933,24 @@ $this->params['breadcrumbs'][] = $this->title;
 //                                ]),
                             ],
                             [
+                                'label' => "总成本价",
+                                'attribute' => 'cost_price',
+                                //'format' => 'raw',
+                                'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#9b95c9;'],
+                                'contentOptions' => ['style' => 'color:red'],
+                                'footerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#9b95c9;'],
+                                'value' => function ($model, $key, $index, $widget) use ($total) {
+                                    $widget->footer = "总成本价";
+                                    return bcmul($model->cost_price, $model->goods_num, 3) ?? "0.00";
+                                },
+                                'visible' => \common\helpers\Auth::verify(\common\enums\SpecialAuthEnum::VIEW_CAIGOU_PRICE),
+                                'filter' => false,
+//                                'filter' => Html::activeTextInput($searchModel, 'cost_price', [
+//                                    'class' => 'form-control',
+//                                    'style' => 'width:100px;'
+//                                ]),
+                            ],
+                            [
                                 'attribute' => 'markup_rate',
                                 //'format' => 'raw',
                                 'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#9b95c9;'],
@@ -2016,6 +2034,22 @@ $this->params['breadcrumbs'][] = $this->title;
                                     return \addons\Style\common\enums\InlayEnum::getValue($model->is_inlay) ?? "";
                                 },
                                 'filter' => Html::activeDropDownList($searchModel, 'is_inlay', $model->getIsInlayMap(), [
+                                    'prompt' => '全部',
+                                    'class' => 'form-control',
+                                    'style' => 'width:60px;'
+                                ]),
+                            ],
+                            [
+                                'label' => '是否批发',
+                                'attribute' => 'is_wholesale',
+                                'format' => 'raw',
+                                'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#9b95c9;'],
+                                'footerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#9b95c9;'],
+                                'value' => function ($model, $key, $index, $widget) {
+                                    $widget->footer = "是否批发";
+                                    return \addons\Warehouse\common\enums\IsWholeSaleEnum::getValue($model->is_wholesale);
+                                },
+                                'filter' => Html::activeDropDownList($searchModel, 'is_wholesale', \addons\Warehouse\common\enums\IsWholeSaleEnum::getMap(), [
                                     'prompt' => '全部',
                                     'class' => 'form-control',
                                     'style' => 'width:60px;'

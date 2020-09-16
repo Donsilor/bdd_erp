@@ -57,14 +57,16 @@ class WarehouseBillTGoodsForm extends WarehouseBillGoodsL
     public function trimField($data)
     {
         $res = [];
+        $fieldName = $this->getFieldName();
         foreach ($data as $k => $v) {
+            $name = $fieldName[$k] ?? "";
             if ($v !== "") {
                 $str = StringHelper::strIconv($v);
                 $str = str_replace(',', '，', $str);
                 $str = str_replace('】', '', $str);
-                $res[$k] = $str;
+                $res[$name] = $str;
             } else {
-                $res[$k] = "";
+                $res[$name] = "";
             }
         }
         return $res ?? [];
@@ -203,10 +205,12 @@ class WarehouseBillTGoodsForm extends WarehouseBillGoodsL
         $values = [
             '条码号(货号)为空则系统自动生成',
             '[非起版]和[有款起版]款号不能为空',
+            $this->formatTitle($this->getJietuoTypeMap()),//'金托类型' .
             '[起版号]和[款号]必填其一',
             '#',
             $this->formatTitle($this->getMaterialTypeMap()),//'材质' .
             $this->formatTitle($this->getMaterialColorMap()),//'材质颜色' .
+            '不填默认为1',
             $this->formatTitle($this->getPortNoMap()),//'手寸(港号)' .
             $this->formatTitle($this->getFingerMap()),//'手寸(美号)' .
             '#', '#',
@@ -261,21 +265,39 @@ class WarehouseBillTGoodsForm extends WarehouseBillGoodsL
             '#', '#', '#', '#', '#', '#', '#', '#', '#',
             $this->formatTitle($this->getCertTypeMap()),//'主石证书类型' .
             '填写则不自动计算','#',
-            $this->formatTitle($this->getJietuoTypeMap()),//'金托类型' .
             '#',
         ];
         $fields = [
-            '条码号(货号)', '(*)款号', '起版号', '商品名称', '材质', '材质颜色', '手寸(港号)', '手寸(美号)', '尺寸(cm)', '成品尺寸(mm)', '镶口(ct)', '刻字', '链类型', '扣环', '爪头形状',
+            '条码号(货号)', '(*)款号', '(*)金托类型', '起版号', '商品名称', '材质', '材质颜色', '货品数量', '手寸(港号)', '手寸(美号)', '尺寸(cm)', '成品尺寸(mm)', '镶口(ct)', '刻字', '链类型', '扣环', '爪头形状',
             '配料方式', '连石重(g)', '损耗(%)', '金价/g', '折足(g)',
             '主石配石方式', '主石编号', '主石类型', '主石粒数', '主石重(ct)', '主石单价/ct', '主石形状', '主石颜色', '主石净度', '主石切工', '主石色彩',
             '副石1配石方式', '副石1编号', '副石1类型', '副石1粒数', '副石1重(ct)', '副石1单价/ct', '副石1形状', '副石1颜色', '副石1净度', '副石1切工', '副石1色彩',
             '副石2配石方式', '副石2编号', '副石2类型', '副石2粒数', '副石2重(ct)', '副石2单价/ct',
             '副石3配石方式', '副石3编号', '副石3类型', '副石3粒数', '副石3重(ct)', '副石3单价/ct', '石料备注',
             '配件方式', '配件类型', '配件材质', '配件数量', '配件金重(g)', '配件金价/g',
-            '配石重量(ct)', '配石工费/ct', '配件工费', '克/工费', '件/工费', '镶嵌工艺', '镶石1工费/颗', '镶石2工费/颗', '镶石3工费/颗', '表面工艺(多个用“|”分割)', '表面工艺费', '分色/分件费', '喷沙费', '拉沙费', '补口费', '版费', '证书费',
-            '其它费用', '主石证书号', '主石证书类型', '公司成本价', '倍率(默认1)', '(*)金托类型', '备注',
+            '配石重量(ct)', '配石工费/ct', '配件工费', '克/工费', '件/工费', '镶嵌工艺', '镶石1工费/颗', '镶石2工费/颗', '镶石3工费/颗', '表面工艺(多个用“|”分割)', '表面工艺费', '分色/分件费', '喷沙费', '拉沙费', '补口费', '版费', '证书费', '其它费用',
+            '主石证书号', '主石证书类型', '公司成本价', '倍率(默认1)', '备注',
         ];
         return [$values, $fields];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getFieldName()
+    {
+        $fieldName = [
+            'goods_id', 'style_sn', 'jintuo_type', 'qiban_sn', 'goods_name', 'material_type', 'material_color', 'goods_num', 'finger_hk', 'finger', 'length', 'product_size', 'xiangkou', 'kezi', 'chain_type', 'cramp_ring', 'talon_head_type',
+            'peiliao_way', 'suttle_weight', 'gold_loss', 'gold_price', 'pure_gold',
+            'main_pei_type', 'main_stone_sn', 'main_stone_type', 'main_stone_num', 'main_stone_weight', 'main_stone_price', 'main_stone_shape', 'main_stone_color', 'main_stone_clarity', 'main_stone_cut', 'main_stone_colour',
+            'second_pei_type', 'second_stone_sn1', 'second_stone_type1', 'second_stone_num1', 'second_stone_weight1', 'second_stone_price1', 'second_stone_shape1', 'second_stone_color1', 'second_stone_clarity1', 'second_stone_cut1', 'second_stone_colour1',
+            'second_pei_type2', 'second_stone_sn2', 'second_stone_type2', 'second_stone_num2', 'second_stone_weight2', 'second_stone_price2',
+            'second_pei_type3', 'second_stone_sn3', 'second_stone_type3', 'second_stone_num3', 'second_stone_weight3', 'second_stone_price3', 'stone_remark',
+            'parts_way', 'parts_type', 'parts_material', 'parts_num', 'parts_gold_weight', 'parts_price',
+            'peishi_weight', 'peishi_gong_fee', 'parts_fee', 'gong_fee', 'piece_fee', 'xiangqian_craft', 'second_stone_fee1', 'second_stone_fee2', 'second_stone_fee3', 'biaomiangongyi', 'biaomiangongyi_fee', 'fense_fee', 'penlasha_fee', 'lasha_fee', 'bukou_fee', 'templet_fee', 'cert_fee', 'other_fee',
+            'main_cert_id', 'main_cert_type', 'cost_price', 'markup_rate', 'remark',
+        ];
+        return $fieldName ?? [];
     }
 
     /**

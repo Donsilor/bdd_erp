@@ -199,7 +199,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                         return Html::a($model->style_sn, ['/style/view', 'id' => $model->id, 'returnUrl' => Url::getReturnUrl()], ['style' => "text-decoration:underline;color:#3c8dbc", 'id' => $model->style_sn]) . ' <i class="fa fa-copy" onclick="copy(\'' . $model->style_sn . '\')"></i>';
                                     } else {
                                         if ($model->style_sn) {
-                                            $model->style_sn = $model->style_sn . ' <i class="fa fa-copy" onclick="copy(\'' . $model->style_sn . '\')"></i>';
+                                            return "<span id='{$model->style_sn}_{$model->id}'>".$model->style_sn."</span>".' <i class="fa fa-copy" onclick="copy(\''. $model->style_sn.'_'.$model->id .'\')"></i>';
                                         }
                                         return $model->style_sn ?? "";
                                     }
@@ -2222,6 +2222,22 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'filter' => Html::activeTextInput($searchModel, 'main_cert_id', [
                                     'class' => 'form-control',
                                     'style' => 'width:100px;'
+                                ]),
+                            ],
+                            [
+                                'label' => '是否批发',
+                                'attribute' => 'is_wholesale',
+                                'format' => 'raw',
+                                'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#b7ba6b;'],
+                                'footerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#b7ba6b;'],
+                                'value' => function ($model, $key, $index, $widget) {
+                                    $widget->footer = "是否批发";
+                                    return \addons\Warehouse\common\enums\IsWholeSaleEnum::getValue($model->is_wholesale);
+                                },
+                                'filter' => Html::activeDropDownList($searchModel, 'is_wholesale', \addons\Warehouse\common\enums\IsWholeSaleEnum::getMap(), [
+                                    'prompt' => '全部',
+                                    'class' => 'form-control',
+                                    'style' => 'width:60px;'
                                 ]),
                             ],
                             [
