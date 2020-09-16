@@ -19,7 +19,7 @@ class WarehouseBillTForm extends WarehouseBill
     public function rules()
     {
          $rules = [
-            [['put_in_type', 'to_warehouse_id', 'supplier_id'], 'required'],
+            [['put_in_type', 'supplier_id'], 'required'],//, 'to_warehouse_id'
             [['file'], 'file', 'extensions' => ['csv']],//'skipOnEmpty' => false,
          ];
          return array_merge(parent::rules() , $rules);

@@ -322,6 +322,7 @@ class WarehouseBillCService extends WarehouseBillService
                      }
                  }                 
              }
+             $salesman_id = 0;
              $goods_id = $row['goods_id'] ?? 0;
              $channel_id = $row['channel_id'] ?? 0;
              $salesman  = $row['salesman'] ?? '';

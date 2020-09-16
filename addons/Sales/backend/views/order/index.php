@@ -3,6 +3,7 @@
 use common\helpers\Html;
 use common\helpers\Url;
 use yii\grid\GridView;
+use addons\Sales\common\enums\OrderFromEnum;
 
 /* @var $this yii\web\View */
 /* @var $dataProvider yii\data\ActiveDataProvider */
@@ -79,7 +80,11 @@ $this->params['breadcrumbs'][] = $this->title;
             [
                     'attribute' => 'order_sn',
                     'value'=>function($model) {
-                        return Html::a($model->order_sn, ['view', 'id' => $model->id,'returnUrl'=>Url::getReturnUrl()], ['style'=>"text-decoration:underline;color:#3c8dbc"]);
+                        $action = 'order/view';
+                        if($model->order_from == OrderFromEnum::FROM_EXTERNAL) {
+                            $action = 'external-order/view';
+                        }
+                        return Html::a($model->order_sn, [$action, 'id' => $model->id], ['class'=>'openContab','style'=>"text-decoration:underline;color:#3c8dbc"]);
                     },
                     'filter' => Html::activeTextInput($searchModel, 'order_sn', [
                         'class' => 'form-control',

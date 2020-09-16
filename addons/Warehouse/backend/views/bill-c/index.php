@@ -65,7 +65,7 @@ $params = $params ? "&".http_build_query($params) : '';
                         [
                             'attribute'=>'bill_no',
                             'value'=>function($model) {
-                                return Html::a($model->bill_no, ['view', 'id' => $model->id,'returnUrl'=>Url::getReturnUrl()], ['style'=>"text-decoration:underline;color:#3c8dbc"]);
+                                return Html::a($model->bill_no, ['view', 'id' => $model->id,'returnUrl'=>Url::getReturnUrl()], ['class'=>'openContab','style'=>"text-decoration:underline;color:#3c8dbc"]);
                             },
                             'filter' => Html::activeTextInput($searchModel, 'bill_no', [
                                 'class' => 'form-control',
@@ -187,7 +187,7 @@ $params = $params ? "&".http_build_query($params) : '';
                                 ],
                             ]),
                             'value'=>function($model){
-                                return Yii::$app->formatter->asDatetime($model->created_at);
+                                return Yii::$app->formatter->asDate($model->created_at);
                             }
                         ],
                         /*[

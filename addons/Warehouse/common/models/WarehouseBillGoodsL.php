@@ -28,6 +28,7 @@ use Yii;
  * @property string $order_sn 订单号
  * @property int $order_detail_id 订单明细ID
  * @property int $supplier_id 供应商ID
+ * @property int $to_warehouse_id 入库仓库
  * @property int $put_in_type 入库方式
  * @property string $produce_sn 布产单号
  * @property int $is_wholesale 是否批发
@@ -160,6 +161,7 @@ use Yii;
  * @property string $peishi_gong_fee 配石工费
  * @property int $source_detail_id 来源明细ID
  * @property int $auto_goods_id 是否手动录入货号
+ * @property int $is_auto_price 是否自动计算价格
  * @property string $remark 备注
  * @property int $status 状态
  * @property int $creator_id 创建人
@@ -183,7 +185,7 @@ class WarehouseBillGoodsL extends BaseModel
     {
         return [
             [['bill_id', 'bill_no', 'bill_type'], 'required'],
-            [['bill_id', 'style_id', 'product_type_id', 'style_cate_id', 'style_sex', 'style_channel_id', 'qiban_type', 'order_detail_id', 'supplier_id', 'put_in_type', 'is_wholesale', 'goods_num', 'jintuo_type', 'is_inlay', 'peiliao_way', 'parts_type', 'parts_way', 'parts_num', 'main_pei_type', 'main_stone_num', 'second_pei_type', 'second_stone_num1', 'second_pei_type2', 'second_stone_num2', 'second_stone_num3', 'second_pei_type3', 'peishi_num', 'source_detail_id', 'auto_goods_id', 'status', 'creator_id', 'created_at', 'updated_at'], 'integer'],
+            [['bill_id', 'style_id', 'product_type_id', 'style_cate_id', 'style_sex', 'style_channel_id', 'qiban_type', 'order_detail_id', 'supplier_id', 'to_warehouse_id', 'put_in_type', 'is_wholesale', 'goods_num', 'jintuo_type', 'is_inlay', 'peiliao_way', 'parts_type', 'parts_way', 'parts_num', 'main_pei_type', 'main_stone_num', 'second_pei_type', 'second_stone_num1', 'second_pei_type2', 'second_stone_num2', 'second_stone_num3', 'second_pei_type3', 'peishi_num', 'source_detail_id', 'auto_goods_id', 'is_auto_price', 'status', 'creator_id', 'created_at', 'updated_at'], 'integer'],
             [['gold_weight', 'pure_gold', 'gold_loss', 'suttle_weight', 'lncl_loss_weight', 'gold_price', 'gold_amount', 'diamond_carat', 'market_price', 'cost_price', 'gong_fee', 'piece_fee', 'basic_gong_fee', 'bukou_fee', 'xianqian_price', 'xianqian_fee', 'cert_fee', 'markup_rate', 'extra_stone_fee', 'tax_fee', 'fense_fee', 'other_fee', 'biaomiangongyi_fee', 'penlasha_fee', 'lasha_fee', 'templet_fee', 'total_gong_fee', 'factory_cost', 'chain_long', 'parts_amount', 'parts_gold_weight', 'parts_price', 'parts_fee', 'main_stone_weight', 'main_stone_price', 'main_stone_amount', 'second_stone_weight1', 'second_stone_price1', 'second_stone_amount1', 'second_stone_fee1', 'second_stone_weight2', 'second_stone_price2', 'second_stone_amount2', 'second_stone_fee2', 'second_stone_weight3', 'second_stone_price3', 'second_stone_amount3', 'second_stone_fee3', 'peishi_weight', 'peishi_fee', 'peishi_gong_fee'], 'number'],
             [['bill_no', 'goods_id', 'goods_sn', 'style_sn', 'qiban_sn', 'produce_sn', 'main_stone_sn', 'main_cert_id', 'second_stone_sn1', 'second_stone_sn2', 'second_cert_id2', 'second_stone_sn3'], 'string', 'max' => 30],
             [['bill_type'], 'string', 'max' => 3],
@@ -225,6 +227,7 @@ class WarehouseBillGoodsL extends BaseModel
             'order_detail_id' => '订单明细ID',
             'produce_sn' => '布产单号',
             'supplier_id' => '供应商ID',
+            'to_warehouse_id' => '入库仓库',
             'put_in_type' => '入库方式',
 
             //属性信息
@@ -376,6 +379,7 @@ class WarehouseBillGoodsL extends BaseModel
             'is_inlay' => '是否镶嵌',
             'is_wholesale' => '是否批发',
             'auto_goods_id' => '是否手动录入货号',
+            'is_auto_price' => '是否自动计算价格',
             'source_detail_id' => '来源明细ID',
             'remark' => '备注',
             'status' => '状态',
@@ -384,30 +388,42 @@ class WarehouseBillGoodsL extends BaseModel
             'updated_at' => '更新时间',
         ];
     }
+
     /**
      * 表面工艺
      */
     public function parseFaceCraft()
     {
-        if(is_array($this->biaomiangongyi)){
-            $this->biaomiangongyi = ','.implode(',',$this->biaomiangongyi).',';
+        if (is_array($this->biaomiangongyi)) {
+            $this->biaomiangongyi = ',' . implode(',', $this->biaomiangongyi) . ',';
         }
         return $this->biaomiangongyi;
     }
+
     /**
      * 关联产品线分类一对一
      * @return \yii\db\ActiveQuery
      */
     public function getProductType()
     {
-        return $this->hasOne(ProductType::class, ['id'=>'product_type_id']);
+        return $this->hasOne(ProductType::class, ['id' => 'product_type_id']);
     }
+
     /**
      * 关联款式分类一对一
      * @return \yii\db\ActiveQuery
      */
     public function getStyleCate()
     {
-        return $this->hasOne(StyleCate::class, ['id'=>'style_cate_id']);
+        return $this->hasOne(StyleCate::class, ['id' => 'style_cate_id']);
+    }
+
+    /**
+     * 入库仓库 一对一
+     * @return \yii\db\ActiveQuery
+     */
+    public function getToWarehouse()
+    {
+        return $this->hasOne(Warehouse::class, ['id'=>'to_warehouse_id'])->alias('toWarehouse');
     }
 }

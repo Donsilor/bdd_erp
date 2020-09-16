@@ -57,7 +57,7 @@ $params = $params ? "&".http_build_query($params) : '';
                             'attribute'=>'parts_sn',
                             'format' => 'raw',
                             'value'=>function($model) {
-                                return Html::a($model->parts_sn, ['view', 'id' => $model->id,'returnUrl'=>Url::getReturnUrl()], ['style'=>"text-decoration:underline;color:#3c8dbc"]);
+                                return Html::a($model->parts_sn, ['view', 'id' => $model->id,'returnUrl'=>Url::getReturnUrl()], ['class'=>'openContab','style'=>"text-decoration:underline;color:#3c8dbc"]);
                             },
                             'filter' => Html::activeTextInput($searchModel, 'parts_sn', [
                                 'class' => 'form-control',

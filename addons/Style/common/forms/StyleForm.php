@@ -67,7 +67,7 @@ class StyleForm extends Style
             }
         }
         $values = [
-            '#', '#',
+            '#', '【款号生成规则：①第1位：渠道；②第2位：品类；③第3-8位：自动生成序号；④第9位：材质】',
             $this->formatTitleId($cate),
             $this->formatTitleId($product),
             $this->formatTitleId($this->getStatusList()),

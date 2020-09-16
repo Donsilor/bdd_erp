@@ -14,6 +14,7 @@ class CurrencyEnum extends BaseEnum
     const CNY = 'CNY';
     const HKD = 'HKD';
     const USD = 'USD';
+    const TWD = 'TWD';
     
     /**
      * @return array
@@ -24,6 +25,7 @@ class CurrencyEnum extends BaseEnum
             self::CNY=> 'CNY',
             self::HKD=> 'HKD',
             self::USD=> 'USD',
+            self::TWD=> 'TWD'
         ];
     }
 }

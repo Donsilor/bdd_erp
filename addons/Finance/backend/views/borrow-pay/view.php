@@ -120,7 +120,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                      $flow_list = Yii::$app->services->flow->getFlows($flow_ids);
                                      foreach ($flow_list as $flow){
                                     ?>
-                                         <dd><?= $flow['flow_name']?> :  <?= Html::a($flow['target_no'], $flow['url'], ['style'=>"text-decoration:underline;color:#3c8dbc"])?></dd>
+                                         <dd><?= $flow['flow_name']?> :  <?= Html::a($flow['target_no'], $flow['url'], ['class'=>'openContab','style'=>"text-decoration:underline;color:#3c8dbc"])?></dd>
                                     <?php } ?>
                                 </dl>
                                 <p>

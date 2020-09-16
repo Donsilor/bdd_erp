@@ -61,7 +61,7 @@ $params = $params ? "&".http_build_query($params) : '';
                         [
                             'attribute'=>'bill_no',
                             'value'=>function($model) {
-                                return Html::a($model->bill_no, ['view', 'id' => $model->id,'returnUrl'=>Url::getReturnUrl()], ['style'=>"text-decoration:underline;color:#3c8dbc"]);
+                                return Html::a($model->bill_no, ['view', 'id' => $model->id,'returnUrl'=>Url::getReturnUrl()], ['class'=>'openContab','style'=>"text-decoration:underline;color:#3c8dbc"]);
                             },
                             'filter' => Html::activeTextInput($searchModel, 'bill_no', [
                                 'class' => 'form-control',
@@ -93,21 +93,21 @@ $params = $params ? "&".http_build_query($params) : '';
                             'format' => 'raw',
                             'headerOptions' => ['class' => 'col-md-2'],
                         ],
-                        [
-                            'attribute' => 'to_warehouse_id',
-                            'value' =>"toWarehouse.name",
-                            'filter'=>Select2::widget([
-                                'name'=>'SearchModel[to_warehouse_id]',
-                                'value'=>$searchModel->to_warehouse_id,
-                                'data'=>Yii::$app->warehouseService->warehouse::getDropDown(),
-                                'options' => ['placeholder' =>"请选择"],
-                                'pluginOptions' => [
-                                    'allowClear' => true,
-                                ],
-                            ]),
-                            'format' => 'raw',
-                            'headerOptions' => ['class' => 'col-md-2'],
-                        ],
+//                        [
+//                            'attribute' => 'to_warehouse_id',
+//                            'value' =>"toWarehouse.name",
+//                            'filter'=>Select2::widget([
+//                                'name'=>'SearchModel[to_warehouse_id]',
+//                                'value'=>$searchModel->to_warehouse_id,
+//                                'data'=>Yii::$app->warehouseService->warehouse::getDropDown(),
+//                                'options' => ['placeholder' =>"请选择"],
+//                                'pluginOptions' => [
+//                                    'allowClear' => true,
+//                                ],
+//                            ]),
+//                            'format' => 'raw',
+//                            'headerOptions' => ['class' => 'col-md-2'],
+//                        ],
                         [
                             'attribute' => 'put_in_type',
                             'format' => 'raw',
@@ -179,7 +179,7 @@ $params = $params ? "&".http_build_query($params) : '';
                                 ],
                             ]),
                             'value'=>function($model){
-                                return Yii::$app->formatter->asDatetime($model->created_at);
+                                return Yii::$app->formatter->asDate($model->created_at);
                             },
                         ],
                         /*[

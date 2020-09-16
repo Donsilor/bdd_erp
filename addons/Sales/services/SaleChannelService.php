@@ -29,5 +29,19 @@ class SaleChannelService extends Service
         
         return ArrayHelper::map($models, 'id', 'name');        
     }
+    /**
+     * 外部平台销售渠道
+     * @return array
+     */
+    public static function getDropDownForExternalOrder()
+    {
+        $models = SaleChannel::find()
+            ->where(['id'=>[7,8,13]])
+            ->select(['id', 'name'])
+            ->orderBy('sort asc')
+            ->asArray()
+            ->all();        
+        return ArrayHelper::map($models, 'id', 'name'); 
+    }
     
 }

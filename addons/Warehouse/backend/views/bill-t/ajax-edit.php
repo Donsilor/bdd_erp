@@ -31,15 +31,15 @@ $form = ActiveForm::begin([
                     ],
                 ]); ?>
             </div>
-            <div class="col-sm-4">
-                <?= $form->field($model, 'to_warehouse_id')->widget(\kartik\select2\Select2::class, [
-                    'data' => Yii::$app->warehouseService->warehouse::getDropDown(),
-                    'options' => ['placeholder' => '请选择'],
-                    'pluginOptions' => [
-                        'allowClear' => false
-                    ],
-                ]); ?>
-            </div>
+<!--            <div class="col-sm-4">-->
+<!--                --><?//= $form->field($model, 'to_warehouse_id')->widget(\kartik\select2\Select2::class, [
+//                    'data' => Yii::$app->warehouseService->warehouse::getDropDown(),
+//                    'options' => ['placeholder' => '请选择'],
+//                    'pluginOptions' => [
+//                        'allowClear' => false
+//                    ],
+//                ]); ?>
+<!--            </div>-->
             <div class="col-sm-4">
                 <?= $form->field($model, 'put_in_type')->widget(\kartik\select2\Select2::class, [
                     'data' => \addons\Warehouse\common\enums\PutInTypeEnum::getMap(),
@@ -49,11 +49,11 @@ $form = ActiveForm::begin([
                     ],
                 ]); ?>
             </div>
-        </div>
-        <div class="row">
             <div class="col-sm-4">
                 <?= $form->field($model, 'is_settle_accounts')->radioList(\addons\Warehouse\common\enums\IsSettleAccountsEnum::getMap()) ?>
             </div>
+        </div>
+        <div class="row">
             <div class="col-sm-4">
                 <?= $form->field($model, 'send_goods_sn')->textInput() ?>
             </div>

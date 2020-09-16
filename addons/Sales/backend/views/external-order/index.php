@@ -6,7 +6,7 @@ use yii\grid\GridView;
 
 /* @var $this yii\web\View */
 /* @var $dataProvider yii\data\ActiveDataProvider */
-$this->title = '外部订单列表';
+$this->title = '外部平台订单';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 
@@ -19,7 +19,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     <?= Html::create(['edit'], '创建', [
                             'class' => 'btn btn-primary btn-xs openIframe',
                             'data-width' => '70%',
-                            'data-height' => '90%',
+                            'data-height' => '95%',
                             'data-offset' => '20px',
                     ]); ?>
                     <?= Html::button('导出', [
@@ -80,7 +80,7 @@ $this->params['breadcrumbs'][] = $this->title;
             [
                     'attribute' => 'out_trade_no',
                     'value'=>function($model) {
-                        return Html::a($model->out_trade_no, ['view', 'id' => $model->id,'returnUrl'=>Url::getReturnUrl()], ['style'=>"text-decoration:underline;color:#3c8dbc"]);
+                        return Html::a($model->out_trade_no, ['view', 'id' => $model->id], ['class'=>'openContab','style'=>"text-decoration:underline;color:#3c8dbc"]);
                     },
                     'filter' => Html::activeTextInput($searchModel, 'out_trade_no', [
                             'class' => 'form-control',
@@ -153,7 +153,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     'value' => function ($model){
                         return $model->saleChannel->name ?? '';
                     },
-                    'filter' => Html::activeDropDownList($searchModel, 'sale_channel_id',Yii::$app->salesService->saleChannel->getDropDown(), [
+                    'filter' => Html::activeDropDownList($searchModel, 'sale_channel_id',Yii::$app->salesService->saleChannel->getDropDownForExternalOrder(), [
                             'prompt' => '全部',
                             'class' => 'form-control',
                             'style'=> 'width:120px;'
@@ -238,20 +238,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 ]),
                 'format' => 'raw',
                 'headerOptions' => ['width'=>'100'],
-            ],
-            [
-                    'attribute' => 'order_from',
-                    'value' => function ($model){
-                        return \addons\Sales\common\enums\OrderFromEnum::getValue($model->order_from);
-                    },
-                    'filter' => Html::activeDropDownList($searchModel, 'order_from',\addons\Sales\common\enums\OrderFromEnum::getMap(), [
-                            'prompt' => '全部',
-                            'class' => 'form-control',
-                            'style' =>'width:90px'
-                    ]),
-                    'format' => 'raw',
-                    'headerOptions' => ['width'=>'100'],
-            ],            
+            ],                   
             [
                 'attribute' => 'creator_id',
                 'value' => 'creator.username',
@@ -293,10 +280,11 @@ $this->params['breadcrumbs'][] = $this->title;
                 'buttons' => [
                     'edit' => function($url, $model, $key){
                      if($model->order_status == \addons\Sales\common\enums\OrderStatusEnum::SAVE) {
-                         return Html::edit(['ajax-edit', 'id' => $model->id, 'returnUrl' => Url::getReturnUrl()], '编辑', [
-                             'data-toggle' => 'modal',
-                             'data-target' => '#ajaxModalLg',
-                             'class' => 'btn btn-primary btn-sm',
+                         return Html::edit(['edit', 'id' => $model->id, 'returnUrl' => Url::getReturnUrl()], '编辑', [
+                                 'class' => 'btn btn-primary btn-sm openIframe',
+                                 'data-width' => '70%',
+                                 'data-height' => '95%',
+                                 'data-offset' => '20px',
                          ]);
                      }
                     },

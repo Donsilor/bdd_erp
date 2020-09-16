@@ -67,7 +67,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         [
                             'attribute' => 'style_sn',
                             'value' => function ($model) {
-                                return Html::a($model->style_sn, ['view', 'id' => $model->id, 'returnUrl' => Url::getReturnUrl()], ['style' => "text-decoration:underline;color:#3c8dbc",'id'=>$model->style_sn]).' <i class="fa fa-copy" onclick="copy(\''. $model->style_sn .'\')"></i>';
+                                return Html::a($model->style_sn, ['view', 'id' => $model->id, 'returnUrl' => Url::getReturnUrl()], ['class'=>'openContab','style' => "text-decoration:underline;color:#3c8dbc",'id'=>$model->style_sn]).' <i class="fa fa-copy" onclick="copy(\''. $model->style_sn .'\')"></i>';
                             },
                             'filter' => Html::activeTextInput($searchModel, 'style_sn', [
                                 'class' => 'form-control',

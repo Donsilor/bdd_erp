@@ -59,7 +59,7 @@ $params = $params ? "&".http_build_query($params) : '';
             [
                 'attribute' => 'defective_no',
                 'value'=>function($model) {
-                    return Html::a($model->defective_no, ['view', 'id' => $model->id, 'returnUrl'=>Url::getReturnUrl()], ['style'=>"text-decoration:underline;color:#3c8dbc"]);
+                    return Html::a($model->defective_no, ['view', 'id' => $model->id, 'returnUrl'=>Url::getReturnUrl()], ['class'=>'openContab','style'=>"text-decoration:underline;color:#3c8dbc"]);
                 },
                 'filter' => true,
                 'format' => 'raw',
