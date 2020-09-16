@@ -91,7 +91,7 @@ class WarehouseBillTGoodsForm extends WarehouseBillGoodsL
     {
         $title = "";
         if (!empty($values)) {
-            $title = implode($str.'】', $values) . "】";
+            $title = implode($str . '】', $values) . "】";
         }
         return $title ?? "";
     }
@@ -208,6 +208,7 @@ class WarehouseBillTGoodsForm extends WarehouseBillGoodsL
             $this->formatTitle($this->getJietuoTypeMap()),//'金托类型' .
             '[起版号]和[款号]必填其一',
             '#',
+            $this->formatTitle($this->getWarehouseMap()),//'入库仓库' .
             $this->formatTitle($this->getMaterialTypeMap()),//'材质' .
             $this->formatTitle($this->getMaterialColorMap()),//'材质颜色' .
             '不填默认为1',
@@ -264,11 +265,11 @@ class WarehouseBillTGoodsForm extends WarehouseBillGoodsL
             $this->formatTitle($this->getFaceCraftMap(), "|"),//'表面工艺' .
             '#', '#', '#', '#', '#', '#', '#', '#', '#',
             $this->formatTitle($this->getCertTypeMap()),//'主石证书类型' .
-            '填写则不自动计算','#',
+            '填写则不自动计算', '#',
             '#',
         ];
         $fields = [
-            '条码号(货号)', '(*)款号', '(*)金托类型', '起版号', '商品名称', '材质', '材质颜色', '货品数量', '手寸(港号)', '手寸(美号)', '尺寸(cm)', '成品尺寸(mm)', '镶口(ct)', '刻字', '链类型', '扣环', '爪头形状',
+            '条码号(货号)', '(*)款号', '(*)金托类型', '起版号', '商品名称', '(*)入库仓库', '材质', '材质颜色', '货品数量', '手寸(港号)', '手寸(美号)', '尺寸(cm)', '成品尺寸(mm)', '镶口(ct)', '刻字', '链类型', '扣环', '爪头形状',
             '配料方式', '连石重(g)', '损耗(%)', '金价/g', '折足(g)',
             '主石配石方式', '主石编号', '主石类型', '主石粒数', '主石重(ct)', '主石单价/ct', '主石形状', '主石颜色', '主石净度', '主石切工', '主石色彩',
             '副石1配石方式', '副石1编号', '副石1类型', '副石1粒数', '副石1重(ct)', '副石1单价/ct', '副石1形状', '副石1颜色', '副石1净度', '副石1切工', '副石1色彩',
@@ -287,7 +288,7 @@ class WarehouseBillTGoodsForm extends WarehouseBillGoodsL
     public function getFieldName()
     {
         $fieldName = [
-            'goods_id', 'style_sn', 'jintuo_type', 'qiban_sn', 'goods_name', 'material_type', 'material_color', 'goods_num', 'finger_hk', 'finger', 'length', 'product_size', 'xiangkou', 'kezi', 'chain_type', 'cramp_ring', 'talon_head_type',
+            'goods_id', 'style_sn', 'jintuo_type', 'qiban_sn', 'goods_name', 'to_warehouse_id', 'material_type', 'material_color', 'goods_num', 'finger_hk', 'finger', 'length', 'product_size', 'xiangkou', 'kezi', 'chain_type', 'cramp_ring', 'talon_head_type',
             'peiliao_way', 'suttle_weight', 'gold_loss', 'gold_price', 'pure_gold',
             'main_pei_type', 'main_stone_sn', 'main_stone_type', 'main_stone_num', 'main_stone_weight', 'main_stone_price', 'main_stone_shape', 'main_stone_color', 'main_stone_clarity', 'main_stone_cut', 'main_stone_colour',
             'second_pei_type', 'second_stone_sn1', 'second_stone_type1', 'second_stone_num1', 'second_stone_weight1', 'second_stone_price1', 'second_stone_shape1', 'second_stone_color1', 'second_stone_clarity1', 'second_stone_cut1', 'second_stone_colour1',
@@ -318,6 +319,18 @@ class WarehouseBillTGoodsForm extends WarehouseBillGoodsL
     }
 
     /**
+     * {@inheritdoc}
+     */
+    public function getWarehouseId($to_warehouse_id, $warehouseAll = [], $defaultValue = 0)
+    {
+        if ($warehouseAll) {
+            $warehouseAll = array_flip($warehouseAll);
+            $warehouse_id = $warehouseAll[$to_warehouse_id] ?? 0;
+        }
+        return $warehouse_id ?? $defaultValue;
+    }
+
+    /**
      * 属性值转换属性ID
      * @param string $style_sn 款号
      * @param string $value 属性值
@@ -329,7 +342,7 @@ class WarehouseBillTGoodsForm extends WarehouseBillGoodsL
 //        if (!empty($style_sn)) {
 //            $valueList = $this->getAttrValueListByStyle($style_sn, $attr_id);
 //        } else {
-                $valueList = \Yii::$app->attr->valueMap($attr_id);
+        $valueList = \Yii::$app->attr->valueMap($attr_id);
 //        }
         $valueList = array_flip($valueList);
         $attrId = isset($valueList[$value]) ? $valueList[$value] : "";
@@ -346,6 +359,15 @@ class WarehouseBillTGoodsForm extends WarehouseBillGoodsL
     {
         return \Yii::$app->attr->valueMap($attr_id) ?? [];//暂时放开限制
         //return \Yii::$app->styleService->styleAttribute->getAttrValueListByStyle($style_sn, $attr_id) ?? [];
+    }
+
+    /**
+     * 入库仓库列表
+     * @return array
+     */
+    public function getWarehouseMap()
+    {
+        return \Yii::$app->warehouseService->warehouse::getDropDown() ?? [];
     }
 
     /**

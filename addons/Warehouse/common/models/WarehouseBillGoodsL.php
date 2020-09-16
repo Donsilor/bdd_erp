@@ -417,4 +417,13 @@ class WarehouseBillGoodsL extends BaseModel
     {
         return $this->hasOne(StyleCate::class, ['id' => 'style_cate_id']);
     }
+
+    /**
+     * 入库仓库 一对一
+     * @return \yii\db\ActiveQuery
+     */
+    public function getToWarehouse()
+    {
+        return $this->hasOne(Warehouse::class, ['id'=>'to_warehouse_id'])->alias('toWarehouse');
+    }
 }

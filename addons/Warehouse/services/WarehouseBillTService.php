@@ -46,7 +46,7 @@ class WarehouseBillTService extends Service
     {
         $result = false;
         $sum = WarehouseBillGoodsL::find()
-            ->select(['sum(1) as goods_num', 'sum(cost_price) as total_cost', 'sum(market_price) as total_market'])
+            ->select(['sum(goods_num) as goods_num', 'sum(cost_price) as total_cost', 'sum(market_price) as total_market'])
             ->where(['bill_id' => $bill_id])
             ->asArray()->one();
         if ($sum) {
@@ -213,12 +213,13 @@ class WarehouseBillTService extends Service
         $error_off = true;
         $error = $saveData = $goods_ids = $style_sns = [];
         $bill = WarehouseBill::findOne($form->bill_id);
+        $warehouseAll = $form->getWarehouseMap();
         while ($goods = fgetcsv($file)) {
             if ($i <= 1) {
                 $i++;
                 continue;
             }
-            if (count($goods) != 86) {
+            if (count($goods) != 87) {
                 throw new \Exception("模板格式不正确，请下载最新模板");
             }
             $goods = $form->trimField($goods);
@@ -329,6 +330,18 @@ class WarehouseBillTService extends Service
             }
             $goods_sn = !empty($style_sn) ? $style_sn : $qiban_sn;
             $goods_name = $goods['goods_name'] ?? "";
+            $to_warehouse_id = $goods['to_warehouse_id'] ?? "";
+            if (!empty($to_warehouse_id)) {
+                $to_warehouse_id = $form->getWarehouseId($to_warehouse_id, $warehouseAll, 0);
+                if (empty($to_warehouse_id)) {
+                    $flag = false;
+                    $error[$i][] = "入库仓库：[" . $to_warehouse_id . "]录入值有误";
+                    $to_warehouse_id = "";
+                }
+            }else{
+                $flag = false;
+                $error[$i][] = "入库仓库不能为空";
+            }
             $material_type = $goods['material_type'] ?? "";
             if (!empty($material_type)) {
                 $attr_id = $form->getAttrIdByAttrValue($style_sn, $material_type, AttrIdEnum::MATERIAL_TYPE);
@@ -875,6 +888,7 @@ class WarehouseBillTService extends Service
                 'style_sex' => $style_sex,
                 'style_channel_id' => $style_channel_id,
                 'supplier_id' => $bill->supplier_id,
+                'to_warehouse_id' => $to_warehouse_id,
                 'put_in_type' => $bill->put_in_type,
                 'qiban_sn' => $qiban_sn,
                 'qiban_type' => $qiban_type,

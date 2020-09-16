@@ -237,6 +237,22 @@ $this->params['breadcrumbs'][] = $this->title;
                                     'style' => 'width:90px;'
                                 ]),
                             ],
+                            [
+                                'attribute' => 'to_warehouse_id',
+                                'format' => 'raw',
+                                'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#feeeed;'],
+                                'footerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#feeeed;'],
+                                'value' =>"toWarehouse.name",
+                                'filter'=>Select2::widget([
+                                    'name'=>'SearchModel[to_warehouse_id]',
+                                    'value'=>$searchModel->to_warehouse_id,
+                                    'data'=>Yii::$app->warehouseService->warehouse::getDropDown(),
+                                    'options' => ['placeholder' =>"请选择"],
+                                    'pluginOptions' => [
+                                        'allowClear' => true,
+                                    ],
+                                ]),
+                            ],
                             /* [
                                  'attribute' => 'material',
                                 'headerOptions' => ['class' => 'col-md-1'],

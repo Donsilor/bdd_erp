@@ -142,7 +142,7 @@ class WarehouseBillLService extends Service
                     'supplier_id' => $bill->supplier_id,//供应商
                     'put_in_type' => $bill->put_in_type,//入库方式
                     'company_id' => 1,//所在公司(默认1)
-                    'warehouse_id' => $bill->to_warehouse_id ?: 0,//入库仓库
+                    'warehouse_id' => $good->to_warehouse_id ?: $bill->to_warehouse_id,//入库仓库
                     'order_sn' => $good->order_sn ?? "",//订单号
                     'order_detail_id' => (string)$good->order_detail_id ?? "",//订单明细ID
                     'produce_sn' => $good->produce_sn,//布产号
@@ -315,6 +315,7 @@ class WarehouseBillLService extends Service
                     'goods_name' => $good->goods_name,//商品名称
                     'style_sn' => $good->style_sn,//款式编号
                     'goods_num' => $good->goods_num,//商品数量
+                    'warehouse_id' => $good->to_warehouse_id,//入库仓库
                     'put_in_type' => $bill->put_in_type,//入库方式
                     'cost_price' => $good->cost_price,//成本价
                     //'sale_price' => $good->sale_price,//销售价
