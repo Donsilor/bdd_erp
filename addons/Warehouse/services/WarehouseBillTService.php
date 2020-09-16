@@ -831,9 +831,9 @@ class WarehouseBillTService extends Service
                 $main_cert_type = $cert_type;
             }
             $cost_price = $form->formatValue($goods[81], 0) ?? 0;
-            if($cost_price){
+            if ($cost_price) {
                 $is_auto_price = ConfirmEnum::YES;
-            }else{
+            } else {
                 $is_auto_price = ConfirmEnum::NO;
             }
             $markup_rate = $form->formatValue($goods[82], 1) ?? 1;
@@ -1036,7 +1036,7 @@ class WarehouseBillTService extends Service
      */
     public function syncUpdatePriceAll($form, $ids = [])
     {
-        $where = ['bill_id' => $form->id, 'is_auto_price' => ConfirmEnum::NO];
+        $where = ['bill_id' => $form->id];
 //        if(!empty($ids)){
 //            $where = ['bill_id' => $form->id, 'id' => $ids];
 //        }
@@ -1351,7 +1351,7 @@ class WarehouseBillTService extends Service
      */
     public function syncUpdatePrice($form)
     {
-        if (empty($form->is_auto_price)) {
+        if (empty($form->is_auto_price) || empty($form->cost_price)) {
             if (!$form->validate()) {
                 throw new \Exception($this->getError($form));
             }
