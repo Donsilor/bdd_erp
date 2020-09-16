@@ -16,6 +16,11 @@ $this->title = Yii::t('bill_t_goods', '其它入库单详情');
 $this->params['breadcrumbs'][] = ['label' => $this->title, 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
+<style>
+    select.form-control {
+        font-size: 12px;
+    }
+</style>
 <div class="box-body nav-tabs-custom">
     <h2 class="page-header"><?= $this->title; ?> - <?= $bill->bill_no ?>
         - <?= \addons\Warehouse\common\enums\BillStatusEnum::getValue($bill->bill_status) ?></h2>
@@ -62,10 +67,10 @@ $this->params['breadcrumbs'][] = $this->title;
                         'dataProvider' => $dataProvider,
                         'filterModel' => $searchModel,
                         //'tableOptions' => ['class' => 'table table-hover'],
-                        'options' => ['style' => 'white-space:nowrap;'],
+                        'options' => ['style' => 'white-space:nowrap;font-size:12px;'],
                         'rowOptions' => function ($model, $key, $index) {
                             if ($index % 2 === 0) {
-                                return ['style' => 'background:#fffef9'];
+                                return ['style' => 'background:#fffef9;'];
                             }
                         },
                         'showFooter' => true,//显示footer行
@@ -136,7 +141,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'filter' => Html::activeDropDownList($searchModel, 'style_cate_id', $model->getCateMap(), [
                                     'prompt' => '全部',
                                     'class' => 'form-control',
-                                    'style' => 'width:120px;'
+                                    'style' => 'width:60px;'
                                 ]),
                             ],
                             [
@@ -151,7 +156,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'filter' => Html::activeDropDownList($searchModel, 'product_type_id', $model->getProductMap(), [
                                     'prompt' => '全部',
                                     'class' => 'form-control',
-                                    'style' => 'width:120px;'
+                                    'style' => 'width:60px;'
 
                                 ]),
                             ],
@@ -229,7 +234,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 },
                                 'filter' => Html::activeTextInput($searchModel, 'goods_name', [
                                     'class' => 'form-control',
-                                    'style' => 'width:200px;'
+                                    'style' => 'width:90px;'
                                 ]),
                             ],
                             /* [
@@ -256,7 +261,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'filter' => Html::activeDropDownList($searchModel, 'material_type', $model->getPartsMaterialMap(), [
                                     'prompt' => '全部',
                                     'class' => 'form-control',
-                                    'style' => 'width:80px;'
+                                    'style' => 'width:60px;'
                                 ]),
                             ],
                             [
@@ -271,13 +276,13 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'filter' => Html::activeDropDownList($searchModel, 'material_color', $model->getMaterialColorMap(), [
                                     'prompt' => '全部',
                                     'class' => 'form-control',
-                                    'style' => 'width:80px;'
+                                    'style' => 'width:60px;'
                                 ]),
                             ],
                             [
                                 'attribute' => 'goods_num',
-                                'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#feeeed;'],
-                                'footerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#feeeed;'],
+                                'headerOptions' => [ 'style' => 'background-color:#feeeed;'],
+                                'footerOptions' => [ 'style' => 'background-color:#feeeed;'],
                                 'value' => function ($model, $key, $index, $widget) use ($total) {
                                     $widget->footer = $model->getFooterValues('goods_num', $total);
                                     return $model->goods_num ?? 0;
@@ -300,7 +305,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'filter' => Html::activeDropDownList($searchModel, 'finger_hk', $model->getPortNoMap(), [
                                     'prompt' => '全部',
                                     'class' => 'form-control',
-                                    'style' => 'width:80px;'
+                                    'style' => 'width:60px;'
                                 ]),
                             ],
                             [
@@ -315,7 +320,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'filter' => Html::activeDropDownList($searchModel, 'finger', $model->getFingerMap(), [
                                     'prompt' => '全部',
                                     'class' => 'form-control',
-                                    'style' => 'width:80px;'
+                                    'style' => 'width:60px;'
                                 ]),
                             ],
                             [
@@ -329,7 +334,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 },
                                 'filter' => Html::activeTextInput($searchModel, 'length', [
                                     'class' => 'form-control',
-                                    'style' => 'width:80px;'
+                                    'style' => 'width:60px;'
                                 ]),
                             ],
                             [
@@ -342,7 +347,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 },
                                 'filter' => Html::activeTextInput($searchModel, 'product_size', [
                                     'class' => 'form-control',
-                                    'style' => 'width:100px;'
+                                    'style' => 'width:60px;'
                                 ]),
                             ],
                             [
@@ -357,7 +362,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'filter' => Html::activeDropDownList($searchModel, 'xiangkou', $model->getXiangkouMap(), [
                                     'prompt' => '全部',
                                     'class' => 'form-control',
-                                    'style' => 'width:80px;'
+                                    'style' => 'width:60px;'
                                 ]),
                             ],
                             [
@@ -370,7 +375,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 },
                                 'filter' => Html::activeTextInput($searchModel, 'kezi', [
                                     'class' => 'form-control',
-                                    'style' => 'width:80px;'
+                                    'style' => 'width:40px;'
                                 ]),
                             ],
                             [
@@ -385,7 +390,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'filter' => Html::activeDropDownList($searchModel, 'chain_type', $model->getChainTypeMap(), [
                                     'prompt' => '全部',
                                     'class' => 'form-control',
-                                    'style' => 'width:80px;'
+                                    'style' => 'width:60px;'
                                 ]),
                             ],
 //                            [
@@ -408,7 +413,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'filter' => Html::activeDropDownList($searchModel, 'cramp_ring', $model->getCrampRingMap(), [
                                     'prompt' => '全部',
                                     'class' => 'form-control',
-                                    'style' => 'width:80px;'
+                                    'style' => 'width:60px;'
                                 ]),
                             ],
                             [
@@ -423,7 +428,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'filter' => Html::activeDropDownList($searchModel, 'talon_head_type', $model->getTalonHeadTypeMap(), [
                                     'prompt' => '全部',
                                     'class' => 'form-control',
-                                    'style' => 'width:80px;'
+                                    'style' => 'width:60px;'
                                 ]),
                             ],
                             [
@@ -438,7 +443,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'filter' => Html::activeDropDownList($searchModel, 'peiliao_way', $model->getPeiLiaoWayMap(), [
                                     'prompt' => '全部',
                                     'class' => 'form-control',
-                                    'style' => 'width:80px;'
+                                    'style' => 'width:60px;'
                                 ]),
                             ],
                             [
@@ -711,7 +716,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 },
                                 'filter' => Html::activeTextInput($searchModel, 'main_stone_sn', [
                                     'class' => 'form-control',
-                                    'style' => 'width:100px;'
+                                    'style' => 'width:60px;'
                                 ]),
                             ],
                             [
@@ -726,7 +731,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'filter' => Html::activeDropDownList($searchModel, 'main_stone_type', $model->getMainStoneTypeMap(), [
                                     'prompt' => '全部',
                                     'class' => 'form-control',
-                                    'style' => 'width:80px;'
+                                    'style' => 'width:60px;'
                                 ]),
                             ],
                             [
@@ -801,7 +806,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'filter' => Html::activeDropDownList($searchModel, 'main_stone_shape', $model->getMainStoneShapeMap(), [
                                     'prompt' => '全部',
                                     'class' => 'form-control',
-                                    'style' => 'width:100px;'
+                                    'style' => 'width:60px;'
                                 ]),
                             ],
                             [
@@ -816,7 +821,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'filter' => Html::activeDropDownList($searchModel, 'main_stone_color', $model->getMainStoneColorMap(), [
                                     'prompt' => '全部',
                                     'class' => 'form-control',
-                                    'style' => 'width:80px;'
+                                    'style' => 'width:60px;'
                                 ]),
                             ],
                             [
@@ -831,7 +836,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'filter' => Html::activeDropDownList($searchModel, 'main_stone_clarity', $model->getMainStoneClarityMap(), [
                                     'prompt' => '全部',
                                     'class' => 'form-control',
-                                    'style' => 'width:80px;'
+                                    'style' => 'width:60px;'
                                 ]),
                             ],
                             [
@@ -846,7 +851,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'filter' => Html::activeDropDownList($searchModel, 'main_stone_cut', $model->getMainStoneCutMap(), [
                                     'prompt' => '全部',
                                     'class' => 'form-control',
-                                    'style' => 'width:80px;'
+                                    'style' => 'width:60px;'
                                 ]),
                             ],
                             [
@@ -861,7 +866,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'filter' => Html::activeDropDownList($searchModel, 'main_stone_colour', $model->getMainStoneColourMap(), [
                                     'prompt' => '全部',
                                     'class' => 'form-control',
-                                    'style' => 'width:80px;'
+                                    'style' => 'width:60px;'
                                 ]),
                             ],
 //                            [
@@ -889,7 +894,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 },
                                 'filter' => Html::activeTextInput($searchModel, 'main_cert_id', [
                                     'class' => 'form-control',
-                                    'style' => 'width:100px;'
+                                    'style' => 'width:60px;'
                                 ]),
                             ],
                             [
@@ -933,7 +938,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 },
                                 'filter' => Html::activeTextInput($searchModel, 'second_stone_sn1', [
                                     'class' => 'form-control',
-                                    'style' => 'width:100px;'
+                                    'style' => 'width:60px;'
                                 ]),
                             ],
                             [
@@ -948,7 +953,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'filter' => Html::activeDropDownList($searchModel, 'second_stone_type1', $model->getSecondStoneType1Map(), [
                                     'prompt' => '全部',
                                     'class' => 'form-control',
-                                    'style' => 'width:80px;'
+                                    'style' => 'width:60px;'
                                 ]),
                             ],
                             [
@@ -1023,7 +1028,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'filter' => Html::activeDropDownList($searchModel, 'second_stone_shape1', $model->getSecondStoneShape1Map(), [
                                     'prompt' => '全部',
                                     'class' => 'form-control',
-                                    'style' => 'width:80px;'
+                                    'style' => 'width:60px;'
                                 ]),
                             ],
                             [
@@ -1038,7 +1043,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'filter' => Html::activeDropDownList($searchModel, 'second_stone_color1', $model->getSecondStoneColor1Map(), [
                                     'prompt' => '全部',
                                     'class' => 'form-control',
-                                    'style' => 'width:80px;'
+                                    'style' => 'width:60px;'
                                 ]),
                             ],
                             [
@@ -1053,7 +1058,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'filter' => Html::activeDropDownList($searchModel, 'second_stone_clarity1', $model->getSecondStoneClarity1Map(), [
                                     'prompt' => '全部',
                                     'class' => 'form-control',
-                                    'style' => 'width:80px;'
+                                    'style' => 'width:60px;'
                                 ]),
                             ],
                             [
@@ -1068,7 +1073,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'filter' => Html::activeDropDownList($searchModel, 'second_stone_cut1', $model->getSecondStoneCut1Map(), [
                                     'prompt' => '全部',
                                     'class' => 'form-control',
-                                    'style' => 'width:80px;'
+                                    'style' => 'width:60px;'
                                 ]),
                             ],
                             [
@@ -1083,7 +1088,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'filter' => Html::activeDropDownList($searchModel, 'second_stone_colour1', $model->getSecondStoneColour1Map(), [
                                     'prompt' => '全部',
                                     'class' => 'form-control',
-                                    'style' => 'width:80px;'
+                                    'style' => 'width:60px;'
                                 ]),
                             ],
 //                            [
@@ -1142,7 +1147,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 },
                                 'filter' => Html::activeTextInput($searchModel, 'second_stone_sn2', [
                                     'class' => 'form-control',
-                                    'style' => 'width:100px;'
+                                    'style' => 'width:60px;'
                                 ]),
                             ],
                             [
@@ -1157,7 +1162,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'filter' => Html::activeDropDownList($searchModel, 'second_stone_type2', $model->getSecondStoneType2Map(), [
                                     'prompt' => '全部',
                                     'class' => 'form-control',
-                                    'style' => 'width:80px;'
+                                    'style' => 'width:60px;'
                                 ]),
                             ],
                             [
@@ -1341,7 +1346,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 },
                                 'filter' => Html::activeTextInput($searchModel, 'second_stone_sn3', [
                                     'class' => 'form-control',
-                                    'style' => 'width:100px;'
+                                    'style' => 'width:60px;'
                                 ]),
                             ],
                             [
@@ -1356,7 +1361,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'filter' => Html::activeDropDownList($searchModel, 'second_stone_type3', $model->getSecondStoneType3Map(), [
                                     'prompt' => '全部',
                                     'class' => 'form-control',
-                                    'style' => 'width:80px;'
+                                    'style' => 'width:60px;'
                                 ]),
                             ],
                             [
@@ -1445,7 +1450,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'filter' => Html::activeDropDownList($searchModel, 'parts_way', $model->getPeiJianWayMap(), [
                                     'prompt' => '全部',
                                     'class' => 'form-control',
-                                    'style' => 'width:80px;'
+                                    'style' => 'width:60px;'
                                 ]),
                             ],
                             [
@@ -1460,7 +1465,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'filter' => Html::activeDropDownList($searchModel, 'parts_type', $model->getPartsTypeMap(), [
                                     'prompt' => '全部',
                                     'class' => 'form-control',
-                                    'style' => 'width:80px;'
+                                    'style' => 'width:60px;'
                                 ]),
                             ],
                             [
@@ -1475,7 +1480,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'filter' => Html::activeDropDownList($searchModel, 'parts_material', $model->getPartsMaterialMap(), [
                                     'prompt' => '全部',
                                     'class' => 'form-control',
-                                    'style' => 'width:80px;'
+                                    'style' => 'width:60px;'
                                 ]),
                             ],
                             [
@@ -1656,7 +1661,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'filter' => Html::activeDropDownList($searchModel, 'xiangqian_craft', $model->getXiangqianCraftMap(), [
                                     'prompt' => '全部',
                                     'class' => 'form-control',
-                                    'style' => 'width:80px;'
+                                    'style' => 'width:60px;'
                                 ]),
                             ],
 //                            [
@@ -1968,7 +1973,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'filter' => Html::activeDropDownList($searchModel, 'style_sex', $model->getStyleSexMap(), [
                                     'prompt' => '全部',
                                     'class' => 'form-control',
-                                    'style' => 'width:80px;'
+                                    'style' => 'width:60px;'
                                 ]),
                             ],
                             [
@@ -1983,7 +1988,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'filter' => Html::activeDropDownList($searchModel, 'jintuo_type', $model->getJietuoTypeMap(), [
                                     'prompt' => '全部',
                                     'class' => 'form-control',
-                                    'style' => 'width:80px;'
+                                    'style' => 'width:60px;'
                                 ]),
                             ],
                             [
@@ -1998,7 +2003,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'filter' => Html::activeDropDownList($searchModel, 'qiban_type', $model->getQibanTypeMap(), [
                                     'prompt' => '全部',
                                     'class' => 'form-control',
-                                    'style' => 'width:80px;'
+                                    'style' => 'width:60px;'
                                 ]),
                             ],
                             [
@@ -2013,7 +2018,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'filter' => Html::activeDropDownList($searchModel, 'is_inlay', $model->getIsInlayMap(), [
                                     'prompt' => '全部',
                                     'class' => 'form-control',
-                                    'style' => 'width:80px;'
+                                    'style' => 'width:60px;'
                                 ]),
                             ],
                             [
@@ -2027,7 +2032,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 },
                                 'filter' => Html::activeTextInput($searchModel, 'factory_mo', [
                                     'class' => 'form-control',
-                                    'style' => 'width:100px;'
+                                    'style' => 'width:60px;'
                                 ]),
                             ],
                             [
@@ -2040,7 +2045,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 },
                                 'filter' => Html::activeTextInput($searchModel, 'order_sn', [
                                     'class' => 'form-control',
-                                    'style' => 'width:100px;'
+                                    'style' => 'width:60px;'
                                 ]),
                             ],
                             [
