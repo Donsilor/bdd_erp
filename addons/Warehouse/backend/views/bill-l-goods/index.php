@@ -250,7 +250,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#afdfe4;'],
                                 'footerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#afdfe4;'],
                                 'value' => function ($model, $key, $index, $widget) {
-                                    $widget->footer = $model->getAttributeLabel('material_type');
+                                    $widget->footer = $model->getAttributeLabel('finger_hk');
                                     return Yii::$app->attr->valueName($model->finger_hk) ?? "";
                                 },
                                 'filter' => Html::activeDropDownList($searchModel, 'finger_hk', $model->getPortNoMap(), [

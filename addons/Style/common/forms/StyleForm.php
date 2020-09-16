@@ -2,9 +2,9 @@
 
 namespace addons\Style\common\forms;
 
-use addons\Style\common\enums\AttrIdEnum;
 use Yii;
 use addons\Style\common\models\Style;
+use addons\Style\common\enums\AttrIdEnum;
 use addons\Style\common\enums\FactoryFeeEnum;
 use addons\Style\common\enums\StyleCateEnum;
 use addons\Style\common\enums\StyleChannelEnum;
@@ -67,7 +67,7 @@ class StyleForm extends Style
             }
         }
         $values = [
-            '#', '#',
+            '#', '【款号生成规则：①第1位：渠道；②第2位：品类；③第3-8位：自动生成序号；④第9位：材质】',
             $this->formatTitleId($cate),
             $this->formatTitleId($product),
             $this->formatTitleId($this->getStatusList()),
@@ -92,18 +92,18 @@ class StyleForm extends Style
             $this->formatTitleId($this->getIsMadeList()),
             $this->formatTitleId($this->getStatusList()),
 
-            '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#',
+            '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#',
         ];
         $fields = [
             '款式名称[style_name]', '(*)款式编号[style_sn]', '款式分类[style_cate_id]', '(*)产品线[product_type_id]', '是否启用[status]',
-            '归属渠道[style_channel_id]', '款式来源[style_source_id]', '款式材质[style_material]', '款式性别[style_sex]','连石重(g)[suttle_weight]','镶嵌工艺(多个用“|”分割)[inlay_craft]','生产工艺[product_craft]',
+            '归属渠道[style_channel_id]', '款式来源[style_source_id]', '款式材质[style_material]', '款式性别[style_sex]', '连石重(g)[suttle_weight]', '镶嵌工艺(多个用“|”分割)[inlay_craft]', '生产工艺[product_craft]',
             '是否支持定制[is_made]', '备注[remark]',
 
             '工厂名称1(默认工厂)[factory_id1]', '工厂模号1[factory_mo1]', '备注(计费方式)1[factory_remark1]', '出货时间(天)1[shipping_time1]', '是否支持定制1[factory_made1]', '是否启用1[factory_status1]',
             '工厂名称2[factory_id2]', '工厂模号2[factory_mo2]', '备注(计费方式)2[factory_remark2]', '出货时间(天)2[shipping_time2]', '是否支持定制2[factory_made2]', '是否启用2[factory_status2]',
 
-            '配石工费/ct[peishi_fee]', '配件工费[peijian_fee]', '克/工费[gram_fee]', '基本工费[basic_fee]', '镶石费[xiangshi_fee]', '表面工艺费[technology_fee]',
-            '分色费[fense_fee]', '喷拉沙费[penlasa_fee]', '补口费[bukou_fee]', '版费[templet_fee]', '证书费[cert_fee]', '其他费用[other_fee]',
+            '配石工费/ct[peishi_fee]', '配件工费[peijian_fee]', '克/工费[gram_fee]', '基本工费[basic_fee]', '镶石费/颗[xiangshi_fee]', '表面工艺费[technology_fee]',
+            '分色费[fense_fee]', '喷沙费[pensa_fee]', '拉沙费[lasa_fee]', '车花片[chehuapian_fee]', '分件费[fenjian_fee]', '辘珠边[luzhubian_fee]', '补口费[bukou_fee]', '版费[templet_fee]', '证书费[cert_fee]', '其他费用[other_fee]',
         ];
         return [$values, $fields];
     }
@@ -189,7 +189,7 @@ class StyleForm extends Style
                     if ($result[1][0] === 0) {
                         return $defaultValue;
                     } elseif (!empty($result[1][0])) {
-                        $values.= $result[1][0].",";
+                        $values .= $result[1][0] . ",";
                     } else {
                         return $defaultValue;
                     }
@@ -197,7 +197,7 @@ class StyleForm extends Style
                     return $item;
                 }
             }
-            return rtrim($values,",") ?? "";
+            return rtrim($values, ",") ?? "";
         } else {
             return $defaultValue;
         }
@@ -364,6 +364,7 @@ class StyleForm extends Style
     {
         return \Yii::$app->attr->valueMap(AttrIdEnum::XIANGQIAN_CRAFT) ?? [];
     }
+
     /**
      * 生产工艺
      * @return array
@@ -386,12 +387,16 @@ class StyleForm extends Style
             'gram_fee' => FactoryFeeEnum::GEAM_GF,
             'basic_fee' => FactoryFeeEnum::BASIC_GF,
             'xiangshi_fee' => FactoryFeeEnum::INLAID_GF,
-            'technology_fee' => FactoryFeeEnum::TECHNOLOGY_GF,
             'fense_fee' => FactoryFeeEnum::FENSE_GF,
-            'penlasa_fee' => FactoryFeeEnum::PENLASHA_GF,
+            'pensa_fee' => FactoryFeeEnum::PENSHA_GF,
+            'lasa_fee' => FactoryFeeEnum::LASHA_GF,
+            'chehuapian_fee' => FactoryFeeEnum::CHEHUAPIAN_GF,
+            'fenjian_fee' => FactoryFeeEnum::FENJIAN_GF,
+            'luzhubian_fee' => FactoryFeeEnum::LUZHUBIAN_GF,
             'bukou_fee' => FactoryFeeEnum::BUKOU_GF,
             'templet_fee' => FactoryFeeEnum::TEMPLET_GF,
             'cert_fee' => FactoryFeeEnum::CERT_GF,
+            'technology_fee' => FactoryFeeEnum::TECHNOLOGY_GF,
             'other_fee' => FactoryFeeEnum::OTHER_GF,
         ];
         return $feeType[$type] ?? "";
@@ -410,12 +415,16 @@ class StyleForm extends Style
             'gram_fee' => "克/工费",
             'basic_fee' => "基本工费",
             'xiangshi_fee' => "镶石费",
-            'technology_fee' => "表面工艺费",
             'fense_fee' => "分色费",
-            'penlasa_fee' => "喷拉沙费",
+            'pensa_fee' => "喷沙费",
+            'lasa_fee' => "拉沙费",
+            'chehuapian_fee' => "车花片",
+            'fenjian_fee' => "分件费",
+            'luzhubian_fee' => "辘珠边",
             'bukou_fee' => "补口费",
             'templet_fee' => "版费",
             'cert_fee' => "证书费",
+            'technology_fee' => "表面工艺费",
             'other_fee' => "其他费用",
         ];
         return $feeName[$type] ?? "";

@@ -2,6 +2,7 @@
 
 namespace addons\Warehouse\services;
 
+use addons\Warehouse\common\models\WarehouseGoods;
 use Yii;
 use common\components\Service;
 use common\helpers\SnHelper;
@@ -190,8 +191,6 @@ class WarehouseBillTService extends Service
      */
     public function uploadGoods($form)
     {
-        //echo '<pre>';
-        //print_r(\Yii::$app->attr->valueMap($attr_id));
         if (empty($form->file) && !isset($form->file)) {
             throw new \Exception("请上传文件");
         }
@@ -206,13 +205,13 @@ class WarehouseBillTService extends Service
         $flag = true;
         $error_off = true;
         $error = $saveData = $goods_ids = $style_sns = [];
-        $bill = WarehouseBill::findOne($form->bill_id);
+        //$bill = WarehouseBill::findOne($form->bill_id);
         while ($goods = fgetcsv($file)) {
             if ($i <= 1) {
                 $i++;
                 continue;
             }
-            if (count($goods) != 84) {
+            if (count($goods) != 85) {
                 throw new \Exception("模板格式不正确，请下载最新模板");
             }
             $goods = $form->trimField($goods);
@@ -227,6 +226,12 @@ class WarehouseBillTService extends Service
                     $error[$i][] = "货号与第" . ($key + 1) . "行货号重复";
                 }
                 $goods_ids[$i] = $goods_id;
+
+                $exist_goods_id = WarehouseGoods::findOne(['goods_id' => $goods_id]);
+                if (!empty($exist_goods_id)) {
+                    $flag = false;
+                    $error[$i][] = "货号在库存中已存在";
+                }
             }
             $style_sn = $goods[1] ?? "";
             $qiban_sn = $goods[2] ?? "";
@@ -784,6 +789,7 @@ class WarehouseBillTService extends Service
             $biaomiangongyi = $goods[70] ?? "";
             if (!empty($biaomiangongyi)) {
                 $biaomiangongyi = StringHelper::explode($biaomiangongyi, "|");
+                $biaomiangongyi = array_unique(array_filter($biaomiangongyi));
                 $attr_str = "";
                 foreach ($biaomiangongyi as $item) {
                     $attr_id = $form->getAttrIdByAttrValue($style_sn, $item, AttrIdEnum::FACEWORK);
@@ -792,11 +798,11 @@ class WarehouseBillTService extends Service
                         $error[$i][] = "表面工艺：[" . $item . "]录入值有误";
                         $biaomiangongyi = "";
                     } else {
-                        $attr_str.= $attr_id.",";
+                        $attr_str .= $attr_id . ",";
                     }
                 }
-                if(!empty($attr_str)){
-                    $biaomiangongyi = ",".$attr_str;
+                if (!empty($attr_str)) {
+                    $biaomiangongyi = "," . $attr_str;
                 }
             }
             $biaomiangongyi_fee = $form->formatValue($goods[71], 0) ?? 0;
@@ -824,9 +830,14 @@ class WarehouseBillTService extends Service
             } else {
                 $main_cert_type = $cert_type;
             }
-            //$cost_price = $form->formatValue($goods[81], 0) ?? 0;
-            $markup_rate = $form->formatValue($goods[81], 1) ?? 1;
-            $jintuo_type = $goods[82] ?? "";
+            $cost_price = $form->formatValue($goods[81], 0) ?? 0;
+            if ($cost_price) {
+                $is_auto_price = ConfirmEnum::YES;
+            } else {
+                $is_auto_price = ConfirmEnum::NO;
+            }
+            $markup_rate = $form->formatValue($goods[82], 1) ?? 1;
+            $jintuo_type = $goods[83] ?? "";
             if (!empty($jintuo_type)) {
                 $jintuo_type = JintuoTypeEnum::getIdByName($jintuo_type);
                 if (empty($jintuo_type)) {
@@ -838,11 +849,11 @@ class WarehouseBillTService extends Service
                 $flag = false;
                 $error[$i][] = "金托类型不能为空";
             }
-            $remark = $goods[83] ?? "";
+            $remark = $goods[84] ?? "";
             $saveData[] = $item = [
-                'bill_id' => $bill->id,
-                'bill_no' => $bill->bill_no,
-                'bill_type' => $bill->bill_type,
+                //'bill_id' => $bill->id,
+                'bill_no' => $form->bill_no,
+                'bill_type' => $form->bill_type,
                 'goods_id' => $goods_id,
                 'goods_sn' => $goods_sn,
                 'style_id' => $style->id ?? $qiban->id,
@@ -852,8 +863,8 @@ class WarehouseBillTService extends Service
                 'product_type_id' => $product_type_id,
                 'style_sex' => $style_sex,
                 'style_channel_id' => $style_channel_id,
-                'supplier_id' => $bill->supplier_id,
-                'put_in_type' => $bill->put_in_type,
+                'supplier_id' => $form->supplier_id,
+                'put_in_type' => $form->put_in_type,
                 'qiban_sn' => $qiban_sn,
                 'qiban_type' => $qiban_type,
                 'goods_name' => $goods_name,
@@ -941,7 +952,8 @@ class WarehouseBillTService extends Service
                 'other_fee' => $other_fee,
                 'main_cert_id' => $main_cert_id,
                 'main_cert_type' => $main_cert_type,
-                //'cost_price' => $cost_price,
+                'cost_price' => $cost_price,
+                'is_auto_price' => $is_auto_price,
                 'markup_rate' => $markup_rate,
                 'jintuo_type' => $jintuo_type,
                 'auto_goods_id' => $auto_goods_id,
@@ -982,6 +994,10 @@ class WarehouseBillTService extends Service
         if (empty($saveData)) {
             throw new \Exception("数据不能为空");
         }
+        $saveBillT = [];
+//        foreach ($saveData as $saveDatum) {
+//            $saveBillT[$saveDatum['supplier_id']] = 1;
+//        }
         $value = $ids = [];
         $key = array_keys($saveData[0]);
         foreach ($saveData as $item) {
@@ -1339,30 +1355,28 @@ class WarehouseBillTService extends Service
      */
     public function syncUpdatePrice($form)
     {
-        if (!$form->validate()) {
-            throw new \Exception($this->getError($form));
-        }
-//        if (!empty($form->pure_gold) && $form->peiliao_way === "") {
-//            //如果折足填写，配料方式未填，则默认：配料方式：来料加工
-//            $form->peiliao_way = PeiLiaoWayEnum::LAILIAO;
-//        }
-        $form->gold_weight = $this->calculateGoldWeight($form);//金重
-        $form->lncl_loss_weight = $this->calculateLossWeight($form);//含耗重
-        $form->gold_amount = $this->calculateGoldAmount($form);//金料额
-        $form->main_stone_amount = $this->calculateMainStoneCost($form);//主石成本
-        $form->second_stone_amount1 = $this->calculateSecondStone1Cost($form);//副石1成本
-        $form->second_stone_amount2 = $this->calculateSecondStone2Cost($form);//副石2成本
-        $form->second_stone_amount3 = $this->calculateSecondStone3Cost($form);//副石3成本
-        $form->peishi_fee = $this->calculatePeishiFee($form);//配石费
-        $form->xianqian_fee = $this->calculateXiangshiFee($form);//镶石费
-        $form->parts_amount = $this->calculatePartsAmount($form);//配件额
-        $form->basic_gong_fee = $this->calculateBasicGongFee($form);//基本工费
-        $form->total_gong_fee = $this->calculateTotalGongFee($form);//总工费
-        $form->factory_cost = $this->calculateFactoryCost($form);//工厂成本
-        $form->cost_price = $this->calculateCostPrice($form);//公司成本
-        $form->market_price = $this->calculateMarketPrice($form);//标签价
-        if (false === $form->save()) {
-            throw new \Exception($this->getError($form));
+        if (empty($form->is_auto_price) || empty($form->cost_price)) {
+            if (!$form->validate()) {
+                throw new \Exception($this->getError($form));
+            }
+            $form->gold_weight = $this->calculateGoldWeight($form);//金重
+            $form->lncl_loss_weight = $this->calculateLossWeight($form);//含耗重
+            $form->gold_amount = $this->calculateGoldAmount($form);//金料额
+            $form->main_stone_amount = $this->calculateMainStoneCost($form);//主石成本
+            $form->second_stone_amount1 = $this->calculateSecondStone1Cost($form);//副石1成本
+            $form->second_stone_amount2 = $this->calculateSecondStone2Cost($form);//副石2成本
+            $form->second_stone_amount3 = $this->calculateSecondStone3Cost($form);//副石3成本
+            $form->peishi_fee = $this->calculatePeishiFee($form);//配石费
+            $form->xianqian_fee = $this->calculateXiangshiFee($form);//镶石费
+            $form->parts_amount = $this->calculatePartsAmount($form);//配件额
+            $form->basic_gong_fee = $this->calculateBasicGongFee($form);//基本工费
+            $form->total_gong_fee = $this->calculateTotalGongFee($form);//总工费
+            $form->factory_cost = $this->calculateFactoryCost($form);//工厂成本
+            $form->cost_price = $this->calculateCostPrice($form);//公司成本
+            $form->market_price = $this->calculateMarketPrice($form);//标签价
+            if (false === $form->save()) {
+                throw new \Exception($this->getError($form));
+            }
         }
         return $form;
     }

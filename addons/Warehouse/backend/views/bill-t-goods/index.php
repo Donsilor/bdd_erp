@@ -55,8 +55,8 @@ $this->params['breadcrumbs'][] = $this->title;
                     <span style="color:red;">Ctrl+F键可快速查找字段名</span>
                     <span style="font-size:16px">
                         <!--<span style="font-weight:bold;">明细汇总：</span>-->
-                        货品总数：<span style="color:green;"><?= $bill->goods_num?></span>
-                        总成本价：<span style="color:green;"><?= $bill->total_cost?></span>
+                        货品总数：<span style="color:green;"><?= $bill->goods_num ?></span>
+                        总成本价：<span style="color:green;"><?= $bill->total_cost ?></span>
                     </span>
                     <?= GridView::widget([
                         'dataProvider' => $dataProvider,
@@ -84,7 +84,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#feeeed;'],
                                 'footerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#feeeed;'],
                                 'value' => function ($model, $key, $index, $widget) {
-                                    $widget->footer = "Total：";
+                                    $widget->footer = "汇总：";
                                     return $model->id ?? 0;
                                 },
                                 'filter' => false,
@@ -156,6 +156,22 @@ $this->params['breadcrumbs'][] = $this->title;
                                 ]),
                             ],
                             [
+                                'label' => '手动填写',
+                                'attribute' => 'auto_goods_id',
+                                'format' => 'raw',
+                                'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#feeeed;'],
+                                'footerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#feeeed;'],
+                                'value' => function ($model, $key, $index, $widget) {
+                                    $widget->footer = "手动填写";
+                                    return \common\enums\ConfirmEnum::getValue($model->auto_goods_id);
+                                },
+                                'filter' => Html::activeDropDownList($searchModel, 'auto_goods_id', \common\enums\ConfirmEnum::getMap(), [
+                                    'prompt' => '全部',
+                                    'class' => 'form-control',
+                                    'style' => 'width:60px;'
+                                ]),
+                            ],
+                            [
                                 'attribute' => 'goods_id',
                                 'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#feeeed;'],
                                 'footerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#feeeed;'],
@@ -170,11 +186,19 @@ $this->params['breadcrumbs'][] = $this->title;
                             ],
                             [
                                 'attribute' => 'style_sn',
+                                'format' => 'raw',
                                 'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#feeeed;'],
                                 'footerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#feeeed;'],
                                 'value' => function ($model, $key, $index, $widget) {
                                     $widget->footer = $model->getAttributeLabel('style_sn');
-                                    return $model->style_sn ?? "";
+                                    if (false) {//!empty($model->style_sn) && !empty($model->id)
+                                        return Html::a($model->style_sn, ['/style/view', 'id' => $model->id, 'returnUrl' => Url::getReturnUrl()], ['style' => "text-decoration:underline;color:#3c8dbc", 'id' => $model->style_sn]) . ' <i class="fa fa-copy" onclick="copy(\'' . $model->style_sn . '\')"></i>';
+                                    } else {
+                                        if ($model->style_sn) {
+                                            $model->style_sn = $model->style_sn . ' <i class="fa fa-copy" onclick="copy(\'' . $model->style_sn . '\')"></i>';
+                                        }
+                                        return $model->style_sn ?? "";
+                                    }
                                 },
                                 'filter' => Html::activeTextInput($searchModel, 'style_sn', [
                                     'class' => 'form-control',
@@ -270,7 +294,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#afdfe4;'],
                                 'footerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#afdfe4;'],
                                 'value' => function ($model, $key, $index, $widget) {
-                                    $widget->footer = $model->getAttributeLabel('material_type');
+                                    $widget->footer = $model->getAttributeLabel('finger_hk');
                                     return Yii::$app->attr->valueName($model->finger_hk) ?? "";
                                 },
                                 'filter' => Html::activeDropDownList($searchModel, 'finger_hk', $model->getPortNoMap(), [
@@ -1717,14 +1741,14 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'footerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#b7ba6b;'],
                                 'value' => function ($model, $key, $index, $widget) {
                                     $widget->footer = $model->getAttributeLabel('biaomiangongyi');
-                                    if(!empty($model->biaomiangongyi)){
+                                    if (!empty($model->biaomiangongyi)) {
                                         $biaomiangongyi = explode(',', $model->biaomiangongyi);
                                         $biaomiangongyi = array_filter($biaomiangongyi);
                                         $arr = [];
                                         foreach ($biaomiangongyi as $item) {
                                             $arr[] = \Yii::$app->attr->valueName($item);
                                         }
-                                        return implode(",",$arr) ?? "";
+                                        return implode(",", $arr) ?? "";
                                     }
                                     return "";
                                 },
@@ -1871,9 +1895,26 @@ $this->params['breadcrumbs'][] = $this->title;
 //                                ]),
                             ],
                             [
+                                'label' => '手动填写',
+                                'attribute' => 'is_auto_price',
+                                'format' => 'raw',
+                                'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#9b95c9;'],
+                                'footerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#9b95c9;'],
+                                'value' => function ($model, $key, $index, $widget) {
+                                    $widget->footer = "手动填写";
+                                    return \common\enums\ConfirmEnum::getValue($model->is_auto_price);
+                                },
+                                'filter' => Html::activeDropDownList($searchModel, 'is_auto_price', \common\enums\ConfirmEnum::getMap(), [
+                                    'prompt' => '全部',
+                                    'class' => 'form-control',
+                                    'style' => 'width:60px;'
+                                ]),
+                            ],
+                            [
                                 'attribute' => 'cost_price',
                                 //'format' => 'raw',
                                 'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#9b95c9;'],
+                                'contentOptions' => ['style' => 'color:red'],
                                 'footerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#9b95c9;'],
                                 'value' => function ($model, $key, $index, $widget) use ($total) {
                                     $widget->footer = $model->getFooterValues('cost_price', $total, "0.00");
@@ -2068,3 +2109,53 @@ $this->params['breadcrumbs'][] = $this->title;
     </div>
     <!-- tab-content end -->
 </div>
+<script type="text/javascript">
+    /**
+     * 一键粘贴
+     * @param  {String} id [需要粘贴的内容]
+     * @param  {String} attr [需要 copy 的属性，默认是 innerText，主要用途例如赋值 a 标签上的 href 链接]
+     *
+     * range + selection
+     *
+     * 1.创建一个 range
+     * 2.把内容放入 range
+     * 3.把 range 放入 selection
+     *
+     * 注意：参数 attr 不能是自定义属性
+     * 注意：对于 user-select: none 的元素无效
+     * 注意：当 id 为 false 且 attr 不会空，会直接复制 attr 的内容
+     */
+    function copy(id, attr = null) {
+        let target = null;
+        if (attr) {
+            target = document.createElement('div');
+            target.id = 'tempTarget';
+            target.style.opacity = '0';
+            if (id) {
+                let curNode = document.querySelector('#' + id);
+                target.innerText = curNode[attr];
+            } else {
+                target.innerText = attr;
+            }
+            document.body.appendChild(target);
+        } else {
+            target = document.querySelector('#' + id);
+        }
+        try {
+            let range = document.createRange();
+            range.selectNode(target);
+            window.getSelection().removeAllRanges();
+            window.getSelection().addRange(range);
+            document.execCommand('copy');
+            window.getSelection().removeAllRanges();
+            rfMsg('复制成功');
+            console.log('复制成功')
+        } catch (e) {
+            console.log('复制失败')
+        }
+        if (attr) {
+            // remove temp target
+            target.parentElement.removeChild(target);
+        }
+    }
+</script>

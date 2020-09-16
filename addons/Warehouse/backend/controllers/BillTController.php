@@ -2,6 +2,7 @@
 
 namespace addons\Warehouse\backend\controllers;
 
+use addons\Warehouse\common\enums\PutInTypeEnum;
 use Yii;
 use common\traits\Curd;
 use common\models\base\SearchModel;
@@ -108,12 +109,15 @@ class BillTController extends BaseController
                     $model->bill_no = SnHelper::createBillSn($this->billType);
                     $model->bill_type = $this->billType;
                 }
-                if (false === $model->save()) {
-                    throw new \Exception($this->getError($model));
-                }
+//                if (false === $model->save()) {
+//                    throw new \Exception($this->getError($model));
+//                }
                 if ($isNewRecord) {
                     $gModel = new WarehouseBillTGoodsForm();
-                    $gModel->bill_id = $model->id;
+                    //$gModel->bill_id = $model->id;
+                    $gModel->supplier_id = $model->supplier_id;
+                    $gModel->put_in_type = $model->put_in_type;
+                    $gModel->supplier_id = $model->supplier_id;
                     $gModel->file = UploadedFile::getInstance($model, 'file');
                     if (!empty($gModel->file) && isset($gModel->file)) {
                         \Yii::$app->warehouseService->billT->uploadGoods($gModel);
@@ -145,6 +149,7 @@ class BillTController extends BaseController
                 return $this->message($e->getMessage(), $this->redirect(\Yii::$app->request->referrer), 'error');
             }
         }
+        $model->put_in_type = PutInTypeEnum::PURCHASE;
         return $this->renderAjax($this->action->id, [
             'model' => $model,
         ]);

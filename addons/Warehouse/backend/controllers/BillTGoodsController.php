@@ -262,7 +262,7 @@ class BillTGoodsController extends BaseController
             return ResultHelper::json(200, '', ['url' => Url::to([$this->action->id, 'ids' => $ids, 'name' => $name, 'attr_id' => $attr_id])]);
         }
         $style_sn = $style_arr[0]['style_sn'] ?? "";
-        $attr_arr = Yii::$app->styleService->styleAttribute->getAttrValueListByStyle($style_sn, $attr_id);
+        $attr_arr = $model->getAttrValueListByStyle($style_sn, $attr_id);
         return $this->render($this->action->id, [
             'model' => $model,
             'ids' => $ids,

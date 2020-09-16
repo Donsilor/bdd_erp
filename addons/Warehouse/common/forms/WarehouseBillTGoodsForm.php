@@ -58,12 +58,12 @@ class WarehouseBillTGoodsForm extends WarehouseBillGoodsL
     {
         $res = [];
         foreach ($data as $k => $v) {
-            if($v !== ""){
+            if ($v !== "") {
                 $str = StringHelper::strIconv($v);
                 $str = str_replace(',', '，', $str);
                 $str = str_replace('】', '', $str);
                 $res[$k] = $str;
-            }else{
+            } else {
                 $res[$k] = "";
             }
         }
@@ -85,11 +85,11 @@ class WarehouseBillTGoodsForm extends WarehouseBillGoodsL
     /**
      * {@inheritdoc}
      */
-    public function formatTitle($values)
+    public function formatTitle($values, $str = "")
     {
         $title = "";
         if (!empty($values)) {
-            $title = implode('】', $values) . "】";
+            $title = implode($str.'】', $values) . "】";
         }
         return $title ?? "";
     }
@@ -100,7 +100,7 @@ class WarehouseBillTGoodsForm extends WarehouseBillGoodsL
     public function getFooterValues($name = null, $total = [], $defaultValue = 0)
     {
         $value = $total[$name] ?? $defaultValue;
-        $footer_value = $this->getAttributeLabel($name)."<span style='font-size:16px; color: red;'>[$value]</span>";
+        $footer_value = $this->getAttributeLabel($name) . "<span style='font-size:16px; color: red;'>[$value]</span>";
         return $footer_value;
     }
 
@@ -256,11 +256,11 @@ class WarehouseBillTGoodsForm extends WarehouseBillGoodsL
 
             '#', '#', '#', '#', '#',
             $this->formatTitle($this->getXiangqianCraftMap()),//'镶嵌工艺' .
-            '#','#','#',
-            $this->formatTitle($this->getFaceCraftMap()),//'表面工艺' .
+            '#', '#', '#',
+            $this->formatTitle($this->getFaceCraftMap(), "|"),//'表面工艺' .
             '#', '#', '#', '#', '#', '#', '#', '#', '#',
             $this->formatTitle($this->getCertTypeMap()),//'主石证书类型' .
-            '#',
+            '填写则不自动计算','#',
             $this->formatTitle($this->getJietuoTypeMap()),//'金托类型' .
             '#',
         ];
@@ -273,7 +273,7 @@ class WarehouseBillTGoodsForm extends WarehouseBillGoodsL
             '副石3配石方式', '副石3编号', '副石3类型', '副石3粒数', '副石3重(ct)', '副石3单价/ct', '石料备注',
             '配件方式', '配件类型', '配件材质', '配件数量', '配件金重(g)', '配件金价/g',
             '配石重量(ct)', '配石工费/ct', '配件工费', '克/工费', '件/工费', '镶嵌工艺', '镶石1工费/颗', '镶石2工费/颗', '镶石3工费/颗', '表面工艺(多个用“|”分割)', '表面工艺费', '分色/分件费', '喷沙费', '拉沙费', '补口费', '版费', '证书费',
-            '其它费用', '主石证书号', '主石证书类型', '倍率(默认1)', '(*)金托类型', '备注',
+            '其它费用', '主石证书号', '主石证书类型', '公司成本价', '倍率(默认1)', '(*)金托类型', '备注',
         ];
         return [$values, $fields];
     }
@@ -307,7 +307,7 @@ class WarehouseBillTGoodsForm extends WarehouseBillGoodsL
 //        if (!empty($style_sn)) {
 //            $valueList = $this->getAttrValueListByStyle($style_sn, $attr_id);
 //        } else {
-            $valueList = \Yii::$app->attr->valueMap($attr_id);
+                $valueList = \Yii::$app->attr->valueMap($attr_id);
 //        }
         $valueList = array_flip($valueList);
         $attrId = isset($valueList[$value]) ? $valueList[$value] : "";
