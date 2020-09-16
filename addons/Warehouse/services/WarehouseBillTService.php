@@ -2,11 +2,10 @@
 
 namespace addons\Warehouse\services;
 
-use addons\Warehouse\common\enums\IsWholeSaleEnum;
-use addons\Warehouse\common\models\WarehouseGoods;
 use Yii;
 use common\components\Service;
 use common\helpers\SnHelper;
+use addons\Warehouse\common\models\WarehouseGoods;
 use addons\Warehouse\common\models\WarehouseBill;
 use addons\Warehouse\common\models\WarehouseBillGoodsL;
 use addons\Warehouse\common\models\WarehouseStone;
@@ -17,6 +16,7 @@ use addons\Style\common\models\Qiban;
 use addons\Warehouse\common\enums\PeiJianWayEnum;
 use addons\Warehouse\common\enums\PeiLiaoWayEnum;
 use addons\Warehouse\common\enums\PeiShiWayEnum;
+use addons\Warehouse\common\enums\IsWholeSaleEnum;
 use addons\Style\common\enums\StonePositionEnum;
 use addons\Style\common\enums\JintuoTypeEnum;
 use addons\Style\common\enums\QibanTypeEnum;
