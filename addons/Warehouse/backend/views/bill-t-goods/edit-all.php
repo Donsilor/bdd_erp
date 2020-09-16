@@ -81,7 +81,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#feeeed;'],
                                 'footerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#feeeed;'],
                                 'value' => function ($model, $key, $index, $widget) {
-                                    $widget->footer = "Total：";
+                                    $widget->footer = "汇总：";
                                     return $model->id ?? 0;
                                 },
                                 'filter' => false,
@@ -154,14 +154,15 @@ $this->params['breadcrumbs'][] = $this->title;
                                 ]),
                             ],
                             [
-                                'label' => 'AUTO',
+                                'label' => '手动填写',
                                 'attribute' => 'auto_goods_id',
                                 'format' => 'raw',
                                 'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#feeeed;'],
                                 'footerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#feeeed;'],
                                 'value' => function ($model, $key, $index, $widget) {
-                                    $widget->footer = "AUTO";
-                                    return \common\enums\ConfirmEnum::getValue($model->auto_goods_id);
+                                    $widget->footer = "手动填写";
+                                    //return \common\enums\ConfirmEnum::getValue($model->auto_goods_id);
+                                    return Html::ajaxSelect($model, 'auto_goods_id', \common\enums\ConfirmEnum::getMap(), ['data-id' => $model->id]);
                                 },
                                 'filter' => Html::activeDropDownList($searchModel, 'auto_goods_id', \common\enums\ConfirmEnum::getMap(), [
                                     'prompt' => '全部',
@@ -2076,13 +2077,13 @@ $this->params['breadcrumbs'][] = $this->title;
                                 ]),
                             ],
                             [
-                                'label' => '自动计算',
+                                'label' => '手动填写',
                                 'attribute' => 'is_auto_price',
                                 'format' => 'raw',
                                 'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#b7ba6b;'],
                                 'footerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#b7ba6b;'],
                                 'value' => function ($model, $key, $index, $widget) {
-                                    $widget->footer = "自动计算";
+                                    $widget->footer = "手动填写";
                                     return Html::ajaxSelect($model, 'is_auto_price', \common\enums\ConfirmEnum::getMap(), ['data-id' => $model->id]);
                                 },
                                 'filter' => Html::activeDropDownList($searchModel, 'is_auto_price', \common\enums\ConfirmEnum::getMap(), [

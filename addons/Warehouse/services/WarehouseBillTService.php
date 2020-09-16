@@ -1344,14 +1344,10 @@ class WarehouseBillTService extends Service
      */
     public function syncUpdatePrice($form)
     {
-        if(empty($form->is_auto_price)){
+        if (empty($form->is_auto_price)) {
             if (!$form->validate()) {
                 throw new \Exception($this->getError($form));
             }
-//        if (!empty($form->pure_gold) && $form->peiliao_way === "") {
-//            //如果折足填写，配料方式未填，则默认：配料方式：来料加工
-//            $form->peiliao_way = PeiLiaoWayEnum::LAILIAO;
-//        }
             $form->gold_weight = $this->calculateGoldWeight($form);//金重
             $form->lncl_loss_weight = $this->calculateLossWeight($form);//含耗重
             $form->gold_amount = $this->calculateGoldAmount($form);//金料额
