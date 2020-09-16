@@ -227,8 +227,8 @@ class WarehouseBillTService extends Service
                 }
                 $goods_ids[$i] = $goods_id;
 
-                $exist_goods_id = WarehouseGoods::findOne(['goods_id'=>$goods_id]);
-                if(!empty($exist_goods_id)){
+                $exist_goods_id = WarehouseGoods::findOne(['goods_id' => $goods_id]);
+                if (!empty($exist_goods_id)) {
                     $flag = false;
                     $error[$i][] = "货号在库存中已存在";
                 }
@@ -797,11 +797,11 @@ class WarehouseBillTService extends Service
                         $error[$i][] = "表面工艺：[" . $item . "]录入值有误";
                         $biaomiangongyi = "";
                     } else {
-                        $attr_str.= $attr_id.",";
+                        $attr_str .= $attr_id . ",";
                     }
                 }
-                if(!empty($attr_str)){
-                    $biaomiangongyi = ",".$attr_str;
+                if (!empty($attr_str)) {
+                    $biaomiangongyi = "," . $attr_str;
                 }
             }
             $biaomiangongyi_fee = $form->formatValue($goods[71], 0) ?? 0;
@@ -1029,7 +1029,7 @@ class WarehouseBillTService extends Service
      */
     public function syncUpdatePriceAll($form, $ids = [])
     {
-        $where = ['bill_id' => $form->id];
+        $where = ['bill_id' => $form->id, 'is_auto_price' => ConfirmEnum::NO];
 //        if(!empty($ids)){
 //            $where = ['bill_id' => $form->id, 'id' => $ids];
 //        }
@@ -1344,30 +1344,32 @@ class WarehouseBillTService extends Service
      */
     public function syncUpdatePrice($form)
     {
-        if (!$form->validate()) {
-            throw new \Exception($this->getError($form));
-        }
+        if(empty($form->is_auto_price)){
+            if (!$form->validate()) {
+                throw new \Exception($this->getError($form));
+            }
 //        if (!empty($form->pure_gold) && $form->peiliao_way === "") {
 //            //如果折足填写，配料方式未填，则默认：配料方式：来料加工
 //            $form->peiliao_way = PeiLiaoWayEnum::LAILIAO;
 //        }
-        $form->gold_weight = $this->calculateGoldWeight($form);//金重
-        $form->lncl_loss_weight = $this->calculateLossWeight($form);//含耗重
-        $form->gold_amount = $this->calculateGoldAmount($form);//金料额
-        $form->main_stone_amount = $this->calculateMainStoneCost($form);//主石成本
-        $form->second_stone_amount1 = $this->calculateSecondStone1Cost($form);//副石1成本
-        $form->second_stone_amount2 = $this->calculateSecondStone2Cost($form);//副石2成本
-        $form->second_stone_amount3 = $this->calculateSecondStone3Cost($form);//副石3成本
-        $form->peishi_fee = $this->calculatePeishiFee($form);//配石费
-        $form->xianqian_fee = $this->calculateXiangshiFee($form);//镶石费
-        $form->parts_amount = $this->calculatePartsAmount($form);//配件额
-        $form->basic_gong_fee = $this->calculateBasicGongFee($form);//基本工费
-        $form->total_gong_fee = $this->calculateTotalGongFee($form);//总工费
-        $form->factory_cost = $this->calculateFactoryCost($form);//工厂成本
-        $form->cost_price = $this->calculateCostPrice($form);//公司成本
-        $form->market_price = $this->calculateMarketPrice($form);//标签价
-        if (false === $form->save()) {
-            throw new \Exception($this->getError($form));
+            $form->gold_weight = $this->calculateGoldWeight($form);//金重
+            $form->lncl_loss_weight = $this->calculateLossWeight($form);//含耗重
+            $form->gold_amount = $this->calculateGoldAmount($form);//金料额
+            $form->main_stone_amount = $this->calculateMainStoneCost($form);//主石成本
+            $form->second_stone_amount1 = $this->calculateSecondStone1Cost($form);//副石1成本
+            $form->second_stone_amount2 = $this->calculateSecondStone2Cost($form);//副石2成本
+            $form->second_stone_amount3 = $this->calculateSecondStone3Cost($form);//副石3成本
+            $form->peishi_fee = $this->calculatePeishiFee($form);//配石费
+            $form->xianqian_fee = $this->calculateXiangshiFee($form);//镶石费
+            $form->parts_amount = $this->calculatePartsAmount($form);//配件额
+            $form->basic_gong_fee = $this->calculateBasicGongFee($form);//基本工费
+            $form->total_gong_fee = $this->calculateTotalGongFee($form);//总工费
+            $form->factory_cost = $this->calculateFactoryCost($form);//工厂成本
+            $form->cost_price = $this->calculateCostPrice($form);//公司成本
+            $form->market_price = $this->calculateMarketPrice($form);//标签价
+            if (false === $form->save()) {
+                throw new \Exception($this->getError($form));
+            }
         }
         return $form;
     }

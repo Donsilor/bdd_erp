@@ -58,12 +58,12 @@ class WarehouseBillTGoodsForm extends WarehouseBillGoodsL
     {
         $res = [];
         foreach ($data as $k => $v) {
-            if($v !== ""){
+            if ($v !== "") {
                 $str = StringHelper::strIconv($v);
                 $str = str_replace(',', '，', $str);
                 $str = str_replace('】', '', $str);
                 $res[$k] = $str;
-            }else{
+            } else {
                 $res[$k] = "";
             }
         }
@@ -100,7 +100,7 @@ class WarehouseBillTGoodsForm extends WarehouseBillGoodsL
     public function getFooterValues($name = null, $total = [], $defaultValue = 0)
     {
         $value = $total[$name] ?? $defaultValue;
-        $footer_value = $this->getAttributeLabel($name)."<span style='font-size:16px; color: red;'>[$value]</span>";
+        $footer_value = $this->getAttributeLabel($name) . "<span style='font-size:16px; color: red;'>[$value]</span>";
         return $footer_value;
     }
 
@@ -256,7 +256,7 @@ class WarehouseBillTGoodsForm extends WarehouseBillGoodsL
 
             '#', '#', '#', '#', '#',
             $this->formatTitle($this->getXiangqianCraftMap()),//'镶嵌工艺' .
-            '#','#','#',
+            '#', '#', '#',
             $this->formatTitle($this->getFaceCraftMap()),//'表面工艺' .
             '#', '#', '#', '#', '#', '#', '#', '#', '#',
             $this->formatTitle($this->getCertTypeMap()),//'主石证书类型' .
@@ -307,7 +307,7 @@ class WarehouseBillTGoodsForm extends WarehouseBillGoodsL
 //        if (!empty($style_sn)) {
 //            $valueList = $this->getAttrValueListByStyle($style_sn, $attr_id);
 //        } else {
-            $valueList = \Yii::$app->attr->valueMap($attr_id);
+                $valueList = \Yii::$app->attr->valueMap($attr_id);
 //        }
         $valueList = array_flip($valueList);
         $attrId = isset($valueList[$value]) ? $valueList[$value] : "";

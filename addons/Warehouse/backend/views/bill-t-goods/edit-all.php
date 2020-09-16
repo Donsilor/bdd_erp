@@ -2061,19 +2061,6 @@ $this->params['breadcrumbs'][] = $this->title;
 ////                                    'style' => 'width:100px;'
 ////                                ]),
 //                            ],
-//                            [
-//                                'attribute' => 'cost_price',
-//                                'format' => 'raw',
-//                                'value' => function ($model, $key, $index, $column) {
-//                                    return Html::ajaxInput('cost_price', $model->cost_price, ['data-id' => $model->id, 'onfocus' => 'rfClearVal(this)', 'data-type' => 'number']);
-//                                },
-//                                'filter' => false,
-//                                'headerOptions' => ['class' => 'col-md-1 batch_full', 'attr-name' => 'cost_price', 'style' => 'background-color:#b7ba6b;'],
-////                                'filter' => Html::activeTextInput($searchModel, 'cost_price', [
-////                                    'class' => 'form-control',
-////                                    'style' => 'width:100px;'
-////                                ]),
-//                            ],
                             [
                                 'attribute' => 'markup_rate',
                                 'format' => 'raw',
@@ -2087,6 +2074,43 @@ $this->params['breadcrumbs'][] = $this->title;
                                     'class' => 'form-control',
                                     'style' => 'width:80px;'
                                 ]),
+                            ],
+                            [
+                                'label' => '自动计算',
+                                'attribute' => 'is_auto_price',
+                                'format' => 'raw',
+                                'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#b7ba6b;'],
+                                'footerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#b7ba6b;'],
+                                'value' => function ($model, $key, $index, $widget) {
+                                    $widget->footer = "自动计算";
+                                    return Html::ajaxSelect($model, 'is_auto_price', \common\enums\ConfirmEnum::getMap(), ['data-id' => $model->id]);
+                                },
+                                'filter' => Html::activeDropDownList($searchModel, 'is_auto_price', \common\enums\ConfirmEnum::getMap(), [
+                                    'prompt' => '全部',
+                                    'class' => 'form-control',
+                                    'style' => 'width:60px;'
+                                ]),
+                            ],
+                            [
+                                'attribute' => 'cost_price',
+                                'format' => 'raw',
+                                'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#b7ba6b;'],
+                                'contentOptions' => ['style'=>'color:red'],
+                                'footerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#b7ba6b;'],
+                                'value' => function ($model, $key, $index, $widget) use ($total) {
+                                    $widget->footer = $model->getFooterValues('cost_price', $total, "0.00");
+                                    if($model->is_auto_price){
+                                        return Html::ajaxInput('cost_price', $model->cost_price, ['data-id' => $model->id, 'onfocus' => 'rfClearVal(this)', 'data-type' => 'number']);
+                                    }else{
+                                        return $model->cost_price ?? "0.00";
+                                    }
+                                },
+                                'visible' => \common\helpers\Auth::verify(\common\enums\SpecialAuthEnum::VIEW_CAIGOU_PRICE),
+                                'filter' => false,
+//                                'filter' => Html::activeTextInput($searchModel, 'cost_price', [
+//                                    'class' => 'form-control',
+//                                    'style' => 'width:100px;'
+//                                ]),
                             ],
 //                            [
 //                                'attribute' => 'market_price',
