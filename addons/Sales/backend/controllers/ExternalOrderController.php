@@ -114,7 +114,6 @@ class ExternalOrderController extends BaseController
                 return $this->message($e->getMessage(), $this->redirect(Yii::$app->request->referrer), 'error');
             }
         }
-        
         return $this->render($this->action->id, [
                 'model' => $model,
         ]);

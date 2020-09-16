@@ -5,6 +5,9 @@ namespace addons\Sales\common\forms;
 use Yii;
 use common\helpers\ArrayHelper;
 use addons\Sales\common\models\Order;
+use common\enums\LanguageEnum;
+use common\models\common\Currency;
+use common\enums\CurrencyEnum;
 
 /**
  * 订单 Form
@@ -18,8 +21,11 @@ class ExternalOrderForm extends Order
      */
     public function rules()
     {
-        $rules = [];
-        return ArrayHelper::merge(parent::rules(),$rules);
+        $rules = [
+                [['out_trade_no','consignee_id'],'required'], 
+        ];
+        $rules = ArrayHelper::merge(parent::rules(), $rules);
+        return $rules;
     }
     /**
      * {@inheritdoc}
@@ -30,28 +36,49 @@ class ExternalOrderForm extends Order
         return ArrayHelper::merge(parent::attributeLabels() , [
              'consignee_id'=>'收货人信息'
         ]);
-    }  
+    } 
     
     public function getConsigneeMap()
-    {
-        return [
-              1=>'亚马逊代收:广东省深圳市XXX区2004栋003号/高朋/15989407534'  
-        ];
+    {   
+        $map = self::getConsigneeList();
+        return array_column(self::getConsigneeList(), 'title','id');
     }
     
     public static function getConsigneeList()
     {
-        $data = [
+        return [
                 1 => [
-                     'title' =>'亚马逊代收:广东省深圳市XXX区2004栋003号/高朋/15989407534',
-                     'customer_mobile' =>'15989407534',
-                     'customer_name' =>'高朋',
-                     'country_id' =>0,
+                     'id'=>1,   
+                     'title' =>'Unit04.23/F Universal Trade Centre 3 Arbuthrot RD Central/Mobile:+852-21653908',
+                     'mobile' =>'21653908',
+                     'realname' =>'香港代收点',
+                     'country_id' =>279,
                      'province_id'=>0, 
                      'city_id'=>0,
-                     'address_details' => '广东省深圳市XXX区2004栋003号',   
+                     'mobile_code'=>'+852',
+                     'zip_code'=>'999077',
+                     'address_details' => 'Unit04.23/F Universal Trade Centre 3 Arbuthrot RD Central',   
                 ]
         ];
+    }
+    /**
+     * 初始化FORM默认值
+     */
+    public function initForm() 
+    {    
+        //13台湾momo 7东森
+         if($this->sale_channel_id == 7 || $this->sale_channel_id == 13) {
+             $this->language = LanguageEnum::ZH_HK;
+             $this->currency = CurrencyEnum::TWD;
+         }else if($this->sale_channel_id == 8) {
+             //8 HKTvMall 
+             $this->language = LanguageEnum::ZH_HK;
+             $this->currency = CurrencyEnum::HKD;
+         }else {
+             $this->language = LanguageEnum::ZH_HK;
+             $this->currency = CurrencyEnum::HKD;
+         }         
+        
     }
     
 }

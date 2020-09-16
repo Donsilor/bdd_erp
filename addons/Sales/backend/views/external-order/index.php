@@ -19,7 +19,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     <?= Html::create(['edit'], '创建', [
                             'class' => 'btn btn-primary btn-xs openIframe',
                             'data-width' => '70%',
-                            'data-height' => '90%',
+                            'data-height' => '95%',
                             'data-offset' => '20px',
                     ]); ?>
                     <?= Html::button('导出', [

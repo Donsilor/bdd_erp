@@ -22,15 +22,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             ],
                         ]);?>              
                         </div>                        
-                    </div>
-                    <div class="row">
-                        <div class="col-sm-6">
-                        <?= $form->field($model, 'language')->dropDownList(common\enums\LanguageEnum::getMap(),['prompt'=>'请选择']);?>              
-                        </div>
-                        <div class="col-sm-6">
-                        <?= $form->field($model, 'currency')->dropDownList(common\enums\CurrencyEnum::getMap(),['prompt'=>'请选择']);?>             
-                        </div>
-                    </div> 
+                    </div>                     
                     <div class="row">                    	
                         <div class="col-sm-6"><?= $form->field($model, 'customer_mobile')->textInput()?></div>
                         <div class="col-sm-6">
@@ -42,9 +34,9 @@ $this->params['breadcrumbs'][] = $this->title;
                                 ],
                             ]);?> 
                         </div>
-                    </div>                    
-                    <div class="row">
-                    	<div class="col-sm-6">
+                    </div>
+                    <div class="row"> 
+                        <div class="col-sm-6">
                         	<?= $form->field($model, 'pay_type')->widget(\kartik\select2\Select2::class, [
                                 'data' => Yii::$app->salesService->payment->getDropDown(),
                                 'options' => ['placeholder' => '请选择'],
@@ -52,15 +44,36 @@ $this->params['breadcrumbs'][] = $this->title;
                                     'allowClear' => true,                        
                                 ],
                             ]);?> 
+                        </div>                   	
+                        <div class="col-sm-6">
+                          <?= $form->field($model, 'pay_time')->widget(\kartik\date\DatePicker::class, [
+                                'language' => 'zh-CN',
+                                'options' => [
+                                        'value' =>  Yii::$app->formatter->asDate($model->pay_time ? $model->pay_time : time()),
+                                ],
+                                'pluginOptions' => [
+                                    'format' => 'yyyy-mm-dd',
+                                    'todayHighlight' => true,//今日高亮
+                                    'autoclose' => true,//选择后自动关闭
+                                    'todayBtn' => true,//今日按钮显示
+                                ]
+                            ]);?>
+                        </div>                        
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-6">
+                        <?= $form->field($model, 'language')->dropDownList(common\enums\LanguageEnum::getMap(),['prompt'=>'请选择']);?>              
                         </div>
-                        <div class="col-sm-6"><?= $form->field($model, 'out_pay_no')->textInput()?></div>
+                        <div class="col-sm-6">
+                        <?= $form->field($model, 'currency')->dropDownList(common\enums\CurrencyEnum::getMap(),['prompt'=>'请选择']);?>             
+                        </div>
                     </div>
                     <div class="row">
                         <div class="col-sm-6"><?= $form->field($model, 'pay_remark')->textArea(['options'=>['maxlength' => true]])?></div>
                         <div class="col-sm-6"><?= $form->field($model, 'remark')->textArea(['options'=>['maxlength' => true]])?></div>            
                     </div>  
                     
-                    <div class="row col-sm-12">
+                    <div class="row">
                         <?= \unclead\multipleinput\MultipleInput::widget([
                                     'max' => 5,
                                     'name' => "ExternalOrderForm[{$model->id}][OrderGoods]",
@@ -82,7 +95,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                                 'enableError' => false,
                                                 'options' => [
                                                     'class' => 'input-priority',
-                                                    'style' => 'width:200px',
+                                                    //'style' => 'width:200px',
                                                     'placeholder' => '请输入款号',
                                                 ]
                                         ],
@@ -92,10 +105,21 @@ $this->params['breadcrumbs'][] = $this->title;
                                                 'enableError' => false,
                                                 'options' => [
                                                         'class' => 'input-priority',
-                                                        'style' => 'width:200px',
+                                                        //'style' => 'width:200px',
                                                         'placeholder' => '请输入商品价格',
                                                 ]
+                                        ],
+                                        [
+                                                'name' => "finger",
+                                                'title' => '手寸/尺寸',
+                                                'enableError' => false,
+                                                'options' => [
+                                                        'class' => 'input-priority',
+                                                        //'style' => 'width:200px',
+                                                        'placeholder' => '请输入手寸/尺寸',
+                                                ]
                                         ]
+                                            
                                     ]
                                 ]);?>          
                     </div> 
@@ -104,3 +128,18 @@ $this->params['breadcrumbs'][] = $this->title;
         </div>
     </div>
 </div>
+
+<script type="text/javascript">
+    var formId = 'externalorderform';
+    $("#"+formId+'-sale_channel_id').change(function(){
+        var sale_channel_id = $(this).val();
+    	//13台湾momo 7东森
+        if(sale_channel_id == 7 || sale_channel_id == 13) {
+            $("#"+formId+'-language').val('zh-TW');
+            $("#"+formId+'-currency').val('TWD');
+        }else {
+        	$("#"+formId+'-language').val('zh-TW');
+            $("#"+formId+'-currency').val('HKD');
+        }   
+    })
+</script>
