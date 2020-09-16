@@ -66,7 +66,7 @@ $params = $params ? "&".http_build_query($params) : '';
             [
                 'attribute' => 'repair_no',
                 'value'=>function($model) {
-                    return Html::a($model->repair_no, ['view', 'id' => $model->id,'returnUrl'=>Url::getReturnUrl()], ['style'=>"text-decoration:underline;color:#3c8dbc"]);
+                    return Html::a($model->repair_no, ['view', 'id' => $model->id,'returnUrl'=>Url::getReturnUrl()], ['class'=>'openContab','style'=>"text-decoration:underline;color:#3c8dbc"]);
                 },
                 'filter' => Html::activeTextInput($searchModel, 'repair_no', [
                     'class' => 'form-control',
