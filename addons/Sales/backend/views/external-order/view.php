@@ -74,7 +74,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('express_no') ?>：</td>
                             <td><?= $model->express_no ?>
                                 <?php if ($model->express_no) {
-                                    echo Html::a("(物流轨迹)", ['logistics', 'id' => $model->id],
+                                    echo Html::a("(物流轨迹)", ['order/logistics', 'id' => $model->id],
                                         [
                                             'style' => "text-decoration:underline;color:#3c8dbc",
                                             'class' => 'openIframe',
