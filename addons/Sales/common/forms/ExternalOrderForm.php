@@ -31,6 +31,9 @@ class ExternalOrderForm extends Order
     {
         $rules = [
                 [['out_trade_no','consignee_id'],'required'], 
+                [['out_trade_no'],'unique', 'targetAttribute'=>['out_trade_no'],
+                     'message' => "当前外部订单号已被使用了" //错误信息
+                ],
                 ['goods_list','validateGoodsList']
         ];
         $rules = ArrayHelper::merge(parent::rules(), $rules);
