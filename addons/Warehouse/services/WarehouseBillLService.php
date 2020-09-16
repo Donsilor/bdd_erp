@@ -234,7 +234,7 @@ class WarehouseBillLService extends Service
                     'second_stone_cost1' => $good->second_stone_amount1,//副石1成本价
 
                     //副石2
-                    'second_peishi_type2' => $good->second_pei_type2,//副石2配石方式
+                    'second_peishi_way2' => $good->second_pei_type2,//副石2配石方式
                     'second_stone_sn2' => $good->second_stone_sn2,//副石2编号
                     'second_stone_type2' => $good->second_stone_type2,//副石2类型
                     'second_stone_num2' => $good->second_stone_num2,//副石2粒数
