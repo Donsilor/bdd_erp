@@ -51,7 +51,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         'filterModel' => $searchModel,
                         'tableOptions' => ['class' => 'table table-hover'],
                         //'options' => ['style'=>' width:120%;white-space:nowrap;'],
-                        'options' => ['style'=>'white-space:nowrap;'],
+                        'options' => ['style'=>'white-space:nowrap;font-size:12px;'],
                         'showFooter' => false,//显示footer行
                         'id'=>'grid',
                         'columns' => [

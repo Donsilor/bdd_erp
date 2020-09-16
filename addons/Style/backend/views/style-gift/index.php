@@ -63,9 +63,9 @@ $this->params['breadcrumbs'][] = $this->title;
                             'format' => 'raw',
                             'value'=>function($model) {
                                 if($model->style_id){
-                                    return Html::a($model->style_sn, ['style/view', 'id' => $model->style_id,'returnUrl'=>Url::getReturnUrl()], ['style'=>"text-decoration:underline;color:#3c8dbc"]);
+                                    return Html::a($model->style_sn, ['style/view', 'id' => $model->style_id,'returnUrl'=>Url::getReturnUrl()], ['class'=>'openContab','style'=>"text-decoration:underline;color:#3c8dbc"]);
                                 }else{
-                                    return Html::a($model->style_sn, ['view', 'id' => $model->id,'returnUrl'=>Url::getReturnUrl()], ['style'=>"text-decoration:underline;color:#3c8dbc"]);
+                                    return Html::a($model->style_sn, ['view', 'id' => $model->id,'returnUrl'=>Url::getReturnUrl()], ['class'=>'openContab','style'=>"text-decoration:underline;color:#3c8dbc"]);
                                 }
                             },
                             'headerOptions' => ['class' => 'col-md-1'],

@@ -50,7 +50,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         [
                             'attribute' => 'supplier_code',
                             'value'=>function($model) {
-                                return Html::a($model->supplier_code, ['view', 'id' => $model->id,'returnUrl'=>Url::getReturnUrl()], ['style'=>"text-decoration:underline;color:#3c8dbc"]);
+                                return Html::a($model->supplier_code, ['view', 'id' => $model->id,'returnUrl'=>Url::getReturnUrl()], ['class'=>'openContab','style'=>"text-decoration:underline;color:#3c8dbc"]);
                             },
                             'filter' => Html::activeTextInput($searchModel, 'supplier_code', [
                                 'class' => 'form-control',

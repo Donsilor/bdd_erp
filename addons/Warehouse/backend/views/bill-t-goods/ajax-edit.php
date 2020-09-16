@@ -31,8 +31,21 @@ $form = ActiveForm::begin([
                 <?= $form->field($model, 'goods_num')->textInput(["placeholder"=>"请输入数量"]) ?>
             </div>
             <div class="col-sm-6">
+                <?= $form->field($model, 'to_warehouse_id')->widget(\kartik\select2\Select2::class, [
+                    'data' => Yii::$app->warehouseService->warehouse::getDropDown(),
+                    'options' => ['placeholder' => '请选择'],
+                    'pluginOptions' => [
+                        'allowClear' => false
+                    ],
+                ]); ?>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-6">
                 <?= $form->field($model, 'order_sn')->textInput(["placeholder"=>"请输入订单号"]) ?>
-<!--                --><?//= $form->field($model, 'cost_price')->textInput(["placeholder"=>"请输入成本单价"]) ?>
+            </div>
+            <div class="col-sm-6">
+                <?= $form->field($model, 'cost_price')->textInput(["placeholder"=>"请输入成本单价"]) ?>
             </div>
         </div>
     </div>

@@ -73,7 +73,7 @@ $this->params['breadcrumbs'][] = $this->title;
             [
                 'attribute' => 'goods_name',
                 'value' => function($model){
-                    return Html::a($model->goods_name,['view','id' => $model->id,'returnUrl'=>Url::getReturnUrl()] ,['style'=>"text-decoration:underline;color:#3c8dbc"]);
+                    return Html::a($model->goods_name,['view','id' => $model->id,'returnUrl'=>Url::getReturnUrl()] ,['class'=>'openContab','style'=>"text-decoration:underline;color:#3c8dbc"]);
                 },
                 'filter' => Html::activeTextInput($searchModel, 'goods_name', [
                     'class' => 'form-control',

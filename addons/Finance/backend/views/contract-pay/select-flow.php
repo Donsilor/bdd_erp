@@ -54,7 +54,7 @@ use common\helpers\Url;
                         [
                             'label' => '单号',
                             'value' => function($model){
-                                return Html::a($model->target_no, $model->url, ['style'=>"text-decoration:underline;color:#3c8dbc"]);
+                                return Html::a($model->target_no, $model->url, ['class'=>'openContab','style'=>"text-decoration:underline;color:#3c8dbc"]);
                             },
                             'filter' => Html::activeTextInput($searchModel, 'target_no', [
                                 'class' => 'form-control',

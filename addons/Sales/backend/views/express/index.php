@@ -71,7 +71,7 @@ $params = $params ? "&".http_build_query($params) : '';
                             'attribute'=>'name',
                             'format' => 'raw',
                             'value'=>function($model) {
-                                return Html::a($model->name, ['view', 'id' => $model->id,'returnUrl'=>Url::getReturnUrl()], ['style'=>"text-decoration:underline;color:#3c8dbc"]);
+                                return Html::a($model->name, ['view', 'id' => $model->id,'returnUrl'=>Url::getReturnUrl()], ['class'=>'openContab','style'=>"text-decoration:underline;color:#3c8dbc"]);
                             },
                             'filter' => Html::activeTextInput($searchModel, 'name', [
                                 'class' => 'form-control',
