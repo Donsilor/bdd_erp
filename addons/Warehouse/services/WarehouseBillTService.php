@@ -2,6 +2,7 @@
 
 namespace addons\Warehouse\services;
 
+use addons\Warehouse\common\models\WarehouseGoods;
 use Yii;
 use common\components\Service;
 use common\helpers\SnHelper;
@@ -225,6 +226,12 @@ class WarehouseBillTService extends Service
                     $error[$i][] = "货号与第" . ($key + 1) . "行货号重复";
                 }
                 $goods_ids[$i] = $goods_id;
+
+                $exist_goods_id = WarehouseGoods::findOne(['goods_id'=>$goods_id]);
+                if(!empty($exist_goods_id)){
+                    $flag = false;
+                    $error[$i][] = "货号在库存中已存在";
+                }
             }
             $style_sn = $goods[1] ?? "";
             $qiban_sn = $goods[2] ?? "";
