@@ -338,6 +338,9 @@ class WarehouseBillTService extends Service
                     $error[$i][] = "入库仓库：[" . $to_warehouse_id . "]录入值有误";
                     $to_warehouse_id = "";
                 }
+            }else{
+                $flag = false;
+                $error[$i][] = "入库仓库不能为空";
             }
             $material_type = $goods['material_type'] ?? "";
             if (!empty($material_type)) {
