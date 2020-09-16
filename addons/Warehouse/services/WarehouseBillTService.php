@@ -211,7 +211,7 @@ class WarehouseBillTService extends Service
                 $i++;
                 continue;
             }
-            if (count($goods) != 84) {
+            if (count($goods) != 85) {
                 throw new \Exception("模板格式不正确，请下载最新模板");
             }
             $goods = $form->trimField($goods);
@@ -789,6 +789,7 @@ class WarehouseBillTService extends Service
             $biaomiangongyi = $goods[70] ?? "";
             if (!empty($biaomiangongyi)) {
                 $biaomiangongyi = StringHelper::explode($biaomiangongyi, "|");
+                $biaomiangongyi = array_unique(array_filter($biaomiangongyi));
                 $attr_str = "";
                 foreach ($biaomiangongyi as $item) {
                     $attr_id = $form->getAttrIdByAttrValue($style_sn, $item, AttrIdEnum::FACEWORK);
@@ -829,9 +830,14 @@ class WarehouseBillTService extends Service
             } else {
                 $main_cert_type = $cert_type;
             }
-            //$cost_price = $form->formatValue($goods[81], 0) ?? 0;
-            $markup_rate = $form->formatValue($goods[81], 1) ?? 1;
-            $jintuo_type = $goods[82] ?? "";
+            $cost_price = $form->formatValue($goods[81], 0) ?? 0;
+            if($cost_price){
+                $is_auto_price = ConfirmEnum::YES;
+            }else{
+                $is_auto_price = ConfirmEnum::NO;
+            }
+            $markup_rate = $form->formatValue($goods[82], 1) ?? 1;
+            $jintuo_type = $goods[83] ?? "";
             if (!empty($jintuo_type)) {
                 $jintuo_type = JintuoTypeEnum::getIdByName($jintuo_type);
                 if (empty($jintuo_type)) {
@@ -843,7 +849,7 @@ class WarehouseBillTService extends Service
                 $flag = false;
                 $error[$i][] = "金托类型不能为空";
             }
-            $remark = $goods[83] ?? "";
+            $remark = $goods[84] ?? "";
             $saveData[] = $item = [
                 'bill_id' => $bill->id,
                 'bill_no' => $bill->bill_no,
@@ -946,7 +952,8 @@ class WarehouseBillTService extends Service
                 'other_fee' => $other_fee,
                 'main_cert_id' => $main_cert_id,
                 'main_cert_type' => $main_cert_type,
-                //'cost_price' => $cost_price,
+                'cost_price' => $cost_price,
+                'is_auto_price' => $is_auto_price,
                 'markup_rate' => $markup_rate,
                 'jintuo_type' => $jintuo_type,
                 'auto_goods_id' => $auto_goods_id,
