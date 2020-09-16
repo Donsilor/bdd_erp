@@ -31,15 +31,15 @@ $form = ActiveForm::begin([
                     ],
                 ]); ?>
             </div>
-            <div class="col-sm-4">
-                <?= $form->field($model, 'to_warehouse_id')->widget(\kartik\select2\Select2::class, [
-                    'data' => Yii::$app->warehouseService->warehouse::getDropDown(),
-                    'options' => ['placeholder' => '请选择'],
-                    'pluginOptions' => [
-                        'allowClear' => false
-                    ],
-                ]); ?>
-            </div>
+<!--            <div class="col-sm-4">-->
+<!--                --><?//= $form->field($model, 'to_warehouse_id')->widget(\kartik\select2\Select2::class, [
+//                    'data' => Yii::$app->warehouseService->warehouse::getDropDown(),
+//                    'options' => ['placeholder' => '请选择'],
+//                    'pluginOptions' => [
+//                        'allowClear' => false
+//                    ],
+//                ]); ?>
+<!--            </div>-->
             <div class="col-sm-4">
                 <?= $form->field($model, 'put_in_type')->widget(\kartik\select2\Select2::class, [
                     'data' => \addons\Warehouse\common\enums\PutInTypeEnum::getMap(),

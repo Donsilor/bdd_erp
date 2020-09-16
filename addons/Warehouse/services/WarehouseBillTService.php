@@ -83,6 +83,10 @@ class WarehouseBillTService extends Service
             $goods_num = $form->goods_num;
             $form->goods_num = 1;
         }
+        $form->is_auto_price = ConfirmEnum::NO;
+        if($form->cost_price){//自动计算成本
+            $form->is_auto_price = ConfirmEnum::YES;
+        }
         $style = Style::find()->where(['style_sn' => $form->goods_sn])->one();
         if (!$style) {
             $qiban = Qiban::find()->where(['qiban_sn' => $form->goods_sn])->one();
@@ -158,6 +162,7 @@ class WarehouseBillTService extends Service
             $goodsInfo[$i]['goods_id'] = SnHelper::createGoodsId();
             $goodsInfo[$i]['is_wholesale'] = $form->is_wholesale;//批发
             $goodsInfo[$i]['auto_goods_id'] = $form->auto_goods_id;
+            $goodsInfo[$i]['is_auto_price'] = $form->is_auto_price;
             $goodsM->setAttributes($goodsInfo[$i]);
             if (!$goodsM->validate()) {
                 throw new \Exception($this->getError($goodsM));
