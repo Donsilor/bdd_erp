@@ -49,11 +49,11 @@ $form = ActiveForm::begin([
                     ],
                 ]); ?>
             </div>
-        </div>
-        <div class="row">
             <div class="col-sm-4">
                 <?= $form->field($model, 'is_settle_accounts')->radioList(\addons\Warehouse\common\enums\IsSettleAccountsEnum::getMap()) ?>
             </div>
+        </div>
+        <div class="row">
             <div class="col-sm-4">
                 <?= $form->field($model, 'send_goods_sn')->textInput() ?>
             </div>

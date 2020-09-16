@@ -93,21 +93,21 @@ $params = $params ? "&".http_build_query($params) : '';
                             'format' => 'raw',
                             'headerOptions' => ['class' => 'col-md-2'],
                         ],
-                        [
-                            'attribute' => 'to_warehouse_id',
-                            'value' =>"toWarehouse.name",
-                            'filter'=>Select2::widget([
-                                'name'=>'SearchModel[to_warehouse_id]',
-                                'value'=>$searchModel->to_warehouse_id,
-                                'data'=>Yii::$app->warehouseService->warehouse::getDropDown(),
-                                'options' => ['placeholder' =>"请选择"],
-                                'pluginOptions' => [
-                                    'allowClear' => true,
-                                ],
-                            ]),
-                            'format' => 'raw',
-                            'headerOptions' => ['class' => 'col-md-2'],
-                        ],
+//                        [
+//                            'attribute' => 'to_warehouse_id',
+//                            'value' =>"toWarehouse.name",
+//                            'filter'=>Select2::widget([
+//                                'name'=>'SearchModel[to_warehouse_id]',
+//                                'value'=>$searchModel->to_warehouse_id,
+//                                'data'=>Yii::$app->warehouseService->warehouse::getDropDown(),
+//                                'options' => ['placeholder' =>"请选择"],
+//                                'pluginOptions' => [
+//                                    'allowClear' => true,
+//                                ],
+//                            ]),
+//                            'format' => 'raw',
+//                            'headerOptions' => ['class' => 'col-md-2'],
+//                        ],
                         [
                             'attribute' => 'put_in_type',
                             'format' => 'raw',
