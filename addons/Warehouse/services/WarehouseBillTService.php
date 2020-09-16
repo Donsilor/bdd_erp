@@ -205,7 +205,7 @@ class WarehouseBillTService extends Service
         $flag = true;
         $error_off = true;
         $error = $saveData = $goods_ids = $style_sns = [];
-        $bill = WarehouseBill::findOne($form->bill_id);
+        //$bill = WarehouseBill::findOne($form->bill_id);
         while ($goods = fgetcsv($file)) {
             if ($i <= 1) {
                 $i++;
@@ -851,9 +851,9 @@ class WarehouseBillTService extends Service
             }
             $remark = $goods[84] ?? "";
             $saveData[] = $item = [
-                'bill_id' => $bill->id,
-                'bill_no' => $bill->bill_no,
-                'bill_type' => $bill->bill_type,
+                //'bill_id' => $bill->id,
+                'bill_no' => $form->bill_no,
+                'bill_type' => $form->bill_type,
                 'goods_id' => $goods_id,
                 'goods_sn' => $goods_sn,
                 'style_id' => $style->id ?? $qiban->id,
@@ -863,8 +863,8 @@ class WarehouseBillTService extends Service
                 'product_type_id' => $product_type_id,
                 'style_sex' => $style_sex,
                 'style_channel_id' => $style_channel_id,
-                'supplier_id' => $bill->supplier_id,
-                'put_in_type' => $bill->put_in_type,
+                'supplier_id' => $form->supplier_id,
+                'put_in_type' => $form->put_in_type,
                 'qiban_sn' => $qiban_sn,
                 'qiban_type' => $qiban_type,
                 'goods_name' => $goods_name,
@@ -994,6 +994,10 @@ class WarehouseBillTService extends Service
         if (empty($saveData)) {
             throw new \Exception("数据不能为空");
         }
+        $saveBillT = [];
+//        foreach ($saveData as $saveDatum) {
+//            $saveBillT[$saveDatum['supplier_id']] = 1;
+//        }
         $value = $ids = [];
         $key = array_keys($saveData[0]);
         foreach ($saveData as $item) {
