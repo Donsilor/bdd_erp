@@ -114,6 +114,9 @@ class BillTController extends BaseController
                 if ($isNewRecord) {
                     $gModel = new WarehouseBillTGoodsForm();
                     $gModel->bill_id = $model->id;
+                    $gModel->supplier_id = $model->supplier_id;
+                    $gModel->put_in_type = $model->put_in_type;
+                    $gModel->supplier_id = $model->supplier_id;
                     $gModel->file = UploadedFile::getInstance($model, 'file');
                     if (!empty($gModel->file) && isset($gModel->file)) {
                         \Yii::$app->warehouseService->billT->uploadGoods($gModel);
