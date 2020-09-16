@@ -160,6 +160,7 @@ class WarehouseBillTService extends Service
             $goodsInfo[$i]['bill_no'] = $bill->bill_no;
             $goodsInfo[$i]['bill_type'] = $bill->bill_type;
             $goodsInfo[$i]['goods_id'] = SnHelper::createGoodsId();
+            $goodsInfo[$i]['to_warehouse_id'] = $form->to_warehouse_id;
             $goodsInfo[$i]['is_wholesale'] = $form->is_wholesale;//批发
             $goodsInfo[$i]['auto_goods_id'] = $form->auto_goods_id;
             $goodsInfo[$i]['is_auto_price'] = $form->is_auto_price;
