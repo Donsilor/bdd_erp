@@ -2225,6 +2225,22 @@ $this->params['breadcrumbs'][] = $this->title;
                                 ]),
                             ],
                             [
+                                'label' => '是否批发',
+                                'attribute' => 'is_wholesale',
+                                'format' => 'raw',
+                                'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#b7ba6b;'],
+                                'footerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#b7ba6b;'],
+                                'value' => function ($model, $key, $index, $widget) {
+                                    $widget->footer = "是否批发";
+                                    return \addons\Warehouse\common\enums\IsWholeSaleEnum::getValue($model->is_wholesale);
+                                },
+                                'filter' => Html::activeDropDownList($searchModel, 'is_wholesale', \addons\Warehouse\common\enums\IsWholeSaleEnum::getMap(), [
+                                    'prompt' => '全部',
+                                    'class' => 'form-control',
+                                    'style' => 'width:60px;'
+                                ]),
+                            ],
+                            [
                                 'attribute' => 'factory_mo',
                                 'format' => 'raw',
                                 'headerOptions' => ['class' => 'col-md-1 batch_full', 'attr-name' => 'factory_mo', 'style' => 'background-color:#b7ba6b;'],

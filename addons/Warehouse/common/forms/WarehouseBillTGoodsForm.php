@@ -210,7 +210,7 @@ class WarehouseBillTGoodsForm extends WarehouseBillGoodsL
             '#',
             $this->formatTitle($this->getMaterialTypeMap()),//'材质' .
             $this->formatTitle($this->getMaterialColorMap()),//'材质颜色' .
-            '#',
+            '不填默认为1',
             $this->formatTitle($this->getPortNoMap()),//'手寸(港号)' .
             $this->formatTitle($this->getFingerMap()),//'手寸(美号)' .
             '#', '#',

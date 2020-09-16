@@ -206,13 +206,13 @@ class WarehouseBillTService extends Service
         $flag = true;
         $error_off = true;
         $error = $saveData = $goods_ids = $style_sns = [];
-        //$bill = WarehouseBill::findOne($form->bill_id);
+        $bill = WarehouseBill::findOne($form->bill_id);
         while ($goods = fgetcsv($file)) {
             if ($i <= 1) {
                 $i++;
                 continue;
             }
-            if (count($goods) != 85) {
+            if (count($goods) != 86) {
                 throw new \Exception("模板格式不正确，请下载最新模板");
             }
             $goods = $form->trimField($goods);
@@ -234,7 +234,7 @@ class WarehouseBillTService extends Service
                     $error[$i][] = "货号在库存中已存在";
                 }
             }
-            $style_sn = $goods['goods_sn'] ?? "";
+            $style_sn = $goods['style_sn'] ?? "";
             $jintuo_type = $goods['jintuo_type'] ?? "";
             if (!empty($jintuo_type)) {
                 $jintuo_type = JintuoTypeEnum::getIdByName($jintuo_type);
@@ -345,7 +345,7 @@ class WarehouseBillTService extends Service
                     $material_color = $attr_id;
                 }
             }
-            $goods_num = $goods['goods_num'] ?? 1;
+            $goods_num = $form->formatValue($goods['goods_num'],1) ?? 1;
             $is_wholesale = IsWholeSaleEnum::NO;
             if($goods_num > 1){
                 $is_wholesale = IsWholeSaleEnum::YES;
@@ -856,9 +856,9 @@ class WarehouseBillTService extends Service
             $markup_rate = $form->formatValue($goods['markup_rate'], 1) ?? 1;
             $remark = $goods['remark'] ?? "";
             $saveData[] = $item = [
-                //'bill_id' => $bill->id,
-                'bill_no' => $form->bill_no,
-                'bill_type' => $form->bill_type,
+                'bill_id' => $bill->id,
+                'bill_no' => $bill->bill_no,
+                'bill_type' => $bill->bill_type,
                 'goods_id' => $goods_id,
                 'goods_sn' => $goods_sn,
                 'style_id' => $style->id ?? $qiban->id,
@@ -868,8 +868,8 @@ class WarehouseBillTService extends Service
                 'product_type_id' => $product_type_id,
                 'style_sex' => $style_sex,
                 'style_channel_id' => $style_channel_id,
-                'supplier_id' => $form->supplier_id,
-                'put_in_type' => $form->put_in_type,
+                'supplier_id' => $bill->supplier_id,
+                'put_in_type' => $bill->put_in_type,
                 'qiban_sn' => $qiban_sn,
                 'qiban_type' => $qiban_type,
                 'goods_name' => $goods_name,

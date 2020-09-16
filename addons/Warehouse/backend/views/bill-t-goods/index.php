@@ -2017,6 +2017,22 @@ $this->params['breadcrumbs'][] = $this->title;
                                 ]),
                             ],
                             [
+                                'label' => '是否批发',
+                                'attribute' => 'is_wholesale',
+                                'format' => 'raw',
+                                'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#9b95c9;'],
+                                'footerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#9b95c9;'],
+                                'value' => function ($model, $key, $index, $widget) {
+                                    $widget->footer = "是否批发";
+                                    return \addons\Warehouse\common\enums\IsWholeSaleEnum::getValue($model->is_wholesale);
+                                },
+                                'filter' => Html::activeDropDownList($searchModel, 'is_wholesale', \addons\Warehouse\common\enums\IsWholeSaleEnum::getMap(), [
+                                    'prompt' => '全部',
+                                    'class' => 'form-control',
+                                    'style' => 'width:60px;'
+                                ]),
+                            ],
+                            [
                                 'attribute' => 'factory_mo',
                                 //'format' => 'raw',
                                 'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#9b95c9;'],
