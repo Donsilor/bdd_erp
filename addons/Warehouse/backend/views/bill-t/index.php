@@ -179,7 +179,7 @@ $params = $params ? "&".http_build_query($params) : '';
                                 ],
                             ]),
                             'value'=>function($model){
-                                return Yii::$app->formatter->asDatetime($model->created_at);
+                                return Yii::$app->formatter->asDate($model->created_at);
                             },
                         ],
                         /*[
