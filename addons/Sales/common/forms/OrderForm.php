@@ -30,7 +30,7 @@ class OrderForm extends Order
     public function rules()
     {
         $rules = [
-                [['pay_type'],'required'],
+                [['pay_type','customer_name'],'required'],
                 [['customer_mobile_1'],'required','isEmpty'=>function($value){
                     if($this->sale_channel_id != 3 && $value !== null && empty($value)) {
                         return true;//提示 为空 错误

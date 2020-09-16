@@ -181,11 +181,13 @@ class OrderGoods extends BaseModel
             }
         } 
         //商品规格
-        $spec_list = $spec_list + (json_decode($this->goods_spec,true) ?? []);        
-        $str = '';
-        foreach ($spec_list as $key=>$value) {
-            $str .= $key.':'.$value."<br/>";
+        if($this->goods_spec) {
+            $spec_list = $spec_list + (json_decode($this->goods_spec,true) ?? []);        
+            $str = '';
+            foreach ($spec_list as $key=>$value) {
+                $str .= $key.':'.$value."<br/>";
+            }
+            return $str;
         }
-        return $str;
     }
 }

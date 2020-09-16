@@ -25,6 +25,8 @@ use addons\Sales\common\models\OrderAddress;
 use addons\Sales\common\models\Customer;
 use common\enums\LogTypeEnum;
 use addons\Sales\common\forms\ExternalOrderForm;
+use addons\Sales\common\enums\PayStatusEnum;
+use addons\Sales\common\enums\OrderFromEnum;
 
 /**
  * Default controller for the `order` module
@@ -63,6 +65,7 @@ class ExternalOrderController extends BaseController
         
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams, ['created_at', 'customer_mobile', 'customer_email']);
         $searchParams = Yii::$app->request->queryParams['SearchModel'] ?? [];
+        $dataProvider->query->andWhere(['=', 'order_from', OrderFromEnum::FROM_EXTERNAL]);
         if($order_status != -1) {
             $dataProvider->query->andWhere(['=', 'order_status', $order_status]);
         }
@@ -101,9 +104,7 @@ class ExternalOrderController extends BaseController
             try{
                 $trans = Yii::$app->trans->beginTransaction();
                 
-                $model = Yii::$app->salesService->order->createOrder($model);
-                
-                
+                $model = Yii::$app->salesService->order->createExternalOrder($model);
                 $trans->commit();
                 return $isNewRecord
                 ? $this->message("创建成功", $this->redirect(['view', 'id' => $model->id]), 'success')
@@ -111,7 +112,8 @@ class ExternalOrderController extends BaseController
                 
             }catch (\Exception $e) {
                 $trans->rollback();
-                return $this->message($e->getMessage(), $this->redirect(Yii::$app->request->referrer), 'error');
+                return ResultHelper::json(424, $e->getMessage());
+                //return $this->message($e->getMessage(), $this->redirect(Yii::$app->request->referrer), 'error');
             }
         }
         return $this->render($this->action->id, [

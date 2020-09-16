@@ -24,6 +24,7 @@ use addons\Sales\common\enums\PayStatusEnum;
 use common\enums\LogTypeEnum;
 use addons\Sales\common\enums\OrderFromEnum;
 use addons\Sales\common\models\OrderInvoice;
+use addons\Sales\common\forms\ExternalOrderForm;
 
 /**
  * Class SaleChannelService
@@ -37,12 +38,20 @@ class OrderService extends Service
      * @return array
      */
     public function menuTabList($order_id, $returnUrl = null)
-    {
-            return [
-                    1=>['name'=>'订单信息','url'=>Url::to(['order/view','id'=>$order_id,'tab'=>1,'returnUrl'=>$returnUrl])],
-                    2=>['name'=>'日志信息','url'=>Url::to(['order-log/index','order_id'=>$order_id,'tab'=>2,'returnUrl'=>$returnUrl])],
-            ];       
-    }
+    {      
+            $model = Order::find()->select(['id','order_from'])->where(['id'=>$order_id])->one();
+            if($model->order_from == OrderFromEnum::FROM_EXTERNAL) {
+                return [
+                        1=>['name'=>'订单信息','url'=>Url::to(['external-order/view','id'=>$order_id,'tab'=>1,'returnUrl'=>$returnUrl])],
+                        2=>['name'=>'日志信息','url'=>Url::to(['order-log/index','order_id'=>$order_id,'tab'=>2,'returnUrl'=>$returnUrl])],
+                ];      
+            }else {
+                return [
+                        1=>['name'=>'订单信息','url'=>Url::to(['order/view','id'=>$order_id,'tab'=>1,'returnUrl'=>$returnUrl])],
+                        2=>['name'=>'日志信息','url'=>Url::to(['order-log/index','order_id'=>$order_id,'tab'=>2,'returnUrl'=>$returnUrl])],
+                ];
+            }
+    } 
     /**
      * 人工创建订单
      * 
@@ -120,7 +129,7 @@ class OrderService extends Service
         if(false == $address->save(false)) {
             throw new \Exception("同步收货地址失败：".$this->getError($address));
         }
-
+        
         //创建订单日志
         if($isNewOrder === true) {
             $log = [
@@ -135,6 +144,79 @@ class OrderService extends Service
             \Yii::$app->salesService->orderLog->createOrderLog($log);
         }
         return $order;        
+    }
+    /**
+     *  创建外部平台订单
+     * @param ExternalOrderForm $form
+     */
+    public function createExternalOrder($form)
+    {
+        if(false === $form->validate()) {
+            throw new \Exception($this->getError($form));
+        }
+        $isNewOrder = $form->isNewRecord;
+        //1.创建订单
+        $order = clone $form;
+        $order->pay_status = PayStatusEnum::HAS_PAY;
+        $order->order_from = OrderFromEnum::FROM_EXTERNAL;
+        if(false == $order->save()) {
+            throw new \Exception($this->getError($order));
+        }        
+        //2.创建订单明细
+        if($isNewOrder === true){
+            foreach ($form->goods_list ?? [] as $goods) {
+                $orderGoods = new OrderGoods();
+                $orderGoods->attributes = $goods;
+                $orderGoods->order_id = $order->id;
+                if(false === $orderGoods->save()) {
+                    throw new \Exception($this->getError($orderGoods));
+                }
+            }
+        }
+        //3.创建订单金额
+        if($isNewOrder === true){
+            $account = new OrderAccount();
+            $account->order_id = $order->id;
+            $account->currency = $order->currency;
+            if(false == $account->save()) {
+                throw new \Exception($this->getError($account));
+            }
+        }
+        //4.订单收货地址
+        $address = OrderAddress::find()->where(['order_id'=>$order->id])->one();
+        if(!$address) {
+            $address = new OrderAddress();
+            $address->order_id = $order->id;            
+        }
+        $address->attributes = $form->getConsigneeInfo();  
+        
+        if(false == $address->save()) {
+            throw new \Exception("同步收货地址失败：".$this->getError($address));
+        }        
+        
+        if($form->isNewRecord){
+            $order->order_sn = $this->createOrderSn($order);
+        }
+        if(false == $order->save()) {
+            throw new \Exception($this->getError($order));
+        }   
+        //商品金额汇总
+        $this->orderSummary($order->id);
+        
+        //创建订单日志
+        if($isNewOrder === true) {
+            $log = [
+                    'order_id' => $order->id,
+                    'order_sn' => $order->order_sn,
+                    'order_status' => $order->order_status,
+                    'log_type' => LogTypeEnum::ARTIFICIAL,
+                    'log_time' => time(),
+                    'log_module' => '创建订单',
+                    'log_msg' => "创建新订单， 订单号:".$order->order_sn
+            ];
+            \Yii::$app->salesService->orderLog->createOrderLog($log);
+        }
+        return $order;
     }
     /**
      * 自动创建同步订单
@@ -474,7 +556,9 @@ class OrderService extends Service
             $order_account->order_amount = $order_account->goods_amount + $order_account->shipping_fee + $order_account->tax_fee + $order_account->safe_fee
                         + $order_account->other_fee; // 商品总金额+运费，税费，保险费
             $order_account->pay_amount = $order_account->order_amount - $order_account->discount_amount;
-            $order_account->save();
+            if(false === $order_account->save()){
+                throw new \Exception("订单金额汇总失败:".$this->getError($order_account));
+            }
         }
     }
     

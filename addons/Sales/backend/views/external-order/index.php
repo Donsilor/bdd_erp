@@ -6,7 +6,7 @@ use yii\grid\GridView;
 
 /* @var $this yii\web\View */
 /* @var $dataProvider yii\data\ActiveDataProvider */
-$this->title = '外部订单列表';
+$this->title = '外部平台订单';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 
@@ -153,7 +153,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     'value' => function ($model){
                         return $model->saleChannel->name ?? '';
                     },
-                    'filter' => Html::activeDropDownList($searchModel, 'sale_channel_id',Yii::$app->salesService->saleChannel->getDropDown(), [
+                    'filter' => Html::activeDropDownList($searchModel, 'sale_channel_id',Yii::$app->salesService->saleChannel->getDropDownForExternalOrder(), [
                             'prompt' => '全部',
                             'class' => 'form-control',
                             'style'=> 'width:120px;'
@@ -238,20 +238,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 ]),
                 'format' => 'raw',
                 'headerOptions' => ['width'=>'100'],
-            ],
-            [
-                    'attribute' => 'order_from',
-                    'value' => function ($model){
-                        return \addons\Sales\common\enums\OrderFromEnum::getValue($model->order_from);
-                    },
-                    'filter' => Html::activeDropDownList($searchModel, 'order_from',\addons\Sales\common\enums\OrderFromEnum::getMap(), [
-                            'prompt' => '全部',
-                            'class' => 'form-control',
-                            'style' =>'width:90px'
-                    ]),
-                    'format' => 'raw',
-                    'headerOptions' => ['width'=>'100'],
-            ],            
+            ],                   
             [
                 'attribute' => 'creator_id',
                 'value' => 'creator.username',

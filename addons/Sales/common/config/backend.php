@@ -33,7 +33,7 @@ return [
                     'route' => 'order/index',
                 ],
                 [
-                        'title' => '外部订单列表',
+                        'title' => '外部平台订单',
                         'route' => 'external-order/index',
                 ],
                 [

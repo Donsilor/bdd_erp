@@ -15,7 +15,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         <div class="col-sm-6"><?= $form->field($model, 'out_trade_no')->textInput()?></div>
                         <div class="col-sm-6">
                         <?= $form->field($model, 'sale_channel_id')->widget(\kartik\select2\Select2::class, [
-                            'data' => Yii::$app->salesService->saleChannel->getDropDown(),
+                            'data' => Yii::$app->salesService->saleChannel->getDropDownForExternalOrder(),
                             'options' => ['placeholder' => '请选择',],
                             'pluginOptions' => [
                                 'allowClear' => true
@@ -72,23 +72,13 @@ $this->params['breadcrumbs'][] = $this->title;
                         <div class="col-sm-6"><?= $form->field($model, 'pay_remark')->textArea(['options'=>['maxlength' => true]])?></div>
                         <div class="col-sm-6"><?= $form->field($model, 'remark')->textArea(['options'=>['maxlength' => true]])?></div>            
                     </div>  
-                    
+                    <?php if($model->isNewRecord) {?>
                     <div class="row">
                         <?= \unclead\multipleinput\MultipleInput::widget([
                                     'max' => 5,
-                                    'name' => "ExternalOrderForm[{$model->id}][OrderGoods]",
-                                    'value' => $model->OrderGoods ?? [],
-                                    'columns' => [
-                                        [
-                                                'name' => 'goods_name',
-                                                'title' => '商品名称',
-                                                'enableError' => false,
-                                                'options' => [
-                                                    'class' => 'input-priority',
-                                                    'style'=>'width:500px',
-                                                    'placeholder' => '请输入商品名称',
-                                                ]
-                                        ],
+                                    'name' => "ExternalOrderForm[goods_list]",
+                                    'value' => $model->goods_list,
+                                    'columns' => [                                        
                                         [
                                                 'name' => "style_sn",
                                                 'title' => '款号',
@@ -97,6 +87,16 @@ $this->params['breadcrumbs'][] = $this->title;
                                                     'class' => 'input-priority',
                                                     //'style' => 'width:200px',
                                                     'placeholder' => '请输入款号',
+                                                ]
+                                        ],
+                                        [
+                                                'name' => 'goods_name',
+                                                'title' => '商品名称',
+                                                'enableError' => false,
+                                                'options' => [
+                                                        'class' => 'input-priority',
+                                                        'style'=>'width:500px',
+                                                        'placeholder' => '请输入商品名称',
                                                 ]
                                         ],
                                         [
@@ -110,7 +110,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                                 ]
                                         ],
                                         [
-                                                'name' => "finger",
+                                                'name' => "goods_spec",
                                                 'title' => '手寸/尺寸',
                                                 'enableError' => false,
                                                 'options' => [
@@ -123,6 +123,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                     ]
                                 ]);?>          
                     </div> 
+                    <?php }?>
             </div>
             <?php ActiveForm::end(); ?>
         </div>

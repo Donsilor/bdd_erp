@@ -2,12 +2,17 @@
 
 use common\helpers\Html;
 use yii\grid\GridView;
+use addons\Sales\common\enums\OrderFromEnum;
 
 $this->title = '订单日志';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="box-body nav-tabs-custom">
+    <?php if($order->order_from == OrderFromEnum::FROM_EXTERNAL) {?>
+    <h2 class="page-header">订单详情 - <?php echo $order->out_trade_no ?? ''?></h2>
+    <?php }else {?>
     <h2 class="page-header">订单详情 - <?php echo $order->order_sn ?? ''?></h2>
+    <?php }?>
     <?php echo Html::menuTab($tabList,$tab)?>
     <div class="tab-content">
         <div class="row col-xs-14">

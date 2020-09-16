@@ -73,7 +73,7 @@ class Order extends BaseModel
     public function rules()
     {
         return [
-            [['sale_channel_id','language','currency','customer_name'], 'required'],
+            [['sale_channel_id','language','currency'], 'required'],
             [['merchant_id', 'goods_num','apply_id','sale_channel_id','pay_type', 'pay_status', 'order_time', 'order_status', 'refund_status', 'express_id', 'distribute_status', 'delivery_status', 'receive_type', 'order_from', 'order_type', 'is_invoice', 'follower_id', 'followed_time', 'followed_status', 'area_id', 'audit_status', 'audit_time', 'auditor_id','customer_id', 'creator_id', 'created_at', 'updated_at'], 'integer'],
             [['language'], 'string', 'max' => 5],
             [['currency'], 'string', 'max' => 3],
