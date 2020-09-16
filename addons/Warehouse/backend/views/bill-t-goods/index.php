@@ -1911,6 +1911,24 @@ $this->params['breadcrumbs'][] = $this->title;
                                 ]),
                             ],
                             [
+                                'label' => "单件成本价",
+                                'attribute' => 'cost_price',
+                                //'format' => 'raw',
+                                'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#9b95c9;'],
+                                'contentOptions' => ['style' => 'color:red'],
+                                'footerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#9b95c9;'],
+                                'value' => function ($model, $key, $index, $widget) use ($total) {
+                                    $widget->footer = "单件成本价";
+                                    return bcdiv($model->cost_price, $model->goods_num, 3) ?? "0.00";
+                                },
+                                'visible' => \common\helpers\Auth::verify(\common\enums\SpecialAuthEnum::VIEW_CAIGOU_PRICE),
+                                'filter' => false,
+//                                'filter' => Html::activeTextInput($searchModel, 'cost_price', [
+//                                    'class' => 'form-control',
+//                                    'style' => 'width:100px;'
+//                                ]),
+                            ],
+                            [
                                 'attribute' => 'cost_price',
                                 //'format' => 'raw',
                                 'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#9b95c9;'],
