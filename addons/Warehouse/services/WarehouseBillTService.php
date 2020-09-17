@@ -1507,12 +1507,24 @@ class WarehouseBillTService extends Service
     public function calculateCostPrice($form)
     {
         $cost_price = 0;
-        $cost_price = bcadd($cost_price, $this->calculateGoldAmount($form), 5);
-        $cost_price = bcadd($cost_price, $this->calculateMainStoneCost($form), 5);
-        $cost_price = bcadd($cost_price, $this->calculateSecondStone1Cost($form), 5);
-        $cost_price = bcadd($cost_price, $this->calculateSecondStone2Cost($form), 5);
-        $cost_price = bcadd($cost_price, $this->calculateSecondStone3Cost($form), 5);
-        $cost_price = bcadd($cost_price, $this->calculatePartsAmount($form), 5);
+        if ($form->peiliao_way != PeiLiaoWayEnum::NO_PEI) {
+            $cost_price = bcadd($cost_price, $this->calculateGoldAmount($form), 5);
+        }
+        if ($form->main_pei_type != PeiShiWayEnum::NO_PEI) {
+            $cost_price = bcadd($cost_price, $this->calculateMainStoneCost($form), 5);
+        }
+        if ($form->second_pei_type != PeiShiWayEnum::NO_PEI) {
+            $cost_price = bcadd($cost_price, $this->calculateSecondStone1Cost($form), 5);
+        }
+        if ($form->second_pei_type2 != PeiShiWayEnum::NO_PEI) {
+            $cost_price = bcadd($cost_price, $this->calculateSecondStone2Cost($form), 5);
+        }
+        if ($form->second_pei_type3 != PeiShiWayEnum::NO_PEI) {
+            $cost_price = bcadd($cost_price, $this->calculateSecondStone3Cost($form), 5);
+        }
+        if ($form->parts_way != PeiJianWayEnum::NO_PEI) {
+            $cost_price = bcadd($cost_price, $this->calculatePartsAmount($form), 5);
+        }
         $cost_price = bcadd($cost_price, $this->calculateTotalGongFee($form), 5);
 
         return sprintf("%.3f", $cost_price) ?? 0;
