@@ -219,7 +219,7 @@ class WarehouseBillTService extends Service
                 $i++;
                 continue;
             }
-            if (count($goods) != 87) {
+            if (count($goods) != 99) {
                 throw new \Exception("模板格式不正确，请下载最新模板");
             }
             $goods = $form->trimField($goods);
@@ -897,6 +897,12 @@ class WarehouseBillTService extends Service
             $lasha_fee = $form->formatValue($goods['lasha_fee'], 0) ?? 0;//拉砂费
             $bukou_fee = $form->formatValue($goods['bukou_fee'], 0) ?? 0;//补口费
             $templet_fee = $form->formatValue($goods['templet_fee'], 0) ?? 0;//版费
+            $tax_fee = $form->formatValue($goods['tax_fee'], 0) ?? 0;//税费
+            $tax_amount = $form->formatValue($goods['tax_amount'], 0) ?? 0;//税额
+            $auto_tax_amount = ConfirmEnum::NO;
+            if (bccomp($tax_amount, 0, 5) > 0) {
+                $auto_tax_amount = ConfirmEnum::YES;
+            }
             $cert_fee = $form->formatValue($goods['cert_fee'], 0) ?? 0;//证书费
             $other_fee = $form->formatValue($goods['other_fee'], 0) ?? 0;//其他费用
             $main_cert_id = $goods['main_cert_id'] ?? "";//主石证书号
@@ -1045,10 +1051,12 @@ class WarehouseBillTService extends Service
                 'bukou_fee' => $bukou_fee,
                 'templet_fee' => $templet_fee,
                 'cert_fee' => $cert_fee,
+                'tax_fee' => $tax_fee,
                 'other_fee' => $other_fee,
                 'main_cert_id' => $main_cert_id,
                 'main_cert_type' => $main_cert_type,
                 //价格信息
+                'tax_amount' => $tax_amount,
                 'factory_cost' => $factory_cost,
                 'cost_price' => $cost_price,
                 //其他信息
@@ -1064,6 +1072,7 @@ class WarehouseBillTService extends Service
                 'auto_peishi_fee' => $auto_peishi_fee,
                 'auto_xianqian_fee' => $auto_xianqian_fee,
                 'auto_factory_cost' => $auto_factory_cost,
+                'auto_tax_amount' => $auto_tax_amount,
                 'markup_rate' => $markup_rate,
                 'jintuo_type' => $jintuo_type,
                 'auto_goods_id' => $auto_goods_id,
@@ -1347,6 +1356,18 @@ class WarehouseBillTService extends Service
 
     /**
      *
+     * 税额=(金重*税费)
+     * @param WarehouseBillTGoodsForm $form
+     * @return integer
+     * @throws
+     */
+    public function calculateTaxAmount($form)
+    {
+        return bcmul($this->calculateGoldWeight($form), $form->tax_fee, 5) ?? 0;
+    }
+
+    /**
+     *
      * 基本工费=(克/工费*含耗重)
      * ps:填了件工费，基本工费=件工费
      * @param WarehouseBillTGoodsForm $form
@@ -1547,6 +1568,12 @@ class WarehouseBillTService extends Service
                 $form->auto_factory_cost = ConfirmEnum::NO;
             }
             $form->factory_cost = $this->calculateFactoryCost($form);//工厂成本
+        }
+        if (empty($form->auto_tax_amount) || empty($form->tax_amount)) {
+            if (empty($form->tax_amount)) {
+                $form->auto_tax_amount = ConfirmEnum::NO;
+            }
+            $form->tax_amount = $this->calculateTaxAmount($form);//税额
         }
         if (empty($form->is_auto_price) || empty($form->cost_price)) {
             $form->cost_price = $this->calculateCostPrice($form);//公司成本
