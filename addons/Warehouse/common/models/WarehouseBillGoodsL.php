@@ -377,7 +377,7 @@ class WarehouseBillGoodsL extends BaseModel
             'extra_stone_fee' => '超石费',
             'fense_fee' => '分色/分件费',
             'biaomiangongyi_fee' => '表面工艺费',
-            'tax_fee' => '税费',
+            'tax_fee' => '税费/克',
             'cert_fee' => '证书费',
             'other_fee' => '其它工费',
             'total_gong_fee' => '总工费',

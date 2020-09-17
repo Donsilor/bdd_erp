@@ -2135,6 +2135,36 @@ $this->params['breadcrumbs'][] = $this->title;
 //                                ]),
                             ],
                             [
+                                'attribute' => 'tax_fee',
+                                'format' => 'raw',
+                                'headerOptions' => ['class' => 'col-md-1 batch_full', 'attr-name' => 'tax_fee', 'style' => 'background-color:#E6E6FA;'],
+                                'footerOptions' => ['class' => 'col-md-1 batch_full2', 'attr-name' => 'tax_fee', 'style' => 'background-color:#E6E6FA;'],
+                                'value' => function ($model, $key, $index, $widget) {
+                                    $widget->footer = $model->getAttributeLabel('tax_fee');
+                                    return Html::ajaxInput('tax_fee', $model->tax_fee, ['data-id' => $model->id, 'onfocus' => 'rfClearVal(this)', 'data-type' => 'number']);
+                                },
+                                'filter' => false,
+//                                'filter' => Html::activeTextInput($searchModel, 'tax_fee', [
+//                                    'class' => 'form-control',
+//                                    'style' => 'width:80px;'
+//                                ]),
+                            ],
+                            [
+                                'attribute' => 'tax_amount',
+                                'format' => 'raw',
+                                'headerOptions' => ['class' => 'col-md-1 batch_full', 'attr-name' => 'tax_amount', 'style' => 'background-color:#E6E6FA;'],
+                                'footerOptions' => ['class' => 'col-md-1 batch_full2', 'attr-name' => 'tax_amount', 'style' => 'background-color:#E6E6FA;'],
+                                'value' => function ($model, $key, $index, $widget) use ($total) {
+                                    $widget->footer = $model->getAttributeLabel('tax_amount');
+                                    return Html::ajaxInput('tax_amount', $model->tax_amount, ['data-id' => $model->id, 'onfocus' => 'rfClearVal(this)', 'data-type' => 'number']);
+                                },
+                                'filter' => false,
+//                                'filter' => Html::activeTextInput($searchModel, 'tax_amount', [
+//                                    'class' => 'form-control',
+//                                    'style' => 'width:80px;'
+//                                ]),
+                            ],
+                            [
                                 'attribute' => 'cert_fee',
                                 'format' => 'raw',
                                 'headerOptions' => ['class' => 'col-md-1 batch_full', 'attr-name' => 'cert_fee', 'style' => 'background-color:#E6E6FA;'],

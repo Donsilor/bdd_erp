@@ -440,6 +440,12 @@ $this->params['breadcrumbs'][] = $this->title;
                         <?= $form->field($model, 'templet_fee')->textInput() ?>
                     </div>
                     <div class="col-lg-4">
+                        <?= $form->field($model, 'tax_fee')->textInput() ?>
+                    </div>
+                    <div class="col-lg-4">
+                        <?= $form->field($model, 'tax_amount')->textInput() ?>
+                    </div>
+                    <div class="col-lg-4">
                         <?= $form->field($model, 'cert_fee')->textInput() ?>
                     </div>
 <!--                    <div class="col-lg-4">-->
