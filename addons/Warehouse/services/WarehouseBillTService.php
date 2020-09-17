@@ -1217,7 +1217,7 @@ class WarehouseBillTService extends Service
             if (empty($form->pure_gold_rate)) {
                 $form->pure_gold_rate = 0;
             }
-            return bcmul($this->calculateLossWeight($form), 1 + ($form->pure_gold_rate / 100), 5) ?? 0;
+            return bcmul($this->calculateLossWeight($form), ($form->pure_gold_rate / 100), 5) ?? 0;
         }
         return 0;
     }
