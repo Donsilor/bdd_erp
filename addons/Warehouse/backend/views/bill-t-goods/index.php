@@ -57,12 +57,12 @@ $this->params['breadcrumbs'][] = $this->title;
             <div class="box">
                 <div class="box-body table-responsive">
                     <?php echo Html::batchButtons(false) ?>
-                    <span style="color:red;">Ctrl+F键可快速查找字段名</span>
                     <span style="font-size:16px">
                         <!--<span style="font-weight:bold;">明细汇总：</span>-->
                         货品总数：<span style="color:green;"><?= $bill->goods_num ?></span>
                         总成本价：<span style="color:green;"><?= $bill->total_cost ?></span>
                     </span>
+                    <span style="color:red;">（Ctrl+F键可快速查找字段名）</span>
                     <?= GridView::widget([
                         'dataProvider' => $dataProvider,
                         'filterModel' => $searchModel,
@@ -161,13 +161,13 @@ $this->params['breadcrumbs'][] = $this->title;
                                 ]),
                             ],
                             [
-                                'label' => '手动填写',
+                                'label' => '货号手填',
                                 'attribute' => 'auto_goods_id',
                                 'format' => 'raw',
                                 'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#feeeed;'],
                                 'footerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#feeeed;'],
                                 'value' => function ($model, $key, $index, $widget) {
-                                    $widget->footer = "手动填写";
+                                    $widget->footer = "货号手填";
                                     return \common\enums\ConfirmEnum::getValue($model->auto_goods_id);
                                 },
                                 'filter' => Html::activeDropDownList($searchModel, 'auto_goods_id', \common\enums\ConfirmEnum::getMap(), [
@@ -312,8 +312,8 @@ $this->params['breadcrumbs'][] = $this->title;
                             [
                                 'attribute' => 'finger_hk',
                                 'format' => 'raw',
-                                'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#afdfe4;'],
-                                'footerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#afdfe4;'],
+                                'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#feeeed;'],
+                                'footerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#feeeed;'],
                                 'value' => function ($model, $key, $index, $widget) {
                                     $widget->footer = $model->getAttributeLabel('finger_hk');
                                     return Yii::$app->attr->valueName($model->finger_hk) ?? "";
@@ -327,8 +327,8 @@ $this->params['breadcrumbs'][] = $this->title;
                             [
                                 'attribute' => 'finger',
                                 'format' => 'raw',
-                                'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#afdfe4;'],
-                                'footerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#afdfe4;'],
+                                'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#feeeed;'],
+                                'footerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#feeeed;'],
                                 'value' => function ($model, $key, $index, $widget) {
                                     $widget->footer = $model->getAttributeLabel('finger');
                                     return Yii::$app->attr->valueName($model->finger) ?? "";
@@ -342,8 +342,8 @@ $this->params['breadcrumbs'][] = $this->title;
                             [
                                 'attribute' => 'length',
                                 //'format' => 'raw',
-                                'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#afdfe4;'],
-                                'footerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#afdfe4;'],
+                                'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#feeeed;'],
+                                'footerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#feeeed;'],
                                 'value' => function ($model, $key, $index, $widget) {
                                     $widget->footer = $model->getAttributeLabel('length');
                                     return $model->length ?? "";
@@ -355,8 +355,8 @@ $this->params['breadcrumbs'][] = $this->title;
                             ],
                             [
                                 'attribute' => 'product_size',
-                                'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#afdfe4;'],
-                                'footerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#afdfe4;'],
+                                'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#feeeed;'],
+                                'footerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#feeeed;'],
                                 'value' => function ($model, $key, $index, $widget) {
                                     $widget->footer = $model->getAttributeLabel('product_size');
                                     return $model->product_size ?? "";
@@ -369,8 +369,8 @@ $this->params['breadcrumbs'][] = $this->title;
                             [
                                 'attribute' => 'xiangkou',
                                 'format' => 'raw',
-                                'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#afdfe4;'],
-                                'footerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#afdfe4;'],
+                                'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#feeeed;'],
+                                'footerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#feeeed;'],
                                 'value' => function ($model, $key, $index, $widget) {
                                     $widget->footer = $model->getAttributeLabel('xiangkou');
                                     return Yii::$app->attr->valueName($model->xiangkou) ?? "";
@@ -383,8 +383,8 @@ $this->params['breadcrumbs'][] = $this->title;
                             ],
                             [
                                 'attribute' => 'kezi',
-                                'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#afdfe4;'],
-                                'footerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#afdfe4;'],
+                                'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#feeeed;'],
+                                'footerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#feeeed;'],
                                 'value' => function ($model, $key, $index, $widget) {
                                     $widget->footer = $model->getAttributeLabel('kezi');
                                     return $model->kezi ?? "";
@@ -397,8 +397,8 @@ $this->params['breadcrumbs'][] = $this->title;
                             [
                                 'attribute' => 'chain_type',
                                 'format' => 'raw',
-                                'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#afdfe4;'],
-                                'footerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#afdfe4;'],
+                                'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#feeeed;'],
+                                'footerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#feeeed;'],
                                 'value' => function ($model, $key, $index, $widget) {
                                     $widget->footer = $model->getAttributeLabel('chain_type');
                                     return Yii::$app->attr->valueName($model->chain_type) ?? "";
@@ -420,8 +420,8 @@ $this->params['breadcrumbs'][] = $this->title;
                             [
                                 'attribute' => 'cramp_ring',
                                 'format' => 'raw',
-                                'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#afdfe4;'],
-                                'footerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#afdfe4;'],
+                                'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#feeeed;'],
+                                'footerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#feeeed;'],
                                 'value' => function ($model, $key, $index, $widget) {
                                     $widget->footer = $model->getAttributeLabel('cramp_ring');
                                     return Yii::$app->attr->valueName($model->cramp_ring) ?? "";
@@ -435,8 +435,8 @@ $this->params['breadcrumbs'][] = $this->title;
                             [
                                 'attribute' => 'talon_head_type',
                                 'format' => 'raw',
-                                'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#afdfe4;'],
-                                'footerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#afdfe4;'],
+                                'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#feeeed;'],
+                                'footerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#feeeed;'],
                                 'value' => function ($model, $key, $index, $widget) {
                                     $widget->footer = $model->getAttributeLabel('talon_head_type');
                                     return Yii::$app->attr->valueName($model->talon_head_type) ?? "";
@@ -556,6 +556,20 @@ $this->params['breadcrumbs'][] = $this->title;
                                 },
                                 'filter' => false,
 //                                'filter' => Html::activeTextInput($searchModel, 'pure_gold', [
+//                                    'class' => 'form-control',
+//                                    'style' => 'width:80px;'
+//                                ]),
+                            ],
+                            [
+                                'attribute' => 'pure_gold_rate',
+                                'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#FFD700;'],
+                                'footerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#FFD700;'],
+                                'value' => function ($model, $key, $index, $widget) {
+                                    $widget->footer = $model->getAttributeLabel('pure_gold_rate');
+                                    return $model->pure_gold_rate ?? "0";
+                                },
+                                'filter' => false,
+//                                'filter' => Html::activeTextInput($searchModel, 'pure_gold_rate', [
 //                                    'class' => 'form-control',
 //                                    'style' => 'width:80px;'
 //                                ]),
@@ -1916,13 +1930,13 @@ $this->params['breadcrumbs'][] = $this->title;
 //                                ]),
                             ],
                             [
-                                'label' => '手动填写',
+                                'label' => '成本手填',
                                 'attribute' => 'is_auto_price',
                                 'format' => 'raw',
                                 'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#9b95c9;'],
                                 'footerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#9b95c9;'],
                                 'value' => function ($model, $key, $index, $widget) {
-                                    $widget->footer = "手动填写";
+                                    $widget->footer = "成本手填";
                                     return \common\enums\ConfirmEnum::getValue($model->is_auto_price);
                                 },
                                 'filter' => Html::activeDropDownList($searchModel, 'is_auto_price', \common\enums\ConfirmEnum::getMap(), [

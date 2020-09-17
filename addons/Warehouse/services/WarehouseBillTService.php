@@ -84,7 +84,7 @@ class WarehouseBillTService extends Service
             $form->goods_num = 1;
         }
         $form->is_auto_price = ConfirmEnum::NO;
-        if($form->cost_price){//自动计算成本
+        if ($form->cost_price) {//自动计算成本
             $form->is_auto_price = ConfirmEnum::YES;
         }
         $style = Style::find()->where(['style_sn' => $form->goods_sn])->one();
@@ -338,7 +338,7 @@ class WarehouseBillTService extends Service
                     $error[$i][] = "入库仓库：[" . $to_warehouse_id . "]录入值有误";
                     $to_warehouse_id = "";
                 }
-            }else{
+            } else {
                 $flag = false;
                 $error[$i][] = "入库仓库不能为空";
             }
@@ -364,9 +364,9 @@ class WarehouseBillTService extends Service
                     $material_color = $attr_id;
                 }
             }
-            $goods_num = $form->formatValue($goods['goods_num'],1) ?? 1;
+            $goods_num = $form->formatValue($goods['goods_num'], 1) ?? 1;
             $is_wholesale = IsWholeSaleEnum::NO;
-            if($goods_num > 1){
+            if ($goods_num > 1) {
                 $is_wholesale = IsWholeSaleEnum::YES;
             }
             $finger_hk = $goods['finger_hk'] ?? "";
@@ -1088,12 +1088,11 @@ class WarehouseBillTService extends Service
      */
     public function calculateGoldWeight($form)
     {
-        $stone_weight = bcadd($this->calculateMainStoneWeight($form), $this->calculateSecondStoneWeight($form), 3);
+        $stone_weight = bcadd($this->calculateMainStoneWeight($form), $this->calculateSecondStoneWeight($form), 5);
         $stone_weight = bcmul($stone_weight, 0.2, 5);//ct转换为克重
-        $weight = bcsub($form->suttle_weight, $stone_weight, 3) ?? 0;
-        $weight = bcsub($weight, $this->calculatePartsWeight($form), 3) ?? 0;
-
-        if ($weight < 0) {
+        $weight = bcsub($form->suttle_weight, $stone_weight, 5) ?? 0;
+        $weight = bcsub($weight, $this->calculatePartsWeight($form), 5) ?? 0;
+        if (bccomp(0, $weight, 5) == 1) {
             $weight = 0;
         }
         return $weight ?? 0;
@@ -1108,10 +1107,10 @@ class WarehouseBillTService extends Service
      */
     public function calculateLossWeight($form)
     {
-        if (!$form->gold_loss) {
+        if (empty($form->gold_loss)) {
             $form->gold_loss = 0;
         }
-        return bcmul($this->calculateGoldWeight($form), 1 + ($form->gold_loss / 100), 3) ?? 0;
+        return bcmul($this->calculateGoldWeight($form), 1 + ($form->gold_loss / 100), 5) ?? 0;
     }
 
     /**
@@ -1123,7 +1122,7 @@ class WarehouseBillTService extends Service
      */
     public function calculateGoldAmount($form)
     {
-        return bcmul($form->gold_price, $this->calculateLossWeight($form), 3) ?? 0;
+        return bcmul($form->gold_price, $this->calculateLossWeight($form), 5) ?? 0;
     }
 
     /**
@@ -1135,7 +1134,7 @@ class WarehouseBillTService extends Service
      */
     public function calculateMainStoneWeight($form)
     {
-        return bcmul($form->main_stone_weight, $form->main_stone_num, 3) ?? 0;
+        return bcmul($form->main_stone_weight, $form->main_stone_num, 5) ?? 0;
     }
 
     /**
@@ -1147,7 +1146,7 @@ class WarehouseBillTService extends Service
      */
     public function calculateSecondStoneNum($form)
     {
-        return bcadd(bcadd($form->second_stone_num1, $form->second_stone_num2, 3), $form->second_stone_num3, 3) ?? 0;
+        return bcadd(bcadd($form->second_stone_num1, $form->second_stone_num2, 5), $form->second_stone_num3, 5) ?? 0;
     }
 
     /**
@@ -1159,7 +1158,7 @@ class WarehouseBillTService extends Service
      */
     public function calculateSecondStoneWeight($form)
     {
-        return bcadd(bcadd($form->second_stone_weight1, $form->second_stone_weight2, 3), $form->second_stone_weight3, 3) ?? 0;
+        return bcadd(bcadd($form->second_stone_weight1, $form->second_stone_weight2, 5), $form->second_stone_weight3, 5) ?? 0;
     }
 
     /**
@@ -1171,7 +1170,7 @@ class WarehouseBillTService extends Service
      */
     public function calculateMainStoneCost($form)
     {
-        return bcmul($this->calculateMainStoneWeight($form), $form->main_stone_price, 3) ?? 0;
+        return bcmul($this->calculateMainStoneWeight($form), $form->main_stone_price, 5) ?? 0;
     }
 
     /**
@@ -1183,7 +1182,7 @@ class WarehouseBillTService extends Service
      */
     public function calculateSecondStone1Cost($form)
     {
-        return bcmul($form->second_stone_weight1, $form->second_stone_price1, 3) ?? 0;
+        return bcmul($form->second_stone_weight1, $form->second_stone_price1, 5) ?? 0;
     }
 
     /**
@@ -1195,7 +1194,7 @@ class WarehouseBillTService extends Service
      */
     public function calculateSecondStone2Cost($form)
     {
-        return bcmul($form->second_stone_weight2, $form->second_stone_price2, 3) ?? 0;
+        return bcmul($form->second_stone_weight2, $form->second_stone_price2, 5) ?? 0;
     }
 
     /**
@@ -1207,7 +1206,7 @@ class WarehouseBillTService extends Service
      */
     public function calculateSecondStone3Cost($form)
     {
-        return bcmul($form->second_stone_weight3, $form->second_stone_price3, 3) ?? 0;
+        return bcmul($form->second_stone_weight3, $form->second_stone_price3, 5) ?? 0;
     }
 
     /**
@@ -1219,7 +1218,7 @@ class WarehouseBillTService extends Service
      */
     public function calculatePartsWeight($form)
     {
-        return bcmul($form->parts_gold_weight, 1, 3) ?? 0;//$form->parts_num
+        return bcmul($form->parts_gold_weight, 1, 5) ?? 0;//$form->parts_num
     }
 
     /**
@@ -1231,7 +1230,7 @@ class WarehouseBillTService extends Service
      */
     public function calculatePartsAmount($form)
     {
-        return bcmul($this->calculatePartsWeight($form), $form->parts_price, 3) ?? 0;
+        return bcmul($this->calculatePartsWeight($form), $form->parts_price, 5) ?? 0;
     }
 
     /**
@@ -1243,7 +1242,7 @@ class WarehouseBillTService extends Service
      */
     public function calculatePeishiFee($form)
     {
-        return bcmul($form->peishi_weight, $form->peishi_gong_fee) ?? 0;
+        return bcmul($form->peishi_weight, $form->peishi_gong_fee, 5) ?? 0;
     }
 
     /**
@@ -1259,7 +1258,7 @@ class WarehouseBillTService extends Service
         if (bccomp($form->piece_fee, 0, 5) > 0) {
             return $form->piece_fee ?? 0;
         }
-        return bcmul($form->gong_fee, $this->calculateLossWeight($form), 3) ?? 0;
+        return bcmul($form->gong_fee, $this->calculateLossWeight($form), 5) ?? 0;
     }
 
     /**
@@ -1272,10 +1271,10 @@ class WarehouseBillTService extends Service
      */
     public function calculateXiangshiFee($form)
     {
-        $second_stone_fee1 = bcmul($form->second_stone_fee1, $form->second_stone_num1, 3) ?? 0;
-        $second_stone_fee2 = bcmul($form->second_stone_fee2, $form->second_stone_num2, 3) ?? 0;
-        $second_stone_fee3 = bcmul($form->second_stone_fee3, $form->second_stone_num3, 3) ?? 0;
-        return bcadd($second_stone_fee1, bcadd($second_stone_fee2, $second_stone_fee3, 3), 3) ?? 0;
+        $second_stone_fee1 = bcmul($form->second_stone_fee1, $form->second_stone_num1, 5) ?? 0;
+        $second_stone_fee2 = bcmul($form->second_stone_fee2, $form->second_stone_num2, 5) ?? 0;
+        $second_stone_fee3 = bcmul($form->second_stone_fee3, $form->second_stone_num3, 5) ?? 0;
+        return bcadd($second_stone_fee1, bcadd($second_stone_fee2, $second_stone_fee3, 5), 5) ?? 0;
     }
 
     /**
@@ -1288,22 +1287,22 @@ class WarehouseBillTService extends Service
     public function calculateTotalGongFee($form)
     {
         $total_gong_fee = 0;
-        $total_gong_fee = bcadd($total_gong_fee, $this->calculatePeishiFee($form), 3);
-        //$total_gong_fee = bcadd($total_gong_fee, $form->piece_fee, 3);//件/工费
-        $total_gong_fee = bcadd($total_gong_fee, $this->calculateBasicGongFee($form), 3);
-        $total_gong_fee = bcadd($total_gong_fee, $form->parts_fee, 3);
-        $total_gong_fee = bcadd($total_gong_fee, $this->calculateXiangshiFee($form), 3);
-        $total_gong_fee = bcadd($total_gong_fee, $form->biaomiangongyi_fee, 3);//表面工艺费
-        $total_gong_fee = bcadd($total_gong_fee, $form->fense_fee, 3);//分件/分色费
-        $total_gong_fee = bcadd($total_gong_fee, $form->penlasha_fee, 3);//喷砂费
-        $total_gong_fee = bcadd($total_gong_fee, $form->lasha_fee, 3);//拉砂费
-        $total_gong_fee = bcadd($total_gong_fee, $form->bukou_fee, 3);//补口费
-        //$total_gong_fee = bcadd($total_gong_fee, $form->extra_stone_fee, 3);//超石费
-        $total_gong_fee = bcadd($total_gong_fee, $form->templet_fee, 3);//样板工费
-        $total_gong_fee = bcadd($total_gong_fee, $form->cert_fee, 3);//证书费
-        $total_gong_fee = bcadd($total_gong_fee, $form->other_fee, 3);//其它补充费用
+        $total_gong_fee = bcadd($total_gong_fee, $this->calculatePeishiFee($form), 5);
+        //$total_gong_fee = bcadd($total_gong_fee, $form->piece_fee, 5);//件/工费
+        $total_gong_fee = bcadd($total_gong_fee, $this->calculateBasicGongFee($form), 5);
+        $total_gong_fee = bcadd($total_gong_fee, $form->parts_fee, 5);
+        $total_gong_fee = bcadd($total_gong_fee, $this->calculateXiangshiFee($form), 5);
+        $total_gong_fee = bcadd($total_gong_fee, $form->biaomiangongyi_fee, 5);//表面工艺费
+        $total_gong_fee = bcadd($total_gong_fee, $form->fense_fee, 5);//分件/分色费
+        $total_gong_fee = bcadd($total_gong_fee, $form->penlasha_fee, 5);//喷砂费
+        $total_gong_fee = bcadd($total_gong_fee, $form->lasha_fee, 5);//拉砂费
+        $total_gong_fee = bcadd($total_gong_fee, $form->bukou_fee, 5);//补口费
+        //$total_gong_fee = bcadd($total_gong_fee, $form->extra_stone_fee, 5);//超石费
+        $total_gong_fee = bcadd($total_gong_fee, $form->templet_fee, 5);//样板工费
+        $total_gong_fee = bcadd($total_gong_fee, $form->cert_fee, 5);//证书费
+        $total_gong_fee = bcadd($total_gong_fee, $form->other_fee, 5);//其它补充费用
 
-        return sprintf("%.2f", $total_gong_fee) ?? 0;
+        return sprintf("%.3f", $total_gong_fee) ?? 0;
     }
 
     /**
@@ -1317,26 +1316,26 @@ class WarehouseBillTService extends Service
     {
         $factory_cost = 0;
         if ($form->peiliao_way == PeiLiaoWayEnum::FACTORY) {
-            $factory_cost = bcadd($factory_cost, $this->calculateGoldAmount($form), 3);
+            $factory_cost = bcadd($factory_cost, $this->calculateGoldAmount($form), 5);
         }
         if ($form->main_pei_type == PeiShiWayEnum::FACTORY) {
-            $factory_cost = bcadd($factory_cost, $this->calculateMainStoneCost($form), 3);
+            $factory_cost = bcadd($factory_cost, $this->calculateMainStoneCost($form), 5);
         }
         if ($form->second_pei_type == PeiShiWayEnum::FACTORY) {
-            $factory_cost = bcadd($factory_cost, $this->calculateSecondStone1Cost($form), 3);
+            $factory_cost = bcadd($factory_cost, $this->calculateSecondStone1Cost($form), 5);
         }
         if ($form->second_pei_type2 == PeiShiWayEnum::FACTORY) {
-            $factory_cost = bcadd($factory_cost, $this->calculateSecondStone2Cost($form), 3);
+            $factory_cost = bcadd($factory_cost, $this->calculateSecondStone2Cost($form), 5);
         }
         if ($form->second_pei_type3 == PeiShiWayEnum::FACTORY) {
-            $factory_cost = bcadd($factory_cost, $this->calculateSecondStone3Cost($form), 3);
+            $factory_cost = bcadd($factory_cost, $this->calculateSecondStone3Cost($form), 5);
         }
         if ($form->parts_way == PeiJianWayEnum::FACTORY) {
-            $factory_cost = bcadd($factory_cost, $this->calculatePartsAmount($form), 3);
+            $factory_cost = bcadd($factory_cost, $this->calculatePartsAmount($form), 5);
         }
-        $factory_cost = bcadd($factory_cost, $this->calculateTotalGongFee($form), 3);//总工费
+        $factory_cost = bcadd($factory_cost, $this->calculateTotalGongFee($form), 5);//总工费
 
-        return sprintf("%.2f", $factory_cost) ?? 0;
+        return sprintf("%.3f", $factory_cost) ?? 0;
     }
 
     /**
@@ -1349,15 +1348,15 @@ class WarehouseBillTService extends Service
     public function calculateCostPrice($form)
     {
         $cost_price = 0;
-        $cost_price = bcadd($cost_price, $this->calculateGoldAmount($form), 3);
-        $cost_price = bcadd($cost_price, $this->calculateMainStoneCost($form), 3);
-        $cost_price = bcadd($cost_price, $this->calculateSecondStone1Cost($form), 3);
-        $cost_price = bcadd($cost_price, $this->calculateSecondStone2Cost($form), 3);
-        $cost_price = bcadd($cost_price, $this->calculateSecondStone3Cost($form), 3);
-        $cost_price = bcadd($cost_price, $this->calculatePartsAmount($form), 3);
-        $cost_price = bcadd($cost_price, $this->calculateTotalGongFee($form), 3);
+        $cost_price = bcadd($cost_price, $this->calculateGoldAmount($form), 5);
+        $cost_price = bcadd($cost_price, $this->calculateMainStoneCost($form), 5);
+        $cost_price = bcadd($cost_price, $this->calculateSecondStone1Cost($form), 5);
+        $cost_price = bcadd($cost_price, $this->calculateSecondStone2Cost($form), 5);
+        $cost_price = bcadd($cost_price, $this->calculateSecondStone3Cost($form), 5);
+        $cost_price = bcadd($cost_price, $this->calculatePartsAmount($form), 5);
+        $cost_price = bcadd($cost_price, $this->calculateTotalGongFee($form), 5);
 
-        return sprintf("%.2f", $cost_price) ?? 0;
+        return sprintf("%.3f", $cost_price) ?? 0;
     }
 
     /**
@@ -1369,7 +1368,7 @@ class WarehouseBillTService extends Service
      */
     public function calculateMarketPrice($form)
     {
-        return bcmul($form->markup_rate, $this->calculateCostPrice($form), 3) ?? 0;
+        return bcmul($form->markup_rate, $this->calculateCostPrice($form), 5) ?? 0;
     }
 
     /**
