@@ -17,6 +17,11 @@ $this->title = Yii::t('bill_t_goods', '其它入库单明细');
 $this->params['breadcrumbs'][] = ['label' => $this->title, 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
+<style>
+    select.form-control {
+        font-size: 12px;
+    }
+</style>
 <div class="box-body nav-tabs-custom">
     <h2 class="page-header"><?= $this->title; ?> - <?= $bill->bill_no ?>
         - <?= \addons\Warehouse\common\enums\BillStatusEnum::getValue($bill->bill_status) ?></h2>
@@ -59,7 +64,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         'dataProvider' => $dataProvider,
                         'filterModel' => $searchModel,
                         //'tableOptions' => ['class' => 'table table-hover'],
-                        'options' => ['style' => 'white-space:nowrap;'],
+                        'options' => ['style' => 'white-space:nowrap;font-size:12px;'],
                         'rowOptions' => function ($model, $key, $index) {
                             if ($index % 2 === 0) {
                                 return ['style' => 'background:#fffef9'];
@@ -133,7 +138,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'filter' => Html::activeDropDownList($searchModel, 'style_cate_id', $model->getCateMap(), [
                                     'prompt' => '全部',
                                     'class' => 'form-control',
-                                    'style' => 'width:120px;'
+                                    'style' => 'width:80px;'
 
                                 ]),
                             ],
@@ -149,7 +154,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'filter' => Html::activeDropDownList($searchModel, 'product_type_id', $model->getProductMap(), [
                                     'prompt' => '全部',
                                     'class' => 'form-control',
-                                    'style' => 'width:120px;'
+                                    'style' => 'width:80px;'
 
                                 ]),
                             ],
@@ -185,7 +190,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 },
                                 'filter' => Html::activeTextInput($searchModel, 'goods_id', [
                                     'class' => 'form-control',
-                                    'style' => 'width:160px;'
+                                    'style' => 'width:120px;'
                                 ]),
                             ],
                             [
@@ -206,7 +211,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 },
                                 'filter' => Html::activeTextInput($searchModel, 'style_sn', [
                                     'class' => 'form-control',
-                                    'style' => 'width:100px;'
+                                    'style' => 'width:80px;'
                                 ]),
                             ],
                             [
@@ -219,7 +224,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 },
                                 'filter' => Html::activeTextInput($searchModel, 'qiban_sn', [
                                     'class' => 'form-control',
-                                    'style' => 'width:100px;'
+                                    'style' => 'width:80px;'
                                 ]),
                             ],
                             [
@@ -233,7 +238,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 },
                                 'filter' => Html::activeTextInput($searchModel, 'goods_name', [
                                     'class' => 'form-control goods_name',
-                                    'style' => 'width:200px;'
+                                    'style' => 'width:130px;'
                                 ]),
                             ],
                             /*[
@@ -1578,7 +1583,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 },
                                 'filter' => Html::activeTextInput($searchModel, 'stone_remark', [
                                     'class' => 'form-control',
-                                    'style' => 'width:160px;'
+                                    'style' => 'width:80px;'
                                 ]),
                             ],
                             [
@@ -2161,7 +2166,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'filter' => Html::activeDropDownList($searchModel, 'jintuo_type', $model->getJietuoTypeMap(), [
                                     'prompt' => '全部',
                                     'class' => 'form-control',
-                                    'style' => 'width:100px;'
+                                    'style' => 'width:60px;'
                                 ]),
                             ],
 //                            [
