@@ -17,12 +17,13 @@ use Yii;
  * @property string $goods_name 商品名称
  * @property string $goods_sn 款号/起版号
  * @property string $goods_image 商品图片
- * @property int $style_id 款式ID/起版ID
+ * @property int $style_id 款式ID
  * @property string $style_sn 款号
  * @property int $product_type_id 产品线
  * @property int $style_cate_id 款式分类
  * @property int $style_sex 款式性别
  * @property int $style_channel_id 款式渠道
+ * @property int $qiban_id 起版ID
  * @property string $qiban_sn 起版号
  * @property int $qiban_type 起版类型
  * @property string $order_sn 订单号
@@ -185,16 +186,16 @@ class WarehouseBillGoodsL extends BaseModel
     {
         return [
             [['bill_id', 'bill_no', 'bill_type'], 'required'],
-            [['bill_id', 'style_id', 'product_type_id', 'style_cate_id', 'style_sex', 'style_channel_id', 'qiban_type', 'order_detail_id', 'supplier_id', 'to_warehouse_id', 'put_in_type', 'is_wholesale', 'goods_num', 'jintuo_type', 'is_inlay', 'peiliao_way', 'parts_type', 'parts_way', 'parts_num', 'main_pei_type', 'main_stone_num', 'second_pei_type', 'second_stone_num1', 'second_pei_type2', 'second_stone_num2', 'second_stone_num3', 'second_pei_type3', 'peishi_num', 'source_detail_id', 'auto_goods_id', 'is_auto_price', 'status', 'creator_id', 'created_at', 'updated_at'], 'integer'],
+            [['bill_id', 'style_id', 'qiban_id', 'product_type_id', 'style_cate_id', 'style_sex', 'style_channel_id', 'qiban_type', 'order_detail_id', 'supplier_id', 'to_warehouse_id', 'put_in_type', 'is_wholesale', 'goods_num', 'jintuo_type', 'is_inlay', 'peiliao_way', 'parts_type', 'parts_way', 'parts_num', 'main_pei_type', 'main_stone_num', 'second_pei_type', 'second_stone_num1', 'second_pei_type2', 'second_stone_num2', 'second_stone_num3', 'second_pei_type3', 'peishi_num', 'source_detail_id', 'auto_goods_id', 'is_auto_price', 'status', 'creator_id', 'created_at', 'updated_at'], 'integer'],
             [['gold_weight', 'pure_gold', 'gold_loss', 'suttle_weight', 'lncl_loss_weight', 'gold_price', 'gold_amount', 'diamond_carat', 'market_price', 'cost_price', 'gong_fee', 'piece_fee', 'basic_gong_fee', 'bukou_fee', 'xianqian_price', 'xianqian_fee', 'cert_fee', 'markup_rate', 'extra_stone_fee', 'tax_fee', 'fense_fee', 'other_fee', 'biaomiangongyi_fee', 'penlasha_fee', 'lasha_fee', 'templet_fee', 'total_gong_fee', 'factory_cost', 'chain_long', 'parts_amount', 'parts_gold_weight', 'parts_price', 'parts_fee', 'main_stone_weight', 'main_stone_price', 'main_stone_amount', 'second_stone_weight1', 'second_stone_price1', 'second_stone_amount1', 'second_stone_fee1', 'second_stone_weight2', 'second_stone_price2', 'second_stone_amount2', 'second_stone_fee2', 'second_stone_weight3', 'second_stone_price3', 'second_stone_amount3', 'second_stone_fee3', 'peishi_weight', 'peishi_fee', 'peishi_gong_fee'], 'number'],
             [['bill_no', 'goods_id', 'goods_sn', 'style_sn', 'qiban_sn', 'produce_sn', 'main_stone_sn', 'main_cert_id', 'second_stone_sn1', 'second_stone_sn2', 'second_cert_id2', 'second_stone_sn3'], 'string', 'max' => 30],
             [['bill_type'], 'string', 'max' => 3],
-            [['goods_name', 'goods_image', 'product_size', 'cert_id', 'length', 'goods_color', 'main_stone_size', 'second_stone_size1', 'second_stone_size2'], 'string', 'max' => 100],
+            [['goods_name', 'product_size', 'cert_id', 'length', 'goods_color', 'main_stone_size', 'second_stone_size1', 'second_stone_size2'], 'string', 'max' => 100],
             [['order_sn'], 'string', 'max' => 40],
             [['gross_weight', 'diamond_cert_id', 'second_cert_id1'], 'string', 'max' => 20],
             [['finger', 'finger_hk', 'material', 'material_type', 'material_color', 'diamond_color', 'diamond_shape', 'diamond_clarity', 'diamond_cut', 'diamond_polish', 'diamond_symmetry', 'diamond_fluorescence', 'diamond_discount', 'diamond_cert_type', 'xiangkou', 'chain_type', 'cramp_ring', 'talon_head_type', 'xiangqian_craft', 'parts_material', 'main_stone_type', 'main_cert_type', 'main_stone_shape', 'main_stone_color', 'main_stone_clarity', 'main_stone_cut', 'main_stone_colour', 'second_stone_type1', 'second_stone_shape1', 'second_stone_color1', 'second_stone_clarity1', 'second_stone_cut1', 'second_stone_colour1', 'second_stone_type2', 'second_stone_shape2', 'second_stone_color2', 'second_stone_clarity2', 'second_stone_colour2', 'second_stone_type3'], 'string', 'max' => 10],
             [['kezi', 'cert_type', 'factory_mo'], 'string', 'max' => 50],
-            [['stone_remark', 'remark'], 'string', 'max' => 255],
+            [['goods_image', 'stone_remark', 'remark'], 'string', 'max' => 255],
             [['goods_id'], 'unique'],
             [['biaomiangongyi'], 'parseFaceCraft'],
         ];
@@ -214,12 +215,13 @@ class WarehouseBillGoodsL extends BaseModel
             'goods_name' => '商品名称',
             'goods_sn' => '款号/起版号',
             'goods_image' => '商品图片',
-            'style_id' => '款式ID/起版ID',
+            'style_id' => '款式ID',
             'style_sn' => '款号',
             'product_type_id' => '产品线',
             'style_cate_id' => '款式分类',
             'style_sex' => '款式性别',
             'style_channel_id' => '款式渠道',
+            'qiban_id' => '起版ID',
             'qiban_sn' => '起版号',
             'qiban_type' => '起版类型',
             'goods_num' => '商品数量',
