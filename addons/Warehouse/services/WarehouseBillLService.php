@@ -175,6 +175,7 @@ class WarehouseBillLService extends Service
                     'gross_weight' => $good->lncl_loss_weight,//毛重(含耗重)
                     'gold_loss' => $good->gold_loss,//损耗
                     'pure_gold' => $good->pure_gold,//折足
+                    //'pure_gold_rate' => $good->pure_gold_rate,//折足率
                     'gold_price' => $good->gold_price,//金价
                     'gold_amount' => $good->gold_amount,//金料成本
 
