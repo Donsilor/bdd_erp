@@ -138,11 +138,11 @@ class WarehouseBillLService extends Service
                     'qiban_type' => $good->qiban_type,//起版类型
                     'goods_num' => $good->goods_num,//商品数量
                     'goods_status' => GoodsStatusEnum::IN_STOCK,//库存状态
-                    'goods_source' => GoodSourceEnum::QUICK_STORAGE,//写入库存方式
+                    'goods_source' => GoodSourceEnum::QUICK_STORAGE,//数据来源方式
                     'supplier_id' => $bill->supplier_id,//供应商
                     'put_in_type' => $bill->put_in_type,//入库方式
                     'company_id' => 1,//所在公司(默认1)
-                    'warehouse_id' => $bill->to_warehouse_id ?: 0,//入库仓库
+                    'warehouse_id' => $good->to_warehouse_id ?: $bill->to_warehouse_id,//入库仓库
                     'order_sn' => $good->order_sn ?? "",//订单号
                     'order_detail_id' => (string)$good->order_detail_id ?? "",//订单明细ID
                     'produce_sn' => $good->produce_sn,//布产号
@@ -175,6 +175,7 @@ class WarehouseBillLService extends Service
                     'gross_weight' => $good->lncl_loss_weight,//毛重(含耗重)
                     'gold_loss' => $good->gold_loss,//损耗
                     'pure_gold' => $good->pure_gold,//折足
+                    //'pure_gold_rate' => $good->pure_gold_rate,//折足率
                     'gold_price' => $good->gold_price,//金价
                     'gold_amount' => $good->gold_amount,//金料成本
 
@@ -315,6 +316,7 @@ class WarehouseBillLService extends Service
                     'goods_name' => $good->goods_name,//商品名称
                     'style_sn' => $good->style_sn,//款式编号
                     'goods_num' => $good->goods_num,//商品数量
+                    'warehouse_id' => $good->to_warehouse_id,//入库仓库
                     'put_in_type' => $bill->put_in_type,//入库方式
                     'cost_price' => $good->cost_price,//成本价
                     //'sale_price' => $good->sale_price,//销售价
@@ -390,13 +392,12 @@ class WarehouseBillLService extends Service
                             throw new \Exception($this->getError($goodsL));
                         }
                     }
-
-                    //插入商品日志
+                    //写入货品日志
                     $log = [
                         'goods_id' => $id,
                         'goods_status' => GoodsStatusEnum::IN_STOCK,
                         'log_type' => LogTypeEnum::ARTIFICIAL,
-                        'log_msg' => '入库单：'.$form->bill_no.";货品状态:“".GoodsStatusEnum::getValue(GoodsStatusEnum::IN_STOCK)."”"
+                        'log_msg' => '入库单：' . $form->bill_no . ";货品状态:“" . GoodsStatusEnum::getValue(GoodsStatusEnum::IN_STOCK) . "”"
                     ];
                     Yii::$app->warehouseService->goodsLog->createGoodsLog($log);
                 }

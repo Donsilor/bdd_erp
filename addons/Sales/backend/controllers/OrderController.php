@@ -27,6 +27,7 @@ use addons\Sales\common\models\OrderAddress;
 use addons\Sales\common\models\Customer;
 use common\enums\LogTypeEnum;
 use common\helpers\Auth;
+use addons\Finance\common\forms\OrderPayForm;
 
 /**
  * Default controller for the `order` module
@@ -130,7 +131,39 @@ class OrderController extends BaseController
                 'model' => $model,
         ]);
         
-    }   
+    }  
+    /**
+     * ajax 订单支付
+     *
+     * @return mixed|string|\yii\web\Response
+     * @throws \yii\base\ExitException
+     */
+    public function actionAjaxPay()
+    {
+        $id = Yii::$app->request->get('id');
+        $this->modelClass = OrderPayForm::class;
+        $model = $this->findModel($id);
+        $model = $model ?? new OrderPayForm();
+        
+        // ajax 校验
+        $this->activeFormValidate($model);
+        if ($model->load(Yii::$app->request->post())) {
+            try{
+                $trans = Yii::$app->db->beginTransaction();
+                \Yii::$app->financeService->orderPay->pay($model);
+                $trans->commit();
+                return $this->message('支付完成', $this->redirect(Yii::$app->request->referrer), 'success');
+            }catch (\Exception $e){
+                $trans->rollBack();
+                return $this->message($e->getMessage(), $this->redirect(Yii::$app->request->referrer), 'error');
+            }
+            
+        }
+        
+        return $this->renderAjax($this->action->id, [
+                'model' => $model,
+        ]);
+    }
     /**
      * 查询客户信息
      * @return array|\yii\db\ActiveRecord|NULL

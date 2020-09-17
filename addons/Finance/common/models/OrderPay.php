@@ -65,9 +65,9 @@ class OrderPay extends BaseModel
             'creator' => '点款人',
             'arrive_type' => '到账方式',
             'arrive_status' => '到账状态',
-            'arrival_time' => '到账时间',
+            'arrival_time' => '预估到账时间',
             'remark' => '备注',
-            'creator_id' => '点款人ID',
+            'creator_id' => '点款人',
             'created_at' => '点款时间',
             'updated_at' => '更新时间',
         ];

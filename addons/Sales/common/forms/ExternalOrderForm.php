@@ -5,9 +5,6 @@ namespace addons\Sales\common\forms;
 use Yii;
 use common\helpers\ArrayHelper;
 use addons\Sales\common\models\Order;
-use common\enums\LanguageEnum;
-use common\models\common\Currency;
-use common\enums\CurrencyEnum;
 use addons\Sales\common\models\OrderGoods;
 use addons\Style\common\models\Style;
 use common\enums\StatusEnum;
@@ -31,6 +28,9 @@ class ExternalOrderForm extends Order
     {
         $rules = [
                 [['out_trade_no','consignee_id'],'required'], 
+                [['out_trade_no'],'unique', 'targetAttribute'=>['out_trade_no'],
+                     'message' => "当前外部订单号已被使用了" //错误信息
+                ],
                 ['goods_list','validateGoodsList']
         ];
         $rules = ArrayHelper::merge(parent::rules(), $rules);

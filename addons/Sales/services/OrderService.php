@@ -157,7 +157,6 @@ class OrderService extends Service
         $isNewOrder = $form->isNewRecord;
         //1.创建订单
         $order = clone $form;
-        $order->pay_status = PayStatusEnum::HAS_PAY;
         $order->order_from = OrderFromEnum::FROM_EXTERNAL;
         if(false == $order->save()) {
             throw new \Exception($this->getError($order));

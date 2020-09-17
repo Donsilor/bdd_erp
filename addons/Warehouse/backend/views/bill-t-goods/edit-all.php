@@ -54,12 +54,12 @@ $this->params['breadcrumbs'][] = $this->title;
             <div class="box">
                 <div class="box-body table-responsive">
                     <?php echo Html::batchButtons(false) ?>
-                    <span style="color:red;">Ctrl+F键可快速查找字段名</span>
                     <span style="font-size:16px">
                         <!--<span style="font-weight:bold;">明细汇总：</span>-->
                         货品总数：<span style="color:green;"><?= $bill->goods_num ?></span>
                         总成本价：<span style="color:green;"><?= $bill->total_cost ?></span>
                     </span>
+                    <span style="color:red;">（Ctrl+F键可快速查找字段名)</span>
                     <?= GridView::widget([
                         'dataProvider' => $dataProvider,
                         'filterModel' => $searchModel,
@@ -159,13 +159,13 @@ $this->params['breadcrumbs'][] = $this->title;
                                 ]),
                             ],
                             [
-                                'label' => '手动填写',
+                                'label' => '货号手填',
                                 'attribute' => 'auto_goods_id',
                                 'format' => 'raw',
                                 'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#feeeed;'],
                                 'footerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#feeeed;'],
                                 'value' => function ($model, $key, $index, $widget) {
-                                    $widget->footer = "手动填写";
+                                    $widget->footer = "货号手填";
                                     //return \common\enums\ConfirmEnum::getValue($model->auto_goods_id);
                                     return Html::ajaxSelect($model, 'auto_goods_id', \common\enums\ConfirmEnum::getMap(), ['data-id' => $model->id]);
                                 },
@@ -580,6 +580,21 @@ $this->params['breadcrumbs'][] = $this->title;
                                 },
                                 'filter' => false,
 //                                'filter' => Html::activeTextInput($searchModel, 'pure_gold', [
+//                                    'class' => 'form-control',
+//                                    'style' => 'width:80px;'
+//                                ]),
+                            ],
+                            [
+                                'attribute' => 'pure_gold_rate',
+                                'headerOptions' => ['class' => 'col-md-1 batch_full', 'attr-name' => 'gold_loss', 'style' => 'background-color:#afdfe4;'],
+                                'footerOptions' => ['class' => 'col-md-1 batch_full2', 'attr-name' => 'gold_loss', 'style' => 'background-color:#afdfe4;'],
+                                'format' => 'raw',
+                                'value' => function ($model, $key, $index, $widget) {
+                                    $widget->footer = $model->getAttributeLabel('pure_gold_rate');
+                                    return Html::ajaxInput('pure_gold_rate', $model->pure_gold_rate, ['data-id' => $model->id, 'onfocus' => 'rfClearVal(this)', 'data-type' => 'number']);
+                                },
+                                'filter' => false,
+//                                'filter' => Html::activeTextInput($searchModel, 'pure_gold_rate', [
 //                                    'class' => 'form-control',
 //                                    'style' => 'width:80px;'
 //                                ]),
@@ -2090,13 +2105,13 @@ $this->params['breadcrumbs'][] = $this->title;
                                 ]),
                             ],
                             [
-                                'label' => '手动填写',
+                                'label' => '成本手填',
                                 'attribute' => 'is_auto_price',
                                 'format' => 'raw',
                                 'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#b7ba6b;'],
                                 'footerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#b7ba6b;'],
                                 'value' => function ($model, $key, $index, $widget) {
-                                    $widget->footer = "手动填写";
+                                    $widget->footer = "成本手填";
                                     return Html::ajaxSelect($model, 'is_auto_price', \common\enums\ConfirmEnum::getMap(), ['data-id' => $model->id]);
                                 },
                                 'filter' => Html::activeDropDownList($searchModel, 'is_auto_price', \common\enums\ConfirmEnum::getMap(), [

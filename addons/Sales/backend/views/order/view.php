@@ -123,8 +123,8 @@ $this->params['breadcrumbs'][] = $this->title;
                 </div>
                 <div class="box-footer text-center">
                     <?php
-                    if ($model->order_status == \addons\Sales\common\enums\OrderStatusEnum::SAVE) {
-                        echo Html::edit(['ajax-edit', 'id' => $model->id], '编辑', [
+                    if ($model->order_status == OrderStatusEnum::SAVE) {
+                        echo Html::edit(['order/ajax-edit', 'id' => $model->id], '编辑', [
                             'data-toggle' => 'modal',
                             'class' => 'btn btn-primary btn-ms',
                             'data-target' => '#ajaxModalLg',
@@ -132,17 +132,26 @@ $this->params['breadcrumbs'][] = $this->title;
                     }
                     ?>
                     <?php
-                    if ($model->order_status == \addons\Sales\common\enums\OrderStatusEnum::SAVE) {
-                        echo Html::edit(['ajax-edit-fee', 'id' => $model->id], '编辑费用', [
+                    if ($model->pay_status == PayStatusEnum::NO_PAY) {
+                        echo Html::edit(['order/ajax-edit-fee', 'id' => $model->id], '编辑费用', [
                             'data-toggle' => 'modal',
                             'class' => 'btn btn-primary btn-ms',
-                            'data-target' => '#ajaxModalLg',
+                            'data-target' => '#ajaxModal',
                         ]);
                     }
                     ?>
                     <?php
-                    if ($model->order_status == \addons\Sales\common\enums\OrderStatusEnum::SAVE) {
-                        echo Html::edit(['ajax-apply', 'id' => $model->id], '提审', [
+                    if ($model->pay_status == PayStatusEnum::NO_PAY) {
+                        echo Html::edit(['order/ajax-pay', 'id' => $model->id], '支付', [
+                                'data-toggle' => 'modal',
+                                'class' => 'btn btn-primary btn-ms',
+                                'data-target' => '#ajaxModalLg',
+                        ]);
+                    }
+                    ?>
+                    <?php
+                    if ($model->order_status == OrderStatusEnum::SAVE && $model->pay_status == PayStatusEnum::HAS_PAY) {
+                        echo Html::edit(['order/ajax-apply', 'id' => $model->id], '提审', [
                             'class' => 'btn btn-success btn-ms',
                             'onclick' => 'rfTwiceAffirm(this,"提交审核", "确定提交吗？");return false;',
                         ]);
@@ -154,8 +163,8 @@ $this->params['breadcrumbs'][] = $this->title;
                     } else {
                         $isAudit = true;
                     }
-                    if ($model->order_status == \addons\Sales\common\enums\OrderStatusEnum::PENDING && $isAudit) {
-                        echo Html::edit(['ajax-audit', 'id' => $model->id], '审核', [
+                    if ($isAudit && $model->order_status == OrderStatusEnum::PENDING) {
+                        echo Html::edit(['order/ajax-audit', 'id' => $model->id], '审核', [
                             'class' => 'btn btn-success btn-ms',
                             'data-toggle' => 'modal',
                             'data-target' => '#ajaxModalLg',
@@ -163,17 +172,17 @@ $this->params['breadcrumbs'][] = $this->title;
                     }
                     ?>
                     <?php
-                    if ($model->order_status == \addons\Sales\common\enums\OrderStatusEnum::CONFORMED && empty($model->apply_id)) {
-                        echo Html::edit(['ajax-purchase-apply', 'id' => $model->id], '申请采购', [
+                    if ($model->order_status == OrderStatusEnum::CONFORMED && empty($model->apply_id)) {
+                        echo Html::edit(['order/ajax-purchase-apply', 'id' => $model->id], '申请采购', [
                             'class' => 'btn btn-success btn-ms',
                             'onclick' => 'rfTwiceAffirm(this,"申请采购", "确定申请采购吗？");return false;',
                         ]);
                     }
                     ?>
                     <?php
-                    if ($model->pay_status == \addons\Sales\common\enums\PayStatusEnum::HAS_PAY
+                    if ($model->pay_status == PayStatusEnum::HAS_PAY
                         && !in_array($model->refund_status, [\addons\Sales\common\enums\RefundStatusEnum::HAS_RETURN])) {
-                        echo Html::edit(['return', 'id' => $model->id], '退款', [
+                        echo Html::edit(['order/return', 'id' => $model->id], '退款', [
                             //'data-toggle' => 'modal',
                             'class' => 'btn btn-warning btn-ms openIframe',
                             //'data-target' => '#ajaxModalLg',

@@ -69,8 +69,10 @@ class OrderPayService extends Service
         //订单变更
         $form->pay_sn = $orderPay->pay_sn;
         $form->pay_status = PayStatusEnum::HAS_PAY;
-        $form->distribute_status = DistributeStatusEnum::ALLOWED;
-        $form->pay_time   = time();
+        //$form->distribute_status = DistributeStatusEnum::ALLOWED;
+        if($form->pay_time == '') {
+            $form->pay_time   = time();
+        }
         if(false === $form->save()) {
             throw new \Exception($this->getError($form));
         }

@@ -3,6 +3,8 @@
 use common\helpers\Html;
 use common\helpers\Url;
 use yii\grid\GridView;
+use addons\Sales\common\enums\OrderStatusEnum;
+use addons\Sales\common\enums\PayStatusEnum;
 
 /* @var $this yii\web\View */
 /* @var $dataProvider yii\data\ActiveDataProvider */
@@ -80,7 +82,7 @@ $this->params['breadcrumbs'][] = $this->title;
             [
                     'attribute' => 'out_trade_no',
                     'value'=>function($model) {
-                        return Html::a($model->out_trade_no, ['view', 'id' => $model->id,'returnUrl'=>Url::getReturnUrl()], ['class'=>'openContab','style'=>"text-decoration:underline;color:#3c8dbc"]);
+                        return Html::a($model->out_trade_no, ['view', 'id' => $model->id], ['class'=>'openContab','style'=>"text-decoration:underline;color:#3c8dbc"]);
                     },
                     'filter' => Html::activeTextInput($searchModel, 'out_trade_no', [
                             'class' => 'form-control',
@@ -276,28 +278,38 @@ $this->params['breadcrumbs'][] = $this->title;
             [
                 'class' => 'yii\grid\ActionColumn',
                 'header' => '操作',
-                'template' => '{edit} {audit} {ajax-apply} {apply} {follower} {close}',
+                'template' => '{edit} {pay} {apply} {audit} ',
                 'buttons' => [
                     'edit' => function($url, $model, $key){
-                     if($model->order_status == \addons\Sales\common\enums\OrderStatusEnum::SAVE) {
-                         return Html::edit(['ajax-edit', 'id' => $model->id, 'returnUrl' => Url::getReturnUrl()], '编辑', [
-                             'data-toggle' => 'modal',
-                             'data-target' => '#ajaxModalLg',
-                             'class' => 'btn btn-primary btn-sm',
-                         ]);
-                     }
+                         if($model->order_status == OrderStatusEnum::SAVE) {
+                             return Html::edit(['edit', 'id' => $model->id, 'returnUrl' => Url::getReturnUrl()], '编辑', [
+                                     'class' => 'btn btn-primary btn-sm openIframe',
+                                     'data-width' => '70%',
+                                     'data-height' => '95%',
+                                     'data-offset' => '20px',
+                             ]);
+                         }
                     },
-                    'ajax-apply' => function($url, $model, $key){
-                        if($model->order_status == \addons\Sales\common\enums\OrderStatusEnum::SAVE){
-                            return Html::edit(['ajax-apply','id'=>$model->id], '提审', [
+                    'pay' => function($url, $model, $key){
+                        if($model->pay_status == PayStatusEnum::NO_PAY){
+                            return Html::edit(['order/ajax-pay', 'id' => $model->id], '支付', [
+                                    'data-toggle' => 'modal',
+                                    'class' => 'btn btn-primary btn-ms',
+                                    'data-target' => '#ajaxModalLg',
+                            ]);
+                        }
+                    },
+                    'apply' => function($url, $model, $key){
+                        if($model->order_status == OrderStatusEnum::SAVE && $model->pay_status == PayStatusEnum::HAS_PAY){
+                            return Html::edit(['order/ajax-apply','id'=>$model->id], '提审', [
                                 'class'=>'btn btn-success btn-sm',
                                 'onclick' => 'rfTwiceAffirm(this,"提交审核", "确定提交吗？");return false;',
                             ]);
                         }
                     },
                     'audit' => function($url, $model, $key){
-                        if($model->order_status == \addons\Sales\common\enums\OrderStatusEnum::PENDING) {
-                            return Html::edit(['ajax-audit', 'id' => $model->id], '审核', [
+                        if($model->order_status == OrderStatusEnum::PENDING) {
+                            return Html::edit(['order/ajax-audit', 'id' => $model->id], '审核', [
                                 'class' => 'btn btn-success btn-sm',
                                 'data-toggle' => 'modal',
                                 'data-target' => '#ajaxModal',
@@ -305,13 +317,12 @@ $this->params['breadcrumbs'][] = $this->title;
                         }
 
                     },                    
-                    'close' => function($url, $model, $key){
-                       
-                            return Html::delete(['delete', 'id' => $model->id],'关闭',[
+                    /* 'close' => function($url, $model, $key){                       
+                            return Html::delete(['order/delete', 'id' => $model->id],'关闭',[
                                 'onclick' => 'rfTwiceAffirm(this,"关闭单据", "确定关闭吗？");return false;',
                             ]);
 
-                    },                    
+                    },   */                  
                 ]
             ]
         ]

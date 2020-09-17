@@ -91,7 +91,7 @@ class WarehouseBillTGoodsForm extends WarehouseBillGoodsL
     {
         $title = "";
         if (!empty($values)) {
-            $title = implode($str.'】', $values) . "】";
+            $title = implode($str . '】', $values) . "】";
         }
         return $title ?? "";
     }
@@ -159,39 +159,39 @@ class WarehouseBillTGoodsForm extends WarehouseBillGoodsL
                 $total['gold_weight'] = bcadd($total['gold_weight'], $good->gold_weight, 3);
                 $total['pure_gold'] = bcadd($total['pure_gold'], $good->pure_gold, 3);
                 $total['lncl_loss_weight'] = bcadd($total['lncl_loss_weight'], $good->lncl_loss_weight, 3);
-                $total['gold_amount'] = bcadd($total['gold_amount'], $good->gold_amount, 2);
+                $total['gold_amount'] = bcadd($total['gold_amount'], $good->gold_amount, 3);
                 $total['main_stone_num'] = bcadd($total['main_stone_num'], $good->main_stone_num);
-                $total['main_stone_weight'] = bcadd($total['main_stone_weight'], $good->main_stone_weight, 3);
-                $total['main_stone_amount'] = bcadd($total['main_stone_amount'], $good->main_stone_amount, 2);
+                $total['main_stone_weight'] = bcadd($total['main_stone_weight'], $good->main_stone_weight, 5);
+                $total['main_stone_amount'] = bcadd($total['main_stone_amount'], $good->main_stone_amount, 3);
                 $total['second_stone_num1'] = bcadd($total['second_stone_num1'], $good->second_stone_num1);
-                $total['second_stone_weight1'] = bcadd($total['second_stone_weight1'], $good->second_stone_weight1, 3);
-                $total['second_stone_amount1'] = bcadd($total['second_stone_amount1'], $good->second_stone_amount1, 2);
+                $total['second_stone_weight1'] = bcadd($total['second_stone_weight1'], $good->second_stone_weight1, 5);
+                $total['second_stone_amount1'] = bcadd($total['second_stone_amount1'], $good->second_stone_amount1, 3);
                 $total['second_stone_num2'] = bcadd($total['second_stone_num2'], $good->second_stone_num2);
-                $total['second_stone_weight2'] = bcadd($total['second_stone_weight2'], $good->second_stone_weight2, 3);
-                $total['second_stone_amount2'] = bcadd($total['second_stone_amount2'], $good->second_stone_amount2, 2);
+                $total['second_stone_weight2'] = bcadd($total['second_stone_weight2'], $good->second_stone_weight2, 5);
+                $total['second_stone_amount2'] = bcadd($total['second_stone_amount2'], $good->second_stone_amount2, 3);
                 $total['second_stone_num3'] = bcadd($total['second_stone_num3'], $good->second_stone_num3);
-                $total['second_stone_weight3'] = bcadd($total['second_stone_weight3'], $good->second_stone_weight3, 3);
-                $total['second_stone_amount3'] = bcadd($total['second_stone_amount3'], $good->second_stone_amount3, 2);
+                $total['second_stone_weight3'] = bcadd($total['second_stone_weight3'], $good->second_stone_weight3, 5);
+                $total['second_stone_amount3'] = bcadd($total['second_stone_amount3'], $good->second_stone_amount3, 3);
                 $total['peishi_weight'] = bcadd($total['peishi_weight'], $good->peishi_weight, 3);
-                $total['peishi_fee'] = bcadd($total['peishi_fee'], $good->peishi_fee, 2);
+                $total['peishi_fee'] = bcadd($total['peishi_fee'], $good->peishi_fee, 3);
                 $total['parts_num'] = bcadd($total['parts_num'], $good->parts_num);
                 $total['parts_gold_weight'] = bcadd($total['parts_gold_weight'], $good->parts_gold_weight, 3);
-                $total['parts_amount'] = bcadd($total['parts_amount'], $good->parts_amount, 2);
-                $total['parts_fee'] = bcadd($total['parts_fee'], $good->parts_fee, 2);
-                $total['piece_fee'] = bcadd($total['piece_fee'], $good->piece_fee, 2);
-                $total['basic_gong_fee'] = bcadd($total['basic_gong_fee'], $good->basic_gong_fee, 2);
-                $total['xianqian_fee'] = bcadd($total['xianqian_fee'], $good->xianqian_fee, 2);
-                $total['biaomiangongyi_fee'] = bcadd($total['biaomiangongyi_fee'], $good->biaomiangongyi_fee, 2);
-                $total['fense_fee'] = bcadd($total['fense_fee'], $good->fense_fee, 2);
-                $total['penlasha_fee'] = bcadd($total['penlasha_fee'], $good->penlasha_fee, 2);
-                $total['lasha_fee'] = bcadd($total['lasha_fee'], $good->lasha_fee, 2);
-                $total['bukou_fee'] = bcadd($total['bukou_fee'], $good->bukou_fee, 2);
-                $total['templet_fee'] = bcadd($total['templet_fee'], $good->templet_fee, 2);
-                $total['cert_fee'] = bcadd($total['cert_fee'], $good->cert_fee, 2);
-                $total['other_fee'] = bcadd($total['other_fee'], $good->other_fee, 2);
-                $total['factory_cost'] = bcadd($total['factory_cost'], $good->factory_cost, 2);
-                $total['cost_price'] = bcadd($total['cost_price'], $good->cost_price, 2);
-                $total['market_price'] = bcadd($total['market_price'], $good->market_price, 2);
+                $total['parts_amount'] = bcadd($total['parts_amount'], $good->parts_amount, 3);
+                $total['parts_fee'] = bcadd($total['parts_fee'], $good->parts_fee, 3);
+                $total['piece_fee'] = bcadd($total['piece_fee'], $good->piece_fee, 3);
+                $total['basic_gong_fee'] = bcadd($total['basic_gong_fee'], $good->basic_gong_fee, 3);
+                $total['xianqian_fee'] = bcadd($total['xianqian_fee'], $good->xianqian_fee, 3);
+                $total['biaomiangongyi_fee'] = bcadd($total['biaomiangongyi_fee'], $good->biaomiangongyi_fee, 3);
+                $total['fense_fee'] = bcadd($total['fense_fee'], $good->fense_fee, 3);
+                $total['penlasha_fee'] = bcadd($total['penlasha_fee'], $good->penlasha_fee, 3);
+                $total['lasha_fee'] = bcadd($total['lasha_fee'], $good->lasha_fee, 3);
+                $total['bukou_fee'] = bcadd($total['bukou_fee'], $good->bukou_fee, 3);
+                $total['templet_fee'] = bcadd($total['templet_fee'], $good->templet_fee, 3);
+                $total['cert_fee'] = bcadd($total['cert_fee'], $good->cert_fee, 3);
+                $total['other_fee'] = bcadd($total['other_fee'], $good->other_fee, 3);
+                $total['factory_cost'] = bcadd($total['factory_cost'], $good->factory_cost, 3);
+                $total['cost_price'] = bcadd($total['cost_price'], $good->cost_price, 3);
+                $total['market_price'] = bcadd($total['market_price'], $good->market_price, 3);
             }
         }
         return $total;
@@ -208,6 +208,7 @@ class WarehouseBillTGoodsForm extends WarehouseBillGoodsL
             $this->formatTitle($this->getJietuoTypeMap()),//'金托类型' .
             '[起版号]和[款号]必填其一',
             '#',
+            $this->formatTitle($this->getWarehouseMap()),//'入库仓库' .
             $this->formatTitle($this->getMaterialTypeMap()),//'材质' .
             $this->formatTitle($this->getMaterialColorMap()),//'材质颜色' .
             '不填默认为1',
@@ -264,12 +265,12 @@ class WarehouseBillTGoodsForm extends WarehouseBillGoodsL
             $this->formatTitle($this->getFaceCraftMap(), "|"),//'表面工艺' .
             '#', '#', '#', '#', '#', '#', '#', '#', '#',
             $this->formatTitle($this->getCertTypeMap()),//'主石证书类型' .
-            '填写则不自动计算','#',
+            '填写则不自动计算', '#',
             '#',
         ];
         $fields = [
-            '条码号(货号)', '(*)款号', '(*)金托类型', '起版号', '商品名称', '材质', '材质颜色', '货品数量', '手寸(港号)', '手寸(美号)', '尺寸(cm)', '成品尺寸(mm)', '镶口(ct)', '刻字', '链类型', '扣环', '爪头形状',
-            '配料方式', '连石重(g)', '损耗(%)', '金价/g', '折足(g)',
+            '条码号(货号)', '(*)款号', '(*)金托类型', '起版号', '商品名称', '(*)入库仓库', '材质', '材质颜色', '货品数量', '手寸(港号)', '手寸(美号)', '尺寸(cm)', '成品尺寸(mm)', '镶口(ct)', '刻字', '链类型', '扣环', '爪头形状',
+            '配料方式', '连石重(g)', '损耗(%)', '金价/g', '折足率(%)',
             '主石配石方式', '主石编号', '主石类型', '主石粒数', '主石重(ct)', '主石单价/ct', '主石形状', '主石颜色', '主石净度', '主石切工', '主石色彩',
             '副石1配石方式', '副石1编号', '副石1类型', '副石1粒数', '副石1重(ct)', '副石1单价/ct', '副石1形状', '副石1颜色', '副石1净度', '副石1切工', '副石1色彩',
             '副石2配石方式', '副石2编号', '副石2类型', '副石2粒数', '副石2重(ct)', '副石2单价/ct',
@@ -287,8 +288,8 @@ class WarehouseBillTGoodsForm extends WarehouseBillGoodsL
     public function getFieldName()
     {
         $fieldName = [
-            'goods_id', 'style_sn', 'jintuo_type', 'qiban_sn', 'goods_name', 'material_type', 'material_color', 'goods_num', 'finger_hk', 'finger', 'length', 'product_size', 'xiangkou', 'kezi', 'chain_type', 'cramp_ring', 'talon_head_type',
-            'peiliao_way', 'suttle_weight', 'gold_loss', 'gold_price', 'pure_gold',
+            'goods_id', 'style_sn', 'jintuo_type', 'qiban_sn', 'goods_name', 'to_warehouse_id', 'material_type', 'material_color', 'goods_num', 'finger_hk', 'finger', 'length', 'product_size', 'xiangkou', 'kezi', 'chain_type', 'cramp_ring', 'talon_head_type',
+            'peiliao_way', 'suttle_weight', 'gold_loss', 'gold_price', 'pure_gold_rate',
             'main_pei_type', 'main_stone_sn', 'main_stone_type', 'main_stone_num', 'main_stone_weight', 'main_stone_price', 'main_stone_shape', 'main_stone_color', 'main_stone_clarity', 'main_stone_cut', 'main_stone_colour',
             'second_pei_type', 'second_stone_sn1', 'second_stone_type1', 'second_stone_num1', 'second_stone_weight1', 'second_stone_price1', 'second_stone_shape1', 'second_stone_color1', 'second_stone_clarity1', 'second_stone_cut1', 'second_stone_colour1',
             'second_pei_type2', 'second_stone_sn2', 'second_stone_type2', 'second_stone_num2', 'second_stone_weight2', 'second_stone_price2',
@@ -318,6 +319,18 @@ class WarehouseBillTGoodsForm extends WarehouseBillGoodsL
     }
 
     /**
+     * {@inheritdoc}
+     */
+    public function getWarehouseId($to_warehouse_id, $warehouseAll = [], $defaultValue = 0)
+    {
+        if ($warehouseAll) {
+            $warehouseAll = array_flip($warehouseAll);
+            $warehouse_id = $warehouseAll[$to_warehouse_id] ?? 0;
+        }
+        return $warehouse_id ?? $defaultValue;
+    }
+
+    /**
      * 属性值转换属性ID
      * @param string $style_sn 款号
      * @param string $value 属性值
@@ -329,7 +342,7 @@ class WarehouseBillTGoodsForm extends WarehouseBillGoodsL
 //        if (!empty($style_sn)) {
 //            $valueList = $this->getAttrValueListByStyle($style_sn, $attr_id);
 //        } else {
-                $valueList = \Yii::$app->attr->valueMap($attr_id);
+        $valueList = \Yii::$app->attr->valueMap($attr_id);
 //        }
         $valueList = array_flip($valueList);
         $attrId = isset($valueList[$value]) ? $valueList[$value] : "";
@@ -346,6 +359,15 @@ class WarehouseBillTGoodsForm extends WarehouseBillGoodsL
     {
         return \Yii::$app->attr->valueMap($attr_id) ?? [];//暂时放开限制
         //return \Yii::$app->styleService->styleAttribute->getAttrValueListByStyle($style_sn, $attr_id) ?? [];
+    }
+
+    /**
+     * 入库仓库列表
+     * @return array
+     */
+    public function getWarehouseMap()
+    {
+        return \Yii::$app->warehouseService->warehouse::getDropDown() ?? [];
     }
 
     /**
