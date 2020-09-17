@@ -1431,7 +1431,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'footerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#6495ED;'],
                                 'value' => function ($model, $key, $index, $widget) {
                                     $widget->footer = $model->getAttributeLabel('second_stone_price3');
-                                    return $model->second_stone_price2 ?? "0.00";
+                                    return $model->second_stone_price3 ?? "0.00";
                                 },
                                 'filter' => false,
 //                                'filter' => Html::activeTextInput($searchModel, 'second_stone_price3', [
