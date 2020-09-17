@@ -161,13 +161,13 @@ $this->params['breadcrumbs'][] = $this->title;
                                 ]),
                             ],
                             [
-                                'label' => '货号手动填写',
+                                'label' => '货号手填',
                                 'attribute' => 'auto_goods_id',
                                 'format' => 'raw',
                                 'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#feeeed;'],
                                 'footerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#feeeed;'],
                                 'value' => function ($model, $key, $index, $widget) {
-                                    $widget->footer = "货号手动填写";
+                                    $widget->footer = "货号手填";
                                     return \common\enums\ConfirmEnum::getValue($model->auto_goods_id);
                                 },
                                 'filter' => Html::activeDropDownList($searchModel, 'auto_goods_id', \common\enums\ConfirmEnum::getMap(), [
@@ -1916,13 +1916,13 @@ $this->params['breadcrumbs'][] = $this->title;
 //                                ]),
                             ],
                             [
-                                'label' => '成本手动填写',
+                                'label' => '成本手填',
                                 'attribute' => 'is_auto_price',
                                 'format' => 'raw',
                                 'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#9b95c9;'],
                                 'footerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#9b95c9;'],
                                 'value' => function ($model, $key, $index, $widget) {
-                                    $widget->footer = "成本手动填写";
+                                    $widget->footer = "成本手填";
                                     return \common\enums\ConfirmEnum::getValue($model->is_auto_price);
                                 },
                                 'filter' => Html::activeDropDownList($searchModel, 'is_auto_price', \common\enums\ConfirmEnum::getMap(), [
