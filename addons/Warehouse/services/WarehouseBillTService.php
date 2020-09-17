@@ -816,7 +816,7 @@ class WarehouseBillTService extends Service
                     $error[$i][] = "配件类型：[" . $parts_type . "]录入值有误";
                     $parts_type = "";
                 } else {
-                    $parts_type = (int)$attr_id ?? "";
+                    $parts_type = $attr_id ?? "";
                 }
             }
             $parts_material = $goods['parts_material'] ?? "";//配件材质

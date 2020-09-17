@@ -555,6 +555,21 @@ $this->params['breadcrumbs'][] = $this->title;
 //                                ]),
                             ],
                             [
+                                'attribute' => 'lncl_loss_weight',
+                                'headerOptions' => ['class' => 'col-md-1 batch_full', 'attr-name' => 'lncl_loss_weight', 'style' => 'background-color:#afdfe4;'],
+                                'footerOptions' => ['class' => 'col-md-1 batch_full2', 'attr-name' => 'lncl_loss_weight', 'style' => 'background-color:#afdfe4;'],
+                                'format' => 'raw',
+                                'value' => function ($model, $key, $index, $widget) {
+                                    $widget->footer = $model->getAttributeLabel('lncl_loss_weight');
+                                    return Html::ajaxInput('lncl_loss_weight', $model->lncl_loss_weight, ['data-id' => $model->id, 'onfocus' => 'rfClearVal(this)', 'data-type' => 'number']);
+                                },
+                                'filter' => false,
+//                                'filter' => Html::activeTextInput($searchModel, 'lncl_loss_weight', [
+//                                    'class' => 'form-control',
+//                                    'style' => 'width:80px;'
+//                                ]),
+                            ],
+                            [
                                 'attribute' => 'gold_price',
                                 'headerOptions' => ['class' => 'col-md-1 batch_full', 'attr-name' => 'gold_price', 'style' => 'background-color:#afdfe4;'],
                                 'footerOptions' => ['class' => 'col-md-1 batch_full2', 'attr-name' => 'gold_price', 'style' => 'background-color:#afdfe4;'],
