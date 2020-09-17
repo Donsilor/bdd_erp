@@ -54,12 +54,12 @@ $this->params['breadcrumbs'][] = $this->title;
                         货品总数：<span style="color:green;"><?= $bill->goods_num ?></span>
                         总成本价：<span style="color:green;"><?= $bill->total_cost ?></span>
                     </span>
-                    <span style="color:red;">（Ctrl+F键可快速查找字段名）</span>
+                    <span style="color:red;">（Ctrl+F键可快速查找字段名)</span>
                     <?= GridView::widget([
                         'dataProvider' => $dataProvider,
                         'filterModel' => $searchModel,
                         //'tableOptions' => ['class' => 'table table-hover'],
-                        'options' => ['style' => 'white-space:nowrap;'],
+                        'options' => ['style' => 'white-space:nowrap;font-size:12px;'],
                         'rowOptions' => function ($model, $key, $index) {
                             if ($index % 2 === 0) {
                                 return ['style' => 'background:#fffef9'];
