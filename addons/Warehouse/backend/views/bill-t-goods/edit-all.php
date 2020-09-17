@@ -579,6 +579,21 @@ $this->params['breadcrumbs'][] = $this->title;
 //                                    'style' => 'width:80px;'
 //                                ]),
                             ],
+                            [
+                                'attribute' => 'pure_gold_rate',
+                                'headerOptions' => ['class' => 'col-md-1 batch_full', 'attr-name' => 'gold_loss', 'style' => 'background-color:#afdfe4;'],
+                                'footerOptions' => ['class' => 'col-md-1 batch_full2', 'attr-name' => 'gold_loss', 'style' => 'background-color:#afdfe4;'],
+                                'format' => 'raw',
+                                'value' => function ($model, $key, $index, $widget) {
+                                    $widget->footer = $model->getAttributeLabel('pure_gold_rate');
+                                    return Html::ajaxInput('pure_gold_rate', $model->pure_gold_rate, ['data-id' => $model->id, 'onfocus' => 'rfClearVal(this)', 'data-type' => 'number']);
+                                },
+                                'filter' => false,
+//                                'filter' => Html::activeTextInput($searchModel, 'pure_gold_rate', [
+//                                    'class' => 'form-control',
+//                                    'style' => 'width:80px;'
+//                                ]),
+                            ],
                             /*[
                                 'attribute' => 'gold_amount',
                                 'headerOptions' => ['class' => 'col-md-1 batch_full', 'attr-name' => 'gold_amount'],
