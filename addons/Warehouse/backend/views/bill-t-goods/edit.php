@@ -132,6 +132,9 @@ $this->params['breadcrumbs'][] = $this->title;
                         <?= $form->field($model, 'suttle_weight')->textInput() ?>
                     </div>
                     <div class="col-lg-4">
+                        <?= $form->field($model, 'lncl_loss_weight')->textInput() ?>
+                    </div>
+                    <div class="col-lg-4">
                         <?= $form->field($model, 'gold_loss')->textInput() ?>
                     </div>
                     <div class="col-lg-4">
@@ -139,6 +142,9 @@ $this->params['breadcrumbs'][] = $this->title;
                     </div>
                     <div class="col-lg-4">
                         <?= $form->field($model, 'pure_gold')->textInput() ?>
+                    </div>
+                    <div class="col-lg-4">
+                        <?= $form->field($model, 'gold_amount')->textInput() ?>
                     </div>
                 </div>
 <!--                <div class="row">-->
@@ -202,6 +208,9 @@ $this->params['breadcrumbs'][] = $this->title;
                         <?= $form->field($model, 'main_stone_price')->textInput() ?>
                     </div>
                     <div class="col-lg-4">
+                        <?= $form->field($model, 'main_stone_amount')->textInput() ?>
+                    </div>
+                    <div class="col-lg-4">
                         <?= $form->field($model, 'main_stone_shape')->dropDownList($model->getMainStoneShapeDrop($model), ['prompt' => '请选择']) ?>
                     </div>
                     <div class="col-lg-4">
@@ -247,6 +256,9 @@ $this->params['breadcrumbs'][] = $this->title;
                     </div>
                     <div class="col-lg-4">
                         <?= $form->field($model, 'second_stone_price1')->textInput() ?>
+                    </div>
+                    <div class="col-lg-4">
+                        <?= $form->field($model, 'second_stone_amount1')->textInput() ?>
                     </div>
                     <div class="col-lg-4">
                         <?= $form->field($model, 'second_stone_shape1')->dropDownList($model->getSecondStoneShape1Drop($model), ['prompt' => '请选择']) ?>
@@ -298,6 +310,9 @@ $this->params['breadcrumbs'][] = $this->title;
                     <div class="col-lg-4">
                         <?= $form->field($model, 'second_stone_price2')->textInput() ?>
                     </div>
+                    <div class="col-lg-4">
+                        <?= $form->field($model, 'second_stone_amount2')->textInput() ?>
+                    </div>
 <!--                    <div class="col-lg-4">-->
 <!--                        --><?//= $form->field($model, 'second_stone_shape2')->dropDownList($model->getSecondStoneShape2Drop($model), ['prompt' => '请选择']) ?>
 <!--                    </div>-->
@@ -343,6 +358,9 @@ $this->params['breadcrumbs'][] = $this->title;
                         <?= $form->field($model, 'second_stone_price3')->textInput() ?>
                     </div>
                     <div class="col-lg-4">
+                        <?= $form->field($model, 'second_stone_amount3')->textInput() ?>
+                    </div>
+                    <div class="col-lg-4">
                         <?= $form->field($model, 'stone_remark')->textInput() ?>
                     </div>
                 </div>
@@ -367,6 +385,9 @@ $this->params['breadcrumbs'][] = $this->title;
                     </div>
                     <div class="col-lg-4">
                         <?= $form->field($model, 'parts_price')->textInput() ?>
+                    </div>
+                    <div class="col-lg-4">
+                        <?= $form->field($model, 'parts_amount')->textInput() ?>
                     </div>
                 </div>
                 <div class="row">
@@ -397,9 +418,9 @@ $this->params['breadcrumbs'][] = $this->title;
                     <div class="col-lg-4">
                         <?= $form->field($model, 'second_stone_fee3')->textInput() ?>
                     </div>
-<!--                    <div class="col-lg-4">-->
-<!--                        --><?//= $form->field($model, 'xianqian_price')->textInput() ?>
-<!--                    </div>-->
+                    <div class="col-lg-4">
+                        <?= $form->field($model, 'xianqian_fee')->textInput() ?>
+                    </div>
                     <div class="col-lg-4">
                         <?= $form->field($model, 'biaomiangongyi_fee')->textInput() ?>
                     </div>
@@ -429,6 +450,9 @@ $this->params['breadcrumbs'][] = $this->title;
                     </div>
                     <div class="col-lg-4">
                         <?= $form->field($model, 'other_fee')->textInput() ?>
+                    </div>
+                    <div class="col-lg-4">
+                        <?= $form->field($model, 'factory_cost')->textInput() ?>
                     </div>
                 </div>
                 <!-- ./box-body -->

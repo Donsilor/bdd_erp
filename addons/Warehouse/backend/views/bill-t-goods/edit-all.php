@@ -585,16 +585,16 @@ $this->params['breadcrumbs'][] = $this->title;
 //                                ]),
                             ],
                             [
-                                'attribute' => 'pure_gold',
+                                'attribute' => 'gold_amount',
+                                'headerOptions' => ['class' => 'col-md-1 batch_full', 'attr-name' => 'gold_amount', 'style' => 'background-color:#afdfe4;'],
+                                'footerOptions' => ['class' => 'col-md-1 batch_full2', 'attr-name' => 'gold_amount', 'style' => 'background-color:#afdfe4;'],
                                 'format' => 'raw',
-                                'headerOptions' => ['class' => 'col-md-1 batch_full', 'attr-name' => 'pure_gold', 'style' => 'background-color:#afdfe4;'],
-                                'footerOptions' => ['class' => 'col-md-1 batch_full2', 'attr-name' => 'pure_gold', 'style' => 'background-color:#afdfe4;'],
-                                'value' => function ($model, $key, $index, $widget) use ($total) {
-                                    $widget->footer = $model->getFooterValues('pure_gold', $total, "0.000");
-                                    return Html::ajaxInput('pure_gold', $model->pure_gold, ['data-id' => $model->id, 'onfocus' => 'rfClearVal(this)', 'data-type' => 'number']);
+                                'value' => function ($model, $key, $index, $widget) {
+                                    $widget->footer = $model->getAttributeLabel('gold_amount');
+                                    return Html::ajaxInput('gold_amount', $model->gold_amount, ['data-id' => $model->id, 'onfocus' => 'rfClearVal(this)', 'data-type' => 'number']);
                                 },
                                 'filter' => false,
-//                                'filter' => Html::activeTextInput($searchModel, 'pure_gold', [
+//                                'filter' => Html::activeTextInput($searchModel, 'gold_amount', [
 //                                    'class' => 'form-control',
 //                                    'style' => 'width:80px;'
 //                                ]),
@@ -610,6 +610,21 @@ $this->params['breadcrumbs'][] = $this->title;
                                 },
                                 'filter' => false,
 //                                'filter' => Html::activeTextInput($searchModel, 'pure_gold_rate', [
+//                                    'class' => 'form-control',
+//                                    'style' => 'width:80px;'
+//                                ]),
+                            ],
+                            [
+                                'attribute' => 'pure_gold',
+                                'format' => 'raw',
+                                'headerOptions' => ['class' => 'col-md-1 batch_full', 'attr-name' => 'pure_gold', 'style' => 'background-color:#afdfe4;'],
+                                'footerOptions' => ['class' => 'col-md-1 batch_full2', 'attr-name' => 'pure_gold', 'style' => 'background-color:#afdfe4;'],
+                                'value' => function ($model, $key, $index, $widget) use ($total) {
+                                    $widget->footer = $model->getFooterValues('pure_gold', $total, "0.000");
+                                    return Html::ajaxInput('pure_gold', $model->pure_gold, ['data-id' => $model->id, 'onfocus' => 'rfClearVal(this)', 'data-type' => 'number']);
+                                },
+                                'filter' => false,
+//                                'filter' => Html::activeTextInput($searchModel, 'pure_gold', [
 //                                    'class' => 'form-control',
 //                                    'style' => 'width:80px;'
 //                                ]),
@@ -926,6 +941,20 @@ $this->params['breadcrumbs'][] = $this->title;
                                 ]),
                             ],
                             [
+                                'attribute' => 'main_stone_amount',
+                                'format' => 'raw',
+                                'headerOptions' => ['class' => 'col-md-1 batch_full', 'attr-name' => 'main_stone_amount', 'style' => 'background-color:#afb4db;'],
+                                'footerOptions' => ['class' => 'col-md-1 batch_full2', 'attr-name' => 'main_stone_amount', 'style' => 'background-color:#afb4db;'],
+                                'value' => function ($model, $key, $index, $widget) {
+                                    $widget->footer = $model->getAttributeLabel('main_stone_amount');
+                                    return Html::ajaxInput('main_stone_amount', $model->main_stone_amount, ['data-id' => $model->id, 'onfocus' => 'rfClearVal(this)', 'data-type' => 'number']);
+                                },
+                                'filter' => Html::activeTextInput($searchModel, 'main_stone_amount', [
+                                    'class' => 'form-control',
+                                    'style' => 'width:80px;'
+                                ]),
+                            ],
+                            [
                                 'attribute' => 'main_stone_shape',
                                 'format' => 'raw',
                                 'headerOptions' => ['class' => 'col-md-1 batch_select_full', 'attr-name' => 'main_stone_shape', 'attr-id' => AttrIdEnum::MAIN_STONE_SHAPE, 'style' => 'background-color:#afb4db;'],
@@ -1117,6 +1146,20 @@ $this->params['breadcrumbs'][] = $this->title;
                                     return Html::ajaxInput('second_stone_price1', $model->second_stone_price1, ['data-id' => $model->id, 'onfocus' => 'rfClearVal(this)', 'data-type' => 'number']);
                                 },
                                 'filter' => Html::activeTextInput($searchModel, 'second_stone_price1', [
+                                    'class' => 'form-control',
+                                    'style' => 'width:80px;'
+                                ]),
+                            ],
+                            [
+                                'attribute' => 'second_stone_amount1',
+                                'format' => 'raw',
+                                'headerOptions' => ['class' => 'col-md-1 batch_full', 'attr-name' => 'second_stone_amount1', 'style' => 'background-color:#dec674;'],
+                                'footerOptions' => ['class' => 'col-md-1 batch_full2', 'attr-name' => 'second_stone_amount1', 'style' => 'background-color:#dec674;'],
+                                'value' => function ($model, $key, $index, $widget) {
+                                    $widget->footer = $model->getAttributeLabel('second_stone_amount1');
+                                    return Html::ajaxInput('second_stone_amount1', $model->second_stone_amount1, ['data-id' => $model->id, 'onfocus' => 'rfClearVal(this)', 'data-type' => 'number']);
+                                },
+                                'filter' => Html::activeTextInput($searchModel, 'second_stone_amount1', [
                                     'class' => 'form-control',
                                     'style' => 'width:80px;'
                                 ]),
@@ -1351,6 +1394,21 @@ $this->params['breadcrumbs'][] = $this->title;
                                 },
                                 'filter' => false,
 //                                'filter' => Html::activeTextInput($searchModel, 'second_stone_price2', [
+//                                    'class' => 'form-control',
+//                                    'style' => 'width:80px;'
+//                                ]),
+                            ],
+                            [
+                                'attribute' => 'second_stone_amount2',
+                                'format' => 'raw',
+                                'headerOptions' => ['class' => 'col-md-1 batch_full', 'attr-name' => 'second_stone_amount2', 'style' => 'background-color:#84bf96;'],
+                                'footerOptions' => ['class' => 'col-md-1 batch_full2', 'attr-name' => 'second_stone_amount2', 'style' => 'background-color:#84bf96;'],
+                                'value' => function ($model, $key, $index, $widget) {
+                                    $widget->footer = $model->getAttributeLabel('second_stone_amount2');
+                                    return Html::ajaxInput('second_stone_amount2', $model->second_stone_amount2, ['data-id' => $model->id, 'onfocus' => 'rfClearVal(this)', 'data-type' => 'number']);
+                                },
+                                'filter' => false,
+//                                'filter' => Html::activeTextInput($searchModel, 'second_stone_amount2', [
 //                                    'class' => 'form-control',
 //                                    'style' => 'width:80px;'
 //                                ]),
@@ -1603,6 +1661,21 @@ $this->params['breadcrumbs'][] = $this->title;
 //                                ]),
                             ],
                             [
+                                'attribute' => 'second_stone_amount3',
+                                'format' => 'raw',
+                                'headerOptions' => ['class' => 'col-md-1 batch_full', 'attr-name' => 'second_stone_amount3', 'style' => 'background-color:#6495ED;'],
+                                'footerOptions' => ['class' => 'col-md-1 batch_full2', 'attr-name' => 'second_stone_amount3', 'style' => 'background-color:#6495ED;'],
+                                'value' => function ($model, $key, $index, $widget) {
+                                    $widget->footer = $model->getAttributeLabel('second_stone_amount3');
+                                    return Html::ajaxInput('second_stone_amount3', $model->second_stone_amount3, ['data-id' => $model->id, 'onfocus' => 'rfClearVal(this)', 'data-type' => 'number']);
+                                },
+                                'filter' => false,
+//                                'filter' => Html::activeTextInput($searchModel, 'second_stone_amount3', [
+//                                    'class' => 'form-control',
+//                                    'style' => 'width:80px;'
+//                                ]),
+                            ],
+                            [
                                 'attribute' => 'stone_remark',
                                 'format' => 'raw',
                                 'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#6495ED;'],
@@ -1725,18 +1798,21 @@ $this->params['breadcrumbs'][] = $this->title;
 //                                    'style' => 'width:80px;'
 //                                ]),
                             ],
-                            /*[
+                            [
                                 'attribute' => 'parts_amount',
                                 'format' => 'raw',
-                                'value' => function ($model, $key, $index, $column) {
+                                'headerOptions' => ['class' => 'col-md-1 batch_full', 'attr-name' => 'parts_amount', 'style' => 'background-color:#cde6c7;'],
+                                'footerOptions' => ['class' => 'col-md-1 batch_full2', 'attr-name' => 'parts_amount', 'style' => 'background-color:#cde6c7;'],
+                                'value' => function ($model, $key, $index, $widget) {
+                                    $widget->footer = $model->getAttributeLabel('parts_amount');
                                     return Html::ajaxInput('parts_amount', $model->parts_amount, ['data-id' => $model->id, 'onfocus' => 'rfClearVal(this)', 'data-type' => 'number']);
                                 },
-                                'headerOptions' => ['class' => 'col-md-1 batch_full', 'attr-name' => 'parts_amount'],
-                                'filter' => Html::activeTextInput($searchModel, 'parts_amount', [
-                                    'class' => 'form-control',
-                                    'style' => 'width:80px;'
-                                ]),
-                            ],*/
+                                'filter' => false,
+//                                'filter' => Html::activeTextInput($searchModel, 'parts_amount', [
+//                                    'class' => 'form-control',
+//                                    'style' => 'width:80px;'
+//                                ]),
+                            ],
                             [
                                 'class' => 'yii\grid\CheckboxColumn',
                                 'name' => 'id',  //设置每行数据的复选框属性
@@ -1829,21 +1905,21 @@ $this->params['breadcrumbs'][] = $this->title;
 //                                    'style' => 'width:80px;'
 //                                ]),
                             ],
-//                            [
-//                                'attribute' => 'peishi_fee',
-//                                'format' => 'raw',
-//                                'headerOptions' => ['class' => 'col-md-1 batch_full', 'attr-name' => 'peishi_fee', 'style' => 'background-color:#FFA500;'],
-//                                'footerOptions' => ['class' => 'col-md-1 batch_full2', 'attr-name' => 'peishi_fee', 'style' => 'background-color:#FFA500;'],
-//                                'value' => function ($model, $key, $index, $widget) use($total){
-//                                    $widget->footer = $model->getFooterValues('peishi_fee', $total, "0.00");
-//                                    return Html::ajaxInput('peishi_fee', $model->peishi_fee, ['data-id' => $model->id, 'onfocus' => 'rfClearVal(this)', 'data-type' => 'number']);
-//                                },
-//                                'filter' => false,
-////                                'filter' => Html::activeTextInput($searchModel, 'peishi_fee', [
-////                                    'class' => 'form-control',
-////                                    'style' => 'width:80px;'
-////                                ]),
-//                            ],
+                            [
+                                'attribute' => 'peishi_fee',
+                                'format' => 'raw',
+                                'headerOptions' => ['class' => 'col-md-1 batch_full', 'attr-name' => 'peishi_fee', 'style' => 'background-color:#FFA500;'],
+                                'footerOptions' => ['class' => 'col-md-1 batch_full2', 'attr-name' => 'peishi_fee', 'style' => 'background-color:#FFA500;'],
+                                'value' => function ($model, $key, $index, $widget) use ($total) {
+                                    $widget->footer = $model->getFooterValues('peishi_fee', $total, "0.00");
+                                    return Html::ajaxInput('peishi_fee', $model->peishi_fee, ['data-id' => $model->id, 'onfocus' => 'rfClearVal(this)', 'data-type' => 'number']);
+                                },
+                                'filter' => false,
+//                                'filter' => Html::activeTextInput($searchModel, 'peishi_fee', [
+//                                    'class' => 'form-control',
+//                                    'style' => 'width:80px;'
+//                                ]),
+                            ],
                             [
                                 'attribute' => 'parts_fee',
                                 'format' => 'raw',
@@ -1915,6 +1991,21 @@ $this->params['breadcrumbs'][] = $this->title;
                                 },
                                 'filter' => false,
 //                                'filter' => Html::activeTextInput($searchModel, 'second_stone_fee3', [
+//                                    'class' => 'form-control',
+//                                    'style' => 'width:80px;'
+//                                ]),
+                            ],
+                            [
+                                'attribute' => 'xianqian_fee',
+                                'format' => 'raw',
+                                'headerOptions' => ['class' => 'col-md-1 batch_full', 'attr-name' => 'xianqian_fee', 'style' => 'background-color:#FFA500;'],
+                                'footerOptions' => ['class' => 'col-md-1 batch_full2', 'attr-name' => 'xianqian_fee', 'style' => 'background-color:#FFA500;'],
+                                'value' => function ($model, $key, $index, $widget) {
+                                    $widget->footer = $model->getAttributeLabel('xianqian_fee');
+                                    return Html::ajaxInput('xianqian_fee', $model->xianqian_fee, ['data-id' => $model->id, 'onfocus' => 'rfClearVal(this)', 'data-type' => 'number']);
+                                },
+                                'filter' => false,
+//                                'filter' => Html::activeTextInput($searchModel, 'xianqian_fee', [
 //                                    'class' => 'form-control',
 //                                    'style' => 'width:80px;'
 //                                ]),
@@ -2092,19 +2183,20 @@ $this->params['breadcrumbs'][] = $this->title;
 //                                    'style' => 'width:200px;'
 //                                ]),
                             ],
-//                            [
-//                                'attribute' => 'factory_cost',
-//                                'format' => 'raw',
-//                                'value' => function ($model, $key, $index, $column) {
-//                                    return Html::ajaxInput('factory_cost', $model->factory_cost, ['data-id' => $model->id, 'onfocus' => 'rfClearVal(this)', 'data-type' => 'number']);
-//                                },
-//                                'filter' => false,
-//                                'headerOptions' => ['class' => 'col-md-1 batch_full', 'attr-name' => 'factory_cost', 'style' => 'background-color:#b7ba6b;'],
-////                                'filter' => Html::activeTextInput($searchModel, 'factory_cost', [
-////                                    'class' => 'form-control',
-////                                    'style' => 'width:100px;'
-////                                ]),
-//                            ],
+                            [
+                                'attribute' => 'factory_cost',
+                                'format' => 'raw',
+                                'headerOptions' => ['class' => 'col-md-1 batch_full', 'attr-name' => 'factory_cost', 'style' => 'background-color:#b7ba6b;'],
+                                'footerOptions' => ['class' => 'col-md-1 batch_full2', 'attr-name' => 'factory_cost', 'style' => 'background-color:#b7ba6b;'],
+                                'value' => function ($model, $key, $index, $widget) {
+                                    $widget->footer = $model->getAttributeLabel('factory_cost');
+                                    return Html::ajaxInput('factory_cost', $model->factory_cost, ['data-id' => $model->id]);
+                                },
+                                'filter' => Html::activeTextInput($searchModel, 'factory_cost', [
+                                    'class' => 'form-control',
+                                    'style' => 'width:80px;'
+                                ]),
+                            ],
                             [
                                 'attribute' => 'markup_rate',
                                 'format' => 'raw',

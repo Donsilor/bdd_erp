@@ -547,20 +547,6 @@ $this->params['breadcrumbs'][] = $this->title;
 //                                ]),
                             ],
                             [
-                                'attribute' => 'pure_gold',
-                                'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#FFD700;'],
-                                'footerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#FFD700;'],
-                                'value' => function ($model, $key, $index, $widget) use ($total) {
-                                    $widget->footer = $model->getFooterValues('pure_gold', $total, "0.000");
-                                    return $model->pure_gold ?? "0.000";
-                                },
-                                'filter' => false,
-//                                'filter' => Html::activeTextInput($searchModel, 'pure_gold', [
-//                                    'class' => 'form-control',
-//                                    'style' => 'width:80px;'
-//                                ]),
-                            ],
-                            [
                                 'attribute' => 'pure_gold_rate',
                                 'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#FFD700;'],
                                 'footerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#FFD700;'],
@@ -570,6 +556,20 @@ $this->params['breadcrumbs'][] = $this->title;
                                 },
                                 'filter' => false,
 //                                'filter' => Html::activeTextInput($searchModel, 'pure_gold_rate', [
+//                                    'class' => 'form-control',
+//                                    'style' => 'width:80px;'
+//                                ]),
+                            ],
+                            [
+                                'attribute' => 'pure_gold',
+                                'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#FFD700;'],
+                                'footerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#FFD700;'],
+                                'value' => function ($model, $key, $index, $widget) use ($total) {
+                                    $widget->footer = $model->getFooterValues('pure_gold', $total, "0.000");
+                                    return $model->pure_gold ?? "0.000";
+                                },
+                                'filter' => false,
+//                                'filter' => Html::activeTextInput($searchModel, 'pure_gold', [
 //                                    'class' => 'form-control',
 //                                    'style' => 'width:80px;'
 //                                ]),
