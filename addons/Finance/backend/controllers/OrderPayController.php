@@ -102,7 +102,7 @@ class OrderPayController extends BaseController
                 $trans = Yii::$app->db->beginTransaction();                
                 $orderPay = \Yii::$app->financeService->orderPay->pay($model);
                 $trans->commit();
-                return $this->message('点款成功,交易号：'.$orderPay->pay_sn, $this->redirect(['index']), 'success');
+                return $this->message('点款成功，交易号：'.$orderPay->pay_sn, $this->redirect(Yii::$app->request->referrer), 'success');
             }catch (\Exception $e){
                 $trans->rollBack();
                 return $this->message($e->getMessage(), $this->redirect(Yii::$app->request->referrer), 'error');
