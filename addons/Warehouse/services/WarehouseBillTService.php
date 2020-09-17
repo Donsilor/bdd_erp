@@ -1376,6 +1376,9 @@ class WarehouseBillTService extends Service
         if ($form->auto_peishi_fee) {
             return $form->peishi_fee ?? 0;
         }
+        if(empty($form->peishi_weight)){
+            $form->peishi_weight = $this->calculateSecondStoneWeight($form);
+        }
         return bcmul($form->peishi_weight, $form->peishi_gong_fee, 5) ?? 0;
     }
 
