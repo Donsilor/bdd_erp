@@ -1434,7 +1434,7 @@ class WarehouseBillTService extends Service
 
     /**
      *
-     * 总工费=(配石费+基本工费+配件工费+镶石费+表面工艺费+分色分件费+喷砂费+拉砂费+补口费+版费+证书费+其它费用)
+     * 总工费=(配石费+基本工费+配件工费+镶石费+表面工艺费+分色分件费+喷砂费+拉砂费+补口费+版费+税费+证书费+其它费用)
      * @param WarehouseBillTGoodsForm $form
      * @return integer
      * @throws
@@ -1454,6 +1454,7 @@ class WarehouseBillTService extends Service
         $total_gong_fee = bcadd($total_gong_fee, $form->bukou_fee, 5);//补口费
         //$total_gong_fee = bcadd($total_gong_fee, $form->extra_stone_fee, 5);//超石费
         $total_gong_fee = bcadd($total_gong_fee, $form->templet_fee, 5);//样板工费
+        $total_gong_fee = bcadd($total_gong_fee, $form->tax_amount, 5);//税费
         $total_gong_fee = bcadd($total_gong_fee, $form->cert_fee, 5);//证书费
         $total_gong_fee = bcadd($total_gong_fee, $form->other_fee, 5);//其它补充费用
 
