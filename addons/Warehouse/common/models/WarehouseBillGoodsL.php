@@ -206,7 +206,7 @@ class WarehouseBillGoodsL extends BaseModel
             [['goods_name'], 'string', 'max' => 150],
             [['goods_image', 'stone_remark', 'remark'], 'string', 'max' => 255],
             [['material', 'material_type', 'material_color', 'xiangkou', 'finger', 'finger_hk', 'chain_type', 'cramp_ring', 'talon_head_type', 'xiangqian_craft', 'gross_weight', 'diamond_color', 'diamond_shape', 'diamond_clarity', 'diamond_cut', 'diamond_polish', 'diamond_symmetry', 'diamond_fluorescence', 'diamond_discount', 'diamond_cert_type', 'main_stone_type', 'main_stone_shape', 'main_stone_color', 'main_stone_clarity', 'main_stone_cut', 'main_stone_colour', 'main_cert_type', 'second_stone_type1', 'second_stone_shape1', 'second_stone_color1', 'second_stone_clarity1', 'second_stone_cut1', 'second_stone_colour1', 'second_stone_type2', 'second_stone_shape2', 'second_stone_color2', 'second_stone_clarity2', 'second_stone_colour2', 'second_stone_type3', 'parts_type', 'parts_material'], 'string', 'max' => 10],
-            [['biaomiangongyi', 'goods_color', 'main_stone_size', 'second_stone_size1', 'second_stone_size2'], 'string', 'max' => 100],
+            [['goods_color', 'main_stone_size', 'second_stone_size1', 'second_stone_size2'], 'string', 'max' => 100],
             [['biaomiangongyi'], 'parseFaceCraft'],
             [['goods_id'], 'unique'],
         ];

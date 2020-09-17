@@ -1556,76 +1556,76 @@ class WarehouseBillTService extends Service
             throw new \Exception($this->getError($form));
         }
         $form->gold_weight = $this->calculateGoldWeight($form);//金重
-        if (empty($form->auto_loss_weight) || empty($form->lncl_loss_weight)) {
-            if (empty($form->lncl_loss_weight)) {
+        if (empty($form->auto_loss_weight) || bccomp($form->lncl_loss_weight, 0, 5) != 1) {
+            if (bccomp($form->lncl_loss_weight, 0, 5) != 1) {
                 $form->auto_loss_weight = ConfirmEnum::NO;
             }
             $form->lncl_loss_weight = $this->calculateLossWeight($form);//含耗重
         }
         $form->pure_gold = $this->calculatePureGold($form);//折足
-        if (empty($form->auto_gold_amount) || empty($form->gold_amount)) {
-            if (empty($form->gold_amount)) {
+        if (empty($form->auto_gold_amount) || bccomp($form->gold_amount, 0, 5) != 1) {
+            if (bccomp($form->gold_amount, 0, 5) != 1) {
                 $form->auto_loss_weight = ConfirmEnum::NO;
             }
             $form->gold_amount = $this->calculateGoldAmount($form);//金料额
         }
-        if (empty($form->auto_main_stone) || empty($form->main_stone_amount)) {
-            if (empty($form->main_stone_amount)) {
+        if (empty($form->auto_main_stone) || bccomp($form->main_stone_amount, 0, 5) != 1) {
+            if (bccomp($form->main_stone_amount, 0, 5) != 1) {
                 $form->auto_main_stone = ConfirmEnum::NO;
             }
             $form->main_stone_amount = $this->calculateMainStoneCost($form);//主石成本
         }
-        if (empty($form->auto_second_stone1) || empty($form->second_stone_amount1)) {
-            if (empty($form->second_stone_amount1)) {
+        if (empty($form->auto_second_stone1) || bccomp($form->second_stone_amount1, 0, 5) != 1) {
+            if (bccomp($form->second_stone_amount1, 0, 5) != 1) {
                 $form->auto_second_stone1 = ConfirmEnum::NO;
             }
             $form->second_stone_amount1 = $this->calculateSecondStone1Cost($form);//副石1成本
         }
-        if (empty($form->auto_second_stone2) || empty($form->second_stone_amount2)) {
-            if (empty($form->second_stone_amount2)) {
+        if (empty($form->auto_second_stone2) || bccomp($form->second_stone_amount2, 0, 5) != 1) {
+            if (bccomp($form->second_stone_amount2, 0, 5) != 1) {
                 $form->auto_second_stone2 = ConfirmEnum::NO;
             }
             $form->second_stone_amount2 = $this->calculateSecondStone2Cost($form);//副石2成本
         }
-        if (empty($form->auto_second_stone3) || empty($form->second_stone_amount3)) {
-            if (empty($form->second_stone_amount3)) {
+        if (empty($form->auto_second_stone3) || bccomp($form->second_stone_amount3, 0, 5) != 1) {
+            if (bccomp($form->second_stone_amount3, 0, 5) != 1) {
                 $form->auto_second_stone3 = ConfirmEnum::NO;
             }
             $form->second_stone_amount3 = $this->calculateSecondStone3Cost($form);//副石3成本
         }
-        if (empty($form->auto_peishi_fee) || empty($form->peishi_fee)) {
-            if (empty($form->peishi_fee)) {
+        if (empty($form->auto_peishi_fee) || bccomp($form->peishi_fee, 0, 5) != 1) {
+            if (bccomp($form->peishi_fee, 0, 5) != 1) {
                 $form->auto_peishi_fee = ConfirmEnum::NO;
             }
             $form->peishi_fee = $this->calculatePeishiFee($form);//配石费
         }
-        if (empty($form->auto_xianqian_fee) || empty($form->xianqian_fee)) {
-            if (empty($form->xianqian_fee)) {
+        if (empty($form->auto_xianqian_fee) || bccomp($form->xianqian_fee, 0, 5) != 1) {
+            if (bccomp($form->xianqian_fee, 0, 5) != 1) {
                 $form->auto_xianqian_fee = ConfirmEnum::NO;
             }
             $form->xianqian_fee = $this->calculateXiangshiFee($form);//镶石费
         }
-        if (empty($form->auto_parts_amount) || empty($form->parts_amount)) {
-            if (empty($form->parts_amount)) {
+        if (empty($form->auto_parts_amount) || bccomp($form->parts_amount, 0, 5) != 1) {
+            if (bccomp($form->parts_amount, 0, 5) != 1) {
                 $form->auto_parts_amount = ConfirmEnum::NO;
             }
             $form->parts_amount = $this->calculatePartsAmount($form);//配件额
         }
         $form->basic_gong_fee = $this->calculateBasicGongFee($form);//基本工费
         $form->total_gong_fee = $this->calculateTotalGongFee($form);//总工费
-        if (empty($form->auto_factory_cost) || empty($form->factory_cost)) {
-            if (empty($form->factory_cost)) {
+        if (empty($form->auto_factory_cost) || bccomp($form->factory_cost, 0, 5) != 1) {
+            if (bccomp($form->factory_cost, 0, 5) != 1) {
                 $form->auto_factory_cost = ConfirmEnum::NO;
             }
             $form->factory_cost = $this->calculateFactoryCost($form);//工厂成本
         }
-        if (empty($form->auto_tax_amount) || empty($form->tax_amount)) {
+        if (empty($form->auto_tax_amount) || bccomp($form->tax_amount, 0, 5) != 1) {
             if (empty($form->tax_amount)) {
                 $form->auto_tax_amount = ConfirmEnum::NO;
             }
             $form->tax_amount = $this->calculateTaxAmount($form);//税额
         }
-        if (empty($form->is_auto_price) || empty($form->cost_price)) {
+        if (empty($form->is_auto_price) || bccomp($form->cost_price, 0, 5) != 1) {
             $form->cost_price = $this->calculateCostPrice($form);//公司成本
         }
         $form->market_price = $this->calculateMarketPrice($form);//标签价
