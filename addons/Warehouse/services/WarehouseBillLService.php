@@ -138,7 +138,7 @@ class WarehouseBillLService extends Service
                     'qiban_type' => $good->qiban_type,//起版类型
                     'goods_num' => $good->goods_num,//商品数量
                     'goods_status' => GoodsStatusEnum::IN_STOCK,//库存状态
-                    'goods_source' => GoodSourceEnum::QUICK_STORAGE,//写入库存方式
+                    'goods_source' => GoodSourceEnum::QUICK_STORAGE,//数据来源方式
                     'supplier_id' => $bill->supplier_id,//供应商
                     'put_in_type' => $bill->put_in_type,//入库方式
                     'company_id' => 1,//所在公司(默认1)
@@ -391,13 +391,12 @@ class WarehouseBillLService extends Service
                             throw new \Exception($this->getError($goodsL));
                         }
                     }
-
-                    //插入商品日志
+                    //写入货品日志
                     $log = [
                         'goods_id' => $id,
                         'goods_status' => GoodsStatusEnum::IN_STOCK,
                         'log_type' => LogTypeEnum::ARTIFICIAL,
-                        'log_msg' => '入库单：'.$form->bill_no.";货品状态:“".GoodsStatusEnum::getValue(GoodsStatusEnum::IN_STOCK)."”"
+                        'log_msg' => '入库单：' . $form->bill_no . ";货品状态:“" . GoodsStatusEnum::getValue(GoodsStatusEnum::IN_STOCK) . "”"
                     ];
                     Yii::$app->warehouseService->goodsLog->createGoodsLog($log);
                 }
