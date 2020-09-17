@@ -633,9 +633,9 @@ class WarehouseBillTService extends Service
             }
             $second_stone_price1 = $form->formatValue($goods['second_stone_price1'], 0) ?? 0;//副石1单价
             $second_stone_amount1 = $form->formatValue($goods['second_stone_amount1'], 0) ?? 0;//副石1成本
-            $auto_second1_stone = ConfirmEnum::NO;
+            $auto_second_stone1 = ConfirmEnum::NO;
             if (bccomp($second_stone_amount1, 0, 5) > 0) {
-                $auto_second1_stone = ConfirmEnum::YES;
+                $auto_second_stone1 = ConfirmEnum::YES;
             }
             if (empty($second_stone_price1) && !empty($stone)) {
                 $second_stone_price1 = $stone->stone_price ?? 0;
@@ -744,9 +744,9 @@ class WarehouseBillTService extends Service
             }
             $second_stone_price2 = $form->formatValue($goods['second_stone_price2'], 0) ?? 0;//副石2单价
             $second_stone_amount2 = $form->formatValue($goods['second_stone_amount2'], 0) ?? 0;//副石2成本
-            $auto_second2_stone = ConfirmEnum::NO;
+            $auto_second_stone2 = ConfirmEnum::NO;
             if (bccomp($second_stone_amount2, 0, 5) > 0) {
-                $auto_second2_stone = ConfirmEnum::YES;
+                $auto_second_stone2 = ConfirmEnum::YES;
             }
             if (empty($second_stone_price2) && !empty($stone)) {
                 $second_stone_price2 = $stone->stone_price ?? 0;
@@ -790,9 +790,9 @@ class WarehouseBillTService extends Service
             }
             $second_stone_price3 = $form->formatValue($goods['second_stone_price3'], 0) ?? 0;//副石3单价
             $second_stone_amount3 = $form->formatValue($goods['second_stone_amount3'], 0) ?? 0;//副石3成本
-            $auto_second3_stone = ConfirmEnum::NO;
+            $auto_second_stone3 = ConfirmEnum::NO;
             if (bccomp($second_stone_amount3, 0, 5) > 0) {
-                $auto_second3_stone = ConfirmEnum::YES;
+                $auto_second_stone3 = ConfirmEnum::YES;
             }
             if (empty($second_stone_price3) && !empty($stone)) {
                 $second_stone_price3 = $stone->stone_price ?? 0;
@@ -1057,9 +1057,9 @@ class WarehouseBillTService extends Service
                 'auto_loss_weight' => $auto_loss_weight,
                 'auto_gold_amount' => $auto_gold_amount,
                 'auto_main_stone' => $auto_main_stone,
-                'auto_second1_stone' => $auto_second1_stone,
-                'auto_second2_stone' => $auto_second2_stone,
-                'auto_second3_stone' => $auto_second3_stone,
+                'auto_second_stone1' => $auto_second_stone1,
+                'auto_second_stone2' => $auto_second_stone2,
+                'auto_second_stone3' => $auto_second_stone3,
                 'auto_parts_amount' => $auto_parts_amount,
                 'auto_peishi_fee' => $auto_peishi_fee,
                 'auto_xianqian_fee' => $auto_xianqian_fee,
@@ -1480,30 +1480,82 @@ class WarehouseBillTService extends Service
      */
     public function syncUpdatePrice($form)
     {
-        if (empty($form->is_auto_price) || empty($form->cost_price)) {
-            if (!$form->validate()) {
-                throw new \Exception($this->getError($form));
-            }
-            $form->gold_weight = $this->calculateGoldWeight($form);//金重
-            $form->lncl_loss_weight = $this->calculateLossWeight($form);//含耗重
-            $form->pure_gold = $this->calculatePureGold($form);//折足
-            $form->gold_amount = $this->calculateGoldAmount($form);//金料额
-            $form->main_stone_amount = $this->calculateMainStoneCost($form);//主石成本
-            $form->second_stone_amount1 = $this->calculateSecondStone1Cost($form);//副石1成本
-            $form->second_stone_amount2 = $this->calculateSecondStone2Cost($form);//副石2成本
-            $form->second_stone_amount3 = $this->calculateSecondStone3Cost($form);//副石3成本
-            $form->peishi_fee = $this->calculatePeishiFee($form);//配石费
-            $form->xianqian_fee = $this->calculateXiangshiFee($form);//镶石费
-            $form->parts_amount = $this->calculatePartsAmount($form);//配件额
-            $form->basic_gong_fee = $this->calculateBasicGongFee($form);//基本工费
-            $form->total_gong_fee = $this->calculateTotalGongFee($form);//总工费
-            $form->factory_cost = $this->calculateFactoryCost($form);//工厂成本
-            $form->cost_price = $this->calculateCostPrice($form);//公司成本
-            $form->market_price = $this->calculateMarketPrice($form);//标签价
-            if (false === $form->save()) {
-                throw new \Exception($this->getError($form));
-            }
+
+        if (!$form->validate()) {
+            throw new \Exception($this->getError($form));
         }
+        $form->gold_weight = $this->calculateGoldWeight($form);//金重
+        if (empty($form->auto_loss_weight) || empty($form->lncl_loss_weight)) {
+            if (empty($form->lncl_loss_weight)) {
+                $form->auto_loss_weight = ConfirmEnum::NO;
+            }
+            $form->lncl_loss_weight = $this->calculateLossWeight($form);//含耗重
+        }
+        $form->pure_gold = $this->calculatePureGold($form);//折足
+        if (empty($form->auto_gold_amount) || empty($form->gold_amount)) {
+            if (empty($form->gold_amount)) {
+                $form->auto_loss_weight = ConfirmEnum::NO;
+            }
+            $form->gold_amount = $this->calculateGoldAmount($form);//金料额
+        }
+        if (empty($form->auto_main_stone) || empty($form->main_stone_amount)) {
+            if (empty($form->main_stone_amount)) {
+                $form->auto_main_stone = ConfirmEnum::NO;
+            }
+            $form->main_stone_amount = $this->calculateMainStoneCost($form);//主石成本
+        }
+        if (empty($form->auto_second_stone1) || empty($form->second_stone_amount1)) {
+            if (empty($form->second_stone_amount1)) {
+                $form->auto_second_stone1 = ConfirmEnum::NO;
+            }
+            $form->second_stone_amount1 = $this->calculateSecondStone1Cost($form);//副石1成本
+        }
+        if (empty($form->auto_second_stone2) || empty($form->second_stone_amount2)) {
+            if (empty($form->second_stone_amount2)) {
+                $form->auto_second_stone2 = ConfirmEnum::NO;
+            }
+            $form->second_stone_amount2 = $this->calculateSecondStone2Cost($form);//副石2成本
+        }
+        if (empty($form->auto_second_stone3) || empty($form->second_stone_amount3)) {
+            if (empty($form->second_stone_amount3)) {
+                $form->auto_second_stone3 = ConfirmEnum::NO;
+            }
+            $form->second_stone_amount3 = $this->calculateSecondStone3Cost($form);//副石3成本
+        }
+        if (empty($form->auto_peishi_fee) || empty($form->peishi_fee)) {
+            if (empty($form->peishi_fee)) {
+                $form->auto_peishi_fee = ConfirmEnum::NO;
+            }
+            $form->peishi_fee = $this->calculatePeishiFee($form);//配石费
+        }
+        if (empty($form->auto_xianqian_fee) || empty($form->xianqian_fee)) {
+            if (empty($form->xianqian_fee)) {
+                $form->auto_xianqian_fee = ConfirmEnum::NO;
+            }
+            $form->xianqian_fee = $this->calculateXiangshiFee($form);//镶石费
+        }
+        if (empty($form->auto_parts_amount) || empty($form->parts_amount)) {
+            if (empty($form->parts_amount)) {
+                $form->auto_parts_amount = ConfirmEnum::NO;
+            }
+            $form->parts_amount = $this->calculatePartsAmount($form);//配件额
+        }
+        $form->basic_gong_fee = $this->calculateBasicGongFee($form);//基本工费
+        $form->total_gong_fee = $this->calculateTotalGongFee($form);//总工费
+        if (empty($form->auto_factory_cost) || empty($form->factory_cost)) {
+            if (empty($form->factory_cost)) {
+                $form->auto_factory_cost = ConfirmEnum::NO;
+            }
+            $form->factory_cost = $this->calculateFactoryCost($form);//工厂成本
+        }
+        if (empty($form->is_auto_price) || empty($form->cost_price)) {
+            $form->cost_price = $this->calculateCostPrice($form);//公司成本
+        }
+        $form->market_price = $this->calculateMarketPrice($form);//标签价
+        if (false === $form->save()) {
+            throw new \Exception($this->getError($form));
+        }
+
         return $form;
     }
 
