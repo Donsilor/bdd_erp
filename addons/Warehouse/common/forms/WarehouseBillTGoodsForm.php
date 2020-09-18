@@ -2,6 +2,9 @@
 
 namespace addons\Warehouse\common\forms;
 
+use addons\Warehouse\common\enums\PeiJianWayEnum;
+use addons\Warehouse\common\enums\PeiLiaoWayEnum;
+use addons\Warehouse\common\enums\PeiShiWayEnum;
 use common\helpers\ArrayHelper;
 use addons\Warehouse\common\models\WarehouseBillGoodsL;
 use addons\Style\common\enums\AttrIdEnum;
@@ -145,6 +148,7 @@ class WarehouseBillTGoodsForm extends WarehouseBillGoodsL
             'lasha_fee' => 0,
             'bukou_fee' => 0,
             'templet_fee' => 0,
+            'tax_amount' => 0,
             'cert_fee' => 0,
             'other_fee' => 0,
             'factory_cost' => 0,
@@ -188,6 +192,7 @@ class WarehouseBillTGoodsForm extends WarehouseBillGoodsL
                 $total['lasha_fee'] = bcadd($total['lasha_fee'], $good->lasha_fee, 3);
                 $total['bukou_fee'] = bcadd($total['bukou_fee'], $good->bukou_fee, 3);
                 $total['templet_fee'] = bcadd($total['templet_fee'], $good->templet_fee, 3);
+                $total['tax_amount'] = bcadd($total['tax_amount'], $good->tax_amount, 3);
                 $total['cert_fee'] = bcadd($total['cert_fee'], $good->cert_fee, 3);
                 $total['other_fee'] = bcadd($total['other_fee'], $good->other_fee, 3);
                 $total['factory_cost'] = bcadd($total['factory_cost'], $good->factory_cost, 3);
@@ -1430,11 +1435,106 @@ class WarehouseBillTGoodsForm extends WarehouseBillGoodsL
     }
 
     /**
+     * 自定义表单验证
      * {@inheritdoc}
+     * @param WarehouseBillTGoodsForm $form
      */
     public function updateFromValidate($form)
     {
         $result = ['error' => true, 'data' => [], 'msg' => ''];
+        //金料
+        if ($form->peiliao_way == PeiLiaoWayEnum::NO_PEI) {
+            if ($form->suttle_weight > 0
+                || $form->lncl_loss_weight > 0
+                || $form->gold_loss > 0
+                || $form->pure_gold_rate > 0
+                || $form->gold_price > 0) {
+                $result['error'] = false;
+                $result['msg'] = "配料方式为不需配料，金料信息不能填写";
+            }
+        }
+        //主石
+        if ($form->main_pei_type == PeiShiWayEnum::NO_PEI) {
+            if ($form->main_stone_sn
+                || $form->main_stone_type
+                || $form->main_stone_num
+                || $form->main_stone_weight > 0
+                || $form->main_stone_shape
+                || $form->main_stone_color
+                || $form->main_stone_clarity
+                || $form->main_stone_cut
+                || $form->main_stone_colour
+                || $form->main_stone_size
+                || $form->main_cert_id
+                || $form->main_cert_type
+                || $form->main_stone_price > 0
+                || $form->main_stone_amount > 0) {
+                $result['error'] = false;
+                $result['msg'] = "主石配石方式为不需配石，主石信息不能填写";
+            }
+        }
+        //副石1
+        if ($form->second_pei_type == PeiShiWayEnum::NO_PEI) {
+            if ($form->second_stone_sn1
+                || $form->second_stone_type1
+                || $form->second_stone_num1
+                || $form->second_stone_weight1 > 0
+                || $form->second_stone_shape1
+                || $form->second_stone_color1
+                || $form->second_stone_clarity1
+                || $form->second_stone_cut1
+                || $form->second_stone_colour1
+                || $form->second_stone_size1
+                || $form->second_cert_id1
+                || $form->second_stone_price1 > 0
+                || $form->second_stone_amount1 > 0) {
+                $result['error'] = false;
+                $result['msg'] = "副石1配石方式为不需配石，副石1信息不能填写";
+            }
+        }
+        //副石2
+        if ($form->second_pei_type2 == PeiShiWayEnum::NO_PEI) {
+            if ($form->second_stone_sn2
+                || $form->second_stone_type2
+                || $form->second_stone_num2
+                || $form->second_stone_weight2 > 0
+                || $form->second_stone_shape2
+                || $form->second_stone_color2
+                || $form->second_stone_clarity2
+                || $form->second_stone_colour2
+                || $form->second_stone_size2
+                || $form->second_cert_id2
+                || $form->second_stone_price2 > 0
+                || $form->second_stone_amount2 > 0) {
+                $result['error'] = false;
+                $result['msg'] = "副石2配石方式为不需配石，副石2信息不能填写";
+            }
+        }
+        //副石3
+        if ($form->second_pei_type3 == PeiShiWayEnum::NO_PEI) {
+            if ($form->second_stone_sn3
+                || $form->second_stone_type3
+                || $form->second_stone_num3
+                || $form->second_stone_weight3 > 0
+                || $form->second_stone_price3 > 0
+                || $form->second_stone_amount3 > 0) {
+                $result['error'] = false;
+                $result['msg'] = "副石3配石方式为不需配石，副石3信息不能填写";
+            }
+        }
+        //配件
+        if ($form->parts_way == PeiJianWayEnum::NO_PEI) {
+            if ($form->parts_type
+                || $form->parts_num
+                || $form->parts_material
+                || $form->parts_gold_weight > 0
+                || $form->parts_price > 0
+                || $form->parts_amount > 0) {
+                $result['error'] = false;
+                $result['msg'] = "配件方式为不需配件，配件信息不能填写";
+            }
+        }
+        //工费
         if ($form->gong_fee > 0 && $form->piece_fee > 0) {
             $result['error'] = false;
             $result['msg'] = "克工费与件工费只能填写一个";
