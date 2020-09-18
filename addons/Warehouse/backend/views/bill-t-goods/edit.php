@@ -515,7 +515,7 @@ $this->params['breadcrumbs'][] = $this->title;
     function rfClearVal(obj) {
         var val = $(obj).val();
         if (val == "") {
-            $(obj).val("0.00");
+            $(obj).val("0");
         }
     }
 </script>
