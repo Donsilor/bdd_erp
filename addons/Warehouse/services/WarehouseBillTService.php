@@ -1088,7 +1088,7 @@ class WarehouseBillTService extends Service
                 $error[$i][] = $this->getError($goodsM);
             }
             $result = $form->updateFromValidate($goodsM);
-            if($result['error'] == false){
+            if ($result['error'] == false) {
                 $flag = false;
                 $error[$i][] = $result['msg'];
             }
@@ -1163,7 +1163,7 @@ class WarehouseBillTService extends Service
     public function syncUpdatePriceAll($form, $ids = [])
     {
         $where = ['bill_id' => $form->id];
-        if(!empty($ids)){
+        if (!empty($ids)) {
             $where = array_merge($where, ['id' => $ids]);
         }
         $goods = WarehouseBillTGoodsForm::findAll($where);
@@ -1222,7 +1222,7 @@ class WarehouseBillTService extends Service
     public function calculatePureGold($form)
     {
         if ($form->peiliao_way == PeiLiaoWayEnum::LAILIAO) {
-            if (empty($form->pure_gold_rate)) {
+            if (bccomp($form->pure_gold_rate, 0, 5) != 1) {
                 $form->pure_gold_rate = 0;
             }
             return bcmul($this->calculateLossWeight($form), ($form->pure_gold_rate / 100), 5) ?? 0;
