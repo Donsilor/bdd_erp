@@ -181,6 +181,10 @@ class BillTGoodsController extends BaseController
             try {
                 $trans = \Yii::$app->db->beginTransaction();
                 //$model->biaomiangongyi = join(',',$model->biaomiangongyi);
+                $result = $model->updateFromValidate($model);
+                if($result['error'] == false){
+                    throw new \Exception($result['msg']);
+                }
                 if (false === $model->save()) {
                     throw new \Exception($this->getError($model));
                 }
@@ -213,13 +217,13 @@ class BillTGoodsController extends BaseController
         }
         $params = Yii::$app->request->get();
         $keys = array_keys($params);  //$model->attributes();
-        $result = $model->updateFromValidate($model, $params);
-        if($result['error'] == false){
-            return ResultHelper::json(422, $result['msg']);
-        }
         try {
             $trans = \Yii::$app->db->beginTransaction();
             $model->attributes = ArrayHelper::filter($params, $keys);
+            $result = $model->updateFromValidate($model);
+            if($result['error'] == false){
+                throw new \Exception($result['msg']);
+            }
             if (!$model->save()) {
                 throw new \Exception("保存失败");
             }
@@ -268,6 +272,10 @@ class BillTGoodsController extends BaseController
                     $goods->$name = $value;
                     if (false === $goods->validate()) {
                         throw new \Exception($this->getError($goods));
+                    }
+                    $result = $model->updateFromValidate($goods);
+                    if($result['error'] == false){
+                        throw new \Exception($result['msg']);
                     }
                     if (false === $goods->save(true, [$name])) {
                         throw new \Exception($this->getError($goods));
