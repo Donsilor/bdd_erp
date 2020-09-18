@@ -1569,7 +1569,7 @@ class WarehouseBillTService extends Service
         $form->pure_gold = $this->calculatePureGold($form);//折足
         if (empty($form->auto_gold_amount) || bccomp($form->gold_amount, 0, 5) != 1) {
             if (bccomp($form->gold_amount, 0, 5) != 1) {
-                $form->auto_loss_weight = ConfirmEnum::NO;
+                $form->auto_gold_amount = ConfirmEnum::NO;
             }
             $form->gold_amount = $this->calculateGoldAmount($form);//金料额
         }
@@ -1624,7 +1624,7 @@ class WarehouseBillTService extends Service
             $form->factory_cost = $this->calculateFactoryCost($form);//工厂成本
         }
         if (empty($form->auto_tax_amount) || bccomp($form->tax_amount, 0, 5) != 1) {
-            if (empty($form->tax_amount)) {
+            if (bccomp($form->tax_amount, 0, 5) != 1) {
                 $form->auto_tax_amount = ConfirmEnum::NO;
             }
             $form->tax_amount = $this->calculateTaxAmount($form);//税额
