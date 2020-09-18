@@ -559,8 +559,8 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'headerOptions' => ['class' => 'col-md-1 batch_full', 'attr-name' => 'lncl_loss_weight', 'style' => 'background-color:#afdfe4;'],
                                 'footerOptions' => ['class' => 'col-md-1 batch_full2', 'attr-name' => 'lncl_loss_weight', 'style' => 'background-color:#afdfe4;'],
                                 'format' => 'raw',
-                                'value' => function ($model, $key, $index, $widget) {
-                                    $widget->footer = $model->getAttributeLabel('lncl_loss_weight');
+                                'value' => function ($model, $key, $index, $widget) use($total){
+                                    $widget->footer = $model->getFooterValues('lncl_loss_weight', $total, "0.000");
                                     return Html::ajaxInput('lncl_loss_weight', $model->lncl_loss_weight, ['data-id' => $model->id, 'onfocus' => 'rfClearVal(this)', 'data-type' => 'number']);
                                 },
                                 'filter' => false,
@@ -589,8 +589,8 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'headerOptions' => ['class' => 'col-md-1 batch_full', 'attr-name' => 'gold_amount', 'style' => 'background-color:#afdfe4;'],
                                 'footerOptions' => ['class' => 'col-md-1 batch_full2', 'attr-name' => 'gold_amount', 'style' => 'background-color:#afdfe4;'],
                                 'format' => 'raw',
-                                'value' => function ($model, $key, $index, $widget) {
-                                    $widget->footer = $model->getAttributeLabel('gold_amount');
+                                'value' => function ($model, $key, $index, $widget) use($total){
+                                    $widget->footer = $model->getFooterValues('gold_amount', $total, "0.000");
                                     return Html::ajaxInput('gold_amount', $model->gold_amount, ['data-id' => $model->id, 'onfocus' => 'rfClearVal(this)', 'data-type' => 'number']);
                                 },
                                 'filter' => false,
@@ -945,8 +945,8 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'format' => 'raw',
                                 'headerOptions' => ['class' => 'col-md-1 batch_full', 'attr-name' => 'main_stone_amount', 'style' => 'background-color:#afb4db;'],
                                 'footerOptions' => ['class' => 'col-md-1 batch_full2', 'attr-name' => 'main_stone_amount', 'style' => 'background-color:#afb4db;'],
-                                'value' => function ($model, $key, $index, $widget) {
-                                    $widget->footer = $model->getAttributeLabel('main_stone_amount');
+                                'value' => function ($model, $key, $index, $widget) use($total){
+                                    $widget->footer = $model->getFooterValues('main_stone_amount', $total, "0.000");
                                     return Html::ajaxInput('main_stone_amount', $model->main_stone_amount, ['data-id' => $model->id, 'onfocus' => 'rfClearVal(this)', 'data-type' => 'number']);
                                 },
                                 'filter' => Html::activeTextInput($searchModel, 'main_stone_amount', [
@@ -1155,8 +1155,8 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'format' => 'raw',
                                 'headerOptions' => ['class' => 'col-md-1 batch_full', 'attr-name' => 'second_stone_amount1', 'style' => 'background-color:#dec674;'],
                                 'footerOptions' => ['class' => 'col-md-1 batch_full2', 'attr-name' => 'second_stone_amount1', 'style' => 'background-color:#dec674;'],
-                                'value' => function ($model, $key, $index, $widget) {
-                                    $widget->footer = $model->getAttributeLabel('second_stone_amount1');
+                                'value' => function ($model, $key, $index, $widget) use($total){
+                                    $widget->footer = $model->getFooterValues('second_stone_amount1', $total, "0.000");
                                     return Html::ajaxInput('second_stone_amount1', $model->second_stone_amount1, ['data-id' => $model->id, 'onfocus' => 'rfClearVal(this)', 'data-type' => 'number']);
                                 },
                                 'filter' => Html::activeTextInput($searchModel, 'second_stone_amount1', [
@@ -1403,8 +1403,8 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'format' => 'raw',
                                 'headerOptions' => ['class' => 'col-md-1 batch_full', 'attr-name' => 'second_stone_amount2', 'style' => 'background-color:#84bf96;'],
                                 'footerOptions' => ['class' => 'col-md-1 batch_full2', 'attr-name' => 'second_stone_amount2', 'style' => 'background-color:#84bf96;'],
-                                'value' => function ($model, $key, $index, $widget) {
-                                    $widget->footer = $model->getAttributeLabel('second_stone_amount2');
+                                'value' => function ($model, $key, $index, $widget) use($total){
+                                    $widget->footer = $model->getFooterValues('second_stone_amount2', $total, "0.000");
                                     return Html::ajaxInput('second_stone_amount2', $model->second_stone_amount2, ['data-id' => $model->id, 'onfocus' => 'rfClearVal(this)', 'data-type' => 'number']);
                                 },
                                 'filter' => false,
@@ -1665,8 +1665,8 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'format' => 'raw',
                                 'headerOptions' => ['class' => 'col-md-1 batch_full', 'attr-name' => 'second_stone_amount3', 'style' => 'background-color:#6495ED;'],
                                 'footerOptions' => ['class' => 'col-md-1 batch_full2', 'attr-name' => 'second_stone_amount3', 'style' => 'background-color:#6495ED;'],
-                                'value' => function ($model, $key, $index, $widget) {
-                                    $widget->footer = $model->getAttributeLabel('second_stone_amount3');
+                                'value' => function ($model, $key, $index, $widget) use($total){
+                                    $widget->footer = $model->getFooterValues('second_stone_amount3', $total, "0.000");
                                     return Html::ajaxInput('second_stone_amount3', $model->second_stone_amount3, ['data-id' => $model->id, 'onfocus' => 'rfClearVal(this)', 'data-type' => 'number']);
                                 },
                                 'filter' => false,
@@ -1803,8 +1803,8 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'format' => 'raw',
                                 'headerOptions' => ['class' => 'col-md-1 batch_full', 'attr-name' => 'parts_amount', 'style' => 'background-color:#cde6c7;'],
                                 'footerOptions' => ['class' => 'col-md-1 batch_full2', 'attr-name' => 'parts_amount', 'style' => 'background-color:#cde6c7;'],
-                                'value' => function ($model, $key, $index, $widget) {
-                                    $widget->footer = $model->getAttributeLabel('parts_amount');
+                                'value' => function ($model, $key, $index, $widget) use($total){
+                                    $widget->footer = $model->getFooterValues('parts_amount', $total, "0.000");
                                     return Html::ajaxInput('parts_amount', $model->parts_amount, ['data-id' => $model->id, 'onfocus' => 'rfClearVal(this)', 'data-type' => 'number']);
                                 },
                                 'filter' => false,
@@ -2000,8 +2000,8 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'format' => 'raw',
                                 'headerOptions' => ['class' => 'col-md-1 batch_full', 'attr-name' => 'xianqian_fee', 'style' => 'background-color:#FFA500;'],
                                 'footerOptions' => ['class' => 'col-md-1 batch_full2', 'attr-name' => 'xianqian_fee', 'style' => 'background-color:#FFA500;'],
-                                'value' => function ($model, $key, $index, $widget) {
-                                    $widget->footer = $model->getAttributeLabel('xianqian_fee');
+                                'value' => function ($model, $key, $index, $widget) use($total){
+                                    $widget->footer = $model->getFooterValues('xianqian_fee', $total, "0.000");
                                     return Html::ajaxInput('xianqian_fee', $model->xianqian_fee, ['data-id' => $model->id, 'onfocus' => 'rfClearVal(this)', 'data-type' => 'number']);
                                 },
                                 'filter' => false,
@@ -2155,7 +2155,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'headerOptions' => ['class' => 'col-md-1 batch_full', 'attr-name' => 'tax_amount', 'style' => 'background-color:#E6E6FA;'],
                                 'footerOptions' => ['class' => 'col-md-1 batch_full2', 'attr-name' => 'tax_amount', 'style' => 'background-color:#E6E6FA;'],
                                 'value' => function ($model, $key, $index, $widget) use ($total) {
-                                    $widget->footer = $model->getAttributeLabel('tax_amount');
+                                    $widget->footer = $model->getFooterValues('tax_amount', $total, "0.00");
                                     return Html::ajaxInput('tax_amount', $model->tax_amount, ['data-id' => $model->id, 'onfocus' => 'rfClearVal(this)', 'data-type' => 'number']);
                                 },
                                 'filter' => false,
@@ -2218,8 +2218,8 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'format' => 'raw',
                                 'headerOptions' => ['class' => 'col-md-1 batch_full', 'attr-name' => 'factory_cost', 'style' => 'background-color:#b7ba6b;'],
                                 'footerOptions' => ['class' => 'col-md-1 batch_full2', 'attr-name' => 'factory_cost', 'style' => 'background-color:#b7ba6b;'],
-                                'value' => function ($model, $key, $index, $widget) {
-                                    $widget->footer = $model->getAttributeLabel('factory_cost');
+                                'value' => function ($model, $key, $index, $widget) use($total){
+                                    $widget->footer = $model->getFooterValues('factory_cost', $total, "0.00");
                                     return Html::ajaxInput('factory_cost', $model->factory_cost, ['data-id' => $model->id]);
                                 },
                                 'filter' => Html::activeTextInput($searchModel, 'factory_cost', [
