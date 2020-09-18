@@ -501,7 +501,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'footerOptions' => ['class' => 'col-md-1', 'attr-name' => 'peiliao_way', 'style' => 'background-color:#afdfe4;'],
                                 'value' => function ($model, $key, $index, $widget) {
                                     $widget->footer = $model->getAttributeLabel('peiliao_way');
-                                    return Html::ajaxSelect($model, 'peiliao_way', \addons\Warehouse\common\enums\PeiLiaoWayEnum::getMap(), ['data-id' => $model->id, 'prompt' => '请选择']);
+                                    return Html::ajaxSelect($model, 'peiliao_way', \addons\Warehouse\common\enums\PeiLiaoWayEnum::getMap(), ['data-id' => $model->id]);
                                 },
                                 'filter' => Html::activeDropDownList($searchModel, 'peiliao_way', \addons\Warehouse\common\enums\PeiLiaoWayEnum::getMap(), [
                                     'prompt' => '全部',
@@ -859,7 +859,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'footerOptions' => ['class' => 'col-md-1', 'attr-name' => 'main_pei_type', 'style' => 'background-color:#afb4db;'],
                                 'value' => function ($model, $key, $index, $widget) {
                                     $widget->footer = $model->getAttributeLabel('main_pei_type');
-                                    return Html::ajaxSelect($model, 'main_pei_type', \addons\Warehouse\common\enums\PeiShiWayEnum::getMap(), ['data-id' => $model->id, 'prompt' => '请选择']);
+                                    return Html::ajaxSelect($model, 'main_pei_type', \addons\Warehouse\common\enums\PeiShiWayEnum::getMap(), ['data-id' => $model->id]);
                                 },
                                 'filter' => Html::activeDropDownList($searchModel, 'main_pei_type', \addons\Warehouse\common\enums\PeiShiWayEnum::getMap(), [
                                     'prompt' => '全部',
@@ -1069,7 +1069,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'footerOptions' => ['class' => 'col-md-1', 'attr-name' => 'second_pei_type', 'style' => 'background-color:#dec674;'],
                                 'value' => function ($model, $key, $index, $widget) {
                                     $widget->footer = $model->getAttributeLabel('second_pei_type');
-                                    return Html::ajaxSelect($model, 'second_pei_type', \addons\Warehouse\common\enums\PeiShiWayEnum::getMap(), ['data-id' => $model->id, 'prompt' => '请选择']);
+                                    return Html::ajaxSelect($model, 'second_pei_type', \addons\Warehouse\common\enums\PeiShiWayEnum::getMap(), ['data-id' => $model->id]);
                                 },
                                 'filter' => Html::activeDropDownList($searchModel, 'second_pei_type', \addons\Warehouse\common\enums\PeiShiWayEnum::getMap(), [
                                     'prompt' => '全部',
@@ -1302,7 +1302,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'footerOptions' => ['class' => 'col-md-1', 'attr-name' => 'second_pei_type2', 'style' => 'background-color:#84bf96;'],
                                 'value' => function ($model, $key, $index, $widget) {
                                     $widget->footer = $model->getAttributeLabel('second_pei_type2');
-                                    return Html::ajaxSelect($model, 'second_pei_type2', \addons\Warehouse\common\enums\PeiShiWayEnum::getMap(), ['data-id' => $model->id, 'prompt' => '请选择']);
+                                    return Html::ajaxSelect($model, 'second_pei_type2', \addons\Warehouse\common\enums\PeiShiWayEnum::getMap(), ['data-id' => $model->id]);
                                 },
                                 'filter' => Html::activeDropDownList($searchModel, 'second_pei_type2', \addons\Warehouse\common\enums\PeiShiWayEnum::getMap(), [
                                     'prompt' => '全部',
@@ -1578,7 +1578,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'footerOptions' => ['class' => 'col-md-1', 'attr-name' => 'second_pei_type3', 'style' => 'background-color:#6495ED;'],
                                 'value' => function ($model, $key, $index, $widget) {
                                     $widget->footer = $model->getAttributeLabel('second_pei_type3');
-                                    return Html::ajaxSelect($model, 'second_pei_type3', \addons\Warehouse\common\enums\PeiShiWayEnum::getMap(), ['data-id' => $model->id, 'prompt' => '请选择']);
+                                    return Html::ajaxSelect($model, 'second_pei_type3', \addons\Warehouse\common\enums\PeiShiWayEnum::getMap(), ['data-id' => $model->id]);
                                 },
                                 'filter' => Html::activeDropDownList($searchModel, 'second_pei_type3', \addons\Warehouse\common\enums\PeiShiWayEnum::getMap(), [
                                     'prompt' => '全部',
@@ -1715,7 +1715,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'footerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#cde6c7;'],
                                 'value' => function ($model, $key, $index, $widget) {
                                     $widget->footer = $model->getAttributeLabel('parts_way');
-                                    return Html::ajaxSelect($model, 'parts_way', $model->getPeiJianWayMap(), ['data-id' => $model->id, 'prompt' => '请选择']);
+                                    return Html::ajaxSelect($model, 'parts_way', $model->getPeiJianWayMap(), ['data-id' => $model->id]);
                                 },
                                 'filter' => Html::activeDropDownList($searchModel, 'parts_way', $model->getPeiJianWayMap(), [
                                     'prompt' => '全部',

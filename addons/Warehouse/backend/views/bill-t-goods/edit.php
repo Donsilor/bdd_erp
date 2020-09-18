@@ -126,28 +126,28 @@ $this->params['breadcrumbs'][] = $this->title;
                         <h5 class="box-title" style="font-weight: bold">金料信息</h5>
                     </div>
                     <div class="col-lg-4">
-                        <?= $form->field($model, 'peiliao_way')->dropDownList($model->getPeiLiaoWayMap(), ['prompt' => '请选择']) ?>
+                        <?= $form->field($model, 'peiliao_way')->dropDownList($model->getPeiLiaoWayMap()) ?>
                     </div>
 <!--                    <div class="col-lg-4">-->
 <!--                        --><?//= $form->field($model, 'gold_weight')->textInput() ?>
 <!--                    </div>-->
                     <div class="col-lg-4">
-                        <?= $form->field($model, 'suttle_weight')->textInput() ?>
+                        <?= $form->field($model, 'suttle_weight')->textInput(['onblur' => 'rfClearVal(this)']) ?>
                     </div>
                     <div class="col-lg-4">
-                        <?= $form->field($model, 'lncl_loss_weight')->textInput() ?>
+                        <?= $form->field($model, 'lncl_loss_weight')->textInput(['onblur' => 'rfClearVal(this)']) ?>
                     </div>
                     <div class="col-lg-4">
-                        <?= $form->field($model, 'gold_loss')->textInput() ?>
+                        <?= $form->field($model, 'gold_loss')->textInput(['onblur' => 'rfClearVal(this)']) ?>
                     </div>
                     <div class="col-lg-4">
-                        <?= $form->field($model, 'gold_price')->textInput() ?>
+                        <?= $form->field($model, 'gold_price')->textInput(['onblur' => 'rfClearVal(this)']) ?>
                     </div>
                     <div class="col-lg-4">
-                        <?= $form->field($model, 'pure_gold')->textInput() ?>
+                        <?= $form->field($model, 'pure_gold')->textInput(['onblur' => 'rfClearVal(this)']) ?>
                     </div>
                     <div class="col-lg-4">
-                        <?= $form->field($model, 'gold_amount')->textInput() ?>
+                        <?= $form->field($model, 'gold_amount')->textInput(['onblur' => 'rfClearVal(this)']) ?>
                     </div>
                 </div>
 <!--                <div class="row">-->
@@ -193,7 +193,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         <h5 class="box-title" style="font-weight: bold">主石信息</h5>
                     </div>
                     <div class="col-lg-4">
-                        <?= $form->field($model, 'main_pei_type')->dropDownList(\addons\Warehouse\common\enums\PeiShiWayEnum::getMap(), ['prompt' => '请选择']) ?>
+                        <?= $form->field($model, 'main_pei_type')->dropDownList(\addons\Warehouse\common\enums\PeiShiWayEnum::getMap()) ?>
                     </div>
                     <div class="col-lg-4">
                         <?= $form->field($model, 'main_stone_sn')->textInput() ?>
@@ -202,16 +202,16 @@ $this->params['breadcrumbs'][] = $this->title;
                         <?= $form->field($model, 'main_stone_type')->dropDownList($model->getMainStoneTypeDrop($model), ['prompt' => '请选择']) ?>
                     </div>
                     <div class="col-lg-4">
-                        <?= $form->field($model, 'main_stone_num')->textInput() ?>
+                        <?= $form->field($model, 'main_stone_num')->textInput(['onblur' => 'rfClearVal(this)']) ?>
                     </div>
                     <div class="col-lg-4">
-                        <?= $form->field($model, 'main_stone_weight')->textInput() ?>
+                        <?= $form->field($model, 'main_stone_weight')->textInput(['onblur' => 'rfClearVal(this)']) ?>
                     </div>
                     <div class="col-lg-4">
-                        <?= $form->field($model, 'main_stone_price')->textInput() ?>
+                        <?= $form->field($model, 'main_stone_price')->textInput(['onblur' => 'rfClearVal(this)']) ?>
                     </div>
                     <div class="col-lg-4">
-                        <?= $form->field($model, 'main_stone_amount')->textInput() ?>
+                        <?= $form->field($model, 'main_stone_amount')->textInput(['onblur' => 'rfClearVal(this)']) ?>
                     </div>
                     <div class="col-lg-4">
                         <?= $form->field($model, 'main_stone_shape')->dropDownList($model->getMainStoneShapeDrop($model), ['prompt' => '请选择']) ?>
@@ -243,7 +243,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         <h5 class="box-title" style="font-weight: bold">副石1信息</h5>
                     </div>
                     <div class="col-lg-4">
-                        <?= $form->field($model, 'second_pei_type')->dropDownList(\addons\Warehouse\common\enums\PeiShiWayEnum::getMap(), ['prompt' => '请选择']) ?>
+                        <?= $form->field($model, 'second_pei_type')->dropDownList(\addons\Warehouse\common\enums\PeiShiWayEnum::getMap()) ?>
                     </div>
                     <div class="col-lg-4">
                         <?= $form->field($model, 'second_stone_sn1')->textInput() ?>
@@ -252,16 +252,16 @@ $this->params['breadcrumbs'][] = $this->title;
                         <?= $form->field($model, 'second_stone_type1')->dropDownList($model->getSecondStoneType1Drop($model), ['prompt' => '请选择']) ?>
                     </div>
                     <div class="col-lg-4">
-                        <?= $form->field($model, 'second_stone_num1')->textInput() ?>
+                        <?= $form->field($model, 'second_stone_num1')->textInput(['onblur' => 'rfClearVal(this)']) ?>
                     </div>
                     <div class="col-lg-4">
-                        <?= $form->field($model, 'second_stone_weight1')->textInput() ?>
+                        <?= $form->field($model, 'second_stone_weight1')->textInput(['onblur' => 'rfClearVal(this)']) ?>
                     </div>
                     <div class="col-lg-4">
-                        <?= $form->field($model, 'second_stone_price1')->textInput() ?>
+                        <?= $form->field($model, 'second_stone_price1')->textInput(['onblur' => 'rfClearVal(this)']) ?>
                     </div>
                     <div class="col-lg-4">
-                        <?= $form->field($model, 'second_stone_amount1')->textInput() ?>
+                        <?= $form->field($model, 'second_stone_amount1')->textInput(['onblur' => 'rfClearVal(this)']) ?>
                     </div>
                     <div class="col-lg-4">
                         <?= $form->field($model, 'second_stone_shape1')->dropDownList($model->getSecondStoneShape1Drop($model), ['prompt' => '请选择']) ?>
@@ -296,7 +296,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         <h5 class="box-title" style="font-weight: bold">副石2信息</h5>
                     </div>
                     <div class="col-lg-4">
-                        <?= $form->field($model, 'second_pei_type2')->dropDownList(\addons\Warehouse\common\enums\PeiShiWayEnum::getMap(), ['prompt' => '请选择']) ?>
+                        <?= $form->field($model, 'second_pei_type2')->dropDownList(\addons\Warehouse\common\enums\PeiShiWayEnum::getMap()) ?>
                     </div>
                     <div class="col-lg-4">
                         <?= $form->field($model, 'second_stone_sn2')->textInput() ?>
@@ -305,16 +305,16 @@ $this->params['breadcrumbs'][] = $this->title;
                         <?= $form->field($model, 'second_stone_type2')->dropDownList($model->getSecondStoneType2Drop($model), ['prompt' => '请选择']) ?>
                     </div>
                     <div class="col-lg-4">
-                        <?= $form->field($model, 'second_stone_num2')->textInput() ?>
+                        <?= $form->field($model, 'second_stone_num2')->textInput(['onblur' => 'rfClearVal(this)']) ?>
                     </div>
                     <div class="col-lg-4">
-                        <?= $form->field($model, 'second_stone_weight2')->textInput() ?>
+                        <?= $form->field($model, 'second_stone_weight2')->textInput(['onblur' => 'rfClearVal(this)']) ?>
                     </div>
                     <div class="col-lg-4">
-                        <?= $form->field($model, 'second_stone_price2')->textInput() ?>
+                        <?= $form->field($model, 'second_stone_price2')->textInput(['onblur' => 'rfClearVal(this)']) ?>
                     </div>
                     <div class="col-lg-4">
-                        <?= $form->field($model, 'second_stone_amount2')->textInput() ?>
+                        <?= $form->field($model, 'second_stone_amount2')->textInput(['onblur' => 'rfClearVal(this)']) ?>
                     </div>
 <!--                    <div class="col-lg-4">-->
 <!--                        --><?//= $form->field($model, 'second_stone_shape2')->dropDownList($model->getSecondStoneShape2Drop($model), ['prompt' => '请选择']) ?>
@@ -343,7 +343,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         <h5 class="box-title" style="font-weight: bold">副石3信息</h5>
                     </div>
                     <div class="col-lg-4">
-                        <?= $form->field($model, 'second_pei_type3')->dropDownList(\addons\Warehouse\common\enums\PeiShiWayEnum::getMap(), ['prompt' => '请选择']) ?>
+                        <?= $form->field($model, 'second_pei_type3')->dropDownList(\addons\Warehouse\common\enums\PeiShiWayEnum::getMap()) ?>
                     </div>
                     <div class="col-lg-4">
                         <?= $form->field($model, 'second_stone_sn3')->textInput() ?>
@@ -352,16 +352,16 @@ $this->params['breadcrumbs'][] = $this->title;
                         <?= $form->field($model, 'second_stone_type3')->dropDownList($model->getSecondStoneType3Drop($model), ['prompt' => '请选择']) ?>
                     </div>
                     <div class="col-lg-4">
-                        <?= $form->field($model, 'second_stone_num3')->textInput() ?>
+                        <?= $form->field($model, 'second_stone_num3')->textInput(['onblur' => 'rfClearVal(this)']) ?>
                     </div>
                     <div class="col-lg-4">
-                        <?= $form->field($model, 'second_stone_weight3')->textInput() ?>
+                        <?= $form->field($model, 'second_stone_weight3')->textInput(['onblur' => 'rfClearVal(this)']) ?>
                     </div>
                     <div class="col-lg-4">
-                        <?= $form->field($model, 'second_stone_price3')->textInput() ?>
+                        <?= $form->field($model, 'second_stone_price3')->textInput(['onblur' => 'rfClearVal(this)']) ?>
                     </div>
                     <div class="col-lg-4">
-                        <?= $form->field($model, 'second_stone_amount3')->textInput() ?>
+                        <?= $form->field($model, 'second_stone_amount3')->textInput(['onblur' => 'rfClearVal(this)']) ?>
                     </div>
                     <div class="col-lg-4">
                         <?= $form->field($model, 'stone_remark')->textInput() ?>
@@ -372,7 +372,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         <h5 class="box-title" style="font-weight: bold">配件信息</h5>
                     </div>
                     <div class="col-lg-4">
-                        <?= $form->field($model, 'parts_way')->dropDownList($model->getPeiJianWayMap(), ['prompt' => '请选择']) ?>
+                        <?= $form->field($model, 'parts_way')->dropDownList($model->getPeiJianWayMap()) ?>
                     </div>
                     <div class="col-lg-4">
                         <?= $form->field($model, 'parts_type')->dropDownList($model->getPartsTypeMap(), ['prompt' => '请选择']) ?>
@@ -381,16 +381,16 @@ $this->params['breadcrumbs'][] = $this->title;
                         <?= $form->field($model, 'parts_material')->dropDownList($model->getPartsMaterialMap(), ['prompt' => '请选择']) ?>
                     </div>
                     <div class="col-lg-4">
-                        <?= $form->field($model, 'parts_num')->textInput() ?>
+                        <?= $form->field($model, 'parts_num')->textInput(['onblur' => 'rfClearVal(this)']) ?>
                     </div>
                     <div class="col-lg-4">
-                        <?= $form->field($model, 'parts_gold_weight')->textInput() ?>
+                        <?= $form->field($model, 'parts_gold_weight')->textInput(['onblur' => 'rfClearVal(this)']) ?>
                     </div>
                     <div class="col-lg-4">
-                        <?= $form->field($model, 'parts_price')->textInput() ?>
+                        <?= $form->field($model, 'parts_price')->textInput(['onblur' => 'rfClearVal(this)']) ?>
                     </div>
                     <div class="col-lg-4">
-                        <?= $form->field($model, 'parts_amount')->textInput() ?>
+                        <?= $form->field($model, 'parts_amount')->textInput(['onblur' => 'rfClearVal(this)']) ?>
                     </div>
                 </div>
                 <div class="row">
@@ -398,70 +398,70 @@ $this->params['breadcrumbs'][] = $this->title;
                         <h5 class="box-title" style="font-weight: bold">工费及其它费用信息</h5>
                     </div>
                     <div class="col-lg-4">
-                        <?= $form->field($model, 'gong_fee')->textInput() ?>
+                        <?= $form->field($model, 'gong_fee')->textInput(['onblur' => 'rfClearVal(this)']) ?>
                     </div>
                     <div class="col-lg-4">
-                        <?= $form->field($model, 'piece_fee')->textInput() ?>
+                        <?= $form->field($model, 'piece_fee')->textInput(['onblur' => 'rfClearVal(this)']) ?>
                     </div>
                     <div class="col-lg-4">
-                        <?= $form->field($model, 'peishi_weight')->textInput() ?>
+                        <?= $form->field($model, 'peishi_weight')->textInput(['onblur' => 'rfClearVal(this)']) ?>
                     </div>
                     <div class="col-lg-4">
-                        <?= $form->field($model, 'peishi_gong_fee')->textInput() ?>
+                        <?= $form->field($model, 'peishi_gong_fee')->textInput(['onblur' => 'rfClearVal(this)']) ?>
                     </div>
                     <div class="col-lg-4">
-                        <?= $form->field($model, 'parts_fee')->textInput() ?>
+                        <?= $form->field($model, 'parts_fee')->textInput(['onblur' => 'rfClearVal(this)']) ?>
                     </div>
                     <div class="col-lg-4">
-                        <?= $form->field($model, 'second_stone_fee1')->textInput() ?>
+                        <?= $form->field($model, 'second_stone_fee1')->textInput(['onblur' => 'rfClearVal(this)']) ?>
                     </div>
                     <div class="col-lg-4">
-                        <?= $form->field($model, 'second_stone_fee2')->textInput() ?>
+                        <?= $form->field($model, 'second_stone_fee2')->textInput(['onblur' => 'rfClearVal(this)']) ?>
                     </div>
                     <div class="col-lg-4">
-                        <?= $form->field($model, 'second_stone_fee3')->textInput() ?>
+                        <?= $form->field($model, 'second_stone_fee3')->textInput(['onblur' => 'rfClearVal(this)']) ?>
                     </div>
                     <div class="col-lg-4">
-                        <?= $form->field($model, 'xianqian_fee')->textInput() ?>
+                        <?= $form->field($model, 'xianqian_fee')->textInput(['onblur' => 'rfClearVal(this)']) ?>
                     </div>
                     <div class="col-lg-4">
-                        <?= $form->field($model, 'biaomiangongyi_fee')->textInput() ?>
+                        <?= $form->field($model, 'biaomiangongyi_fee')->textInput(['onblur' => 'rfClearVal(this)']) ?>
                     </div>
                     <div class="col-lg-4">
-                        <?= $form->field($model, 'fense_fee')->textInput() ?>
+                        <?= $form->field($model, 'fense_fee')->textInput(['onblur' => 'rfClearVal(this)']) ?>
                     </div>
                     <div class="col-lg-4">
-                        <?= $form->field($model, 'penlasha_fee')->textInput() ?>
+                        <?= $form->field($model, 'penlasha_fee')->textInput(['onblur' => 'rfClearVal(this)']) ?>
                     </div>
                     <div class="col-lg-4">
-                        <?= $form->field($model, 'lasha_fee')->textInput() ?>
+                        <?= $form->field($model, 'lasha_fee')->textInput(['onblur' => 'rfClearVal(this)']) ?>
                     </div>
                     <div class="col-lg-4">
-                        <?= $form->field($model, 'bukou_fee')->textInput() ?>
+                        <?= $form->field($model, 'bukou_fee')->textInput(['onblur' => 'rfClearVal(this)']) ?>
                     </div>
                     <div class="col-lg-4">
-                        <?= $form->field($model, 'templet_fee')->textInput() ?>
+                        <?= $form->field($model, 'templet_fee')->textInput(['onblur' => 'rfClearVal(this)']) ?>
                     </div>
                     <div class="col-lg-4">
-                        <?= $form->field($model, 'tax_fee')->textInput() ?>
+                        <?= $form->field($model, 'tax_fee')->textInput(['onblur' => 'rfClearVal(this)']) ?>
                     </div>
                     <div class="col-lg-4">
-                        <?= $form->field($model, 'tax_amount')->textInput() ?>
+                        <?= $form->field($model, 'tax_amount')->textInput(['onblur' => 'rfClearVal(this)']) ?>
                     </div>
                     <div class="col-lg-4">
-                        <?= $form->field($model, 'cert_fee')->textInput() ?>
+                        <?= $form->field($model, 'cert_fee')->textInput(['onblur' => 'rfClearVal(this)']) ?>
                     </div>
 <!--                    <div class="col-lg-4">-->
 <!--                        --><?//= $form->field($model, 'extra_stone_fee')->textInput() ?>
 <!--                    </div>-->
                     <div class="col-lg-4">
-                        <?= $form->field($model, 'tax_fee')->textInput() ?>
+                        <?= $form->field($model, 'tax_fee')->textInput(['onblur' => 'rfClearVal(this)']) ?>
                     </div>
                     <div class="col-lg-4">
-                        <?= $form->field($model, 'other_fee')->textInput() ?>
+                        <?= $form->field($model, 'other_fee')->textInput(['onblur' => 'rfClearVal(this)']) ?>
                     </div>
                     <div class="col-lg-4">
-                        <?= $form->field($model, 'factory_cost')->textInput() ?>
+                        <?= $form->field($model, 'factory_cost')->textInput(['onblur' => 'rfClearVal(this)']) ?>
                     </div>
                 </div>
                 <div class="row">
@@ -511,3 +511,11 @@ $this->params['breadcrumbs'][] = $this->title;
         </div>
     </div>
 </div>
+<script type="text/javascript">
+    function rfClearVal(obj) {
+        var val = $(obj).val();
+        if (val == "") {
+            $(obj).val("0.00");
+        }
+    }
+</script>
