@@ -2211,6 +2211,11 @@ $this->params['breadcrumbs'][] = $this->title;
     <!-- tab-content end -->
 </div>
 <script type="text/javascript">
+    $(function () {
+        //默认全选
+        $("input[name='id[]']").trigger("click");
+    });
+
     /**
      * 一键粘贴
      * @param  {String} id [需要粘贴的内容]
