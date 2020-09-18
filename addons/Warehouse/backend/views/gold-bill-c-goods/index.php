@@ -15,7 +15,11 @@ use yii\web\View;
 $this->title = Yii::t('gold_bill_c_goods', '领料单明细');
 $this->params['breadcrumbs'][] = $this->title;
 ?>
-
+<style>
+    select.form-control {
+        font-size: 12px;
+    }
+</style>
 <div class="box-body nav-tabs-custom">
     <h2 class="page-header"><?php echo $this->title; ?> - <?php echo $bill->bill_no?></h2>
     <?php echo Html::menuTab($tabList,$tab)?>

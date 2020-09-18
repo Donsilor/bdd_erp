@@ -47,7 +47,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'options' => [
                                     'class' => 'input-priority',
                                     'readonly' =>'true',
-                                    'style'=>'width:160px'
+                                    'style'=>'width:100px'
                                 ]
                             ],
                             [
@@ -57,7 +57,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'options' => [
                                     'class' => 'input-priority',
                                     'readonly' =>'true',
-                                    'style'=>'width:120px'
+                                    'style'=>'width:100px'
                                 ]
                             ],
 
@@ -79,7 +79,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'options' => [
                                     'class' => 'input-priority',
                                     'disabled' =>'true',
-                                    'style'=>'width:120px',
+                                    'style'=>'width:80px',
                                     'prompt'=>'请选择',
                                 ],
                                 'items' => \addons\Warehouse\common\enums\PutInTypeEnum::getMap()
@@ -92,7 +92,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'options' => [
                                     'class' => 'input-priority',
                                     'disabled' =>'true',
-                                    'style'=>'width:120px',
+                                    'style'=>'width:100px',
                                     'prompt'=>'请选择',
                                 ],
                                 'items' => Yii::$app->warehouseService->warehouse::getDropDown()
@@ -105,7 +105,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'options' => [
                                     'class' => 'input-priority',
                                     'disabled' =>'true',
-                                    'style'=>'width:120px',
+                                    'style'=>'width:80px',
                                     'prompt'=>'请选择',
                                 ],
                                 'defaultValue' => 0,

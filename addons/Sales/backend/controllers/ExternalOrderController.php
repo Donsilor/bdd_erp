@@ -102,8 +102,7 @@ class ExternalOrderController extends BaseController
         if ($model->load(Yii::$app->request->post())) {
             $isNewRecord = $model->isNewRecord;
             try{
-                $trans = Yii::$app->trans->beginTransaction();
-                
+                $trans = Yii::$app->trans->beginTransaction();                
                 $model = Yii::$app->salesService->order->createExternalOrder($model);
                 $trans->commit();
                 return $isNewRecord
