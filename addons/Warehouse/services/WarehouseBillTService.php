@@ -854,10 +854,10 @@ class WarehouseBillTService extends Service
             }
             $gong_fee = $form->formatValue($goods['gong_fee'], 0) ?? 0;//克工费
             $piece_fee = $form->formatValue($goods['piece_fee'], 0) ?? 0;//件工费
-            if (!empty($gong_fee) && !empty($piece_fee)) {
-                $flag = false;
-                $error[$i][] = "[克/工费]和[件/工费]只能填其一";
-            }
+//            if (!empty($gong_fee) && !empty($piece_fee)) {
+//                $flag = false;
+//                $error[$i][] = "[克/工费]和[件/工费]只能填其一";
+//            }
             $xiangqian_craft = $goods['xiangqian_craft'] ?? "";//镶嵌工艺
             if (!empty($xiangqian_craft)) {
                 $attr_id = $form->getAttrIdByAttrValue($style_sn, $xiangqian_craft, AttrIdEnum::XIANGQIAN_CRAFT);
@@ -1087,6 +1087,11 @@ class WarehouseBillTService extends Service
                 $flag = false;
                 $error[$i][] = $this->getError($goodsM);
             }
+            $result = $form->updateFromValidate($goodsM);
+            if ($result['error'] == false) {
+                $flag = false;
+                $error[$i][] = $result['msg'];
+            }
             if (!$flag && !empty($style_sn)) {
                 //$error[$i] = array_unshift($error[$i], "[" . $style_sn . "]");
             }
@@ -1158,9 +1163,9 @@ class WarehouseBillTService extends Service
     public function syncUpdatePriceAll($form, $ids = [])
     {
         $where = ['bill_id' => $form->id];
-//        if(!empty($ids)){
-//            $where = ['bill_id' => $form->id, 'id' => $ids];
-//        }
+        if (!empty($ids)) {
+            $where = array_merge($where, ['id' => $ids]);
+        }
         $goods = WarehouseBillTGoodsForm::findAll($where);
         if (!empty($goods)) {
             foreach ($goods as $good) {
@@ -1217,7 +1222,7 @@ class WarehouseBillTService extends Service
     public function calculatePureGold($form)
     {
         if ($form->peiliao_way == PeiLiaoWayEnum::LAILIAO) {
-            if (empty($form->pure_gold_rate)) {
+            if (bccomp($form->pure_gold_rate, 0, 5) != 1) {
                 $form->pure_gold_rate = 0;
             }
             return bcmul($this->calculateLossWeight($form), ($form->pure_gold_rate / 100), 5) ?? 0;
@@ -1551,7 +1556,6 @@ class WarehouseBillTService extends Service
      */
     public function syncUpdatePrice($form)
     {
-
         if (!$form->validate()) {
             throw new \Exception($this->getError($form));
         }
@@ -1565,7 +1569,7 @@ class WarehouseBillTService extends Service
         $form->pure_gold = $this->calculatePureGold($form);//折足
         if (empty($form->auto_gold_amount) || bccomp($form->gold_amount, 0, 5) != 1) {
             if (bccomp($form->gold_amount, 0, 5) != 1) {
-                $form->auto_loss_weight = ConfirmEnum::NO;
+                $form->auto_gold_amount = ConfirmEnum::NO;
             }
             $form->gold_amount = $this->calculateGoldAmount($form);//金料额
         }
@@ -1620,7 +1624,7 @@ class WarehouseBillTService extends Service
             $form->factory_cost = $this->calculateFactoryCost($form);//工厂成本
         }
         if (empty($form->auto_tax_amount) || bccomp($form->tax_amount, 0, 5) != 1) {
-            if (empty($form->tax_amount)) {
+            if (bccomp($form->tax_amount, 0, 5) != 1) {
                 $form->auto_tax_amount = ConfirmEnum::NO;
             }
             $form->tax_amount = $this->calculateTaxAmount($form);//税额

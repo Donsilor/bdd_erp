@@ -117,6 +117,9 @@ $this->params['breadcrumbs'][] = $this->title;
                     <!--                    <div class="col-lg-4">-->
                     <!--                        --><? //= $form->field($model, 'goods_color')->dropDownList(\Yii::$app->styleService->styleAttribute->getAttrValueListByStyle($model->style_sn,AttrIdEnum::GOODS_COLOR),['prompt'=>'请选择']) ?>
                     <!--                    </div>-->
+                    <div class="col-sm-4">
+                        <?= $form->field($model, 'auto_goods_id')->radioList(\common\enums\ConfirmEnum::getMap()) ?>
+                    </div>
                 </div>
                 <div class="row">
                     <div class="with-border">
@@ -459,6 +462,47 @@ $this->params['breadcrumbs'][] = $this->title;
                     </div>
                     <div class="col-lg-4">
                         <?= $form->field($model, 'factory_cost')->textInput() ?>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="with-border">
+                        <h5 class="box-title" style="font-weight: bold">自动计算开关</h5>
+                    </div>
+                    <div class="col-sm-4">
+                        <?= $form->field($model, 'auto_loss_weight')->radioList(\addons\Warehouse\common\enums\IsAutoCalculateEnum::getMap()) ?>
+                    </div>
+                    <div class="col-sm-4">
+                        <?= $form->field($model, 'auto_gold_amount')->radioList(\addons\Warehouse\common\enums\IsAutoCalculateEnum::getMap()) ?>
+                    </div>
+                    <div class="col-sm-4">
+                        <?= $form->field($model, 'auto_main_stone')->radioList(\addons\Warehouse\common\enums\IsAutoCalculateEnum::getMap()) ?>
+                    </div>
+                    <div class="col-sm-4">
+                        <?= $form->field($model, 'auto_second_stone1')->radioList(\addons\Warehouse\common\enums\IsAutoCalculateEnum::getMap()) ?>
+                    </div>
+                    <div class="col-sm-4">
+                        <?= $form->field($model, 'auto_second_stone2')->radioList(\addons\Warehouse\common\enums\IsAutoCalculateEnum::getMap()) ?>
+                    </div>
+                    <div class="col-sm-4">
+                        <?= $form->field($model, 'auto_second_stone3')->radioList(\addons\Warehouse\common\enums\IsAutoCalculateEnum::getMap()) ?>
+                    </div>
+                    <div class="col-sm-4">
+                        <?= $form->field($model, 'auto_parts_amount')->radioList(\addons\Warehouse\common\enums\IsAutoCalculateEnum::getMap()) ?>
+                    </div>
+                    <div class="col-sm-4">
+                        <?= $form->field($model, 'auto_peishi_fee')->radioList(\addons\Warehouse\common\enums\IsAutoCalculateEnum::getMap()) ?>
+                    </div>
+                    <div class="col-sm-4">
+                        <?= $form->field($model, 'auto_xianqian_fee')->radioList(\addons\Warehouse\common\enums\IsAutoCalculateEnum::getMap()) ?>
+                    </div>
+                    <div class="col-sm-4">
+                        <?= $form->field($model, 'auto_tax_amount')->radioList(\addons\Warehouse\common\enums\IsAutoCalculateEnum::getMap()) ?>
+                    </div>
+                    <div class="col-sm-4">
+                        <?= $form->field($model, 'auto_factory_cost')->radioList(\addons\Warehouse\common\enums\IsAutoCalculateEnum::getMap()) ?>
+                    </div>
+                    <div class="col-sm-4">
+                        <?= $form->field($model, 'is_auto_price')->radioList(\addons\Warehouse\common\enums\IsAutoCalculateEnum::getMap()) ?>
                     </div>
                 </div>
                 <!-- ./box-body -->

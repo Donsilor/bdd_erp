@@ -100,7 +100,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#feeeed;'],
                                 'footerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#feeeed;'],
                                 'contentOptions' => ['style' => ['white-space' => 'nowrap']],
-                                'template' => '{image} {edit} {delete}',
+                                'template' => '{delete} {edit} {image}',
                                 'buttons' => [
                                     'image' => function ($url, $model, $key) {
                                         return Html::edit(['ajax-image', 'id' => $model->id], '图片', [
@@ -1967,7 +1967,8 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'contentOptions' => ['style' => 'color:red'],
                                 'footerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#9b95c9;'],
                                 'value' => function ($model, $key, $index, $widget) use ($total) {
-                                    $widget->footer = "总成本/件";
+                                    $one_cost_price = $total['one_cost_price'] ?? 0;
+                                    $widget->footer = "总成本/件<span style='font-size:16px; color: red;'>[".$one_cost_price."]</span>";
                                     return bcdiv($model->cost_price, $model->goods_num, 3) ?? "0.00";
                                 },
                                 'visible' => \common\helpers\Auth::verify(\common\enums\SpecialAuthEnum::VIEW_CAIGOU_PRICE),

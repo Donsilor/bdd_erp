@@ -152,6 +152,7 @@ class WarehouseBillTGoodsForm extends WarehouseBillGoodsL
             'market_price' => 0,
         ];
         $goods = $this->find()->select(array_keys($total))->where(['bill_id' => $bill_id])->all();
+        $total = array_merge($total, ['one_cost_price' => 0]);
         if (!empty($goods)) {
             foreach ($goods as $good) {
                 $total['goods_num'] = bcadd($total['goods_num'], $good->goods_num);
@@ -161,16 +162,16 @@ class WarehouseBillTGoodsForm extends WarehouseBillGoodsL
                 $total['lncl_loss_weight'] = bcadd($total['lncl_loss_weight'], $good->lncl_loss_weight, 3);
                 $total['gold_amount'] = bcadd($total['gold_amount'], $good->gold_amount, 3);
                 $total['main_stone_num'] = bcadd($total['main_stone_num'], $good->main_stone_num);
-                $total['main_stone_weight'] = bcadd($total['main_stone_weight'], $good->main_stone_weight, 5);
+                $total['main_stone_weight'] = bcadd($total['main_stone_weight'], $good->main_stone_weight, 3);
                 $total['main_stone_amount'] = bcadd($total['main_stone_amount'], $good->main_stone_amount, 3);
                 $total['second_stone_num1'] = bcadd($total['second_stone_num1'], $good->second_stone_num1);
-                $total['second_stone_weight1'] = bcadd($total['second_stone_weight1'], $good->second_stone_weight1, 5);
+                $total['second_stone_weight1'] = bcadd($total['second_stone_weight1'], $good->second_stone_weight1, 3);
                 $total['second_stone_amount1'] = bcadd($total['second_stone_amount1'], $good->second_stone_amount1, 3);
                 $total['second_stone_num2'] = bcadd($total['second_stone_num2'], $good->second_stone_num2);
-                $total['second_stone_weight2'] = bcadd($total['second_stone_weight2'], $good->second_stone_weight2, 5);
+                $total['second_stone_weight2'] = bcadd($total['second_stone_weight2'], $good->second_stone_weight2, 3);
                 $total['second_stone_amount2'] = bcadd($total['second_stone_amount2'], $good->second_stone_amount2, 3);
                 $total['second_stone_num3'] = bcadd($total['second_stone_num3'], $good->second_stone_num3);
-                $total['second_stone_weight3'] = bcadd($total['second_stone_weight3'], $good->second_stone_weight3, 5);
+                $total['second_stone_weight3'] = bcadd($total['second_stone_weight3'], $good->second_stone_weight3, 3);
                 $total['second_stone_amount3'] = bcadd($total['second_stone_amount3'], $good->second_stone_amount3, 3);
                 $total['peishi_weight'] = bcadd($total['peishi_weight'], $good->peishi_weight, 3);
                 $total['peishi_fee'] = bcadd($total['peishi_fee'], $good->peishi_fee, 3);
@@ -191,6 +192,7 @@ class WarehouseBillTGoodsForm extends WarehouseBillGoodsL
                 $total['other_fee'] = bcadd($total['other_fee'], $good->other_fee, 3);
                 $total['factory_cost'] = bcadd($total['factory_cost'], $good->factory_cost, 3);
                 $total['cost_price'] = bcadd($total['cost_price'], $good->cost_price, 3);
+                $total['one_cost_price'] = bcadd($total['one_cost_price'], ($good->cost_price / $good->goods_num), 3);
                 $total['market_price'] = bcadd($total['market_price'], $good->market_price, 3);
             }
         }
@@ -375,6 +377,60 @@ class WarehouseBillTGoodsForm extends WarehouseBillGoodsL
     {
         return \Yii::$app->attr->valueMap($attr_id) ?? [];//暂时放开限制
         //return \Yii::$app->styleService->styleAttribute->getAttrValueListByStyle($style_sn, $attr_id) ?? [];
+    }
+
+    /**
+     * 款式性别
+     * @return array
+     */
+    public function getStyleSexMap()
+    {
+        return \addons\Style\common\enums\StyleSexEnum::getMap() ?? [];
+    }
+
+    /**
+     * 金托类型
+     * @return array
+     */
+    public function getJietuoTypeMap()
+    {
+        return \addons\Style\common\enums\JintuoTypeEnum::getMap() ?? [];
+    }
+
+    /**
+     * 是否镶嵌
+     * @return array
+     */
+    public function getIsInlayMap()
+    {
+        return \addons\Style\common\enums\InlayEnum::getMap() ?? [];
+    }
+
+    /**
+     * 配料方式
+     * @return array
+     */
+    public function getPeiLiaoWayMap()
+    {
+        return \addons\Warehouse\common\enums\PeiLiaoWayEnum::getMap() ?? [];
+    }
+
+    /**
+     * 配石方式(类型)
+     * @return array
+     */
+    public function getPeiShiWayMap()
+    {
+        return \addons\Warehouse\common\enums\PeiShiWayEnum::getMap() ?? [];
+    }
+
+    /**
+     * 配件方式
+     * @return array
+     */
+    public function getPeiJianWayMap()
+    {
+        return \addons\Warehouse\common\enums\PeiJianWayEnum::getMap() ?? [];
     }
 
     /**
@@ -1374,56 +1430,15 @@ class WarehouseBillTGoodsForm extends WarehouseBillGoodsL
     }
 
     /**
-     * 款式性别
-     * @return array
+     * {@inheritdoc}
      */
-    public function getStyleSexMap()
+    public function updateFromValidate($form)
     {
-        return \addons\Style\common\enums\StyleSexEnum::getMap() ?? [];
-    }
-
-    /**
-     * 金托类型
-     * @return array
-     */
-    public function getJietuoTypeMap()
-    {
-        return \addons\Style\common\enums\JintuoTypeEnum::getMap() ?? [];
-    }
-
-    /**
-     * 是否镶嵌
-     * @return array
-     */
-    public function getIsInlayMap()
-    {
-        return \addons\Style\common\enums\InlayEnum::getMap() ?? [];
-    }
-
-    /**
-     * 配料方式
-     * @return array
-     */
-    public function getPeiLiaoWayMap()
-    {
-        return \addons\Warehouse\common\enums\PeiLiaoWayEnum::getMap() ?? [];
-    }
-
-    /**
-     * 配石方式(类型)
-     * @return array
-     */
-    public function getPeiShiWayMap()
-    {
-        return \addons\Warehouse\common\enums\PeiShiWayEnum::getMap() ?? [];
-    }
-
-    /**
-     * 配件方式
-     * @return array
-     */
-    public function getPeiJianWayMap()
-    {
-        return \addons\Warehouse\common\enums\PeiJianWayEnum::getMap() ?? [];
+        $result = ['error' => true, 'data' => [], 'msg' => ''];
+        if ($form->gong_fee > 0 && $form->piece_fee > 0) {
+            $result['error'] = false;
+            $result['msg'] = "克工费与件工费只能填写一个";
+        }
+        return $result;
     }
 }
