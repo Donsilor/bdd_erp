@@ -42,7 +42,7 @@ class AuthRoleService extends Service
 
         if (!$this->roles) {
             /* @var $assignment \common\models\rbac\AuthAssignment */
-            if (!($assignment = Yii::$app->user->identity->assignment)) {
+            if (!($assignment = Yii::$app->user->identity->assignment ?? false)) {
                 throw new UnauthorizedHttpException('未授权角色，请联系管理员');
             }
 
