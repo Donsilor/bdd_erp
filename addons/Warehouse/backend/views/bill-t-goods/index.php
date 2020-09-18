@@ -100,7 +100,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#feeeed;'],
                                 'footerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#feeeed;'],
                                 'contentOptions' => ['style' => ['white-space' => 'nowrap']],
-                                'template' => '{image} {edit} {delete}',
+                                'template' => '{delete} {edit} {image}',
                                 'buttons' => [
                                     'image' => function ($url, $model, $key) {
                                         return Html::edit(['ajax-image', 'id' => $model->id], '图片', [

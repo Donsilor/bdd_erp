@@ -84,7 +84,7 @@ class BillTGoodsController extends BaseController
                 Yii::$app->warehouseService->billT->addBillTGoods($model);
                 $trans->commit();
                 \Yii::$app->getSession()->setFlash('success', '保存成功');
-                return $this->redirect(['edit-all', 'bill_id' => $bill_id]);
+                return $this->redirect(['index', 'bill_id' => $bill_id]);
             } catch (\Exception $e) {
                 $trans->rollBack();
                 return $this->message($e->getMessage(), $this->redirect(\Yii::$app->request->referrer), 'error');
@@ -239,6 +239,7 @@ class BillTGoodsController extends BaseController
                         throw new \Exception($this->getError($goods));
                     }
                     $model->bill_id = $goods->bill_id;
+                    \Yii::$app->warehouseService->billT->syncUpdatePrice($goods);
                 }
                 \Yii::$app->warehouseService->billT->WarehouseBillTSummary($model->bill_id);
                 $trans->commit();
@@ -315,7 +316,7 @@ class BillTGoodsController extends BaseController
 
     /**
      *
-     * 删除/关闭
+     * 删除
      * @param $id
      * @return mixed
      */

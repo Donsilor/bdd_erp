@@ -97,7 +97,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#feeeed;'],
                                 'footerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#feeeed;'],
                                 'contentOptions' => ['style' => ['white-space' => 'nowrap']],
-                                'template' => '{image} {ajax-edit} {delete}',
+                                'template' => '{delete} {edit} {image}',
                                 'buttons' => [
                                     'image' => function ($url, $model, $key) {
                                         return Html::edit(['ajax-image', 'id' => $model->id], '图片', [
@@ -106,7 +106,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                             'data-target' => '#ajaxModal',
                                         ]);
                                     },
-                                    'ajax-edit' => function ($url, $model, $key) use ($bill) {
+                                    'edit' => function ($url, $model, $key) use ($bill) {
                                         if ($bill->bill_status == BillStatusEnum::SAVE) {
                                             return Html::edit(['edit', 'id' => $model->id, 'bill_id' => $bill->id], '编辑', [
                                                 'class' => 'btn btn-primary btn-xs openIframe',
