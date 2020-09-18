@@ -1436,14 +1436,14 @@ class WarehouseBillTGoodsForm extends WarehouseBillGoodsL
         $keys = array_keys($params);
         $values = ArrayHelper::filter($params, $keys);
         if (in_array('gong_fee', $keys)
-            && $values['gong_fee']
-            && $form->piece_fee) {
+            && $values['gong_fee'] > 0
+            && $form->piece_fee > 0) {
             $result['error'] = false;
             $result['msg'] = "克/工费与件/工费只能填写一个";
         }
         if (in_array('piece_fee', $keys)
-            && $values['piece_fee']
-            && $form->gong_fee) {
+            && $values['piece_fee'] > 0
+            && $form->gong_fee > 0) {
             $result['error'] = false;
             $result['msg'] = "克/工费与件/工费只能填写一个";
         }
