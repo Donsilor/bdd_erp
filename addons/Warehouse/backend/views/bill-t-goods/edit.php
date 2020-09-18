@@ -117,6 +117,9 @@ $this->params['breadcrumbs'][] = $this->title;
                     <!--                    <div class="col-lg-4">-->
                     <!--                        --><? //= $form->field($model, 'goods_color')->dropDownList(\Yii::$app->styleService->styleAttribute->getAttrValueListByStyle($model->style_sn,AttrIdEnum::GOODS_COLOR),['prompt'=>'请选择']) ?>
                     <!--                    </div>-->
+                    <div class="col-sm-4">
+                        <?= $form->field($model, 'auto_goods_id')->radioList(\common\enums\ConfirmEnum::getMap()) ?>
+                    </div>
                 </div>
                 <div class="row">
                     <div class="with-border">

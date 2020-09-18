@@ -1159,7 +1159,7 @@ class WarehouseBillTService extends Service
     {
         $where = ['bill_id' => $form->id];
         if(!empty($ids)){
-            $where = ['bill_id' => $form->id, 'id' => $ids];
+            $where = array_merge($where, ['id' => $ids]);
         }
         $goods = WarehouseBillTGoodsForm::findAll($where);
         if (!empty($goods)) {
