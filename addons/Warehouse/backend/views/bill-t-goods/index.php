@@ -1904,8 +1904,8 @@ $this->params['breadcrumbs'][] = $this->title;
                                 //'format' => 'raw',
                                 'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#b7ba6b;'],
                                 'footerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#b7ba6b;'],
-                                'value' => function ($model, $key, $index, $widget) {
-                                    $widget->footer = $model->getAttributeLabel('tax_amount');
+                                'value' => function ($model, $key, $index, $widget) use ($total){
+                                    $widget->footer = $model->getFooterValues('tax_amount', $total, "0.00");
                                     return $model->tax_amount ?? "0.00";
                                 },
                                 'filter' => false,

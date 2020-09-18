@@ -145,6 +145,7 @@ class WarehouseBillTGoodsForm extends WarehouseBillGoodsL
             'lasha_fee' => 0,
             'bukou_fee' => 0,
             'templet_fee' => 0,
+            'tax_amount' => 0,
             'cert_fee' => 0,
             'other_fee' => 0,
             'factory_cost' => 0,
@@ -188,6 +189,7 @@ class WarehouseBillTGoodsForm extends WarehouseBillGoodsL
                 $total['lasha_fee'] = bcadd($total['lasha_fee'], $good->lasha_fee, 3);
                 $total['bukou_fee'] = bcadd($total['bukou_fee'], $good->bukou_fee, 3);
                 $total['templet_fee'] = bcadd($total['templet_fee'], $good->templet_fee, 3);
+                $total['tax_amount'] = bcadd($total['tax_amount'], $good->tax_amount, 3);
                 $total['cert_fee'] = bcadd($total['cert_fee'], $good->cert_fee, 3);
                 $total['other_fee'] = bcadd($total['other_fee'], $good->other_fee, 3);
                 $total['factory_cost'] = bcadd($total['factory_cost'], $good->factory_cost, 3);

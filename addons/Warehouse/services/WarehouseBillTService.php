@@ -1120,7 +1120,7 @@ class WarehouseBillTService extends Service
         } else {
             $saveData = array_reverse($saveData);//倒序
         }
-        $value = $ids = [];
+        $value = [];
         $key = array_keys($saveData[0]);
         foreach ($saveData as $item) {
             $goodsM = new WarehouseBillGoodsL();
@@ -1128,7 +1128,6 @@ class WarehouseBillTService extends Service
             if (!$goodsM->validate()) {
                 throw new \Exception($this->getError($goodsM));
             }
-            $ids[] = $goodsM->id;
             $value[] = array_values($item);
             if (count($value) >= 10) {
                 $res = Yii::$app->db->createCommand()->batchInsert(WarehouseBillGoodsL::tableName(), $key, $value)->execute();
@@ -1146,7 +1145,7 @@ class WarehouseBillTService extends Service
         }
 
         //同步更新价格
-        $this->syncUpdatePriceAll($bill, $ids);
+        $this->syncUpdatePriceAll($bill);
 
         //同步更新单头信息
         $this->warehouseBillTSummary($form->bill_id);
