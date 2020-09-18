@@ -7,6 +7,7 @@ use yii\helpers\Console;
 use common\helpers\FileHelper;
 use addons\Style\common\models\Style;
 use addons\Style\common\models\StyleImages;
+use yii\web\UploadedFile;
 
 
 /**
@@ -48,28 +49,31 @@ class StyleImageController extends Controller
     public function actionImport()
     {
         $dir = dirname(dirname(dirname(__FILE__)));
-        $newDir = $dir.'/upload/2020/09/11';
-        $imageUrlDir = 'https://cdn-erp.bddco.cn/images/2020/09/11';
+        $newDir = $dir.'/upload/2020/09/18';
+        $imageUrlDir = 'https://cdn-erp.bddco.cn/images/2020/09/18';
         FileHelper::createDirectory($newDir);
         
-        $list = FileHelper::findFiles($dir."/upload/styleImages04/");
+        $list = FileHelper::findFiles($dir."/upload/styleImages05");
         $style_image_list = [];
+        $imageIndex = [];
         foreach ($list as $file){
             if(!preg_match("/\.db$/is", $file)){
                 $fileData = file_get_contents($file);
-                //$style_sn = basename(dirname($file));
-                $newfile = $newDir."/image_".preg_replace("/( |\(|\))/is","",basename($file));
-                $imageUrl = $imageUrlDir."/image_".preg_replace("/( |\(|\))/is","",basename($file));
-                preg_match("/image_(.*?)(\.|\-|\_)/", $newfile,$arr);
+                $file =  str_replace('\\','/', $file);
+                preg_match("/upload\/.*?\/(.*?)\//is", $file,$arr);
                 if(empty($arr[1])) {
-                    console::output($newfile.': error---------------------');
+                    console::output($file.': error---------------------');
                     continue;
                 }
                 $style_sn = $arr[1];
+                $imageIndex[$style_sn] = ($imageIndex[$style_sn]??0)+1 ;
+                $newname = "image_".$style_sn."_".$imageIndex[$style_sn].'.'.strtolower(pathinfo($file, PATHINFO_EXTENSION));
+                $newfile = $newDir."/".$newname;
+                $imageUrl = $imageUrlDir."/".$newname;                
                 if(strlen($style_sn) <=5) {
                     console::output($file);exit;
                 }else{
-                     if(!file_exists($newfile) && !file_exists(str_replace('2020/08/14','2020/08/06',$newfile))) {
+                    if(!file_exists($newfile)) {
                         $res = file_put_contents($newfile, $fileData);
                         console::output($newfile.'-'.$res);
                     } 
@@ -86,7 +90,7 @@ class StyleImageController extends Controller
             }
         }
         console::output("不存在的款号排查--end");
-
+        //exit;
         foreach ($style_image_list as $style_sn=>$image_list){
             console::output($style_sn.': BEGING--------------');
             try{
@@ -113,8 +117,11 @@ class StyleImageController extends Controller
         if(!$style) {
             console::output($style_sn.": [{$style_sn}]款号不存在");
             return ;
-        } else if($style->style_image) {
-            console::output($style_sn.": [{$style_sn}]款号已导入过图片");
+        }
+        //超过1张图片不在导入
+        $count = StyleImages::find()->where(['style_id'=>$style->id])->count();
+        if($count > 1) {
+            console::output($style_sn.": [{$style_sn}]款号已导入过图片({$count})");
             return ;
         }  
         foreach ($image_list as $image) {

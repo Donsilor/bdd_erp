@@ -33,7 +33,7 @@ return [
         //BDD正式erp
         'db2' => [
                 'class' => 'yii\db\Connection',
-                'dsn' => 'mysql:host=47.75.210.123;port=3306;dbname=bdd_erp;',
+                'dsn' => 'mysql:host=47.75.210.123;port=3389;dbname=bdd_erp;',
                 'username' => 'super',
                 'password' => 'Bdd123o123',
                 'charset' => 'utf8',
