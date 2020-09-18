@@ -1432,18 +1432,18 @@ class WarehouseBillTGoodsForm extends WarehouseBillGoodsL
      */
     public function updateFromValidate($form, $params)
     {
-        $result = [ 'error' => true, 'data' => [], 'msg'=> ''];
+        $result = ['error' => true, 'data' => [], 'msg' => ''];
         $keys = array_keys($params);
-        $values  = ArrayHelper::filter($params, $keys);
-        if(in_array('gong_fee', $keys)
-            && !empty($values['gong_fee'])
-            && !empty($form->piece_fee)){
+        $values = ArrayHelper::filter($params, $keys);
+        if (in_array('gong_fee', $keys)
+            && $values['gong_fee']
+            && $form->piece_fee) {
             $result['error'] = false;
             $result['msg'] = "克/工费与件/工费只能填写一个";
         }
-        if(in_array('piece_fee', $keys)
-            && !empty($values['piece_fee'])
-            && !empty($form->gong_fee)){
+        if (in_array('piece_fee', $keys)
+            && $values['piece_fee']
+            && $form->gong_fee) {
             $result['error'] = false;
             $result['msg'] = "克/工费与件/工费只能填写一个";
         }
