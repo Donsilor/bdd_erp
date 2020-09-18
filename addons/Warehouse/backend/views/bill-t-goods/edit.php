@@ -128,9 +128,9 @@ $this->params['breadcrumbs'][] = $this->title;
                     <div class="col-lg-4">
                         <?= $form->field($model, 'peiliao_way')->dropDownList($model->getPeiLiaoWayMap(), ['prompt' => '请选择']) ?>
                     </div>
-                    <div class="col-lg-4">
-                        <?= $form->field($model, 'gold_weight')->textInput() ?>
-                    </div>
+<!--                    <div class="col-lg-4">-->
+<!--                        --><?//= $form->field($model, 'gold_weight')->textInput() ?>
+<!--                    </div>-->
                     <div class="col-lg-4">
                         <?= $form->field($model, 'suttle_weight')->textInput() ?>
                     </div>
