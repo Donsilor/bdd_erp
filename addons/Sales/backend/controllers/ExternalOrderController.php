@@ -27,6 +27,8 @@ use common\enums\LogTypeEnum;
 use addons\Sales\common\forms\ExternalOrderForm;
 use addons\Sales\common\enums\PayStatusEnum;
 use addons\Sales\common\enums\OrderFromEnum;
+use yii\web\UploadedFile;
+use common\helpers\ExcelHelper;
 
 /**
  * Default controller for the `order` module
@@ -166,385 +168,44 @@ class ExternalOrderController extends BaseController
                 'returnUrl'=>$this->returnUrl,
                 'return'=>!empty($return)?json_encode($return):"",
         ]);
-    }
+    } 
     /**
-     * 物流轨迹日志
-     */
-    public function actionLogistics()
-    {
-        $this->layout = '@backend/views/layouts/iframe';
-        $id = Yii::$app->request->get('id');
-        $model = $this->findModel($id);
-        $logistics = \Yii::$app->logistics->kd100($model->express_no, $model->express->api_code ?? null, true);
-        return $this->render($this->action->id, [
-                'model' => $model,
-                'logistics'=>$logistics,
-        ]);
-    }
-    /**
-     * 取消订单
-     * @throws Exception
+     * 导入订单
      * @return array|mixed
      */
-    public function actionDelete()
+    public function actionAjaxImport()
     {
-        $ids = Yii::$app->request->post("ids", []);
-        if(empty($ids) || !is_array($ids)) {
-            return ResultHelper::json(422, '提交数据异常');
-        }
-        
-        try {
-            $trans = Yii::$app->db->beginTransaction();
-            foreach ($ids as $id) {
-                
+        if(Yii::$app->request->get('download')) {
+            $file = dirname(dirname(__FILE__)).'/resources/excel/外部订单数据导入模板.xlsx';
+            $content = file_get_contents($file);
+            if (!empty($content)) {
+                header("Content-type:application/vnd.ms-excel");
+                header("Content-Disposition: attachment;filename=外部订单数据导入模板".date("Ymd").".xlsx");
+                header("Content-Transfer-Encoding: binary");
+                exit($content);
             }
-            $trans->commit();
-            return ResultHelper::json(200, '操作成功');
-        } catch (\Exception $e) {
-            $trans->rollBack();
-            return ResultHelper::json(422, '取消失败！'.$e->getMessage());
         }
-        
-    }
-    /**
-     * 分配跟单人
-     * @return mixed|string|\yii\web\Response
-     * @throws \yii\base\ExitException
-     */
-    public function actionAjaxFollower()
-    {
-        
-    }
-    
-    
-    /**
-     * @return mixed
-     * 申请审核
-     */
-    public function actionAjaxApply(){
-        $id = \Yii::$app->request->get('id');
-        $order_goods_count = OrderGoods::find()->where(['order_id'=>$id])->count();
-        if($order_goods_count == 0){
-            return $this->message('订单没有明细', $this->redirect(\Yii::$app->request->referrer), 'error');
-        }
-        $model = $this->findModel($id);
-        $model = $model ?? new OrderForm();
-        if($model->order_status != OrderStatusEnum::SAVE){
-            return $this->message('订单不是保存状态', $this->redirect(\Yii::$app->request->referrer), 'error');
-        }
-        $model->getTargetType();
-        try{
-            $trans = Yii::$app->db->beginTransaction();
-            if($model->targetType){
-                //审批流程
-                $flow = Yii::$app->services->flowType->createFlow($model->targetType,$id,$model->order_sn);
-            }
-            
-            $model->order_status = OrderStatusEnum::PENDING;
-            $model->audit_status = AuditStatusEnum::PENDING;
-            if(false === $model->save()){
-                throw new \Exception($this->getError($model));
-            }
-            
-            //订单日志
-            $log = [
-                    'order_id' => $model->id,
-                    'order_sn' => $model->order_sn,
-                    'order_status' => $model->order_status,
-                    'log_type' => LogTypeEnum::ARTIFICIAL,
-                    'log_time' => time(),
-                    'log_module' => '申请审核',
-                    'log_msg' => $model->targetType ? "订单提交申请，审批编号:".$flow->id : '订单提交申请',
-            ];
-            \Yii::$app->salesService->orderLog->createOrderLog($log);
-            $trans->commit();
-            return $this->message('操作成功', $this->redirect(\Yii::$app->request->referrer), 'success');
-        }catch (\Exception $e){
-            $trans->rollBack();
-            return $this->message($e->getMessage(), $this->redirect(Yii::$app->request->referrer), 'error');
-        }
-        
-    }
-    
-    /**
-     * 订单审核
-     * @return array
-     * @throws \yii\db\Exception
-     */
-    public function actionAjaxAudit()
-    {
-        $id = Yii::$app->request->get('id');
-        $model = $this->findModel($id);
-        $model = $model ?? new OrderForm();
+        $model =  new ExternalOrderForm();
         // ajax 校验
         $this->activeFormValidate($model);
-        if ($model->load(Yii::$app->request->post())) {
+        
+        if ($model->load(\Yii::$app->request->post())) {
+            
             try{
-                $trans = Yii::$app->trans->beginTransaction();
+                //$trans = \Yii::$app->trans->beginTransaction();
                 
-                $model->getTargetType();
-                if($model->targetType){
-                    $audit = [
-                            'audit_status' =>  $model->audit_status ,
-                            'audit_time' => time(),
-                            'audit_remark' => $model->audit_remark
-                    ];
-                    $flow = \Yii::$app->services->flowType->flowAudit($model->targetType,$id,$audit);
-                    //审批完结或者审批不通过才会走下面
-                    if($flow->flow_status == FlowStatusEnum::COMPLETE || $flow->flow_status == FlowStatusEnum::CANCEL){
-                        $model->auditor_id = \Yii::$app->user->id;
-                        $model->audit_time = time();
-                        if($model->audit_status == AuditStatusEnum::PASS){
-                            $model->order_status = OrderStatusEnum::CONFORMED;
-                        }else{
-                            $model->order_status = OrderStatusEnum::SAVE;
-                        }
-                        if(false === $model->save()){
-                            return $this->message($this->getError($model), $this->redirect(\Yii::$app->request->referrer), 'error');
-                        }
-                    }
-                    $log_msg = "订单审核：".AuditStatusEnum::getValue($model->audit_status)."，审核备注：".$model->audit_remark."，审批编号:".$flow->id;
-                }else{
-                    $model->auditor_id = \Yii::$app->user->id;
-                    $model->audit_time = time();
-                    if($model->audit_status == AuditStatusEnum::PASS){
-                        $model->order_status = OrderStatusEnum::CONFORMED;
-                    }else{
-                        $model->order_status = OrderStatusEnum::SAVE;
-                    }
-                    if(false === $model->save()){
-                        return $this->message($this->getError($model), $this->redirect(\Yii::$app->request->referrer), 'error');
-                    }
-                    $log_msg = "订单审核：".AuditStatusEnum::getValue($model->audit_status)."，审核备注：".$model->audit_remark;
-                }
-                
-                //订单日志
-                $log = [
-                        'order_id' => $model->id,
-                        'order_sn' => $model->order_sn,
-                        'order_status' => $model->order_status,
-                        'log_type' => LogTypeEnum::ARTIFICIAL,
-                        'log_time' => time(),
-                        'log_module' => '订单审核',
-                        'log_msg' => $log_msg,
-                ];
-                \Yii::$app->salesService->orderLog->createOrderLog($log);
-                $trans->commit();
+                $model->file = UploadedFile::getInstance($model, 'file');
+                $rows = ExcelHelper::import($model->file->tempName);//从第1行开始,第4列结束取值
+                print_r($rows);
+                //$trans->commit();
+                return $this->message('导入成功', $this->redirect(Yii::$app->request->referrer), 'success');
             }catch (\Exception $e){
                 $trans->rollBack();
-                return $this->message("审核失败:". $e->getMessage(),  $this->redirect(Yii::$app->request->referrer), 'error');
-            }
-            return $this->message("保存成功", $this->redirect(Yii::$app->request->referrer), 'success');
-        }
-        $model->audit_status = AuditStatusEnum::PASS;
-        return $this->renderAjax($this->action->id, [
-                'model' => $model,
-        ]);
-    }
-    
-    
-    /**
-     * 修改费用
-     * @return \yii\web\Response|mixed|string|string
-     */
-    public function actionAjaxEditFee()
-    {
-        $id = Yii::$app->request->get('id');
-        $this->modelClass = OrderAccount::class;
-        $model = $this->findModel($id);
-        $isNewRecord = $model->isNewRecord;
-        if($isNewRecord) {
-            $model->order_id = $id;
-        }
-        // ajax 校验
-        $this->activeFormValidate($model);
-        if ($model->load(Yii::$app->request->post())) {
-            try{
-                $trans = Yii::$app->trans->beginTransaction();
-                if(false === $model->save()) {
-                    throw new \Exception($this->getError($model));
-                }
-                //更新采购汇总：总金额和总数量
-                \Yii::$app->salesService->order->orderSummary($model->order_id);
-                $trans->commit();
-                
-                return $this->message("保存成功", $this->redirect(Yii::$app->request->referrer), 'success');
-            }catch (\Exception $e) {
-                $trans->rollback();
-                return $this->message($e->getMessage(), $this->redirect(Yii::$app->request->referrer), 'error');
+                return $this->message($e->getMessage(), $this->redirect(\Yii::$app->request->referrer), 'error');
             }
         }
         return $this->renderAjax($this->action->id, [
                 'model' => $model,
-        ]);
-    }
-    
-    /**
-     * 修改收货地址
-     * @return \yii\web\Response|mixed|string|string
-     */
-    public function actionAjaxEditAddress()
-    {
-        $id = Yii::$app->request->get('id');
-        $this->modelClass = OrderAddress::class;
-        $model = $this->findModel($id);
-        $isNewRecord = $model->isNewRecord;
-        if($isNewRecord) {
-            $model->order_id = $id;
-        }
-        // ajax 校验
-        $this->activeFormValidate($model);
-        if ($model->load(Yii::$app->request->post())) {
-            try{
-                $trans = Yii::$app->trans->beginTransaction();
-                if(false === $model->save()) {
-                    throw new \Exception($this->getError($model));
-                }
-                $trans->commit();
-                
-                return $this->message("保存成功", $this->redirect(Yii::$app->request->referrer), 'success');
-            }catch (\Exception $e) {
-                $trans->rollback();
-                return $this->message($e->getMessage(), $this->redirect(Yii::$app->request->referrer), 'error');
-            }
-        }
-        if(!$model->realname) {
-            $model->realname = $model->order->customer_name ?? null;
-        }
-        if(!$model->mobile) {
-            $model->mobile = $model->order->customer_mobile ?? null;
-        }
-        if(!$model->email) {
-            $model->email = $model->order->customer_email ?? null;
-        }
-        if($isNewRecord && isset($model->customer)) {
-            $model->country_id = $model->customer->country_id ?? null;
-            $model->province_id = $model->customer->province_id ?? null;
-            $model->city_id = $model->customer->city_id ?? null;
-            $model->address_details = $model->customer->address_details ?? null;
-        }
-        return $this->renderAjax($this->action->id, [
-                'model' => $model,
-        ]);
-    }
-    
-    /**
-     * 修改收货地址
-     * @return \yii\web\Response|mixed|string|string
-     */
-    public function actionAjaxEditInvoice()
-    {
-        $id = Yii::$app->request->get('id');
-        $this->modelClass = OrderInvoice::class;
-        $model = $this->findModel($id);
-        if($model->isNewRecord) {
-            $model->order_id = $id;
-        }
-        // ajax 校验
-        $this->activeFormValidate($model);
-        if ($model->load(Yii::$app->request->post())) {
-            try{
-                $trans = Yii::$app->trans->beginTransaction();
-                if(false === $model->save()) {
-                    throw new \Exception($this->getError($model));
-                }
-                $trans->commit();
-                
-                return $this->message("保存成功", $this->redirect(Yii::$app->request->referrer), 'success');
-                
-            }catch (\Exception $e) {
-                $trans->rollback();
-                return $this->message($e->getMessage(), $this->redirect(Yii::$app->request->referrer), 'error');
-            }
-        }
-        
-        return $this->renderAjax($this->action->id, [
-                'model' => $model,
-        ]);
-    }
-    /**
-     * 申请采购
-     * @return array|mixed
-     */
-    public function actionAjaxPurchaseApply()
-    {
-        $id = Yii::$app->request->get('id');
-        $model = $this->findModel($id);
-        try {
-            $trans = Yii::$app->db->beginTransaction();
-            $apply = Yii::$app->salesService->order->syncPurchaseApply($id);
-            //订单日志
-            $log_msg = "生成采购申请单。采购申请单号：{$apply->apply_sn}";
-            $log = [
-                    'order_id' => $model->id,
-                    'order_sn' => $model->order_sn,
-                    'order_status' => $model->order_status,
-                    'log_type' => LogTypeEnum::ARTIFICIAL,
-                    'log_time' => time(),
-                    'log_module' => '生成采购申请单',
-                    'log_msg' => $log_msg,
-            ];
-            \Yii::$app->salesService->orderLog->createOrderLog($log);
-            $trans->commit();
-            return $this->message('操作成功', $this->redirect(\Yii::$app->request->referrer), 'success');
-        } catch (\Exception $e) {
-            $trans->rollBack();
-            return $this->message($e->getMessage(), $this->redirect(Yii::$app->request->referrer), 'error');
-        }
-    }
-    
-    /**
-     * 退款
-     * @var SalesReturn $model
-     * @throws
-     * @return mixed
-     */
-    public function actionReturn()
-    {
-        $this->layout = '@backend/views/layouts/iframe';
-        $id = Yii::$app->request->get('id');
-        $ids = Yii::$app->request->post('ids');
-        $model = new ReturnForm();
-        $model->ids = $ids;
-        $order = $this->findModel($id) ?? new Order();
-        if ($model->load(Yii::$app->request->post())) {
-            if(!$model->validate()) {
-                //return ResultHelper::json(422, $this->getError($model));
-            }
-            try{
-                $trans = Yii::$app->trans->beginTransaction();
-                
-                \Yii::$app->salesService->return->createReturn($model, $order);
-                $trans->commit();
-                Yii::$app->getSession()->setFlash('success','保存成功');
-                return ResultHelper::json(200, '保存成功');
-            }catch (\Exception $e){
-                $trans->rollBack();
-                return ResultHelper::json(422, $e->getMessage());
-            }
-        }
-        $dataProvider = null;
-        if (!is_null($id)) {
-            $searchModel = new SearchModel([
-                    'model' => OrderGoodsForm::class,
-                    'scenario' => 'default',
-                    'partialMatchAttributes' => [], // 模糊查询
-                    'defaultOrder' => [
-                            'id' => SORT_DESC
-                    ],
-                    'pageSize' => 1000,
-            ]);
-            $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
-            $dataProvider->query->andWhere(['=', 'order_id', $id]);
-            $dataProvider->query->andWhere(['=', 'is_return', IsReturnEnum::SAVE]);
-            $dataProvider->setSort(false);
-        }
-        $model->is_quick_refund = ConfirmEnum::NO;
-        $model->return_type = ReturnTypeEnum::CARD;
-        return $this->render($this->action->id, [
-                'model' => $model,
-                'order' => $order,
-                'dataProvider' => $dataProvider,
         ]);
     }
 }
