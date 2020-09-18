@@ -11,6 +11,7 @@ use addons\Warehouse\common\models\WarehouseBillGoodsL;
 use addons\Warehouse\common\forms\WarehouseBillTGoodsForm;
 use addons\Warehouse\common\enums\BillStatusEnum;
 use addons\Warehouse\common\enums\BillTypeEnum;
+use common\helpers\ArrayHelper;
 use common\helpers\ResultHelper;
 use yii\web\UploadedFile;
 
@@ -121,14 +122,14 @@ class BillTGoodsController extends BaseController
     {
         $id = \Yii::$app->request->get('id');
         $bill_id = \Yii::$app->request->get('bill_id');
-        $download = \Yii::$app->request->get('download',0);
+        $download = \Yii::$app->request->get('download', 0);
         $bill = WarehouseBill::findOne($bill_id);
-        if($download){
+        if ($download) {
             $model = new WarehouseBillTGoodsForm();
             list($values, $fields) = $model->getTitleList();
-            if(empty($bill_id)){
-                header("Content-Disposition: attachment;filename=【".rand(100,999)."】入库单明细导入(".date('Ymd').").csv");
-            }else{
+            if (empty($bill_id)) {
+                header("Content-Disposition: attachment;filename=【" . rand(100, 999) . "】入库单明细导入(" . date('Ymd') . ").csv");
+            } else {
                 header("Content-Disposition: attachment;filename=【{$bill_id}】入库单明细导入($bill->bill_no).csv");
             }
             $content = implode($values, ",") . "\n" . implode($fields, ",") . "\n";
@@ -193,10 +194,43 @@ class BillTGoodsController extends BaseController
                 return ResultHelper::json(422, $e->getMessage());
             }
         }
-        $model->biaomiangongyi = explode(',',$model->biaomiangongyi);
+        $model->biaomiangongyi = explode(',', $model->biaomiangongyi);
         return $this->render($this->action->id, [
             'model' => $model,
         ]);
+    }
+
+    /**
+     * ajax更新排序/状态
+     *
+     * @param $id
+     * @return array
+     */
+    public function actionAjaxUpdate($id)
+    {
+        if (!($model = $this->modelClass::findOne($id))) {
+            return ResultHelper::json(404, '找不到数据');
+        }
+        $params = Yii::$app->request->get();
+        $keys = array_keys($params);  //$model->attributes();
+        $result = $model->updateFromValidate($model, $params);
+        if($result['error'] == false){
+            return ResultHelper::json(422, $result['msg']);
+        }
+        try {
+            $trans = \Yii::$app->db->beginTransaction();
+            $model->attributes = ArrayHelper::filter($params, $keys);
+            if (!$model->save()) {
+                throw new \Exception("保存失败");
+            }
+            \Yii::$app->warehouseService->billT->syncUpdatePrice($model);
+            \Yii::$app->warehouseService->billT->WarehouseBillTSummary($model->bill_id);
+            $trans->commit();
+            return ResultHelper::json(200, '修改成功');
+        } catch (\Exception $e) {
+            $trans->rollBack();
+            return ResultHelper::json(422, $e->getMessage());
+        }
     }
 
     /**

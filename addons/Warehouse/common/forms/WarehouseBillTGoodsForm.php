@@ -378,6 +378,60 @@ class WarehouseBillTGoodsForm extends WarehouseBillGoodsL
     }
 
     /**
+     * 款式性别
+     * @return array
+     */
+    public function getStyleSexMap()
+    {
+        return \addons\Style\common\enums\StyleSexEnum::getMap() ?? [];
+    }
+
+    /**
+     * 金托类型
+     * @return array
+     */
+    public function getJietuoTypeMap()
+    {
+        return \addons\Style\common\enums\JintuoTypeEnum::getMap() ?? [];
+    }
+
+    /**
+     * 是否镶嵌
+     * @return array
+     */
+    public function getIsInlayMap()
+    {
+        return \addons\Style\common\enums\InlayEnum::getMap() ?? [];
+    }
+
+    /**
+     * 配料方式
+     * @return array
+     */
+    public function getPeiLiaoWayMap()
+    {
+        return \addons\Warehouse\common\enums\PeiLiaoWayEnum::getMap() ?? [];
+    }
+
+    /**
+     * 配石方式(类型)
+     * @return array
+     */
+    public function getPeiShiWayMap()
+    {
+        return \addons\Warehouse\common\enums\PeiShiWayEnum::getMap() ?? [];
+    }
+
+    /**
+     * 配件方式
+     * @return array
+     */
+    public function getPeiJianWayMap()
+    {
+        return \addons\Warehouse\common\enums\PeiJianWayEnum::getMap() ?? [];
+    }
+
+    /**
      * 入库仓库列表
      * @return array
      */
@@ -1374,56 +1428,25 @@ class WarehouseBillTGoodsForm extends WarehouseBillGoodsL
     }
 
     /**
-     * 款式性别
-     * @return array
+     * {@inheritdoc}
      */
-    public function getStyleSexMap()
+    public function updateFromValidate($form, $params)
     {
-        return \addons\Style\common\enums\StyleSexEnum::getMap() ?? [];
-    }
-
-    /**
-     * 金托类型
-     * @return array
-     */
-    public function getJietuoTypeMap()
-    {
-        return \addons\Style\common\enums\JintuoTypeEnum::getMap() ?? [];
-    }
-
-    /**
-     * 是否镶嵌
-     * @return array
-     */
-    public function getIsInlayMap()
-    {
-        return \addons\Style\common\enums\InlayEnum::getMap() ?? [];
-    }
-
-    /**
-     * 配料方式
-     * @return array
-     */
-    public function getPeiLiaoWayMap()
-    {
-        return \addons\Warehouse\common\enums\PeiLiaoWayEnum::getMap() ?? [];
-    }
-
-    /**
-     * 配石方式(类型)
-     * @return array
-     */
-    public function getPeiShiWayMap()
-    {
-        return \addons\Warehouse\common\enums\PeiShiWayEnum::getMap() ?? [];
-    }
-
-    /**
-     * 配件方式
-     * @return array
-     */
-    public function getPeiJianWayMap()
-    {
-        return \addons\Warehouse\common\enums\PeiJianWayEnum::getMap() ?? [];
+        $result = [ 'error' => true, 'data' => [], 'msg'=> ''];
+        $keys = array_keys($params);
+        $values  = ArrayHelper::filter($params, $keys);
+        if(in_array('gong_fee', $keys)
+            && !empty($values['gong_fee'])
+            && !empty($form->piece_fee)){
+            $result['error'] = false;
+            $result['msg'] = "克/工费与件/工费只能填写一个";
+        }
+        if(in_array('piece_fee', $keys)
+            && !empty($values['piece_fee'])
+            && !empty($form->gong_fee)){
+            $result['error'] = false;
+            $result['msg'] = "克/工费与件/工费只能填写一个";
+        }
+        return $result;
     }
 }

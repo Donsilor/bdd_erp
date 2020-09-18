@@ -1551,7 +1551,6 @@ class WarehouseBillTService extends Service
      */
     public function syncUpdatePrice($form)
     {
-
         if (!$form->validate()) {
             throw new \Exception($this->getError($form));
         }
