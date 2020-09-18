@@ -2473,15 +2473,15 @@ $this->params['breadcrumbs'][] = $this->title;
                         ]
                     ]); ?>
                 </div>
-                <span class="navbar-fixed-top text-center" style="font-size:16px; margin-top:80px">
-                    <a id="mao_gold" style="color: green;" href="#gold">金料</a>
-                    <a id="mao_main_stone" style="color: green;" href="#main_stone">主石</a>
-                    <a id="mao_second_stone1" style="color: green;" href="#second_stone1">副石1</a>
-                    <a id="mao_second_stone2" style="color: green;" href="#second_stone2">副石2</a>
-                    <a id="mao_second_stone3" style="color: green;" href="#second_stone3">副石3</a>
-                    <a id="mao_fee1" style="color: green;" href="#fee1">工费1</a>
-                    <a id="mao_fee2" style="color: green;" href="#fee2">工费1</a>
-                    <a id="mao_price" style="color: green;" href="#price">价格</a>
+                <span class="navbar-fixed-top text-center" style="font-size:16px; margin-top:60px">
+                    <a id="mao_gold" style="color: #2E9AFE;" href="#gold">金料</a>
+                    <a id="mao_main_stone" style="color: #2E9AFE;" href="#main_stone">主石</a>
+                    <a id="mao_second_stone1" style="color: #2E9AFE;" href="#second_stone1">副石1</a>
+                    <a id="mao_second_stone2" style="color: #2E9AFE;" href="#second_stone2">副石2</a>
+                    <a id="mao_second_stone3" style="color: #2E9AFE;" href="#second_stone3">副石3</a>
+                    <a id="mao_fee1" style="color: #2E9AFE;" href="#fee1">工费1</a>
+                    <a id="mao_fee2" style="color: #2E9AFE;" href="#fee2">工费1</a>
+                    <a id="mao_price" style="color: #2E9AFE;" href="#price">价格</a>
                 </span>
             </div>
         </div>
