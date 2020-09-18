@@ -27,7 +27,7 @@ $form = ActiveForm::begin([
                 <?= $form->field($model, 'name')->textInput(['maxlength' => true]); ?>
             </div>
             <div class="col-lg-4">
-                <?= $form->field($model, 'type')->dropDownList(addons\Sales\common\enums\PlatformTypeEnum::getMap(),['prompt'=>'请选择']);?>             
+                <?= $form->field($model, 'type')->dropDownList(addons\Sales\common\enums\DeliveryTypeEnum::getMap(),['prompt'=>'请选择']);?>             
             </div>
             <div class="col-lg-4">
                 <?= $form->field($model, 'channel_id')->widget(\kartik\select2\Select2::class, [

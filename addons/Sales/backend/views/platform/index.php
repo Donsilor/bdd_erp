@@ -1,10 +1,8 @@
 <?php
 
 use common\helpers\Html;
-use common\helpers\ImageHelper;
 use common\helpers\Url;
 use yii\grid\GridView;
-use kartik\daterange\DateRangePicker;
 
 /* @var $this yii\web\View */
 /* @var $dataProvider yii\data\ActiveDataProvider */
@@ -72,6 +70,18 @@ $params = $params ? "&".http_build_query($params) : '';
                                 'headerOptions' => ['class' => 'col-md-2'],
                         ],
                         [
+                            'attribute'=>'type',
+                            'value' =>function($model) {
+                                return addons\Sales\common\enums\DeliveryTypeEnum::getValue($model->type);
+                            },
+                            'filter' => Html::activeDropDownList($searchModel, 'channel_id',addons\Sales\common\enums\DeliveryTypeEnum::getMap(), [
+                                    'prompt' => '全部',
+                                    'class' => 'form-control',
+                                    
+                            ]),
+                            'headerOptions' => ['class' => 'col-md-1'],
+                        ],
+                        [
                             'attribute'=>'channel_id',
                              'value' =>function($model) {
                                  return $model->channel->name??'';
@@ -103,7 +113,7 @@ $params = $params ? "&".http_build_query($params) : '';
                             },
                             'filter' => false,
                             'format' => 'raw',
-                            'headerOptions' => ['width'=>'100'],
+                            'headerOptions' => ['class' => 'col-md-1'],
                         ],                        
                         [
                             'label' => '添加人',
@@ -125,13 +135,13 @@ $params = $params ? "&".http_build_query($params) : '';
                             'value' => function ($model, $key, $index, $column){
                                 return  Html::sort($model->sort,['data-url'=>Url::to(['ajax-update'])]);
                             },
-                            'headerOptions' => ['width' => '80'],
+                            'headerOptions' => ['class' => 'col-md-1'],
                             'filter' => false,
                         ],
                         [
                             'attribute' => 'status',
                             'format' => 'raw',
-                            'headerOptions' => ['width'=>'100'],
+                            'headerOptions' => ['class' => 'col-md-1'],
                             'value' => function ($model){
                                 return \common\enums\StatusEnum::getValue($model->status);
                             },
