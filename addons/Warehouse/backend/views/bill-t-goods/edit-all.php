@@ -27,17 +27,6 @@ $this->params['breadcrumbs'][] = $this->title;
         - <?= \addons\Warehouse\common\enums\BillStatusEnum::getValue($bill->bill_status) ?></h2>
     <?php echo Html::menuTab($tabList, $tab) ?>
     <div class="box-tools" style="float:right;margin-top:-40px; margin-right: 20px;">
-<!--        navbar-fixed-bottom-->
-        <span>
-            <a id="mao_gold" href="#gold">金料</a>
-            <a id="mao_main_stone" href="#main_stone">主石</a>
-            <a id="mao_second_stone1" href="#second_stone1">副石1</a>
-            <a id="mao_second_stone2" href="#second_stone2">副石2</a>
-            <a id="mao_second_stone3" href="#second_stone3">副石3</a>
-            <a id="mao_fee1" href="#fee1">工费1</a>
-            <a id="mao_fee2" href="#fee2">工费1</a>
-            <a id="mao_price" href="#price">价格</a>
-        </span>
         <?php
         if ($bill->bill_status == \addons\Warehouse\common\enums\BillStatusEnum::SAVE) {
             echo Html::create(['ajax-edit', 'bill_id' => $bill->id], '新增货品', [
@@ -2484,6 +2473,16 @@ $this->params['breadcrumbs'][] = $this->title;
                         ]
                     ]); ?>
                 </div>
+                <span class="navbar-fixed-top text-center" style="font-size:16px; margin-top:80px">
+                    <a id="mao_gold" style="color: green;" href="#gold">金料</a>
+                    <a id="mao_main_stone" style="color: green;" href="#main_stone">主石</a>
+                    <a id="mao_second_stone1" style="color: green;" href="#second_stone1">副石1</a>
+                    <a id="mao_second_stone2" style="color: green;" href="#second_stone2">副石2</a>
+                    <a id="mao_second_stone3" style="color: green;" href="#second_stone3">副石3</a>
+                    <a id="mao_fee1" style="color: green;" href="#fee1">工费1</a>
+                    <a id="mao_fee2" style="color: green;" href="#fee2">工费1</a>
+                    <a id="mao_price" style="color: green;" href="#price">价格</a>
+                </span>
             </div>
         </div>
         <!-- box end -->
