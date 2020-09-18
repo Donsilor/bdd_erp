@@ -18,6 +18,11 @@ $this->title = Yii::t('gold_bill_l_goods', '领料单详情');
 $this->params['breadcrumbs'][] = ['label' => $this->title, 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
+<style>
+    select.form-control {
+        font-size: 12px;
+    }
+</style>
 <div class="box-body nav-tabs-custom">
     <h2 class="page-header"><?php echo $this->title; ?> - <?php echo $bill->bill_no?></h2>
     <?php echo Html::menuTab($tabList,$tab)?>
@@ -37,7 +42,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         'dataProvider' => $dataProvider,
                         'filterModel' => $searchModel,
                         'tableOptions' => ['class' => 'table table-hover'],
-                        'options' => ['style'=>'white-space:nowrap;'],
+                        'options' => ['style'=>'white-space:nowrap;font-size:12px;'],
                         'showFooter' => false,//显示footer行
                         'id'=>'grid',
                         'columns' => [

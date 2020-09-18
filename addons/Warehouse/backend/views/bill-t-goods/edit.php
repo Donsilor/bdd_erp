@@ -117,6 +117,9 @@ $this->params['breadcrumbs'][] = $this->title;
                     <!--                    <div class="col-lg-4">-->
                     <!--                        --><? //= $form->field($model, 'goods_color')->dropDownList(\Yii::$app->styleService->styleAttribute->getAttrValueListByStyle($model->style_sn,AttrIdEnum::GOODS_COLOR),['prompt'=>'请选择']) ?>
                     <!--                    </div>-->
+                    <div class="col-sm-4">
+                        <?= $form->field($model, 'auto_goods_id')->radioList(\common\enums\ConfirmEnum::getMap()) ?>
+                    </div>
                 </div>
                 <div class="row">
                     <div class="with-border">
@@ -132,6 +135,9 @@ $this->params['breadcrumbs'][] = $this->title;
                         <?= $form->field($model, 'suttle_weight')->textInput() ?>
                     </div>
                     <div class="col-lg-4">
+                        <?= $form->field($model, 'lncl_loss_weight')->textInput() ?>
+                    </div>
+                    <div class="col-lg-4">
                         <?= $form->field($model, 'gold_loss')->textInput() ?>
                     </div>
                     <div class="col-lg-4">
@@ -139,6 +145,9 @@ $this->params['breadcrumbs'][] = $this->title;
                     </div>
                     <div class="col-lg-4">
                         <?= $form->field($model, 'pure_gold')->textInput() ?>
+                    </div>
+                    <div class="col-lg-4">
+                        <?= $form->field($model, 'gold_amount')->textInput() ?>
                     </div>
                 </div>
 <!--                <div class="row">-->
@@ -202,6 +211,9 @@ $this->params['breadcrumbs'][] = $this->title;
                         <?= $form->field($model, 'main_stone_price')->textInput() ?>
                     </div>
                     <div class="col-lg-4">
+                        <?= $form->field($model, 'main_stone_amount')->textInput() ?>
+                    </div>
+                    <div class="col-lg-4">
                         <?= $form->field($model, 'main_stone_shape')->dropDownList($model->getMainStoneShapeDrop($model), ['prompt' => '请选择']) ?>
                     </div>
                     <div class="col-lg-4">
@@ -247,6 +259,9 @@ $this->params['breadcrumbs'][] = $this->title;
                     </div>
                     <div class="col-lg-4">
                         <?= $form->field($model, 'second_stone_price1')->textInput() ?>
+                    </div>
+                    <div class="col-lg-4">
+                        <?= $form->field($model, 'second_stone_amount1')->textInput() ?>
                     </div>
                     <div class="col-lg-4">
                         <?= $form->field($model, 'second_stone_shape1')->dropDownList($model->getSecondStoneShape1Drop($model), ['prompt' => '请选择']) ?>
@@ -298,6 +313,9 @@ $this->params['breadcrumbs'][] = $this->title;
                     <div class="col-lg-4">
                         <?= $form->field($model, 'second_stone_price2')->textInput() ?>
                     </div>
+                    <div class="col-lg-4">
+                        <?= $form->field($model, 'second_stone_amount2')->textInput() ?>
+                    </div>
 <!--                    <div class="col-lg-4">-->
 <!--                        --><?//= $form->field($model, 'second_stone_shape2')->dropDownList($model->getSecondStoneShape2Drop($model), ['prompt' => '请选择']) ?>
 <!--                    </div>-->
@@ -343,6 +361,9 @@ $this->params['breadcrumbs'][] = $this->title;
                         <?= $form->field($model, 'second_stone_price3')->textInput() ?>
                     </div>
                     <div class="col-lg-4">
+                        <?= $form->field($model, 'second_stone_amount3')->textInput() ?>
+                    </div>
+                    <div class="col-lg-4">
                         <?= $form->field($model, 'stone_remark')->textInput() ?>
                     </div>
                 </div>
@@ -367,6 +388,9 @@ $this->params['breadcrumbs'][] = $this->title;
                     </div>
                     <div class="col-lg-4">
                         <?= $form->field($model, 'parts_price')->textInput() ?>
+                    </div>
+                    <div class="col-lg-4">
+                        <?= $form->field($model, 'parts_amount')->textInput() ?>
                     </div>
                 </div>
                 <div class="row">
@@ -397,9 +421,9 @@ $this->params['breadcrumbs'][] = $this->title;
                     <div class="col-lg-4">
                         <?= $form->field($model, 'second_stone_fee3')->textInput() ?>
                     </div>
-<!--                    <div class="col-lg-4">-->
-<!--                        --><?//= $form->field($model, 'xianqian_price')->textInput() ?>
-<!--                    </div>-->
+                    <div class="col-lg-4">
+                        <?= $form->field($model, 'xianqian_fee')->textInput() ?>
+                    </div>
                     <div class="col-lg-4">
                         <?= $form->field($model, 'biaomiangongyi_fee')->textInput() ?>
                     </div>
@@ -419,6 +443,12 @@ $this->params['breadcrumbs'][] = $this->title;
                         <?= $form->field($model, 'templet_fee')->textInput() ?>
                     </div>
                     <div class="col-lg-4">
+                        <?= $form->field($model, 'tax_fee')->textInput() ?>
+                    </div>
+                    <div class="col-lg-4">
+                        <?= $form->field($model, 'tax_amount')->textInput() ?>
+                    </div>
+                    <div class="col-lg-4">
                         <?= $form->field($model, 'cert_fee')->textInput() ?>
                     </div>
 <!--                    <div class="col-lg-4">-->
@@ -429,6 +459,50 @@ $this->params['breadcrumbs'][] = $this->title;
                     </div>
                     <div class="col-lg-4">
                         <?= $form->field($model, 'other_fee')->textInput() ?>
+                    </div>
+                    <div class="col-lg-4">
+                        <?= $form->field($model, 'factory_cost')->textInput() ?>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="with-border">
+                        <h5 class="box-title" style="font-weight: bold">自动计算开关</h5>
+                    </div>
+                    <div class="col-sm-4">
+                        <?= $form->field($model, 'auto_loss_weight')->radioList(\addons\Warehouse\common\enums\IsAutoCalculateEnum::getMap()) ?>
+                    </div>
+                    <div class="col-sm-4">
+                        <?= $form->field($model, 'auto_gold_amount')->radioList(\addons\Warehouse\common\enums\IsAutoCalculateEnum::getMap()) ?>
+                    </div>
+                    <div class="col-sm-4">
+                        <?= $form->field($model, 'auto_main_stone')->radioList(\addons\Warehouse\common\enums\IsAutoCalculateEnum::getMap()) ?>
+                    </div>
+                    <div class="col-sm-4">
+                        <?= $form->field($model, 'auto_second_stone1')->radioList(\addons\Warehouse\common\enums\IsAutoCalculateEnum::getMap()) ?>
+                    </div>
+                    <div class="col-sm-4">
+                        <?= $form->field($model, 'auto_second_stone2')->radioList(\addons\Warehouse\common\enums\IsAutoCalculateEnum::getMap()) ?>
+                    </div>
+                    <div class="col-sm-4">
+                        <?= $form->field($model, 'auto_second_stone3')->radioList(\addons\Warehouse\common\enums\IsAutoCalculateEnum::getMap()) ?>
+                    </div>
+                    <div class="col-sm-4">
+                        <?= $form->field($model, 'auto_parts_amount')->radioList(\addons\Warehouse\common\enums\IsAutoCalculateEnum::getMap()) ?>
+                    </div>
+                    <div class="col-sm-4">
+                        <?= $form->field($model, 'auto_peishi_fee')->radioList(\addons\Warehouse\common\enums\IsAutoCalculateEnum::getMap()) ?>
+                    </div>
+                    <div class="col-sm-4">
+                        <?= $form->field($model, 'auto_xianqian_fee')->radioList(\addons\Warehouse\common\enums\IsAutoCalculateEnum::getMap()) ?>
+                    </div>
+                    <div class="col-sm-4">
+                        <?= $form->field($model, 'auto_tax_amount')->radioList(\addons\Warehouse\common\enums\IsAutoCalculateEnum::getMap()) ?>
+                    </div>
+                    <div class="col-sm-4">
+                        <?= $form->field($model, 'auto_factory_cost')->radioList(\addons\Warehouse\common\enums\IsAutoCalculateEnum::getMap()) ?>
+                    </div>
+                    <div class="col-sm-4">
+                        <?= $form->field($model, 'is_auto_price')->radioList(\addons\Warehouse\common\enums\IsAutoCalculateEnum::getMap()) ?>
                     </div>
                 </div>
                 <!-- ./box-body -->

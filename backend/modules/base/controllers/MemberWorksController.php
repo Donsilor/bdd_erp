@@ -219,7 +219,7 @@ class MemberWorksController extends BaseController
         foreach ($creator_id_list as $creator_id){
             $list = [];
             $member = Member::find()->where(['id'=>$creator_id])->one();
-            if(!$member) continue;
+            if(!$member || $member->status != StatusEnum::ENABLED) continue;
             $list['username'] = $member->username;
             $list['dept'] = $member->department->name ?? '';
             $list['post'] = $member->assignment->role->title ?? '';

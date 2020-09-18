@@ -100,7 +100,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#feeeed;'],
                                 'footerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#feeeed;'],
                                 'contentOptions' => ['style' => ['white-space' => 'nowrap']],
-                                'template' => '{image} {edit} {delete}',
+                                'template' => '{delete} {edit} {image}',
                                 'buttons' => [
                                     'image' => function ($url, $model, $key) {
                                         return Html::edit(['ajax-image', 'id' => $model->id], '图片', [
@@ -547,20 +547,6 @@ $this->params['breadcrumbs'][] = $this->title;
 //                                ]),
                             ],
                             [
-                                'attribute' => 'pure_gold',
-                                'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#FFD700;'],
-                                'footerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#FFD700;'],
-                                'value' => function ($model, $key, $index, $widget) use ($total) {
-                                    $widget->footer = $model->getFooterValues('pure_gold', $total, "0.000");
-                                    return $model->pure_gold ?? "0.000";
-                                },
-                                'filter' => false,
-//                                'filter' => Html::activeTextInput($searchModel, 'pure_gold', [
-//                                    'class' => 'form-control',
-//                                    'style' => 'width:80px;'
-//                                ]),
-                            ],
-                            [
                                 'attribute' => 'pure_gold_rate',
                                 'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#FFD700;'],
                                 'footerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#FFD700;'],
@@ -570,6 +556,20 @@ $this->params['breadcrumbs'][] = $this->title;
                                 },
                                 'filter' => false,
 //                                'filter' => Html::activeTextInput($searchModel, 'pure_gold_rate', [
+//                                    'class' => 'form-control',
+//                                    'style' => 'width:80px;'
+//                                ]),
+                            ],
+                            [
+                                'attribute' => 'pure_gold',
+                                'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#FFD700;'],
+                                'footerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#FFD700;'],
+                                'value' => function ($model, $key, $index, $widget) use ($total) {
+                                    $widget->footer = $model->getFooterValues('pure_gold', $total, "0.000");
+                                    return $model->pure_gold ?? "0.000";
+                                },
+                                'filter' => false,
+//                                'filter' => Html::activeTextInput($searchModel, 'pure_gold', [
 //                                    'class' => 'form-control',
 //                                    'style' => 'width:80px;'
 //                                ]),
@@ -1431,7 +1431,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'footerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#6495ED;'],
                                 'value' => function ($model, $key, $index, $widget) {
                                     $widget->footer = $model->getAttributeLabel('second_stone_price3');
-                                    return $model->second_stone_price2 ?? "0.00";
+                                    return $model->second_stone_price3 ?? "0.00";
                                 },
                                 'filter' => false,
 //                                'filter' => Html::activeTextInput($searchModel, 'second_stone_price3', [
@@ -1885,6 +1885,36 @@ $this->params['breadcrumbs'][] = $this->title;
 //                                ]),
                             ],
                             [
+                                'attribute' => 'tax_fee',
+                                //'format' => 'raw',
+                                'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#b7ba6b;'],
+                                'footerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#b7ba6b;'],
+                                'value' => function ($model, $key, $index, $widget) {
+                                    $widget->footer = $model->getAttributeLabel('tax_fee');
+                                    return $model->tax_fee ?? "0.00";
+                                },
+                                'filter' => false,
+//                                'filter' => Html::activeTextInput($searchModel, 'tax_fee', [
+//                                    'class' => 'form-control',
+//                                    'style' => 'width:80px;'
+//                                ]),
+                            ],
+                            [
+                                'attribute' => 'tax_amount',
+                                //'format' => 'raw',
+                                'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#b7ba6b;'],
+                                'footerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#b7ba6b;'],
+                                'value' => function ($model, $key, $index, $widget) {
+                                    $widget->footer = $model->getAttributeLabel('tax_amount');
+                                    return $model->tax_amount ?? "0.00";
+                                },
+                                'filter' => false,
+//                                'filter' => Html::activeTextInput($searchModel, 'tax_amount', [
+//                                    'class' => 'form-control',
+//                                    'style' => 'width:80px;'
+//                                ]),
+                            ],
+                            [
                                 'attribute' => 'cert_fee',
                                 //'format' => 'raw',
                                 'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#b7ba6b;'],
@@ -1930,6 +1960,25 @@ $this->params['breadcrumbs'][] = $this->title;
 //                                ]),
                             ],
                             [
+                                'label' => "总成本/件",
+                                'attribute' => 'cost_price',
+                                //'format' => 'raw',
+                                'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#9b95c9;'],
+                                'contentOptions' => ['style' => 'color:red'],
+                                'footerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#9b95c9;'],
+                                'value' => function ($model, $key, $index, $widget) use ($total) {
+                                    $one_cost_price = $total['one_cost_price'] ?? 0;
+                                    $widget->footer = "总成本/件<span style='font-size:16px; color: red;'>[".$one_cost_price."]</span>";
+                                    return bcdiv($model->cost_price, $model->goods_num, 3) ?? "0.00";
+                                },
+                                'visible' => \common\helpers\Auth::verify(\common\enums\SpecialAuthEnum::VIEW_CAIGOU_PRICE),
+                                'filter' => false,
+//                                'filter' => Html::activeTextInput($searchModel, 'cost_price', [
+//                                    'class' => 'form-control',
+//                                    'style' => 'width:100px;'
+//                                ]),
+                            ],
+                            [
                                 'label' => '成本手填',
                                 'attribute' => 'is_auto_price',
                                 'format' => 'raw',
@@ -1954,24 +2003,6 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'value' => function ($model, $key, $index, $widget) use ($total) {
                                     $widget->footer = $model->getFooterValues('cost_price', $total, "0.00");
                                     return $model->cost_price ?? "0.00";
-                                },
-                                'visible' => \common\helpers\Auth::verify(\common\enums\SpecialAuthEnum::VIEW_CAIGOU_PRICE),
-                                'filter' => false,
-//                                'filter' => Html::activeTextInput($searchModel, 'cost_price', [
-//                                    'class' => 'form-control',
-//                                    'style' => 'width:100px;'
-//                                ]),
-                            ],
-                            [
-                                'label' => "总成本价",
-                                'attribute' => 'cost_price',
-                                //'format' => 'raw',
-                                'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#9b95c9;'],
-                                'contentOptions' => ['style' => 'color:red'],
-                                'footerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#9b95c9;'],
-                                'value' => function ($model, $key, $index, $widget) use ($total) {
-                                    $widget->footer = "总成本价";
-                                    return bcmul($model->cost_price, $model->goods_num, 3) ?? "0.00";
                                 },
                                 'visible' => \common\helpers\Auth::verify(\common\enums\SpecialAuthEnum::VIEW_CAIGOU_PRICE),
                                 'filter' => false,
