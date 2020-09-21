@@ -3,32 +3,18 @@
 namespace addons\Sales\backend\controllers;
 
 use addons\Sales\common\enums\IsReturnEnum;
-use addons\Sales\common\enums\OrderStatusEnum;
-use addons\Sales\common\enums\ReturnTypeEnum;
-use addons\Sales\common\forms\OrderForm;
-use addons\Sales\common\forms\OrderGoodsForm;
-use addons\Sales\common\forms\ReturnForm;
-use addons\Sales\common\models\OrderAccount;
-use addons\Sales\common\models\SalesReturn;
-use common\enums\AuditStatusEnum;
-use common\enums\ConfirmEnum;
-use common\enums\FlowStatusEnum;
 use common\helpers\ArrayHelper;
 use Yii;
 use common\traits\Curd;
 use addons\Sales\common\models\Order;
 use common\models\base\SearchModel;
-use addons\Sales\common\models\OrderGoods;
 use common\helpers\ResultHelper;
-use addons\Sales\common\models\OrderInvoice;
-use addons\Sales\common\models\OrderAddress;
-use addons\Sales\common\models\Customer;
-use common\enums\LogTypeEnum;
-use addons\Sales\common\forms\ExternalOrderForm;
-use addons\Sales\common\enums\PayStatusEnum;
 use addons\Sales\common\enums\OrderFromEnum;
 use yii\web\UploadedFile;
 use common\helpers\ExcelHelper;
+use addons\Sales\common\forms\OrderImportForm;
+use addons\Sales\common\forms\ExternalOrderForm;
+use addons\Sales\common\forms\OrderGoodsForm;
 
 /**
  * Default controller for the `order` module
@@ -176,31 +162,30 @@ class ExternalOrderController extends BaseController
     public function actionAjaxImport()
     {
         if(Yii::$app->request->get('download')) {
-            $file = dirname(dirname(__FILE__)).'/resources/excel/外部订单数据导入模板.xlsx';
+            $file = dirname(dirname(__FILE__)).'/resources/excel/港台订单模板导入.xlsx';
             $content = file_get_contents($file);
             if (!empty($content)) {
                 header("Content-type:application/vnd.ms-excel");
-                header("Content-Disposition: attachment;filename=外部订单数据导入模板".date("Ymd").".xlsx");
+                header("Content-Disposition: attachment;filename=港台订单模板导入".date("Ymd").".xlsx");
                 header("Content-Transfer-Encoding: binary");
                 exit($content);
             }
         }
-        $model =  new ExternalOrderForm();
+        $model =  new OrderImportForm();
         // ajax 校验
         $this->activeFormValidate($model);
         
         if ($model->load(\Yii::$app->request->post())) {
             
             try{
-                //$trans = \Yii::$app->trans->beginTransaction();
+                $trans = \Yii::$app->trans->beginTransaction();
                 
                 $model->file = UploadedFile::getInstance($model, 'file');
-                $rows = ExcelHelper::import($model->file->tempName);//从第1行开始,第4列结束取值
-                print_r($rows);
-                //$trans->commit();
+                Yii::$app->salesService->order->importExternalOrder($model);
+                $trans->rollback();
                 return $this->message('导入成功', $this->redirect(Yii::$app->request->referrer), 'success');
             }catch (\Exception $e){
-                $trans->rollBack();
+                //$trans->rollBack();
                 return $this->message($e->getMessage(), $this->redirect(\Yii::$app->request->referrer), 'error');
             }
         }

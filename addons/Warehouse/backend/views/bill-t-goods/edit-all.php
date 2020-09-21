@@ -1,6 +1,7 @@
 <?php
 
 use common\helpers\Html;
+use common\helpers\ImageHelper;
 use common\helpers\Url;
 use yii\grid\GridView;
 use addons\Style\common\enums\AttrIdEnum;
@@ -37,6 +38,13 @@ $this->params['breadcrumbs'][] = $this->title;
             echo '&nbsp;';
             echo Html::a('返回明细', ['bill-t-goods/index', 'bill_id' => $bill->id], ['class' => 'btn btn-white btn-xs']);
             echo '&nbsp;';
+        }
+        echo Html::a('单据打印', ['bill-t/print', 'id' => $bill->id], [
+            'target' => '_blank',
+            'class' => 'btn btn-info btn-xs',
+        ]);
+        echo '&nbsp;';
+        if ($bill->bill_status == \addons\Warehouse\common\enums\BillStatusEnum::SAVE) {
             echo Html::edit(['ajax-upload', 'bill_id' => $bill->id], '批量导入', [
                 'class' => 'btn btn-success btn-xs',
                 'data-toggle' => 'modal',
@@ -97,7 +105,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#feeeed;'],
                                 'footerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#feeeed;'],
                                 'contentOptions' => ['style' => ['white-space' => 'nowrap']],
-                                'template' => '{delete} {edit} {image}',
+                                'template' => '{delete} {edit}',
                                 'buttons' => [
                                     'image' => function ($url, $model, $key) {
                                         return Html::edit(['ajax-image', 'id' => $model->id], '图片', [
@@ -124,6 +132,16 @@ $this->params['breadcrumbs'][] = $this->title;
                                         }
                                     },
                                 ],
+                            ],
+                            [
+                                'attribute' => 'goods_image',
+                                'format' => 'raw',
+                                'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#feeeed;'],
+                                'footerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#feeeed;'],
+                                'value' => function ($model) {
+                                    return ImageHelper::fancyBox($model->goods_image, 30, 30);
+                                },
+                                'filter' => false,
                             ],
                             [
                                 'attribute' => 'style_cate_id',
@@ -204,25 +222,12 @@ $this->params['breadcrumbs'][] = $this->title;
                                         return Html::a($model->style_sn, ['/style/view', 'id' => $model->id, 'returnUrl' => Url::getReturnUrl()], ['style' => "text-decoration:underline;color:#3c8dbc", 'id' => $model->style_sn]) . ' <i class="fa fa-copy" onclick="copy(\'' . $model->style_sn . '\')"></i>';
                                     } else {
                                         if ($model->style_sn) {
-                                            return "<span id='{$model->style_sn}_{$model->id}'>".$model->style_sn."</span>".' <i class="fa fa-copy" onclick="copy(\''. $model->style_sn.'_'.$model->id .'\')"></i>';
+                                            return "<span id='{$model->style_sn}_{$model->id}'>" . $model->style_sn . "</span>" . ' <i class="fa fa-copy" onclick="copy(\'' . $model->style_sn . '_' . $model->id . '\')"></i>';
                                         }
                                         return $model->style_sn ?? "";
                                     }
                                 },
                                 'filter' => Html::activeTextInput($searchModel, 'style_sn', [
-                                    'class' => 'form-control',
-                                    'style' => 'width:80px;'
-                                ]),
-                            ],
-                            [
-                                'attribute' => 'qiban_sn',
-                                'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#feeeed;'],
-                                'footerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#feeeed;'],
-                                'value' => function ($model, $key, $index, $widget) {
-                                    $widget->footer = $model->getAttributeLabel('qiban_sn');
-                                    return $model->qiban_sn ?? "";
-                                },
-                                'filter' => Html::activeTextInput($searchModel, 'qiban_sn', [
                                     'class' => 'form-control',
                                     'style' => 'width:80px;'
                                 ]),
@@ -239,6 +244,19 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'filter' => Html::activeTextInput($searchModel, 'goods_name', [
                                     'class' => 'form-control goods_name',
                                     'style' => 'width:130px;'
+                                ]),
+                            ],
+                            [
+                                'attribute' => 'qiban_sn',
+                                'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#feeeed;'],
+                                'footerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#feeeed;'],
+                                'value' => function ($model, $key, $index, $widget) {
+                                    $widget->footer = $model->getAttributeLabel('qiban_sn');
+                                    return $model->qiban_sn ?? "";
+                                },
+                                'filter' => Html::activeTextInput($searchModel, 'qiban_sn', [
+                                    'class' => 'form-control',
+                                    'style' => 'width:80px;'
                                 ]),
                             ],
                             /*[
@@ -501,7 +519,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'footerOptions' => ['class' => 'col-md-1', 'attr-name' => 'peiliao_way', 'style' => 'background-color:#afdfe4;'],
                                 'value' => function ($model, $key, $index, $widget) {
                                     $widget->footer = $model->getAttributeLabel('peiliao_way');
-                                    return Html::ajaxSelect($model, 'peiliao_way', \addons\Warehouse\common\enums\PeiLiaoWayEnum::getMap(), ['data-id' => $model->id, 'prompt' => '请选择']);
+                                    return Html::ajaxSelect($model, 'peiliao_way', \addons\Warehouse\common\enums\PeiLiaoWayEnum::getMap(), ['data-id' => $model->id]);
                                 },
                                 'filter' => Html::activeDropDownList($searchModel, 'peiliao_way', \addons\Warehouse\common\enums\PeiLiaoWayEnum::getMap(), [
                                     'prompt' => '全部',
@@ -512,7 +530,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             [
                                 'attribute' => 'suttle_weight',
                                 'format' => 'raw',
-                                'headerOptions' => ['class' => 'col-md-1 batch_full', 'attr-name' => 'suttle_weight', 'style' => 'background-color:#afdfe4;'],
+                                'headerOptions' => ['class' => 'col-md-1 batch_full', 'id' => 'suttle_weight', 'attr-name' => 'suttle_weight', 'style' => 'background-color:#afdfe4;'],
                                 'footerOptions' => ['class' => 'col-md-1 batch_full2', 'attr-name' => 'suttle_weight', 'style' => 'background-color:#afdfe4;'],
                                 'value' => function ($model, $key, $index, $widget) use ($total) {
                                     $widget->footer = $model->getFooterValues('suttle_weight', $total, "0.000");
@@ -559,8 +577,8 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'headerOptions' => ['class' => 'col-md-1 batch_full', 'attr-name' => 'lncl_loss_weight', 'style' => 'background-color:#afdfe4;'],
                                 'footerOptions' => ['class' => 'col-md-1 batch_full2', 'attr-name' => 'lncl_loss_weight', 'style' => 'background-color:#afdfe4;'],
                                 'format' => 'raw',
-                                'value' => function ($model, $key, $index, $widget) {
-                                    $widget->footer = $model->getAttributeLabel('lncl_loss_weight');
+                                'value' => function ($model, $key, $index, $widget) use ($total) {
+                                    $widget->footer = $model->getFooterValues('lncl_loss_weight', $total, "0.000");
                                     return Html::ajaxInput('lncl_loss_weight', $model->lncl_loss_weight, ['data-id' => $model->id, 'onfocus' => 'rfClearVal(this)', 'data-type' => 'number']);
                                 },
                                 'filter' => false,
@@ -589,8 +607,8 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'headerOptions' => ['class' => 'col-md-1 batch_full', 'attr-name' => 'gold_amount', 'style' => 'background-color:#afdfe4;'],
                                 'footerOptions' => ['class' => 'col-md-1 batch_full2', 'attr-name' => 'gold_amount', 'style' => 'background-color:#afdfe4;'],
                                 'format' => 'raw',
-                                'value' => function ($model, $key, $index, $widget) {
-                                    $widget->footer = $model->getAttributeLabel('gold_amount');
+                                'value' => function ($model, $key, $index, $widget) use ($total) {
+                                    $widget->footer = $model->getFooterValues('gold_amount', $total, "0.000");
                                     return Html::ajaxInput('gold_amount', $model->gold_amount, ['data-id' => $model->id, 'onfocus' => 'rfClearVal(this)', 'data-type' => 'number']);
                                 },
                                 'filter' => false,
@@ -617,7 +635,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             [
                                 'attribute' => 'pure_gold',
                                 'format' => 'raw',
-                                'headerOptions' => ['class' => 'col-md-1 batch_full', 'attr-name' => 'pure_gold', 'style' => 'background-color:#afdfe4;'],
+                                'headerOptions' => ['class' => 'col-md-1 batch_full', 'id' => 'gold', 'attr-name' => 'pure_gold', 'style' => 'background-color:#afdfe4;'],
                                 'footerOptions' => ['class' => 'col-md-1 batch_full2', 'attr-name' => 'pure_gold', 'style' => 'background-color:#afdfe4;'],
                                 'value' => function ($model, $key, $index, $widget) use ($total) {
                                     $widget->footer = $model->getFooterValues('pure_gold', $total, "0.000");
@@ -859,7 +877,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'footerOptions' => ['class' => 'col-md-1', 'attr-name' => 'main_pei_type', 'style' => 'background-color:#afb4db;'],
                                 'value' => function ($model, $key, $index, $widget) {
                                     $widget->footer = $model->getAttributeLabel('main_pei_type');
-                                    return Html::ajaxSelect($model, 'main_pei_type', \addons\Warehouse\common\enums\PeiShiWayEnum::getMap(), ['data-id' => $model->id, 'prompt' => '请选择']);
+                                    return Html::ajaxSelect($model, 'main_pei_type', \addons\Warehouse\common\enums\PeiShiWayEnum::getMap(), ['data-id' => $model->id]);
                                 },
                                 'filter' => Html::activeDropDownList($searchModel, 'main_pei_type', \addons\Warehouse\common\enums\PeiShiWayEnum::getMap(), [
                                     'prompt' => '全部',
@@ -945,8 +963,8 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'format' => 'raw',
                                 'headerOptions' => ['class' => 'col-md-1 batch_full', 'attr-name' => 'main_stone_amount', 'style' => 'background-color:#afb4db;'],
                                 'footerOptions' => ['class' => 'col-md-1 batch_full2', 'attr-name' => 'main_stone_amount', 'style' => 'background-color:#afb4db;'],
-                                'value' => function ($model, $key, $index, $widget) {
-                                    $widget->footer = $model->getAttributeLabel('main_stone_amount');
+                                'value' => function ($model, $key, $index, $widget) use ($total) {
+                                    $widget->footer = $model->getFooterValues('main_stone_amount', $total, "0.000");
                                     return Html::ajaxInput('main_stone_amount', $model->main_stone_amount, ['data-id' => $model->id, 'onfocus' => 'rfClearVal(this)', 'data-type' => 'number']);
                                 },
                                 'filter' => Html::activeTextInput($searchModel, 'main_stone_amount', [
@@ -972,7 +990,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             [
                                 'attribute' => 'main_stone_color',
                                 'format' => 'raw',
-                                'headerOptions' => ['class' => 'col-md-1 batch_select_full', 'attr-name' => 'main_stone_color', 'attr-id' => AttrIdEnum::MAIN_STONE_COLOR, 'style' => 'background-color:#afb4db;'],
+                                'headerOptions' => ['class' => 'col-md-1 batch_select_full', 'id' => 'main_stone', 'attr-name' => 'main_stone_color', 'attr-id' => AttrIdEnum::MAIN_STONE_COLOR, 'style' => 'background-color:#afb4db;'],
                                 'footerOptions' => ['class' => 'col-md-1 batch_select_full2', 'attr-name' => 'main_stone_color', 'attr-id' => AttrIdEnum::MAIN_STONE_COLOR, 'style' => 'background-color:#afb4db;'],
                                 'value' => function ($model, $key, $index, $widget) {
                                     $widget->footer = $model->getAttributeLabel('main_stone_color');
@@ -1069,9 +1087,24 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'footerOptions' => ['class' => 'col-md-1', 'attr-name' => 'second_pei_type', 'style' => 'background-color:#dec674;'],
                                 'value' => function ($model, $key, $index, $widget) {
                                     $widget->footer = $model->getAttributeLabel('second_pei_type');
-                                    return Html::ajaxSelect($model, 'second_pei_type', \addons\Warehouse\common\enums\PeiShiWayEnum::getMap(), ['data-id' => $model->id, 'prompt' => '请选择']);
+                                    return Html::ajaxSelect($model, 'second_pei_type', \addons\Warehouse\common\enums\PeiShiWayEnum::getMap(), ['data-id' => $model->id]);
                                 },
                                 'filter' => Html::activeDropDownList($searchModel, 'second_pei_type', \addons\Warehouse\common\enums\PeiShiWayEnum::getMap(), [
+                                    'prompt' => '全部',
+                                    'class' => 'form-control',
+                                    'style' => 'width:80px;'
+                                ]),
+                            ],
+                            [
+                                'attribute' => 'second_stone_type1',
+                                'format' => 'raw',
+                                'headerOptions' => ['class' => 'col-md-1 batch_select_full', 'attr-name' => 'second_stone_type1', 'attr-id' => AttrIdEnum::SIDE_STONE1_TYPE, 'style' => 'background-color:#dec674;'],
+                                'footerOptions' => ['class' => 'col-md-1 batch_select_full2', 'attr-name' => 'second_stone_type1', 'attr-id' => AttrIdEnum::SIDE_STONE1_TYPE, 'style' => 'background-color:#dec674;'],
+                                'value' => function ($model, $key, $index, $widget) {
+                                    $widget->footer = $model->getAttributeLabel('second_stone_type1');
+                                    return Html::ajaxSelect($model, 'second_stone_type1', $model->getSecondStoneType1Drop($model), ['data-id' => $model->id, 'prompt' => '请选择']);
+                                },
+                                'filter' => Html::activeDropDownList($searchModel, 'second_stone_type1', $model->getSecondStoneType1Map(), [
                                     'prompt' => '全部',
                                     'class' => 'form-control',
                                     'style' => 'width:80px;'
@@ -1089,21 +1122,6 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'filter' => Html::activeTextInput($searchModel, 'second_stone_sn1', [
                                     'class' => 'form-control',
                                     'style' => 'width:100px;'
-                                ]),
-                            ],
-                            [
-                                'attribute' => 'second_stone_type1',
-                                'format' => 'raw',
-                                'headerOptions' => ['class' => 'col-md-1 batch_select_full', 'attr-name' => 'second_stone_type1', 'attr-id' => AttrIdEnum::SIDE_STONE1_TYPE, 'style' => 'background-color:#dec674;'],
-                                'footerOptions' => ['class' => 'col-md-1 batch_select_full2', 'attr-name' => 'second_stone_type1', 'attr-id' => AttrIdEnum::SIDE_STONE1_TYPE, 'style' => 'background-color:#dec674;'],
-                                'value' => function ($model, $key, $index, $widget) {
-                                    $widget->footer = $model->getAttributeLabel('second_stone_type1');
-                                    return Html::ajaxSelect($model, 'second_stone_type1', $model->getSecondStoneType1Drop($model), ['data-id' => $model->id, 'prompt' => '请选择']);
-                                },
-                                'filter' => Html::activeDropDownList($searchModel, 'second_stone_type1', $model->getSecondStoneType1Map(), [
-                                    'prompt' => '全部',
-                                    'class' => 'form-control',
-                                    'style' => 'width:80px;'
                                 ]),
                             ],
                             [
@@ -1155,8 +1173,8 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'format' => 'raw',
                                 'headerOptions' => ['class' => 'col-md-1 batch_full', 'attr-name' => 'second_stone_amount1', 'style' => 'background-color:#dec674;'],
                                 'footerOptions' => ['class' => 'col-md-1 batch_full2', 'attr-name' => 'second_stone_amount1', 'style' => 'background-color:#dec674;'],
-                                'value' => function ($model, $key, $index, $widget) {
-                                    $widget->footer = $model->getAttributeLabel('second_stone_amount1');
+                                'value' => function ($model, $key, $index, $widget) use ($total) {
+                                    $widget->footer = $model->getFooterValues('second_stone_amount1', $total, "0.000");
                                     return Html::ajaxInput('second_stone_amount1', $model->second_stone_amount1, ['data-id' => $model->id, 'onfocus' => 'rfClearVal(this)', 'data-type' => 'number']);
                                 },
                                 'filter' => Html::activeTextInput($searchModel, 'second_stone_amount1', [
@@ -1182,7 +1200,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             [
                                 'attribute' => 'second_stone_color1',
                                 'format' => 'raw',
-                                'headerOptions' => ['class' => 'col-md-1 batch_select_full', 'attr-name' => 'second_stone_color1', 'attr-id' => AttrIdEnum::SIDE_STONE1_COLOR, 'style' => 'background-color:#dec674;'],
+                                'headerOptions' => ['class' => 'col-md-1 batch_select_full', 'id' => 'second_stone1', 'attr-name' => 'second_stone_color1', 'attr-id' => AttrIdEnum::SIDE_STONE1_COLOR, 'style' => 'background-color:#dec674;'],
                                 'footerOptions' => ['class' => 'col-md-1 batch_select_full2', 'attr-name' => 'second_stone_color1', 'attr-id' => AttrIdEnum::SIDE_STONE1_COLOR, 'style' => 'background-color:#dec674;'],
                                 'value' => function ($model, $key, $index, $widget) {
                                     $widget->footer = $model->getAttributeLabel('second_stone_color1');
@@ -1302,9 +1320,24 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'footerOptions' => ['class' => 'col-md-1', 'attr-name' => 'second_pei_type2', 'style' => 'background-color:#84bf96;'],
                                 'value' => function ($model, $key, $index, $widget) {
                                     $widget->footer = $model->getAttributeLabel('second_pei_type2');
-                                    return Html::ajaxSelect($model, 'second_pei_type2', \addons\Warehouse\common\enums\PeiShiWayEnum::getMap(), ['data-id' => $model->id, 'prompt' => '请选择']);
+                                    return Html::ajaxSelect($model, 'second_pei_type2', \addons\Warehouse\common\enums\PeiShiWayEnum::getMap(), ['data-id' => $model->id]);
                                 },
                                 'filter' => Html::activeDropDownList($searchModel, 'second_pei_type2', \addons\Warehouse\common\enums\PeiShiWayEnum::getMap(), [
+                                    'prompt' => '全部',
+                                    'class' => 'form-control',
+                                    'style' => 'width:80px;'
+                                ]),
+                            ],
+                            [
+                                'attribute' => 'second_stone_type2',
+                                'format' => 'raw',
+                                'headerOptions' => ['class' => 'col-md-1 batch_select_full', 'attr-name' => 'second_stone_type2', 'attr-id' => AttrIdEnum::SIDE_STONE2_TYPE, 'style' => 'background-color:#84bf96;'],
+                                'footerOptions' => ['class' => 'col-md-1 batch_select_full2', 'attr-name' => 'second_stone_type2', 'attr-id' => AttrIdEnum::SIDE_STONE2_TYPE, 'style' => 'background-color:#84bf96;'],
+                                'value' => function ($model, $key, $index, $widget) {
+                                    $widget->footer = $model->getAttributeLabel('second_stone_type2');
+                                    return Html::ajaxSelect($model, 'second_stone_type2', $model->getSecondStoneType2Drop($model), ['data-id' => $model->id, 'prompt' => '请选择']);
+                                },
+                                'filter' => Html::activeDropDownList($searchModel, 'second_stone_type2', $model->getSecondStoneType2Map(), [
                                     'prompt' => '全部',
                                     'class' => 'form-control',
                                     'style' => 'width:80px;'
@@ -1322,21 +1355,6 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'filter' => Html::activeTextInput($searchModel, 'second_stone_sn2', [
                                     'class' => 'form-control',
                                     'style' => 'width:100px;'
-                                ]),
-                            ],
-                            [
-                                'attribute' => 'second_stone_type2',
-                                'format' => 'raw',
-                                'headerOptions' => ['class' => 'col-md-1 batch_select_full', 'attr-name' => 'second_stone_type2', 'attr-id' => AttrIdEnum::SIDE_STONE2_TYPE, 'style' => 'background-color:#84bf96;'],
-                                'footerOptions' => ['class' => 'col-md-1 batch_select_full2', 'attr-name' => 'second_stone_type2', 'attr-id' => AttrIdEnum::SIDE_STONE2_TYPE, 'style' => 'background-color:#84bf96;'],
-                                'value' => function ($model, $key, $index, $widget) {
-                                    $widget->footer = $model->getAttributeLabel('second_stone_type2');
-                                    return Html::ajaxSelect($model, 'second_stone_type2', $model->getSecondStoneType2Drop($model), ['data-id' => $model->id, 'prompt' => '请选择']);
-                                },
-                                'filter' => Html::activeDropDownList($searchModel, 'second_stone_type2', $model->getSecondStoneType2Map(), [
-                                    'prompt' => '全部',
-                                    'class' => 'form-control',
-                                    'style' => 'width:80px;'
                                 ]),
                             ],
 //                            [
@@ -1401,10 +1419,10 @@ $this->params['breadcrumbs'][] = $this->title;
                             [
                                 'attribute' => 'second_stone_amount2',
                                 'format' => 'raw',
-                                'headerOptions' => ['class' => 'col-md-1 batch_full', 'attr-name' => 'second_stone_amount2', 'style' => 'background-color:#84bf96;'],
+                                'headerOptions' => ['class' => 'col-md-1 batch_full', 'id' => 'second_stone2', 'attr-name' => 'second_stone_amount2', 'style' => 'background-color:#84bf96;'],
                                 'footerOptions' => ['class' => 'col-md-1 batch_full2', 'attr-name' => 'second_stone_amount2', 'style' => 'background-color:#84bf96;'],
-                                'value' => function ($model, $key, $index, $widget) {
-                                    $widget->footer = $model->getAttributeLabel('second_stone_amount2');
+                                'value' => function ($model, $key, $index, $widget) use ($total) {
+                                    $widget->footer = $model->getFooterValues('second_stone_amount2', $total, "0.000");
                                     return Html::ajaxInput('second_stone_amount2', $model->second_stone_amount2, ['data-id' => $model->id, 'onfocus' => 'rfClearVal(this)', 'data-type' => 'number']);
                                 },
                                 'filter' => false,
@@ -1578,9 +1596,24 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'footerOptions' => ['class' => 'col-md-1', 'attr-name' => 'second_pei_type3', 'style' => 'background-color:#6495ED;'],
                                 'value' => function ($model, $key, $index, $widget) {
                                     $widget->footer = $model->getAttributeLabel('second_pei_type3');
-                                    return Html::ajaxSelect($model, 'second_pei_type3', \addons\Warehouse\common\enums\PeiShiWayEnum::getMap(), ['data-id' => $model->id, 'prompt' => '请选择']);
+                                    return Html::ajaxSelect($model, 'second_pei_type3', \addons\Warehouse\common\enums\PeiShiWayEnum::getMap(), ['data-id' => $model->id]);
                                 },
                                 'filter' => Html::activeDropDownList($searchModel, 'second_pei_type3', \addons\Warehouse\common\enums\PeiShiWayEnum::getMap(), [
+                                    'prompt' => '全部',
+                                    'class' => 'form-control',
+                                    'style' => 'width:80px;'
+                                ]),
+                            ],
+                            [
+                                'attribute' => 'second_stone_type3',
+                                'format' => 'raw',
+                                'headerOptions' => ['class' => 'col-md-1 batch_select_full', 'attr-name' => 'second_stone_type3', 'attr-id' => AttrIdEnum::SIDE_STONE3_TYPE, 'style' => 'background-color:#6495ED;'],
+                                'footerOptions' => ['class' => 'col-md-1 batch_select_full2', 'attr-name' => 'second_stone_type3', 'attr-id' => AttrIdEnum::SIDE_STONE3_TYPE, 'style' => 'background-color:#6495ED;'],
+                                'value' => function ($model, $key, $index, $widget) {
+                                    $widget->footer = $model->getAttributeLabel('second_stone_type3');
+                                    return Html::ajaxSelect($model, 'second_stone_type3', $model->getSecondStoneType3Drop($model), ['data-id' => $model->id, 'prompt' => '请选择']);
+                                },
+                                'filter' => Html::activeDropDownList($searchModel, 'second_stone_type3', $model->getSecondStoneType3Map(), [
                                     'prompt' => '全部',
                                     'class' => 'form-control',
                                     'style' => 'width:80px;'
@@ -1598,21 +1631,6 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'filter' => Html::activeTextInput($searchModel, 'second_stone_sn3', [
                                     'class' => 'form-control',
                                     'style' => 'width:100px;'
-                                ]),
-                            ],
-                            [
-                                'attribute' => 'second_stone_type3',
-                                'format' => 'raw',
-                                'headerOptions' => ['class' => 'col-md-1 batch_select_full', 'attr-name' => 'second_stone_type3', 'attr-id' => AttrIdEnum::SIDE_STONE3_TYPE, 'style' => 'background-color:#6495ED;'],
-                                'footerOptions' => ['class' => 'col-md-1 batch_select_full2', 'attr-name' => 'second_stone_type3', 'attr-id' => AttrIdEnum::SIDE_STONE3_TYPE, 'style' => 'background-color:#6495ED;'],
-                                'value' => function ($model, $key, $index, $widget) {
-                                    $widget->footer = $model->getAttributeLabel('second_stone_type3');
-                                    return Html::ajaxSelect($model, 'second_stone_type3', $model->getSecondStoneType3Drop($model), ['data-id' => $model->id, 'prompt' => '请选择']);
-                                },
-                                'filter' => Html::activeDropDownList($searchModel, 'second_stone_type3', $model->getSecondStoneType3Map(), [
-                                    'prompt' => '全部',
-                                    'class' => 'form-control',
-                                    'style' => 'width:80px;'
                                 ]),
                             ],
                             [
@@ -1665,8 +1683,8 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'format' => 'raw',
                                 'headerOptions' => ['class' => 'col-md-1 batch_full', 'attr-name' => 'second_stone_amount3', 'style' => 'background-color:#6495ED;'],
                                 'footerOptions' => ['class' => 'col-md-1 batch_full2', 'attr-name' => 'second_stone_amount3', 'style' => 'background-color:#6495ED;'],
-                                'value' => function ($model, $key, $index, $widget) {
-                                    $widget->footer = $model->getAttributeLabel('second_stone_amount3');
+                                'value' => function ($model, $key, $index, $widget) use ($total) {
+                                    $widget->footer = $model->getFooterValues('second_stone_amount3', $total, "0.000");
                                     return Html::ajaxInput('second_stone_amount3', $model->second_stone_amount3, ['data-id' => $model->id, 'onfocus' => 'rfClearVal(this)', 'data-type' => 'number']);
                                 },
                                 'filter' => false,
@@ -1678,7 +1696,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             [
                                 'attribute' => 'stone_remark',
                                 'format' => 'raw',
-                                'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#6495ED;'],
+                                'headerOptions' => ['class' => 'col-md-1', 'id' => 'second_stone3', 'style' => 'background-color:#6495ED;'],
                                 'footerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#6495ED;'],
                                 'value' => function ($model, $key, $index, $widget) {
                                     $widget->footer = $model->getAttributeLabel('stone_remark');
@@ -1711,11 +1729,11 @@ $this->params['breadcrumbs'][] = $this->title;
                             [
                                 'attribute' => 'parts_way',
                                 'format' => 'raw',
-                                'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#cde6c7;'],
+                                'headerOptions' => ['class' => 'col-md-1', 'id'=>'parts', 'style' => 'background-color:#cde6c7;'],
                                 'footerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#cde6c7;'],
                                 'value' => function ($model, $key, $index, $widget) {
                                     $widget->footer = $model->getAttributeLabel('parts_way');
-                                    return Html::ajaxSelect($model, 'parts_way', $model->getPeiJianWayMap(), ['data-id' => $model->id, 'prompt' => '请选择']);
+                                    return Html::ajaxSelect($model, 'parts_way', $model->getPeiJianWayMap(), ['data-id' => $model->id]);
                                 },
                                 'filter' => Html::activeDropDownList($searchModel, 'parts_way', $model->getPeiJianWayMap(), [
                                     'prompt' => '全部',
@@ -1801,10 +1819,10 @@ $this->params['breadcrumbs'][] = $this->title;
                             [
                                 'attribute' => 'parts_amount',
                                 'format' => 'raw',
-                                'headerOptions' => ['class' => 'col-md-1 batch_full', 'attr-name' => 'parts_amount', 'style' => 'background-color:#cde6c7;'],
+                                'headerOptions' => ['class' => 'col-md-1 batch_full', 'id' => 'parts', 'attr-name' => 'parts_amount', 'style' => 'background-color:#cde6c7;'],
                                 'footerOptions' => ['class' => 'col-md-1 batch_full2', 'attr-name' => 'parts_amount', 'style' => 'background-color:#cde6c7;'],
-                                'value' => function ($model, $key, $index, $widget) {
-                                    $widget->footer = $model->getAttributeLabel('parts_amount');
+                                'value' => function ($model, $key, $index, $widget) use ($total) {
+                                    $widget->footer = $model->getFooterValues('parts_amount', $total, "0.000");
                                     return Html::ajaxInput('parts_amount', $model->parts_amount, ['data-id' => $model->id, 'onfocus' => 'rfClearVal(this)', 'data-type' => 'number']);
                                 },
                                 'filter' => false,
@@ -1953,8 +1971,8 @@ $this->params['breadcrumbs'][] = $this->title;
                             [
                                 'attribute' => 'second_stone_fee1',
                                 'format' => 'raw',
-                                'headerOptions' => ['class' => 'col-md-1 batch_full', 'attr-name' => 'xianqian_price', 'style' => 'background-color:#FFA500;'],
-                                'footerOptions' => ['class' => 'col-md-1 batch_full2', 'attr-name' => 'xianqian_price', 'style' => 'background-color:#FFA500;'],
+                                'headerOptions' => ['class' => 'col-md-1 batch_full', 'attr-name' => 'second_stone_fee1', 'style' => 'background-color:#FFA500;'],
+                                'footerOptions' => ['class' => 'col-md-1 batch_full2', 'attr-name' => 'second_stone_fee1', 'style' => 'background-color:#FFA500;'],
                                 'value' => function ($model, $key, $index, $widget) {
                                     $widget->footer = $model->getAttributeLabel('second_stone_fee1');
                                     return Html::ajaxInput('second_stone_fee1', $model->second_stone_fee1, ['data-id' => $model->id, 'onfocus' => 'rfClearVal(this)', 'data-type' => 'number']);
@@ -1968,8 +1986,8 @@ $this->params['breadcrumbs'][] = $this->title;
                             [
                                 'attribute' => 'second_stone_fee2',
                                 'format' => 'raw',
-                                'headerOptions' => ['class' => 'col-md-1 batch_full', 'attr-name' => 'xianqian_price', 'style' => 'background-color:#FFA500;'],
-                                'footerOptions' => ['class' => 'col-md-1 batch_full2', 'attr-name' => 'xianqian_price', 'style' => 'background-color:#FFA500;'],
+                                'headerOptions' => ['class' => 'col-md-1 batch_full', 'attr-name' => 'second_stone_fee2', 'style' => 'background-color:#FFA500;'],
+                                'footerOptions' => ['class' => 'col-md-1 batch_full2', 'attr-name' => 'second_stone_fee2', 'style' => 'background-color:#FFA500;'],
                                 'value' => function ($model, $key, $index, $widget) {
                                     $widget->footer = $model->getAttributeLabel('second_stone_fee2');
                                     return Html::ajaxInput('second_stone_fee2', $model->second_stone_fee2, ['data-id' => $model->id, 'onfocus' => 'rfClearVal(this)', 'data-type' => 'number']);
@@ -1983,8 +2001,8 @@ $this->params['breadcrumbs'][] = $this->title;
                             [
                                 'attribute' => 'second_stone_fee3',
                                 'format' => 'raw',
-                                'headerOptions' => ['class' => 'col-md-1 batch_full', 'attr-name' => 'xianqian_price', 'style' => 'background-color:#FFA500;'],
-                                'footerOptions' => ['class' => 'col-md-1 batch_full2', 'attr-name' => 'xianqian_price', 'style' => 'background-color:#FFA500;'],
+                                'headerOptions' => ['class' => 'col-md-1 batch_full', 'attr-name' => 'second_stone_fee3', 'style' => 'background-color:#FFA500;'],
+                                'footerOptions' => ['class' => 'col-md-1 batch_full2', 'attr-name' => 'second_stone_fee3', 'style' => 'background-color:#FFA500;'],
                                 'value' => function ($model, $key, $index, $widget) {
                                     $widget->footer = $model->getAttributeLabel('second_stone_fee3');
                                     return Html::ajaxInput('second_stone_fee3', $model->second_stone_fee3, ['data-id' => $model->id, 'onfocus' => 'rfClearVal(this)', 'data-type' => 'number']);
@@ -1998,10 +2016,10 @@ $this->params['breadcrumbs'][] = $this->title;
                             [
                                 'attribute' => 'xianqian_fee',
                                 'format' => 'raw',
-                                'headerOptions' => ['class' => 'col-md-1 batch_full', 'attr-name' => 'xianqian_fee', 'style' => 'background-color:#FFA500;'],
+                                'headerOptions' => ['class' => 'col-md-1 batch_full', 'id' => 'fee1', 'attr-name' => 'xianqian_fee', 'style' => 'background-color:#FFA500;'],
                                 'footerOptions' => ['class' => 'col-md-1 batch_full2', 'attr-name' => 'xianqian_fee', 'style' => 'background-color:#FFA500;'],
-                                'value' => function ($model, $key, $index, $widget) {
-                                    $widget->footer = $model->getAttributeLabel('xianqian_fee');
+                                'value' => function ($model, $key, $index, $widget) use ($total) {
+                                    $widget->footer = $model->getFooterValues('xianqian_fee', $total, "0.000");
                                     return Html::ajaxInput('xianqian_fee', $model->xianqian_fee, ['data-id' => $model->id, 'onfocus' => 'rfClearVal(this)', 'data-type' => 'number']);
                                 },
                                 'filter' => false,
@@ -2155,7 +2173,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'headerOptions' => ['class' => 'col-md-1 batch_full', 'attr-name' => 'tax_amount', 'style' => 'background-color:#E6E6FA;'],
                                 'footerOptions' => ['class' => 'col-md-1 batch_full2', 'attr-name' => 'tax_amount', 'style' => 'background-color:#E6E6FA;'],
                                 'value' => function ($model, $key, $index, $widget) use ($total) {
-                                    $widget->footer = $model->getAttributeLabel('tax_amount');
+                                    $widget->footer = $model->getFooterValues('tax_amount', $total, "0.00");
                                     return Html::ajaxInput('tax_amount', $model->tax_amount, ['data-id' => $model->id, 'onfocus' => 'rfClearVal(this)', 'data-type' => 'number']);
                                 },
                                 'filter' => false,
@@ -2182,7 +2200,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             [
                                 'attribute' => 'other_fee',
                                 'format' => 'raw',
-                                'headerOptions' => ['class' => 'col-md-1 batch_full', 'attr-name' => 'other_fee', 'style' => 'background-color:#E6E6FA;'],
+                                'headerOptions' => ['class' => 'col-md-1 batch_full', 'id' => 'fee2', 'attr-name' => 'other_fee', 'style' => 'background-color:#E6E6FA;'],
                                 'footerOptions' => ['class' => 'col-md-1 batch_full2', 'attr-name' => 'other_fee', 'style' => 'background-color:#E6E6FA;'],
                                 'value' => function ($model, $key, $index, $widget) use ($total) {
                                     $widget->footer = $model->getFooterValues('other_fee', $total, "0.00");
@@ -2218,8 +2236,8 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'format' => 'raw',
                                 'headerOptions' => ['class' => 'col-md-1 batch_full', 'attr-name' => 'factory_cost', 'style' => 'background-color:#b7ba6b;'],
                                 'footerOptions' => ['class' => 'col-md-1 batch_full2', 'attr-name' => 'factory_cost', 'style' => 'background-color:#b7ba6b;'],
-                                'value' => function ($model, $key, $index, $widget) {
-                                    $widget->footer = $model->getAttributeLabel('factory_cost');
+                                'value' => function ($model, $key, $index, $widget) use ($total) {
+                                    $widget->footer = $model->getFooterValues('factory_cost', $total, "0.00");
                                     return Html::ajaxInput('factory_cost', $model->factory_cost, ['data-id' => $model->id]);
                                 },
                                 'filter' => Html::activeTextInput($searchModel, 'factory_cost', [
@@ -2414,7 +2432,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             [
                                 'attribute' => 'order_sn',
                                 'format' => 'raw',
-                                'headerOptions' => ['class' => 'col-md-1 batch_full', 'attr-name' => 'order_sn', 'style' => 'background-color:#b7ba6b;'],
+                                'headerOptions' => ['class' => 'col-md-1 batch_full', 'id' => 'price', 'attr-name' => 'order_sn', 'style' => 'background-color:#b7ba6b;'],
                                 'footerOptions' => ['class' => 'col-md-1 batch_full2', 'attr-name' => 'order_sn', 'style' => 'background-color:#b7ba6b;'],
                                 'value' => function ($model, $key, $index, $widget) {
                                     $widget->footer = $model->getAttributeLabel('order_sn');
@@ -2473,6 +2491,17 @@ $this->params['breadcrumbs'][] = $this->title;
                         ]
                     ]); ?>
                 </div>
+                <span class="navbar-fixed-top text-center" style="font-size:16px; margin-top:60px">
+                    <a id="mao_gold" style="color: #2E9AFE;" href="#gold">金料</a>
+                    <a id="mao_main_stone" style="color: #2E9AFE;" href="#main_stone">主石</a>
+                    <a id="mao_second_stone1" style="color: #2E9AFE;" href="#second_stone1">副石1</a>
+                    <a id="mao_second_stone2" style="color: #2E9AFE;" href="#second_stone2">副石2</a>
+                    <a id="mao_second_stone3" style="color: #2E9AFE;" href="#second_stone3">副石3</a>
+                    <a id="mao_parts" style="color: #2E9AFE;" href="#parts">配件</a>
+                    <a id="mao_fee1" style="color: #2E9AFE;" href="#fee1">工费1</a>
+                    <a id="mao_fee2" style="color: #2E9AFE;" href="#fee2">工费1</a>
+                    <a id="mao_price" style="color: #2E9AFE;" href="#price">价格</a>
+                </span>
             </div>
         </div>
         <!-- box end -->
@@ -2481,10 +2510,14 @@ $this->params['breadcrumbs'][] = $this->title;
 </div>
 <script type="text/javascript">
     $(function () {
+        //批量填充(文本)
         $(".batch_full > a").after('&nbsp;<?= Html::batchFullButton(['batch-edit'], "批量填充"); ?>');
         $(".batch_full2").append('&nbsp;<?= Html::batchFullButton(['batch-edit'], "批量填充"); ?>');
+        //批量填充(下拉)
         $(".batch_select_full > a").after('&nbsp;<?= Html::batchFullButton(['batch-edit', 'check' => 1], "批量填充", ['input_type' => 'select']); ?>');
         $(".batch_select_full2").append('&nbsp;<?= Html::batchFullButton(['batch-edit', 'check' => 1], "批量填充", ['input_type' => 'select']); ?>');
+        //默认全选
+        $("input[name='id[]']").trigger("click");
     });
 
     function rfClearVal(obj) {
@@ -2493,6 +2526,7 @@ $this->params['breadcrumbs'][] = $this->title;
             $(obj).val("");
         }
     }
+
 </script>
 <script type="text/javascript">
     /**

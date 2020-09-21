@@ -267,6 +267,7 @@ class BillTGoodsController extends BaseController
             }
             try {
                 $trans = Yii::$app->trans->beginTransaction();
+                $id_arr = array_unique($id_arr);
                 foreach ($id_arr as $id) {
                     $goods = WarehouseBillTGoodsForm::findOne(['id' => $id]);
                     $goods->$name = $value;
@@ -286,7 +287,7 @@ class BillTGoodsController extends BaseController
                 \Yii::$app->warehouseService->billT->WarehouseBillTSummary($model->bill_id);
                 $trans->commit();
                 Yii::$app->getSession()->setFlash('success', '保存成功');
-                return ResultHelper::json(200, '保存成功');
+                return ResultHelper::json(200, '保存成功');//['url'=>Url::to(['edit-all', 'bill_id' => $model->bill_id])."#suttle_weight"]
             } catch (\Exception $e) {
                 $trans->rollBack();
                 return ResultHelper::json(422, $e->getMessage());

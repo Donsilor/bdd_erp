@@ -106,7 +106,7 @@ $this->registerJs($script);
     //列表每行选中背景高亮
     $("#grid table tr > td  input[type='checkbox']").change(function () {
         if($(this).is(':checked')) {
-        	$(this).attr('checked', 'checked');        	
+        	$(this).attr('checked', 'checked');
             $(this).parent().parent().css('background-color','#f5f5f5');
         }else{
             $(this).attr('checked','');
@@ -122,8 +122,8 @@ $this->registerJs($script);
         		checkbox.attr('checked','');
         		$(this).parent().css('background-color','#fff');
         	}else{
-            	checkbox.attr('checked', 'checked');  
-            	$(this).parent().css('background-color','#ecf0f5');	
+            	checkbox.attr('checked', 'checked');
+            	$(this).parent().css('background-color','#ecf0f5');
         	}
         }
         return false;
@@ -228,7 +228,7 @@ $this->registerJs($script);
         }
         if(!url){
              url = "<?= Url::to(['ajax-update'])?>";
-        } 
+        }
         $.ajax({
             type: "get",
             url: url,
@@ -272,7 +272,7 @@ $this->registerJs($script);
         	rfInfo('未选中数据！','');
             return false;
         }
-        
+
     	appConfirm("确定要"+text+"吗?", '', function (code) {
     		switch (code) {
                 case "defeat":
@@ -289,17 +289,17 @@ $this->registerJs($script);
                                 rfAffirm(data.message);
                             }else {
                             	//rfAffirm(data.message);
-                            	window.location.reload(); 
+                            	window.location.reload();
                             }
                         }
                     });
                     break;
             	default:
         	}
-    		
+
         })
 
-    });    
+    });
     // 排序
     function rfSort(obj) {
         let id = $(obj).attr('data-id');
@@ -314,7 +314,7 @@ $this->registerJs($script);
         }
         if(!url){
             url = "<?= Url::to(['ajax-update'])?>";
-        } 
+        }
         var sort = $(obj).val();
         if (isNaN(sort)) {
             rfAffirm('排序只能为数字');
@@ -416,14 +416,14 @@ $this->registerJs($script);
         }
         else if($("#"+grid).length>0) {
             ids = $("#"+grid).yiiGridView("getSelectedRows");
-        }        
+        }
         if(ids.length===0) {
             rfInfo('未选中数据！','');
             return false;
         }
         if($.isArray(ids)){
             ids = ids.join(',');
-        }        
+        }
         $.ajax({
             type: "get",
             url: url,
@@ -462,7 +462,7 @@ $this->registerJs($script);
         }
         else if($("#"+grid).length>0) {
             ids = $("#"+grid).yiiGridView("getSelectedRows");
-        }        
+        }
         if(ids.length===0) {
             rfInfo('未选中数据！','');
             return false;
@@ -543,31 +543,35 @@ $this->registerJs($script);
                 }
             });
         }else{
-            if(name){
-                name = "["+name+"]";
+            if (name) {
+                name = "[" + name + "]";
             }
-            rfPrompt("请输入"+name, function (fromValue) {
+            rfPrompt("请输入" + name, function (fromValue) {
                 $.ajax({
                     type: "post",
                     url: url,
                     dataType: "json",
                     data: {
                         ids: ids,
-                        name:attr_name,
-                        value:fromValue,
+                        name: attr_name,
+                        value: fromValue,
                     },
                     success: function (data) {
                         if (parseInt(data.code) !== 200) {
                             rfAffirm(data.message);
                         } else {
                             window.location.reload();
+                            //setTimeout('test()', 6000);
                         }
                     }
                 });
 
             });
         }
-
+    }
+    
+    function test() {
+        $("#mao_suttle_weight").trigger("click");
     }
     /**
      * 一键粘贴

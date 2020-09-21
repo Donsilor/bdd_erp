@@ -2,7 +2,6 @@
 
 namespace addons\Warehouse\backend\controllers;
 
-use addons\Warehouse\common\enums\PutInTypeEnum;
 use Yii;
 use common\traits\Curd;
 use common\models\base\SearchModel;
@@ -13,14 +12,17 @@ use addons\Warehouse\common\models\WarehouseBillGoods;
 use addons\Warehouse\common\models\WarehouseBillGoodsL;
 use addons\Warehouse\common\forms\WarehouseBillTForm;
 use addons\Warehouse\common\forms\WarehouseBillTGoodsForm;
+use addons\Warehouse\common\forms\WarehouseBillLGoodsForm;
 use addons\Warehouse\common\enums\BillStatusEnum;
 use addons\Warehouse\common\enums\BillTypeEnum;
+use addons\Warehouse\common\enums\PutInTypeEnum;
 use addons\Style\common\enums\LogTypeEnum;
 use addons\Style\common\models\ProductType;
 use addons\Style\common\models\StyleCate;
 use common\helpers\ArrayHelper;
 use common\helpers\StringHelper;
 use common\enums\AuditStatusEnum;
+use common\helpers\PageHelper;
 use common\helpers\SnHelper;
 use common\helpers\Url;
 use yii\web\UploadedFile;
@@ -336,10 +338,10 @@ class BillTController extends BaseController
         }
         try {
             $trans = \Yii::$app->db->beginTransaction();
-            
-            if(false === WarehouseBillGoodsL::deleteAll(['bill_id' => $id])){
+
+            if (false === WarehouseBillGoodsL::deleteAll(['bill_id' => $id])) {
                 throw new \Exception("单据明细删除失败");
-            }            
+            }
             if (false === $model->delete()) {
                 throw new \Exception($this->getError($model));
             }
@@ -360,9 +362,29 @@ class BillTController extends BaseController
     }
 
     /**
+     * 单据打印
+     * @return string
+     * @throws
+     */
+    public function actionPrint()
+    {
+        $this->layout = '@backend/views/layouts/print';
+        $id = Yii::$app->request->get('id');
+        $model = $this->findModel($id);
+        $model = $model ?? new WarehouseBillTForm();
+        list($lists, $total) = $this->getData($id);
+        return $this->render($this->action->id, [
+            'model' => $model,
+            'lists' => $lists,
+            'total' => $total
+        ]);
+    }
+
+    /**
+     * 单据导出
      * @param null $ids
      * @return bool|mixed
-     * @throws \PhpOffice\PhpSpreadsheet\Exception
+     * @throws
      */
     public function actionExport($ids = null)
     {
@@ -424,6 +446,100 @@ class BillTController extends BaseController
 
         ];
         return ExcelHelper::exportData($list, $header, $name . '数据导出_' . date('YmdHis', time()));
+    }
+
+    private function getData($ids)
+    {
+        $select = [
+            'w.bill_no', 'w.bill_type', 'w.bill_status', 'wg.goods_id', 'wg.style_sn', 'wg.goods_num', 'wg.goods_name',//基本
+            'wg.material_type', 'wg.finger', 'wg.finger_hk',//属性
+            'wg.suttle_weight', 'wg.gold_weight', 'wg.gold_loss', 'wg.lncl_loss_weight', 'wg.gold_amount',//金料
+            'wg.main_stone_sn', 'wg.main_stone_num', 'wg.main_stone_weight', 'wg.main_stone_price', 'wg.main_stone_amount',//主石
+            'wg.second_stone_sn1', 'wg.second_stone_num1', 'wg.second_stone_weight1', 'wg.second_stone_price1', 'wg.second_stone_amount1',//副石1
+            'parts_gold_weight', 'parts_amount', 'parts_fee',//配件
+            'basic_gong_fee', 'xianqian_fee', 'biaomiangongyi_fee', 'fense_fee', 'bukou_fee', 'templet_fee', 'tax_amount',//工费
+            'wg.cert_id', 'wg.pure_gold', 'wg.factory_cost', 'wg.cost_price',//成本
+        ];
+        $query = WarehouseBill::find()->alias('w')
+            ->leftJoin(WarehouseBillGoodsL::tableName() . " wg", 'w.id=wg.bill_id')
+            ->leftJoin(ProductType::tableName() . ' type', 'type.id=wg.product_type_id')
+            ->leftJoin(StyleCate::tableName() . ' cate', 'cate.id=wg.style_cate_id')
+            ->where(['w.id' => $ids])
+            ->select($select);
+        $lists = PageHelper::findAll($query, 100);
+//        echo '<pre>';
+//        print_r($lists);die;
+        $total = [
+            'goods_num' => 0,
+            'suttle_weight' => 0,
+            'gold_weight' => 0,
+            'lncl_loss_weight' => 0,
+            'gold_amount' => 0,
+
+            'main_stone_num' => 0,
+            'main_stone_weight' => 0,
+            'main_stone_amount' => 0,
+            'second_stone_num1' => 0,
+            'second_stone_weight1' => 0,
+            'second_stone_amount1' => 0,
+
+            'parts_gold_weight' => 0,
+            'parts_amount' => 0,
+            'parts_fee' => 0,
+            'basic_gong_fee' => 0,
+            'xianqian_fee' => 0,
+            'biaomiangongyi_fee' => 0,
+            'fense_fee' => 0,
+            'bukou_fee' => 0,
+            'templet_fee' => 0,
+
+            'tax_amount' => 0,
+            'pure_gold' => 0,
+            'factory_cost' => 0,
+            'one_cost_price' => 0,
+            'cost_price' => 0,
+
+        ];
+        foreach ($lists as &$list) {
+            //材质
+            $material_type = empty($list['material_type']) ? 0 : $list['material_type'];
+            $list['material_type'] = Yii::$app->attr->valueName($material_type);
+            //手寸
+            $finger = empty($list['finger']) ? 0 : $list['finger'];
+            $list['finger'] = Yii::$app->attr->valueName($finger);
+
+            //汇总
+            $total['goods_num'] = bcadd($total['goods_num'], $list['goods_num']);//数量
+            $total['suttle_weight'] = bcadd($total['suttle_weight'], $list['suttle_weight'], 3);//连石重
+            $total['gold_weight'] = bcadd($total['gold_weight'], $list['gold_weight'], 3);//金重
+            $total['lncl_loss_weight'] = bcadd($total['lncl_loss_weight'], $list['lncl_loss_weight'], 3);//含耗重
+            $total['gold_amount'] = bcadd($total['gold_amount'], $list['gold_amount'], 3);//金料额
+
+            $total['main_stone_num'] = bcadd($total['main_stone_num'], $list['main_stone_num']);//主石粒数
+            $total['main_stone_weight'] = bcadd($total['main_stone_weight'], $list['main_stone_weight']);//主石重
+            $total['main_stone_amount'] = bcadd($total['main_stone_amount'], $list['main_stone_amount']);//主石成本价
+
+            $total['second_stone_num1'] = bcadd($total['second_stone_num1'], $list['second_stone_num1']);//副石1粒数
+            $total['second_stone_weight1'] = bcadd($total['second_stone_weight1'], $list['second_stone_weight1']);//副石1重
+            $total['second_stone_amount1'] = bcadd($total['second_stone_amount1'], $list['second_stone_amount1']);//副石1成本价
+
+            $total['parts_gold_weight'] = bcadd($total['parts_gold_weight'], $list['parts_gold_weight']);//配件金重
+            $total['parts_amount'] = bcadd($total['parts_amount'], $list['parts_amount']);//配件额
+            $total['parts_fee'] = bcadd($total['parts_fee'], $list['parts_fee']);//配件工费
+            $total['basic_gong_fee'] = bcadd($total['basic_gong_fee'], $list['basic_gong_fee']);//基本工费
+            $total['xianqian_fee'] = bcadd($total['xianqian_fee'], $list['xianqian_fee']);//镶石费
+            $total['biaomiangongyi_fee'] = bcadd($total['biaomiangongyi_fee'], $list['biaomiangongyi_fee']);//表面工艺费
+            $total['fense_fee'] = bcadd($total['fense_fee'], $list['fense_fee']);//分件分色费
+            $total['bukou_fee'] = bcadd($total['bukou_fee'], $list['bukou_fee']);//补口费
+            $total['templet_fee'] = bcadd($total['templet_fee'], $list['templet_fee']);//版费
+
+            $total['tax_amount'] = bcadd($total['tax_amount'], $list['tax_amount']);//税额
+            $total['pure_gold'] = bcadd($total['pure_gold'], $list['pure_gold']);//折足
+            $total['factory_cost'] = bcadd($total['factory_cost'], ($list['factory_cost']/$list['goods_num']));//单件工厂工费
+            $total['one_cost_price'] = bcadd($total['one_cost_price'], ($list['cost_price']/$list['goods_num']));//成本价/件
+            $total['cost_price'] = bcadd($total['cost_price'], $list['cost_price']);//总成本价
+        }
+        return [$lists, $total];
     }
 
 }
