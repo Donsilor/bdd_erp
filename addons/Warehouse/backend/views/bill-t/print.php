@@ -316,13 +316,16 @@
         .Noprint {
             DISPLAY: none;
         }
-
         .PageNext {
             PAGE-BREAK-AFTER: always
         }
     </style>
 </head>
 <body>
+<div class="text-center" style="text-align:right;">
+    <!-- 打印按钮 -->
+    <button type="button" class="btn btn-info btn-ms" target="_blank" onclick="preview(1)">打印</button>
+</div>
 <div class="template">
     <div class="information">
         <p class="font-bold font-20">深圳市恒得利珠宝有限公司</p>
@@ -427,8 +430,8 @@
             <tbody>
             <?php
             foreach ($lists as $key => $val) {
-                $pagesize = 10;
-                ?>
+                //$pagesize = 10;
+            ?>
                 <tr class="algin-left">
                     <td class="algin-center padding-5"><?= $key + 1 ?></td>
                     <td class="algin-center padding-5"><?= $val['goods_id'] ?? "" ?></td>
@@ -473,11 +476,10 @@
                     <td class="algin-center padding-5"><?= bcdiv($val['cost_price'], $val['goods_num'], 3) ?></td>
                     <td class="algin-center padding-5"><?= $val['cost_price'] ?? "0" ?></td>
                 </tr>
-                <?php
+                </tbody>
+            <?php
             }
             ?>
-            </tbody>
-            <tfoot>
             <tr>
                 <td class="algin-center padding-5" colspan="5">合计</td>
                 <td class="algin-center padding-5"><?= $total['goods_num'] ?? 0; ?></td>
@@ -513,7 +515,6 @@
                 <td class="algin-center padding-5"><?= $total['cost_price'] ?? '0.00'; ?></td>
                 <td class="algin-center padding-5"><?= $total['cost_price'] ?? '0.00'; ?></td>
             </tr>
-            </tfoot>
         </table>
         <div class="foot-info">
             <div class="prepared-by">
@@ -531,7 +532,7 @@
         </div>
         <div class="text-center">
             <!-- 打印按钮 -->
-            <button type="button" class="btn-ms" target="_blank" onclick="preview(1)">打印</button>
+            <button type="button" class="btn btn-info btn-ms" onclick="preview(1)">打印</button>
         </div>
     </div>
 </div>

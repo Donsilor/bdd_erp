@@ -140,6 +140,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'attribute' => 'goods_image',
                                 'format' => 'raw',
                                 'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#feeeed;'],
+                                'footerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#feeeed;'],
                                 'value' => function ($model) {
                                     return ImageHelper::fancyBox($model->goods_image, 30, 30);
                                 },
