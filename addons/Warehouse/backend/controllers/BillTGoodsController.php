@@ -267,6 +267,7 @@ class BillTGoodsController extends BaseController
             }
             try {
                 $trans = Yii::$app->trans->beginTransaction();
+                $id_arr = array_unique($id_arr);
                 foreach ($id_arr as $id) {
                     $goods = WarehouseBillTGoodsForm::findOne(['id' => $id]);
                     $goods->$name = $value;

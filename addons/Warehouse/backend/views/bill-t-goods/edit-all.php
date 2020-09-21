@@ -1971,8 +1971,8 @@ $this->params['breadcrumbs'][] = $this->title;
                             [
                                 'attribute' => 'second_stone_fee1',
                                 'format' => 'raw',
-                                'headerOptions' => ['class' => 'col-md-1 batch_full', 'attr-name' => 'xianqian_price', 'style' => 'background-color:#FFA500;'],
-                                'footerOptions' => ['class' => 'col-md-1 batch_full2', 'attr-name' => 'xianqian_price', 'style' => 'background-color:#FFA500;'],
+                                'headerOptions' => ['class' => 'col-md-1 batch_full', 'attr-name' => 'second_stone_fee1', 'style' => 'background-color:#FFA500;'],
+                                'footerOptions' => ['class' => 'col-md-1 batch_full2', 'attr-name' => 'second_stone_fee1', 'style' => 'background-color:#FFA500;'],
                                 'value' => function ($model, $key, $index, $widget) {
                                     $widget->footer = $model->getAttributeLabel('second_stone_fee1');
                                     return Html::ajaxInput('second_stone_fee1', $model->second_stone_fee1, ['data-id' => $model->id, 'onfocus' => 'rfClearVal(this)', 'data-type' => 'number']);
@@ -1986,8 +1986,8 @@ $this->params['breadcrumbs'][] = $this->title;
                             [
                                 'attribute' => 'second_stone_fee2',
                                 'format' => 'raw',
-                                'headerOptions' => ['class' => 'col-md-1 batch_full', 'attr-name' => 'xianqian_price', 'style' => 'background-color:#FFA500;'],
-                                'footerOptions' => ['class' => 'col-md-1 batch_full2', 'attr-name' => 'xianqian_price', 'style' => 'background-color:#FFA500;'],
+                                'headerOptions' => ['class' => 'col-md-1 batch_full', 'attr-name' => 'second_stone_fee2', 'style' => 'background-color:#FFA500;'],
+                                'footerOptions' => ['class' => 'col-md-1 batch_full2', 'attr-name' => 'second_stone_fee2', 'style' => 'background-color:#FFA500;'],
                                 'value' => function ($model, $key, $index, $widget) {
                                     $widget->footer = $model->getAttributeLabel('second_stone_fee2');
                                     return Html::ajaxInput('second_stone_fee2', $model->second_stone_fee2, ['data-id' => $model->id, 'onfocus' => 'rfClearVal(this)', 'data-type' => 'number']);
@@ -2001,8 +2001,8 @@ $this->params['breadcrumbs'][] = $this->title;
                             [
                                 'attribute' => 'second_stone_fee3',
                                 'format' => 'raw',
-                                'headerOptions' => ['class' => 'col-md-1 batch_full', 'attr-name' => 'xianqian_price', 'style' => 'background-color:#FFA500;'],
-                                'footerOptions' => ['class' => 'col-md-1 batch_full2', 'attr-name' => 'xianqian_price', 'style' => 'background-color:#FFA500;'],
+                                'headerOptions' => ['class' => 'col-md-1 batch_full', 'attr-name' => 'second_stone_fee3', 'style' => 'background-color:#FFA500;'],
+                                'footerOptions' => ['class' => 'col-md-1 batch_full2', 'attr-name' => 'second_stone_fee3', 'style' => 'background-color:#FFA500;'],
                                 'value' => function ($model, $key, $index, $widget) {
                                     $widget->footer = $model->getAttributeLabel('second_stone_fee3');
                                     return Html::ajaxInput('second_stone_fee3', $model->second_stone_fee3, ['data-id' => $model->id, 'onfocus' => 'rfClearVal(this)', 'data-type' => 'number']);
