@@ -322,7 +322,7 @@
     </style>
 </head>
 <p class="noprint">
-<div class="text-center" style="text-align:right;">
+<div class="text-center noprint" style="text-align:right;">
     <!-- 打印按钮 -->
     <button type="button" class="btn btn-info btn-ms" target="_blank" onclick="preview(10)">打印</button>
 </div>
@@ -338,22 +338,22 @@
                 <div class="height"><span></span><span></span></div>
                 <div class="one">
                     <span>供应商：</span>
-                    <span contenteditable="true"><?= $model->supplier->supplier_name ?? ""; ?></span>
+                    <span contenteditable="true"><?= $model->supplier->supplier_name ?? "无"; ?></span>
                 </div>
                 <div class="one">
                     <span>销售渠道：</span>
-                    <span contenteditable="true"><?= $model->saleChannel->name ?? ""; ?></span>
+                    <span contenteditable="true"><?= $model->saleChannel->name ?? "无"; ?></span>
                 </div>
                 <div class="one">
                     <span>入库单号：</span>
-                    <span contenteditable="true"><?= $model->bill_no ?? "" ?></span>
+                    <span contenteditable="true"><?= $model->bill_no ?? "无" ?></span>
                 </div>
             </div>
             <div class="middle">
                 <div class="height"><span></span><span></span></div>
                 <div class="two">
                     <span>采购订单号：</span>
-                    <span contenteditable="true"></span>
+                    <span contenteditable="true">无</span>
                 </div>
                 <div class="two">
                     <span>订单类型：</span>
@@ -361,25 +361,25 @@
                 </div>
                 <div class="two">
                     <span>入库方法：</span>
-                    <span contenteditable="true"></span>
+                    <span contenteditable="true">无</span>
                 </div>
             </div>
             <div class="bottom">
                 <div class="three">
                     <span>金价/g：</span>
-                    <span contenteditable="true"></span>
+                    <span contenteditable="true">无</span>
                 </div>
                 <div class="three">
                     <span>工厂结算单号：</span>
-                    <span contenteditable="true"></span>
+                    <span contenteditable="true">无</span>
                 </div>
                 <div class="three">
                     <span>结价：</span>
-                    <span contenteditable="true">按380.90元/克+工费9.5/克</span>
+                    <span contenteditable="true">无</span>
                 </div>
                 <div class="three">
                     <span>日期：</span>
-                    <span contenteditable="true">2020/05/14</span>
+                    <span contenteditable="true"><?= date('Y/m/d', $model->created_at)?></span>
                 </div>
             </div>
         </div>
@@ -535,7 +535,7 @@
     </div>
 </div>
 <p class="noprint">
-<div class="text-center" style="text-align:center;">
+<div class="text-center noprint" style="text-align:center;">
     <!-- 打印按钮 -->
     <button type="button" class="btn btn-info btn-ms" onclick="preview(10)">打印</button>
 </div>
