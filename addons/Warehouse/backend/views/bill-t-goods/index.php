@@ -38,6 +38,13 @@ $this->params['breadcrumbs'][] = $this->title;
             echo '&nbsp;';
             echo Html::edit(['edit-all', 'bill_id' => $bill->id], '编辑货品', ['class' => 'btn btn-info btn-xs']);
             echo '&nbsp;';
+        }
+        echo Html::a('单据打印', ['bill-t/print', 'id' => $bill->id], [
+            'target' => '_blank',
+            'class' => 'btn btn-info btn-xs',
+        ]);
+        echo '&nbsp;';
+        if ($bill->bill_status == \addons\Warehouse\common\enums\BillStatusEnum::SAVE) {
             echo Html::edit(['ajax-upload', 'bill_id' => $bill->id], '批量导入', [
                 'class' => 'btn btn-success btn-xs',
                 'data-toggle' => 'modal',
