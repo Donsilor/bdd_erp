@@ -131,7 +131,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'format' => 'raw',
                                 'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#feeeed;'],
                                 'value' => function ($model) {
-                                    return ImageHelper::fancyBox($model->goods_image, 40, 40);
+                                    return ImageHelper::fancyBox($model->goods_image, 30, 30);
                                 },
                                 'filter' => false,
                             ],
