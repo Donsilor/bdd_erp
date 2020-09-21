@@ -14,6 +14,7 @@ use yii\web\UploadedFile;
 use common\helpers\ExcelHelper;
 use addons\Sales\common\forms\OrderImportForm;
 use addons\Sales\common\forms\ExternalOrderForm;
+use addons\Sales\common\forms\OrderGoodsForm;
 
 /**
  * Default controller for the `order` module
@@ -161,11 +162,11 @@ class ExternalOrderController extends BaseController
     public function actionAjaxImport()
     {
         if(Yii::$app->request->get('download')) {
-            $file = dirname(dirname(__FILE__)).'/resources/excel/外部订单数据导入模板.xlsx';
+            $file = dirname(dirname(__FILE__)).'/resources/excel/港台订单模板导入.xlsx';
             $content = file_get_contents($file);
             if (!empty($content)) {
                 header("Content-type:application/vnd.ms-excel");
-                header("Content-Disposition: attachment;filename=外部订单数据导入模板".date("Ymd").".xlsx");
+                header("Content-Disposition: attachment;filename=港台订单模板导入".date("Ymd").".xlsx");
                 header("Content-Transfer-Encoding: binary");
                 exit($content);
             }
@@ -177,12 +178,11 @@ class ExternalOrderController extends BaseController
         if ($model->load(\Yii::$app->request->post())) {
             
             try{
-                //$trans = \Yii::$app->trans->beginTransaction();
+                $trans = \Yii::$app->trans->beginTransaction();
                 
                 $model->file = UploadedFile::getInstance($model, 'file');
-                $rows = ExcelHelper::import($model->file->tempName);//从第1行开始,第4列结束取值
-                print_r($rows);exit();
-                //$trans->commit();
+                Yii::$app->salesService->order->importExternalOrder($model);
+                $trans->rollback();
                 return $this->message('导入成功', $this->redirect(Yii::$app->request->referrer), 'success');
             }catch (\Exception $e){
                 //$trans->rollBack();
