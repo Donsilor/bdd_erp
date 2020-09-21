@@ -1711,7 +1711,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             [
                                 'attribute' => 'parts_way',
                                 'format' => 'raw',
-                                'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#cde6c7;'],
+                                'headerOptions' => ['class' => 'col-md-1', 'id'=>'parts', 'style' => 'background-color:#cde6c7;'],
                                 'footerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#cde6c7;'],
                                 'value' => function ($model, $key, $index, $widget) {
                                     $widget->footer = $model->getAttributeLabel('parts_way');
@@ -2479,6 +2479,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     <a id="mao_second_stone1" style="color: #2E9AFE;" href="#second_stone1">副石1</a>
                     <a id="mao_second_stone2" style="color: #2E9AFE;" href="#second_stone2">副石2</a>
                     <a id="mao_second_stone3" style="color: #2E9AFE;" href="#second_stone3">副石3</a>
+                    <a id="mao_parts" style="color: #2E9AFE;" href="#parts">配件</a>
                     <a id="mao_fee1" style="color: #2E9AFE;" href="#fee1">工费1</a>
                     <a id="mao_fee2" style="color: #2E9AFE;" href="#fee2">工费1</a>
                     <a id="mao_price" style="color: #2E9AFE;" href="#price">价格</a>
