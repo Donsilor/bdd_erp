@@ -28,19 +28,22 @@ $this->params['breadcrumbs'][] = $this->title;
                         <?= $form->field($model, 'style_sn')->textInput(['disabled' => true]) ?>
                     </div>
                     <div class="col-lg-4">
+                        <?= $form->field($model, 'goods_name')->textInput() ?>
+                    </div>
+                    <div class="col-lg-4">
                         <?= $form->field($model, 'qiban_sn')->textInput(['disabled' => true]) ?>
                     </div>
                     <div class="col-lg-4">
                         <?= $form->field($model, 'qiban_type')->dropDownList($model->getQibanTypeMap(), ['disabled' => true]) ?>
                     </div>
                     <div class="col-lg-4">
-                        <?= $form->field($model, 'goods_name')->textInput() ?>
-                    </div>
-                    <div class="col-lg-4">
                         <?= $form->field($model, 'material_type')->dropDownList($model->getMaterialTypeDrop($model), ['prompt' => '请选择']) ?>
                     </div>
                     <div class="col-lg-4">
                         <?= $form->field($model, 'material_color')->dropDownList($model->getMaterialColorDrop($model), ['prompt' => '请选择']) ?>
+                    </div>
+                    <div class="col-lg-4">
+                        <?= $form->field($model, 'xiangkou')->dropDownList($model->getXiangkouDrop($model), ['prompt' => '请选择']) ?>
                     </div>
                     <!--                    <div class="col-lg-4">-->
                     <!--                        --><? //= $form->field($model, 'goods_num')->textInput(['disabled'=>true]) ?>
@@ -55,16 +58,13 @@ $this->params['breadcrumbs'][] = $this->title;
                         <?= $form->field($model, 'finger')->dropDownList($model->getFingerDrop($model), ['prompt' => '请选择']) ?>
                     </div>
                     <div class="col-lg-4">
+                        <?= $form->field($model, 'kezi')->textInput() ?>
+                    </div>
+                    <div class="col-lg-4">
                         <?= $form->field($model, 'length')->textInput() ?>
                     </div>
                     <div class="col-lg-4">
                         <?= $form->field($model, 'product_size')->textInput() ?>
-                    </div>
-                    <div class="col-lg-4">
-                        <?= $form->field($model, 'xiangkou')->dropDownList($model->getXiangkouDrop($model), ['prompt' => '请选择']) ?>
-                    </div>
-                    <div class="col-lg-4">
-                        <?= $form->field($model, 'kezi')->textInput() ?>
                     </div>
                     <div class="col-lg-4">
                         <?= $form->field($model, 'chain_type')->dropDownList($model->getChainTypeDrop($model), ['prompt' => '请选择']) ?>
@@ -99,18 +99,13 @@ $this->params['breadcrumbs'][] = $this->title;
                             ],
                         ]);?>
                     </div>
-                    <div class="col-lg-4">
-                        <?= $form->field($model, 'jintuo_type')->dropDownList($model->getJietuoTypeMap($model), ['prompt' => '请选择']) ?>
+                    <div class="col-sm-4">
+                        <?= $form->field($model, 'jintuo_type')->radioList($model->getJietuoTypeMap($model)) ?>
                     </div>
-                    <div class="col-lg-4">
-                        <?= $form->field($model, 'is_inlay')->dropDownList($model->getIsInlayMap($model), ['prompt' => '请选择']) ?>
+                    <div class="col-sm-4">
+                        <?= $form->field($model, 'is_inlay')->radioList($model->getIsInlayMap($model)) ?>
                     </div>
-                    <div class="col-lg-4">
-                        <?= $form->field($model, 'factory_mo')->textInput() ?>
-                    </div>
-                    <div class="col-lg-4">
-                        <?= $form->field($model, 'order_sn')->textInput() ?>
-                    </div>
+
                     <!--                    <div class="col-lg-4">-->
                     <!--                        --><? //= $form->field($model, 'gross_weight')->textInput() ?>
                     <!--                    </div>-->
@@ -120,13 +115,19 @@ $this->params['breadcrumbs'][] = $this->title;
                     <div class="col-sm-4">
                         <?= $form->field($model, 'auto_goods_id')->radioList(\common\enums\ConfirmEnum::getMap()) ?>
                     </div>
+                    <div class="col-lg-4">
+                        <?= $form->field($model, 'factory_mo')->textInput() ?>
+                    </div>
+                    <div class="col-lg-4">
+                        <?= $form->field($model, 'order_sn')->textInput() ?>
+                    </div>
                 </div>
                 <div class="row">
                     <div class="with-border">
                         <h5 class="box-title" style="font-weight: bold">金料信息</h5>
                     </div>
-                    <div class="col-lg-4">
-                        <?= $form->field($model, 'peiliao_way')->dropDownList($model->getPeiLiaoWayMap()) ?>
+                    <div class="col-sm-4">
+                        <?= $form->field($model, 'peiliao_way')->radioList($model->getPeiLiaoWayMap()) ?>
                     </div>
 <!--                    <div class="col-lg-4">-->
 <!--                        --><?//= $form->field($model, 'gold_weight')->textInput() ?>
@@ -192,8 +193,8 @@ $this->params['breadcrumbs'][] = $this->title;
                     <div class="with-border">
                         <h5 class="box-title" style="font-weight: bold">主石信息</h5>
                     </div>
-                    <div class="col-lg-4">
-                        <?= $form->field($model, 'main_pei_type')->dropDownList(\addons\Warehouse\common\enums\PeiShiWayEnum::getMap()) ?>
+                    <div class="col-sm-4">
+                        <?= $form->field($model, 'main_pei_type')->radioList($model->getPeiShiWayMap()) ?>
                     </div>
                     <div class="col-lg-4">
                         <?= $form->field($model, 'main_stone_sn')->textInput() ?>
@@ -242,14 +243,14 @@ $this->params['breadcrumbs'][] = $this->title;
                     <div class="with-border">
                         <h5 class="box-title" style="font-weight: bold">副石1信息</h5>
                     </div>
-                    <div class="col-lg-4">
-                        <?= $form->field($model, 'second_pei_type')->dropDownList(\addons\Warehouse\common\enums\PeiShiWayEnum::getMap()) ?>
-                    </div>
-                    <div class="col-lg-4">
-                        <?= $form->field($model, 'second_stone_sn1')->textInput() ?>
+                    <div class="col-sm-4">
+                        <?= $form->field($model, 'second_pei_type')->radioList($model->getPeiShiWayMap()) ?>
                     </div>
                     <div class="col-lg-4">
                         <?= $form->field($model, 'second_stone_type1')->dropDownList($model->getSecondStoneType1Drop($model), ['prompt' => '请选择']) ?>
+                    </div>
+                    <div class="col-lg-4">
+                        <?= $form->field($model, 'second_stone_sn1')->textInput() ?>
                     </div>
                     <div class="col-lg-4">
                         <?= $form->field($model, 'second_stone_num1')->textInput(['onblur' => 'rfClearVal(this)']) ?>
@@ -295,14 +296,14 @@ $this->params['breadcrumbs'][] = $this->title;
                     <div class="with-border">
                         <h5 class="box-title" style="font-weight: bold">副石2信息</h5>
                     </div>
-                    <div class="col-lg-4">
-                        <?= $form->field($model, 'second_pei_type2')->dropDownList(\addons\Warehouse\common\enums\PeiShiWayEnum::getMap()) ?>
-                    </div>
-                    <div class="col-lg-4">
-                        <?= $form->field($model, 'second_stone_sn2')->textInput() ?>
+                    <div class="col-sm-4">
+                        <?= $form->field($model, 'second_pei_type2')->radioList($model->getPeiShiWayMap()) ?>
                     </div>
                     <div class="col-lg-4">
                         <?= $form->field($model, 'second_stone_type2')->dropDownList($model->getSecondStoneType2Drop($model), ['prompt' => '请选择']) ?>
+                    </div>
+                    <div class="col-lg-4">
+                        <?= $form->field($model, 'second_stone_sn2')->textInput() ?>
                     </div>
                     <div class="col-lg-4">
                         <?= $form->field($model, 'second_stone_num2')->textInput(['onblur' => 'rfClearVal(this)']) ?>
@@ -342,14 +343,14 @@ $this->params['breadcrumbs'][] = $this->title;
                     <div class="with-border">
                         <h5 class="box-title" style="font-weight: bold">副石3信息</h5>
                     </div>
-                    <div class="col-lg-4">
-                        <?= $form->field($model, 'second_pei_type3')->dropDownList(\addons\Warehouse\common\enums\PeiShiWayEnum::getMap()) ?>
-                    </div>
-                    <div class="col-lg-4">
-                        <?= $form->field($model, 'second_stone_sn3')->textInput() ?>
+                    <div class="col-sm-4">
+                        <?= $form->field($model, 'second_pei_type3')->radioList($model->getPeiShiWayMap()) ?>
                     </div>
                     <div class="col-lg-4">
                         <?= $form->field($model, 'second_stone_type3')->dropDownList($model->getSecondStoneType3Drop($model), ['prompt' => '请选择']) ?>
+                    </div>
+                    <div class="col-lg-4">
+                        <?= $form->field($model, 'second_stone_sn3')->textInput() ?>
                     </div>
                     <div class="col-lg-4">
                         <?= $form->field($model, 'second_stone_num3')->textInput(['onblur' => 'rfClearVal(this)']) ?>
@@ -371,8 +372,8 @@ $this->params['breadcrumbs'][] = $this->title;
                     <div class="with-border">
                         <h5 class="box-title" style="font-weight: bold">配件信息</h5>
                     </div>
-                    <div class="col-lg-4">
-                        <?= $form->field($model, 'parts_way')->dropDownList($model->getPeiJianWayMap()) ?>
+                    <div class="col-sm-4">
+                        <?= $form->field($model, 'parts_way')->radioList($model->getPeiJianWayMap()) ?>
                     </div>
                     <div class="col-lg-4">
                         <?= $form->field($model, 'parts_type')->dropDownList($model->getPartsTypeMap(), ['prompt' => '请选择']) ?>

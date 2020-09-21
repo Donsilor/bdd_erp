@@ -206,6 +206,29 @@ class Html extends BaseHtml
     }
 
     /**
+     * 列表radio更新字段
+     *
+     * @param $value
+     * @return string
+     */
+    public static function ajaxRadio($model, $name, $items, $options = [])
+    {
+        $url = isset($options['ajax-update']) ?? 'ajax-update';
+        // 权限校验
+        if (!self::beforVerify($url)) {
+            return $model->$name;
+        }
+        $options = ArrayHelper::merge([
+            'ajax-update' => $url,
+            'name' => $name,
+            'class' => 'form-control',
+            'onchange' => 'rfAjaxUpdate(this)',
+        ], $options);
+
+        return self::activeRadioList($model, $name, $items, $options);
+    }
+
+    /**
      * 批量操作弹框
      *
      * @param $url
