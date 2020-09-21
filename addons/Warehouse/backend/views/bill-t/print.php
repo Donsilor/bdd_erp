@@ -513,7 +513,7 @@
                 <td class="algin-center padding-5"><?= $total['tax_amount'] ?? '0.00'; ?></td>
                 <td class="algin-center padding-5"><?= $total['pure_gold'] ?? '0.00'; ?></td>
                 <td class="algin-center padding-5"><?= $total['factory_cost'] ?? '0.00'; ?></td>
-                <td class="algin-center padding-5"><?= $total['cost_price'] ?? '0.00'; ?></td>
+                <td class="algin-center padding-5"><?= $total['one_cost_price'] ?? '0.00'; ?></td>
                 <td class="algin-center padding-5"><?= $total['cost_price'] ?? '0.00'; ?></td>
             </tr>
         </table>
