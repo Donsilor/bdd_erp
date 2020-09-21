@@ -754,6 +754,20 @@ $this->params['breadcrumbs'][] = $this->title;
                                 ]),
                             ],
                             [
+                                'attribute' => 'main_stone_sn',
+                                //'format' => 'raw',
+                                'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#afb4db;'],
+                                'footerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#afb4db;'],
+                                'value' => function ($model, $key, $index, $widget) {
+                                    $widget->footer = $model->getAttributeLabel('main_stone_sn');
+                                    return $model->main_stone_sn ?? "";
+                                },
+                                'filter' => Html::activeTextInput($searchModel, 'main_stone_sn', [
+                                    'class' => 'form-control',
+                                    'style' => 'width:60px;'
+                                ]),
+                            ],
+                            [
                                 'attribute' => 'main_stone_type',
                                 'format' => 'raw',
                                 'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#afb4db;'],
@@ -764,20 +778,6 @@ $this->params['breadcrumbs'][] = $this->title;
                                 },
                                 'filter' => Html::activeDropDownList($searchModel, 'main_stone_type', $model->getMainStoneTypeMap(), [
                                     'prompt' => '全部',
-                                    'class' => 'form-control',
-                                    'style' => 'width:60px;'
-                                ]),
-                            ],
-                            [
-                                'attribute' => 'main_stone_sn',
-                                //'format' => 'raw',
-                                'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#afb4db;'],
-                                'footerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#afb4db;'],
-                                'value' => function ($model, $key, $index, $widget) {
-                                    $widget->footer = $model->getAttributeLabel('main_stone_sn');
-                                    return $model->main_stone_sn ?? "";
-                                },
-                                'filter' => Html::activeTextInput($searchModel, 'main_stone_sn', [
                                     'class' => 'form-control',
                                     'style' => 'width:60px;'
                                 ]),

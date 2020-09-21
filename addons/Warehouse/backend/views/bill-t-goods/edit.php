@@ -197,10 +197,10 @@ $this->params['breadcrumbs'][] = $this->title;
                         <?= $form->field($model, 'main_pei_type')->radioList($model->getPeiShiWayMap()) ?>
                     </div>
                     <div class="col-lg-4">
-                        <?= $form->field($model, 'main_stone_type')->dropDownList($model->getMainStoneTypeDrop($model), ['prompt' => '请选择']) ?>
+                        <?= $form->field($model, 'main_stone_sn')->textInput() ?>
                     </div>
                     <div class="col-lg-4">
-                        <?= $form->field($model, 'main_stone_sn')->textInput() ?>
+                        <?= $form->field($model, 'main_stone_type')->dropDownList($model->getMainStoneTypeDrop($model), ['prompt' => '请选择']) ?>
                     </div>
                     <div class="col-lg-4">
                         <?= $form->field($model, 'main_stone_num')->textInput(['onblur' => 'rfClearVal(this)']) ?>
