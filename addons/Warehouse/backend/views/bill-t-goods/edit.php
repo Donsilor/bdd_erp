@@ -28,19 +28,22 @@ $this->params['breadcrumbs'][] = $this->title;
                         <?= $form->field($model, 'style_sn')->textInput(['disabled' => true]) ?>
                     </div>
                     <div class="col-lg-4">
+                        <?= $form->field($model, 'goods_name')->textInput() ?>
+                    </div>
+                    <div class="col-lg-4">
                         <?= $form->field($model, 'qiban_sn')->textInput(['disabled' => true]) ?>
                     </div>
                     <div class="col-lg-4">
                         <?= $form->field($model, 'qiban_type')->dropDownList($model->getQibanTypeMap(), ['disabled' => true]) ?>
                     </div>
                     <div class="col-lg-4">
-                        <?= $form->field($model, 'goods_name')->textInput() ?>
-                    </div>
-                    <div class="col-lg-4">
                         <?= $form->field($model, 'material_type')->dropDownList($model->getMaterialTypeDrop($model), ['prompt' => '请选择']) ?>
                     </div>
                     <div class="col-lg-4">
                         <?= $form->field($model, 'material_color')->dropDownList($model->getMaterialColorDrop($model), ['prompt' => '请选择']) ?>
+                    </div>
+                    <div class="col-lg-4">
+                        <?= $form->field($model, 'xiangkou')->dropDownList($model->getXiangkouDrop($model), ['prompt' => '请选择']) ?>
                     </div>
                     <!--                    <div class="col-lg-4">-->
                     <!--                        --><? //= $form->field($model, 'goods_num')->textInput(['disabled'=>true]) ?>
@@ -55,16 +58,13 @@ $this->params['breadcrumbs'][] = $this->title;
                         <?= $form->field($model, 'finger')->dropDownList($model->getFingerDrop($model), ['prompt' => '请选择']) ?>
                     </div>
                     <div class="col-lg-4">
+                        <?= $form->field($model, 'kezi')->textInput() ?>
+                    </div>
+                    <div class="col-lg-4">
                         <?= $form->field($model, 'length')->textInput() ?>
                     </div>
                     <div class="col-lg-4">
                         <?= $form->field($model, 'product_size')->textInput() ?>
-                    </div>
-                    <div class="col-lg-4">
-                        <?= $form->field($model, 'xiangkou')->dropDownList($model->getXiangkouDrop($model), ['prompt' => '请选择']) ?>
-                    </div>
-                    <div class="col-lg-4">
-                        <?= $form->field($model, 'kezi')->textInput() ?>
                     </div>
                     <div class="col-lg-4">
                         <?= $form->field($model, 'chain_type')->dropDownList($model->getChainTypeDrop($model), ['prompt' => '请选择']) ?>

@@ -218,19 +218,6 @@ $this->params['breadcrumbs'][] = $this->title;
                                 ]),
                             ],
                             [
-                                'attribute' => 'qiban_sn',
-                                'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#feeeed;'],
-                                'footerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#feeeed;'],
-                                'value' => function ($model, $key, $index, $widget) {
-                                    $widget->footer = $model->getAttributeLabel('qiban_sn');
-                                    return $model->qiban_sn ?? "";
-                                },
-                                'filter' => Html::activeTextInput($searchModel, 'qiban_sn', [
-                                    'class' => 'form-control',
-                                    'style' => 'width:100px;'
-                                ]),
-                            ],
-                            [
                                 'attribute' => 'goods_name',
                                 //'format' => 'raw',
                                 'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#feeeed;'],
@@ -242,6 +229,19 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'filter' => Html::activeTextInput($searchModel, 'goods_name', [
                                     'class' => 'form-control',
                                     'style' => 'width:90px;'
+                                ]),
+                            ],
+                            [
+                                'attribute' => 'qiban_sn',
+                                'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#feeeed;'],
+                                'footerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#feeeed;'],
+                                'value' => function ($model, $key, $index, $widget) {
+                                    $widget->footer = $model->getAttributeLabel('qiban_sn');
+                                    return $model->qiban_sn ?? "";
+                                },
+                                'filter' => Html::activeTextInput($searchModel, 'qiban_sn', [
+                                    'class' => 'form-control',
+                                    'style' => 'width:100px;'
                                 ]),
                             ],
                             [

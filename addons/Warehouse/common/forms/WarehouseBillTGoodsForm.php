@@ -2,13 +2,13 @@
 
 namespace addons\Warehouse\common\forms;
 
+use addons\Warehouse\common\models\WarehouseBillGoodsL;
 use addons\Warehouse\common\enums\PeiJianWayEnum;
 use addons\Warehouse\common\enums\PeiLiaoWayEnum;
 use addons\Warehouse\common\enums\PeiShiWayEnum;
-use common\helpers\ArrayHelper;
-use addons\Warehouse\common\models\WarehouseBillGoodsL;
 use addons\Style\common\enums\AttrIdEnum;
 use common\helpers\StringHelper;
+use common\helpers\ArrayHelper;
 
 /**
  * 其它收货单明细 Form
@@ -212,9 +212,9 @@ class WarehouseBillTGoodsForm extends WarehouseBillGoodsL
         $values = [
             '条码号(货号)为空则系统自动生成',
             '[非起版]和[有款起版]款号不能为空',
+            '#',
             $this->formatTitle($this->getJietuoTypeMap()),//'金托类型' .
             '[起版号]和[款号]必填其一',
-            '#',
             $this->formatTitle($this->getWarehouseMap()),//'入库仓库' .
             $this->formatTitle($this->getMaterialTypeMap()),//'材质' .
             $this->formatTitle($this->getMaterialColorMap()),//'材质颜色' .
@@ -292,7 +292,7 @@ class WarehouseBillTGoodsForm extends WarehouseBillGoodsL
             '#', '#',
         ];
         $fields = [
-            '条码号(货号)', '(*)款号', '(*)金托类型', '起版号', '商品名称', '(*)入库仓库', '材质', '材质颜色', '货品数量', '手寸(港号)', '手寸(美号)', '尺寸(cm)', '成品尺寸(mm)', '镶口(ct)', '刻字', '链类型', '扣环', '爪头形状',
+            '条码号(货号)', '(*)款号', '商品名称' , '(*)金托类型', '起版号', '(*)入库仓库', '材质', '材质颜色', '货品数量', '手寸(港号)', '手寸(美号)', '尺寸(cm)', '成品尺寸(mm)', '镶口(ct)', '刻字', '链类型', '扣环', '爪头形状',
             '配料方式', '连石重(g)', '损耗(%)', '含耗重(g)', '金价/g', '金料额', '折足率(%)',
             '主石配石方式', '主石编号', '主石类型', '主石粒数', '主石重(ct)', '主石单价/ct', '主石成本', '主石形状', '主石颜色', '主石净度', '主石切工', '主石色彩',
             '副石1配石方式', '副石1编号', '副石1类型', '副石1粒数', '副石1重(ct)', '副石1单价/ct', '副石1成本', '副石1形状', '副石1颜色', '副石1净度', '副石1切工', '副石1色彩',
@@ -311,7 +311,7 @@ class WarehouseBillTGoodsForm extends WarehouseBillGoodsL
     public function getFieldName()
     {
         $fieldName = [
-            'goods_id', 'style_sn', 'jintuo_type', 'qiban_sn', 'goods_name', 'to_warehouse_id', 'material_type', 'material_color', 'goods_num', 'finger_hk', 'finger', 'length', 'product_size', 'xiangkou', 'kezi', 'chain_type', 'cramp_ring', 'talon_head_type',
+            'goods_id', 'style_sn', 'goods_name', 'jintuo_type', 'qiban_sn', 'to_warehouse_id', 'material_type', 'material_color', 'goods_num', 'finger_hk', 'finger', 'length', 'product_size', 'xiangkou', 'kezi', 'chain_type', 'cramp_ring', 'talon_head_type',
             'peiliao_way', 'suttle_weight', 'gold_loss', 'lncl_loss_weight', 'gold_price', 'gold_amount', 'pure_gold_rate',
             'main_pei_type', 'main_stone_sn', 'main_stone_type', 'main_stone_num', 'main_stone_weight', 'main_stone_price', 'main_stone_amount', 'main_stone_shape', 'main_stone_color', 'main_stone_clarity', 'main_stone_cut', 'main_stone_colour',
             'second_pei_type', 'second_stone_sn1', 'second_stone_type1', 'second_stone_num1', 'second_stone_weight1', 'second_stone_price1', 'second_stone_amount1', 'second_stone_shape1', 'second_stone_color1', 'second_stone_clarity1', 'second_stone_cut1', 'second_stone_colour1',
