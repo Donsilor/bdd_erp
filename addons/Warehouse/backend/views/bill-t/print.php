@@ -11,7 +11,6 @@
                 sprnstr = "<!--startprint" + fang + "-->"; //设置打印开始区域
                 eprnstr = "<!--endprint" + fang + "-->"; //设置打印结束区域
                 prnhtml = bdhtml.substring(bdhtml.indexOf(sprnstr) + 18); //从开始代码向后取html
-                console.log(prnhtml);
                 prnhtml = prnhtml.substring(0, prnhtml.indexOf(eprnstr)); //从结束代码向前取html
                 window.document.body.innerHTML = prnhtml;
                 window.print();
@@ -324,7 +323,7 @@
 </head>
 <div class="text-center" style="text-align:right;">
     <!-- 打印按钮 -->
-    <button type="button" class="btn btn-info btn-ms" target="_blank" onclick="preview(1)">打印</button>
+    <button type="button" class="btn btn-info btn-ms" target="_blank" onclick="preview(10)">打印</button>
 </div>
 <body>
 <div class="template">
@@ -535,7 +534,7 @@
 </div>
 <div class="text-center" style="text-align:center;">
     <!-- 打印按钮 -->
-    <button type="button" class="btn btn-info btn-ms" onclick="preview(1)">打印</button>
+    <button type="button" class="btn btn-info btn-ms" onclick="preview(10)">打印</button>
 </div>
 </body>
 </html>
