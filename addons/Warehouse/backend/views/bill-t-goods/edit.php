@@ -197,10 +197,10 @@ $this->params['breadcrumbs'][] = $this->title;
                         <?= $form->field($model, 'main_pei_type')->radioList($model->getPeiShiWayMap()) ?>
                     </div>
                     <div class="col-lg-4">
-                        <?= $form->field($model, 'main_stone_sn')->textInput() ?>
+                        <?= $form->field($model, 'main_stone_type')->dropDownList($model->getMainStoneTypeDrop($model), ['prompt' => '请选择']) ?>
                     </div>
                     <div class="col-lg-4">
-                        <?= $form->field($model, 'main_stone_type')->dropDownList($model->getMainStoneTypeDrop($model), ['prompt' => '请选择']) ?>
+                        <?= $form->field($model, 'main_stone_sn')->textInput() ?>
                     </div>
                     <div class="col-lg-4">
                         <?= $form->field($model, 'main_stone_num')->textInput(['onblur' => 'rfClearVal(this)']) ?>
@@ -247,10 +247,10 @@ $this->params['breadcrumbs'][] = $this->title;
                         <?= $form->field($model, 'second_pei_type')->radioList($model->getPeiShiWayMap()) ?>
                     </div>
                     <div class="col-lg-4">
-                        <?= $form->field($model, 'second_stone_sn1')->textInput() ?>
+                        <?= $form->field($model, 'second_stone_type1')->dropDownList($model->getSecondStoneType1Drop($model), ['prompt' => '请选择']) ?>
                     </div>
                     <div class="col-lg-4">
-                        <?= $form->field($model, 'second_stone_type1')->dropDownList($model->getSecondStoneType1Drop($model), ['prompt' => '请选择']) ?>
+                        <?= $form->field($model, 'second_stone_sn1')->textInput() ?>
                     </div>
                     <div class="col-lg-4">
                         <?= $form->field($model, 'second_stone_num1')->textInput(['onblur' => 'rfClearVal(this)']) ?>
@@ -300,10 +300,10 @@ $this->params['breadcrumbs'][] = $this->title;
                         <?= $form->field($model, 'second_pei_type2')->radioList($model->getPeiShiWayMap()) ?>
                     </div>
                     <div class="col-lg-4">
-                        <?= $form->field($model, 'second_stone_sn2')->textInput() ?>
+                        <?= $form->field($model, 'second_stone_type2')->dropDownList($model->getSecondStoneType2Drop($model), ['prompt' => '请选择']) ?>
                     </div>
                     <div class="col-lg-4">
-                        <?= $form->field($model, 'second_stone_type2')->dropDownList($model->getSecondStoneType2Drop($model), ['prompt' => '请选择']) ?>
+                        <?= $form->field($model, 'second_stone_sn2')->textInput() ?>
                     </div>
                     <div class="col-lg-4">
                         <?= $form->field($model, 'second_stone_num2')->textInput(['onblur' => 'rfClearVal(this)']) ?>
@@ -347,10 +347,10 @@ $this->params['breadcrumbs'][] = $this->title;
                         <?= $form->field($model, 'second_pei_type3')->radioList($model->getPeiShiWayMap()) ?>
                     </div>
                     <div class="col-lg-4">
-                        <?= $form->field($model, 'second_stone_sn3')->textInput() ?>
+                        <?= $form->field($model, 'second_stone_type3')->dropDownList($model->getSecondStoneType3Drop($model), ['prompt' => '请选择']) ?>
                     </div>
                     <div class="col-lg-4">
-                        <?= $form->field($model, 'second_stone_type3')->dropDownList($model->getSecondStoneType3Drop($model), ['prompt' => '请选择']) ?>
+                        <?= $form->field($model, 'second_stone_sn3')->textInput() ?>
                     </div>
                     <div class="col-lg-4">
                         <?= $form->field($model, 'second_stone_num3')->textInput(['onblur' => 'rfClearVal(this)']) ?>

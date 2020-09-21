@@ -225,7 +225,7 @@ class WarehouseBillGoodsL extends BaseModel
             'goods_id' => '货号[条码号]',
             'goods_name' => '商品名称',
             'goods_sn' => '款号/起版号',
-            'goods_image' => '商品图片',
+            'goods_image' => '图片',
             'style_id' => '款式ID',
             'style_sn' => '款号',
             'product_type_id' => '产品线',

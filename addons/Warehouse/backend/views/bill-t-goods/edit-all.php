@@ -1,6 +1,7 @@
 <?php
 
 use common\helpers\Html;
+use common\helpers\ImageHelper;
 use common\helpers\Url;
 use yii\grid\GridView;
 use addons\Style\common\enums\AttrIdEnum;
@@ -97,7 +98,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#feeeed;'],
                                 'footerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#feeeed;'],
                                 'contentOptions' => ['style' => ['white-space' => 'nowrap']],
-                                'template' => '{delete} {edit} {image}',
+                                'template' => '{delete} {edit}',
                                 'buttons' => [
                                     'image' => function ($url, $model, $key) {
                                         return Html::edit(['ajax-image', 'id' => $model->id], '图片', [
@@ -124,6 +125,15 @@ $this->params['breadcrumbs'][] = $this->title;
                                         }
                                     },
                                 ],
+                            ],
+                            [
+                                'attribute' => 'goods_image',
+                                'format' => 'raw',
+                                'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#feeeed;'],
+                                'value' => function ($model) {
+                                    return ImageHelper::fancyBox($model->goods_image, 40, 40);
+                                },
+                                'filter' => false,
                             ],
                             [
                                 'attribute' => 'style_cate_id',
@@ -868,20 +878,6 @@ $this->params['breadcrumbs'][] = $this->title;
                                 ]),
                             ],
                             [
-                                'attribute' => 'main_stone_sn',
-                                'format' => 'raw',
-                                'headerOptions' => ['class' => 'col-md-1 batch_full', 'attr-name' => 'main_stone_sn', 'style' => 'background-color:#afb4db;'],
-                                'footerOptions' => ['class' => 'col-md-1 batch_full2', 'attr-name' => 'main_stone_sn', 'style' => 'background-color:#afb4db;'],
-                                'value' => function ($model, $key, $index, $widget) {
-                                    $widget->footer = $model->getAttributeLabel('main_stone_sn');
-                                    return Html::ajaxInput('main_stone_sn', $model->main_stone_sn, ['data-id' => $model->id]);
-                                },
-                                'filter' => Html::activeTextInput($searchModel, 'main_stone_sn', [
-                                    'class' => 'form-control',
-                                    'style' => 'width:100px;'
-                                ]),
-                            ],
-                            [
                                 'attribute' => 'main_stone_type',
                                 'format' => 'raw',
                                 'headerOptions' => ['class' => 'col-md-1 batch_select_full', 'attr-name' => 'main_stone_type', 'attr-id' => AttrIdEnum::MAIN_STONE_TYPE, 'style' => 'background-color:#afb4db;'],
@@ -894,6 +890,20 @@ $this->params['breadcrumbs'][] = $this->title;
                                     'prompt' => '全部',
                                     'class' => 'form-control',
                                     'style' => 'width:80px;'
+                                ]),
+                            ],
+                            [
+                                'attribute' => 'main_stone_sn',
+                                'format' => 'raw',
+                                'headerOptions' => ['class' => 'col-md-1 batch_full', 'attr-name' => 'main_stone_sn', 'style' => 'background-color:#afb4db;'],
+                                'footerOptions' => ['class' => 'col-md-1 batch_full2', 'attr-name' => 'main_stone_sn', 'style' => 'background-color:#afb4db;'],
+                                'value' => function ($model, $key, $index, $widget) {
+                                    $widget->footer = $model->getAttributeLabel('main_stone_sn');
+                                    return Html::ajaxInput('main_stone_sn', $model->main_stone_sn, ['data-id' => $model->id]);
+                                },
+                                'filter' => Html::activeTextInput($searchModel, 'main_stone_sn', [
+                                    'class' => 'form-control',
+                                    'style' => 'width:100px;'
                                 ]),
                             ],
                             [
@@ -1078,20 +1088,6 @@ $this->params['breadcrumbs'][] = $this->title;
                                 ]),
                             ],
                             [
-                                'attribute' => 'second_stone_sn1',
-                                'format' => 'raw',
-                                'headerOptions' => ['class' => 'col-md-1 batch_full', 'attr-name' => 'second_stone_sn1', 'style' => 'background-color:#dec674;'],
-                                'footerOptions' => ['class' => 'col-md-1 batch_full2', 'attr-name' => 'second_stone_sn1', 'style' => 'background-color:#dec674;'],
-                                'value' => function ($model, $key, $index, $widget) {
-                                    $widget->footer = $model->getAttributeLabel('second_stone_sn1');
-                                    return Html::ajaxInput('second_stone_sn1', $model->second_stone_sn1, ['data-id' => $model->id]);
-                                },
-                                'filter' => Html::activeTextInput($searchModel, 'second_stone_sn1', [
-                                    'class' => 'form-control',
-                                    'style' => 'width:100px;'
-                                ]),
-                            ],
-                            [
                                 'attribute' => 'second_stone_type1',
                                 'format' => 'raw',
                                 'headerOptions' => ['class' => 'col-md-1 batch_select_full', 'attr-name' => 'second_stone_type1', 'attr-id' => AttrIdEnum::SIDE_STONE1_TYPE, 'style' => 'background-color:#dec674;'],
@@ -1104,6 +1100,20 @@ $this->params['breadcrumbs'][] = $this->title;
                                     'prompt' => '全部',
                                     'class' => 'form-control',
                                     'style' => 'width:80px;'
+                                ]),
+                            ],
+                            [
+                                'attribute' => 'second_stone_sn1',
+                                'format' => 'raw',
+                                'headerOptions' => ['class' => 'col-md-1 batch_full', 'attr-name' => 'second_stone_sn1', 'style' => 'background-color:#dec674;'],
+                                'footerOptions' => ['class' => 'col-md-1 batch_full2', 'attr-name' => 'second_stone_sn1', 'style' => 'background-color:#dec674;'],
+                                'value' => function ($model, $key, $index, $widget) {
+                                    $widget->footer = $model->getAttributeLabel('second_stone_sn1');
+                                    return Html::ajaxInput('second_stone_sn1', $model->second_stone_sn1, ['data-id' => $model->id]);
+                                },
+                                'filter' => Html::activeTextInput($searchModel, 'second_stone_sn1', [
+                                    'class' => 'form-control',
+                                    'style' => 'width:100px;'
                                 ]),
                             ],
                             [
@@ -1311,20 +1321,6 @@ $this->params['breadcrumbs'][] = $this->title;
                                 ]),
                             ],
                             [
-                                'attribute' => 'second_stone_sn2',
-                                'format' => 'raw',
-                                'headerOptions' => ['class' => 'col-md-1 batch_full', 'attr-name' => 'second_stone_sn2', 'style' => 'background-color:#84bf96;'],
-                                'footerOptions' => ['class' => 'col-md-1 batch_full2', 'attr-name' => 'second_stone_sn2', 'style' => 'background-color:#84bf96;'],
-                                'value' => function ($model, $key, $index, $widget) {
-                                    $widget->footer = $model->getAttributeLabel('second_stone_sn2');
-                                    return Html::ajaxInput('second_stone_sn2', $model->second_stone_sn2, ['data-id' => $model->id]);
-                                },
-                                'filter' => Html::activeTextInput($searchModel, 'second_stone_sn2', [
-                                    'class' => 'form-control',
-                                    'style' => 'width:100px;'
-                                ]),
-                            ],
-                            [
                                 'attribute' => 'second_stone_type2',
                                 'format' => 'raw',
                                 'headerOptions' => ['class' => 'col-md-1 batch_select_full', 'attr-name' => 'second_stone_type2', 'attr-id' => AttrIdEnum::SIDE_STONE2_TYPE, 'style' => 'background-color:#84bf96;'],
@@ -1337,6 +1333,20 @@ $this->params['breadcrumbs'][] = $this->title;
                                     'prompt' => '全部',
                                     'class' => 'form-control',
                                     'style' => 'width:80px;'
+                                ]),
+                            ],
+                            [
+                                'attribute' => 'second_stone_sn2',
+                                'format' => 'raw',
+                                'headerOptions' => ['class' => 'col-md-1 batch_full', 'attr-name' => 'second_stone_sn2', 'style' => 'background-color:#84bf96;'],
+                                'footerOptions' => ['class' => 'col-md-1 batch_full2', 'attr-name' => 'second_stone_sn2', 'style' => 'background-color:#84bf96;'],
+                                'value' => function ($model, $key, $index, $widget) {
+                                    $widget->footer = $model->getAttributeLabel('second_stone_sn2');
+                                    return Html::ajaxInput('second_stone_sn2', $model->second_stone_sn2, ['data-id' => $model->id]);
+                                },
+                                'filter' => Html::activeTextInput($searchModel, 'second_stone_sn2', [
+                                    'class' => 'form-control',
+                                    'style' => 'width:100px;'
                                 ]),
                             ],
 //                            [
@@ -1587,20 +1597,6 @@ $this->params['breadcrumbs'][] = $this->title;
                                 ]),
                             ],
                             [
-                                'attribute' => 'second_stone_sn3',
-                                'format' => 'raw',
-                                'headerOptions' => ['class' => 'col-md-1 batch_full', 'attr-name' => 'second_stone_sn3', 'style' => 'background-color:#6495ED;'],
-                                'footerOptions' => ['class' => 'col-md-1 batch_full2', 'attr-name' => 'second_stone_sn3', 'style' => 'background-color:#6495ED;'],
-                                'value' => function ($model, $key, $index, $widget) {
-                                    $widget->footer = $model->getAttributeLabel('second_stone_sn3');
-                                    return Html::ajaxInput('second_stone_sn3', $model->second_stone_sn3, ['data-id' => $model->id]);
-                                },
-                                'filter' => Html::activeTextInput($searchModel, 'second_stone_sn3', [
-                                    'class' => 'form-control',
-                                    'style' => 'width:100px;'
-                                ]),
-                            ],
-                            [
                                 'attribute' => 'second_stone_type3',
                                 'format' => 'raw',
                                 'headerOptions' => ['class' => 'col-md-1 batch_select_full', 'attr-name' => 'second_stone_type3', 'attr-id' => AttrIdEnum::SIDE_STONE3_TYPE, 'style' => 'background-color:#6495ED;'],
@@ -1613,6 +1609,20 @@ $this->params['breadcrumbs'][] = $this->title;
                                     'prompt' => '全部',
                                     'class' => 'form-control',
                                     'style' => 'width:80px;'
+                                ]),
+                            ],
+                            [
+                                'attribute' => 'second_stone_sn3',
+                                'format' => 'raw',
+                                'headerOptions' => ['class' => 'col-md-1 batch_full', 'attr-name' => 'second_stone_sn3', 'style' => 'background-color:#6495ED;'],
+                                'footerOptions' => ['class' => 'col-md-1 batch_full2', 'attr-name' => 'second_stone_sn3', 'style' => 'background-color:#6495ED;'],
+                                'value' => function ($model, $key, $index, $widget) {
+                                    $widget->footer = $model->getAttributeLabel('second_stone_sn3');
+                                    return Html::ajaxInput('second_stone_sn3', $model->second_stone_sn3, ['data-id' => $model->id]);
+                                },
+                                'filter' => Html::activeTextInput($searchModel, 'second_stone_sn3', [
+                                    'class' => 'form-control',
+                                    'style' => 'width:100px;'
                                 ]),
                             ],
                             [
