@@ -471,6 +471,34 @@ class BillTController extends BaseController
 //        print_r($lists);die;
         $total = [
             'goods_num' => 0,
+            'suttle_weight' => 0,
+            'gold_weight' => 0,
+            'lncl_loss_weight' => 0,
+            'gold_amount' => 0,
+
+            'main_stone_num' => 0,
+            'main_stone_weight' => 0,
+            'main_stone_amount' => 0,
+            'second_stone_num1' => 0,
+            'second_stone_weight1' => 0,
+            'second_stone_amount1' => 0,
+
+            'parts_gold_weight' => 0,
+            'parts_amount' => 0,
+            'parts_fee' => 0,
+            'basic_gong_fee' => 0,
+            'xianqian_fee' => 0,
+            'biaomiangongyi_fee' => 0,
+            'fense_fee' => 0,
+            'bukou_fee' => 0,
+            'templet_fee' => 0,
+
+            'tax_amount' => 0,
+            'pure_gold' => 0,
+            'factory_cost' => 0,
+            'one_cost_price' => 0,
+            'cost_price' => 0,
+
         ];
         foreach ($lists as &$list) {
             //材质
@@ -508,7 +536,7 @@ class BillTController extends BaseController
             $total['tax_amount'] = bcadd($total['tax_amount'], $list['tax_amount']);//税额
             $total['pure_gold'] = bcadd($total['pure_gold'], $list['pure_gold']);//折足
             $total['factory_cost'] = bcadd($total['factory_cost'], ($list['factory_cost']/$list['goods_num']));//单件工厂工费
-            $total['cost_price'] = bcadd($total['cost_price'], ($list['cost_price']/$list['goods_num']));//成本价/件
+            $total['one_cost_price'] = bcadd($total['one_cost_price'], ($list['cost_price']/$list['goods_num']));//成本价/件
             $total['cost_price'] = bcadd($total['cost_price'], $list['cost_price']);//总成本价
         }
         return [$lists, $total];
