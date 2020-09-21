@@ -1711,7 +1711,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             [
                                 'attribute' => 'parts_way',
                                 'format' => 'raw',
-                                'headerOptions' => ['class' => 'col-md-1', 'id'=>'parts', 'style' => 'background-color:#cde6c7;'],
+                                'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#cde6c7;'],
                                 'footerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#cde6c7;'],
                                 'value' => function ($model, $key, $index, $widget) {
                                     $widget->footer = $model->getAttributeLabel('parts_way');
