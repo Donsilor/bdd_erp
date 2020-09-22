@@ -56,20 +56,30 @@ $form = ActiveForm::begin([
                 <div class="col-lg-6"><?= $form->field($model, 'paid_amount')->textInput()?></div>
             </div>
            <div class="row">
+               <?php 
+                   if(!empty($model->pay_time)) {
+                       if(!$model->arrive_type) {
+                           $model->arrive_type  = \addons\Finance\common\enums\ArriveTypeEnum::ON_TIME;
+                       }
+                       if(!$model->arrival_time) {
+                           $model->arrival_time = $model->order_time; 
+                       }
+                   }
+               ?>
                <div class="col-lg-6">
                    <?= $form->field($model, 'arrive_type')->dropDownList(\addons\Finance\common\enums\ArriveTypeEnum::getMap(),['prompt'=>'请选择']);?>
                </div>
                <div class="col-lg-6">
                    <?= $form->field($model, 'arrival_time')->widget(\kartik\date\DatePicker::class, [
                        'options' => [
-                           'value' => date('Y-m-d') ,
+                           'value' => Yii::$app->formatter->asDatetime($model->arrival_time?$model->arrival_time:time()),
                            'readonly' => false,
                        ],
                        'pluginOptions' => [
                            'format' => 'yyyy-mm-dd',
                            'todayHighlight' => true,//今日高亮
                            'autoclose' => true,//选择后自动关闭
-                           'startDate' => date("yyyy-MM-dd H:i:s"),
+                           //'startDate' => date("yyyy-MM-dd H:i:s"),
                            'todayBtn' => true,//今日按钮显示
                        ]
                    ]);?>

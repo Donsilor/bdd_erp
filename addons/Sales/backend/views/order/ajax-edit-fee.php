@@ -22,6 +22,7 @@ $form = ActiveForm::begin([
            <div class="col-lg-12"><?= $form->field($model, 'shipping_fee')->textInput()?></div>
            <div class="col-lg-12"><?= $form->field($model, 'tax_fee')->textInput()?></div>
            <div class="col-lg-12"><?= $form->field($model, 'safe_fee')->textInput()?></div>
+           <div class="col-lg-12"><?= $form->field($model, 'other_fee')->textInput()?></div>
         </div>    
                    
     </div>

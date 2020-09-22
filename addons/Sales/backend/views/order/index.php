@@ -332,16 +332,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                  ]);
                              }
                          }
-                    },
-                    'pay' => function($url, $model, $key){
-                        if($model->pay_status == PayStatusEnum::NO_PAY){
-                            return Html::edit(['order/ajax-pay', 'id' => $model->id], '支付', [
-                                    'data-toggle' => 'modal',
-                                    'class' => 'btn btn-primary btn-ms',
-                                    'data-target' => '#ajaxModalLg',
-                            ]);
-                        }
-                    },
+                    },                    
                     'apply' => function($url, $model, $key){
                         if($model->order_status == OrderStatusEnum::SAVE){
                             return Html::edit(['ajax-apply','id'=>$model->id], '提审', [
@@ -365,7 +356,16 @@ $this->params['breadcrumbs'][] = $this->title;
                             ]);
                         }
 
-                    },                    
+                    },  
+                    'pay' => function($url, $model, $key){
+                        if($model->order_status == OrderStatusEnum::CONFORMED){
+                            return Html::edit(['order/ajax-pay', 'id' => $model->id], '点款', [
+                                    'data-toggle' => 'modal',
+                                    'class' => 'btn btn-primary btn-ms',
+                                    'data-target' => '#ajaxModalLg',
+                            ]);
+                        }
+                    },
                     'close' => function($url, $model, $key){
                        
                             return Html::delete(['delete', 'id' => $model->id],'关闭',[

@@ -1,6 +1,7 @@
 <?php
 use yii\widgets\ActiveForm;
 use common\helpers\Url;
+use addons\Sales\common\enums\DeliveryTypeEnum;
 
 $this->title = '创建外部平台订单';
 $this->params['breadcrumbs'][] = ['label' => 'Curd', 'url' => ['index']];
@@ -12,28 +13,29 @@ $this->params['breadcrumbs'][] = $this->title;
             <?php $form = ActiveForm::begin([]); ?>
             <div class="box-body" style="padding:20px 50px;">                    
                     <div class="row">
-                        <div class="col-sm-6"><?= $form->field($model, 'out_trade_no')->textInput()?></div>
                         <div class="col-sm-6">
-                        <?= $form->field($model, 'sale_channel_id')->widget(\kartik\select2\Select2::class, [
-                            'data' => Yii::$app->salesService->saleChannel->getDropDownForExternalOrder(),
-                            'options' => ['placeholder' => '请选择',],
-                            'pluginOptions' => [
-                                'allowClear' => true
-                            ],
-                        ]);?>              
-                        </div>                        
-                    </div>                     
-                    <div class="row">                    	
-                        <div class="col-sm-6"><?= $form->field($model, 'customer_mobile')->textInput()?></div>
-                        <div class="col-sm-6">
-                        	<?= $form->field($model, 'consignee_id')->widget(\kartik\select2\Select2::class, [
-                        	    'data' => $model->getConsigneeMap(),
+                        	<?= $form->field($model, 'platform_id')->widget(\kartik\select2\Select2::class, [
+                        	    'data' => Yii::$app->salesService->platform->getDropDown(DeliveryTypeEnum::Platform),
                                 'options' => ['placeholder' => '请选择'],
                                 'pluginOptions' => [
                                     'allowClear' => true,                        
                                 ],
                             ]);?> 
                         </div>
+                        <div class="col-sm-6"><?= $form->field($model, 'out_trade_no')->textInput()?></div>
+                                               
+                    </div>                     
+                    <div class="row">                    	
+                        <div class="col-sm-6"><?= $form->field($model, 'customer_mobile')->textInput()?></div>
+                        <div class="col-sm-6">
+                        <?= $form->field($model, 'sale_channel_id')->widget(\kartik\select2\Select2::class, [
+                            'data' => Yii::$app->salesService->saleChannel->getDropDown(),
+                            'options' => ['placeholder' => '请选择',],
+                            'pluginOptions' => [
+                                'allowClear' => true
+                            ],
+                        ]);?>              
+                        </div> 
                     </div>
                     <div class="row"> 
                         <div class="col-sm-6">
@@ -60,6 +62,10 @@ $this->params['breadcrumbs'][] = $this->title;
                             ]);?>
                         </div>                        
                     </div>
+                    <div class="row">                    	
+                        <div class="col-sm-6"><?= $form->field($model, 'other_fee')->textInput()?></div>
+                        <div class="col-sm-6"><?= $form->field($model, 'arrive_amount')->textInput()?></div>
+                    </div>
                     <div class="row">
                         <div class="col-sm-6">
                         <?= $form->field($model, 'language')->dropDownList(common\enums\LanguageEnum::getMap(),['prompt'=>'请选择']);?>              
@@ -81,42 +87,60 @@ $this->params['breadcrumbs'][] = $this->title;
                                     'columns' => [                                        
                                         [
                                                 'name' => "style_sn",
-                                                'title' => '款号',
+                                                'title' => '*款号',
                                                 'enableError' => false,
                                                 'options' => [
                                                     'class' => 'input-priority',
-                                                    //'style' => 'width:200px',
                                                     'placeholder' => '请输入款号',
                                                 ]
                                         ],
                                         [
                                                 'name' => 'goods_name',
-                                                'title' => '商品名称',
+                                                'title' => '*商品名称',
                                                 'enableError' => false,
                                                 'options' => [
                                                         'class' => 'input-priority',
-                                                        'style'=>'width:500px',
+                                                        'style'=>'width:300px',
                                                         'placeholder' => '请输入商品名称',
                                                 ]
                                         ],
                                         [
-                                                'name' => "goods_pay_price",
-                                                'title' => '商品价格',
+                                                'name' => "goods_price",
+                                                'title' => '*商品价格',
                                                 'enableError' => false,
                                                 'options' => [
                                                         'class' => 'input-priority',
-                                                        //'style' => 'width:200px',
                                                         'placeholder' => '请输入商品价格',
                                                 ]
                                         ],
                                         [
-                                                'name' => "goods_spec",
-                                                'title' => '手寸/尺寸',
+                                                'name' => "size",
+                                                'title' => '尺寸(cm)',
                                                 'enableError' => false,
                                                 'options' => [
                                                         'class' => 'input-priority',
-                                                        //'style' => 'width:200px',
-                                                        'placeholder' => '请输入手寸/尺寸',
+                                                         'placeholder' => '请输入尺寸(cm)',
+                                                ]
+                                        ],
+                                        [
+                                                'name' => "finger_type",
+                                                'title'=>"手寸类型",
+                                                'enableError'=>false,
+                                                'type'  => 'dropDownList',
+                                                'options' => [
+                                                        'class' => 'input-priority',
+                                                        'style' =>'width:80px'
+                                                ],
+                                                'defaultValue' => '',
+                                                'items' => [''=>'请选择','HK'=>'港号','US'=>'美号']
+                                        ],
+                                        [
+                                                'name' => "finger",
+                                                'title' => '手寸',
+                                                'enableError' => false,
+                                                'options' => [
+                                                        'class' => 'input-priority',
+                                                        'placeholder' => '请输入手寸',
                                                 ]
                                         ]
                                             
@@ -132,15 +156,9 @@ $this->params['breadcrumbs'][] = $this->title;
 
 <script type="text/javascript">
     var formId = 'externalorderform';
-    $("#"+formId+'-sale_channel_id').change(function(){
-        var sale_channel_id = $(this).val();
-    	//13台湾momo 7东森
-        if(sale_channel_id == 7 || sale_channel_id == 13) {
-            $("#"+formId+'-language').val('zh-TW');
-            $("#"+formId+'-currency').val('TWD');
-        }else {
-        	$("#"+formId+'-language').val('zh-TW');
-            $("#"+formId+'-currency').val('HKD');
-        }   
+    $("#"+formId+'-platform_id').change(function(){
+        var platform_id = $(this).val();
+        var url = "<?= Url::buildUrl(\Yii::$app->request->url,[],['platform_id'])?>?platform_id="+platform_id;
+        window.location.href = url;   
     })
 </script>
