@@ -15,6 +15,7 @@ use common\helpers\ExcelHelper;
 use addons\Sales\common\forms\OrderImportForm;
 use addons\Sales\common\forms\ExternalOrderForm;
 use addons\Sales\common\forms\OrderGoodsForm;
+use addons\Sales\common\models\Platform;
 
 /**
  * Default controller for the `order` module
@@ -84,25 +85,43 @@ class ExternalOrderController extends BaseController
         $this->layout = '@backend/views/layouts/iframe';
         
         $id = Yii::$app->request->get('id');
+        $platform_id = Yii::$app->request->get('platform_id');
         $model = $this->findModel($id);
+        $isNewRecord = $model->isNewRecord;
+        if($platform_id) {
+            $model->platform_id = $platform_id; 
+            $platform = Platform::find()->where(['id'=>$platform_id])->one();
+            if($platform) {
+                $model->language = $platform->language;
+                $model->currency = $platform->currency;
+                $model->sale_channel_id = $platform->channel_id;
+                $model->pay_type = $platform->payment_id;
+                $model->address = $platform;
+            }else{
+                $this->message("系统异常", $this->redirect(Yii::$app->request->referrer), 'error');
+            }            
+        }  
+        if($isNewRecord === false) {
+            $model->other_fee = $model->account->other_fee;
+            $model->arrive_amount = $model->account->arrive_amount;
+        }
         // ajax 校验
         //$this->activeFormValidate($model);
-        if ($model->load(Yii::$app->request->post())) {
-            $isNewRecord = $model->isNewRecord;
-            try{
+        if ($model->load(Yii::$app->request->post())) {           
+            try{                
                 $trans = Yii::$app->trans->beginTransaction();                
                 $model = Yii::$app->salesService->order->createExternalOrder($model);
                 $trans->commit();
                 return $isNewRecord
-                ? $this->message("创建成功", $this->redirect(['view', 'id' => $model->id]), 'success')
-                : $this->message("保存成功", $this->redirect(Yii::$app->request->referrer), 'success');
+                    ? $this->message("创建成功", $this->redirect(['view', 'id' => $model->id]), 'success')
+                    : $this->message("保存成功", $this->redirect(Yii::$app->request->referrer), 'success');
                 
             }catch (\Exception $e) {
                 $trans->rollback();
                 return ResultHelper::json(424, $e->getMessage());
-                //return $this->message($e->getMessage(), $this->redirect(Yii::$app->request->referrer), 'error');
             }
         }
+        
         return $this->render($this->action->id, [
                 'model' => $model,
         ]);
@@ -182,10 +201,10 @@ class ExternalOrderController extends BaseController
                 
                 $model->file = UploadedFile::getInstance($model, 'file');
                 Yii::$app->salesService->order->importExternalOrder($model);
-                $trans->rollback();
+                $trans->commit();
                 return $this->message('导入成功', $this->redirect(Yii::$app->request->referrer), 'success');
             }catch (\Exception $e){
-                //$trans->rollBack();
+                $trans->rollBack();
                 return $this->message($e->getMessage(), $this->redirect(\Yii::$app->request->referrer), 'error');
             }
         }

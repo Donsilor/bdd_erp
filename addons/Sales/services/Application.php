@@ -24,6 +24,7 @@ use common\components\Service;
  * @property \addons\Sales\services\BddOrderService $bddOrder Bdd订单同步
  * @property \addons\Sales\services\ReturnService $return 订单退款
  * @property \addons\Sales\services\ReturnConfigService $returnConfig 退款配置
+ * @property \addons\Sales\services\PlatformService $platform 销售平台
  */
 class Application extends Service
 {
@@ -47,5 +48,6 @@ class Application extends Service
         'bddOrder' => 'addons\Sales\services\BddOrderService',
         'return' => 'addons\Sales\services\ReturnService',
         'returnConfig' => 'addons\Sales\services\ReturnConfigService',
+        'platform' => 'addons\Sales\services\PlatformService',
     ];
 }

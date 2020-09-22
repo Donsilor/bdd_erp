@@ -69,7 +69,7 @@ $form = ActiveForm::begin([
                            'format' => 'yyyy-mm-dd',
                            'todayHighlight' => true,//今日高亮
                            'autoclose' => true,//选择后自动关闭
-                           'startDate' => date("yyyy-MM-dd H:i:s"),
+                           //'startDate' => date("yyyy-MM-dd H:i:s"),
                            'todayBtn' => true,//今日按钮显示
                        ]
                    ]);?>

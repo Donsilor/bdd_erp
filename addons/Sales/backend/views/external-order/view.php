@@ -97,7 +97,9 @@ $this->params['breadcrumbs'][] = $this->title;
                         </tr>
                         <tr>
                             <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('pay_remark') ?>：</td>
-                            <td colspan="5"><?= $model->pay_remark ?></td>
+                            <td colspan="3"><?= $model->pay_remark ?></td>
+                            <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('account.arrive_amount') ?>：</td>
+                            <td><?= AmountHelper::outputAmount($model->account->arrive_amount ?? 0, 2, $model->currency) ?></td>                            
                         </tr>
                         <tr>
                             <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('remark') ?>：</td>
@@ -589,8 +591,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 <div class="box-footer">
                     <div class="col-lg-12">
                         <div class="row">
-                            <div class="col-lg-8 text-right"><label><?= $model->getAttributeLabel('goods_num') ?>
-                                    ：</label></div>
+                            <div class="col-lg-8 text-right"><label><?= $model->getAttributeLabel('goods_num') ?>：</label></div>
                             <div class="col-lg-4"><?= $model->goods_num ?></div>
                         </div>
                         <div class="row">
@@ -604,14 +605,16 @@ $this->params['breadcrumbs'][] = $this->title;
                             <div class="col-lg-4"><?= AmountHelper::outputAmount($model->account->shipping_fee ?? 0, 2, $model->currency) ?></div>
                         </div>
                         <div class="row">
-                            <div class="col-lg-8 text-right"><label><?= $model->getAttributeLabel('account.tax_fee') ?>
-                                    ：</label></div>
+                            <div class="col-lg-8 text-right"><label><?= $model->getAttributeLabel('account.tax_fee') ?>：</label></div>
                             <div class="col-lg-4"><?= AmountHelper::outputAmount($model->account->tax_fee ?? 0, 2, $model->currency) ?></div>
                         </div>
                         <div class="row">
-                            <div class="col-lg-8 text-right"><label><?= $model->getAttributeLabel('account.safe_fee') ?>
-                                    ：</label></div>
+                            <div class="col-lg-8 text-right"><label><?= $model->getAttributeLabel('account.safe_fee') ?>：</label></div>
                             <div class="col-lg-4"><?= AmountHelper::outputAmount($model->account->safe_fee ?? 0, 2, $model->currency) ?></div>
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-8 text-right"><label><?= $model->getAttributeLabel('account.other_fee') ?>：</label></div>
+                            <div class="col-lg-4"><?= AmountHelper::outputAmount($model->account->other_fee ?? 0, 2, $model->currency) ?></div>
                         </div>
                         <div class="row">
                             <div class="col-lg-8 text-right">

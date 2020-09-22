@@ -74,7 +74,7 @@ class Order extends BaseModel
     {
         return [
             [['sale_channel_id','language','currency'], 'required'],
-            [['merchant_id','platform_id' ,'goods_num','apply_id','sale_channel_id','pay_type', 'pay_status', 'order_time', 'order_status', 'refund_status', 'express_id', 'distribute_status', 'delivery_status', 'receive_type', 'order_from', 'order_type', 'is_invoice', 'follower_id', 'followed_time', 'followed_status', 'area_id', 'audit_status', 'audit_time', 'auditor_id','customer_id', 'creator_id', 'created_at', 'updated_at'], 'integer'],
+            [['merchant_id','platform_id' ,'goods_num','apply_id','sale_channel_id','pay_type', 'pay_status', 'order_status', 'refund_status', 'express_id', 'distribute_status', 'delivery_status', 'receive_type', 'order_from', 'order_type', 'is_invoice', 'follower_id', 'followed_time', 'followed_status', 'area_id', 'audit_status', 'audit_time', 'auditor_id','customer_id', 'creator_id', 'created_at', 'updated_at'], 'integer'],
             [['language'], 'string', 'max' => 5],
             [['currency'], 'string', 'max' => 3],
             [['order_sn'], 'string', 'max' => 20],
@@ -87,7 +87,7 @@ class Order extends BaseModel
             [['customer_message', 'store_remark'], 'string', 'max' => 500],
             [['remark','audit_remark','pay_remark'], 'string', 'max' => 255],
             [['order_sn'], 'unique'],
-            [['pay_time','out_pay_time','delivery_time','finished_time'],'safe']    
+            [['order_time','pay_time','out_pay_time','delivery_time','finished_time'],'safe']    
         ];
     }
 
@@ -270,6 +270,15 @@ class Order extends BaseModel
     public function getCreator()
     {
         return $this->hasOne(Member::class, ['id'=>'creator_id'])->alias('creator');
+    }
+    
+    /**
+     * 销售平台
+     * @return \yii\db\ActiveQuery
+     */
+    public function getPlatform()
+    {
+        return $this->hasOne(Platform::class, ['platform_id'=>'id']);
     }
     
 }
