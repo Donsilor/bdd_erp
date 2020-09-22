@@ -392,14 +392,14 @@
             <td class="width-25 algin-center font-bold" rowspan="2">序号</td>
             <td class="width-80 algin-center font-bold" rowspan="2">条码号</td>
             <td class="width-60 algin-center font-bold" rowspan="2">款号</td>
-            <td class="width-100 algin-center font-bold" rowspan="2">货品名称</td>
+            <td class="width-50 algin-center font-bold" rowspan="2">货品名称</td>
             <td class="width-30 algin-center font-bold" rowspan="2">材质</td>
             <td class="width-20 algin-center font-bold" rowspan="2">件数</td>
             <td class="width-20 algin-center font-bold" rowspan="2">手寸</td>
-            <td class="width-200 algin-center font-bold" colspan="4">金料</td>
+            <td class="width-160 algin-center font-bold" colspan="4">金料</td>
             <td class="width-180 algin-center font-bold" colspan="5">主石</td>
             <td class="width-180 algin-center font-bold" colspan="5">副石1</td>
-            <td class="width-35 algin-center font-bold" rowspan="2">配件(g)</td>
+            <td class="width-30 algin-center font-bold" rowspan="2">配件(g)</td>
             <td class="width-35 algin-center font-bold" rowspan="2">配件额</td>
             <td class="width-35 algin-center font-bold" rowspan="2">配件工费</td>
             <td class="width-30 algin-center font-bold" rowspan="2">工费</td>

@@ -501,6 +501,18 @@ class BillTController extends BaseController
 
         ];
         foreach ($lists as &$list) {
+            //商品名称
+            if ($list['goods_name']) {
+                $list['goods_name'] = mb_substr($list['goods_name'], 0, 6, 'utf-8') . "...";
+            }
+            //主石编号
+            if ($list['main_stone_sn']) {
+                $list['main_stone_sn'] = substr($list['main_stone_sn'], 0, 3) . "...";
+            }
+            //副石1编号
+            if ($list['second_stone_sn1']) {
+                $list['second_stone_sn1'] = substr($list['second_stone_sn1'], 0, 3) . "...";
+            }
             //材质
             $material_type = empty($list['material_type']) ? 0 : $list['material_type'];
             $list['material_type'] = Yii::$app->attr->valueName($material_type);
@@ -535,8 +547,8 @@ class BillTController extends BaseController
 
             $total['tax_amount'] = bcadd($total['tax_amount'], $list['tax_amount'], 3);//税额
             $total['pure_gold'] = bcadd($total['pure_gold'], $list['pure_gold'], 3);//折足
-            $total['factory_cost'] = bcadd($total['factory_cost'], ($list['factory_cost']/$list['goods_num']), 3);//单件工厂工费
-            $total['one_cost_price'] = bcadd($total['one_cost_price'], ($list['cost_price']/$list['goods_num']), 3);//成本价/件
+            $total['factory_cost'] = bcadd($total['factory_cost'], ($list['factory_cost'] / $list['goods_num']), 3);//单件工厂工费
+            $total['one_cost_price'] = bcadd($total['one_cost_price'], ($list['cost_price'] / $list['goods_num']), 3);//成本价/件
             $total['cost_price'] = bcadd($total['cost_price'], $list['cost_price'], 3);//总成本价
         }
         return [$lists, $total];
