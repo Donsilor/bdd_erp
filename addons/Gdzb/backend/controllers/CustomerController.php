@@ -3,8 +3,8 @@
 namespace addons\Gdzb\backend\controllers;
 
 use addons\Sales\common\enums\ChannelIdEnum;
-use addons\Sales\common\forms\OrderForm;
-use addons\Sales\common\models\Order;
+use addons\Gdzb\common\forms\OrderForm;
+use addons\Gdzb\common\models\Order;
 use common\helpers\DateHelper;
 use Yii;
 use common\helpers\Url;
@@ -176,12 +176,12 @@ class CustomerController extends BaseController
      */
     public function actionOrder()
     {
-        $this->modelClass = OrderForm::class;
         $tab = Yii::$app->request->get('tab',1);
         $returnUrl = Yii::$app->request->get('returnUrl', Url::to(['index']));
         $customer_id = \Yii::$app->request->get('customer_id', null);
+        $model = $this->findModel($customer_id);
         $searchModel = new SearchModel([
-            'model' => $this->modelClass,
+            'model' => Order::class,
             'scenario' => 'default',
             'partialMatchAttributes' => [], // 模糊查询
             'defaultOrder' => [
@@ -189,10 +189,9 @@ class CustomerController extends BaseController
             ],
             'pageSize' => $this->pageSize,
             'relations' => [
-                'account' => ['order_amount', 'refund_amount'],
             ]
         ]);
-        $dataProvider = $searchModel->search(Yii::$app->request->queryParams, ['created_at', 'order_time']);
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams, ['order_time']);
         $searchParams = \Yii::$app->request->queryParams['SearchModel'] ?? [];
         $dataProvider->query->andWhere(['=', Order::tableName().'.customer_id', $customer_id]);
         //创建时间过滤
@@ -203,6 +202,7 @@ class CustomerController extends BaseController
         return $this->render($this->action->id, [
             'dataProvider' => $dataProvider,
             'searchModel' => $searchModel,
+            'model' => $model,
             'tab'=>$tab,
             'tabList'=>\Yii::$app->salesService->customer->menuTabList($customer_id, $returnUrl),
             'returnUrl'=>$returnUrl,

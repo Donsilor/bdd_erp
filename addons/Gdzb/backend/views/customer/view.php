@@ -42,7 +42,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
                                  <tr>
                                      <td class="col-xs-3 text-right"><?= $model->getAttributeLabel('wechat') ?>：</td>
-                                     <td><?= $model->qq ?></td>
+                                     <td><?= $model->wechat ?></td>
                                  </tr>
                                  <tr>
                                      <td class="col-xs-3 text-right"><?= $model->getAttributeLabel('country_id') ?>：</td>
@@ -75,7 +75,7 @@ $this->params['breadcrumbs'][] = $this->title;
                              <table class="table table-hover">
                                  <tr>
                                      <td class="col-xs-3 text-right"><?= $model->getAttributeLabel('channel_id') ?>：</td>
-                                     <td><?= $model->channel->name ?? '' ?></td>
+                                     <td><?= $model->saleChannel->name ?? '' ?></td>
                                  </tr>
                                  <tr>
                                      <td class="col-xs-3 text-right"><?= $model->getAttributeLabel('source_id') ?>：</td>
@@ -90,13 +90,16 @@ $this->params['breadcrumbs'][] = $this->title;
                                      <td class="col-xs-3 text-right"><?= $model->getAttributeLabel('follower_id') ?>：</td>
                                      <td><?= $model->follower->username ?? ''; ?></td>
                                  </tr>
+                                 <?php
+                                 $sum = Yii::$app->gdzbService->order->getOrderAmountNum(['customer_id'=>$model->id])
+                                 ?>
                                  <tr>
                                      <td class="col-xs-3 text-right">交易单量：</td>
-                                     <td></td>
+                                     <td><?= $sum['trade_num'] ?? 0?></td>
                                  </tr>
                                  <tr>
                                      <td class="col-xs-3 text-right">交易订单总金额：</td>
-                                     <td></td>
+                                     <td><?= $sum['total_order_amount'] ?? 0?></td>
                                  </tr>
                                  <tr>
                                      <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('created_at') ?>：</td>

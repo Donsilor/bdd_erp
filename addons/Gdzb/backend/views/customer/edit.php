@@ -56,13 +56,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             ]);?>
                         </div>
                         <div class="col-lg-4">
-                            <?= $form->field($model, 'source_id')->widget(\kartik\select2\Select2::class, [
-                                'data' => \Yii::$app->salesService->sources->getDropDown(),
-                                'options' => ['placeholder' => '请选择'],
-                                'pluginOptions' => [
-                                    'allowClear' => true
-                                ],
-                            ]);?>
+                            <?= $form->field($model, 'source_id')->dropDownList(\addons\Gdzb\common\enums\CustomerSourceEnum::getMap(),['prompt'=>'请选择']) ?>
                         </div>
                         <div class="col-lg-4">
                         <?= $form->field($model, 'follower_id')->widget(kartik\select2\Select2::class, [

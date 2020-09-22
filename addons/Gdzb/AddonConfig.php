@@ -102,7 +102,7 @@ class AddonConfig extends BaseAddonConfig
      *      'services'  => "常用服务及工具",
      *      'biz'       => "行业解决方案",
      *      'h5game'    => "H5游戏",
-     *      'other'     => "其它",
+     *      'other'     => "其他",
      * ]
      */
     public $group = 'plug';

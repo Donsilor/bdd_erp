@@ -31,10 +31,10 @@ class SupplierService
         $model = Supplier::find()
             ->where(['status' => StatusEnum::ENABLED])
             ->andWhere($where)
-            ->select(['id','wechat'])
+            ->select(['id','contactor'])
             ->asArray()
             ->all();
-        return ArrayHelper::map($model,'id', 'wechat');
+        return ArrayHelper::map($model,'id', 'contactor');
     }
 
 }

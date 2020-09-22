@@ -31,7 +31,15 @@ return [
                             [
                                     'title' => '订单列表',
                                     'route' => 'order/index',
-                            ],                             
+                            ],
+                            [
+                                'title' => '商品管理',
+                                'route' => 'goods/index',
+                            ],
+                            [
+                                'title' => '退货管理',
+                                'route' => 'order-refund/index',
+                            ],
                     ],
                     
             ],
@@ -57,8 +65,28 @@ return [
                                     'route' => 'customer/index',
                             ],
                     ],
-                    
+
             ],
+        [
+            'title' => '专题管理',
+            'route' => 'indexOrder',
+            'icon' => 'fa fa-superpowers',
+            'child' => [
+                [
+                    'title' => '专题列表',
+                    'route' => 'special/index',
+                ],
+                [
+                    'title' => '推广列表',
+                    'route' => 'promotional/index',
+                ],
+                [
+                    'title' => '客户列表',
+                    'route' => 'client/index',
+                ],
+            ],
+
+        ],
     ],
 
     // ----------------------- 权限配置 ----------------------- //
