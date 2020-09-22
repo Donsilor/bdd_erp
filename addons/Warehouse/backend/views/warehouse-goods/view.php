@@ -87,6 +87,19 @@ $this->params['breadcrumbs'][] = $this->title;
                         </tr>
                         <?php } ?>
                         <tr>
+                            <td class="col-xs-2 text-right">出库成本/件：</td>
+                            <td>
+                                <?php
+                                if($model->goods_status == GoodsStatusEnum::IN_SALE || $model->goods_status == GoodsStatusEnum::HAS_SOLD){
+                                    echo bcdiv($model->chuku_price, $model->goods_num, 3);
+                                }else{
+                                    $chuku_price = Yii::$app->warehouseService->warehouseGoods->getChukuPrice($model->goods_id);
+                                    echo bcdiv($chuku_price, $model->goods_num, 3);
+                                }
+                                ?>
+                            </td>
+                        </tr>
+                        <tr>
                             <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('chuku_price') ?>：</td>
                             <td>
                                 <?php
