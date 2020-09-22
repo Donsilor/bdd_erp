@@ -16,6 +16,9 @@ $this->params['breadcrumbs'][] = $this->title;
               <?= $form->field($model, 'purchase_id')->hiddenInput()->label(false) ?>
               <div class="row">
                       <div class="col-lg-4">
+                          <?= $form->field($model, 'material_type')->dropDownList($model->getMaterialTypeMap(),['prompt'=>'请选择']) ?>
+                      </div>
+                      <div class="col-lg-4">
                           <?= $form->field($model, 'goods_sn')->widget(\kartik\select2\Select2::class, [
                               'data' => Yii::$app->styleService->gold->getDropDown(),
                               'options' => ['placeholder' => '请选择'],
@@ -27,9 +30,7 @@ $this->params['breadcrumbs'][] = $this->title;
                       <div class="col-lg-4">
                           <?= $form->field($model, 'goods_name')->textInput() ?>
                       </div>
-                    <div class="col-lg-4">
-                        <?= $form->field($model, 'material_type')->dropDownList($model->getMaterialTypeMap(),['prompt'=>'请选择', 'disabled'=>'disabled']) ?>
-                    </div>
+
               </div>
 			   <div class="row">
                    <div class="col-lg-4">
@@ -76,7 +77,30 @@ $this->params['breadcrumbs'][] = $this->title;
             });
         }
     }
+    function getGoodsSn() {
+        var material_type = $("#"+formId+"-material_type").val();
+        var html = '<option>请选择</option>';
+        $.ajax({
+            url: '<?php echo Url::to(['get-goods-sn'])?>',
+            type: 'post',
+            dataType: 'json',
+            data: {material_type: material_type},
+            success: function (msg) {
+                console.log(msg.data)
+                $.each(msg.data, function (key, val) {
+                    html += '<option value="' + key + '">' + val + '</option>';
+                });
+                $("#"+formId+"-goods_sn").html(html);
+                $("#"+formId+"-goods_name").val('');
+            }
+        })
+    }
+
     $("#"+formId+"-goods_sn").change(function(){
         fillStoneForm();
+    });
+
+    $("#"+formId+"-material_type").change(function(){
+        getGoodsSn();
     });
 </script>

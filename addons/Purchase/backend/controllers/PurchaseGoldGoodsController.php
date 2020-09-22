@@ -322,4 +322,11 @@ class PurchaseGoldGoodsController extends BaseController
         ];
         return ResultHelper::json(200,'查询成功', $data);
     }
+
+
+    public function actionGetGoodsSn(){
+        $material_type = Yii::$app->request->post('material_type');
+        $model = Yii::$app->styleService->gold::getDropDown($material_type);
+        return ResultHelper::json(200, 'ok',$model);
+    }
 }

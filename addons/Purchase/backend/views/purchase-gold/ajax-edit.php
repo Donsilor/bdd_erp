@@ -21,7 +21,7 @@ $form = ActiveForm::begin([
        <div class="col-sm-12">
             <?= $form->field($model, 'purchase_sn')->textInput(['disabled'=>true, "placeholder"=>"系统自动生成"])?>
 	        <?= $form->field($model, 'supplier_id')->widget(\kartik\select2\Select2::class, [
-                    'data' => \Yii::$app->supplyService->supplier->getDropDown(['like', 'business_scope', ',9,']),
+                    'data' => \Yii::$app->supplyService->supplier->getDropDown(['goods_type'=>\addons\Supply\common\enums\GoodsTypeEnum::RAW_MATERIAL]),
                     'options' => ['placeholder' => '请选择'],
                     'pluginOptions' => [
                         'allowClear' => false
