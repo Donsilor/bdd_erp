@@ -2238,13 +2238,7 @@ $params = $params ? "&".http_build_query($params) : '';
 
     //导出
     function batchExport() {
-        var ids = $("#grid").yiiGridView("getSelectedRows");
-        if (ids.length == 0) {
-            var url = "<?= Url::to('index?action=export' . $params);?>";
-            rfExport(url)
-        } else {
-            window.location.href = "<?= Url::buildUrl('bill-t/export', [], ['ids'])?>?ids=" + ids;
-        }
+        window.location.href = "<?= Url::buildUrl('bill-t/export')?>;
     }
 
     /**
