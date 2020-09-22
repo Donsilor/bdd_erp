@@ -53,10 +53,13 @@ class Customer extends BaseModel
     public function rules()
     {
         return [
-            [['merchant_id', 'channel_id', 'source_id', 'age', 'gender', 'marriage', 'country_id', 'province_id', 'city_id', 'area_id', 'level', 'status', 'follower_id', 'creator_id', 'created_at', 'updated_at'], 'integer'],
+            [['merchant_id', 'channel_id', 'source_id', 'age', 'gender', 'marriage', 'country_id','order_num',
+                'province_id', 'city_id', 'area_id', 'level', 'status', 'follower_id', 'creator_id',
+                'created_at', 'updated_at'], 'integer'],
+            [['order_amount'], 'number',],
             [['firstname', 'lastname'], 'string', 'max' => 100],
             [['realname'], 'string', 'max' => 200],
-            [['realname','wechat','channel_id','source_id'], 'required'],
+            [['realname','wechat','channel_id'], 'required'],
             [['customer_no','wechat', 'qq', 'mobile'], 'string', 'max' => 20],
             [['email'], 'string', 'max' => 150],
             [['address', 'remark'], 'string', 'max' => 255],
@@ -88,6 +91,8 @@ class Customer extends BaseModel
             'province_id' => '省',
             'city_id' => '城市',
             'area_id' => '地区',
+            'order_num' => '交易单数',
+            'order_amount' => '交易订单总金额',
             'address' => '详细地址',
             'level' => '客户等级',
             'remark' => '备注',
@@ -120,9 +125,9 @@ class Customer extends BaseModel
      * 销售渠道 一对一
      * @return \yii\db\ActiveQuery
      */
-    public function getChannel()
+    public function getSaleChannel()
     {
-        return $this->hasOne(SaleChannel::class, ['id'=>'channel_id'])->alias('channel');
+        return $this->hasOne(SaleChannel::class, ['id'=>'channel_id'])->alias('saleChannel');
     }
 
     /**

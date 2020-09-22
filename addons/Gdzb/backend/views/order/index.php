@@ -16,10 +16,7 @@ $this->params['breadcrumbs'][] = $this->title;
             <div class="box-header">
                 <h3 class="box-title"><?= Html::encode($this->title) ?></h3>
                 <div class="box-tools">
-                    <?= Html::create(['ajax-edit'], '创建', [
-                        'data-toggle' => 'modal',
-                        'data-target' => '#ajaxModalLg',
-                    ]); ?>
+                    <?= Html::create(['edit'], '创建'); ?>
                     <?= Html::button('导出', [
                         'class'=>'btn btn-success btn-xs',
                         'onclick' => 'batchExport()',
@@ -101,28 +98,20 @@ $this->params['breadcrumbs'][] = $this->title;
                 'format' => 'raw',
                 'headerOptions' => [],
             ],
+
             [
-                    'attribute' => 'customer_name',
-                    'value' => 'customer_name',                    
-                    'filter' => Html::activeTextInput($searchModel, 'customer_name', [
-                            'class' => 'form-control',
-                            'style'=> 'width:100px;'
-                    ]),
-                    'format' => 'raw',
-                    'headerOptions' => ['width'=>'100'],
-            ],
-            [
-                    'label' => '联系方式',
-                    'attribute' => 'customer_mobile',
-                    'value' => function($model){
-                          $str = '';
-                          $str .= $model->customer_mobile ? $model->customer_mobile."<br/>":'';
-                          $str .= $model->customer_email ? $model->customer_email."<br/>":'';
-                          return $str;
-                    },
-                    'filter' => false,
-                    'format' => 'raw',
-                    'headerOptions' => ['width'=>'80'],
+                'label' => '客户信息',
+                'attribute' => 'customer_mobile',
+                'value' => function($model){
+                    $str = '';
+                    $str .= $model->customer_name ? $model->customer_name."<br/>":'';
+                    $str .= $model->customer_mobile ? $model->customer_mobile."<br/>":'';
+                    $str .= $model->customer_weixin ? $model->customer_weixin."<br/>":'';
+                    return $str;
+                },
+                'filter' => false,
+                'format' => 'raw',
+                'headerOptions' => ['width'=>'80'],
             ],
 /*                
             [
@@ -135,7 +124,7 @@ $this->params['breadcrumbs'][] = $this->title;
             [
                     'attribute' => 'order_amount',
                     'value' => function($model){
-                         return \common\helpers\AmountHelper::outputAmount($model->order_amount??0,2,$model->currency);
+                         return $model->order_amount??0;
                     },
                     'filter' => false,
                     'format' => 'raw',
@@ -144,7 +133,7 @@ $this->params['breadcrumbs'][] = $this->title;
             [
                     'attribute' => 'refund_amount',
                     'value' => function($model){
-                        return \common\helpers\AmountHelper::outputAmount($model->refund_amount??0,2,$model->currency);
+                        return $model->refund_amount??0;
                     },
                     'filter' => false,
                     'format' => 'raw',
@@ -178,7 +167,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     ]),
                     'format' => 'raw',
                     'headerOptions' => ['width'=>'100'],
-            ],  
+            ],
             [
                     'attribute' => 'order_status',
                     'value' => function ($model){
@@ -256,11 +245,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 'buttons' => [
                     'edit' => function($url, $model, $key){
                      if($model->order_status == \addons\Sales\common\enums\OrderStatusEnum::SAVE) {
-                         return Html::edit(['ajax-edit', 'id' => $model->id, 'returnUrl' => Url::getReturnUrl()], '编辑', [
-                             'data-toggle' => 'modal',
-                             'data-target' => '#ajaxModalLg',
-                             'class' => 'btn btn-primary btn-sm',
-                         ]);
+                         return Html::edit(['edit', 'id' => $model->id, 'returnUrl' => Url::getReturnUrl()], '编辑');
                      }
                     },
                     'ajax-apply' => function($url, $model, $key){
@@ -272,13 +257,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         }
                     },
                     'audit' => function($url, $model, $key){
-                        $model->getTargetType();
-                        if($model->targetType){
-                            $isAudit = Yii::$app->services->flowType->isAudit($model->targetType,$model->id);
-                        }else{
-                            $isAudit = true;
-                        }
-                        if($model->order_status == \addons\Sales\common\enums\OrderStatusEnum::PENDING && $isAudit) {
+                        if($model->order_status == \addons\Sales\common\enums\OrderStatusEnum::PENDING) {
                             return Html::edit(['ajax-audit', 'id' => $model->id], '审核', [
                                 'class' => 'btn btn-success btn-sm',
                                 'data-toggle' => 'modal',
@@ -288,10 +267,11 @@ $this->params['breadcrumbs'][] = $this->title;
 
                     },                    
                     'close' => function($url, $model, $key){
-                       
-                            return Html::delete(['delete', 'id' => $model->id],'关闭',[
+                        if($model->order_status == \addons\Sales\common\enums\OrderStatusEnum::SAVE) {
+                            return Html::delete(['delete', 'id' => $model->id], '关闭', [
                                 'onclick' => 'rfTwiceAffirm(this,"关闭单据", "确定关闭吗？");return false;',
                             ]);
+                        }
 
                     },                    
                 ]

@@ -59,6 +59,7 @@ class Supplier extends BaseModel
             [['audit_remark', 'remark'], 'string', 'max' => 255],
             [['bank_name'], 'string', 'max' => 100],
             [['business_scope'], 'safe'],
+            [['wechat'], 'unique'],
             [['business_scope'], 'parseBusinessScope'],
         ];
     }

@@ -501,11 +501,24 @@ class BillTController extends BaseController
 
         ];
         foreach ($lists as &$list) {
+            //商品名称
+            if ($list['goods_name']) {
+                $list['goods_name'] = mb_substr($list['goods_name'], 0, 6, 'utf-8') . "...";
+            }
+            //主石编号
+            if ($list['main_stone_sn']) {
+                $list['main_stone_sn'] = substr($list['main_stone_sn'], 0, 3) . "...";
+            }
+            //副石1编号
+            if ($list['second_stone_sn1']) {
+                $list['second_stone_sn1'] = substr($list['second_stone_sn1'], 0, 3) . "...";
+            }
             //材质
             $material_type = empty($list['material_type']) ? 0 : $list['material_type'];
             $list['material_type'] = Yii::$app->attr->valueName($material_type);
             //手寸
-            $finger = empty($list['finger']) ? 0 : $list['finger'];
+            $finger = empty($list['finger']) ? $list['finger_hk'] : $list['finger'];
+            $finger = $finger ?? 0;
             $list['finger'] = Yii::$app->attr->valueName($finger);
 
             //汇总
@@ -516,28 +529,28 @@ class BillTController extends BaseController
             $total['gold_amount'] = bcadd($total['gold_amount'], $list['gold_amount'], 3);//金料额
 
             $total['main_stone_num'] = bcadd($total['main_stone_num'], $list['main_stone_num']);//主石粒数
-            $total['main_stone_weight'] = bcadd($total['main_stone_weight'], $list['main_stone_weight']);//主石重
-            $total['main_stone_amount'] = bcadd($total['main_stone_amount'], $list['main_stone_amount']);//主石成本价
+            $total['main_stone_weight'] = bcadd($total['main_stone_weight'], $list['main_stone_weight'], 3);//主石重
+            $total['main_stone_amount'] = bcadd($total['main_stone_amount'], $list['main_stone_amount'], 3);//主石成本价
 
             $total['second_stone_num1'] = bcadd($total['second_stone_num1'], $list['second_stone_num1']);//副石1粒数
-            $total['second_stone_weight1'] = bcadd($total['second_stone_weight1'], $list['second_stone_weight1']);//副石1重
-            $total['second_stone_amount1'] = bcadd($total['second_stone_amount1'], $list['second_stone_amount1']);//副石1成本价
+            $total['second_stone_weight1'] = bcadd($total['second_stone_weight1'], $list['second_stone_weight1'], 3);//副石1重
+            $total['second_stone_amount1'] = bcadd($total['second_stone_amount1'], $list['second_stone_amount1'], 3);//副石1成本价
 
-            $total['parts_gold_weight'] = bcadd($total['parts_gold_weight'], $list['parts_gold_weight']);//配件金重
-            $total['parts_amount'] = bcadd($total['parts_amount'], $list['parts_amount']);//配件额
-            $total['parts_fee'] = bcadd($total['parts_fee'], $list['parts_fee']);//配件工费
-            $total['basic_gong_fee'] = bcadd($total['basic_gong_fee'], $list['basic_gong_fee']);//基本工费
-            $total['xianqian_fee'] = bcadd($total['xianqian_fee'], $list['xianqian_fee']);//镶石费
-            $total['biaomiangongyi_fee'] = bcadd($total['biaomiangongyi_fee'], $list['biaomiangongyi_fee']);//表面工艺费
-            $total['fense_fee'] = bcadd($total['fense_fee'], $list['fense_fee']);//分件分色费
-            $total['bukou_fee'] = bcadd($total['bukou_fee'], $list['bukou_fee']);//补口费
-            $total['templet_fee'] = bcadd($total['templet_fee'], $list['templet_fee']);//版费
+            $total['parts_gold_weight'] = bcadd($total['parts_gold_weight'], $list['parts_gold_weight'], 3);//配件金重
+            $total['parts_amount'] = bcadd($total['parts_amount'], $list['parts_amount'], 3);//配件额
+            $total['parts_fee'] = bcadd($total['parts_fee'], $list['parts_fee'], 3);//配件工费
+            $total['basic_gong_fee'] = bcadd($total['basic_gong_fee'], $list['basic_gong_fee'], 3);//基本工费
+            $total['xianqian_fee'] = bcadd($total['xianqian_fee'], $list['xianqian_fee'], 3);//镶石费
+            $total['biaomiangongyi_fee'] = bcadd($total['biaomiangongyi_fee'], $list['biaomiangongyi_fee'], 3);//表面工艺费
+            $total['fense_fee'] = bcadd($total['fense_fee'], $list['fense_fee'], 3);//分件分色费
+            $total['bukou_fee'] = bcadd($total['bukou_fee'], $list['bukou_fee'], 3);//补口费
+            $total['templet_fee'] = bcadd($total['templet_fee'], $list['templet_fee'], 3);//版费
 
-            $total['tax_amount'] = bcadd($total['tax_amount'], $list['tax_amount']);//税额
-            $total['pure_gold'] = bcadd($total['pure_gold'], $list['pure_gold']);//折足
-            $total['factory_cost'] = bcadd($total['factory_cost'], ($list['factory_cost']/$list['goods_num']));//单件工厂工费
-            $total['one_cost_price'] = bcadd($total['one_cost_price'], ($list['cost_price']/$list['goods_num']));//成本价/件
-            $total['cost_price'] = bcadd($total['cost_price'], $list['cost_price']);//总成本价
+            $total['tax_amount'] = bcadd($total['tax_amount'], $list['tax_amount'], 3);//税额
+            $total['pure_gold'] = bcadd($total['pure_gold'], $list['pure_gold'], 3);//折足
+            $total['factory_cost'] = bcadd($total['factory_cost'], ($list['factory_cost'] / $list['goods_num']), 3);//单件工厂工费
+            $total['one_cost_price'] = bcadd($total['one_cost_price'], ($list['cost_price'] / $list['goods_num']), 3);//成本价/件
+            $total['cost_price'] = bcadd($total['cost_price'], $list['cost_price'], 3);//总成本价
         }
         return [$lists, $total];
     }

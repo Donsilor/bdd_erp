@@ -2,6 +2,7 @@
 
 namespace addons\Gdzb\backend\controllers;
 
+use addons\Gdzb\common\models\Order;
 use common\enums\FlowStatusEnum;
 use common\helpers\SnHelper;
 use Yii;
@@ -138,7 +139,7 @@ class SupplierController extends BaseController
             $business_scope_arr = array_filter($business_scope_arr);
             $business_scope_str = '';
             foreach ($business_scope_arr as $business_scope){
-                $business_scope_str .= ','. \addons\Supply\common\enums\BusinessScopeEnum::getValue($business_scope);
+                $business_scope_str .= ','. \addons\Gdzb\common\enums\BusinessScopeEnum::getValue($business_scope);
             }
             $model->business_scope = trim( $business_scope_str,',' );
         }
@@ -150,6 +151,57 @@ class SupplierController extends BaseController
             'returnUrl'=>$returnUrl,
         ]);
     }
+
+
+
+    /**
+     * Renders the index view for the module
+     * @return string
+     * @throws NotFoundHttpException
+     */
+    public function actionOrder()
+    {
+        $tab = Yii::$app->request->get('tab',1);
+        $returnUrl = Yii::$app->request->get('returnUrl',Url::to(['supplier/index']));
+        $order_status = Yii::$app->request->get('order_status', -1);
+        $supplier_id = Yii::$app->request->get('supplier_id');
+        $model = $this->findModel($supplier_id);
+        $searchModel = new SearchModel([
+            'model' => Order::class,
+            'scenario' => 'default',
+            'partialMatchAttributes' => [], // 模糊查询
+            'defaultOrder' => [
+                'id' => SORT_DESC,
+            ],
+            'pageSize' => $this->pageSize,
+            'relations' => [
+                'address' => [],
+                'creator' =>['username'],
+            ]
+        ]);
+
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams, ['created_at']);
+        $searchParams = Yii::$app->request->queryParams['SearchModel'] ?? [];
+        if($order_status != -1) {
+            $dataProvider->query->andWhere(['=', 'order_status', $order_status]);
+        }
+        $dataProvider->query->andWhere(['=', 'supplier_id', $supplier_id]);
+        //创建时间过滤
+        if (!empty($searchParams['order_time'])) {
+            list($start_date, $end_date) = explode('/', $searchParams['order_time']);
+            $dataProvider->query->andFilterWhere(['between', Order::tableName().'.order_time', strtotime($start_date), strtotime($end_date) + 86400]);
+        }
+        return $this->render($this->action->id, [
+            'dataProvider' => $dataProvider,
+            'searchModel' => $searchModel,
+            'model' =>$model,
+            'tab'=>$tab,
+            'tabList'=>\Yii::$app->gdzbService->supplier->menuTabList($supplier_id, $returnUrl),
+            'returnUrl'=>$returnUrl,
+        ]);
+    }
+
+
 
     /**
      * @return mixed
@@ -292,4 +344,9 @@ class SupplierController extends BaseController
         }
         return [$lists,[]];
     }
+
+
+
+
+
 }

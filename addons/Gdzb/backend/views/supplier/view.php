@@ -38,7 +38,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
                                  <tr>
                                      <td class="col-xs-3 text-right"><?= $model->getAttributeLabel('source_id') ?>：</td>
-                                     <td><?= \addons\Gdzb\common\enums\SourceEnum::getValue($model->source_id) ?></td>
+                                     <td><?= \addons\Gdzb\common\enums\SupplierSourceEnum::getValue($model->source_id) ?></td>
                                  </tr>
                                  <tr>
                                      <td class="col-xs-3 text-right"><?= $model->getAttributeLabel('channel_id') ?>：</td>
@@ -55,7 +55,10 @@ $this->params['breadcrumbs'][] = $this->title;
                                  </tr>
                                  <tr>
                                      <td class="col-xs-3 text-right"><?= $model->getAttributeLabel('trade_num') ?>：</td>
-                                     <td></td>
+                                     <td><?php
+                                          $sum = Yii::$app->gdzbService->order->getOrderAmountNum(['supplier_id'=>$model->id]);
+                                          echo $sum['trade_num'] ?? 0;
+                                         ?></td>
                                  </tr>
                                  <tr>
                                      <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('creator_id') ?>：</td>

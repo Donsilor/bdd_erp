@@ -3,11 +3,6 @@
 namespace addons\Gdzb\common\forms;
 
 use addons\Gdzb\common\models\OrderGoods;
-use addons\Style\common\enums\QibanTypeEnum;
-use addons\Style\common\models\AttributeSpec;
-use addons\Supply\common\enums\PeiliaoTypeEnum;
-use common\enums\ConfirmEnum;
-use common\enums\InputTypeEnum;
 use Yii;
 use common\helpers\ArrayHelper;
 
@@ -23,6 +18,7 @@ class OrderGoodsForm extends OrderGoods
     public function rules()
     {
         $rules = [
+            [['goods_name','style_cate_id','product_type_id','goods_price','cost_price'], 'required'],
         ];
         return ArrayHelper::merge(parent::rules() , $rules);
     }

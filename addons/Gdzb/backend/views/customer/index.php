@@ -36,60 +36,36 @@ $this->params['breadcrumbs'][] = ['label' => $this->title];
                             'attribute' => 'id',
                             'headerOptions' => [],
                         ],
-
+                        [
+                            'attribute' => 'customer_no',
+                            'format' => 'raw',
+                            'value'=>function($model) {
+                                return $model->customer_no;
+                            },
+                            'headerOptions' => ['style'=> 'width:100px;'],
+                        ],
 
                         [
                             'attribute' => 'realname',
                             'format' => 'raw',
                             'value'=>function($model) {
-                                return Html::a($model->realname, ['view', 'id' => $model->id,'returnUrl'=>Url::getReturnUrl()], ['class'=>'openContab','style'=>"text-decoration:underline;color:#3c8dbc"]);
+                                return Html::a($model->realname, ['view', 'id' => $model->id,'returnUrl'=>Url::getReturnUrl()], ['style'=>"text-decoration:underline;color:#3c8dbc"]);
                             },
                             'filter' => true,
-                        ],
-                        [
-                            'attribute' => 'gender',
-                            'format' => 'raw',
-                            'value' => function ($model){
-                                return \common\enums\GenderEnum::getValue($model->gender);
-                            },
-                            'filter' => Html::activeDropDownList($searchModel, 'gender',\common\enums\GenderEnum::getMap(), [
-                                'prompt' => '全部',
-                                'class' => 'form-control',
-                                'style'=> 'width:80px;',
-                            ]),
-                            'headerOptions' => ['class' => 'col-md-1'],
-                        ],
-                        [
-                            'attribute' => 'mobile',
-                            'headerOptions' => ['class' => 'col-md-1'],
+                            'headerOptions' => ['style'=> 'width:80px;'],
                         ],
 
                         [
-                            'attribute' => 'qq',
-                            'headerOptions' => ['class' => 'col-md-1'],
+                            'attribute' => 'wechat',
+                            'headerOptions' =>  ['style'=> 'width:80px;'],
                         ],
-                        [
-                            'attribute' => 'email',
-                            'headerOptions' => ['class' => 'col-md-1'],
-                        ],
-                        [
-                            'attribute' => 'marriage',
-                            'format' => 'raw',
-                            'value' => function ($model){
-                                return \addons\Sales\common\enums\MarriageEnum::getValue($model->marriage);
-                            },
-                            'filter' => Html::activeDropDownList($searchModel, 'marriage',\addons\Sales\common\enums\MarriageEnum::getMap(), [
-                                'prompt' => '全部',
-                                'class' => 'form-control',
-                                'style'=> 'width:80px;',
-                            ]),
-                            'headerOptions' => ['class' => 'col-md-1'],
-                        ],
+
+
                         [
                             'attribute' => 'channel_id',
                             'format' => 'raw',
                             'value' => function ($model){
-                                return $model->channel->name ?? '';
+                                return $model->saleChannel->name ?? '';
                             },
                             'filter' => Html::activeDropDownList($searchModel, 'channel_id',\Yii::$app->salesService->saleChannel->getDropDown(), [
                                 'prompt' => '全部',
@@ -112,20 +88,39 @@ $this->params['breadcrumbs'][] = ['label' => $this->title];
                             'headerOptions' => ['class' => 'col-md-1'],
                         ],
                         [
-                            'label' => '创建人',
-                            'attribute' => 'creator.username',
-                            'headerOptions' => ['class' => 'col-md-1'],
-                            'filter' => Html::activeTextInput($searchModel, 'creator.username', [
-                                'class' => 'form-control',
-                            ]),
+                            'attribute' => 'order_num',
+                            'headerOptions' =>  ['style'=> 'width:80px;'],
                         ],
+                        [
+                            'attribute' => 'order_amount',
+                            'headerOptions' =>  ['style'=> 'width:80px;'],
+                        ],
+                        [
+                            'attribute' => 'remark',
+                            'headerOptions' =>  ['class' => 'col-md-2'],
+                            'filter' => false,
+                        ],
+                        [
+                            'attribute' => 'follower_id',
+                            'format' => 'raw',
+                            'value' => function ($model){
+                                return $model->follower->username ?? '';
+                            },
+                            'filter' => Html::activeDropDownList($searchModel, 'follower_id',Yii::$app->services->backendMember->getDropDown(), [
+                                'prompt' => '全部',
+                                'class' => 'form-control',
+                                'style'=> 'width:100px;',
+                            ]),
+                            'headerOptions' => ['class' => 'col-md-1'],
+                        ],
+
                         [
                             'attribute'=>'created_at',
                             'filter' => DateRangePicker::widget([    // 日期组件
                                 'model' => $searchModel,
                                 'attribute' => 'created_at',
                                 'value' => $searchModel->created_at,
-                                'options' => ['readonly' => false,'class'=>'form-control','style'=>'background-color:#fff;width:200px;'],
+                                'options' => ['readonly' => false,'class'=>'form-control','style'=>'background-color:#fff;width:80px;'],
                                 'pluginOptions' => [
                                     'format' => 'yyyy-mm-dd',
                                     'locale' => [
@@ -139,7 +134,7 @@ $this->params['breadcrumbs'][] = ['label' => $this->title];
                                 ],
                             ]),
                             'value'=>function($model){
-                                return Yii::$app->formatter->asDatetime($model->created_at);
+                                return Yii::$app->formatter->asDate($model->created_at);
                             }
                         ],
                         [
@@ -152,7 +147,7 @@ $this->params['breadcrumbs'][] = ['label' => $this->title];
                             'filter' => Html::activeDropDownList($searchModel, 'status',\common\enums\StatusEnum::getMap(), [
                                 'prompt' => '全部',
                                 'class' => 'form-control',
-                                'style'=> 'width:60px;',
+                                'style'=> 'width:80px;',
                             ]),
                         ],
                         [
@@ -161,21 +156,6 @@ $this->params['breadcrumbs'][] = ['label' => $this->title];
                             'contentOptions' => ['style' => ['white-space' => 'nowrap']],
                             'template' => '{edit} {view} {status}',
                             'buttons' => [
-                                'ajax-edit' => function ($url, $model, $key) {
-                                    return Html::linkButton(['ajax-edit', 'id' => $model->id], '账号密码', [
-                                        'data-toggle' => 'modal',
-                                        'data-target' => '#ajaxModal',
-                                    ]);
-                                },
-                                'address' => function ($url, $model, $key) {
-                                    return Html::linkButton(['address/index', 'member_id' => $model->id], '收货地址');
-                                },
-                                'recharge' => function ($url, $model, $key) {
-                                    return Html::linkButton(['recharge', 'id' => $model->id], '充值', [
-                                        'data-toggle' => 'modal',
-                                        'data-target' => '#ajaxModal',
-                                    ]);
-                                },
                                 'edit' => function ($url, $model, $key) {
                                     return Html::edit(['edit', 'id' => $model->id]);
                                 },

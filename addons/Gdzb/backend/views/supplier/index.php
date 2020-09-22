@@ -50,7 +50,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         [
                             'attribute' => 'supplier_code',
                             'value'=>function($model) {
-                                return Html::a($model->supplier_code, ['view', 'id' => $model->id,'returnUrl'=>Url::getReturnUrl()], ['class'=>'openContab','style'=>"text-decoration:underline;color:#3c8dbc"]);
+                                return Html::a($model->supplier_code, ['view', 'id' => $model->id,'returnUrl'=>Url::getReturnUrl()], ['style'=>"text-decoration:underline;color:#3c8dbc"]);
                             },
                             'filter' => Html::activeTextInput($searchModel, 'supplier_code', [
                                 'class' => 'form-control',
@@ -102,9 +102,9 @@ $this->params['breadcrumbs'][] = $this->title;
                         [
                             'attribute' => 'source_id',
                             'value' => function ($model){
-                                return \addons\Gdzb\common\enums\SourceEnum::getValue($model->source_id);
+                                return \addons\Gdzb\common\enums\SupplierSourceEnum::getValue($model->source_id);
                             },
-                            'filter' => Html::activeDropDownList($searchModel, 'source_id',\addons\Gdzb\common\enums\SourceEnum::getMap(), [
+                            'filter' => Html::activeDropDownList($searchModel, 'source_id',\addons\Gdzb\common\enums\SupplierSourceEnum::getMap(), [
                                 'prompt' => '全部',
                                 'class' => 'form-control',
                                 'style'=> 'width:120px;'
@@ -118,7 +118,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 if($model->business_scope){
                                     $scope_key = explode(',', $model->business_scope);
                                     $scope_key = array_filter($scope_key);
-                                    $scope_val = \addons\Supply\common\enums\BusinessScopeEnum::getValues($scope_key);
+                                    $scope_val = \addons\Gdzb\common\enums\BusinessScopeEnum::getValues($scope_key);
                                     return implode(",",$scope_val);
                                 }else{
                                     return '';
@@ -226,7 +226,9 @@ $this->params['breadcrumbs'][] = $this->title;
                             'template' => '{edit} {apply} {audit} {status} {delete}',
                             'buttons' => [
                             'edit' => function($url, $model, $key){
-                                return Html::edit(['edit', 'id' => $model->id, 'returnUrl' => Url::getReturnUrl()]);
+                                if($model->audit_status == AuditStatusEnum::SAVE) {
+                                    return Html::edit(['edit', 'id' => $model->id, 'returnUrl' => Url::getReturnUrl()]);
+                                }
                              },
                             'apply' => function($url, $model, $key){
                                 if($model->audit_status == AuditStatusEnum::SAVE){
