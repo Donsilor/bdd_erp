@@ -49,8 +49,8 @@ class ExternalOrderForm extends Order
              'platform_id'=>'销售平台',
              'order_time' => '下单/支付时间',
              'pay_time' => '下单/支付时间',
-             'other_fee' => '订单其它费用',
-             'arrive_amount' => '订单到账金额'
+             'other_fee' => '其它费用',
+             'arrive_amount' => '实际到账金额'
         ]);
     } 
     /**

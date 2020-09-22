@@ -264,7 +264,7 @@ $this->params['breadcrumbs'][] = $this->title;
             [
                 'class' => 'yii\grid\ActionColumn',
                 'header' => '操作',
-                'template' => '{edit} {pay} {apply} {audit} ',
+                'template' => '{edit} {apply} {audit} {pay}',
                 'buttons' => [
                     'edit' => function($url, $model, $key){
                          if($model->order_status == OrderStatusEnum::SAVE) {
@@ -275,18 +275,9 @@ $this->params['breadcrumbs'][] = $this->title;
                                      'data-offset' => '20px',
                              ]);
                          }
-                    },
-                    'pay' => function($url, $model, $key){
-                        if($model->pay_status == PayStatusEnum::NO_PAY){
-                            return Html::edit(['order/ajax-pay', 'id' => $model->id], '支付', [
-                                    'data-toggle' => 'modal',
-                                    'class' => 'btn btn-primary btn-sm',
-                                    'data-target' => '#ajaxModalLg',
-                            ]);
-                        }
-                    },
+                    },                    
                     'apply' => function($url, $model, $key){
-                        if($model->order_status == OrderStatusEnum::SAVE && $model->pay_status == PayStatusEnum::HAS_PAY){
+                        if($model->order_status == OrderStatusEnum::SAVE){
                             return Html::edit(['order/ajax-apply','id'=>$model->id], '提审', [
                                 'class'=>'btn btn-success btn-sm',
                                 'onclick' => 'rfTwiceAffirm(this,"提交审核", "确定提交吗？");return false;',
@@ -302,7 +293,16 @@ $this->params['breadcrumbs'][] = $this->title;
                             ]);
                         }
 
-                    },                    
+                    },
+                    'pay' => function($url, $model, $key){
+                        if($model->order_status == OrderStatusEnum::CONFORMED){
+                            return Html::edit(['order/ajax-pay', 'id' => $model->id], '点款', [
+                                    'data-toggle' => 'modal',
+                                    'class' => 'btn btn-primary btn-sm',
+                                    'data-target' => '#ajaxModalLg',
+                            ]);
+                        }
+                    },
                     /* 'close' => function($url, $model, $key){                       
                             return Html::delete(['order/delete', 'id' => $model->id],'关闭',[
                                 'onclick' => 'rfTwiceAffirm(this,"关闭单据", "确定关闭吗？");return false;',

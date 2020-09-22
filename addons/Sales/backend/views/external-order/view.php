@@ -126,16 +126,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             'data-target' => '#ajaxModal',
                         ]);
                     }
-                    ?>
-                    <?php
-                    if ($model->pay_status == PayStatusEnum::NO_PAY) {
-                        echo Html::edit(['order/ajax-pay', 'id' => $model->id], '支付', [
-                                'data-toggle' => 'modal',
-                                'class' => 'btn btn-primary btn-ms',
-                                'data-target' => '#ajaxModalLg',
-                        ]);
-                    }
-                    ?>
+                    ?>                    
                     <?php
                     if ($model->order_status == OrderStatusEnum::SAVE && $model->pay_status == PayStatusEnum::HAS_PAY) {
                         echo Html::edit(['order/ajax-apply', 'id' => $model->id], '提审', [
@@ -159,13 +150,22 @@ $this->params['breadcrumbs'][] = $this->title;
                     }
                     ?>
                     <?php
+                    if ($model->order_status == OrderStatusEnum::CONFORMED) {
+                        echo Html::edit(['order/ajax-pay', 'id' => $model->id], '点款', [
+                                'data-toggle' => 'modal',
+                                'class' => 'btn btn-primary btn-ms',
+                                'data-target' => '#ajaxModalLg',
+                        ]);
+                    }
+                    ?>
+                    <?php
                     if ($model->order_status == OrderStatusEnum::CONFORMED && empty($model->apply_id)) {
                         echo Html::edit(['order/ajax-purchase-apply', 'id' => $model->id], '申请采购', [
                             'class' => 'btn btn-success btn-ms',
                             'onclick' => 'rfTwiceAffirm(this,"申请采购", "确定申请采购吗？");return false;',
                         ]);
                     }
-                    ?>
+                    ?>                    
                     <?php
                     if ($model->pay_status == PayStatusEnum::HAS_PAY
                         && !in_array($model->refund_status, [\addons\Sales\common\enums\RefundStatusEnum::HAS_RETURN])) {
