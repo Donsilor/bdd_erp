@@ -2237,9 +2237,9 @@ $params = $params ? "&".http_build_query($params) : '';
     });
 
     //导出
-    function batchExport() {
-        window.location.href = "<?= Url::buildUrl('bill-t/export')?>;
-    }
+    //function batchExport() {
+    //    window.location.href = "<?//= Url::buildUrl('bill-t/export')?>//;
+    //}
 
     /**
      * 一键粘贴
