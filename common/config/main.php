@@ -150,7 +150,7 @@ return [
                 'class' => 'common\components\JdSdk',
                 'appKey' => '600FE385E066028D2A1B30C46C54E54C',
                 'appSecret' => '1a693572f25440d8905672fac4611a6a',
-                'refreshToken'=>'e5a3eb79e4b64dfd9efa4f42fd9883dfm2vi',
+                'refreshToken'=>'785072c33f0645c48444e6f67dae4eecyyzm',
         ],
     ],
 ];
