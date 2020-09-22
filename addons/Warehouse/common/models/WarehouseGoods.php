@@ -224,7 +224,7 @@ class WarehouseGoods extends BaseModel
             'diamond_cert_id' => '主石证书号',
             'jintuo_type' => '金托类型',
             'market_price' => '市场价(标签价)',
-            'cost_price' => '采购成本价',
+            'cost_price' => '采购成本总价',
             'chuku_price' => '出库成本价',
             'chuku_time' => '出库时间',
             'xiangkou' => '戒托镶口',
