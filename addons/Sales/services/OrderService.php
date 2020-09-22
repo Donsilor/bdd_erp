@@ -163,6 +163,13 @@ class OrderService extends Service
         //1.创建订单
         $order = clone $form;
         $order->order_from = OrderFromEnum::FROM_EXTERNAL;
+        if(empty($order->order_time)){
+            if(!empty($order->pay_time)) {
+                $order->order_time = $order->pay_time;
+            }else{
+                $order->order_time = time();
+            }            
+        }
         if(false == $order->save()) {
             throw new \Exception($this->getError($order));
         }        
@@ -178,21 +185,33 @@ class OrderService extends Service
             }
         }
         //3.创建订单金额
-        if($isNewOrder === true){
+        $account = OrderAccount::find()->where(['order_id'=>$order->id])->one();
+        if(!$account) {
             $account = new OrderAccount();
             $account->order_id = $order->id;
-            $account->currency = $order->currency;
-            if(false == $account->save()) {
-                throw new \Exception($this->getError($account));
-            }
         }
+        $account->other_fee = $form->other_fee;
+        $account->arrive_amount = $form->arrive_amount;
+        $account->currency = $form->currency;
+        if(false == $account->save()) {
+            throw new \Exception($this->getError($account));
+        }
+        
         //4.订单收货地址
         $address = OrderAddress::find()->where(['order_id'=>$order->id])->one();
         if(!$address) {
             $address = new OrderAddress();
             $address->order_id = $order->id;            
         }
-        $address->attributes = $form->getConsigneeInfo();  
+        if($form->_platform) {
+            $address->realname = $form->_platform->realname; 
+            $address->mobile = $form->_platform->mobile; 
+            $address->country_id = $form->_platform->country_id;
+            $address->province_id = $form->_platform->province_id; 
+            $address->city_id = $form->_platform->city_id;
+            $address->zip_code = $form->_platform->zip_code;
+            $address->address_details = $form->_platform->address_details;
+        }      
         
         if(false == $address->save()) {
             throw new \Exception("同步收货地址失败：".$this->getError($address));
@@ -206,7 +225,7 @@ class OrderService extends Service
         }   
         //商品金额汇总
         $this->orderSummary($order->id);
-        
+
         //创建订单日志
         if($isNewOrder === true) {
             if($mode == "import") {
@@ -254,7 +273,7 @@ class OrderService extends Service
         $endColumn = count($form->columns);
         
         $rows = ExcelHelper::import($form->file->tempName, $startRow, $endColumn, $form->columns);//从第1行开始,第4列结束取值
-        if(!isset($rows[4])) {
+        if(!isset($rows[$startRow+1])) {
             throw new \Exception("导入数据不能为空");
         }
         $order_list = [];
@@ -280,13 +299,16 @@ class OrderService extends Service
             $order->customer_mobile = $form->customer_mobile;
             $order->pay_remark = $form->pay_remark;
             $order->remark = $form->remark;
-            $order->pay_time = $form->order_time;//支付时间=下单时间
-            $order->order_time = $form->order_time;
-            
+            $order->pay_time = $form->pay_time;//支付时间=下单时间
+            $order->order_time = $form->pay_time;
+            $order->platform_id = $form->platform->id;
+            $order->_platform = $form->platform;//平台收货地址
             if($form->style_1) {
                 $order->goods_list[] = [
                         'style_sn' =>$form->style_sn_1,
                         'goods_name'=>$form->goods_name_1,
+                        'size' =>$form->size_1,
+                        'finger_type' =>$form->finger_type_1,
                         'goods_spec' =>$form->goods_spec_2,
                         'goods_price'=>$form->goods_price_1
                 ];
@@ -295,7 +317,8 @@ class OrderService extends Service
                 $order->goods_list[] = [
                         'style_sn' =>$form->style_sn_2,
                         'goods_name'=>$form->goods_name_2,
-                        'goods_spec' =>$form->goods_spec_2,
+                        'size' =>$form->size_2,
+                        'finger_type' =>$form->finger_type_2,
                         'goods_price'=>$form->goods_price_2
                 ];
             }                        
@@ -306,9 +329,9 @@ class OrderService extends Service
                 try{
                      $this->createExternalOrder($order, 'import');
                 }catch (\Exception $e) {
-                     $form->addRowError($rowIndex, 'out_trade_no', $e->getMessage());
+                     $form->addRowError($rowIndex, 'error', "创建订单失败：".$e->getMessage());
                 }
-            }
+            } 
         }
         $form->showImportMessage();
     }

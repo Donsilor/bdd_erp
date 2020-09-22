@@ -7,7 +7,7 @@ use yii\base\Widget;
 $form = ActiveForm::begin([
         'id' => $model->formName(),
         'enableAjaxValidation' => true,
-        'validationUrl' => Url::to(['ajax-edit-invoice', 'id' => $model->order_id]),
+        'validationUrl' => Url::to(['ajax-edit-invoice', 'id' => $model->id]),
         'fieldConfig' => [
                 //'template' => "<div class='col-sm-2 text-right'>{label}</div><div class='col-sm-10'>{input}\n{hint}\n{error}</div>",
         ]
@@ -19,15 +19,13 @@ $form = ActiveForm::begin([
         <h4 class="modal-title">基本信息</h4>
     </div>
     <div class="modal-body">
-            <?= $form->field($model, 'order_id')->hiddenInput()->label(false)?>   
+            <?= $form->field($model, 'id')->hiddenInput()->label(false)?>
             <div class="row">
                 <div class="col-lg-6"> 
-                <?= $form->field($model, 'is_invoice')->radioList(addons\Sales\common\enums\IsInvoiceEnum::getMap())?>                 
+                <?= $form->field($model, 'is_invoice')->radioList(addons\Sales\common\enums\IsInvoiceEnum::getMap())?>
                 </div>
-                <div class="col-lg-6"> 
-                
-                <?= $form->field($model, 'invoice_type')->radioList(addons\Sales\common\enums\InvoiceTypeEnum::getMap())?> 
-                         
+                <div class="col-lg-6">
+                 <?= $form->field($model, 'invoice_type')->radioList(addons\Sales\common\enums\InvoiceTypeEnum::getMap())?>
                 </div>
             </div>
             <div class="row">
@@ -46,6 +44,11 @@ $form = ActiveForm::begin([
                 <?= $form->field($model, 'email')->textInput(['maxlength' => true]) ?>                          
                 </div>
             </div>
+        <div class="row">
+            <div class="col-lg-12">
+                <?= $form->field($model, 'invoice_status')->radioList(\addons\Gdzb\common\enums\InvoiceStatusEnum::getMap())?>
+            </div>
+        </div>
     </div>
     <div class="modal-footer">
         <button type="button" class="btn btn-white" data-dismiss="modal">关闭</button>

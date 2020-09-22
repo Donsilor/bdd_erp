@@ -107,14 +107,20 @@ $this->params['breadcrumbs'][] = $this->title;
                     echo Html::edit(['ajax-edit', 'id' => $model->id], '编辑', [
                         'data-toggle' => 'modal',
                         'class' => 'btn btn-primary btn-ms',
-                        'data-target' => '#ajaxModal',
+                        'data-target' => '#ajaxModalLg',
                     ]);
                     echo '&nbsp;';
                     echo Html::edit(['ajax-apply','id'=>$model->id], '提审', [
                         'class'=>'btn btn-success btn-ms',
                         'onclick' => 'rfTwiceAffirm(this,"提交审核","确定提交吗？");return false;',
                     ]);
+                    echo '&nbsp;';
                 }
+                echo Html::a('打印', ['print', 'id' => $model->id], [
+                    'target' => '_blank',
+                    'class' => 'btn btn-info btn-ms',
+                ]);
+                echo '&nbsp;';
             ?>
             <?php
             if ($model->bill_status == \addons\Warehouse\common\enums\BillStatusEnum::PENDING){

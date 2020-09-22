@@ -64,6 +64,59 @@ class PurchaseGoldController extends PurchaseMaterialController
                 'searchModel' => $searchModel,
         ]);
     }
+
+    /**
+     * ajax编辑/创建
+     *
+     * @return mixed|string|\yii\web\Response
+     * @throws \yii\base\ExitException
+     *
+     */
+    public function actionAjaxEdit()
+    {
+        $id = Yii::$app->request->get('id');
+        $model = $this->findModel($id);
+        $isNewRecord = $model->isNewRecord;
+        // ajax 校验
+        $this->activeFormValidate($model);
+        if ($model->load(Yii::$app->request->post())) {
+            try{
+                $trans = Yii::$app->db->beginTransaction();
+                if($isNewRecord){
+                    $model->purchase_sn = SnHelper::createPurchaseSn();
+                    $model->creator_id  = \Yii::$app->user->identity->id;
+                }
+                if(false === $model->save()){
+                    throw new \Exception($this->getError($model));
+                }
+                if($isNewRecord) {
+                    //日志
+                    $log = [
+                        'purchase_id' => $model->id,
+                        'purchase_sn' => $model->purchase_sn,
+                        'log_type' => LogTypeEnum::ARTIFICIAL,
+                        'log_module' => "创建单据",
+                        'log_msg' => "创建采购单，单号:".$model->purchase_sn
+                    ];
+                    Yii::$app->purchaseService->purchaseLog->createPurchaseLog($log,$this->purchaseType);
+                    $trans->commit();
+                    return $this->message("保存成功", $this->redirect(['purchase-gold-goods/index', 'purchase_id' => $model->id, 'tab'=>2]), 'success');
+                }else{
+                    $trans->commit();
+                    return $this->redirect(Yii::$app->request->referrer);
+                }
+            }catch (\Exception $e){
+                $trans->rollBack();
+                return $this->message($e->getMessage(), $this->redirect(Yii::$app->request->referrer), 'error');
+            }
+        }
+        return $this->renderAjax($this->action->id, [
+            'model' => $model,
+        ]);
+    }
+
+
+
     /**
      * 详情展示页
      * @return string

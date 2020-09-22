@@ -36,6 +36,11 @@ $this->params['breadcrumbs'][] = $this->title;
             echo '&nbsp;';
             
         }
+        echo Html::a('打印', ['bill-c/print', 'id' => $bill->id], [
+            'target' => '_blank',
+            'class' => 'btn btn-info btn-xs',
+        ]);
+        echo '&nbsp;';
         echo Html::a('导出', ['bill-c/export?ids='.$bill->id],[
             'class'=>'btn btn-success btn-xs'
         ]);

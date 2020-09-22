@@ -469,6 +469,11 @@ class BillCController extends BaseController
         //统计
         $total = [
             'cost_price_count' => 0,
+            'goods_num' => 0,
+            'cart' => 0,
+            'gross_weight' => 0,
+            'market_price' => 0,
+            'chuku_price' => 0,
         ];
         foreach ($lists as &$list){
             $list['bill_status'] = BillStatusEnum::getValue($list['bill_status']);
@@ -484,6 +489,11 @@ class BillCController extends BaseController
                 . $diamond_polish . '/' . $diamond_symmetry . '/' . $diamond_fluorescence;
 
             $total['cost_price_count'] += $list['cost_price'];
+
+            $total['goods_num'] = bcadd($total['goods_num'], $list['goods_num'], 3);//货品数量
+            $total['gross_weight'] = bcadd($total['gross_weight'], $list['gross_weight'], 3);//连石重
+            $total['market_price'] = bcadd($total['market_price'], $list['market_price'], 3);//标签价
+            $total['chuku_price'] = bcadd($total['chuku_price'], $list['chuku_price'], 3);//销售价
 
         }
         return [$lists,$total];

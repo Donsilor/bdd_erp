@@ -52,7 +52,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     </div>
                     <div class="row">
                         <div class="col-lg-4">
-                            <?= $form->field($model, 'source_id')->dropDownList(\addons\Gdzb\common\enums\SourceEnum::getMap(),['prompt'=>'请选择']) ?>
+                            <?= $form->field($model, 'source_id')->dropDownList(\addons\Gdzb\common\enums\SupplierSourceEnum::getMap(),['prompt'=>'请选择']) ?>
                         </div>
                         <div class="col-lg-4">
                             <?= $form->field($model, 'channel_id')->widget(\kartik\select2\Select2::class, [
@@ -65,7 +65,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         </div>
                     </div>
                     <?php $model->business_scope = !empty($model->business_scope)?array_filter(explode(',', $model->business_scope)):null;?>
-                    <?= $form->field($model, 'business_scope')->checkboxList(\addons\Supply\common\enums\BusinessScopeEnum::getMap()) ?>
+                    <?= $form->field($model, 'business_scope')->checkboxList(\addons\Gdzb\common\enums\BusinessScopeEnum::getMap()) ?>
                     <!-- ./nav-tabs-custom -->
                 </div>
             <!-- ./box-body -->

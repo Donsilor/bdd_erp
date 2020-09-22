@@ -2,6 +2,8 @@
 
 namespace addons\Style\backend\controllers;
 
+use addons\Style\common\enums\StonePositionEnum;
+use addons\Style\common\models\StoneStyle;
 use addons\Style\common\models\StyleAttribute;
 use addons\Style\common\models\StyleFactory;
 use addons\Style\common\models\StyleFactoryFee;
@@ -114,10 +116,25 @@ class StyleController extends BaseController
                 if($isNewRecord && trim($model->style_sn) == "") {
                     Yii::$app->styleService->style->createStyleSn($model);                    
                 }
-                //自定义属性值
+                //创建自定义属性值
                 $command = \Yii::$app->db->createCommand("call sp_create_style_attributes(" . $model->id . ");");
                 $command->execute();
-
+                //镶嵌类(创建一条主石信息)
+                if ($model->is_inlay) {
+                    $styleForm = new StyleForm();
+                    $stoneM = new StyleStone();
+                    $stone = [
+                        'style_id' => $model->id,
+                        'position' => StonePositionEnum::MAIN_STONE,
+                        'stone_type' => $styleForm->getStoneTypeByProduct($model),
+                        'creator_id' => \Yii::$app->user->identity->getId(),
+                        'created_at' => time(),
+                    ];
+                    $stoneM->attributes = $stone;
+                    if (false === $stoneM->save()) {
+                        throw new \Exception($this->getError($stoneM));
+                    }
+                }
                 $trans->commit();
                 if($isNewRecord) {
                     return $this->message("保存成功", $this->redirect(['view', 'id' => $model->id]), 'success');

@@ -26,6 +26,7 @@ use Yii;
  * @property string $card_amount 优惠券优惠金额
  * @property string $paid_amount 实际支付金额
  * @property string $paid_currency 支付货币代号
+ * @property string $arrive_amount 实际到账金额
  */
 class OrderAccount extends BaseModel
 {
@@ -53,7 +54,7 @@ class OrderAccount extends BaseModel
         return [
             [['order_id'], 'required'],
             [['order_id', 'merchant_id'], 'integer'],
-            [['order_amount', 'goods_amount', 'discount_amount', 'goods_discount', 'order_discount', 'pay_amount', 'refund_amount', 'shipping_fee', 'tax_fee', 'safe_fee', 'other_fee', 'exchange_rate', 'coupon_amount', 'card_amount', 'paid_amount'], 'number'],
+            [['order_amount', 'goods_amount', 'discount_amount', 'goods_discount', 'order_discount', 'pay_amount', 'refund_amount', 'shipping_fee', 'tax_fee', 'safe_fee', 'other_fee', 'exchange_rate', 'coupon_amount', 'card_amount', 'paid_amount','arrive_amount'], 'number'],
             [['currency', 'paid_currency'], 'string', 'max' => 3],
             [['order_id'], 'unique'],
         ];
@@ -77,13 +78,14 @@ class OrderAccount extends BaseModel
             'shipping_fee' => '运费',
             'tax_fee' => '税费',
             'safe_fee' => '保险费',
-            'other_fee' => '附加费',
+            'other_fee' => '其它费用',
             'exchange_rate' => '汇率',
             'currency' => '货币代号',
             'coupon_amount' => '优惠券优惠金额',
             'card_amount' => '优惠券优惠金额',
             'paid_amount' => '实际支付金额',
             'paid_currency' => '支付货币代号',
+            'arrive_amount'=>'实际到账金额'    
         ];
     }    
 }

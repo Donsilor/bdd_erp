@@ -9,7 +9,7 @@ namespace addons\Finance\common\enums;
 class ArriveTypeEnum extends \common\enums\BaseEnum
 {
     const POSTPONED = 1;
-    const REAL_TIME_ARRIVAL = 2;
+    const ON_TIME = 2;
 
     /**
      * @return array
@@ -18,7 +18,7 @@ class ArriveTypeEnum extends \common\enums\BaseEnum
     {
         return [
             self::POSTPONED => "延期到账",
-            self::REAL_TIME_ARRIVAL => "实时到账",
+            self::ON_TIME => "实时到账",
         ];
     }
     

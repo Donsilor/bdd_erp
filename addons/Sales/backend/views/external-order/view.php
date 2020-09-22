@@ -97,7 +97,9 @@ $this->params['breadcrumbs'][] = $this->title;
                         </tr>
                         <tr>
                             <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('pay_remark') ?>：</td>
-                            <td colspan="5"><?= $model->pay_remark ?></td>
+                            <td colspan="3"><?= $model->pay_remark ?></td>
+                            <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('account.arrive_amount') ?>：</td>
+                            <td><?= AmountHelper::outputAmount($model->account->arrive_amount ?? 0, 2, $model->currency) ?></td>                            
                         </tr>
                         <tr>
                             <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('remark') ?>：</td>
@@ -124,16 +126,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             'data-target' => '#ajaxModal',
                         ]);
                     }
-                    ?>
-                    <?php
-                    if ($model->pay_status == PayStatusEnum::NO_PAY) {
-                        echo Html::edit(['order/ajax-pay', 'id' => $model->id], '支付', [
-                                'data-toggle' => 'modal',
-                                'class' => 'btn btn-primary btn-ms',
-                                'data-target' => '#ajaxModalLg',
-                        ]);
-                    }
-                    ?>
+                    ?>                    
                     <?php
                     if ($model->order_status == OrderStatusEnum::SAVE && $model->pay_status == PayStatusEnum::HAS_PAY) {
                         echo Html::edit(['order/ajax-apply', 'id' => $model->id], '提审', [
@@ -157,13 +150,22 @@ $this->params['breadcrumbs'][] = $this->title;
                     }
                     ?>
                     <?php
+                    if ($model->order_status == OrderStatusEnum::CONFORMED) {
+                        echo Html::edit(['order/ajax-pay', 'id' => $model->id], '点款', [
+                                'data-toggle' => 'modal',
+                                'class' => 'btn btn-primary btn-ms',
+                                'data-target' => '#ajaxModalLg',
+                        ]);
+                    }
+                    ?>
+                    <?php
                     if ($model->order_status == OrderStatusEnum::CONFORMED && empty($model->apply_id)) {
                         echo Html::edit(['order/ajax-purchase-apply', 'id' => $model->id], '申请采购', [
                             'class' => 'btn btn-success btn-ms',
                             'onclick' => 'rfTwiceAffirm(this,"申请采购", "确定申请采购吗？");return false;',
                         ]);
                     }
-                    ?>
+                    ?>                    
                     <?php
                     if ($model->pay_status == PayStatusEnum::HAS_PAY
                         && !in_array($model->refund_status, [\addons\Sales\common\enums\RefundStatusEnum::HAS_RETURN])) {
@@ -589,8 +591,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 <div class="box-footer">
                     <div class="col-lg-12">
                         <div class="row">
-                            <div class="col-lg-8 text-right"><label><?= $model->getAttributeLabel('goods_num') ?>
-                                    ：</label></div>
+                            <div class="col-lg-8 text-right"><label><?= $model->getAttributeLabel('goods_num') ?>：</label></div>
                             <div class="col-lg-4"><?= $model->goods_num ?></div>
                         </div>
                         <div class="row">
@@ -604,14 +605,16 @@ $this->params['breadcrumbs'][] = $this->title;
                             <div class="col-lg-4"><?= AmountHelper::outputAmount($model->account->shipping_fee ?? 0, 2, $model->currency) ?></div>
                         </div>
                         <div class="row">
-                            <div class="col-lg-8 text-right"><label><?= $model->getAttributeLabel('account.tax_fee') ?>
-                                    ：</label></div>
+                            <div class="col-lg-8 text-right"><label><?= $model->getAttributeLabel('account.tax_fee') ?>：</label></div>
                             <div class="col-lg-4"><?= AmountHelper::outputAmount($model->account->tax_fee ?? 0, 2, $model->currency) ?></div>
                         </div>
                         <div class="row">
-                            <div class="col-lg-8 text-right"><label><?= $model->getAttributeLabel('account.safe_fee') ?>
-                                    ：</label></div>
+                            <div class="col-lg-8 text-right"><label><?= $model->getAttributeLabel('account.safe_fee') ?>：</label></div>
                             <div class="col-lg-4"><?= AmountHelper::outputAmount($model->account->safe_fee ?? 0, 2, $model->currency) ?></div>
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-8 text-right"><label><?= $model->getAttributeLabel('account.other_fee') ?>：</label></div>
+                            <div class="col-lg-4"><?= AmountHelper::outputAmount($model->account->other_fee ?? 0, 2, $model->currency) ?></div>
                         </div>
                         <div class="row">
                             <div class="col-lg-8 text-right">

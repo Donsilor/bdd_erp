@@ -42,7 +42,7 @@ class OrderImportForm extends ImportForm
     public $other_fee;
     public $order_amount;
     public $arrive_amount;
-    public $order_time;
+    public $pay_time;
     public $customer_mobile;
     public $pay_remark;
     public $remark;
@@ -67,7 +67,7 @@ class OrderImportForm extends ImportForm
             17=>'other_fee',
             18=>'order_amount',
             19=>'arrive_amount',
-            20=>'order_time',
+            20=>'pay_time',
             21=>'customer_mobile',
             22=>'pay_remark',
             23=>'remark'
@@ -109,8 +109,7 @@ class OrderImportForm extends ImportForm
                 'goods_name_1',                
                 'goods_price_1',
                 'currency',
-                'arrive_amount',
-                'order_time',
+                'pay_time',
         ];
         $numberColumns = [
                 'goods_price_1',
@@ -136,12 +135,12 @@ class OrderImportForm extends ImportForm
             
         }
         //下单时间
-        if($this->order_time) {
-            $order_time = @strtotime($this->order_time);            
-            if($order_time <= strtotime('2000-01-01')) {
-                $this->addRowError($rowIndex, 'order_time', "[{$this->order_time}]填写错误");
+        if($this->pay_time) {
+            $pay_time = @strtotime($this->pay_time);            
+            if($pay_time <= strtotime('2000-01-01')) {
+                $this->addRowError($rowIndex, 'pay_time', "[{$this->pay_time}]填写错误");
             }else{
-                $this->order_time = $order_time;
+                $this->pay_time = $pay_time;
             }
         }
         //订单编号校验
@@ -194,6 +193,9 @@ class OrderImportForm extends ImportForm
                 $goods_spec['尺寸(cm)'] = $this->size_1;
             }
             if($this->finger_1) {
+                if(!$this->finger_type_1) {
+                    $this->addRowError($rowIndex, 'finger_type_1', "不能为空");
+                }
                 $goods_spec['手寸'] = $this->finger_type_1."#".trim($this->finger_1,'#');
             }
             $this->goods_spec_1 = $goods_spec ? json_encode($goods_spec) : null;
@@ -214,6 +216,9 @@ class OrderImportForm extends ImportForm
                 $goods_spec['尺寸(cm)'] = $this->size_2;
             }
             if($this->finger_2) {
+                if(!$this->finger_type_2) {
+                    $this->addRowError($rowIndex, 'finger_type_2', "不能为空");
+                }
                 $goods_spec['手寸'] = $this->finger_type_2."#".trim($this->finger_2,'#');
             }
             $this->goods_spec_2 = $goods_spec ? json_encode($goods_spec) : null;

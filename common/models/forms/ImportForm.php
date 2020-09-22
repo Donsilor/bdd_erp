@@ -77,8 +77,11 @@ class ImportForm extends Model
                 $message .= '第' . ($k) . '行：';
                 foreach ($this->columns as $code) {
                     if(isset($error[$code])) {
-                        $message .= "【".$this->titles[$code]."=>".$error[$code]."】";
+                        $message .= "【".($this->titles[$code]??$code)."=>".($error[$code]??'')."】";
                     }
+                }
+                if(isset($error['error'])) {
+                    $message .= "【".$error['error']."】";
                 }
                 $message .= PHP_EOL;
             }

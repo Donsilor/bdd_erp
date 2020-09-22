@@ -73,7 +73,7 @@ $params = $params ? "&".http_build_query($params) : '';
                     'filter'=>Select2::widget([
                             'name'=>'SearchModel[supplier_id]',
                             'value'=>$searchModel->supplier_id,
-                            'data'=>Yii::$app->supplyService->supplier->getDropDown(['like', 'business_scope', ',9,']),
+                            'data'=>Yii::$app->supplyService->supplier->getDropDown(['goods_type'=>\addons\Supply\common\enums\GoodsTypeEnum::RAW_MATERIAL]),
                             'options' => ['placeholder' =>"请选择"],
                             'pluginOptions' => [
                                     'allowClear' => true,                                          

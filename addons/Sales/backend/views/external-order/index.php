@@ -104,17 +104,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     ]),
                     'format' => 'raw',
                     'headerOptions' => ['class' => 'col-md-1'],
-            ],
-            [
-                    'attribute' => 'customer_name',
-                    'value' => 'customer_name',                    
-                    'filter' => Html::activeTextInput($searchModel, 'customer_name', [
-                            'class' => 'form-control',
-                            'style'=> 'width:100px;'
-                    ]),
-                    'format' => 'raw',
-                    'headerOptions' => ['width'=>'100'],
-            ],
+            ],            
             [
                     'label' => '联系方式',
                     'attribute' => 'customer_mobile',
@@ -128,14 +118,6 @@ $this->params['breadcrumbs'][] = $this->title;
                     'format' => 'raw',
                     'headerOptions' => ['width'=>'80'],
             ],
-/*                
-            [
-                    'attribute' => 'goods_num',
-                    'value' => "goods_num",
-                    'filter' => false,
-                    'format' => 'raw',
-                    'headerOptions' => ['width'=>'80'],
-            ], */
             [
                     'attribute' => 'account.order_amount',
                     'value' => function($model){
@@ -146,9 +128,9 @@ $this->params['breadcrumbs'][] = $this->title;
                     'headerOptions' => ['width'=>'100'],
             ],
             [
-                    'attribute' => 'account.refund_amount',
+                    'attribute' => 'account.arrive_amount',
                     'value' => function($model){
-                        return \common\helpers\AmountHelper::outputAmount($model->account->refund_amount??0,2,$model->currency);
+                        return \common\helpers\AmountHelper::outputAmount($model->account->arrive_amount??0,2,$model->currency);
                     },
                     'filter' => false,
                     'format' => 'raw',
@@ -257,32 +239,32 @@ $this->params['breadcrumbs'][] = $this->title;
             ],
             [
                 'attribute'=>'created_at',
-                'filter' => \kartik\datetime\DateTimePicker::widget([    // 日期组件
-                    'model' => $searchModel,
-                    'attribute' => 'created_at',
-                    'value' => $searchModel->created_at,
-                    'options' => ['readonly' => false,'class'=>'form-control','style'=>'background-color:#fff;width:100px;'],
-                    'pluginOptions' => [
-                        'format' => 'yyyy-mm-dd',
-                        'locale' => [
-                            'separator' => '/',
-                        ],
-                        'endDate' => date('Y-m-d',time()),
-                        'todayHighlight' => true,
-                        'autoclose' => true,
-                        'todayBtn' => 'linked',
-                        'clearBtn' => true,
-                    ],
-                ]),
                 'value'=>function($model){
                     return Yii::$app->formatter->asDatetime($model->created_at);
-                }
-
+                },
+                'filter' => \kartik\daterange\DateRangePicker::widget([    // 日期组件
+                        'model' => $searchModel,
+                        'attribute' => 'created_at',
+                        'value' => $searchModel->created_at,
+                        'options' => ['readonly' => false,'class'=>'form-control','style'=>'background-color:#fff;width:150px;'],
+                        'pluginOptions' => [
+                                'format' => 'yyyy-mm-dd',
+                                'locale' => [
+                                        'separator' => '/',
+                                ],
+                                'endDate' => date('Y-m-d',time()),
+                                'todayHighlight' => true,
+                                'autoclose' => true,
+                                'todayBtn' => 'linked',
+                                'clearBtn' => true,
+                        ],
+                ]),
+                'headerOptions' => ['class' => 'col-md-1'],
             ],            
             [
                 'class' => 'yii\grid\ActionColumn',
                 'header' => '操作',
-                'template' => '{edit} {pay} {apply} {audit} ',
+                'template' => '{edit} {apply} {audit} {pay}',
                 'buttons' => [
                     'edit' => function($url, $model, $key){
                          if($model->order_status == OrderStatusEnum::SAVE) {
@@ -293,18 +275,9 @@ $this->params['breadcrumbs'][] = $this->title;
                                      'data-offset' => '20px',
                              ]);
                          }
-                    },
-                    'pay' => function($url, $model, $key){
-                        if($model->pay_status == PayStatusEnum::NO_PAY){
-                            return Html::edit(['order/ajax-pay', 'id' => $model->id], '支付', [
-                                    'data-toggle' => 'modal',
-                                    'class' => 'btn btn-primary btn-ms',
-                                    'data-target' => '#ajaxModalLg',
-                            ]);
-                        }
-                    },
+                    },                    
                     'apply' => function($url, $model, $key){
-                        if($model->order_status == OrderStatusEnum::SAVE && $model->pay_status == PayStatusEnum::HAS_PAY){
+                        if($model->order_status == OrderStatusEnum::SAVE){
                             return Html::edit(['order/ajax-apply','id'=>$model->id], '提审', [
                                 'class'=>'btn btn-success btn-sm',
                                 'onclick' => 'rfTwiceAffirm(this,"提交审核", "确定提交吗？");return false;',
@@ -320,7 +293,16 @@ $this->params['breadcrumbs'][] = $this->title;
                             ]);
                         }
 
-                    },                    
+                    },
+                    'pay' => function($url, $model, $key){
+                        if($model->order_status == OrderStatusEnum::CONFORMED){
+                            return Html::edit(['order/ajax-pay', 'id' => $model->id], '点款', [
+                                    'data-toggle' => 'modal',
+                                    'class' => 'btn btn-primary btn-sm',
+                                    'data-target' => '#ajaxModalLg',
+                            ]);
+                        }
+                    },
                     /* 'close' => function($url, $model, $key){                       
                             return Html::delete(['order/delete', 'id' => $model->id],'关闭',[
                                 'onclick' => 'rfTwiceAffirm(this,"关闭单据", "确定关闭吗？");return false;',

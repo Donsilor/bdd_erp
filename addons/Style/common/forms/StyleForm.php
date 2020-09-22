@@ -375,6 +375,18 @@ class StyleForm extends Style
     }
 
     /**
+     * 产品线获取主石类型
+     * @param StyleForm $form
+     * @return int
+     */
+    public function getStoneTypeByProduct($form)
+    {
+        $stone = Yii::$app->attr->valueMap(\addons\Style\common\enums\AttrIdEnum::MAIN_STONE_TYPE, $key = 'name', $value = "id", $language = null,true);
+        $type = $form->type->name ?? 0;
+        return $stone[$type] ?? 0;
+    }
+
+    /**
      * 工费类型映射
      * @param string $type
      * @return string

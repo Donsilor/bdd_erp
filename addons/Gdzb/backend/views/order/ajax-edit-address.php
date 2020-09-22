@@ -7,7 +7,7 @@ use yii\base\Widget;
 $form = ActiveForm::begin([
         'id' => $model->formName(),
         'enableAjaxValidation' => true,
-        'validationUrl' => Url::to(['ajax-edit-address', 'id' => $model->order_id]),
+        'validationUrl' => Url::to(['ajax-edit-address', 'id' => $model->id]),
         'fieldConfig' => [
                 //'template' => "<div class='col-sm-2 text-right'>{label}</div><div class='col-sm-10'>{input}\n{hint}\n{error}</div>",
         ]
@@ -19,10 +19,10 @@ $form = ActiveForm::begin([
         <h4 class="modal-title">基本信息</h4>
     </div>
     <div class="modal-body">
-            <?= $form->field($model, 'order_id')->hiddenInput()->label(false)?>              
-            <?= $form->field($model, 'realname')->textInput(['maxlength' => true])?>
-            <?= $form->field($model, 'mobile')->textInput(['maxlength' => true]) ?>
-            <?= $form->field($model, 'email')->textInput(['maxlength' => true]) ?>
+            <?= $form->field($model, 'id')->hiddenInput()->label(false)?>
+            <?= $form->field($model, 'customer_name')->textInput(['maxlength' => true])?>
+            <?= $form->field($model, 'customer_mobile')->textInput(['maxlength' => true]) ?>
+            <?= $form->field($model, 'customer_weixin')->textInput(['maxlength' => true]) ?>
             <?= \common\widgets\country\Country::widget([
                                 'form' => $form,
                                 'model' => $model,
@@ -32,8 +32,7 @@ $form = ActiveForm::begin([
                                 //'areaName' => 'area_id',// 区字段名
                                 'template' => 'short' //合并为一行显示
                             ]); ?>
-            <?= $form->field($model, 'address_details')->textInput(['maxlength' => true]) ?>
-            <?= $form->field($model, 'zip_code')->textInput(['maxlength' => true]) ?>
+            <?= $form->field($model, 'address')->textInput(['maxlength' => true]) ?>
             
     </div>
     <div class="modal-footer">
