@@ -79,7 +79,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         ?>
                         <tr>
                             <td class="col-xs-2 text-right">采购成本/件：</td>
-                            <td><?= bcdiv($model->cost_price, $model->goods_num, 3) ?></td>
+                            <td><?= bcdiv(bcsub($model->cost_price, $model->edition_fee, 3), $model->goods_num, 3) ?></td>
                         </tr>
                         <tr>
                             <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('cost_price') ?>：</td>

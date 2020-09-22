@@ -258,10 +258,14 @@
             .PageNext {   PAGE-BREAK-AFTER:   always   }
         </style>
 	</head>
+    <div class="text-center noprint" style="text-align:right;">
+        <!-- 打印按钮 -->
+        <button type="button" class="btn btn-info btn-ms" target="_blank" onclick="preview(10)">打印</button>
+    </div>
     <body>
     <div class="template">
         <div class="information">
-            <p class="font-bold font-18">2020年深圳市恒得利珠宝有限公司</p>
+            <p class="font-bold font-18"><?= date('Y', time()) ?>年深圳市恒得利珠宝有限公司</p>
             <p class="font-bold font-16">货品出库单</p>
             <div class="midd"></div>
             <div class="msg">
@@ -290,28 +294,53 @@
                 <th class="width-65 algin-center font-bold" >证书号</th>
                 <th class="width-65 algin-center font-bold" >备注</th>
                 </thead>
+                <?php
+                foreach ($lists as $key => $val) {
+                //$pagesize = 10;
+                ?>
                 <tbody>
                 <tr class="algin-left">
-                    <td class="algin-center padding-5">1</td>
-                    <td class="algin-center padding-5">黄金饰品</td>
-                    <td class="algin-center padding-5">黄金手镯（光圈拉杆）</td>
-                    <td class="algin-center padding-5">XDSS00006216</td>
-                    <td class="algin-center padding-5">HS0000131</td>
-                    <td class="algin-center padding-5">1</td>
-                    <td class="algin-center padding-5">15#</td>
-                    <td class="algin-center padding-5"></td>
-                    <td class="algin-center padding-5">24.73</td>
-                    <td class="algin-center padding-5"></td>
-                    <td class="algin-center padding-5"></td>
-                    <td class="algin-center padding-5"></td>
-                    <td class="algin-center padding-5"></td>
+                    <td class="algin-center padding-5"><?= $key + 1 ?></td>
+                    <td class="algin-center padding-5"><?= $val['style_cate_name'] ?? "/" ?></td>
+                    <td class="algin-center padding-5"><?= $val['goods_name'] ?? "/" ?></td>
+                    <td class="algin-center padding-5"><?= $val['goods_id'] ?? "/" ?></td>
+                    <td class="algin-center padding-5"><?= $val['style_sn'] ?? "/" ?></td>
+                    <td class="algin-center padding-5"><?= $val['goods_num'] ?? "0" ?></td>
+                    <td class="algin-center padding-5"><?= $val['product_size'] ?? "/" ?></td>
+                    <td class="algin-center padding-5"><?= $val['gross_weight'] ?? "0.00" ?></td>
+                    <td class="algin-center padding-5"><?= $val['gross_weight'] ?? "0.00" ?></td>
+                    <td class="algin-center padding-5"><?= $val['market_price'] ?? "0.00" ?></td>
+                    <td class="algin-center padding-5"><?= $val['chuku_price'] ?? "0.00" ?></td>
+                    <td class="algin-center padding-5"><?= $val['cert_id'] ?? "/" ?></td>
+                    <td class="algin-center padding-5"><?= $val['remark'] ?? "/" ?></td>
                 </tr>
+                </tbody>
+                <?php
+                }
+                ?>
+                <tfoot>
+                <tr>
+                    <td class="algin-center padding-5" colspan="5">合计</td>
+                    <td class="algin-center padding-5"><?= floatval($total['goods_num']) ?? '0.00'; ?></td>
+                    <td class="algin-center padding-5">/</td>
+                    <td class="algin-center padding-5"><?= floatval($total['goods_num']) ?? '0.00'; ?></td>
+                    <td class="algin-center padding-5"><?= floatval($total['gross_weight']) ?? '0.00'; ?></td>
+                    <td class="algin-center padding-5"><?= floatval($total['market_price']) ?? '0.00'; ?></td>
+                    <td class="algin-center padding-5"><?= floatval($total['chuku_price']) ?? '0.00'; ?></td>
+                    <td class="algin-center padding-5">/</td>
+                    <td class="algin-center padding-5">/</td>
+                </tr>
+                </tfoot>
             </table>
             <div class="foot-info">
-                <div class="prepared-by font-bold"><span >制单人：</span><span contenteditable="true">陈正青</span></div>
-                <div class="reviewer font-bold"><span >收货人：</span><span contenteditable="true"></span></div>
+                <div class="prepared-by font-bold"><span >制单人：</span><span contenteditable="true"><?= $model->creator->username ?? '无'; ?></span></div>
+                <div class="reviewer font-bold"><span >收货人：</span><span contenteditable="true">无</span></div>
             </div>
         </div>
+    </div>
+    <div class="text-center noprint" style="text-align:center;">
+        <!-- 打印按钮 -->
+        <button type="button" class="btn btn-info btn-ms" onclick="preview(10)">打印</button>
     </div>
     </body>
 </html>

@@ -225,7 +225,7 @@ class WarehouseGoods extends BaseModel
             'jintuo_type' => '金托类型',
             'market_price' => '市场价(标签价)',
             'cost_price' => '采购成本总价',
-            'chuku_price' => '出库成本价',
+            'chuku_price' => '出库成本/件',
             'chuku_time' => '出库时间',
             'xiangkou' => '戒托镶口',
             'factory_cost' => '工厂成本',
