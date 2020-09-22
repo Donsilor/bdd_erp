@@ -15,7 +15,8 @@ use yii\base\Model;
 class WarehousGoodsSearchForm extends Model
 {
     public $goods_id;
-    public $goods_sn;
+    public $style_sn;
+    public $qiban_sn;
     public $goods_name;
     public $style_cate_id;
     public $product_type_id;
@@ -41,7 +42,7 @@ class WarehousGoodsSearchForm extends Model
     {
         return [
 //            ['recommend', 'safe'],
-            [['goods_name','goods_id','goods_sn'], 'string'],
+            [['goods_name','goods_id','style_sn'], 'string'],
             [['style_cate_id','product_type_id','goods_status','material_type','jintuo_type','main_stone_type'
                 ,'warehouse_id','supplier_id','style_channel_id','goods_source'], 'integer'],
             [['min_suttle_weight','max_suttle_weight','min_gold_weight','max_gold_weight','min_diamond_carat',
@@ -57,6 +58,12 @@ class WarehousGoodsSearchForm extends Model
         return $where;
     }
 
+    /**
+     * @return array
+     */
+    public function qiban_sn(){
+        return trim($this->qiban_sn);
+    }
     /**
      * @return array
      */

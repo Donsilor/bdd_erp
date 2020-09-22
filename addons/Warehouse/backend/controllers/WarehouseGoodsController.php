@@ -72,21 +72,21 @@ class WarehouseGoodsController extends BaseController
             ->andFilterWhere(['goods_status'=>$search->goods_status])
             ->andFilterWhere(['material_type'=>$search->material_type])
             ->andFilterWhere(['jintuo_type'=>$search->jintuo_type])
+            ->andFilterWhere(['style_sn'=>$search->style_sn])
             ->andFilterWhere(['main_stone_type'=>$search->main_stone_type])
             ->andFilterWhere(['in', 'goods_id', $search->goods_ids()])
             ->andFilterWhere(['in', 'style_cate_id', $search->styleCateIds()])
             ->andFilterWhere(['in', 'product_type_id', $search->proTypeIds()])
             ->andFilterWhere(['like', 'goods_name', $search->goods_name()])
+            ->andFilterWhere(['like', 'qiban_sn', $search->qiban_sn()])
 //            ->andFilterWhere($search->betweenGoldWeight())
             ->andFilterWhere($search->betweenSuttleWeight())
             ->andFilterWhere($search->betweenDiamondCarat())
             ->andFilterWhere(['in', 'warehouse_id', $search->warehouse_id])
             ->andFilterWhere(['in', 'supplier_id', $search->supplier_id])
             ->andFilterWhere(['in', 'style_channel_id', $search->style_channel_id])
-            ->andFilterWhere(['in', 'goods_source', $search->goods_source])
-            ->andFilterWhere($search->goods_sn());
-
-
+            ->andFilterWhere(['in', 'goods_source', $search->goods_source]);
+        
         $created_at = $searchModel->created_at;
         if (!empty($created_at)) {
             $dataProvider->query->andFilterWhere(['>=',WarehouseGoods::tableName().'.created_at', strtotime(explode('/', $created_at)[0])]);//起始时间

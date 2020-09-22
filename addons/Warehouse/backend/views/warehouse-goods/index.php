@@ -110,10 +110,30 @@ $params = $params ? "&".http_build_query($params) : '';
                                 <div class="col-lg-3">
                                     <div class="form-group field-cate-sort">
                                         <div class="col-sm-4 text-right">
-                                            <label class="control-label" for="cate-sort">款号/起版号：</label>
+                                            <label class="control-label" for="cate-sort">款号：</label>
                                         </div>
                                         <div class="col-sm-8">
-                                            <?= Html::textInput('goods_sn', $search->goods_sn, ['class' => 'form-control','placeholder'=>'款号或者起版号搜索']) ?>
+                                            <?= \kartik\select2\Select2::widget([
+                                                'name'=>'style_sn',
+                                                'value'=>$search->style_sn,
+                                                'data'=>Yii::$app->styleService->style->getStyleList('style_sn'),
+                                                'options' => ['placeholder' =>"请选择",'multiple'=>false,'style'=>"width:180px"],
+                                                'pluginOptions' => [
+                                                    'allowClear' => true,
+                                                ],
+                                            ])
+                                            ?>
+                                            <div class="help-block"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-3">
+                                    <div class="form-group field-cate-sort">
+                                        <div class="col-sm-4 text-right">
+                                            <label class="control-label" for="cate-sort">起版号：</label>
+                                        </div>
+                                        <div class="col-sm-8">
+                                            <?= Html::textInput('qiban_sn', $search->qiban_sn, ['class' => 'form-control','placeholder'=>'起版号搜索']) ?>
                                             <div class="help-block"></div>
                                         </div>
                                     </div>
@@ -160,6 +180,10 @@ $params = $params ? "&".http_build_query($params) : '';
                                     </div>
                                 </div>
 
+
+
+                            </div>
+                            <div class="row">
                                 <div class="col-lg-3">
                                     <div class="form-group field-cate-sort">
                                         <div class="col-sm-4 text-right">
@@ -180,9 +204,6 @@ $params = $params ? "&".http_build_query($params) : '';
                                         </div>
                                     </div>
                                 </div>
-
-                            </div>
-                            <div class="row">
 
                                 <div class="col-lg-3">
                                     <div class="form-group field-cate-sort">
@@ -232,6 +253,13 @@ $params = $params ? "&".http_build_query($params) : '';
                                         </div>
                                     </div>
                                 </div>
+
+
+                            </div>
+
+
+
+                            <div class="row">
                                 <div class="col-lg-3">
                                     <div class="form-group field-cate-sort">
                                         <div class="col-sm-4 text-right">
@@ -252,12 +280,6 @@ $params = $params ? "&".http_build_query($params) : '';
                                         </div>
                                     </div>
                                 </div>
-
-                            </div>
-
-
-
-                            <div class="row">
                                 <div class="col-lg-3">
                                     <div class="form-group field-cate-sort">
                                         <div class="col-sm-4 text-right">
