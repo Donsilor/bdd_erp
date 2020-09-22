@@ -517,7 +517,8 @@ class BillTController extends BaseController
             $material_type = empty($list['material_type']) ? 0 : $list['material_type'];
             $list['material_type'] = Yii::$app->attr->valueName($material_type);
             //手寸
-            $finger = empty($list['finger']) ? 0 : $list['finger'];
+            $finger = empty($list['finger']) ? $list['finger_hk'] : $list['finger'];
+            $finger = $finger ?? 0;
             $list['finger'] = Yii::$app->attr->valueName($finger);
 
             //汇总

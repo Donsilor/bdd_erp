@@ -440,12 +440,12 @@
             ?>
                 <tr class="algin-left">
                     <td class="algin-center padding-5"><?= $key + 1 ?></td>
-                    <td class="algin-center padding-5"><?= $val['goods_id'] ?? "无" ?></td>
-                    <td class="algin-center padding-5"><?= $val['style_sn'] ?? "无" ?></td>
-                    <td class="algin-center padding-5"><?= $val['goods_name'] ?? "无" ?></td>
-                    <td class="algin-center padding-5"><?= $val['material_type'] ?? "无" ?></td>
+                    <td class="algin-center padding-5"><?= $val['goods_id'] ?? "/" ?></td>
+                    <td class="algin-center padding-5"><?= $val['style_sn'] ?? "/" ?></td>
+                    <td class="algin-center padding-5"><?= $val['goods_name'] ?? "/" ?></td>
+                    <td class="algin-center padding-5"><?= $val['material_type'] ?? "/" ?></td>
                     <td class="algin-center padding-5"><?= $val['goods_num'] ?? "0" ?></td>
-                    <td class="algin-center padding-5"><?= $val['finger'] ?? "无" ?></td>
+                    <td class="algin-center padding-5"><?= $val['finger'] ?? "/" ?></td>
                     <!-- 金料-->
                     <td class="algin-center padding-5"><?= floatval($val['suttle_weight']) ?? "0" ?></td>
                     <td class="algin-center padding-5"><?= floatval($val['gold_weight']) ?? "0" ?></td>
@@ -453,13 +453,13 @@
 <!--                    <td class="algin-center padding-5">--><?//= $val['lncl_loss_weight'] ?? "0" ?><!--</td>-->
                     <td class="algin-center padding-5"><?= floatval($val['gold_amount']) ?? "0" ?></td>
                     <!-- 主石-->
-                    <td class="algin-center padding-5"><?= $val['main_stone_sn'] ?? "无" ?></td>
+                    <td class="algin-center padding-5"><?= $val['main_stone_sn'] ?? "/" ?></td>
                     <td class="algin-center padding-5"><?= $val['main_stone_num'] ?? "0" ?></td>
                     <td class="algin-center padding-5"><?= floatval($val['main_stone_weight']) ?? "0" ?></td>
                     <td class="algin-center padding-5"><?= floatval($val['main_stone_price']) ?? "0" ?></td>
                     <td class="algin-center padding-5"><?= floatval($val['main_stone_amount']) ?? "0" ?></td>
                     <!-- 副石1-->
-                    <td class="algin-center padding-5"><?= $val['second_stone_sn1'] ?? "无" ?></td>
+                    <td class="algin-center padding-5"><?= $val['second_stone_sn1'] ?? "/" ?></td>
                     <td class="algin-center padding-5"><?= $val['second_stone_num1'] ?? "0" ?></td>
                     <td class="algin-center padding-5"><?= floatval($val['second_stone_weight1']) ?? "0" ?></td>
                     <td class="algin-center padding-5"><?= floatval($val['second_stone_price1']) ?? "0" ?></td>
@@ -489,21 +489,21 @@
             <tr>
                 <td class="algin-center padding-5" colspan="5">合计</td>
                 <td class="algin-center padding-5"><?= $total['goods_num'] ?? 0; ?></td>
-                <td class="algin-center padding-5"></td>
+                <td class="algin-center padding-5">/</td>
                 <td class="algin-center padding-5"><?= floatval($total['suttle_weight']) ?? '0.00'; ?></td>
                 <td class="algin-center padding-5"><?= floatval($total['gold_weight']) ?? '0.00'; ?></td>
-                <td class="algin-center padding-5"></td>
+                <td class="algin-center padding-5">/</td>
 <!--                <td class="algin-center padding-5">--><?//= $total['lncl_loss_weight'] ?? '0.00'; ?><!--</td>-->
                 <td class="algin-center padding-5"><?= floatval($total['gold_amount']) ?? '0.00'; ?></td>
-                <td class="algin-center padding-5"></td>
+                <td class="algin-center padding-5">/</td>
                 <td class="algin-center padding-5"><?= $total['main_stone_num'] ?? 0; ?></td>
                 <td class="algin-center padding-5"><?= floatval($total['main_stone_weight']) ?? '0.00'; ?></td>
-                <td class="algin-center padding-5"></td>
+                <td class="algin-center padding-5">/</td>
                 <td class="algin-center padding-5"><?= floatval($total['main_stone_amount']) ?? '0.00'; ?></td>
-                <td class="algin-center padding-5"></td>
+                <td class="algin-center padding-5">/</td>
                 <td class="algin-center padding-5"><?= $total['second_stone_num1'] ?? 0; ?></td>
                 <td class="algin-center padding-5"><?= floatval($total['second_stone_weight1']) ?? '0.00'; ?></td>
-                <td class="algin-center padding-5"></td>
+                <td class="algin-center padding-5">/</td>
                 <td class="algin-center padding-5"><?= floatval($total['second_stone_amount1']) ?? '0.00'; ?></td>
                 <td class="algin-center padding-5"><?= floatval($total['parts_gold_weight']) ?? '0.00'; ?></td>
                 <td class="algin-center padding-5"><?= floatval($total['parts_amount']) ?? '0.00'; ?></td>
