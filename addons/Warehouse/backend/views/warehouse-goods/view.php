@@ -94,7 +94,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                     echo bcdiv($model->chuku_price, $model->goods_num, 3);
                                 }else{
                                     $chuku_price = Yii::$app->warehouseService->warehouseGoods->getChukuPrice($model->goods_id);
-                                    echo bcdiv($chuku_price, $model->goods_num, 3);
+                                    echo bcdiv($chuku_price, $model->goods_num, 2);
                                 }
                                 ?>
                             </td>
