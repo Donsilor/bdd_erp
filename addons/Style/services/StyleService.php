@@ -513,9 +513,10 @@ class StyleService extends Service
             throw new \Exception("导入数据不能为空");
         }
         $style_ids = $saveStone = $saveFactory = $saveFee = $saveAttr = [];
+        $styleForm = new StyleForm();
         foreach ($styleList as $k => $item) {
             //创建款式信息
-            $styleM = new StyleForm();
+            $styleM = new Style();
             $styleM->id = null;
             $styleM->setAttributes($item);
             if ($styleM->status == StatusEnum::ENABLED) {//启用即审核
@@ -555,7 +556,7 @@ class StyleService extends Service
                 $saveStone[] = [
                     'style_id' => $styleM->id,
                     'position' => StonePositionEnum::MAIN_STONE,
-                    'stone_type' => $styleM->getStoneTypeByProduct($styleM),
+                    'stone_type' => $styleForm->getStoneTypeByProduct($styleM),
                     'creator_id' => \Yii::$app->user->identity->getId(),
                     'created_at' => time(),
                 ];
