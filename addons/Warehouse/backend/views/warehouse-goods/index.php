@@ -1181,6 +1181,18 @@ $params = $params ? "&".http_build_query($params) : '';
                             'headerOptions' => [],
                         ],
                         [
+                            'label' => '采购成本/件',
+                            'attribute'=>'cost_price',
+                            'value' => function($model){
+                                $cost_price = $model->cost_price ?? 0;
+                                $cost_price = bcsub($cost_price, $model->edition_fee, 3);
+                                return bcdiv($cost_price, $model->goods_num, 3);
+                            },
+                            'filter' => false,
+                            'visible' => \common\helpers\Auth::verify(\common\enums\SpecialAuthEnum::VIEW_CAIGOU_PRICE),
+                            'headerOptions' => [],
+                        ],
+                        [
                             'attribute'=>'cost_price',
                             'filter' => false,
                             'visible' => \common\helpers\Auth::verify(\common\enums\SpecialAuthEnum::VIEW_CAIGOU_PRICE),

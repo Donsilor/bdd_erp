@@ -91,7 +91,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             <td>
                                 <?php
                                 if($model->goods_status == GoodsStatusEnum::IN_SALE || $model->goods_status == GoodsStatusEnum::HAS_SOLD){
-                                    echo bcdiv($model->chuku_price, $model->goods_num, 3);
+                                    echo bcdiv($model->chuku_price, $model->goods_num, 2);
                                 }else{
                                     $chuku_price = Yii::$app->warehouseService->warehouseGoods->getChukuPrice($model->goods_id);
                                     echo bcdiv($chuku_price, $model->goods_num, 2);
