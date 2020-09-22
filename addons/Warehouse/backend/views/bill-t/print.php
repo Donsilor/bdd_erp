@@ -486,6 +486,7 @@
             <?php
             }
             ?>
+            <tfoot>
             <tr>
                 <td class="algin-center padding-5" colspan="5">合计</td>
                 <td class="algin-center padding-5"><?= $total['goods_num'] ?? 0; ?></td>
@@ -521,6 +522,7 @@
                 <td class="algin-center padding-5"><?= floatval($total['one_cost_price']) ?? '0.00'; ?></td>
                 <td class="algin-center padding-5"><?= floatval($total['cost_price']) ?? '0.00'; ?></td>
             </tr>
+            </tfoot>
         </table>
         <div class="foot-info">
             <div class="prepared-by">
