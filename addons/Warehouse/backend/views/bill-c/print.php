@@ -308,9 +308,9 @@
                     <td class="algin-center padding-5"><?= $val['goods_num'] ?? "0" ?></td>
                     <td class="algin-center padding-5"><?= $val['product_size'] ?? "/" ?></td>
                     <td class="algin-center padding-5"><?= $val['cart'] ?? "0.00" ?></td>
-                    <td class="algin-center padding-5"><?= $val['gross_weight'] ?? "0.00" ?></td>
+                    <td class="algin-center padding-5"><?= bcmul($val['gross_weight'], $val['goods_num'], 3)?></td>
                     <td class="algin-center padding-5"><?= $val['market_price'] ?? "0.00" ?></td>
-                    <td class="algin-center padding-5"><?= $val['chuku_price'] ?? "0.00" ?></td>
+                    <td class="algin-center padding-5" contenteditable="true">无</td>
                     <td class="algin-center padding-5"><?= $val['cert_id'] ?? "/" ?></td>
                     <td class="algin-center padding-5"><?= $val['remark'] ?? "/" ?></td>
                 </tr>
@@ -334,7 +334,7 @@
             </table>
             <div class="foot-info">
                 <div class="prepared-by font-bold"><span >制单人：</span><span contenteditable="true"><?= $model->creator->username ?? '无'; ?></span></div>
-                <div class="reviewer font-bold"><span >收货人：</span><span contenteditable="true">无</span></div>
+                <div class="reviewer font-bold"><span >收货人：</span><span contenteditable="true"><?= $model->salesman->username ?? '无'; ?></span></div>
             </div>
         </div>
     </div>
