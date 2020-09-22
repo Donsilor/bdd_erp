@@ -806,4 +806,12 @@ class StyleService extends Service
         return implode(",", $materialType) ?? "";
     }
 
+
+
+    public function getStyleList($index_key='id'){
+        $style_list = Style::find()->where(['status'=>StatusEnum::ENABLED])->select(['id','style_sn'])->asArray()->all();
+        $style_list = array_column($style_list,'style_sn',$index_key);
+        return $style_list;
+    }
+
 }
