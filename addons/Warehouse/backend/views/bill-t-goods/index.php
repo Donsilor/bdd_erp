@@ -16,6 +16,8 @@ use kartik\daterange\DateRangePicker;
 $this->title = Yii::t('bill_t_goods', '其它入库单详情');
 $this->params['breadcrumbs'][] = ['label' => $this->title, 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
+$params = Yii::$app->request->queryParams;
+$params = $params ? "&".http_build_query($params) : '';
 ?>
 <style>
     select.form-control {
@@ -40,10 +42,7 @@ $this->params['breadcrumbs'][] = $this->title;
             echo Html::edit(['edit-all', 'bill_id' => $bill->id], '编辑货品', ['class' => 'btn btn-info btn-xs']);
             echo '&nbsp;';
         }
-        echo Html::a('单据打印', ['bill-t/print', 'id' => $bill->id], [
-            'target' => '_blank',
-            'class' => 'btn btn-info btn-xs',
-        ]);
+        echo Html::a('单据打印', ['bill-t/print', 'id' => $bill->id], ['target' => '_blank', 'class' => 'btn btn-info btn-xs',]);
         echo '&nbsp;';
         if ($bill->bill_status == \addons\Warehouse\common\enums\BillStatusEnum::SAVE) {
             echo Html::edit(['ajax-upload', 'bill_id' => $bill->id], '批量导入', [
@@ -54,6 +53,8 @@ $this->params['breadcrumbs'][] = $this->title;
             echo '&nbsp;';
         }
         echo Html::tag('span', '刷新价格', ["class" => "btn btn-warning btn-xs jsBatchStatus", "data-grid" => "grid", "data-url" => Url::to(['update-price']),]);
+        echo '&nbsp;';
+        echo Html::button('明细导出', ['class' => 'btn btn-inverse btn-xs', 'onclick' => 'batchExport()',]);
         echo '&nbsp;';
         if ($bill->bill_status == \addons\Warehouse\common\enums\BillStatusEnum::SAVE) {
             echo Html::tag('span', '批量删除', ["class" => "btn btn-danger btn-xs jsBatchStatus", "data-grid" => "grid", "data-url" => Url::to(['batch-delete']),]);
@@ -218,7 +219,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                         return Html::a($model->style_sn, ['/style/view', 'id' => $model->id, 'returnUrl' => Url::getReturnUrl()], ['style' => "text-decoration:underline;color:#3c8dbc", 'id' => $model->style_sn]) . ' <i class="fa fa-copy" onclick="copy(\'' . $model->style_sn . '\')"></i>';
                                     } else {
                                         if ($model->style_sn) {
-                                            return "<span id='{$model->style_sn}_{$model->id}'>".$model->style_sn."</span>".' <i class="fa fa-copy" onclick="copy(\''. $model->style_sn.'_'.$model->id .'\')"></i>';
+                                            return "<span id='{$model->style_sn}_{$model->id}'>" . $model->style_sn . "</span>" . ' <i class="fa fa-copy" onclick="copy(\'' . $model->style_sn . '_' . $model->id . '\')"></i>';
                                         }
                                         return $model->style_sn ?? "";
                                     }
@@ -260,12 +261,12 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'format' => 'raw',
                                 'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#feeeed;'],
                                 'footerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#feeeed;'],
-                                'value' =>"toWarehouse.name",
-                                'filter'=>Select2::widget([
-                                    'name'=>'SearchModel[to_warehouse_id]',
-                                    'value'=>$searchModel->to_warehouse_id,
-                                    'data'=>Yii::$app->warehouseService->warehouse::getDropDown(),
-                                    'options' => ['placeholder' =>"请选择"],
+                                'value' => "toWarehouse.name",
+                                'filter' => Select2::widget([
+                                    'name' => 'SearchModel[to_warehouse_id]',
+                                    'value' => $searchModel->to_warehouse_id,
+                                    'data' => Yii::$app->warehouseService->warehouse::getDropDown(),
+                                    'options' => ['placeholder' => "请选择"],
                                     'pluginOptions' => [
                                         'allowClear' => true,
                                     ],
@@ -315,8 +316,8 @@ $this->params['breadcrumbs'][] = $this->title;
                             ],
                             [
                                 'attribute' => 'goods_num',
-                                'headerOptions' => [ 'style' => 'background-color:#feeeed;'],
-                                'footerOptions' => [ 'style' => 'background-color:#feeeed;'],
+                                'headerOptions' => ['style' => 'background-color:#feeeed;'],
+                                'footerOptions' => ['style' => 'background-color:#feeeed;'],
                                 'value' => function ($model, $key, $index, $widget) use ($total) {
                                     $widget->footer = $model->getFooterValues('goods_num', $total);
                                     return $model->goods_num ?? 0;
@@ -1922,7 +1923,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 //'format' => 'raw',
                                 'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#b7ba6b;'],
                                 'footerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#b7ba6b;'],
-                                'value' => function ($model, $key, $index, $widget) use ($total){
+                                'value' => function ($model, $key, $index, $widget) use ($total) {
                                     $widget->footer = $model->getFooterValues('tax_amount', $total, "0.00");
                                     return $model->tax_amount ?? "0.00";
                                 },
@@ -1986,7 +1987,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'footerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#9b95c9;'],
                                 'value' => function ($model, $key, $index, $widget) use ($total) {
                                     $one_cost_price = $total['one_cost_price'] ?? 0;
-                                    $widget->footer = "总成本/件<span style='font-size:16px; color: red;'>[".$one_cost_price."]</span>";
+                                    $widget->footer = "总成本/件<span style='font-size:16px; color: red;'>[" . $one_cost_price . "]</span>";
                                     $cost_price = bcsub($model->cost_price, $model->templet_fee, 3);
                                     return bcdiv($cost_price, $model->goods_num, 3) ?? "0.00";
                                 },
@@ -2234,6 +2235,17 @@ $this->params['breadcrumbs'][] = $this->title;
         //默认全选
         $("input[name='id[]']").trigger("click");
     });
+
+    //导出
+    function batchExport() {
+        var ids = $("#grid").yiiGridView("getSelectedRows");
+        if (ids.length == 0) {
+            var url = "<?= Url::to('index?action=export' . $params);?>";
+            rfExport(url)
+        } else {
+            window.location.href = "<?= Url::buildUrl('bill-t/export', [], ['ids'])?>?ids=" + ids;
+        }
+    }
 
     /**
      * 一键粘贴

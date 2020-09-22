@@ -453,7 +453,7 @@ class BillTController extends BaseController
         $select = [
             'w.bill_no', 'w.bill_type', 'w.bill_status', 'wg.goods_id', 'wg.style_sn', 'wg.goods_num', 'wg.goods_name',//基本
             'wg.material_type', 'wg.finger', 'wg.finger_hk',//属性
-            'wg.suttle_weight', 'wg.gold_weight', 'wg.gold_loss', 'wg.lncl_loss_weight', 'wg.gold_amount',//金料
+            'wg.suttle_weight', 'wg.gold_weight', 'wg.gold_loss', 'wg.lncl_loss_weight', 'wg.gold_price', 'wg.gold_amount',//金料
             'wg.main_stone_sn', 'wg.main_stone_num', 'wg.main_stone_weight', 'wg.main_stone_price', 'wg.main_stone_amount',//主石
             'wg.second_stone_sn1', 'wg.second_stone_num1', 'wg.second_stone_weight1', 'wg.second_stone_price1', 'wg.second_stone_amount1',//副石1
             'parts_gold_weight', 'parts_amount', 'parts_fee',//配件
@@ -499,8 +499,13 @@ class BillTController extends BaseController
             'one_cost_price' => 0,
             'cost_price' => 0,
 
+            'gold_price' => 0,
         ];
         foreach ($lists as &$list) {
+            //金价
+            if($total['gold_price'] == 0 && $list['gold_price']){
+                $total['gold_price'] = $list['gold_price'];
+            }
             //商品名称
             if ($list['goods_name']) {
                 $list['goods_name'] = mb_substr($list['goods_name'], 0, 6, 'utf-8') . "...";
