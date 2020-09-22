@@ -30,13 +30,13 @@ $this->params['breadcrumbs'][] = $this->title;
     <div class="box-tools" style="float:right;margin-top:-40px; margin-right: 20px;">
         <?php
         if ($bill->bill_status == \addons\Warehouse\common\enums\BillStatusEnum::SAVE) {
+            echo Html::a('返回明细', ['bill-t-goods/index', 'bill_id' => $bill->id], ['class' => 'btn btn-white btn-xs']);
+            echo '&nbsp;';
             echo Html::create(['ajax-edit', 'bill_id' => $bill->id], '新增货品', [
                 'class' => 'btn btn-primary btn-xs',
                 'data-toggle' => 'modal',
                 'data-target' => '#ajaxModal',
             ]);
-            echo '&nbsp;';
-            echo Html::a('返回明细', ['bill-t-goods/index', 'bill_id' => $bill->id], ['class' => 'btn btn-white btn-xs']);
             echo '&nbsp;';
         }
         echo Html::a('单据打印', ['bill-t/print', 'id' => $bill->id], [
