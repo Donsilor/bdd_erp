@@ -1987,6 +1987,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'value' => function ($model, $key, $index, $widget) use ($total) {
                                     $one_cost_price = $total['one_cost_price'] ?? 0;
                                     $widget->footer = "总成本/件<span style='font-size:16px; color: red;'>[".$one_cost_price."]</span>";
+                                    $model->cost_price = bcsub($model->cost_price, $model->templet_fee, 3);
                                     return bcdiv($model->cost_price, $model->goods_num, 3) ?? "0.00";
                                 },
                                 'visible' => \common\helpers\Auth::verify(\common\enums\SpecialAuthEnum::VIEW_CAIGOU_PRICE),
