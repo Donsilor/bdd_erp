@@ -1,10 +1,10 @@
-
 <!DOCTYPE html>
-<html>
+<html lang="en">
 	<head>
 		<meta charset="utf-8">
-		<title></title>
-        <link href="/backend/resources/css/print.css" rel="stylesheet">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<title>货品出库单</title>
+<!--        <link href="/backend/resources/css/print.css" rel="stylesheet">-->
 		<script language="javascript">
 			function preview(fang) {
 				if (fang < 10) {
@@ -21,297 +21,297 @@
 				}
 			}
 		</script>
+        <style>
+            body{
+                font-family:initial; /*浏览器打印不出div背景颜色*/
+                -webkit-print-color-adjust: exact;
+            }
+            .information{
+                width: 100%;
+            }
+            td{
+                text-align: left;
+                padding:0 5px;
+            }
+            .midd{
+                height: 10px;
+            }
+            .msg{
+                display: flex;
+                justify-content: space-between;
+                text-align: left;
+                font-weight: bold;
+            }
+            .top{
+                width: 83%;
+            }
+            .bottom{
+                width: 17%;
+            }
+            .height{
+                height: 20px;
+            }
+            thead tr th,thead tr td,tfoot tr td{
+                background-color: #808080!important;
+            }
+            .one,.two,.three{
+                line-height: 20px;
+            }
+            span{
+                display: inline-block;
+            }
+            .template{
+                width: 100%;
+                text-align: center;
+                display: flex;
+                justify-content: center;
+                padding: 20px 0;
+                font-family:'Times New Roman', Times;
+                font-size: 14px;
+                color:#000;
+            }
+            .information{
+                width: 100%;
+            }
+            table{
+                table-layout: fixed;
+            }
+            td{
+                /* word-break: break-all;  */
+                word-wrap:break-word;
+            }
+            p{
+                margin: 0!important;
+            }
+            .address{
+                margin: 6px 0;
+            }
+            /* span{
+                font-size: 14px;
+            } */
+            .total{
+                margin: 8px 0;
+            }
+            .shipping-address{
+                line-height: 60px;
+            }
+            table {
+                width: 100%;
+                border-collapse: collapse;
+                margin-top: 5px;
+            }
+            table,table tr th, table tr td {
+                border:1px solid #000;
+                font-size: 12px;
+            }
+            table tr th{
+                /* padding: 10px 20px; */
+                text-align: center;
+            }
+            .foot-info{
+                display: flex;
+                justify-content: space-between;
+                text-align: left;
+                margin-top: 5px;
+            }
+            .prepared-by{
+                width: 83%;
+            }
+            .reviewer{
+                width: 17%;
+            }
+
+            /* 输入框去掉边框和外边框 */
+            input{
+                border:none;
+                outline: none;
+                font-size: 14px;
+            }
+
+            /* 字体加粗 */
+            .font-bold{
+                font-weight: bold;
+            }
+            /* 文本位置 */
+            .algin-center{
+                text-align: center;
+            }
+            .algin-left{
+                text-align: left;
+            }
+            .algin-right{
+                text-align: right;
+            }
+            .img-center{
+                justify-content: center;
+                align-items: center;
+            }
+            /* 字体大小 */
+            .font-24{
+                font-size: 24px;
+            }
+            .font-22{
+                font-size: 22px;
+            }
+            .font-20{
+                font-size: 20px;
+            }
+            .font-18{
+                font-size: 18px;
+            }
+            .font-16{
+                font-size: 16px;
+            }
+            .font-14{
+                font-size: 14px;
+            }
+            .font-12{
+                font-size: 12px;
+            }
+            /* 宽度 */
+            .width-200{
+                width: 200px;
+            }
+            .width-190{
+                width: 190px;
+            }
+            .width-180{
+                width: 180px;
+            }
+            .width-170{
+                width: 170px;
+            }
+            .width-160{
+                width: 160px;
+            }
+            .width-150{
+                width: 150px;
+            }
+            .width-140{
+                width: 140px;
+            }
+            .width-125{
+                width: 125px;
+            }
+            .width-120{
+                width: 120px;
+            }
+            .width-100{
+                width: 100px;
+            }
+            .width-97{
+                width: 97px;
+            }
+            .width-90{
+                width: 90px;
+            }
+            .width-80{
+                width: 80px;
+            }
+            .width-65{
+                width: 65px;
+            }
+            .width-60{
+                width: 60px;
+            }
+            .width-50{
+                width: 50px;
+            }
+            .width-40{
+                width: 40px;
+            }
+            .width-35{
+                width: 35px;
+            }
+            .width-30{
+                width: 30px;
+            }
+            .width-25{
+                width: 20px;
+            }
+            .width-20{
+                width: 20px;
+            }
+            /* 行高 */
+            .line-height-20{
+                line-height: 20px;
+            }
+            /* 边距 */
+            .margin-top-20{
+                margin-top: 15px;
+            }
+            .margin-top-55{
+                margin-top: 55px;
+            }
+            .padding-5{
+                padding: 3px;
+            }
+            .padding-10{
+                padding:0px 10px;
+            }
+            .padding-14{
+                padding:0px 14px;
+            }
+        </style>
         <style media="print">
             .Noprint {   DISPLAY:   none;}
             .PageNext {   PAGE-BREAK-AFTER:   always   }
         </style>
 	</head>
-	<body>
-		<div class="container" id="wdf">
-			<!--startprint1-->
-			<div class="title"><?= Yii::$app->formatter->asDatetime(time(),'Y年M月') ?>货品维修退货单</div>
-			
-			<!-- 基础信息 -->
-			<div class="order-info">
-
-				<div class="list clf">
-					<div class="child fl clf">
-						<div class="child-attr fl">退货单号：</div>
-						<div class="child-val fl"><?= $model->repair_no ?? '' ?> </div>
-					</div>
-                    <div class="child fl clf">
-                        <div class="child-attr fl">退货供应商：</div>
-                        <div class="child-val fl"><?= $model->supplier->supplier_name ?? '' ?> </div>
-                    </div>
-
-				</div>
-
-			</div>
-			
-			<!-- 订单列表 -->
-			<table class="table" border="1" cellspacing="0" cellpadding="0" width="100%" >
-				<!-- 列表头部 -->
-				<tr class="t-head">
-                    <td>
-                        <div>序号</div>
-                    </td>
-                    <td>
-                        <div>货品名称</div>
-                    </td>
-					<td >
-						<div>条码号</div>
-					</td>
-					<td>
-						<div>款号</div>
-					</td>
-					<td>
-						<div>产品分类</div>
-					</td>
-                    <td>
-                        <div>商品类型</div>
-                    </td>
-                    <td>
-                        <div>仓库</div>
-                    </td>
-
-                    <td>
-                        <div>材质</div>
-                    </td>
-                    <td>
-                        <div>金重</div>
-                    </td>
-                    <td>
-                        <div>成本</div>
-                    </td>
-                    <td>
-                        <div>主石类型</div>
-                    </td>
-                    <td>
-                        <div>主石重</div>
-                    </td>
-                    <td>
-                        <div>主石粒数</div>
-                    </td>
-                    <td>
-                        <div>主石规格(颜色/净度/切工/抛光/对称/荧光)</div>
-                    </td>
-                    <td>
-                        <div>副石重</div>
-                    </td>
-                    <td>
-                        <div>副石粒数</div>
-                    </td>
-                    <td>
-                        <div>总重</div>
-                    </td>
-                    <td>
-                        <div>手寸</div>
-                    </td>
-                    <td>
-                        <div>尺寸</div>
-                    </td>
-                    <td>
-                        <div>证书号</div>
-                    </td>
-                    <td>
-                        <div>工费</div>
-                    </td>
-                    <td>
-                        <div>成本价</div>
-                    </td>
-                    <td>
-                        <div>备注</div>
-                    </td>
-				</tr>
-				
-				<!-- 列表内容 -->
-                <?php
-                  foreach ($lists as $key => $val){
-                      $pagesize = 10;
-                ?>
-				<tr>
-                    <td>
-                        <div><?= $key+1 ?></div>
-                    </td>
-                    <td>
-                        <div><?= $val['goods_name'] ?></div>
-                    </td>
-                    <td>
-                        <div><?= $val['goods_id'] ?></div>
-                    </td>
-					<td>
-						<div><?= $val['style_sn'] ?></div>
-					</td>
-					<td>
-						<div><?= $val['product_type_name'] ?></div>
-					</td>
-                    <td>
-                        <div><?= $val['style_cate_name'] ?></div>
-                    </td>
-                    <td>
-                        <div><?= $val['warehouse_name'] ?></div>
-                    </td>
-                    <td>
-                        <div><?= $val['material'] ?></div>
-                    </td>
-                    <td>
-                        <div><?= $val['gold_weight'] ?></div>
-                    </td>
-                    <td>
-                        <div><?= $val['cost_price'] ?></div>
-                    </td>
-                    <td>
-                        <div><?= $val['main_stone_type'] ?></div>
-                    </td>
-                    <td>
-                        <div><?= $val['diamond_carat'] ?></div>
-                    </td>
-                    <td>
-                        <div><?= $val['main_stone_num'] ?></div>
-                    </td>
-                    <td>
-                        <div><?= $val['main_stone_info'] ?></div>
-                    </td>
-                    <td>
-                        <div><?= $val['second_stone_weight1'] ?></div>
-                    </td>
-                    <td>
-                        <div><?= $val['second_stone_num1'] ?></div>
-                    </td>
-                    <td>
-                        <div><?= $val['gross_weight'] ?></div>
-                    </td>
-                    <td>
-                        <div><?= $val['finger'] ?></div>
-                    </td>
-                    <td>
-                        <div><?= $val['product_size'] ?></div>
-                    </td>
-                    <td>
-                        <div><?= $val['cert_id'] ?></div>
-                    </td>
-                    <td>
-                        <div><?= $val['gong_fee'] ?></div>
-                    </td>
-                    <td>
-                        <div><?= $val['cost_price'] ?></div>
-                    </td>
-                    <td>
-                        <div><?= $val['remark'] ?></div>
-                    </td>
-				</tr>
-                <?php if(($key + 1) % $pagesize == 0){?>
-                    </table>
-                    <div class="PageNext"></div>
-                    <table class="table" border="1" cellspacing="0" cellpadding="0" width="100%" >
-                        <tr class="t-head">
-                            <td>
-                                <div>序号</div>
-                            </td>
-                            <td>
-                                <div>货品名称</div>
-                            </td>
-                            <td >
-                                <div>条码号</div>
-                            </td>
-                            <td>
-                                <div>款号</div>
-                            </td>
-                            <td>
-                                <div>产品分类</div>
-                            </td>
-                            <td>
-                                <div>商品类型</div>
-                            </td>
-                            <td>
-                                <div>仓库</div>
-                            </td>
-
-                            <td>
-                                <div>材质</div>
-                            </td>
-                            <td>
-                                <div>金重</div>
-                            </td>
-                            <td>
-                                <div>成本</div>
-                            </td>
-                            <td>
-                                <div>主石类型</div>
-                            </td>
-                            <td>
-                                <div>主石重</div>
-                            </td>
-                            <td>
-                                <div>主石粒数</div>
-                            </td>
-                            <td>
-                                <div>主石规格(颜色/净度/切工/抛光/对称/荧光)</div>
-                            </td>
-                            <td>
-                                <div>副石重</div>
-                            </td>
-                            <td>
-                                <div>副石粒数</div>
-                            </td>
-                            <td>
-                                <div>总重</div>
-                            </td>
-                            <td>
-                                <div>手寸</div>
-                            </td>
-                            <td>
-                                <div>尺寸</div>
-                            </td>
-                            <td>
-                                <div>证书号</div>
-                            </td>
-                            <td>
-                                <div>工费</div>
-                            </td>
-                            <td>
-                                <div>成本价</div>
-                            </td>
-                            <td>
-                                <div>备注</div>
-                            </td>
-                        </tr>
-                <?php
-                    }
-                }
-                ?>
-                <tr>
-                    <td colspan="3"><div>合计</div></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td><div><?= $total['cost_price_count']?></div></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
+    <body>
+    <div class="template">
+        <div class="information">
+            <p class="font-bold font-18">2020年深圳市恒得利珠宝有限公司</p>
+            <p class="font-bold font-16">货品出库单</p>
+            <div class="midd"></div>
+            <div class="msg">
+                <div class="top">
+                    <div class="one"><span >销售渠道：</span><span contenteditable="true"><?= $model->saleChannel->name ?? "无"; ?></span></div>
+                    <div class="one"><span >出库单号：</span><span contenteditable="true"><?= $model->bill_no ?? "无"; ?></span></div>
+                </div>
+                <div class="bottom">
+                    <div class="three"><span >制单日期：</span><span contenteditable="true"><?= $model->created_at ? date('Y年m月d日', $model->created_at) : "无"; ?></span></div>
+                    <div class="three"><span >出库日期：</span><span contenteditable="true"><?= $model->audit_time ? date('Y年m月d日', $model->audit_time) : "无"; ?></span></div>
+                </div>
+            </div>
+            <table class="table">
+                <thead>
+                <th class="width-30 algin-center font-bold">序号</th>
+                <th class="width-80 algin-center font-bold" >品类</th>
+                <th class="width-150 algin-center font-bold" >货品名称</th>
+                <th class="width-140 algin-center font-bold" >条码号</th>
+                <th class="width-120 algin-center font-bold" >款号</th>
+                <th class="width-30 algin-center font-bold" >数量</th>
+                <th class="width-50 algin-center font-bold" >尺寸</th>
+                <th class="width-65 algin-center font-bold" >总石重(ct)</th>
+                <th class="width-65 algin-center font-bold" >总连石重</th>
+                <th class="width-65 algin-center font-bold" >标签价</th>
+                <th class="width-50 algin-center font-bold" >销售价</th>
+                <th class="width-65 algin-center font-bold" >证书号</th>
+                <th class="width-65 algin-center font-bold" >备注</th>
+                </thead>
+                <tbody>
+                <tr class="algin-left">
+                    <td class="algin-center padding-5">1</td>
+                    <td class="algin-center padding-5">黄金饰品</td>
+                    <td class="algin-center padding-5">黄金手镯（光圈拉杆）</td>
+                    <td class="algin-center padding-5">XDSS00006216</td>
+                    <td class="algin-center padding-5">HS0000131</td>
+                    <td class="algin-center padding-5">1</td>
+                    <td class="algin-center padding-5">15#</td>
+                    <td class="algin-center padding-5"></td>
+                    <td class="algin-center padding-5">24.73</td>
+                    <td class="algin-center padding-5"></td>
+                    <td class="algin-center padding-5"></td>
+                    <td class="algin-center padding-5"></td>
+                    <td class="algin-center padding-5"></td>
                 </tr>
-			</table>
-            <div><span>制单人：<?= $model->creator->username ?? ''?></span><span style="margin-left:300px; ">审核人：<?= $model->auditor->username ?? ''?></span></span><span style="margin-left:300px; ">签收人：</span></div>
-			
-			<!--endprint1-->
-		</div>
-        <div class="text-center">
-            <!-- 打印按钮 -->
-            <button type="button" class="btn-ms" target="_blank" onclick="preview(1)">打印</button>
+            </table>
+            <div class="foot-info">
+                <div class="prepared-by font-bold"><span >制单人：</span><span contenteditable="true">陈正青</span></div>
+                <div class="reviewer font-bold"><span >收货人：</span><span contenteditable="true"></span></div>
+            </div>
         </div>
-
-	</body>
+    </div>
+    </body>
 </html>
