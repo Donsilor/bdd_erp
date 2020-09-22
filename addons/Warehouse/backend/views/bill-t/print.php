@@ -392,7 +392,7 @@
             <td class="width-25 algin-center font-bold" rowspan="2">序号</td>
             <td class="width-80 algin-center font-bold" rowspan="2">条码号</td>
             <td class="width-60 algin-center font-bold" rowspan="2">款号</td>
-            <td class="width-50 algin-center font-bold" rowspan="2">货品名称</td>
+            <td class="width-60 algin-center font-bold" rowspan="2">货品名称</td>
             <td class="width-30 algin-center font-bold" rowspan="2">材质</td>
             <td class="width-20 algin-center font-bold" rowspan="2">件数</td>
             <td class="width-20 algin-center font-bold" rowspan="2">手寸</td>
@@ -400,8 +400,8 @@
             <td class="width-180 algin-center font-bold" colspan="5">主石</td>
             <td class="width-180 algin-center font-bold" colspan="5">副石1</td>
             <td class="width-30 algin-center font-bold" rowspan="2">配件(g)</td>
-            <td class="width-35 algin-center font-bold" rowspan="2">配件额</td>
-            <td class="width-35 algin-center font-bold" rowspan="2">配件工费</td>
+            <td class="width-30 algin-center font-bold" rowspan="2">配件额</td>
+            <td class="width-30 algin-center font-bold" rowspan="2">配件<br>工费</td>
             <td class="width-30 algin-center font-bold" rowspan="2">工费</td>
             <td class="width-35 algin-center font-bold" rowspan="2">镶石费</td>
             <td class="width-35 algin-center font-bold" rowspan="2">车花片</td>
@@ -412,7 +412,7 @@
             <td class="width-30 algin-center font-bold" rowspan="2">税额</td>
             <td class="width-80 algin-center font-bold" colspan="2">工厂结算</td>
             <td class="width-50 algin-center font-bold" rowspan="2">成本单价</td>
-            <td class="width-55 algin-center font-bold" rowspan="2">总成本金额</td>
+            <td class="width-55 algin-center font-bold" rowspan="2">总成本<br>金额</td>
             <tr class="algin-left">
                 <td class="algin-center padding-5 font-bold">货重</td>
                 <td class="algin-center padding-5 font-bold">净重</td>
@@ -429,7 +429,7 @@
                 <td class="algin-center padding-5 font-bold">石重</td>
                 <td class="algin-center padding-5 font-bold">单价</td>
                 <td class="algin-center padding-5 font-bold">金额</td>
-                <td class="algin-center padding-5 font-bold">折足金料</td>
+                <td class="algin-center padding-5 font-bold">折足<br>金料</td>
                 <td class="algin-center padding-5 font-bold">金额</td>
             </tr>
             </thead>
