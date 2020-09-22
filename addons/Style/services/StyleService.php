@@ -2,6 +2,8 @@
 
 namespace addons\Style\services;
 
+use addons\Style\common\enums\StonePositionEnum;
+use addons\Style\common\models\StyleStone;
 use Yii;
 use common\helpers\Url;
 use common\components\Service;
@@ -510,7 +512,8 @@ class StyleService extends Service
         if (empty($styleList)) {
             throw new \Exception("导入数据不能为空");
         }
-        $style_ids = $saveFactory = $saveFee = $saveAttr = [];
+        $style_ids = $saveStone = $saveFactory = $saveFee = $saveAttr = [];
+        $styleForm = new StyleForm();
         foreach ($styleList as $k => $item) {
             //创建款式信息
             $styleM = new Style();
@@ -548,6 +551,16 @@ class StyleService extends Service
                 }
                 $saveAttr[$styleM->id][$attrId] = $val;
             }
+            //石头信息
+            if($styleM->is_inlay){//产品线为镶嵌类
+                $saveStone[] = [
+                    'style_id' => $styleM->id,
+                    'position' => StonePositionEnum::MAIN_STONE,
+                    'stone_type' => $styleForm->getStoneTypeByProduct($styleM),
+                    'creator_id' => \Yii::$app->user->identity->getId(),
+                    'created_at' => time(),
+                ];
+            }
             //款式工厂信息
             if (isset($factoryList1[$k]) || isset($factoryList2[$k])) {
                 if (isset($factoryList1[$k]['factory_id'])
@@ -577,8 +590,32 @@ class StyleService extends Service
             }
 //            $command = \Yii::$app->db->createCommand("call sp_create_style_attributes(" . $styleM->id . ");");
 //            $command->execute();
-
-
+        }
+        //创建石头信息
+        if(!empty($saveStone)){
+            $value = [];
+            $key = array_keys($saveStone[0]);
+            foreach ($saveStone as $item) {
+                $stoneM = new StyleStone();
+                $stoneM->setAttributes($item);
+                if (!$stoneM->validate()) {
+                    throw new \Exception($this->getError($stoneM));
+                }
+                $value[] = array_values($item);
+                if (count($value) >= 10) {
+                    $res = \Yii::$app->db->createCommand()->batchInsert(StyleStone::tableName(), $key, $value)->execute();
+                    if (false === $res) {
+                        throw new \Exception("创建石头信息失败1");
+                    }
+                    $value = [];
+                }
+            }
+            if (!empty($value)) {
+                $res = \Yii::$app->db->createCommand()->batchInsert(StyleStone::tableName(), $key, $value)->execute();
+                if (false === $res) {
+                    throw new \Exception("创建石头信息失败2");
+                }
+            }
         }
         //创建款式工厂信息
         if (!empty($saveFactory)) {
@@ -592,7 +629,7 @@ class StyleService extends Service
                 }
                 $value[] = array_values($item);
                 if (count($value) >= 10) {
-                    $res = Yii::$app->db->createCommand()->batchInsert(StyleFactory::tableName(), $key, $value)->execute();
+                    $res = \Yii::$app->db->createCommand()->batchInsert(StyleFactory::tableName(), $key, $value)->execute();
                     if (false === $res) {
                         throw new \Exception("创建工厂信息失败1");
                     }
@@ -618,7 +655,7 @@ class StyleService extends Service
                 }
                 $value[] = array_values($item);
                 if (count($value) >= 10) {
-                    $res = Yii::$app->db->createCommand()->batchInsert(StyleFactoryFee::tableName(), $key, $value)->execute();
+                    $res = \Yii::$app->db->createCommand()->batchInsert(StyleFactoryFee::tableName(), $key, $value)->execute();
                     if (false === $res) {
                         throw new \Exception("创建工费信息失败1");
                     }

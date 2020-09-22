@@ -11,6 +11,7 @@ use addons\Warehouse\common\models\WarehouseBillGoodsL;
 use addons\Warehouse\common\forms\WarehouseBillTGoodsForm;
 use addons\Warehouse\common\enums\BillStatusEnum;
 use addons\Warehouse\common\enums\BillTypeEnum;
+use common\helpers\ArrayHelper;
 use common\helpers\ResultHelper;
 use yii\web\UploadedFile;
 
@@ -84,7 +85,7 @@ class BillTGoodsController extends BaseController
                 Yii::$app->warehouseService->billT->addBillTGoods($model);
                 $trans->commit();
                 \Yii::$app->getSession()->setFlash('success', '保存成功');
-                return $this->redirect(['edit-all', 'bill_id' => $bill_id]);
+                return $this->redirect(['index', 'bill_id' => $bill_id]);
             } catch (\Exception $e) {
                 $trans->rollBack();
                 return $this->message($e->getMessage(), $this->redirect(\Yii::$app->request->referrer), 'error');
@@ -121,14 +122,14 @@ class BillTGoodsController extends BaseController
     {
         $id = \Yii::$app->request->get('id');
         $bill_id = \Yii::$app->request->get('bill_id');
-        $download = \Yii::$app->request->get('download',0);
+        $download = \Yii::$app->request->get('download', 0);
         $bill = WarehouseBill::findOne($bill_id);
-        if($download){
+        if ($download) {
             $model = new WarehouseBillTGoodsForm();
             list($values, $fields) = $model->getTitleList();
-            if(empty($bill_id)){
-                header("Content-Disposition: attachment;filename=【".rand(100,999)."】入库单明细导入(".date('Ymd').").csv");
-            }else{
+            if (empty($bill_id)) {
+                header("Content-Disposition: attachment;filename=【" . rand(100, 999) . "】入库单明细导入(" . date('Ymd') . ").csv");
+            } else {
                 header("Content-Disposition: attachment;filename=【{$bill_id}】入库单明细导入($bill->bill_no).csv");
             }
             $content = implode($values, ",") . "\n" . implode($fields, ",") . "\n";
@@ -180,6 +181,10 @@ class BillTGoodsController extends BaseController
             try {
                 $trans = \Yii::$app->db->beginTransaction();
                 //$model->biaomiangongyi = join(',',$model->biaomiangongyi);
+                $result = $model->updateFromValidate($model);
+                if($result['error'] == false){
+                    throw new \Exception($result['msg']);
+                }
                 if (false === $model->save()) {
                     throw new \Exception($this->getError($model));
                 }
@@ -193,10 +198,43 @@ class BillTGoodsController extends BaseController
                 return ResultHelper::json(422, $e->getMessage());
             }
         }
-        $model->biaomiangongyi = explode(',',$model->biaomiangongyi);
+        $model->biaomiangongyi = explode(',', $model->biaomiangongyi);
         return $this->render($this->action->id, [
             'model' => $model,
         ]);
+    }
+
+    /**
+     * ajax更新排序/状态
+     *
+     * @param $id
+     * @return array
+     */
+    public function actionAjaxUpdate($id)
+    {
+        if (!($model = $this->modelClass::findOne($id))) {
+            return ResultHelper::json(404, '找不到数据');
+        }
+        $params = Yii::$app->request->get();
+        $keys = array_keys($params);  //$model->attributes();
+        try {
+            $trans = \Yii::$app->db->beginTransaction();
+            $model->attributes = ArrayHelper::filter($params, $keys);
+            $result = $model->updateFromValidate($model);
+            if($result['error'] == false){
+                throw new \Exception($result['msg']);
+            }
+            if (!$model->save()) {
+                throw new \Exception("保存失败");
+            }
+            \Yii::$app->warehouseService->billT->syncUpdatePrice($model);
+            \Yii::$app->warehouseService->billT->WarehouseBillTSummary($model->bill_id);
+            $trans->commit();
+            return ResultHelper::json(200, '修改成功');
+        } catch (\Exception $e) {
+            $trans->rollBack();
+            return ResultHelper::json(422, $e->getMessage());
+        }
     }
 
     /**
@@ -229,21 +267,27 @@ class BillTGoodsController extends BaseController
             }
             try {
                 $trans = Yii::$app->trans->beginTransaction();
+                $id_arr = array_unique($id_arr);
                 foreach ($id_arr as $id) {
                     $goods = WarehouseBillTGoodsForm::findOne(['id' => $id]);
                     $goods->$name = $value;
                     if (false === $goods->validate()) {
                         throw new \Exception($this->getError($goods));
                     }
+                    $result = $model->updateFromValidate($goods);
+                    if($result['error'] == false){
+                        throw new \Exception($result['msg']);
+                    }
                     if (false === $goods->save(true, [$name])) {
                         throw new \Exception($this->getError($goods));
                     }
                     $model->bill_id = $goods->bill_id;
+                    \Yii::$app->warehouseService->billT->syncUpdatePrice($goods);
                 }
                 \Yii::$app->warehouseService->billT->WarehouseBillTSummary($model->bill_id);
                 $trans->commit();
                 Yii::$app->getSession()->setFlash('success', '保存成功');
-                return ResultHelper::json(200, '保存成功');
+                return ResultHelper::json(200, '保存成功');//['url'=>Url::to(['edit-all', 'bill_id' => $model->bill_id])."#suttle_weight"]
             } catch (\Exception $e) {
                 $trans->rollBack();
                 return ResultHelper::json(422, $e->getMessage());
@@ -315,7 +359,7 @@ class BillTGoodsController extends BaseController
 
     /**
      *
-     * 删除/关闭
+     * 删除
      * @param $id
      * @return mixed
      */

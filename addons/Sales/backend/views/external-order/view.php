@@ -96,14 +96,6 @@ $this->params['breadcrumbs'][] = $this->title;
                             <td><?= $model->out_pay_no ?></td>
                         </tr>
                         <tr>
-                            <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('customer_account') ?>：</td>
-                            <td><?= $model->customer_account ?></td>
-                            <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('store_account') ?>：</td>
-                            <td><?= $model->store_account ?></td>
-                            <td class="col-xs-1 text-right"></td>
-                            <td></td>
-                        </tr>
-                        <tr>
                             <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('pay_remark') ?>：</td>
                             <td colspan="5"><?= $model->pay_remark ?></td>
                         </tr>

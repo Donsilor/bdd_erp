@@ -2,10 +2,13 @@
 
 namespace addons\Warehouse\common\forms;
 
-use common\helpers\ArrayHelper;
 use addons\Warehouse\common\models\WarehouseBillGoodsL;
+use addons\Warehouse\common\enums\PeiJianWayEnum;
+use addons\Warehouse\common\enums\PeiLiaoWayEnum;
+use addons\Warehouse\common\enums\PeiShiWayEnum;
 use addons\Style\common\enums\AttrIdEnum;
 use common\helpers\StringHelper;
+use common\helpers\ArrayHelper;
 
 /**
  * 其它收货单明细 Form
@@ -145,6 +148,7 @@ class WarehouseBillTGoodsForm extends WarehouseBillGoodsL
             'lasha_fee' => 0,
             'bukou_fee' => 0,
             'templet_fee' => 0,
+            'tax_amount' => 0,
             'cert_fee' => 0,
             'other_fee' => 0,
             'factory_cost' => 0,
@@ -152,6 +156,7 @@ class WarehouseBillTGoodsForm extends WarehouseBillGoodsL
             'market_price' => 0,
         ];
         $goods = $this->find()->select(array_keys($total))->where(['bill_id' => $bill_id])->all();
+        $total = array_merge($total, ['one_cost_price' => 0]);
         if (!empty($goods)) {
             foreach ($goods as $good) {
                 $total['goods_num'] = bcadd($total['goods_num'], $good->goods_num);
@@ -161,16 +166,16 @@ class WarehouseBillTGoodsForm extends WarehouseBillGoodsL
                 $total['lncl_loss_weight'] = bcadd($total['lncl_loss_weight'], $good->lncl_loss_weight, 3);
                 $total['gold_amount'] = bcadd($total['gold_amount'], $good->gold_amount, 3);
                 $total['main_stone_num'] = bcadd($total['main_stone_num'], $good->main_stone_num);
-                $total['main_stone_weight'] = bcadd($total['main_stone_weight'], $good->main_stone_weight, 5);
+                $total['main_stone_weight'] = bcadd($total['main_stone_weight'], $good->main_stone_weight, 3);
                 $total['main_stone_amount'] = bcadd($total['main_stone_amount'], $good->main_stone_amount, 3);
                 $total['second_stone_num1'] = bcadd($total['second_stone_num1'], $good->second_stone_num1);
-                $total['second_stone_weight1'] = bcadd($total['second_stone_weight1'], $good->second_stone_weight1, 5);
+                $total['second_stone_weight1'] = bcadd($total['second_stone_weight1'], $good->second_stone_weight1, 3);
                 $total['second_stone_amount1'] = bcadd($total['second_stone_amount1'], $good->second_stone_amount1, 3);
                 $total['second_stone_num2'] = bcadd($total['second_stone_num2'], $good->second_stone_num2);
-                $total['second_stone_weight2'] = bcadd($total['second_stone_weight2'], $good->second_stone_weight2, 5);
+                $total['second_stone_weight2'] = bcadd($total['second_stone_weight2'], $good->second_stone_weight2, 3);
                 $total['second_stone_amount2'] = bcadd($total['second_stone_amount2'], $good->second_stone_amount2, 3);
                 $total['second_stone_num3'] = bcadd($total['second_stone_num3'], $good->second_stone_num3);
-                $total['second_stone_weight3'] = bcadd($total['second_stone_weight3'], $good->second_stone_weight3, 5);
+                $total['second_stone_weight3'] = bcadd($total['second_stone_weight3'], $good->second_stone_weight3, 3);
                 $total['second_stone_amount3'] = bcadd($total['second_stone_amount3'], $good->second_stone_amount3, 3);
                 $total['peishi_weight'] = bcadd($total['peishi_weight'], $good->peishi_weight, 3);
                 $total['peishi_fee'] = bcadd($total['peishi_fee'], $good->peishi_fee, 3);
@@ -187,10 +192,16 @@ class WarehouseBillTGoodsForm extends WarehouseBillGoodsL
                 $total['lasha_fee'] = bcadd($total['lasha_fee'], $good->lasha_fee, 3);
                 $total['bukou_fee'] = bcadd($total['bukou_fee'], $good->bukou_fee, 3);
                 $total['templet_fee'] = bcadd($total['templet_fee'], $good->templet_fee, 3);
+                $total['tax_amount'] = bcadd($total['tax_amount'], $good->tax_amount, 3);
                 $total['cert_fee'] = bcadd($total['cert_fee'], $good->cert_fee, 3);
                 $total['other_fee'] = bcadd($total['other_fee'], $good->other_fee, 3);
                 $total['factory_cost'] = bcadd($total['factory_cost'], $good->factory_cost, 3);
                 $total['cost_price'] = bcadd($total['cost_price'], $good->cost_price, 3);
+                //单件总成本=((总成本-版费)/数量)
+                $cost_price = bcsub($good->cost_price, $good->templet_fee, 3);
+                $one_cost_price = bcdiv($cost_price, $good->goods_num, 3);
+                $total['one_cost_price'] = bcadd($total['one_cost_price'], $one_cost_price, 3);
+                //标签价
                 $total['market_price'] = bcadd($total['market_price'], $good->market_price, 3);
             }
         }
@@ -205,9 +216,9 @@ class WarehouseBillTGoodsForm extends WarehouseBillGoodsL
         $values = [
             '条码号(货号)为空则系统自动生成',
             '[非起版]和[有款起版]款号不能为空',
+            '#',
             $this->formatTitle($this->getJietuoTypeMap()),//'金托类型' .
             '[起版号]和[款号]必填其一',
-            '#',
             $this->formatTitle($this->getWarehouseMap()),//'入库仓库' .
             $this->formatTitle($this->getMaterialTypeMap()),//'材质' .
             $this->formatTitle($this->getMaterialColorMap()),//'材质颜色' .
@@ -222,12 +233,17 @@ class WarehouseBillTGoodsForm extends WarehouseBillGoodsL
             $this->formatTitle($this->getTalonHeadTypeMap()),//'爪头形状' .
 
             $this->formatTitle($this->getPeiLiaoWayMap()),//'配料方式' .
-            '#', '#', '#', '#',
+            '#', '#',
+            '填写则不自动计算',//含耗重
+            '#',
+            '填写则不自动计算',//金料额
+            '#',
 
             $this->formatTitle($this->getPeiShiWayMap()),//'主石配石方式' .
             '#',
             $this->formatTitle($this->getMainStoneTypeMap()),//'主石类型' .
             '#', '#', '#',
+            '填写则不自动计算',//主石成本
             $this->formatTitle($this->getMainStoneShapeMap()),//'主石形状' .
             $this->formatTitle($this->getMainStoneColorMap()),//'主石颜色' .
             $this->formatTitle($this->getMainStoneClarityMap()),//'主石净度' .
@@ -235,9 +251,10 @@ class WarehouseBillTGoodsForm extends WarehouseBillGoodsL
             $this->formatTitle($this->getMainStoneColourMap()),//'主石色彩' .
 
             $this->formatTitle($this->getPeiShiWayMap()),//'副石1配石方式' .
-            '#',
             $this->formatTitle($this->getSecondStoneType1Map()),//'副石1类型' .
+            '#',
             '#', '#', '#',
+            '填写则不自动计算',//副石1成本
             $this->formatTitle($this->getSecondStoneShape1Map()),//'副石1形状' .
             $this->formatTitle($this->getSecondStoneColor1Map()),//'副石1颜色' .
             $this->formatTitle($this->getSecondStoneClarity1Map()),//'副石1净度' .
@@ -245,39 +262,49 @@ class WarehouseBillTGoodsForm extends WarehouseBillGoodsL
             $this->formatTitle($this->getSecondStoneColour1Map()),//'副石1色彩' .
 
             $this->formatTitle($this->getPeiShiWayMap()),//'副石2配石方式' .
-            '#',
             $this->formatTitle($this->getSecondStoneType2Map()),//'副石2类型' .
+            '#',
             '#', '#', '#',
+            '填写则不自动计算',//副石2成本
 
             $this->formatTitle($this->getPeiShiWayMap()),//'副石3配石方式' .
-            '#',
             $this->formatTitle($this->getSecondStoneType3Map()),//'副石3类型' .
-            '#', '#', '#', '#',
+            '#',
+            '#', '#', '#',
+            '填写则不自动计算',//副石3成本
+            '#',
 
             $this->formatTitle($this->getPeiJianWayMap()),//'配件方式' .
             $this->formatTitle($this->getPartsTypeMap()),//'配件类型' .
             $this->formatTitle($this->getPartsMaterialMap()),//'配件材质' .
             '#', '#', '#',
+            '填写则不自动计算',//配件额
 
-            '#', '#', '#', '#', '#',
+            '#', '#',
+            '填写则不自动计算',//配石费
+            '#', '#', '#',
             $this->formatTitle($this->getXiangqianCraftMap()),//'镶嵌工艺' .
             '#', '#', '#',
+            '填写则不自动计算',//镶石费
             $this->formatTitle($this->getFaceCraftMap(), "|"),//'表面工艺' .
-            '#', '#', '#', '#', '#', '#', '#', '#', '#',
+            '#', '#', '#', '#', '#', '#', '#',
+            '填写则不自动计算',//税额
+            '#', '#', '#',
             $this->formatTitle($this->getCertTypeMap()),//'主石证书类型' .
-            '填写则不自动计算', '#',
-            '#',
+            '填写则不自动计算',//工厂总成本
+            '填写则不自动计算',//公司成本价
+            '#', '#',
         ];
         $fields = [
-            '条码号(货号)', '(*)款号', '(*)金托类型', '起版号', '商品名称', '(*)入库仓库', '材质', '材质颜色', '货品数量', '手寸(港号)', '手寸(美号)', '尺寸(cm)', '成品尺寸(mm)', '镶口(ct)', '刻字', '链类型', '扣环', '爪头形状',
-            '配料方式', '连石重(g)', '损耗(%)', '金价/g', '折足率(%)',
-            '主石配石方式', '主石编号', '主石类型', '主石粒数', '主石重(ct)', '主石单价/ct', '主石形状', '主石颜色', '主石净度', '主石切工', '主石色彩',
-            '副石1配石方式', '副石1编号', '副石1类型', '副石1粒数', '副石1重(ct)', '副石1单价/ct', '副石1形状', '副石1颜色', '副石1净度', '副石1切工', '副石1色彩',
-            '副石2配石方式', '副石2编号', '副石2类型', '副石2粒数', '副石2重(ct)', '副石2单价/ct',
-            '副石3配石方式', '副石3编号', '副石3类型', '副石3粒数', '副石3重(ct)', '副石3单价/ct', '石料备注',
-            '配件方式', '配件类型', '配件材质', '配件数量', '配件金重(g)', '配件金价/g',
-            '配石重量(ct)', '配石工费/ct', '配件工费', '克/工费', '件/工费', '镶嵌工艺', '镶石1工费/颗', '镶石2工费/颗', '镶石3工费/颗', '表面工艺(多个用“|”分割)', '表面工艺费', '分色/分件费', '喷沙费', '拉沙费', '补口费', '版费', '证书费', '其它费用',
-            '主石证书号', '主石证书类型', '公司成本价', '倍率(默认1)', '备注',
+            '条码号(货号)', '(*)款号', '商品名称' , '(*)金托类型', '起版号', '(*)入库仓库', '材质', '材质颜色', '货品数量', '手寸(港号)', '手寸(美号)', '尺寸(cm)', '成品尺寸(mm)', '镶口(ct)', '刻字', '链类型', '扣环', '爪头形状',
+            '配料方式', '连石重(g)', '损耗(%)', '含耗重(g)', '金价/g', '金料额', '折足率(%)',
+            '主石配石方式', '主石编号', '主石类型', '主石粒数', '主石重(ct)', '主石单价/ct', '主石成本', '主石形状', '主石颜色', '主石净度', '主石切工', '主石色彩',
+            '副石1配石方式', '副石1类型', '副石1编号', '副石1粒数', '副石1重(ct)', '副石1单价/ct', '副石1成本', '副石1形状', '副石1颜色', '副石1净度', '副石1切工', '副石1色彩',
+            '副石2配石方式', '副石2类型', '副石2编号', '副石2粒数', '副石2重(ct)', '副石2单价/ct', '副石2成本',
+            '副石3配石方式', '副石3类型', '副石3编号', '副石3粒数', '副石3重(ct)', '副石3单价/ct', '副石3成本', '石料备注',
+            '配件方式', '配件类型', '配件材质', '配件数量', '配件金重(g)', '配件金价/g', '配件额',
+            '配石重量(ct)', '配石工费/ct', '配石费', '配件工费', '克/工费', '件/工费', '镶嵌工艺', '镶石1工费/颗', '镶石2工费/颗', '镶石3工费/颗', '镶石费', '表面工艺(多个用“|”分割)', '表面工艺费', '分色/分件费', '喷沙费', '拉沙费', '补口费', '版费', '税费', '税额', '证书费', '其它费用',
+            '主石证书号', '主石证书类型', '工厂总成本', '公司成本价', '倍率(默认1)', '备注',
         ];
         return [$values, $fields];
     }
@@ -288,15 +315,15 @@ class WarehouseBillTGoodsForm extends WarehouseBillGoodsL
     public function getFieldName()
     {
         $fieldName = [
-            'goods_id', 'style_sn', 'jintuo_type', 'qiban_sn', 'goods_name', 'to_warehouse_id', 'material_type', 'material_color', 'goods_num', 'finger_hk', 'finger', 'length', 'product_size', 'xiangkou', 'kezi', 'chain_type', 'cramp_ring', 'talon_head_type',
-            'peiliao_way', 'suttle_weight', 'gold_loss', 'gold_price', 'pure_gold_rate',
-            'main_pei_type', 'main_stone_sn', 'main_stone_type', 'main_stone_num', 'main_stone_weight', 'main_stone_price', 'main_stone_shape', 'main_stone_color', 'main_stone_clarity', 'main_stone_cut', 'main_stone_colour',
-            'second_pei_type', 'second_stone_sn1', 'second_stone_type1', 'second_stone_num1', 'second_stone_weight1', 'second_stone_price1', 'second_stone_shape1', 'second_stone_color1', 'second_stone_clarity1', 'second_stone_cut1', 'second_stone_colour1',
-            'second_pei_type2', 'second_stone_sn2', 'second_stone_type2', 'second_stone_num2', 'second_stone_weight2', 'second_stone_price2',
-            'second_pei_type3', 'second_stone_sn3', 'second_stone_type3', 'second_stone_num3', 'second_stone_weight3', 'second_stone_price3', 'stone_remark',
-            'parts_way', 'parts_type', 'parts_material', 'parts_num', 'parts_gold_weight', 'parts_price',
-            'peishi_weight', 'peishi_gong_fee', 'parts_fee', 'gong_fee', 'piece_fee', 'xiangqian_craft', 'second_stone_fee1', 'second_stone_fee2', 'second_stone_fee3', 'biaomiangongyi', 'biaomiangongyi_fee', 'fense_fee', 'penlasha_fee', 'lasha_fee', 'bukou_fee', 'templet_fee', 'cert_fee', 'other_fee',
-            'main_cert_id', 'main_cert_type', 'cost_price', 'markup_rate', 'remark',
+            'goods_id', 'style_sn', 'goods_name', 'jintuo_type', 'qiban_sn', 'to_warehouse_id', 'material_type', 'material_color', 'goods_num', 'finger_hk', 'finger', 'length', 'product_size', 'xiangkou', 'kezi', 'chain_type', 'cramp_ring', 'talon_head_type',
+            'peiliao_way', 'suttle_weight', 'gold_loss', 'lncl_loss_weight', 'gold_price', 'gold_amount', 'pure_gold_rate',
+            'main_pei_type', 'main_stone_sn', 'main_stone_type', 'main_stone_num', 'main_stone_weight', 'main_stone_price', 'main_stone_amount', 'main_stone_shape', 'main_stone_color', 'main_stone_clarity', 'main_stone_cut', 'main_stone_colour',
+            'second_pei_type', 'second_stone_type1', 'second_stone_sn1', 'second_stone_num1', 'second_stone_weight1', 'second_stone_price1', 'second_stone_amount1', 'second_stone_shape1', 'second_stone_color1', 'second_stone_clarity1', 'second_stone_cut1', 'second_stone_colour1',
+            'second_pei_type2', 'second_stone_type2', 'second_stone_sn2', 'second_stone_num2', 'second_stone_weight2', 'second_stone_price2', 'second_stone_amount2',
+            'second_pei_type3', 'second_stone_type3', 'second_stone_sn3', 'second_stone_num3', 'second_stone_weight3', 'second_stone_price3', 'second_stone_amount3', 'stone_remark',
+            'parts_way', 'parts_type', 'parts_material', 'parts_num', 'parts_gold_weight', 'parts_price', 'parts_amount',
+            'peishi_weight', 'peishi_gong_fee', 'peishi_fee', 'parts_fee', 'gong_fee', 'piece_fee', 'xiangqian_craft', 'second_stone_fee1', 'second_stone_fee2', 'second_stone_fee3', 'xianqian_fee', 'biaomiangongyi', 'biaomiangongyi_fee', 'fense_fee', 'penlasha_fee', 'lasha_fee', 'bukou_fee', 'templet_fee', 'tax_fee', 'tax_amount', 'cert_fee', 'other_fee',
+            'main_cert_id', 'main_cert_type', 'factory_cost', 'cost_price', 'markup_rate', 'remark',
         ];
         return $fieldName ?? [];
     }
@@ -359,6 +386,60 @@ class WarehouseBillTGoodsForm extends WarehouseBillGoodsL
     {
         return \Yii::$app->attr->valueMap($attr_id) ?? [];//暂时放开限制
         //return \Yii::$app->styleService->styleAttribute->getAttrValueListByStyle($style_sn, $attr_id) ?? [];
+    }
+
+    /**
+     * 款式性别
+     * @return array
+     */
+    public function getStyleSexMap()
+    {
+        return \addons\Style\common\enums\StyleSexEnum::getMap() ?? [];
+    }
+
+    /**
+     * 金托类型
+     * @return array
+     */
+    public function getJietuoTypeMap()
+    {
+        return \addons\Style\common\enums\JintuoTypeEnum::getMap() ?? [];
+    }
+
+    /**
+     * 是否镶嵌
+     * @return array
+     */
+    public function getIsInlayMap()
+    {
+        return \addons\Style\common\enums\InlayEnum::getMap() ?? [];
+    }
+
+    /**
+     * 配料方式
+     * @return array
+     */
+    public function getPeiLiaoWayMap()
+    {
+        return \addons\Warehouse\common\enums\PeiLiaoWayEnum::getMap() ?? [];
+    }
+
+    /**
+     * 配石方式(类型)
+     * @return array
+     */
+    public function getPeiShiWayMap()
+    {
+        return \addons\Warehouse\common\enums\PeiShiWayEnum::getMap() ?? [];
+    }
+
+    /**
+     * 配件方式
+     * @return array
+     */
+    public function getPeiJianWayMap()
+    {
+        return \addons\Warehouse\common\enums\PeiJianWayEnum::getMap() ?? [];
     }
 
     /**
@@ -1358,56 +1439,126 @@ class WarehouseBillTGoodsForm extends WarehouseBillGoodsL
     }
 
     /**
-     * 款式性别
-     * @return array
+     * 自定义表单验证
+     * {@inheritdoc}
+     * @param WarehouseBillTGoodsForm $form
      */
-    public function getStyleSexMap()
+    public function updateFromValidate($form)
     {
-        return \addons\Style\common\enums\StyleSexEnum::getMap() ?? [];
-    }
-
-    /**
-     * 金托类型
-     * @return array
-     */
-    public function getJietuoTypeMap()
-    {
-        return \addons\Style\common\enums\JintuoTypeEnum::getMap() ?? [];
-    }
-
-    /**
-     * 是否镶嵌
-     * @return array
-     */
-    public function getIsInlayMap()
-    {
-        return \addons\Style\common\enums\InlayEnum::getMap() ?? [];
-    }
-
-    /**
-     * 配料方式
-     * @return array
-     */
-    public function getPeiLiaoWayMap()
-    {
-        return \addons\Warehouse\common\enums\PeiLiaoWayEnum::getMap() ?? [];
-    }
-
-    /**
-     * 配石方式(类型)
-     * @return array
-     */
-    public function getPeiShiWayMap()
-    {
-        return \addons\Warehouse\common\enums\PeiShiWayEnum::getMap() ?? [];
-    }
-
-    /**
-     * 配件方式
-     * @return array
-     */
-    public function getPeiJianWayMap()
-    {
-        return \addons\Warehouse\common\enums\PeiJianWayEnum::getMap() ?? [];
+        $result = ['error' => true, 'data' => [], 'msg' => ''];
+        //金料
+//        if ($form->peiliao_way == PeiLiaoWayEnum::NO_PEI) {
+//            if ($form->suttle_weight > 0
+//                || $form->lncl_loss_weight > 0
+//                || $form->gold_loss > 0
+//                || $form->pure_gold_rate > 0
+//                || $form->gold_price > 0) {
+//                $result['error'] = false;
+//                $result['msg'] = "配料方式为不需配料，金料信息不能填写";
+//            }
+//        }
+        //主石
+        if ($form->main_pei_type == PeiShiWayEnum::NO_PEI) {
+            if (
+                $form->main_stone_num
+                || $form->main_stone_weight > 0
+//                $form->main_stone_sn
+//                || $form->main_stone_type
+//                || $form->main_stone_num
+//                || $form->main_stone_weight > 0
+//                || $form->main_stone_shape
+//                || $form->main_stone_color
+//                || $form->main_stone_clarity
+//                || $form->main_stone_cut
+//                || $form->main_stone_colour
+//                || $form->main_stone_size
+//                || $form->main_cert_id
+//                || $form->main_cert_type
+//                || $form->main_stone_price > 0
+//                || $form->main_stone_amount > 0
+        ) {
+                $result['error'] = false;
+                $result['msg'] = "主石配石方式为不需配石，主石信息不能填写";
+            }
+        }
+        //副石1
+        if ($form->second_pei_type == PeiShiWayEnum::NO_PEI) {
+            if (
+                $form->second_stone_num1
+                || $form->second_stone_weight1 > 0
+//                $form->second_stone_sn1
+//                || $form->second_stone_type1
+//                || $form->second_stone_num1
+//                || $form->second_stone_weight1 > 0
+//                || $form->second_stone_shape1
+//                || $form->second_stone_color1
+//                || $form->second_stone_clarity1
+//                || $form->second_stone_cut1
+//                || $form->second_stone_colour1
+//                || $form->second_stone_size1
+//                || $form->second_cert_id1
+//                || $form->second_stone_price1 > 0
+//                || $form->second_stone_amount1 > 0
+        ) {
+                $result['error'] = false;
+                $result['msg'] = "副石1配石方式为不需配石，副石1信息不能填写";
+            }
+        }
+        //副石2
+        if ($form->second_pei_type2 == PeiShiWayEnum::NO_PEI) {
+            if (
+                $form->second_stone_num2
+                || $form->second_stone_weight2 > 0
+//                $form->second_stone_sn2
+//                || $form->second_stone_type2
+//                || $form->second_stone_num2
+//                || $form->second_stone_weight2 > 0
+//                || $form->second_stone_shape2
+//                || $form->second_stone_color2
+//                || $form->second_stone_clarity2
+//                || $form->second_stone_colour2
+//                || $form->second_stone_size2
+//                || $form->second_cert_id2
+//                || $form->second_stone_price2 > 0
+//                || $form->second_stone_amount2 > 0
+            ) {
+                $result['error'] = false;
+                $result['msg'] = "副石2配石方式为不需配石，副石2信息不能填写";
+            }
+        }
+        //副石3
+        if ($form->second_pei_type3 == PeiShiWayEnum::NO_PEI) {
+            if (
+                $form->second_stone_num3
+                || $form->second_stone_weight3 > 0
+//                $form->second_stone_sn3
+//                || $form->second_stone_type3
+//                || $form->second_stone_num3
+//                || $form->second_stone_weight3 > 0
+//                || $form->second_stone_price3 > 0
+//                || $form->second_stone_amount3 > 0
+                ) {
+                $result['error'] = false;
+                $result['msg'] = "副石3配石方式为不需配石，副石3信息不能填写";
+            }
+        }
+        //配件
+//        if ($form->parts_way == PeiJianWayEnum::NO_PEI) {
+//            if ($form->parts_type
+//                || $form->parts_num
+//                || $form->parts_material
+//                || $form->parts_gold_weight > 0
+//                || $form->parts_price > 0
+//                || $form->parts_amount > 0) {
+//                $result['error'] = false;
+//                $result['msg'] = "配件方式为不需配件，配件信息不能填写";
+//            }
+//        }
+        //工费
+        if ($form->gong_fee > 0 && $form->piece_fee > 0) {
+            $result['error'] = false;
+            $result['msg'] = "克工费与件工费只能填写一个";
+        }
+        return $result;
     }
 }

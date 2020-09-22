@@ -4,6 +4,7 @@ use addons\Warehouse\common\enums\BillStatusEnum;
 use addons\Purchase\common\enums\ReceiptGoodsStatusEnum;
 use common\enums\WhetherEnum;
 use common\helpers\Html;
+use common\helpers\ImageHelper;
 use common\helpers\Url;
 use kartik\select2\Select2;
 use yii\grid\GridView;
@@ -38,6 +39,13 @@ $this->params['breadcrumbs'][] = $this->title;
             echo '&nbsp;';
             echo Html::edit(['edit-all', 'bill_id' => $bill->id], '编辑货品', ['class' => 'btn btn-info btn-xs']);
             echo '&nbsp;';
+        }
+        echo Html::a('单据打印', ['bill-t/print', 'id' => $bill->id], [
+            'target' => '_blank',
+            'class' => 'btn btn-info btn-xs',
+        ]);
+        echo '&nbsp;';
+        if ($bill->bill_status == \addons\Warehouse\common\enums\BillStatusEnum::SAVE) {
             echo Html::edit(['ajax-upload', 'bill_id' => $bill->id], '批量导入', [
                 'class' => 'btn btn-success btn-xs',
                 'data-toggle' => 'modal',
@@ -100,7 +108,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#feeeed;'],
                                 'footerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#feeeed;'],
                                 'contentOptions' => ['style' => ['white-space' => 'nowrap']],
-                                'template' => '{image} {edit} {delete}',
+                                'template' => '{delete} {edit}',
                                 'buttons' => [
                                     'image' => function ($url, $model, $key) {
                                         return Html::edit(['ajax-image', 'id' => $model->id], '图片', [
@@ -127,6 +135,16 @@ $this->params['breadcrumbs'][] = $this->title;
                                         }
                                     },
                                 ],
+                            ],
+                            [
+                                'attribute' => 'goods_image',
+                                'format' => 'raw',
+                                'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#feeeed;'],
+                                'footerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#feeeed;'],
+                                'value' => function ($model) {
+                                    return ImageHelper::fancyBox($model->goods_image, 30, 30);
+                                },
+                                'filter' => false,
                             ],
                             [
                                 'attribute' => 'style_cate_id',
@@ -211,19 +229,6 @@ $this->params['breadcrumbs'][] = $this->title;
                                 ]),
                             ],
                             [
-                                'attribute' => 'qiban_sn',
-                                'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#feeeed;'],
-                                'footerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#feeeed;'],
-                                'value' => function ($model, $key, $index, $widget) {
-                                    $widget->footer = $model->getAttributeLabel('qiban_sn');
-                                    return $model->qiban_sn ?? "";
-                                },
-                                'filter' => Html::activeTextInput($searchModel, 'qiban_sn', [
-                                    'class' => 'form-control',
-                                    'style' => 'width:100px;'
-                                ]),
-                            ],
-                            [
                                 'attribute' => 'goods_name',
                                 //'format' => 'raw',
                                 'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#feeeed;'],
@@ -235,6 +240,19 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'filter' => Html::activeTextInput($searchModel, 'goods_name', [
                                     'class' => 'form-control',
                                     'style' => 'width:90px;'
+                                ]),
+                            ],
+                            [
+                                'attribute' => 'qiban_sn',
+                                'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#feeeed;'],
+                                'footerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#feeeed;'],
+                                'value' => function ($model, $key, $index, $widget) {
+                                    $widget->footer = $model->getAttributeLabel('qiban_sn');
+                                    return $model->qiban_sn ?? "";
+                                },
+                                'filter' => Html::activeTextInput($searchModel, 'qiban_sn', [
+                                    'class' => 'form-control',
+                                    'style' => 'width:100px;'
                                 ]),
                             ],
                             [
@@ -547,20 +565,6 @@ $this->params['breadcrumbs'][] = $this->title;
 //                                ]),
                             ],
                             [
-                                'attribute' => 'pure_gold',
-                                'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#FFD700;'],
-                                'footerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#FFD700;'],
-                                'value' => function ($model, $key, $index, $widget) use ($total) {
-                                    $widget->footer = $model->getFooterValues('pure_gold', $total, "0.000");
-                                    return $model->pure_gold ?? "0.000";
-                                },
-                                'filter' => false,
-//                                'filter' => Html::activeTextInput($searchModel, 'pure_gold', [
-//                                    'class' => 'form-control',
-//                                    'style' => 'width:80px;'
-//                                ]),
-                            ],
-                            [
                                 'attribute' => 'pure_gold_rate',
                                 'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#FFD700;'],
                                 'footerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#FFD700;'],
@@ -570,6 +574,20 @@ $this->params['breadcrumbs'][] = $this->title;
                                 },
                                 'filter' => false,
 //                                'filter' => Html::activeTextInput($searchModel, 'pure_gold_rate', [
+//                                    'class' => 'form-control',
+//                                    'style' => 'width:80px;'
+//                                ]),
+                            ],
+                            [
+                                'attribute' => 'pure_gold',
+                                'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#FFD700;'],
+                                'footerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#FFD700;'],
+                                'value' => function ($model, $key, $index, $widget) use ($total) {
+                                    $widget->footer = $model->getFooterValues('pure_gold', $total, "0.000");
+                                    return $model->pure_gold ?? "0.000";
+                                },
+                                'filter' => false,
+//                                'filter' => Html::activeTextInput($searchModel, 'pure_gold', [
 //                                    'class' => 'form-control',
 //                                    'style' => 'width:80px;'
 //                                ]),
@@ -958,20 +976,6 @@ $this->params['breadcrumbs'][] = $this->title;
                                 ]),
                             ],
                             [
-                                'attribute' => 'second_stone_sn1',
-                                //'format' => 'raw',
-                                'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#dec674;'],
-                                'footerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#dec674;'],
-                                'value' => function ($model, $key, $index, $widget) {
-                                    $widget->footer = $model->getAttributeLabel('second_stone_sn1');
-                                    return $model->second_stone_sn1 ?? "";
-                                },
-                                'filter' => Html::activeTextInput($searchModel, 'second_stone_sn1', [
-                                    'class' => 'form-control',
-                                    'style' => 'width:60px;'
-                                ]),
-                            ],
-                            [
                                 'attribute' => 'second_stone_type1',
                                 'format' => 'raw',
                                 'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#dec674;'],
@@ -982,6 +986,20 @@ $this->params['breadcrumbs'][] = $this->title;
                                 },
                                 'filter' => Html::activeDropDownList($searchModel, 'second_stone_type1', $model->getSecondStoneType1Map(), [
                                     'prompt' => '全部',
+                                    'class' => 'form-control',
+                                    'style' => 'width:60px;'
+                                ]),
+                            ],
+                            [
+                                'attribute' => 'second_stone_sn1',
+                                //'format' => 'raw',
+                                'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#dec674;'],
+                                'footerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#dec674;'],
+                                'value' => function ($model, $key, $index, $widget) {
+                                    $widget->footer = $model->getAttributeLabel('second_stone_sn1');
+                                    return $model->second_stone_sn1 ?? "";
+                                },
+                                'filter' => Html::activeTextInput($searchModel, 'second_stone_sn1', [
                                     'class' => 'form-control',
                                     'style' => 'width:60px;'
                                 ]),
@@ -1167,20 +1185,6 @@ $this->params['breadcrumbs'][] = $this->title;
                                 ]),
                             ],
                             [
-                                'attribute' => 'second_stone_sn2',
-                                //'format' => 'raw',
-                                'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#84bf96;'],
-                                'footerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#84bf96;'],
-                                'value' => function ($model, $key, $index, $widget) {
-                                    $widget->footer = $model->getAttributeLabel('second_stone_sn2');
-                                    return $model->second_stone_sn2 ?? "";
-                                },
-                                'filter' => Html::activeTextInput($searchModel, 'second_stone_sn2', [
-                                    'class' => 'form-control',
-                                    'style' => 'width:60px;'
-                                ]),
-                            ],
-                            [
                                 'attribute' => 'second_stone_type2',
                                 'format' => 'raw',
                                 'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#84bf96;'],
@@ -1191,6 +1195,20 @@ $this->params['breadcrumbs'][] = $this->title;
                                 },
                                 'filter' => Html::activeDropDownList($searchModel, 'second_stone_type2', $model->getSecondStoneType2Map(), [
                                     'prompt' => '全部',
+                                    'class' => 'form-control',
+                                    'style' => 'width:60px;'
+                                ]),
+                            ],
+                            [
+                                'attribute' => 'second_stone_sn2',
+                                //'format' => 'raw',
+                                'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#84bf96;'],
+                                'footerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#84bf96;'],
+                                'value' => function ($model, $key, $index, $widget) {
+                                    $widget->footer = $model->getAttributeLabel('second_stone_sn2');
+                                    return $model->second_stone_sn2 ?? "";
+                                },
+                                'filter' => Html::activeTextInput($searchModel, 'second_stone_sn2', [
                                     'class' => 'form-control',
                                     'style' => 'width:60px;'
                                 ]),
@@ -1366,20 +1384,6 @@ $this->params['breadcrumbs'][] = $this->title;
                                 ]),
                             ],
                             [
-                                'attribute' => 'second_stone_sn3',
-                                //'format' => 'raw',
-                                'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#6495ED;'],
-                                'footerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#6495ED;'],
-                                'value' => function ($model, $key, $index, $widget) {
-                                    $widget->footer = $model->getAttributeLabel('second_stone_sn3');
-                                    return $model->second_stone_sn3 ?? "";
-                                },
-                                'filter' => Html::activeTextInput($searchModel, 'second_stone_sn3', [
-                                    'class' => 'form-control',
-                                    'style' => 'width:60px;'
-                                ]),
-                            ],
-                            [
                                 'attribute' => 'second_stone_type3',
                                 'format' => 'raw',
                                 'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#6495ED;'],
@@ -1390,6 +1394,20 @@ $this->params['breadcrumbs'][] = $this->title;
                                 },
                                 'filter' => Html::activeDropDownList($searchModel, 'second_stone_type3', $model->getSecondStoneType3Map(), [
                                     'prompt' => '全部',
+                                    'class' => 'form-control',
+                                    'style' => 'width:60px;'
+                                ]),
+                            ],
+                            [
+                                'attribute' => 'second_stone_sn3',
+                                //'format' => 'raw',
+                                'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#6495ED;'],
+                                'footerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#6495ED;'],
+                                'value' => function ($model, $key, $index, $widget) {
+                                    $widget->footer = $model->getAttributeLabel('second_stone_sn3');
+                                    return $model->second_stone_sn3 ?? "";
+                                },
+                                'filter' => Html::activeTextInput($searchModel, 'second_stone_sn3', [
                                     'class' => 'form-control',
                                     'style' => 'width:60px;'
                                 ]),
@@ -1431,7 +1449,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'footerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#6495ED;'],
                                 'value' => function ($model, $key, $index, $widget) {
                                     $widget->footer = $model->getAttributeLabel('second_stone_price3');
-                                    return $model->second_stone_price2 ?? "0.00";
+                                    return $model->second_stone_price3 ?? "0.00";
                                 },
                                 'filter' => false,
 //                                'filter' => Html::activeTextInput($searchModel, 'second_stone_price3', [
@@ -1885,6 +1903,36 @@ $this->params['breadcrumbs'][] = $this->title;
 //                                ]),
                             ],
                             [
+                                'attribute' => 'tax_fee',
+                                //'format' => 'raw',
+                                'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#b7ba6b;'],
+                                'footerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#b7ba6b;'],
+                                'value' => function ($model, $key, $index, $widget) {
+                                    $widget->footer = $model->getAttributeLabel('tax_fee');
+                                    return $model->tax_fee ?? "0.00";
+                                },
+                                'filter' => false,
+//                                'filter' => Html::activeTextInput($searchModel, 'tax_fee', [
+//                                    'class' => 'form-control',
+//                                    'style' => 'width:80px;'
+//                                ]),
+                            ],
+                            [
+                                'attribute' => 'tax_amount',
+                                //'format' => 'raw',
+                                'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#b7ba6b;'],
+                                'footerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#b7ba6b;'],
+                                'value' => function ($model, $key, $index, $widget) use ($total){
+                                    $widget->footer = $model->getFooterValues('tax_amount', $total, "0.00");
+                                    return $model->tax_amount ?? "0.00";
+                                },
+                                'filter' => false,
+//                                'filter' => Html::activeTextInput($searchModel, 'tax_amount', [
+//                                    'class' => 'form-control',
+//                                    'style' => 'width:80px;'
+//                                ]),
+                            ],
+                            [
                                 'attribute' => 'cert_fee',
                                 //'format' => 'raw',
                                 'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#b7ba6b;'],
@@ -1930,6 +1978,26 @@ $this->params['breadcrumbs'][] = $this->title;
 //                                ]),
                             ],
                             [
+                                'label' => "总成本/件",
+                                'attribute' => 'cost_price',
+                                //'format' => 'raw',
+                                'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#9b95c9;'],
+                                'contentOptions' => ['style' => 'color:red'],
+                                'footerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#9b95c9;'],
+                                'value' => function ($model, $key, $index, $widget) use ($total) {
+                                    $one_cost_price = $total['one_cost_price'] ?? 0;
+                                    $widget->footer = "总成本/件<span style='font-size:16px; color: red;'>[".$one_cost_price."]</span>";
+                                    $model->cost_price = bcsub($model->cost_price, $model->templet_fee, 3);
+                                    return bcdiv($model->cost_price, $model->goods_num, 3) ?? "0.00";
+                                },
+                                'visible' => \common\helpers\Auth::verify(\common\enums\SpecialAuthEnum::VIEW_CAIGOU_PRICE),
+                                'filter' => false,
+//                                'filter' => Html::activeTextInput($searchModel, 'cost_price', [
+//                                    'class' => 'form-control',
+//                                    'style' => 'width:100px;'
+//                                ]),
+                            ],
+                            [
                                 'label' => '成本手填',
                                 'attribute' => 'is_auto_price',
                                 'format' => 'raw',
@@ -1963,24 +2031,6 @@ $this->params['breadcrumbs'][] = $this->title;
 //                                ]),
                             ],
                             [
-                                'label' => "总成本价",
-                                'attribute' => 'cost_price',
-                                //'format' => 'raw',
-                                'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#9b95c9;'],
-                                'contentOptions' => ['style' => 'color:red'],
-                                'footerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#9b95c9;'],
-                                'value' => function ($model, $key, $index, $widget) use ($total) {
-                                    $widget->footer = "总成本价";
-                                    return bcmul($model->cost_price, $model->goods_num, 3) ?? "0.00";
-                                },
-                                'visible' => \common\helpers\Auth::verify(\common\enums\SpecialAuthEnum::VIEW_CAIGOU_PRICE),
-                                'filter' => false,
-//                                'filter' => Html::activeTextInput($searchModel, 'cost_price', [
-//                                    'class' => 'form-control',
-//                                    'style' => 'width:100px;'
-//                                ]),
-                            ],
-                            [
                                 'attribute' => 'markup_rate',
                                 //'format' => 'raw',
                                 'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#9b95c9;'],
@@ -1998,6 +2048,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'attribute' => 'market_price',
                                 //'format' => 'raw',
                                 'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#9b95c9;'],
+                                'contentOptions' => ['style' => 'color:green'],
                                 'footerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#9b95c9;'],
                                 'value' => function ($model, $key, $index, $widget) use ($total) {
                                     $widget->footer = $model->getFooterValues('market_price', $total, "0.00");
@@ -2179,6 +2230,11 @@ $this->params['breadcrumbs'][] = $this->title;
     <!-- tab-content end -->
 </div>
 <script type="text/javascript">
+    $(function () {
+        //默认全选
+        $("input[name='id[]']").trigger("click");
+    });
+
     /**
      * 一键粘贴
      * @param  {String} id [需要粘贴的内容]

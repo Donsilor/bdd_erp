@@ -23,7 +23,11 @@ $this->params['breadcrumbs'][] = $this->title;
                             'data-width' => '70%',
                             'data-height' => '95%',
                             'data-offset' => '20px',
-                    ]); ?>
+                    ]).'&nbsp;'; ?>
+                    <?= Html::create(['ajax-import'], '批量导入', [
+                        'data-toggle' => 'modal',
+                        'data-target' => '#ajaxModal',
+                    ]).'&nbsp;'; ?>
                     <?= Html::button('导出', [
                         'class'=>'btn btn-success btn-xs',
                         'onclick' => 'batchExport()',

@@ -74,7 +74,7 @@ class Order extends BaseModel
     {
         return [
             [['sale_channel_id','language','currency'], 'required'],
-            [['merchant_id', 'goods_num','apply_id','sale_channel_id','pay_type', 'pay_status', 'order_time', 'order_status', 'refund_status', 'express_id', 'distribute_status', 'delivery_status', 'receive_type', 'order_from', 'order_type', 'is_invoice', 'follower_id', 'followed_time', 'followed_status', 'area_id', 'audit_status', 'audit_time', 'auditor_id','customer_id', 'creator_id', 'created_at', 'updated_at'], 'integer'],
+            [['merchant_id','platform_id' ,'goods_num','apply_id','sale_channel_id','pay_type', 'pay_status', 'order_time', 'order_status', 'refund_status', 'express_id', 'distribute_status', 'delivery_status', 'receive_type', 'order_from', 'order_type', 'is_invoice', 'follower_id', 'followed_time', 'followed_status', 'area_id', 'audit_status', 'audit_time', 'auditor_id','customer_id', 'creator_id', 'created_at', 'updated_at'], 'integer'],
             [['language'], 'string', 'max' => 5],
             [['currency'], 'string', 'max' => 3],
             [['order_sn'], 'string', 'max' => 20],
@@ -99,6 +99,7 @@ class Order extends BaseModel
         return [
             'id' => 'ID',
             'merchant_id' => '商户',
+            'platform_id' => '销售平台',
             'language' => '订单语言',
             'currency' => '订单货币',
             'order_sn' => '订单编号',            

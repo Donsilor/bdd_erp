@@ -219,7 +219,7 @@ class WarehouseBillTService extends Service
                 $i++;
                 continue;
             }
-            if (count($goods) != 87) {
+            if (count($goods) != 99) {
                 throw new \Exception("模板格式不正确，请下载最新模板");
             }
             $goods = $form->trimField($goods);
@@ -453,7 +453,17 @@ class WarehouseBillTService extends Service
             $suttle_weight = $form->formatValue($goods['suttle_weight'], 0) ?? 0;//连石重(净重)
             $gold_loss = $form->formatValue($goods['gold_loss'], 0) ?? 0;//耗损(金损)
             $gold_loss = StringHelper::findNum($gold_loss);
+            $lncl_loss_weight = $form->formatValue($goods['lncl_loss_weight'], 0) ?? 0;//含耗重
+            $auto_loss_weight = ConfirmEnum::NO;
+            if (bccomp($lncl_loss_weight, 0, 5) > 0) {
+                $auto_loss_weight = ConfirmEnum::YES;
+            }
             $gold_price = $form->formatValue($goods['gold_price'], 0) ?? 0;//金价
+            $gold_amount = $form->formatValue($goods['gold_amount'], 0) ?? 0;//金料额
+            $auto_gold_amount = ConfirmEnum::NO;
+            if (bccomp($gold_amount, 0, 5) > 0) {
+                $auto_gold_amount = ConfirmEnum::YES;
+            }
             $pure_gold_rate = $form->formatValue($goods['pure_gold_rate'], 0) ?? 0;//折足率
             if (!empty($peiliao_way)
                 && $peiliao_way == PeiLiaoWayEnum::LAILIAO
@@ -506,6 +516,11 @@ class WarehouseBillTService extends Service
                 $main_pei_type = $form->getPeiType($main_stone_sn, $main_stone_num, $main_stone_weight);
             }
             $main_stone_price = $form->formatValue($goods['main_stone_price'], 0) ?? 0;//主石单价
+            $main_stone_amount = $form->formatValue($goods['main_stone_amount'], 0) ?? 0;//主石成本
+            $auto_main_stone = ConfirmEnum::NO;
+            if (bccomp($main_stone_amount, 0, 5) > 0) {
+                $auto_main_stone = ConfirmEnum::YES;
+            }
             if (empty($main_stone_price) && !empty($stone)) {
                 $main_stone_price = $stone->stone_price ?? 0;
             }
@@ -617,6 +632,11 @@ class WarehouseBillTService extends Service
                 $second_pei_type = $form->getPeiType($second_stone_sn1, $second_stone_num1, $second_stone_weight1);
             }
             $second_stone_price1 = $form->formatValue($goods['second_stone_price1'], 0) ?? 0;//副石1单价
+            $second_stone_amount1 = $form->formatValue($goods['second_stone_amount1'], 0) ?? 0;//副石1成本
+            $auto_second_stone1 = ConfirmEnum::NO;
+            if (bccomp($second_stone_amount1, 0, 5) > 0) {
+                $auto_second_stone1 = ConfirmEnum::YES;
+            }
             if (empty($second_stone_price1) && !empty($stone)) {
                 $second_stone_price1 = $stone->stone_price ?? 0;
             }
@@ -723,6 +743,11 @@ class WarehouseBillTService extends Service
                 $second_pei_type2 = $form->getPeiType($second_stone_sn2, $second_stone_num2, $second_stone_weight2);
             }
             $second_stone_price2 = $form->formatValue($goods['second_stone_price2'], 0) ?? 0;//副石2单价
+            $second_stone_amount2 = $form->formatValue($goods['second_stone_amount2'], 0) ?? 0;//副石2成本
+            $auto_second_stone2 = ConfirmEnum::NO;
+            if (bccomp($second_stone_amount2, 0, 5) > 0) {
+                $auto_second_stone2 = ConfirmEnum::YES;
+            }
             if (empty($second_stone_price2) && !empty($stone)) {
                 $second_stone_price2 = $stone->stone_price ?? 0;
             }
@@ -764,6 +789,11 @@ class WarehouseBillTService extends Service
                 $second_pei_type3 = $form->getPeiType($second_stone_sn3, $second_stone_num3, $second_stone_weight3);
             }
             $second_stone_price3 = $form->formatValue($goods['second_stone_price3'], 0) ?? 0;//副石3单价
+            $second_stone_amount3 = $form->formatValue($goods['second_stone_amount3'], 0) ?? 0;//副石3成本
+            $auto_second_stone3 = ConfirmEnum::NO;
+            if (bccomp($second_stone_amount3, 0, 5) > 0) {
+                $auto_second_stone3 = ConfirmEnum::YES;
+            }
             if (empty($second_stone_price3) && !empty($stone)) {
                 $second_stone_price3 = $stone->stone_price ?? 0;
             }
@@ -786,7 +816,7 @@ class WarehouseBillTService extends Service
                     $error[$i][] = "配件类型：[" . $parts_type . "]录入值有误";
                     $parts_type = "";
                 } else {
-                    $parts_type = (int)$attr_id ?? "";
+                    $parts_type = $attr_id ?? "";
                 }
             }
             $parts_material = $goods['parts_material'] ?? "";//配件材质
@@ -803,10 +833,25 @@ class WarehouseBillTService extends Service
             $parts_num = $form->formatValue($goods['parts_num'], 0) ?? 0;//配件数量
             $parts_gold_weight = $form->formatValue($goods['parts_gold_weight'], 0) ?? 0;//配件金重
             $parts_price = $form->formatValue($goods['parts_price'], 0) ?? 0;//配件金价
+            $parts_amount = $form->formatValue($goods['parts_amount'], 0) ?? 0;//配件额
+            $auto_parts_amount = ConfirmEnum::NO;
+            if (bccomp($parts_amount, 0, 5) > 0) {
+                $auto_parts_amount = ConfirmEnum::YES;
+            }
             //$peishi_num = $form->formatValue($goods[57], 0) ?? 0;
             $peishi_weight = $form->formatValue($goods['peishi_weight'], 0) ?? 0;//配石重
             $peishi_gong_fee = $form->formatValue($goods['peishi_gong_fee'], 0) ?? 0;//配石工费
+            $peishi_fee = $form->formatValue($goods['peishi_fee'], 0) ?? 0;//配石费
+            $auto_peishi_fee = ConfirmEnum::NO;
+            if (bccomp($peishi_fee, 0, 5) > 0) {
+                $auto_peishi_fee = ConfirmEnum::YES;
+            }
             $parts_fee = $form->formatValue($goods['parts_fee'], 0) ?? 0;//配件工费
+            $xianqian_fee = $form->formatValue($goods['xianqian_fee'], 0) ?? 0;//镶石费
+            $auto_xianqian_fee = ConfirmEnum::NO;
+            if (bccomp($xianqian_fee, 0, 5) > 0) {
+                $auto_xianqian_fee = ConfirmEnum::YES;
+            }
             $gong_fee = $form->formatValue($goods['gong_fee'], 0) ?? 0;//克工费
             $piece_fee = $form->formatValue($goods['piece_fee'], 0) ?? 0;//件工费
             if (!empty($gong_fee) && !empty($piece_fee)) {
@@ -852,6 +897,12 @@ class WarehouseBillTService extends Service
             $lasha_fee = $form->formatValue($goods['lasha_fee'], 0) ?? 0;//拉砂费
             $bukou_fee = $form->formatValue($goods['bukou_fee'], 0) ?? 0;//补口费
             $templet_fee = $form->formatValue($goods['templet_fee'], 0) ?? 0;//版费
+            $tax_fee = $form->formatValue($goods['tax_fee'], 0) ?? 0;//税费
+            $tax_amount = $form->formatValue($goods['tax_amount'], 0) ?? 0;//税额
+            $auto_tax_amount = ConfirmEnum::NO;
+            if (bccomp($tax_amount, 0, 5) > 0) {
+                $auto_tax_amount = ConfirmEnum::YES;
+            }
             $cert_fee = $form->formatValue($goods['cert_fee'], 0) ?? 0;//证书费
             $other_fee = $form->formatValue($goods['other_fee'], 0) ?? 0;//其他费用
             $main_cert_id = $goods['main_cert_id'] ?? "";//主石证书号
@@ -871,11 +922,15 @@ class WarehouseBillTService extends Service
             } else {
                 $main_cert_type = $cert_type;
             }
+            $factory_cost = $form->formatValue($goods['factory_cost'], 0) ?? 0;//工厂总成本
+            $auto_factory_cost = ConfirmEnum::NO;
+            if (bccomp($factory_cost, 0, 5) > 0) {
+                $auto_factory_cost = ConfirmEnum::YES;
+            }
             $cost_price = $form->formatValue($goods['cost_price'], 0) ?? 0;//公司成本价
-            if ($cost_price) {
+            $is_auto_price = ConfirmEnum::NO;
+            if (bccomp($cost_price, 0, 5) > 0) {
                 $is_auto_price = ConfirmEnum::YES;
-            } else {
-                $is_auto_price = ConfirmEnum::NO;
             }
             $markup_rate = $form->formatValue($goods['markup_rate'], 1) ?? 1;//倍率
             $remark = $goods['remark'] ?? "";//货品备注
@@ -899,6 +954,7 @@ class WarehouseBillTService extends Service
                 'qiban_type' => $qiban_type,
                 'goods_name' => $goods_name,
                 'goods_num' => $goods_num,
+                //属性信息
                 'material_type' => $material_type,
                 'material_color' => $material_color,
                 'finger_hk' => $finger_hk,
@@ -910,50 +966,62 @@ class WarehouseBillTService extends Service
                 'chain_type' => $chain_type,
                 'cramp_ring' => $cramp_ring,
                 'talon_head_type' => $talon_head_type,
+                //金料信息
                 'peiliao_way' => $peiliao_way,
                 'suttle_weight' => $suttle_weight,
                 //'gold_weight' => $gold_weight,
                 'gold_loss' => $gold_loss,
+                'lncl_loss_weight' => $lncl_loss_weight,
                 'gold_price' => $gold_price,
+                'gold_amount' => $gold_amount,
                 'pure_gold_rate' => $pure_gold_rate,
+                //主石信息
                 'main_pei_type' => $main_pei_type,
                 'main_stone_sn' => $main_stone_sn,
                 'main_stone_type' => $main_stone_type,
                 'main_stone_num' => $main_stone_num,
                 'main_stone_weight' => $main_stone_weight,
                 'main_stone_price' => $main_stone_price,
+                'main_stone_amount' => $main_stone_amount,
                 'main_stone_shape' => $main_stone_shape,
                 'main_stone_color' => $main_stone_color,
                 'main_stone_clarity' => $main_stone_clarity,
                 'main_stone_cut' => $main_stone_cut,
                 'main_stone_colour' => $main_stone_colour,
 //                'main_stone_size' => $main_stone_size,
+                //副石1信息
                 'second_pei_type' => $second_pei_type,
                 'second_stone_sn1' => $second_stone_sn1,
                 'second_stone_type1' => $second_stone_type1,
                 'second_stone_num1' => $second_stone_num1,
                 'second_stone_weight1' => $second_stone_weight1,
                 'second_stone_price1' => $second_stone_price1,
+                'second_stone_amount1' => $second_stone_amount1,
                 'second_stone_shape1' => $second_stone_shape1,
                 'second_stone_color1' => $second_stone_color1,
                 'second_stone_clarity1' => $second_stone_clarity1,
                 'second_stone_cut1' => $second_stone_cut1,
                 'second_stone_colour1' => $second_stone_colour1,
+                //副石2信息
                 'second_pei_type2' => $second_pei_type2,
                 'second_stone_sn2' => $second_stone_sn2,
                 'second_stone_type2' => $second_stone_type2,
                 'second_stone_num2' => $second_stone_num2,
                 'second_stone_weight2' => $second_stone_weight2,
                 'second_stone_price2' => $second_stone_price2,
+                'second_stone_amount2' => $second_stone_amount2,
 //                'second_stone_shape2' => $second_stone_shape2,
 //                'second_stone_size2' => $second_stone_size2,
+                //副石3信息
                 'second_pei_type3' => $second_pei_type3,
                 'second_stone_sn3' => $second_stone_sn3,
                 'second_stone_type3' => $second_stone_type3,
                 'second_stone_num3' => $second_stone_num3,
                 'second_stone_weight3' => $second_stone_weight3,
                 'second_stone_price3' => $second_stone_price3,
+                'second_stone_amount3' => $second_stone_amount3,
                 'stone_remark' => $stone_remark,
+                //配件信息
                 'parts_way' => $parts_way,
                 'parts_type' => $parts_type,
                 'parts_material' => $parts_material,
@@ -961,8 +1029,11 @@ class WarehouseBillTService extends Service
                 'parts_gold_weight' => $parts_gold_weight,
                 'parts_price' => $parts_price,
 //                'peishi_num' => $peishi_num,
+                'parts_amount' => $parts_amount,
+                //工费信息
                 'peishi_weight' => $peishi_weight,
                 'peishi_gong_fee' => $peishi_gong_fee,
+                'peishi_fee' => $peishi_fee,
                 'parts_fee' => $parts_fee,
                 'gong_fee' => $gong_fee,
                 'piece_fee' => $piece_fee,
@@ -971,6 +1042,7 @@ class WarehouseBillTService extends Service
                 'second_stone_fee1' => $second_stone_fee1,
                 'second_stone_fee2' => $second_stone_fee2,
                 'second_stone_fee3' => $second_stone_fee3,
+                'xianqian_fee' => $xianqian_fee,
                 'biaomiangongyi' => $biaomiangongyi,
                 'biaomiangongyi_fee' => $biaomiangongyi_fee,
                 'fense_fee' => $fense_fee,
@@ -979,12 +1051,28 @@ class WarehouseBillTService extends Service
                 'bukou_fee' => $bukou_fee,
                 'templet_fee' => $templet_fee,
                 'cert_fee' => $cert_fee,
+                'tax_fee' => $tax_fee,
                 'other_fee' => $other_fee,
                 'main_cert_id' => $main_cert_id,
                 'main_cert_type' => $main_cert_type,
+                //价格信息
+                'tax_amount' => $tax_amount,
+                'factory_cost' => $factory_cost,
                 'cost_price' => $cost_price,
+                //其他信息
                 'is_wholesale' => $is_wholesale,
                 'is_auto_price' => $is_auto_price,
+                'auto_loss_weight' => $auto_loss_weight,
+                'auto_gold_amount' => $auto_gold_amount,
+                'auto_main_stone' => $auto_main_stone,
+                'auto_second_stone1' => $auto_second_stone1,
+                'auto_second_stone2' => $auto_second_stone2,
+                'auto_second_stone3' => $auto_second_stone3,
+                'auto_parts_amount' => $auto_parts_amount,
+                'auto_peishi_fee' => $auto_peishi_fee,
+                'auto_xianqian_fee' => $auto_xianqian_fee,
+                'auto_factory_cost' => $auto_factory_cost,
+                'auto_tax_amount' => $auto_tax_amount,
                 'markup_rate' => $markup_rate,
                 'jintuo_type' => $jintuo_type,
                 'auto_goods_id' => $auto_goods_id,
@@ -999,6 +1087,11 @@ class WarehouseBillTService extends Service
                 $flag = false;
                 $error[$i][] = $this->getError($goodsM);
             }
+//            $result = $form->updateFromValidate($goodsM);
+//            if ($result['error'] == false) {
+//                $flag = false;
+//                $error[$i][] = $result['msg'];
+//            }
             if (!$flag && !empty($style_sn)) {
                 //$error[$i] = array_unshift($error[$i], "[" . $style_sn . "]");
             }
@@ -1024,10 +1117,10 @@ class WarehouseBillTService extends Service
         }
         if (empty($saveData)) {
             throw new \Exception("数据不能为空");
-        }else{
+        } else {
             $saveData = array_reverse($saveData);//倒序
         }
-        $value = $ids = [];
+        $value = [];
         $key = array_keys($saveData[0]);
         foreach ($saveData as $item) {
             $goodsM = new WarehouseBillGoodsL();
@@ -1035,7 +1128,6 @@ class WarehouseBillTService extends Service
             if (!$goodsM->validate()) {
                 throw new \Exception($this->getError($goodsM));
             }
-            $ids[] = $goodsM->id;
             $value[] = array_values($item);
             if (count($value) >= 10) {
                 $res = Yii::$app->db->createCommand()->batchInsert(WarehouseBillGoodsL::tableName(), $key, $value)->execute();
@@ -1053,7 +1145,7 @@ class WarehouseBillTService extends Service
         }
 
         //同步更新价格
-        $this->syncUpdatePriceAll($bill, $ids);
+        $this->syncUpdatePriceAll($bill);
 
         //同步更新单头信息
         $this->warehouseBillTSummary($form->bill_id);
@@ -1070,9 +1162,9 @@ class WarehouseBillTService extends Service
     public function syncUpdatePriceAll($form, $ids = [])
     {
         $where = ['bill_id' => $form->id];
-//        if(!empty($ids)){
-//            $where = ['bill_id' => $form->id, 'id' => $ids];
-//        }
+        if (!empty($ids)) {
+            $where = array_merge($where, ['id' => $ids]);
+        }
         $goods = WarehouseBillTGoodsForm::findAll($where);
         if (!empty($goods)) {
             foreach ($goods as $good) {
@@ -1110,6 +1202,9 @@ class WarehouseBillTService extends Service
      */
     public function calculateLossWeight($form)
     {
+        if ($form->auto_loss_weight) {
+            return $form->lncl_loss_weight ?? 0;
+        }
         if (empty($form->gold_loss)) {
             $form->gold_loss = 0;
         }
@@ -1126,10 +1221,10 @@ class WarehouseBillTService extends Service
     public function calculatePureGold($form)
     {
         if ($form->peiliao_way == PeiLiaoWayEnum::LAILIAO) {
-            if (empty($form->pure_gold_rate)) {
+            if (bccomp($form->pure_gold_rate, 0, 5) != 1) {
                 $form->pure_gold_rate = 0;
             }
-            return bcmul($this->calculateLossWeight($form), 1 + ($form->pure_gold_rate / 100), 5) ?? 0;
+            return bcmul($this->calculateLossWeight($form), ($form->pure_gold_rate / 100), 5) ?? 0;
         }
         return 0;
     }
@@ -1143,7 +1238,11 @@ class WarehouseBillTService extends Service
      */
     public function calculateGoldAmount($form)
     {
+        if ($form->auto_gold_amount) {
+            return $form->gold_amount ?? 0;
+        }
         return bcmul($form->gold_price, $this->calculateLossWeight($form), 5) ?? 0;
+
     }
 
     /**
@@ -1191,6 +1290,9 @@ class WarehouseBillTService extends Service
      */
     public function calculateMainStoneCost($form)
     {
+        if ($form->auto_main_stone) {
+            return $form->main_stone_amount ?? 0;
+        }
         return bcmul($this->calculateMainStoneWeight($form), $form->main_stone_price, 5) ?? 0;
     }
 
@@ -1203,6 +1305,9 @@ class WarehouseBillTService extends Service
      */
     public function calculateSecondStone1Cost($form)
     {
+        if ($form->auto_second_stone1) {
+            return $form->second_stone_amount1 ?? 0;
+        }
         return bcmul($form->second_stone_weight1, $form->second_stone_price1, 5) ?? 0;
     }
 
@@ -1215,6 +1320,9 @@ class WarehouseBillTService extends Service
      */
     public function calculateSecondStone2Cost($form)
     {
+        if ($form->auto_second_stone2) {
+            return $form->second_stone_amount2 ?? 0;
+        }
         return bcmul($form->second_stone_weight2, $form->second_stone_price2, 5) ?? 0;
     }
 
@@ -1227,6 +1335,9 @@ class WarehouseBillTService extends Service
      */
     public function calculateSecondStone3Cost($form)
     {
+        if ($form->auto_second_stone3) {
+            return $form->second_stone_amount3 ?? 0;
+        }
         return bcmul($form->second_stone_weight3, $form->second_stone_price3, 5) ?? 0;
     }
 
@@ -1251,6 +1362,9 @@ class WarehouseBillTService extends Service
      */
     public function calculatePartsAmount($form)
     {
+        if ($form->auto_parts_amount) {
+            return $form->parts_amount ?? 0;
+        }
         return bcmul($this->calculatePartsWeight($form), $form->parts_price, 5) ?? 0;
     }
 
@@ -1263,7 +1377,28 @@ class WarehouseBillTService extends Service
      */
     public function calculatePeishiFee($form)
     {
+        if ($form->auto_peishi_fee) {
+            return $form->peishi_fee ?? 0;
+        }
+        if (bccomp($form->peishi_weight, 0, 5) != 1) {
+            $form->peishi_weight = $this->calculateSecondStoneWeight($form);
+        }
         return bcmul($form->peishi_weight, $form->peishi_gong_fee, 5) ?? 0;
+    }
+
+    /**
+     *
+     * 税额=(金重*税费)
+     * @param WarehouseBillTGoodsForm $form
+     * @return integer
+     * @throws
+     */
+    public function calculateTaxAmount($form)
+    {
+        if ($form->auto_tax_amount) {
+            return $form->tax_amount ?? 0;
+        }
+        return bcmul($this->calculateGoldWeight($form), $form->tax_fee, 5) ?? 0;
     }
 
     /**
@@ -1292,6 +1427,9 @@ class WarehouseBillTService extends Service
      */
     public function calculateXiangshiFee($form)
     {
+        if ($form->auto_xianqian_fee) {
+            return $form->xianqian_fee ?? 0;
+        }
         $second_stone_fee1 = bcmul($form->second_stone_fee1, $form->second_stone_num1, 5) ?? 0;
         $second_stone_fee2 = bcmul($form->second_stone_fee2, $form->second_stone_num2, 5) ?? 0;
         $second_stone_fee3 = bcmul($form->second_stone_fee3, $form->second_stone_num3, 5) ?? 0;
@@ -1300,7 +1438,7 @@ class WarehouseBillTService extends Service
 
     /**
      *
-     * 总工费=(配石费+基本工费+配件工费+镶石费+表面工艺费+分色分件费+喷砂费+拉砂费+补口费+版费+证书费+其它费用)
+     * 总工费=(配石费+基本工费+配件工费+镶石费+表面工艺费+分色分件费+喷砂费+拉砂费+补口费+版费+税费+证书费+其它费用)
      * @param WarehouseBillTGoodsForm $form
      * @return integer
      * @throws
@@ -1320,6 +1458,7 @@ class WarehouseBillTService extends Service
         $total_gong_fee = bcadd($total_gong_fee, $form->bukou_fee, 5);//补口费
         //$total_gong_fee = bcadd($total_gong_fee, $form->extra_stone_fee, 5);//超石费
         $total_gong_fee = bcadd($total_gong_fee, $form->templet_fee, 5);//样板工费
+        $total_gong_fee = bcadd($total_gong_fee, $form->tax_amount, 5);//税费
         $total_gong_fee = bcadd($total_gong_fee, $form->cert_fee, 5);//证书费
         $total_gong_fee = bcadd($total_gong_fee, $form->other_fee, 5);//其它补充费用
 
@@ -1335,6 +1474,9 @@ class WarehouseBillTService extends Service
      */
     public function calculateFactoryCost($form)
     {
+        if ($form->auto_factory_cost) {
+            return $form->factory_cost ?? 0;
+        }
         $factory_cost = 0;
         if ($form->peiliao_way == PeiLiaoWayEnum::FACTORY) {
             $factory_cost = bcadd($factory_cost, $this->calculateGoldAmount($form), 5);
@@ -1369,12 +1511,24 @@ class WarehouseBillTService extends Service
     public function calculateCostPrice($form)
     {
         $cost_price = 0;
-        $cost_price = bcadd($cost_price, $this->calculateGoldAmount($form), 5);
-        $cost_price = bcadd($cost_price, $this->calculateMainStoneCost($form), 5);
-        $cost_price = bcadd($cost_price, $this->calculateSecondStone1Cost($form), 5);
-        $cost_price = bcadd($cost_price, $this->calculateSecondStone2Cost($form), 5);
-        $cost_price = bcadd($cost_price, $this->calculateSecondStone3Cost($form), 5);
-        $cost_price = bcadd($cost_price, $this->calculatePartsAmount($form), 5);
+        if ($form->peiliao_way != PeiLiaoWayEnum::NO_PEI) {
+            $cost_price = bcadd($cost_price, $this->calculateGoldAmount($form), 5);
+        }
+        if ($form->main_pei_type != PeiShiWayEnum::NO_PEI) {
+            $cost_price = bcadd($cost_price, $this->calculateMainStoneCost($form), 5);
+        }
+        if ($form->second_pei_type != PeiShiWayEnum::NO_PEI) {
+            $cost_price = bcadd($cost_price, $this->calculateSecondStone1Cost($form), 5);
+        }
+        if ($form->second_pei_type2 != PeiShiWayEnum::NO_PEI) {
+            $cost_price = bcadd($cost_price, $this->calculateSecondStone2Cost($form), 5);
+        }
+        if ($form->second_pei_type3 != PeiShiWayEnum::NO_PEI) {
+            $cost_price = bcadd($cost_price, $this->calculateSecondStone3Cost($form), 5);
+        }
+        if ($form->parts_way != PeiJianWayEnum::NO_PEI) {
+            $cost_price = bcadd($cost_price, $this->calculatePartsAmount($form), 5);
+        }
         $cost_price = bcadd($cost_price, $this->calculateTotalGongFee($form), 5);
 
         return sprintf("%.3f", $cost_price) ?? 0;
@@ -1401,30 +1555,87 @@ class WarehouseBillTService extends Service
      */
     public function syncUpdatePrice($form)
     {
-        if (empty($form->is_auto_price) || empty($form->cost_price)) {
-            if (!$form->validate()) {
-                throw new \Exception($this->getError($form));
-            }
-            $form->gold_weight = $this->calculateGoldWeight($form);//金重
-            $form->lncl_loss_weight = $this->calculateLossWeight($form);//含耗重
-            $form->pure_gold = $this->calculatePureGold($form);//折足
-            $form->gold_amount = $this->calculateGoldAmount($form);//金料额
-            $form->main_stone_amount = $this->calculateMainStoneCost($form);//主石成本
-            $form->second_stone_amount1 = $this->calculateSecondStone1Cost($form);//副石1成本
-            $form->second_stone_amount2 = $this->calculateSecondStone2Cost($form);//副石2成本
-            $form->second_stone_amount3 = $this->calculateSecondStone3Cost($form);//副石3成本
-            $form->peishi_fee = $this->calculatePeishiFee($form);//配石费
-            $form->xianqian_fee = $this->calculateXiangshiFee($form);//镶石费
-            $form->parts_amount = $this->calculatePartsAmount($form);//配件额
-            $form->basic_gong_fee = $this->calculateBasicGongFee($form);//基本工费
-            $form->total_gong_fee = $this->calculateTotalGongFee($form);//总工费
-            $form->factory_cost = $this->calculateFactoryCost($form);//工厂成本
-            $form->cost_price = $this->calculateCostPrice($form);//公司成本
-            $form->market_price = $this->calculateMarketPrice($form);//标签价
-            if (false === $form->save()) {
-                throw new \Exception($this->getError($form));
-            }
+        if (!$form->validate()) {
+            throw new \Exception($this->getError($form));
         }
+        $form->gold_weight = $this->calculateGoldWeight($form);//金重
+        if (empty($form->auto_loss_weight) || bccomp($form->lncl_loss_weight, 0, 5) != 1) {
+            if (bccomp($form->lncl_loss_weight, 0, 5) != 1) {
+                $form->auto_loss_weight = ConfirmEnum::NO;
+            }
+            $form->lncl_loss_weight = $this->calculateLossWeight($form);//含耗重
+        }
+        $form->pure_gold = $this->calculatePureGold($form);//折足
+        if (empty($form->auto_gold_amount) || bccomp($form->gold_amount, 0, 5) != 1) {
+            if (bccomp($form->gold_amount, 0, 5) != 1) {
+                $form->auto_gold_amount = ConfirmEnum::NO;
+            }
+            $form->gold_amount = $this->calculateGoldAmount($form);//金料额
+        }
+        if (empty($form->auto_main_stone) || bccomp($form->main_stone_amount, 0, 5) != 1) {
+            if (bccomp($form->main_stone_amount, 0, 5) != 1) {
+                $form->auto_main_stone = ConfirmEnum::NO;
+            }
+            $form->main_stone_amount = $this->calculateMainStoneCost($form);//主石成本
+        }
+        if (empty($form->auto_second_stone1) || bccomp($form->second_stone_amount1, 0, 5) != 1) {
+            if (bccomp($form->second_stone_amount1, 0, 5) != 1) {
+                $form->auto_second_stone1 = ConfirmEnum::NO;
+            }
+            $form->second_stone_amount1 = $this->calculateSecondStone1Cost($form);//副石1成本
+        }
+        if (empty($form->auto_second_stone2) || bccomp($form->second_stone_amount2, 0, 5) != 1) {
+            if (bccomp($form->second_stone_amount2, 0, 5) != 1) {
+                $form->auto_second_stone2 = ConfirmEnum::NO;
+            }
+            $form->second_stone_amount2 = $this->calculateSecondStone2Cost($form);//副石2成本
+        }
+        if (empty($form->auto_second_stone3) || bccomp($form->second_stone_amount3, 0, 5) != 1) {
+            if (bccomp($form->second_stone_amount3, 0, 5) != 1) {
+                $form->auto_second_stone3 = ConfirmEnum::NO;
+            }
+            $form->second_stone_amount3 = $this->calculateSecondStone3Cost($form);//副石3成本
+        }
+        if (empty($form->auto_peishi_fee) || bccomp($form->peishi_fee, 0, 5) != 1) {
+            if (bccomp($form->peishi_fee, 0, 5) != 1) {
+                $form->auto_peishi_fee = ConfirmEnum::NO;
+            }
+            $form->peishi_fee = $this->calculatePeishiFee($form);//配石费
+        }
+        if (empty($form->auto_xianqian_fee) || bccomp($form->xianqian_fee, 0, 5) != 1) {
+            if (bccomp($form->xianqian_fee, 0, 5) != 1) {
+                $form->auto_xianqian_fee = ConfirmEnum::NO;
+            }
+            $form->xianqian_fee = $this->calculateXiangshiFee($form);//镶石费
+        }
+        if (empty($form->auto_parts_amount) || bccomp($form->parts_amount, 0, 5) != 1) {
+            if (bccomp($form->parts_amount, 0, 5) != 1) {
+                $form->auto_parts_amount = ConfirmEnum::NO;
+            }
+            $form->parts_amount = $this->calculatePartsAmount($form);//配件额
+        }
+        $form->basic_gong_fee = $this->calculateBasicGongFee($form);//基本工费
+        $form->total_gong_fee = $this->calculateTotalGongFee($form);//总工费
+        if (empty($form->auto_factory_cost) || bccomp($form->factory_cost, 0, 5) != 1) {
+            if (bccomp($form->factory_cost, 0, 5) != 1) {
+                $form->auto_factory_cost = ConfirmEnum::NO;
+            }
+            $form->factory_cost = $this->calculateFactoryCost($form);//工厂成本
+        }
+        if (empty($form->auto_tax_amount) || bccomp($form->tax_amount, 0, 5) != 1) {
+            if (bccomp($form->tax_amount, 0, 5) != 1) {
+                $form->auto_tax_amount = ConfirmEnum::NO;
+            }
+            $form->tax_amount = $this->calculateTaxAmount($form);//税额
+        }
+        if (empty($form->is_auto_price) || bccomp($form->cost_price, 0, 5) != 1) {
+            $form->cost_price = $this->calculateCostPrice($form);//公司成本
+        }
+        $form->market_price = $this->calculateMarketPrice($form);//标签价
+        if (false === $form->save()) {
+            throw new \Exception($this->getError($form));
+        }
+
         return $form;
     }
 

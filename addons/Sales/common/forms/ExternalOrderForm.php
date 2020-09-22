@@ -18,7 +18,8 @@ class ExternalOrderForm extends Order
 {
     //审批流程
     public $targetType;
-    
+    public $other_fee;
+    public $arrive_amount;
     public $consignee_id;
     public $goods_list;
     /**

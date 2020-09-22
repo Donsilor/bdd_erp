@@ -25,6 +25,11 @@ use common\enums\LogTypeEnum;
 use addons\Sales\common\enums\OrderFromEnum;
 use addons\Sales\common\models\OrderInvoice;
 use addons\Sales\common\forms\ExternalOrderForm;
+use addons\Sales\common\forms\OrderImportForm;
+use common\helpers\UploadHelper;
+use common\helpers\ExcelHelper;
+use addons\Sales\common\models\Platform;
+use common\enums\LanguageEnum;
 
 /**
  * Class SaleChannelService
@@ -149,7 +154,7 @@ class OrderService extends Service
      *  创建外部平台订单
      * @param ExternalOrderForm $form
      */
-    public function createExternalOrder($form)
+    public function createExternalOrder($form, $mode = 'form')
     {
         if(false === $form->validate()) {
             throw new \Exception($this->getError($form));
@@ -204,18 +209,108 @@ class OrderService extends Service
         
         //创建订单日志
         if($isNewOrder === true) {
-            $log = [
-                    'order_id' => $order->id,
-                    'order_sn' => $order->order_sn,
-                    'order_status' => $order->order_status,
-                    'log_type' => LogTypeEnum::ARTIFICIAL,
-                    'log_time' => time(),
-                    'log_module' => '创建订单',
-                    'log_msg' => "创建新订单， 订单号:".$order->order_sn
-            ];
+            if($mode == "import") {
+                $log = [
+                        'order_id' => $order->id,
+                        'order_sn' => $order->order_sn,
+                        'order_status' => $order->order_status,
+                        'log_type' => LogTypeEnum::ARTIFICIAL,
+                        'log_time' => time(),
+                        'log_module' => '批量导入订单',
+                        'log_msg' => "批量导入订单, 订单号:".$order->order_sn
+                ];
+                
+            }else{
+                $log = [
+                        'order_id' => $order->id,
+                        'order_sn' => $order->order_sn,
+                        'order_status' => $order->order_status,
+                        'log_type' => LogTypeEnum::ARTIFICIAL,
+                        'log_time' => time(),
+                        'log_module' => '创建订单',
+                        'log_msg' => "创建订单, 订单号:".$order->order_sn
+                ];
+            }
+            
             \Yii::$app->salesService->orderLog->createOrderLog($log);
         }
         return $order;
+    }
+    
+    /**
+     *  外部订单导入
+     * @param OrderImportForm $form
+     */
+    public function importExternalOrder($form)
+    {
+        if (!($form->file->tempName ?? true)) {
+            throw new \Exception("请上传文件");
+        }
+        if (UploadHelper::getExt($form->file->name) != 'xlsx') {
+            throw new \Exception("请上传xlsx格式文件");
+        }
+        
+        $startRow = 3;
+        $endColumn = count($form->columns);
+        
+        $rows = ExcelHelper::import($form->file->tempName, $startRow, $endColumn, $form->columns);//从第1行开始,第4列结束取值
+        if(!isset($rows[4])) {
+            throw new \Exception("导入数据不能为空");
+        }
+        $order_list = [];
+        $error_flag = false;
+        //1.数据校验及格式化
+        foreach ($rows as $rowIndex=> & $row) {
+            if($rowIndex == $startRow) {
+                $form->titles = $row;
+                continue;
+            }
+            //加载表格行数据 并且数据校验
+            if(false === $form->loadRow($row,$rowIndex)){
+                continue;
+            }            
+            
+            $order = new ExternalOrderForm();
+            $order->language = $form->language;
+            $order->currency = $form->currency;
+            $order->platform_id = $form->platform->id;
+            $order->sale_channel_id = $form->platform->channel_id;
+            $order->out_trade_no = $form->out_trade_no;            
+            $order->pay_type = $form->platform->payment_id;
+            $order->customer_mobile = $form->customer_mobile;
+            $order->pay_remark = $form->pay_remark;
+            $order->remark = $form->remark;
+            $order->pay_time = $form->order_time;//支付时间=下单时间
+            $order->order_time = $form->order_time;
+            
+            if($form->style_1) {
+                $order->goods_list[] = [
+                        'style_sn' =>$form->style_sn_1,
+                        'goods_name'=>$form->goods_name_1,
+                        'goods_spec' =>$form->goods_spec_2,
+                        'goods_price'=>$form->goods_price_1
+                ];
+            }
+            if($form->style_2) {
+                $order->goods_list[] = [
+                        'style_sn' =>$form->style_sn_2,
+                        'goods_name'=>$form->goods_name_2,
+                        'goods_spec' =>$form->goods_spec_2,
+                        'goods_price'=>$form->goods_price_2
+                ];
+            }                        
+            $order_list[$rowIndex] = $order;
+        }
+        if($error_flag === false) {
+            foreach ($order_list as $rowIndex=>$order) {
+                try{
+                     $this->createExternalOrder($order, 'import');
+                }catch (\Exception $e) {
+                     $form->addRowError($rowIndex, 'out_trade_no', $e->getMessage());
+                }
+            }
+        }
+        $form->showImportMessage();
     }
     /**
      * 自动创建同步订单

@@ -11,7 +11,7 @@ namespace addons\Warehouse\common\enums;
 class PeiLiaoWayEnum extends \common\enums\BaseEnum
 {
     const NO_PEI = 0;
-    const COMPANY = 1;
+    //const COMPANY = 1;
     const FACTORY = 2;
     const LAILIAO = 3;
 
@@ -22,7 +22,7 @@ class PeiLiaoWayEnum extends \common\enums\BaseEnum
     {
         return [
             self::NO_PEI => '不需配料',
-            self::COMPANY => '公司配',
+            //self::COMPANY => '公司配',
             self::FACTORY => '工厂配',
             self::LAILIAO=> '来料加工',
         ];

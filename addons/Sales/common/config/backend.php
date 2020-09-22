@@ -113,6 +113,10 @@ return [
                     'route' => 'sale-channel/index',
                 ],
                 [
+                    'title' => '销售平台',
+                    'route' => 'platform/index',
+                ],
+                [
                     'title' => '客户来源',
                     'route' => 'customer-sources/index',
                 ],
