@@ -493,8 +493,10 @@ class BillCController extends BaseController
             $second_stone_cart1 = $list['second_stone_weight1'] ?? 0;
             $second_stone_cart2 = $list['second_stone_weight2'] ?? 0;
             $second_stone_cart3 = $list['second_stone_weight3'] ?? 0;
-            //总石重
-            $list['cart'] = $main_stone_cart + $second_stone_cart1 + $second_stone_cart2 + $second_stone_cart3;
+
+            $list['gross_weight'] = bcdiv($list['gross_weight'], $list['goods_num'], 3);//连石重
+            $list['market_price'] = bcdiv($list['market_price'], $list['goods_num'], 3);//标签价
+            $list['cart'] = $main_stone_cart + $second_stone_cart1 + $second_stone_cart2 + $second_stone_cart3;//总石重
             //汇总
             $total['goods_num'] = bcadd($total['goods_num'], $list['goods_num'], 3);//货品数量
             $total['cart'] = bcadd($total['cart'], $list['cart'], 3);//总石重
