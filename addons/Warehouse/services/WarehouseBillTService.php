@@ -1549,14 +1549,14 @@ class WarehouseBillTService extends Service
 
     /**
      *
-     * 标签价(市场价)=(公司成本*倍率)
+     * 标签价(市场价)=(单件成本*倍率)
      * @param WarehouseBillTGoodsForm $form
      * @return integer
      * @throws
      */
     public function calculateMarketPrice($form)
     {
-        return bcmul($form->markup_rate, $this->calculateCostPrice($form), 5) ?? 0;
+        return bcmul($form->markup_rate, $form->unit_cost_price, 5) ?? 0;
     }
 
     /**
