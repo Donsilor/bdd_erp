@@ -153,7 +153,7 @@ class WarehouseBillTGoodsForm extends WarehouseBillGoodsL
             'other_fee' => 0,
             'factory_cost' => 0,
             'cost_price' => 0,
-            'unit_cost_price' => 0,
+            //'unit_cost_price' => 0,
             'cost_amount' => 0,
             'market_price' => 0,
         ];
@@ -198,7 +198,7 @@ class WarehouseBillTGoodsForm extends WarehouseBillGoodsL
                 $total['other_fee'] = bcadd($total['other_fee'], $good->other_fee, 3);
                 $total['factory_cost'] = bcadd($total['factory_cost'], $good->factory_cost, 3);
                 $total['cost_price'] = bcadd($total['cost_price'], $good->cost_price, 3);
-                $total['unit_cost_price'] = bcadd($total['unit_cost_price'], $good->unit_cost_price, 3);
+                //$total['unit_cost_price'] = bcadd($total['unit_cost_price'], $good->unit_cost_price, 3);
                 $total['cost_amount'] = bcadd($total['cost_amount'], $good->cost_amount, 3);
                 //标签价
                 $total['market_price'] = bcadd($total['market_price'], $good->market_price, 3);
