@@ -1979,17 +1979,14 @@ $params = $params ? "&".http_build_query($params) : '';
 //                                ]),
                             ],
                             [
-                                'label' => "总成本/件",
-                                'attribute' => 'cost_price',
+                                'attribute' => 'unit_cost_price',
                                 //'format' => 'raw',
                                 'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#9b95c9;'],
                                 'contentOptions' => ['style' => 'color:red'],
                                 'footerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#9b95c9;'],
                                 'value' => function ($model, $key, $index, $widget) use ($total) {
-                                    $one_cost_price = $total['one_cost_price'] ?? 0;
-                                    $widget->footer = "总成本/件<span style='font-size:16px; color: red;'>[" . $one_cost_price . "]</span>";
-                                    $cost_price = bcsub($model->cost_price, $model->templet_fee, 3);
-                                    return bcdiv($cost_price, $model->goods_num, 3) ?? "0.00";
+                                    $widget->footer = $model->getFooterValues('unit_cost_price', $total, "0.00");
+                                    return $model->unit_cost_price ?? "0.00";
                                 },
                                 'visible' => \common\helpers\Auth::verify(\common\enums\SpecialAuthEnum::VIEW_CAIGOU_PRICE),
                                 'filter' => false,

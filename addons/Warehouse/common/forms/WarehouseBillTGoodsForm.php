@@ -153,10 +153,10 @@ class WarehouseBillTGoodsForm extends WarehouseBillGoodsL
             'other_fee' => 0,
             'factory_cost' => 0,
             'cost_price' => 0,
+            'unit_cost_price' => 0,
             'market_price' => 0,
         ];
         $goods = $this->find()->select(array_keys($total))->where(['bill_id' => $bill_id])->all();
-        $total = array_merge($total, ['one_cost_price' => 0]);
         if (!empty($goods)) {
             foreach ($goods as $good) {
                 $total['goods_num'] = bcadd($total['goods_num'], $good->goods_num);
@@ -197,10 +197,7 @@ class WarehouseBillTGoodsForm extends WarehouseBillGoodsL
                 $total['other_fee'] = bcadd($total['other_fee'], $good->other_fee, 3);
                 $total['factory_cost'] = bcadd($total['factory_cost'], $good->factory_cost, 3);
                 $total['cost_price'] = bcadd($total['cost_price'], $good->cost_price, 3);
-                //单件总成本=((总成本-版费)/数量)
-                $cost_price = bcsub($good->cost_price, $good->templet_fee, 3);
-                $one_cost_price = bcdiv($cost_price, $good->goods_num, 3);
-                $total['one_cost_price'] = bcadd($total['one_cost_price'], $one_cost_price, 3);
+                $total['unit_cost_price'] = bcadd($total['unit_cost_price'], $good->unit_cost_price, 3);
                 //标签价
                 $total['market_price'] = bcadd($total['market_price'], $good->market_price, 3);
             }

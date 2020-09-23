@@ -389,7 +389,7 @@ class WarehouseBillGoodsL extends BaseModel
             'markup_rate' => '倍率[加价率]',
             'market_price' => '标签价(市场价)',
             'cost_price' => '公司总成本(成本价)',
-            'unit_cost_price' => '公司总成本/件',
+            'unit_cost_price' => '总成本/件',
 
             //其他信息
             'factory_mo' => '工厂模号',
