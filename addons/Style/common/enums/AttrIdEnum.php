@@ -12,7 +12,7 @@ class AttrIdEnum
     //金属信息
     const JINZHONG = 11;//金重
     const FINGER = 38;//美号（手寸）
-    const PORT_NO = 78;//港号（手寸）
+    const FINGER_HK = 78;//港号（手寸）
     const MATERIAL_TYPE = 10;//材质
     const MATERIAL_COLOR = 77;//材质颜色
     const MATERIAL = 10;//材质（成色）

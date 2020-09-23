@@ -535,7 +535,7 @@ $params = $params ? "&".http_build_query($params) : '';
                             'value' => function($model){
                                 return Yii::$app->attr->valueName($model->finger_hk);
                             },
-                            'filter' => Html::activeDropDownList($searchModel, 'finger_hk',Yii::$app->attr->valueMap(AttrIdEnum::PORT_NO), [
+                            'filter' => Html::activeDropDownList($searchModel, 'finger_hk',Yii::$app->attr->valueMap(AttrIdEnum::FINGER_HK), [
                                 'prompt' => '全部',
                                 'class' => 'form-control',
                                 'style'=> 'width:80px;'

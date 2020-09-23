@@ -371,6 +371,12 @@ $params = $params ? "&".http_build_query($params) : '';
                         'class'=>'btn btn-success btn-sm',
                         'onclick' => 'batchExport()',
                     ]);
+                    echo '&nbsp;';
+
+                    echo Html::button('打印标签导出', [
+                        'class'=>'btn btn-success btn-sm',
+                        'onclick' => 'batchLabelExport()',
+                    ]);
                 ?>
                 <?= GridView::widget([
                     'dataProvider' => $dataProvider,
@@ -557,7 +563,7 @@ $params = $params ? "&".http_build_query($params) : '';
                             'value' => function($model){
                                 return Yii::$app->attr->valueName($model->finger_hk);
                             },
-                            'filter' => Html::activeDropDownList($searchModel, 'finger_hk',Yii::$app->attr->valueMap(AttrIdEnum::PORT_NO), [
+                            'filter' => Html::activeDropDownList($searchModel, 'finger_hk',Yii::$app->attr->valueMap(AttrIdEnum::FINGER_HK), [
                                 'prompt' => '全部',
                                 'class' => 'form-control',
                                 'style'=> 'width:80px;'
@@ -1203,13 +1209,7 @@ $params = $params ? "&".http_build_query($params) : '';
                             'headerOptions' => [],
                         ],
                         [
-                            'label' => '采购成本/件',
-                            'attribute'=>'cost_price',
-                            'value' => function($model){
-                                $cost_price = $model->cost_price ?? 0;
-                                $cost_price = bcsub($cost_price, $model->edition_fee, 3);
-                                return bcdiv($cost_price, $model->goods_num, 3);
-                            },
+                            'attribute'=>'unit_cost_price',
                             'filter' => false,
                             'visible' => \common\helpers\Auth::verify(\common\enums\SpecialAuthEnum::VIEW_CAIGOU_PRICE),
                             'headerOptions' => [],
@@ -1459,15 +1459,25 @@ $params = $params ? "&".http_build_query($params) : '';
         $('#select select').prop('selectedIndex', 0);
     }
 
+    //批量导出
     function batchExport() {
         var ids = $("#grid").yiiGridView("getSelectedRows");
-        if(ids.length == 0){
-            var url = "<?= Url::to('index?action=export'.$params);?>";
+        if (ids.length == 0) {
+            var url = "<?= Url::to('index?action=export' . $params);?>";
             rfExport(url)
-        }else{
-            window.location.href = "<?= Url::buildUrl('export',[],['ids'])?>?ids=" + ids;
+        } else {
+            window.location.href = "<?= Url::buildUrl('export', [], ['ids'])?>?ids=" + ids;
         }
-
     }
 
+    //打印标签导出
+    function batchLabelExport() {
+        var ids = $("#grid").yiiGridView("getSelectedRows");
+        if (ids.length == 0) {
+            var url = "<?= Url::to('index?action=export&export_type=1' . $params);?>";
+            rfExport(url)
+        } else {
+            window.location.href = "<?= Url::buildUrl('export', ['export_type' => 1], ['ids'])?>?ids=" + ids;
+        }
+    }
 </script>

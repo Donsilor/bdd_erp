@@ -425,7 +425,7 @@ class OrderGoodsService extends Service
                 'attr_type' => 2,
             ],
             'finger_hk' => [
-                'attr_id' => AttrIdEnum::PORT_NO, //港号（手寸）
+                'attr_id' => AttrIdEnum::FINGER_HK, //港号（手寸）
                 'attr_type'=> 2
             ],
             'chain_long' => [

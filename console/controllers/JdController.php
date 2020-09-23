@@ -8,9 +8,13 @@ use addons\Sales\common\models\OrderGoods;
 use addons\Sales\common\models\Order;
 
 /**
+ * 
  * 京东API任务处理
  * Class CommendController
  * @package console\controllers
+ * 
+ * 1.https://auth.360buy.com/oauth/authorize?response_type=code&client_id=600FE385E066028D2A1B30C46C54E54C&redirect_uri=https://erp.bddco.com/&state=bddco
+ * 2.https://open-oauth.jd.com/oauth2/access_token?app_key=600FE385E066028D2A1B30C46C54E54C&app_secret=1a693572f25440d8905672fac4611a6a&grant_type=authorization_code&code=rHShky 
  */
 class JdController extends Controller
 {

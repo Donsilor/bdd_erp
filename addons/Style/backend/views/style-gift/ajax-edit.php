@@ -65,7 +65,7 @@ $form = ActiveForm::begin([
     <div class="row">
         <div class="col-lg-4">
             <?= $form->field($model, 'finger_hk')->widget(\kartik\select2\Select2::class, [
-                'data' => \Yii::$app->attr->valueMap(AttrIdEnum::PORT_NO),
+                'data' => \Yii::$app->attr->valueMap(AttrIdEnum::FINGER_HK),
                 'options' => ['placeholder' => '请选择'],
                 'pluginOptions' => [
                     'allowClear' => false,

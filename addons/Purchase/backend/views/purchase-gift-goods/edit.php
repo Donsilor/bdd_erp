@@ -46,7 +46,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         <?= $form->field($model, 'material_color')->dropDownList($model->getMaterialColorMap(),['prompt'=>'请选择']) ?>
                     </div>
                     <div class="col-lg-3">
-                        <?= $form->field($model, 'finger_hk')->dropDownList(Yii::$app->attr->valueMap(\addons\Style\common\enums\AttrIdEnum::PORT_NO),['prompt'=>'请选择']) ?>
+                        <?= $form->field($model, 'finger_hk')->dropDownList(Yii::$app->attr->valueMap(\addons\Style\common\enums\AttrIdEnum::FINGER_HK),['prompt'=>'请选择']) ?>
                     </div>
                     <div class="col-lg-3">
                         <?= $form->field($model, 'finger')->dropDownList(Yii::$app->attr->valueMap(AttrIdEnum::FINGER),['prompt'=>'请选择']) ?>

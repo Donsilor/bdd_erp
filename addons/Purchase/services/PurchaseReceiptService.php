@@ -445,7 +445,7 @@ class PurchaseReceiptService extends Service
                     'qiban_sn' => $produce->qiban_sn,
                     'qiban_type' => $produce->qiban_type,
                     'finger' => $attr_arr[AttrIdEnum::FINGER]['attr_value_id'] ?? '',
-                    'finger_hk' => $attr_arr[AttrIdEnum::PORT_NO]['attr_value_id'] ?? '',
+                    'finger_hk' => $attr_arr[AttrIdEnum::FINGER_HK]['attr_value_id'] ?? '',
                     'xiangkou' => $attr_arr[AttrIdEnum::XIANGKOU]['attr_value_id'] ?? '',
                     'material' => $attr_arr[AttrIdEnum::MATERIAL]['attr_value_id'] ?? '',
                     'material_type' => $attr_arr[AttrIdEnum::MATERIAL_TYPE]['attr_value_id'] ?? '',

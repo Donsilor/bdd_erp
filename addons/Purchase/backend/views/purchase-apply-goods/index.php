@@ -285,8 +285,8 @@ $this->params['breadcrumbs'][] = $this->title;
                                             $str .= $model->attr[AttrIdEnum::FINGER]."/美号";
                                             $str .= "<br/>";
                                         }
-                                        if(isset($model->attr[AttrIdEnum::PORT_NO])){
-                                            $str .= $model->attr[AttrIdEnum::PORT_NO]."/港号";
+                                        if(isset($model->attr[AttrIdEnum::FINGER_HK])){
+                                            $str .= $model->attr[AttrIdEnum::FINGER_HK]."/港号";
                                         }
                                         return $str;
                                     }

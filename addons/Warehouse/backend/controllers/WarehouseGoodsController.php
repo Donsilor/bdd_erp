@@ -100,6 +100,13 @@ class WarehouseGoodsController extends BaseController
             $this->actionExport($queryIds);
         }
 
+        //标签打印导出
+        if(\Yii::$app->request->get('action') === 'export'
+            && \Yii::$app->request->get('export_type') == 1){
+            $queryIds = $dataProvider->query->select(WarehouseGoods::tableName().'.id');
+            $this->actionExport($queryIds);
+        }
+
 
         return $this->render($this->action->id, [
             'dataProvider' => $dataProvider,
@@ -370,7 +377,7 @@ class WarehouseGoodsController extends BaseController
             ['折足(g)', 'pure_gold' , 'text'],
             ['金价', 'gold_price' , 'text'],
             ['金料额', 'gold_amount' , 'text'],
-            ['主石配石类型', 'main_peishi_type' , 'text'],
+            //['主石配石类型', 'main_peishi_type' , 'text'],
             ['主石编号', 'main_stone_sn' , 'text'],
             ['主石配石方式', 'main_peishi_way' , 'text'],
             ['主石类型	', 'main_stone_type' , 'text'],
@@ -411,7 +418,7 @@ class WarehouseGoodsController extends BaseController
             ['对称', 'diamond_symmetry' , 'text'],
             ['荧光', 'diamond_fluorescence' , 'text'],
             ['单价', 'main_stone_price' , 'text'],
-            ['金额', 'main_stone_price_sum','text'],
+            //['金额', 'main_stone_price_sum','text'],
             ['钻石证书类型', 'diamond_cert_type','text'],
             ['钻石证书号', 'diamond_cert_id','text'],
             ['副石1类型	', 'second_stone_type1' , 'text'],
@@ -430,7 +437,7 @@ class WarehouseGoodsController extends BaseController
             ['证书费', 'cert_fee' , 'text'],
             ['工艺费', 'biaomiangongyi_fee' , 'text'],
             ['总单价', 'price_sum' , 'text'],
-            ['备注', 'goods_remark' , 'text']
+            //['备注', 'goods_remark' , 'text']
 
         ];
 
@@ -441,7 +448,7 @@ class WarehouseGoodsController extends BaseController
         $query = WarehouseGoods::find()->alias('g')
             ->leftJoin(ProductType::tableName().' type','type.id=g.product_type_id')
             ->leftJoin(StyleCate::tableName().' cate','cate.id=g.style_cate_id')
-            ->where(['w.id' => $ids])
+            ->where(['g.id' => $ids])
             ->select($select);
         $lists = PageHelper::findAll($query, 100);
         //统计
@@ -497,9 +504,9 @@ class WarehouseGoodsController extends BaseController
             //入库方式
             $list['peiliao_way'] = PeiLiaoWayEnum::getValue($list['peiliao_way']);
             //主石配石类型
-            $list['main_peishi_type'] = PeishiTypeEnum::getValue($list['main_peishi_type']);
+            //$list['main_peishi_type'] = PeishiTypeEnum::getValue($list['main_peishi_type']);
             //主石配石方式
-            $list['main_peishi_way'] = PeishiTypeEnum::getValue($list['main_peishi_type']);
+            $list['main_peishi_way'] = PeishiTypeEnum::getValue($list['main_peishi_way']);
             //主石类型
             $main_stone_type = empty($list['main_stone_type']) ? '' : $list['main_stone_type'];
             $list['main_stone_type'] = \Yii::$app->attr->valueName($main_stone_type);
@@ -573,8 +580,9 @@ class WarehouseGoodsController extends BaseController
             $second_stone_weight2 = empty($list['second_stone_weight2']) ? 0 : $list['second_stone_weight2'];
             $list['second_stone_weight2'] = \Yii::$app->attr->valueName($second_stone_weight2);
             //单价
-            $list['price'] = $list['cost_price'] + $list['main_stone_price_sum'] + $list['gong_fee']
-                + $list['bukou_fee'] + $list['biaomiangongyi_fee'];
+            $list['price'] = 0;
+            //$list['price'] = $list['cost_price'] + $list['main_stone_price_sum'] + $list['gong_fee']
+                //+ $list['bukou_fee'] + $list['biaomiangongyi_fee'];
             //总额
             $list['price_sum'] = $list['price'] * $list['goods_num'];
             //含耗重
@@ -588,7 +596,7 @@ class WarehouseGoodsController extends BaseController
             $total['suttle_weight_count'] += $list['suttle_weight']; //净重
             $total['gold_amount_count'] += $list['gold_amount']; //金料额
             $total['main_stone_weight_count'] += $list['diamond_carat']; //石重
-            $total['main_stone_price_sum_count'] += $list['main_stone_price_sum']; //主石金额
+            //$total['main_stone_price_sum_count'] += $list['main_stone_price_sum']; //主石金额
             $total['second_stone_weight1_count'] += $list['second_stone_weight1']; //副石石重
             $total['second_stone_price1_sum_count'] += $list['second_stone_price1_sum']; //副石金额
             $total['price_count'] += $list['price']; //单价

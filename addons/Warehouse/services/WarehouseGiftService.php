@@ -195,7 +195,7 @@ class WarehouseGiftService extends Service
             ],
             //手寸(港)
             [
-                'attr_id' => AttrIdEnum::PORT_NO,
+                'attr_id' => AttrIdEnum::FINGER_HK,
                 'attr_field' => 'finger_hk',
                 'input_type' => InputTypeEnum::INPUT_SELECT,
                 'is_require' => 0

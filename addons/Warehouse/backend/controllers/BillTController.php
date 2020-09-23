@@ -400,7 +400,20 @@ class BillTController extends BaseController
             return $this->message('单据ID不为空', $this->redirect(['index']), 'warning');
         }
 
-        $list = $this->getData($ids);
+        $select = ['wb.bill_no','creator.username as creator_name','wb.created_at','auditor.username as auditor_name', 'wb.bill_status','wb.supplier_id',
+            'wg.*', 'type.name as product_type_name', 'cate.name as style_cate_name','supplier.supplier_name',
+            'w.name as warehouse_name'];
+        $query =  WarehouseBill::find()->alias('wb')
+            ->leftJoin(WarehouseBillGoodsL::tableName() . " wg", 'wb.id=wg.bill_id')
+            ->leftJoin(Warehouse::tableName() . ' w', 'w.id=wg.to_warehouse_id')
+            ->leftJoin(ProductType::tableName() . ' type', 'type.id=wg.product_type_id')
+            ->leftJoin(Supplier::tableName() . ' supplier', 'supplier.id=wb.supplier_id')
+            ->leftJoin(StyleCate::tableName() . ' cate', 'cate.id=wg.style_cate_id')
+            ->leftJoin(Member::tableName() . ' creator', 'creator.id=wb.creator_id')
+            ->leftJoin(Member::tableName() . ' auditor', 'auditor.id=wb.auditor_id')
+            ->where(['wb.id' => $ids])
+            ->select($select);
+        $list = PageHelper::findAll($query, 100);
 
         $header = [
             ['入库单号', 'bill_no', 'text'],
@@ -606,23 +619,114 @@ class BillTController extends BaseController
 
     private function getData($ids)
     {
-
-        $select = ['wb.bill_no','creator.username as creator_name','wb.created_at','auditor.username as auditor_name', 'wb.bill_status','wb.supplier_id',
-            'wg.*', 'type.name as product_type_name', 'cate.name as style_cate_name','supplier.supplier_name',
-            'w.name as warehouse_name'];
-        $query =  WarehouseBill::find()->alias('wb')
-            ->leftJoin(WarehouseBillGoodsL::tableName() . " wg", 'wb.id=wg.bill_id')
-            ->leftJoin(Warehouse::tableName() . ' w', 'w.id=wg.to_warehouse_id')
+        $select = [
+            'w.bill_no', 'w.bill_type', 'w.bill_status', 'wg.goods_id', 'wg.style_sn', 'wg.goods_num', 'wg.goods_name',//基本
+            'wg.material_type', 'wg.finger', 'wg.finger_hk',//属性
+            'wg.suttle_weight', 'wg.gold_weight', 'wg.gold_loss', 'wg.lncl_loss_weight', 'wg.gold_price', 'wg.gold_amount',//金料
+            'wg.main_stone_sn', 'wg.main_stone_num', 'wg.main_stone_weight', 'wg.main_stone_price', 'wg.main_stone_amount',//主石
+            'wg.second_stone_sn1', 'wg.second_stone_num1', 'wg.second_stone_weight1', 'wg.second_stone_price1', 'wg.second_stone_amount1',//副石1
+            'parts_gold_weight', 'parts_amount', 'parts_fee',//配件
+            'basic_gong_fee', 'xianqian_fee', 'biaomiangongyi_fee', 'fense_fee', 'bukou_fee', 'templet_fee', 'tax_amount',//工费
+            'wg.cert_id', 'wg.pure_gold', 'wg.factory_cost', 'wg.cost_price',//成本
+        ];
+        $query = WarehouseBill::find()->alias('w')
+            ->leftJoin(WarehouseBillGoodsL::tableName() . " wg", 'w.id=wg.bill_id')
             ->leftJoin(ProductType::tableName() . ' type', 'type.id=wg.product_type_id')
-            ->leftJoin(Supplier::tableName() . ' supplier', 'supplier.id=wb.supplier_id')
             ->leftJoin(StyleCate::tableName() . ' cate', 'cate.id=wg.style_cate_id')
-            ->leftJoin(Member::tableName() . ' creator', 'creator.id=wb.creator_id')
-            ->leftJoin(Member::tableName() . ' auditor', 'auditor.id=wb.auditor_id')
-            ->where(['wb.id' => $ids])
+            ->where(['w.id' => $ids])
             ->select($select);
         $lists = PageHelper::findAll($query, 100);
+//        echo '<pre>';
+//        print_r($lists);die;
+        $total = [
+            'goods_num' => 0,
+            'suttle_weight' => 0,
+            'gold_weight' => 0,
+            'lncl_loss_weight' => 0,
+            'gold_amount' => 0,
 
-        return $lists;
+            'main_stone_num' => 0,
+            'main_stone_weight' => 0,
+            'main_stone_amount' => 0,
+            'second_stone_num1' => 0,
+            'second_stone_weight1' => 0,
+            'second_stone_amount1' => 0,
+
+            'parts_gold_weight' => 0,
+            'parts_amount' => 0,
+            'parts_fee' => 0,
+            'basic_gong_fee' => 0,
+            'xianqian_fee' => 0,
+            'biaomiangongyi_fee' => 0,
+            'fense_fee' => 0,
+            'bukou_fee' => 0,
+            'templet_fee' => 0,
+
+            'tax_amount' => 0,
+            'pure_gold' => 0,
+            'factory_cost' => 0,
+            'one_cost_price' => 0,
+            'cost_price' => 0,
+
+            'gold_price' => 0,
+        ];
+        foreach ($lists as &$list) {
+            //金价
+            if($total['gold_price'] == 0 && $list['gold_price']){
+                $total['gold_price'] = $list['gold_price'];
+            }
+            //商品名称
+            if ($list['goods_name']) {
+                $list['goods_name'] = mb_substr($list['goods_name'], 0, 6, 'utf-8') . "...";
+            }
+            //主石编号
+            if ($list['main_stone_sn']) {
+                $list['main_stone_sn'] = substr($list['main_stone_sn'], 0, 3) . "...";
+            }
+            //副石1编号
+            if ($list['second_stone_sn1']) {
+                $list['second_stone_sn1'] = substr($list['second_stone_sn1'], 0, 3) . "...";
+            }
+            //材质
+            $material_type = empty($list['material_type']) ? 0 : $list['material_type'];
+            $list['material_type'] = Yii::$app->attr->valueName($material_type);
+            //手寸
+            $finger = empty($list['finger']) ? $list['finger_hk'] : $list['finger'];
+            $finger = $finger ?? 0;
+            $list['finger'] = Yii::$app->attr->valueName($finger);
+
+            //汇总
+            $total['goods_num'] = bcadd($total['goods_num'], $list['goods_num']);//数量
+            $total['suttle_weight'] = bcadd($total['suttle_weight'], $list['suttle_weight'], 3);//连石重
+            $total['gold_weight'] = bcadd($total['gold_weight'], $list['gold_weight'], 3);//金重
+            $total['lncl_loss_weight'] = bcadd($total['lncl_loss_weight'], $list['lncl_loss_weight'], 3);//含耗重
+            $total['gold_amount'] = bcadd($total['gold_amount'], $list['gold_amount'], 3);//金料额
+
+            $total['main_stone_num'] = bcadd($total['main_stone_num'], $list['main_stone_num']);//主石粒数
+            $total['main_stone_weight'] = bcadd($total['main_stone_weight'], $list['main_stone_weight'], 3);//主石重
+            $total['main_stone_amount'] = bcadd($total['main_stone_amount'], $list['main_stone_amount'], 3);//主石成本价
+
+            $total['second_stone_num1'] = bcadd($total['second_stone_num1'], $list['second_stone_num1']);//副石1粒数
+            $total['second_stone_weight1'] = bcadd($total['second_stone_weight1'], $list['second_stone_weight1'], 3);//副石1重
+            $total['second_stone_amount1'] = bcadd($total['second_stone_amount1'], $list['second_stone_amount1'], 3);//副石1成本价
+
+            $total['parts_gold_weight'] = bcadd($total['parts_gold_weight'], $list['parts_gold_weight'], 3);//配件金重
+            $total['parts_amount'] = bcadd($total['parts_amount'], $list['parts_amount'], 3);//配件额
+            $total['parts_fee'] = bcadd($total['parts_fee'], $list['parts_fee'], 3);//配件工费
+            $total['basic_gong_fee'] = bcadd($total['basic_gong_fee'], $list['basic_gong_fee'], 3);//基本工费
+            $total['xianqian_fee'] = bcadd($total['xianqian_fee'], $list['xianqian_fee'], 3);//镶石费
+            $total['biaomiangongyi_fee'] = bcadd($total['biaomiangongyi_fee'], $list['biaomiangongyi_fee'], 3);//表面工艺费
+            $total['fense_fee'] = bcadd($total['fense_fee'], $list['fense_fee'], 3);//分件分色费
+            $total['bukou_fee'] = bcadd($total['bukou_fee'], $list['bukou_fee'], 3);//补口费
+            $total['templet_fee'] = bcadd($total['templet_fee'], $list['templet_fee'], 3);//版费
+
+            $total['tax_amount'] = bcadd($total['tax_amount'], $list['tax_amount'], 3);//税额
+            $total['pure_gold'] = bcadd($total['pure_gold'], $list['pure_gold'], 3);//折足
+            $total['factory_cost'] = bcadd($total['factory_cost'], ($list['factory_cost'] / $list['goods_num']), 3);//单件工厂工费
+            $total['one_cost_price'] = bcadd($total['one_cost_price'], ($list['cost_price'] / $list['goods_num']), 3);//成本价/件
+            $total['cost_price'] = bcadd($total['cost_price'], $list['cost_price'], 3);//总成本价
+        }
+        return [$lists, $total];
     }
 
 }
