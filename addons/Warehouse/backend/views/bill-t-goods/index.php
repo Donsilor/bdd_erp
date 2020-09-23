@@ -2233,10 +2233,10 @@ $params = $params ? "&".http_build_query($params) : '';
         $("input[name='id[]']").trigger("click");
     });
 
-    //导出
-    //function batchExport() {
-    //    window.location.href = "<?//= Url::buildUrl('bill-t/export')?>//;
-    //}
+
+    function batchExport() {
+        window.location.href = "<?= \common\helpers\Url::buildUrl('../bill-t/export',[],['ids'])?>?ids=<?php echo $bill->id ?>";
+    }
 
     /**
      * 一键粘贴
