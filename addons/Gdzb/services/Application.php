@@ -12,6 +12,7 @@ use common\components\Service;
  * @property \addons\Gdzb\services\OrderGoodsService $orderGoods 订单
  * @property \addons\Gdzb\services\OrderRefundService $orderRefund 退货单
  * @property \addons\Gdzb\services\SupplierService $supplier 供应商
+ * @property \addons\Gdzb\services\FollowerService $follower 供应商
  * @property \addons\Gdzb\services\CustomerService $customer 客户
  * @property \addons\Gdzb\services\OrderLogService $orderLog 订单日志
  * @property \addons\Gdzb\services\RefundLogService $refundLog 订单日志
@@ -26,6 +27,7 @@ class Application extends Service
             'orderGoods' => 'addons\Gdzb\services\OrderGoodsService',
             'orderRefund' => 'addons\Gdzb\services\OrderRefundService',
             'supplier' => 'addons\Gdzb\services\SupplierService',
+            'follower' => 'addons\Gdzb\services\FollowerService',
             'customer' => 'addons\Gdzb\services\CustomerService',
             'orderLog' => 'addons\Gdzb\services\OrderLogService',
             'refundLog' => 'addons\Gdzb\services\RefundLogService',

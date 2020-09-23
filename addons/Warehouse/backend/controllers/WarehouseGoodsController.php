@@ -86,7 +86,7 @@ class WarehouseGoodsController extends BaseController
             ->andFilterWhere(['in', 'supplier_id', $search->supplier_id])
             ->andFilterWhere(['in', 'style_channel_id', $search->style_channel_id])
             ->andFilterWhere(['in', 'goods_source', $search->goods_source]);
-        
+
         $created_at = $searchModel->created_at;
         if (!empty($created_at)) {
             $dataProvider->query->andFilterWhere(['>=',WarehouseGoods::tableName().'.created_at', strtotime(explode('/', $created_at)[0])]);//起始时间

@@ -92,7 +92,6 @@ class OrderController extends BaseController
 
             $post = Yii::$app->request->post('OrderForm');
             $model->consignee_info = $model->setConsigneeInfo($post);
-
             $isNewRecord = $model->isNewRecord;
             try{
                 $trans = Yii::$app->trans->beginTransaction();
