@@ -469,7 +469,7 @@ class BillCController extends BaseController
             'cost_price_count' => 0,
             'goods_num' => 0,
             'cart' => 0,
-            'gross_weight' => 0,
+            'suttle_weight' => 0,
             'market_price' => 0,
             'chuku_price' => 0,
         ];
@@ -494,13 +494,13 @@ class BillCController extends BaseController
             $second_stone_cart2 = $list['second_stone_weight2'] ?? 0;
             $second_stone_cart3 = $list['second_stone_weight3'] ?? 0;
 
-            $list['gross_weight'] = bcdiv($list['gross_weight'], $list['goods_num'], 3);//连石重
+            $list['suttle_weight'] = bcdiv($list['suttle_weight'], $list['goods_num'], 3);//连石重
             $list['market_price'] = bcdiv($list['market_price'], $list['goods_num'], 3);//标签价
             $list['cart'] = $main_stone_cart + $second_stone_cart1 + $second_stone_cart2 + $second_stone_cart3;//总石重
             //汇总
             $total['goods_num'] = bcadd($total['goods_num'], $list['goods_num'], 3);//货品数量
             $total['cart'] = bcadd($total['cart'], $list['cart'], 3);//总石重
-            $total['gross_weight'] = bcadd($total['gross_weight'], $list['gross_weight'], 3);//连石重
+            $total['suttle_weight'] = bcadd($total['suttle_weight'], $list['suttle_weight'], 3);//连石重
             $total['market_price'] = bcadd($total['market_price'], $list['market_price'], 3);//标签价
             $total['chuku_price'] = bcadd($total['chuku_price'], $list['chuku_price'], 3);//销售价
 

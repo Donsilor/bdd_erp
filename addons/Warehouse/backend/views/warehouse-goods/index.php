@@ -371,6 +371,12 @@ $params = $params ? "&".http_build_query($params) : '';
                         'class'=>'btn btn-success btn-sm',
                         'onclick' => 'batchExport()',
                     ]);
+                    echo '&nbsp;';
+
+                    echo Html::button('打印标签导出', [
+                        'class'=>'btn btn-success btn-sm',
+                        'onclick' => 'batchLabelExport()',
+                    ]);
                 ?>
                 <?= GridView::widget([
                     'dataProvider' => $dataProvider,
@@ -1453,15 +1459,25 @@ $params = $params ? "&".http_build_query($params) : '';
         $('#select select').prop('selectedIndex', 0);
     }
 
+    //批量导出
     function batchExport() {
         var ids = $("#grid").yiiGridView("getSelectedRows");
-        if(ids.length == 0){
-            var url = "<?= Url::to('index?action=export'.$params);?>";
+        if (ids.length == 0) {
+            var url = "<?= Url::to('index?action=export' . $params);?>";
             rfExport(url)
-        }else{
-            window.location.href = "<?= Url::buildUrl('export',[],['ids'])?>?ids=" + ids;
+        } else {
+            window.location.href = "<?= Url::buildUrl('export', [], ['ids'])?>?ids=" + ids;
         }
-
     }
 
+    //打印标签导出
+    function batchLabelExport() {
+        var ids = $("#grid").yiiGridView("getSelectedRows");
+        if (ids.length == 0) {
+            var url = "<?= Url::to('index?action=export&export_type=1' . $params);?>";
+            rfExport(url)
+        } else {
+            window.location.href = "<?= Url::buildUrl('export', ['export_type' => 1], ['ids'])?>?ids=" + ids;
+        }
+    }
 </script>
