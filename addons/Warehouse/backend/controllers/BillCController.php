@@ -431,75 +431,71 @@ class BillCController extends BaseController
     /**
      * 单据打印
      * @return string
-     * @throws NotFoundHttpException
+     * @throws
      */
     public function actionPrint()
     {
         $this->layout = '@backend/views/layouts/print';
         $id = \Yii::$app->request->get('id');
         $model = $this->findModel($id);
-        list($lists,$total) = $this->getData($id);
+        list($lists, $total) = $this->getData($id);
         return $this->render($this->action->id, [
             'model' => $model,
             'lists' => $lists,
-            'total' =>$total
+            'total' => $total
         ]);
     }
 
     /**
-     *
-     * @return bool
-     * @throws \PhpOffice\PhpSpreadsheet\Exception
-     * @throws \PhpOffice\PhpSpreadsheet\Writer\Exception
+     * @param array $ids
+     * @return array
      */
     public function getData($ids)
     {
-        $select = ['g.*','w.bill_no','w.bill_status','type.name as product_type_name','cate.name as style_cate_name',
-            'warehouse.name as warehouse_name','sup.supplier_name'];
+        $select = [
+            'g.*',
+            'w.bill_no', 'w.bill_status',
+            'type.name as product_type_name',
+            'cate.name as style_cate_name',
+            'warehouse.name as warehouse_name',
+            'sup.supplier_name'
+        ];
         $query = WarehouseBill::find()->alias('w')
-            ->leftJoin(WarehouseBillGoods::tableName()." wg",'w.id=wg.bill_id')
-            ->leftJoin(WarehouseGoods::tableName().' g','g.goods_id=wg.goods_id')
-            ->leftJoin(ProductType::tableName().' type','type.id=g.product_type_id')
-            ->leftJoin(StyleCate::tableName().' cate','cate.id=g.style_cate_id')
-            ->leftJoin(Warehouse::tableName().' warehouse','warehouse.id=g.warehouse_id')
-            ->leftJoin(Supplier::tableName().' sup','sup.id=w.supplier_id')
+            ->leftJoin(WarehouseBillGoods::tableName() . " wg", 'w.id=wg.bill_id')
+            ->leftJoin(WarehouseGoods::tableName() . ' g', 'g.goods_id=wg.goods_id')
+            ->leftJoin(ProductType::tableName() . ' type', 'type.id=g.product_type_id')
+            ->leftJoin(StyleCate::tableName() . ' cate', 'cate.id=g.style_cate_id')
+            ->leftJoin(Warehouse::tableName() . ' warehouse', 'warehouse.id=g.warehouse_id')
+            ->leftJoin(Supplier::tableName() . ' sup', 'sup.id=w.supplier_id')
             ->where(['w.id' => $ids])
             ->select($select);
         $lists = PageHelper::findAll($query, 100);
-        //统计
+        //汇总
         $total = [
-            'cost_price_count' => 0,
             'goods_num' => 0,
             'cart' => 0,
-            'gross_weight' => 0,
+            'suttle_weight' => 0,
             'market_price' => 0,
-            'chuku_price' => 0,
+            //'chuku_price' => 0,
         ];
-        foreach ($lists as &$list){
-            $list['bill_status'] = BillStatusEnum::getValue($list['bill_status']);
-            $list['material'] = \Yii::$app->attr->valueName($list['material']);
-            $list['main_stone_type'] = \Yii::$app->attr->valueName($list['main_stone_type']);
-            $diamond_color = $list['diamond_color'] ? \Yii::$app->attr->valueName($list['diamond_color']): '无';
-            $diamond_clarity = $list['diamond_clarity'] ?\Yii::$app->attr->valueName($list['diamond_clarity']): '无';
-            $diamond_cut = $list['diamond_cut'] ?\Yii::$app->attr->valueName($list['diamond_cut']): '无';
-            $diamond_polish = $list['diamond_polish'] ?\Yii::$app->attr->valueName($list['diamond_polish']): '无';
-            $diamond_symmetry = $list['diamond_symmetry'] ?\Yii::$app->attr->valueName($list['diamond_symmetry']): '无';
-            $diamond_fluorescence = $list['diamond_fluorescence'] ?\Yii::$app->attr->valueName($list['diamond_fluorescence']): '无';
-            $list['main_stone_info'] = $diamond_color . '/' . $diamond_clarity . '/' . $diamond_cut . '/'
-                . $diamond_polish . '/' . $diamond_symmetry . '/' . $diamond_fluorescence;
+        foreach ($lists as &$list) {
+            $main_stone_cart = $list['diamond_carat'] ?? 0;//主石重
+            $main_stone_cart = bcmul($main_stone_cart, $list['goods_num'], 3);//主石总重
+            $second_stone_cart1 = $list['second_stone_weight1'] ?? 0;//副石1重
+            $second_stone_cart2 = $list['second_stone_weight2'] ?? 0;//副石2重
+            $second_stone_cart3 = $list['second_stone_weight3'] ?? 0;//副石3重
+            $cart = $main_stone_cart + $second_stone_cart1 + $second_stone_cart2 + $second_stone_cart3;//石重
 
-            $total['cost_price_count'] += $list['cost_price'];
-
-            $total['goods_num'] = bcadd($total['goods_num'], $list['goods_num'], 3);//货品数量
-            $total['gross_weight'] = bcadd($total['gross_weight'], $list['gross_weight'], 3);//连石重
+            $list['suttle_weight'] = bcmul($list['suttle_weight'], $list['goods_num'], 3);//连石重
+            $list['market_price'] = bcmul($list['market_price'], $list['goods_num'], 3);//标签价
+            $list['cart'] = bcmul($cart, $list['goods_num'], 3);//总石重=石重*数量
+            //汇总
+            $total['goods_num'] = bcadd($total['goods_num'], $list['goods_num'], 3);//总货品数量
+            $total['cart'] = bcadd($total['cart'], $list['cart'], 3);//总石重
+            $total['suttle_weight'] = bcadd($total['suttle_weight'], $list['suttle_weight'], 3);//连石重
             $total['market_price'] = bcadd($total['market_price'], $list['market_price'], 3);//标签价
-            $total['chuku_price'] = bcadd($total['chuku_price'], $list['chuku_price'], 3);//销售价
-
+            //$total['chuku_price'] = bcadd($total['chuku_price'], $list['chuku_price'], 3);//销售价
         }
-        return [$lists,$total];
-
-
-
+        return [$lists, $total];
     }
-
 }

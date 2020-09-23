@@ -371,7 +371,7 @@
             <div class="bottom">
                 <div class="three">
                     <span>金价/g：</span>
-                    <span contenteditable="true">无</span>
+                    <span contenteditable="true"><?= $total['gold_price'] ?? '无' ?></span>
                 </div>
                 <div class="three">
                     <span>工厂结算单号：</span>

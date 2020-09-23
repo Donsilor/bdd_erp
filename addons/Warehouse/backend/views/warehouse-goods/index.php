@@ -110,10 +110,30 @@ $params = $params ? "&".http_build_query($params) : '';
                                 <div class="col-lg-3">
                                     <div class="form-group field-cate-sort">
                                         <div class="col-sm-4 text-right">
-                                            <label class="control-label" for="cate-sort">款号/起版号：</label>
+                                            <label class="control-label" for="cate-sort">款号：</label>
                                         </div>
                                         <div class="col-sm-8">
-                                            <?= Html::textInput('goods_sn', $search->goods_sn, ['class' => 'form-control','placeholder'=>'款号或者起版号搜索']) ?>
+                                            <?= \kartik\select2\Select2::widget([
+                                                'name'=>'style_sn',
+                                                'value'=>$search->style_sn,
+                                                'data'=>Yii::$app->styleService->style->getStyleList('style_sn'),
+                                                'options' => ['placeholder' =>"请选择",'multiple'=>false,'style'=>"width:180px"],
+                                                'pluginOptions' => [
+                                                    'allowClear' => true,
+                                                ],
+                                            ])
+                                            ?>
+                                            <div class="help-block"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-3">
+                                    <div class="form-group field-cate-sort">
+                                        <div class="col-sm-4 text-right">
+                                            <label class="control-label" for="cate-sort">起版号：</label>
+                                        </div>
+                                        <div class="col-sm-8">
+                                            <?= Html::textInput('qiban_sn', $search->qiban_sn, ['class' => 'form-control','placeholder'=>'起版号搜索']) ?>
                                             <div class="help-block"></div>
                                         </div>
                                     </div>
@@ -160,6 +180,10 @@ $params = $params ? "&".http_build_query($params) : '';
                                     </div>
                                 </div>
 
+
+
+                            </div>
+                            <div class="row">
                                 <div class="col-lg-3">
                                     <div class="form-group field-cate-sort">
                                         <div class="col-sm-4 text-right">
@@ -180,9 +204,6 @@ $params = $params ? "&".http_build_query($params) : '';
                                         </div>
                                     </div>
                                 </div>
-
-                            </div>
-                            <div class="row">
 
                                 <div class="col-lg-3">
                                     <div class="form-group field-cate-sort">
@@ -232,6 +253,13 @@ $params = $params ? "&".http_build_query($params) : '';
                                         </div>
                                     </div>
                                 </div>
+
+
+                            </div>
+
+
+
+                            <div class="row">
                                 <div class="col-lg-3">
                                     <div class="form-group field-cate-sort">
                                         <div class="col-sm-4 text-right">
@@ -252,12 +280,6 @@ $params = $params ? "&".http_build_query($params) : '';
                                         </div>
                                     </div>
                                 </div>
-
-                            </div>
-
-
-
-                            <div class="row">
                                 <div class="col-lg-3">
                                     <div class="form-group field-cate-sort">
                                         <div class="col-sm-4 text-right">
@@ -348,6 +370,12 @@ $params = $params ? "&".http_build_query($params) : '';
                     echo Html::button('导出', [
                         'class'=>'btn btn-success btn-sm',
                         'onclick' => 'batchExport()',
+                    ]);
+                    echo '&nbsp;';
+
+                    echo Html::button('打印标签导出', [
+                        'class'=>'btn btn-success btn-sm',
+                        'onclick' => 'batchLabelExport()',
                     ]);
                 ?>
                 <?= GridView::widget([
@@ -535,7 +563,7 @@ $params = $params ? "&".http_build_query($params) : '';
                             'value' => function($model){
                                 return Yii::$app->attr->valueName($model->finger_hk);
                             },
-                            'filter' => Html::activeDropDownList($searchModel, 'finger_hk',Yii::$app->attr->valueMap(AttrIdEnum::PORT_NO), [
+                            'filter' => Html::activeDropDownList($searchModel, 'finger_hk',Yii::$app->attr->valueMap(AttrIdEnum::FINGER_HK), [
                                 'prompt' => '全部',
                                 'class' => 'form-control',
                                 'style'=> 'width:80px;'
@@ -1181,6 +1209,12 @@ $params = $params ? "&".http_build_query($params) : '';
                             'headerOptions' => [],
                         ],
                         [
+                            'attribute'=>'unit_cost_price',
+                            'filter' => false,
+                            'visible' => \common\helpers\Auth::verify(\common\enums\SpecialAuthEnum::VIEW_CAIGOU_PRICE),
+                            'headerOptions' => [],
+                        ],
+                        [
                             'attribute'=>'cost_price',
                             'filter' => false,
                             'visible' => \common\helpers\Auth::verify(\common\enums\SpecialAuthEnum::VIEW_CAIGOU_PRICE),
@@ -1425,15 +1459,25 @@ $params = $params ? "&".http_build_query($params) : '';
         $('#select select').prop('selectedIndex', 0);
     }
 
+    //批量导出
     function batchExport() {
         var ids = $("#grid").yiiGridView("getSelectedRows");
-        if(ids.length == 0){
-            var url = "<?= Url::to('index?action=export'.$params);?>";
+        if (ids.length == 0) {
+            var url = "<?= Url::to('index?action=export' . $params);?>";
             rfExport(url)
-        }else{
-            window.location.href = "<?= Url::buildUrl('export',[],['ids'])?>?ids=" + ids;
+        } else {
+            window.location.href = "<?= Url::buildUrl('export', [], ['ids'])?>?ids=" + ids;
         }
-
     }
 
+    //打印标签导出
+    function batchLabelExport() {
+        var ids = $("#grid").yiiGridView("getSelectedRows");
+        if (ids.length == 0) {
+            var url = "<?= Url::to('index?action=export&export_type=1' . $params);?>";
+            rfExport(url)
+        } else {
+            window.location.href = "<?= Url::buildUrl('export', ['export_type' => 1], ['ids'])?>?ids=" + ids;
+        }
+    }
 </script>

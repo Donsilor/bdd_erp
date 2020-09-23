@@ -461,7 +461,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             [
                                 'label' => '港号',
                                 'value' => function ($model) {
-                                    return $model->attr[AttrIdEnum::PORT_NO] ?? "";
+                                    return $model->attr[AttrIdEnum::FINGER_HK] ?? "";
                                 },
                             ],
                             [

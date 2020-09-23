@@ -274,8 +274,8 @@
                     <div class="one"><span >出库单号：</span><span contenteditable="true"><?= $model->bill_no ?? "无"; ?></span></div>
                 </div>
                 <div class="bottom">
-                    <div class="three"><span >制单日期：</span><span contenteditable="true"><?= $model->created_at ? date('Y年m月d日', $model->created_at) : "无"; ?></span></div>
-                    <div class="three"><span >出库日期：</span><span contenteditable="true"><?= $model->audit_time ? date('Y年m月d日', $model->audit_time) : "无"; ?></span></div>
+                    <div class="three"><span >制单日期：</span><span contenteditable="true"><?= $model->created_at ? date('Y/m/d', $model->created_at) : "无"; ?></span></div>
+                    <div class="three"><span >出库日期：</span><span contenteditable="true"><?= $model->audit_time ? date('Y/m/d', $model->audit_time) : "无"; ?></span></div>
                 </div>
             </div>
             <table class="table">
@@ -307,10 +307,10 @@
                     <td class="algin-center padding-5"><?= $val['style_sn'] ?? "/" ?></td>
                     <td class="algin-center padding-5"><?= $val['goods_num'] ?? "0" ?></td>
                     <td class="algin-center padding-5"><?= $val['product_size'] ?? "/" ?></td>
-                    <td class="algin-center padding-5"><?= $val['gross_weight'] ?? "0.00" ?></td>
-                    <td class="algin-center padding-5"><?= $val['gross_weight'] ?? "0.00" ?></td>
-                    <td class="algin-center padding-5"><?= $val['market_price'] ?? "0.00" ?></td>
-                    <td class="algin-center padding-5"><?= $val['chuku_price'] ?? "0.00" ?></td>
+                    <td class="algin-center padding-5"><?= floatval($val['cart']) ?? "0.00" ?></td>
+                    <td class="algin-center padding-5"><?= floatval($val['suttle_weight']) ?? "0.00" ?></td>
+                    <td class="algin-center padding-5"><?= floatval($val['market_price']) ?? "0.00" ?></td>
+                    <td class="algin-center padding-5" contenteditable="true">无</td>
                     <td class="algin-center padding-5"><?= $val['cert_id'] ?? "/" ?></td>
                     <td class="algin-center padding-5"><?= $val['remark'] ?? "/" ?></td>
                 </tr>
@@ -323,10 +323,10 @@
                     <td class="algin-center padding-5" colspan="5">合计</td>
                     <td class="algin-center padding-5"><?= floatval($total['goods_num']) ?? '0.00'; ?></td>
                     <td class="algin-center padding-5">/</td>
-                    <td class="algin-center padding-5"><?= floatval($total['goods_num']) ?? '0.00'; ?></td>
-                    <td class="algin-center padding-5"><?= floatval($total['gross_weight']) ?? '0.00'; ?></td>
+                    <td class="algin-center padding-5"><?= floatval($total['cart']) ?? '0.00'; ?></td>
+                    <td class="algin-center padding-5"><?= floatval($total['suttle_weight']) ?? '0.00'; ?></td>
                     <td class="algin-center padding-5"><?= floatval($total['market_price']) ?? '0.00'; ?></td>
-                    <td class="algin-center padding-5"><?= floatval($total['chuku_price']) ?? '0.00'; ?></td>
+                    <td class="algin-center padding-5">无</td>
                     <td class="algin-center padding-5">/</td>
                     <td class="algin-center padding-5">/</td>
                 </tr>
@@ -334,7 +334,7 @@
             </table>
             <div class="foot-info">
                 <div class="prepared-by font-bold"><span >制单人：</span><span contenteditable="true"><?= $model->creator->username ?? '无'; ?></span></div>
-                <div class="reviewer font-bold"><span >收货人：</span><span contenteditable="true">无</span></div>
+                <div class="reviewer font-bold"><span >收货人：</span><span contenteditable="true"><?= $model->salesman->username ?? '无'; ?></span></div>
             </div>
         </div>
     </div>

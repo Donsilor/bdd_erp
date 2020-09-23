@@ -52,7 +52,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     <!--                        --><? //= $form->field($model, 'material')->dropDownList(\Yii::$app->styleService->styleAttribute->getAttrValueListByStyle($model->style_sn,AttrIdEnum::MATERIAL),['prompt'=>'请选择']) ?>
                     <!--                    </div>-->
                     <div class="col-lg-4">
-                        <?= $form->field($model, 'finger_hk')->dropDownList($model->getPortNoDrop($model), ['prompt' => '请选择']) ?>
+                        <?= $form->field($model, 'finger_hk')->dropDownList($model->getFingerHkDrop($model), ['prompt' => '请选择']) ?>
                     </div>
                     <div class="col-lg-4">
                         <?= $form->field($model, 'finger')->dropDownList($model->getFingerDrop($model), ['prompt' => '请选择']) ?>

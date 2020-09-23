@@ -372,7 +372,7 @@ class WarehouseBillTService extends Service
             $finger_hk = $goods['finger_hk'] ?? "";//手寸(港号)
             if (!empty($finger_hk)) {
                 $finger_hk = StringHelper::findNum($finger_hk);
-                $attr_id = $form->getAttrIdByAttrValue($style_sn, $finger_hk, AttrIdEnum::PORT_NO);
+                $attr_id = $form->getAttrIdByAttrValue($style_sn, $finger_hk, AttrIdEnum::FINGER_HK);
                 if (empty($attr_id)) {
                     $flag = false;
                     $error[$i][] = "手寸(港号)：[" . $finger_hk . "]录入值有误";
@@ -1536,14 +1536,27 @@ class WarehouseBillTService extends Service
 
     /**
      *
-     * 标签价(市场价)=(公司成本*倍率)
+     * 单件成本=(公司总成本-版费)/商品数量
+     * @param WarehouseBillTGoodsForm $form
+     * @return integer
+     * @throws
+     */
+    public function calculateUnitCostPrice($form)
+    {
+        $cost_price = bcsub($form->cost_price, $form->templet_fee, 3);
+        return bcdiv($cost_price, $form->goods_num, 3) ?? 0;
+    }
+
+    /**
+     *
+     * 标签价(市场价)=(单件成本*倍率)
      * @param WarehouseBillTGoodsForm $form
      * @return integer
      * @throws
      */
     public function calculateMarketPrice($form)
     {
-        return bcmul($form->markup_rate, $this->calculateCostPrice($form), 5) ?? 0;
+        return bcmul($form->markup_rate, $form->unit_cost_price, 5) ?? 0;
     }
 
     /**
@@ -1631,6 +1644,7 @@ class WarehouseBillTService extends Service
         if (empty($form->is_auto_price) || bccomp($form->cost_price, 0, 5) != 1) {
             $form->cost_price = $this->calculateCostPrice($form);//公司成本
         }
+        $form->unit_cost_price = $this->calculateUnitCostPrice($form);//单件成本
         $form->market_price = $this->calculateMarketPrice($form);//标签价
         if (false === $form->save()) {
             throw new \Exception($this->getError($form));

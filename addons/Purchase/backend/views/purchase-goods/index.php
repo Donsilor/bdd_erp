@@ -241,7 +241,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             [
                                 'label'=>'手寸（港）',
                                 'value'=> function($model){
-                                    return $model->attr[AttrIdEnum::PORT_NO] ?? "";
+                                    return $model->attr[AttrIdEnum::FINGER_HK] ?? "";
                                 }
                             ],
                             [

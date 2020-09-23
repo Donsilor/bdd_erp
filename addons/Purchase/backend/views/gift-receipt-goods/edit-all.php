@@ -167,9 +167,9 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'format' => 'raw',
                                 'value' => function ($model, $key, $index, $column){
                                     //return Yii::$app->attr->valueName($model->finger_hk)??"";
-                                    return  Html::ajaxSelect($model,'finger_hk', Yii::$app->attr->valueMap(AttrIdEnum::PORT_NO), ['data-id'=>$model->id, 'prompt'=>'请选择']);
+                                    return  Html::ajaxSelect($model,'finger_hk', Yii::$app->attr->valueMap(AttrIdEnum::FINGER_HK), ['data-id'=>$model->id, 'prompt'=>'请选择']);
                                 },
-                                'filter' => Html::activeDropDownList($searchModel, 'finger_hk',Yii::$app->attr->valueMap(AttrIdEnum::PORT_NO), [
+                                'filter' => Html::activeDropDownList($searchModel, 'finger_hk',Yii::$app->attr->valueMap(AttrIdEnum::FINGER_HK), [
                                     'prompt' => '全部',
                                     'class' => 'form-control',
                                     'style'=> 'width:80px;'

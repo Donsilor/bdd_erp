@@ -376,8 +376,8 @@ function rfPrompt(title,onPrompt, formType=0, dValue='',maxlength=500,area=[]) {
     });
 }
 
-function rfExport(url) {
-    appConfirm("确定全部导出吗",'可能会很慢，请谨慎操作',function (value) {
+function rfExport(url, title = '确定全部导出吗', text = '可能会很慢，请谨慎操作') {
+    appConfirm(title, text, function (value) {
         switch (value) {
             case "defeat":
                 window.location = url;

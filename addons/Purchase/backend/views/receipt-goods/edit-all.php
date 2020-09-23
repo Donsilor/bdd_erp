@@ -265,14 +265,14 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'attribute' => 'finger_hk',
                                 'format' => 'raw',
                                 'value' => function ($model, $key, $index, $column) {
-                                    return Html::ajaxSelect($model, 'finger_hk', $model->getPortNoDrop($model), ['data-id' => $model->id, 'prompt' => '请选择']);
+                                    return Html::ajaxSelect($model, 'finger_hk', $model->getFingerHkDrop($model), ['data-id' => $model->id, 'prompt' => '请选择']);
                                 },
-                                'filter' => Html::activeDropDownList($searchModel, 'finger_hk', $model->getPortNoMap(), [
+                                'filter' => Html::activeDropDownList($searchModel, 'finger_hk', $model->getFingerHkMap(), [
                                     'prompt' => '全部',
                                     'class' => 'form-control',
                                     'style' => 'width:100px;'
                                 ]),
-                                'headerOptions' => ['class' => 'col-md-1 batch_select_full', 'attr-name' => 'finger_hk', 'attr-id' => AttrIdEnum::PORT_NO, 'style' => 'background-color:#feeeed;'],
+                                'headerOptions' => ['class' => 'col-md-1 batch_select_full', 'attr-name' => 'finger_hk', 'attr-id' => AttrIdEnum::FINGER_HK, 'style' => 'background-color:#feeeed;'],
                             ],
                             [
                                 'attribute' => 'finger',

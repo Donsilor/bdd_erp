@@ -155,9 +155,9 @@ class WarehouseBillLGoodsForm extends WarehouseBillGoodsL
      * 港号列表
      * @return array
      */
-    public function getPortNoMap()
+    public function getFingerHkMap()
     {
-        return \Yii::$app->attr->valueMap(AttrIdEnum::PORT_NO) ?? [];
+        return \Yii::$app->attr->valueMap(AttrIdEnum::FINGER_HK) ?? [];
     }
 
     /**
@@ -165,12 +165,12 @@ class WarehouseBillLGoodsForm extends WarehouseBillGoodsL
      * @param WarehouseBillTGoodsForm $form
      * @return array
      */
-    public function getPortNoDrop($form)
+    public function getFingerHkDrop($form)
     {
         if (!empty($form->style_sn)) {
-            $data = $this->getAttrValueListByStyle($form->style_sn, AttrIdEnum::PORT_NO);
+            $data = $this->getAttrValueListByStyle($form->style_sn, AttrIdEnum::FINGER_HK);
         } else {
-            $data = $this->getPortNoMap();
+            $data = $this->getFingerHkMap();
         }
         return $data ?? [];
     }

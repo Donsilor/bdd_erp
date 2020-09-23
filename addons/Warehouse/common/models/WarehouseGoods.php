@@ -64,6 +64,7 @@ use addons\Warehouse\common\enums\GoodsStatusEnum;
  * @property int $jintuo_type 金托类型
  * @property string $market_price 市场价(标签价)
  * @property string $cost_price 成本价
+ * @property string $unit_cost_price 成本价/件
  * @property string $gong_fee 工费
  * @property string $extra_stone_fee 超石费
  * @property string $bukou_fee 补口工费
@@ -152,7 +153,7 @@ class WarehouseGoods extends BaseModel
                 'main_stone_num', 'second_stone_num1', 'second_stone_num2','second_stone_num3', 'creator_id','apply_id','auditor_id','audit_time','audit_status', 'created_at', 'updated_at','is_inlay','goods_source','peiliao_type',
                 'parts_num','sales_time','peiliao_way','peijian_way','main_peishi_way','second_peishi_way1','second_peishi_way2','second_peishi_way3','chuku_time'], 'integer'],
             [['goods_id','warehouse_id', 'jintuo_type'], 'required'],
-            [['gold_weight','suttle_weight', 'gold_loss', 'diamond_carat', 'market_price','cost_price','chuku_price', 'factory_cost', 'xiangkou', 'bukou_fee','gong_fee','biaomiangongyi_fee','parts_gold_weight','main_stone_price', 'second_stone_weight1', 'second_stone_price1', 'second_stone_weight2',
+            [['gold_weight','suttle_weight', 'gold_loss', 'diamond_carat', 'market_price','cost_price','unit_cost_price','chuku_price', 'factory_cost', 'xiangkou', 'bukou_fee','gong_fee','biaomiangongyi_fee','parts_gold_weight','main_stone_price', 'second_stone_weight1', 'second_stone_price1', 'second_stone_weight2',
                 'second_stone_price2','second_stone_weight3','second_stone_price3' ,'gold_price','gold_amount','markup_rate','parts_fee','fense_fee','cert_fee','extra_stone_fee','tax_fee','other_fee','total_gong_fee','parts_price','xianqian_price','peishi_fee','peishi_amount','penrasa_fee',
                 'edition_fee','parts_amount','second_stone_cost3','ke_gong_fee','main_stone_cost','second_stone_cost1','second_stone_cost2','peishi_weight','pure_gold','lasha_fee','piece_fee'], 'number'],
             [['goods_name', 'cert_id', 'length','kezi', 'main_stone_size','second_stone_size1','goods_color','biaomiangongyi'], 'string', 'max' => 100],
@@ -225,7 +226,8 @@ class WarehouseGoods extends BaseModel
             'jintuo_type' => '金托类型',
             'market_price' => '市场价(标签价)',
             'cost_price' => '采购成本总价',
-            'chuku_price' => '出库成本价',
+            'unit_cost_price' => '采购成本/件',
+            'chuku_price' => '出库成本/件',
             'chuku_time' => '出库时间',
             'xiangkou' => '戒托镶口',
             'factory_cost' => '工厂成本',
