@@ -1474,10 +1474,10 @@ $params = $params ? "&".http_build_query($params) : '';
     function batchLabelExport() {
         var ids = $("#grid").yiiGridView("getSelectedRows");
         if (ids.length == 0) {
-            var url = "<?= Url::to('index?action=export&export_type=1' . $params);?>";
+            var url = "<?= Url::to('index?action=label-export' . $params);?>";
             rfExport(url)
         } else {
-            window.location.href = "<?= Url::buildUrl('export')?>?export_type=1&ids=" + ids;
+            window.location.href = "<?= Url::buildUrl('label-export', [], ['ids'])?>?&ids=" + ids;
         }
     }
 </script>

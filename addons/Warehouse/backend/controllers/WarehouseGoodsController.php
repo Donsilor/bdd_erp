@@ -93,25 +93,22 @@ class WarehouseGoodsController extends BaseController
             $dataProvider->query->andFilterWhere(['<',WarehouseGoods::tableName().'.created_at', (strtotime(explode('/', $created_at)[1]) + 86400)] );//结束时间
         }
 
-        //标签打印导出
-        if(\Yii::$app->request->get('action') === 'export'
-            && \Yii::$app->request->get('export_type') == 1){
-            $queryIds = $dataProvider->query->select(WarehouseGoods::tableName().'.id');
-            $this->actionExport($queryIds);
-        }
-
         //导出
         if(\Yii::$app->request->get('action') === 'export'){
             $queryIds = $dataProvider->query->select(WarehouseGoods::tableName().'.id');
             $this->actionExport($queryIds);
+        }
+
+        //标签打印导出
+        if(\Yii::$app->request->get('action') === 'labelExport'){
+            $queryIds = $dataProvider->query->select(WarehouseGoods::tableName().'.id');
+            $this->actionLabelExport($queryIds);
         }
         return $this->render($this->action->id, [
             'dataProvider' => $dataProvider,
             'searchModel' => $searchModel,
             'search' => $search,
         ]);
-
-
     }
 
     /**
