@@ -1506,7 +1506,7 @@ class WarehouseBillTService extends Service
 
     /**
      *
-     * 公司成本(成本价)=(金料额+主石成本+副石1成本+副石2成本+副石3成本+配件额+总工费)
+     * 公司成本(成本价)=(金料额+主石成本+副石1成本+副石2成本+副石3成本+配件额+总工费)-版费
      * @param WarehouseBillTGoodsForm $form
      * @return integer
      * @throws
@@ -1533,21 +1533,22 @@ class WarehouseBillTService extends Service
             $cost_price = bcadd($cost_price, $this->calculatePartsAmount($form), 5);
         }
         $cost_price = bcadd($cost_price, $this->calculateTotalGongFee($form), 5);
+        $cost_price = bcsub($cost_price, $form->templet_fee, 5);//版费
 
         return sprintf("%.3f", $cost_price) ?? 0;
     }
 
     /**
      *
-     * 单件成本=(公司总成本-版费)/商品数量
+     * 公司成本总额=(公司成本/件-版费)/商品数量
      * @param WarehouseBillTGoodsForm $form
      * @return integer
      * @throws
      */
-    public function calculateUnitCostPrice($form)
+    public function calculateCostAmount($form)
     {
-        $cost_price = bcsub($form->cost_price, $form->templet_fee, 3);
-        return bcdiv($cost_price, $form->goods_num, 3) ?? 0;
+        $cost_price = bcmul($form->cost_price, $form->goods_num, 3);
+        return bcadd($cost_price, $form->templet_fee, 3) ?? 0;
     }
 
     /**
@@ -1559,7 +1560,7 @@ class WarehouseBillTService extends Service
      */
     public function calculateMarketPrice($form)
     {
-        return bcmul($form->markup_rate, $form->unit_cost_price, 5) ?? 0;
+        return bcmul($form->markup_rate, $form->cost_price, 5) ?? 0;
     }
 
     /**
@@ -1645,9 +1646,9 @@ class WarehouseBillTService extends Service
             $form->tax_amount = $this->calculateTaxAmount($form);//税额
         }
         if (empty($form->is_auto_price) || bccomp($form->cost_price, 0, 5) != 1) {
-            $form->cost_price = $this->calculateCostPrice($form);//公司成本
+            $form->cost_price = $this->calculateCostPrice($form);//公司成本/件
         }
-        $form->unit_cost_price = $this->calculateUnitCostPrice($form);//单件成本
+        $form->cost_amount = $this->calculateCostAmount($form);//公司成本总额
         $form->market_price = $this->calculateMarketPrice($form);//标签价
         if (false === $form->save()) {
             throw new \Exception($this->getError($form));

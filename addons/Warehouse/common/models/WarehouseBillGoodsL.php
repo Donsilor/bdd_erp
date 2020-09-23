@@ -155,8 +155,9 @@ use Yii;
  * @property string $total_gong_fee 总工费
  * @property string $factory_cost 工厂成本
  * @property string $tax_amount 税额
- * @property string $cost_price 公司成本价
+ * @property string $cost_price 公司成本价/件
  * @property string $unit_cost_price 公司成本价/件
+ * @property string $cost_amount 公司成本总额
  * @property string $markup_rate 倍率(加价率)
  * @property string $market_price 标签价(市场价)
  * @property string $factory_mo 模号
@@ -201,7 +202,7 @@ class WarehouseBillGoodsL extends BaseModel
         return [
             [['bill_id', 'bill_no', 'bill_type'], 'required'],
             [['bill_id', 'goods_num', 'style_id', 'style_cate_id', 'product_type_id', 'style_sex', 'style_channel_id', 'qiban_id', 'qiban_type', 'order_detail_id', 'supplier_id', 'to_warehouse_id', 'put_in_type', 'jintuo_type', 'peiliao_way', 'main_pei_type', 'main_stone_num', 'second_pei_type', 'second_stone_num1', 'second_pei_type2', 'second_stone_num2', 'second_pei_type3', 'second_stone_num3', 'parts_way', 'parts_num', 'peishi_num', 'is_inlay', 'source_detail_id', 'is_auto_price', 'auto_goods_id', 'auto_loss_weight', 'auto_gold_amount', 'auto_main_stone', 'auto_second_stone1', 'auto_second_stone2', 'auto_second_stone3', 'auto_parts_amount', 'auto_peishi_fee', 'auto_xianqian_fee', 'auto_tax_amount', 'auto_factory_cost', 'is_wholesale', 'status', 'creator_id', 'created_at', 'updated_at'], 'integer'],
-            [['chain_long', 'gold_weight', 'suttle_weight', 'gold_loss', 'lncl_loss_weight', 'pure_gold', 'pure_gold_rate', 'gold_price', 'gold_amount', 'diamond_carat', 'main_stone_weight', 'main_stone_price', 'main_stone_amount', 'second_stone_weight1', 'second_stone_price1', 'second_stone_amount1', 'second_stone_weight2', 'second_stone_price2', 'second_stone_amount2', 'second_stone_weight3', 'second_stone_price3', 'second_stone_amount3', 'parts_gold_weight', 'parts_price', 'parts_amount', 'gong_fee', 'piece_fee', 'basic_gong_fee', 'peishi_weight', 'peishi_fee', 'peishi_gong_fee', 'xianqian_price', 'xianqian_fee', 'second_stone_fee1', 'second_stone_fee2', 'second_stone_fee3', 'penlasha_fee', 'lasha_fee', 'bukou_fee', 'fense_fee', 'biaomiangongyi_fee', 'extra_stone_fee', 'parts_fee', 'templet_fee', 'tax_fee', 'cert_fee', 'other_fee', 'total_gong_fee', 'tax_amount', 'factory_cost', 'cost_price', 'unit_cost_price', 'markup_rate', 'market_price'], 'number'],
+            [['chain_long', 'gold_weight', 'suttle_weight', 'gold_loss', 'lncl_loss_weight', 'pure_gold', 'pure_gold_rate', 'gold_price', 'gold_amount', 'diamond_carat', 'main_stone_weight', 'main_stone_price', 'main_stone_amount', 'second_stone_weight1', 'second_stone_price1', 'second_stone_amount1', 'second_stone_weight2', 'second_stone_price2', 'second_stone_amount2', 'second_stone_weight3', 'second_stone_price3', 'second_stone_amount3', 'parts_gold_weight', 'parts_price', 'parts_amount', 'gong_fee', 'piece_fee', 'basic_gong_fee', 'peishi_weight', 'peishi_fee', 'peishi_gong_fee', 'xianqian_price', 'xianqian_fee', 'second_stone_fee1', 'second_stone_fee2', 'second_stone_fee3', 'penlasha_fee', 'lasha_fee', 'bukou_fee', 'fense_fee', 'biaomiangongyi_fee', 'extra_stone_fee', 'parts_fee', 'templet_fee', 'tax_fee', 'cert_fee', 'other_fee', 'total_gong_fee', 'tax_amount', 'factory_cost', 'cost_price', 'unit_cost_price', 'cost_amount', 'markup_rate', 'market_price'], 'number'],
             [['bill_no', 'goods_id', 'goods_sn', 'style_sn', 'qiban_sn', 'order_sn', 'length', 'product_size', 'kezi', 'cert_id', 'cert_type', 'diamond_cert_id', 'main_stone_sn', 'main_cert_id', 'second_stone_sn1', 'second_cert_id1', 'second_stone_sn2', 'second_cert_id2', 'second_stone_sn3', 'factory_mo', 'produce_sn'], 'string', 'max' => 30],
             [['bill_type'], 'string', 'max' => 3],
             [['goods_name'], 'string', 'max' => 150],
@@ -388,8 +389,9 @@ class WarehouseBillGoodsL extends BaseModel
             'factory_cost' => '工厂总成本',
             'markup_rate' => '倍率[加价率]',
             'market_price' => '标签价(市场价)',
-            'cost_price' => '公司总成本(成本价)',
+            'cost_price' => '公司成本/件',
             'unit_cost_price' => '总成本/件',
+            'cost_amount' => '公司成本总额',
 
             //其他信息
             'factory_mo' => '工厂模号',

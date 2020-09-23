@@ -1979,23 +1979,6 @@ $params = $params ? "&".http_build_query($params) : '';
 //                                ]),
                             ],
                             [
-                                'attribute' => 'unit_cost_price',
-                                //'format' => 'raw',
-                                'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#9b95c9;'],
-                                'contentOptions' => ['style' => 'color:red'],
-                                'footerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#9b95c9;'],
-                                'value' => function ($model, $key, $index, $widget) use ($total) {
-                                    $widget->footer = $model->getFooterValues('unit_cost_price', $total, "0.00");
-                                    return $model->unit_cost_price ?? "0.00";
-                                },
-                                'visible' => \common\helpers\Auth::verify(\common\enums\SpecialAuthEnum::VIEW_CAIGOU_PRICE),
-                                'filter' => false,
-//                                'filter' => Html::activeTextInput($searchModel, 'cost_price', [
-//                                    'class' => 'form-control',
-//                                    'style' => 'width:100px;'
-//                                ]),
-                            ],
-                            [
                                 'label' => '成本手填',
                                 'attribute' => 'is_auto_price',
                                 'format' => 'raw',
@@ -2024,6 +2007,23 @@ $params = $params ? "&".http_build_query($params) : '';
                                 'visible' => \common\helpers\Auth::verify(\common\enums\SpecialAuthEnum::VIEW_CAIGOU_PRICE),
                                 'filter' => false,
 //                                'filter' => Html::activeTextInput($searchModel, 'cost_price', [
+//                                    'class' => 'form-control',
+//                                    'style' => 'width:100px;'
+//                                ]),
+                            ],
+                            [
+                                'attribute' => 'cost_amount',
+                                //'format' => 'raw',
+                                'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#9b95c9;'],
+                                'contentOptions' => ['style' => 'color:red'],
+                                'footerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#9b95c9;'],
+                                'value' => function ($model, $key, $index, $widget) use ($total) {
+                                    $widget->footer = $model->getFooterValues('cost_amount', $total, "0.00");
+                                    return $model->cost_amount ?? "0.00";
+                                },
+                                'visible' => \common\helpers\Auth::verify(\common\enums\SpecialAuthEnum::VIEW_CAIGOU_PRICE),
+                                'filter' => false,
+//                                'filter' => Html::activeTextInput($searchModel, 'cost_amount', [
 //                                    'class' => 'form-control',
 //                                    'style' => 'width:100px;'
 //                                ]),
