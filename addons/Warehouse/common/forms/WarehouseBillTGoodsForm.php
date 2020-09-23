@@ -293,7 +293,7 @@ class WarehouseBillTGoodsForm extends WarehouseBillGoodsL
             '#', '#',
         ];
         $fields = [
-            '条码号(货号)', '(*)款号', '商品名称' , '(*)金托类型', '起版号', '(*)入库仓库', '材质', '材质颜色', '货品数量', '手寸(港号)', '手寸(美号)', '尺寸(cm)', '成品尺寸(mm)', '镶口(ct)', '刻字', '链类型', '扣环', '爪头形状',
+            '条码号(货号)', '(*)款号', '商品名称', '(*)金托类型', '起版号', '(*)入库仓库', '材质', '材质颜色', '货品数量', '手寸(港号)', '手寸(美号)', '尺寸(cm)', '成品尺寸(mm)', '镶口(ct)', '刻字', '链类型', '扣环', '爪头形状',
             '配料方式', '连石重(g)', '损耗(%)', '含耗重(g)', '金价/g', '金料额', '折足率(%)',
             '主石配石方式', '主石编号', '主石类型', '主石粒数', '主石重(ct)', '主石单价/ct', '主石成本', '主石形状', '主石颜色', '主石净度', '主石切工', '主石色彩',
             '副石1配石方式', '副石1类型', '副石1编号', '副石1粒数', '副石1重(ct)', '副石1单价/ct', '副石1成本', '副石1形状', '副石1颜色', '副石1净度', '副石1切工', '副石1色彩',
@@ -1473,7 +1473,7 @@ class WarehouseBillTGoodsForm extends WarehouseBillGoodsL
 //                || $form->main_cert_type
 //                || $form->main_stone_price > 0
 //                || $form->main_stone_amount > 0
-        ) {
+            ) {
                 $result['error'] = false;
                 $result['msg'] = "主石配石方式为不需配石，主石信息不能填写";
             }
@@ -1496,7 +1496,7 @@ class WarehouseBillTGoodsForm extends WarehouseBillGoodsL
 //                || $form->second_cert_id1
 //                || $form->second_stone_price1 > 0
 //                || $form->second_stone_amount1 > 0
-        ) {
+            ) {
                 $result['error'] = false;
                 $result['msg'] = "副石1配石方式为不需配石，副石1信息不能填写";
             }
@@ -1534,7 +1534,7 @@ class WarehouseBillTGoodsForm extends WarehouseBillGoodsL
 //                || $form->second_stone_weight3 > 0
 //                || $form->second_stone_price3 > 0
 //                || $form->second_stone_amount3 > 0
-                ) {
+            ) {
                 $result['error'] = false;
                 $result['msg'] = "副石3配石方式为不需配石，副石3信息不能填写";
             }
