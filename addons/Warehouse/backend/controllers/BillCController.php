@@ -2,6 +2,7 @@
 
 namespace addons\Warehouse\backend\controllers;
 
+use addons\Sales\common\models\SaleChannel;
 use addons\Style\common\enums\LogTypeEnum;
 use addons\Style\common\models\ProductType;
 use addons\Style\common\models\StyleCate;
@@ -14,6 +15,7 @@ use addons\Warehouse\common\models\WarehouseGoods;
 use common\helpers\ArrayHelper;
 use common\helpers\PageHelper;
 use common\helpers\StringHelper;
+use common\models\backend\Member;
 use Yii;
 use common\traits\Curd;
 use common\helpers\Url;
@@ -397,33 +399,58 @@ class BillCController extends BaseController
         list($list,) = $this->getData($ids);
         // [名称, 字段名, 类型, 类型规则]
         $header = [
-//            ['维修单号', 'bill_no', 'text'],
-//            ['维修状态', 'bill_status', 'text'],
-//            ['维修工厂', 'supplier_name', 'text'],
-            ['货品名称', 'goods_name', 'text'],
-            ['条码号', 'goods_id', 'text'],
+            ['出库单号', 'bill_no', 'text'],
+            ['销售渠道', 'channel_name', 'text'],
+            ['制单日期', 'created_at', 'date','Y-m-d'],
+            ['出库日期', 'audit_time', 'date','Y-m-d'],
+            ['制单人', 'creator_name', 'text'],
+            ['接收人', 'salesman_name', 'text'],
+            ['货号', 'goods_id', 'text'],
             ['款号', 'style_sn', 'text'],
-            ['产品分类', 'product_type_name' , 'text'],
-            ['商品类型', 'style_cate_name' , 'text'],
+            ['商品名称', 'goods_name', 'text'],
+            ['商品数量', 'goods_num', 'text'],
+            ['商品状态', 'goods_status', 'function',function($model){
+                return GoodsStatusEnum::getValue($model->goods_status ?? '');
+            }],
+            ['款式分类', 'product_type_name' , 'text'],
+            ['产品线', 'style_cate_name' , 'text'],
             ['仓库', 'warehouse_name' , 'text'],
-            ['材质', 'material' , 'text'],
-            ['金重', 'gold_weight' , 'text'],
-            ['主石类型', 'main_stone_type' , 'text'],
-            ['主石重（ct)', 'diamond_carat' , 'text'],
+            ['材质', 'material_type', 'function', function ($model) {
+                return \Yii::$app->attr->valueName($model['material_type']);
+            }],
+            ['材质颜色', 'material_color', 'function', function ($model) {
+                return \Yii::$app->attr->valueName($model['material_color']);
+            }],
+            ['连石重', 'suttle_weight' , 'text'],
+            ['主石类型', 'main_stone_type', 'function', function ($model) {
+                return \Yii::$app->attr->valueName($model['main_stone_type']);
+            }],
+            ['主石大小（ct)', 'diamond_carat' , 'text'],
             ['主石粒数', 'main_stone_num' , 'text'],
-            ['主石规格', 'main_stone_info' , 'text'],
-            ['副石重（ct）', 'second_stone_weight1' , 'text'],
-            ['副石粒数', 'second_stone_num1' , 'text'],
-            ['总重', 'gross_weight' , 'text'],
-            ['手寸	', 'finger' , 'text'],
-            ['尺寸	', 'product_size' , 'text'],
+            ['副石1重（ct）', 'second_stone_weight1' , 'text'],
+            ['副石1粒数', 'second_stone_num1' , 'text'],
+            ['手寸', 'finger', 'function', function ($model) {
+                $finger = '';
+                if($model->finger ?? false){
+                    $finger .= Yii::$app->attr->valueName($model->finger ?? '').'(u)';
+                }
+                if($model->finger_hk ?? false){
+                    $finger .= ' '.Yii::$app->attr->valueName($model->finger_hk ?? '').'(u)';
+                }
+                return $finger;
+            }],
             ['证书号	', 'cert_id' , 'text'],
-            ['工费	', 'gong_fee' , 'text'],
-            ['成本价	', 'cost_price' , 'text'],
-            ['备注	', 'remark' , 'text'],
+            ['采购成本/单件	', 'cost_price' , 'text'],
+            ['采购总成本	', 'cost_price' , 'function', function($model){
+                $cost_price = $model->cost_price ?? 0;
+                $goods_num = $model->goods_num ?? 0;
+                return $cost_price * $goods_num;
+            }],
+            ['出库成本价		', 'chuku_price' , 'text'],
+
         ];
 
-        return ExcelHelper::exportData($list, $header, '退货返厂单_' . date('YmdHis',time()));
+        return ExcelHelper::exportData($list, $header, '其他出库单_' . date('YmdHis',time()));
 
     }
 
@@ -454,7 +481,9 @@ class BillCController extends BaseController
     {
         $select = [
             'g.*',
-            'w.bill_no', 'w.bill_status',
+            'w.bill_no', 'w.bill_status','w.created_at','w.audit_time',
+            'channel.name as channel_name','salesman.username as salesman_name',
+            'creator.username as creator_name',
             'type.name as product_type_name',
             'cate.name as style_cate_name',
             'warehouse.name as warehouse_name',
@@ -467,6 +496,9 @@ class BillCController extends BaseController
             ->leftJoin(StyleCate::tableName() . ' cate', 'cate.id=g.style_cate_id')
             ->leftJoin(Warehouse::tableName() . ' warehouse', 'warehouse.id=g.warehouse_id')
             ->leftJoin(Supplier::tableName() . ' sup', 'sup.id=w.supplier_id')
+            ->leftJoin(SaleChannel::tableName() . ' channel', 'channel.id=w.channel_id')
+            ->leftJoin(Member::tableName() . ' creator', 'creator.id=w.creator_id')
+            ->leftJoin(Member::tableName() . ' salesman', 'salesman.id=w.salesman_id')
             ->where(['w.id' => $ids])
             ->select($select);
         $lists = PageHelper::findAll($query, 100);

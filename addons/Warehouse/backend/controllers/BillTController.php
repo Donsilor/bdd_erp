@@ -429,7 +429,7 @@ class BillTController extends BaseController
             ['起版号', 'qiban_sn', 'text'],
             ['入库仓库', 'warehouse_name', 'text'],
             ['材质', 'material_type', 'function', function ($model) {
-                return \Yii::$app->attr->valueName($model['material']);
+                return \Yii::$app->attr->valueName($model['material_type']);
             }],
             ['材质颜色', 'material_color', 'function', function ($model) {
                 return \Yii::$app->attr->valueName($model['material_color']);

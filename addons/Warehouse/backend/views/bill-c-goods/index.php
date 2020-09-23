@@ -89,6 +89,11 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'headerOptions' => ['class' => 'col-md-2'],
                             ],
                             [
+                                'attribute'=>'goods_num',
+                                'filter' => false,
+                                'headerOptions' => ['class' => 'col-md-1'],
+                            ],
+                            [
                                 'attribute'=>'goods.goods_status',
                                 'value' => function($model){
                                      return \addons\Warehouse\common\enums\GoodsStatusEnum::getValue($model->goods->goods_status);
@@ -126,15 +131,26 @@ $this->params['breadcrumbs'][] = $this->title;
                             ],
 
                             [
-                                'attribute' => 'material',
+                                'attribute' => 'material_type',
                                 'value' => function($model){
-                                    return Yii::$app->attr->valueName($model->material);
+                                    return Yii::$app->attr->valueName($model->material_type);
                                 },
                                 'filter' => false,
                                 'headerOptions' => ['class' => 'col-md-1'],
                             ],
                             [
-                                'attribute' => 'gold_weight',
+                                'attribute' => 'material_color',
+                                'value' => function($model){
+                                    return Yii::$app->attr->valueName($model->material_color);
+                                },
+                                'filter' => false,
+                                'headerOptions' => ['class' => 'col-md-1'],
+                            ],
+                            [
+                                'label' => '连石重',
+                                'value' => function($model){
+                                    return $model->goods->suttle_weight ?? '';
+                                } ,
                                 'filter' => false,
                             ],
 
@@ -159,7 +175,17 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'filter' => false,
                             ],
                             [
-                                'attribute' => 'goods.finger',
+                                'label'=>'手寸',
+                                'value' => function($model){
+                                    $finger = '';
+                                    if($model->goods->finger ?? false){
+                                        $finger .= Yii::$app->attr->valueName($model->goods->finger).'(u)';
+                                    }
+                                    if($model->goods->finger_hk ?? false){
+                                        $finger .= ' '.Yii::$app->attr->valueName($model->goods->finger_hk).'(u)';
+                                    }
+                                    return $finger;
+                                },
                                 'filter' => false,
                             ],
                             [
@@ -167,7 +193,16 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'filter' => false,
                             ],
                             [
+                                'label' => '采购成本/单件',
                                 'attribute' => 'cost_price',
+                                'visible' => \common\helpers\Auth::verify(\common\enums\SpecialAuthEnum::VIEW_CAIGOU_PRICE),
+                                'filter' => false,
+                            ],
+                            [
+                                'label' => '采购总成本',
+                                'value' => function($model){
+                                    return $model->cost_price * $model->goods_num;
+                                },
                                 'visible' => \common\helpers\Auth::verify(\common\enums\SpecialAuthEnum::VIEW_CAIGOU_PRICE),
                                 'filter' => false,
                             ],
