@@ -93,13 +93,6 @@ class WarehouseGoodsController extends BaseController
             $dataProvider->query->andFilterWhere(['<',WarehouseGoods::tableName().'.created_at', (strtotime(explode('/', $created_at)[1]) + 86400)] );//结束时间
         }
 
-
-        //导出
-        if(\Yii::$app->request->get('action') === 'export'){
-            $queryIds = $dataProvider->query->select(WarehouseGoods::tableName().'.id');
-            $this->actionExport($queryIds);
-        }
-
         //标签打印导出
         if(\Yii::$app->request->get('action') === 'export'
             && \Yii::$app->request->get('export_type') == 1){
@@ -107,7 +100,11 @@ class WarehouseGoodsController extends BaseController
             $this->actionExport($queryIds);
         }
 
-
+        //导出
+        if(\Yii::$app->request->get('action') === 'export'){
+            $queryIds = $dataProvider->query->select(WarehouseGoods::tableName().'.id');
+            $this->actionExport($queryIds);
+        }
         return $this->render($this->action->id, [
             'dataProvider' => $dataProvider,
             'searchModel' => $searchModel,
@@ -608,6 +605,68 @@ class WarehouseGoodsController extends BaseController
     }
 
 
-
+    /**
+     * 标签打印导出
+     * @param null $ids
+     * @return bool|mixed
+     * @throws
+     */
+    public function actionLabelExport($ids = null)
+    {
+        if (!is_array($ids)) {
+            $ids = StringHelper::explodeIds($ids);
+        }
+        if (!$ids) {
+            return $this->message('库存ID不为空', $this->redirect(['index']), 'warning');
+        }
+        $select = [
+            'g.goods_id', 'g.goods_name', 'g.style_sn',
+            'g.finger', 'g.finger_hk', 'suttle_weight',
+            'g.diamond_color', 'g.diamond_clarity',
+            'diamond_carat', 'g.second_stone_weight1', 'g.second_stone_weight2', 'g.second_stone_weight3',
+            'g.finger', 'g.finger',
+            'g.diamond_cert_id', 'g.market_price',
+        ];//'type.name as product_type_name','cate.name as style_cate_name'
+        $query = WarehouseGoods::find()->alias('g')
+            //->leftJoin(ProductType::tableName().' type','type.id=g.product_type_id')
+            //->leftJoin(StyleCate::tableName().' cate','cate.id=g.style_cate_id')
+            ->where(['g.id' => $ids])
+            ->select($select);
+        $lists = PageHelper::findAll($query, 100);
+        foreach ($lists as &$list) {
+            $finger = $list['finger'] ?? 0;
+            $list['finger'] = \Yii::$app->attr->valueName($finger) ?? "";//手寸（美）
+            $finger_hk = $list['finger_hk'] ?? 0;
+            $list['finger_hk'] = \Yii::$app->attr->valueName($finger_hk) ?? "";//手寸（港）
+            $diamond_carat = $list['diamond_carat'] ?? 0;//主石重
+            $second_stone_weight1 = $list['second_stone_weight1'] ?? 0;//副石1重
+            $second_stone_weight2 = $list['second_stone_weight2'] ?? 0;//副石2重
+            $second_stone_weight3 = $list['second_stone_weight3'] ?? 0;//副石3重
+            $diamond_color = $list['diamond_color'] ?? 0;
+            $list['main_stone_color'] = \Yii::$app->attr->valueName($diamond_color) ?? "";//钻石颜色
+            $diamond_clarity = $list['diamond_clarity'] ?? 0;
+            $list['main_stone_clarity'] = \Yii::$app->attr->valueName($diamond_clarity) ?? "";//钻石净度
+            //标签打印
+            $list['main_stone_carat'] = $diamond_carat ?? 0;//主石重
+            $list['second_stone_cart'] = $second_stone_weight1 + $second_stone_weight2 + $second_stone_weight3;//总副石重
+            $list['label_finger'] = $list['finger'] ?? $list['finger_hk'];//美号为空取港号
+            $list['qualified'] = "执行标准:GB/T18043-2013 GB11887-2012";
+        }
+        $header = [
+            ['条码号', 'goods_id', 'text'],//货号
+            ['货品名称', 'goods_name', 'text'],//名称
+            ['款号', 'style_sn', 'text'],//款号
+            ['主石重(ct)', 'main_stone_carat', 'text'],//主石重
+            ['副石重(ct)', 'second_stone_carat', 'text'],//副石总重
+            ['货重', 'suttle_weight', 'text'],//连石重
+            ['颜色', 'main_stone_color', 'text'],//主石颜色
+            ['净度', 'main_stone_clarity', 'text'],//主石净度
+            ['手寸', 'label_finger', 'text'],//美号，港号
+            ['金额', 'market_price', 'text'],//标签价(市场价)
+            ['证书号', 'diamond_cert_id', 'text'],//主石证书号
+            ['合格', 'qualified', 'text'],//合格证书
+        ];
+        return ExcelHelper::exportData($lists, $header, '标签打印数据导出_' . date('YmdHis', time()));
+    }
 
 }
