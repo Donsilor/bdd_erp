@@ -632,20 +632,20 @@ class WarehouseGoodsController extends BaseController
         $lists = PageHelper::findAll($query, 100);
         foreach ($lists as &$list) {
             $finger = $list['finger'] ?? 0;
-            $list['finger'] = \Yii::$app->attr->valueName($finger) ?? "";//手寸（美）
+            $list['finger'] = \Yii::$app->attr->valueName($finger) ?? "/";//手寸（美）
             $finger_hk = $list['finger_hk'] ?? 0;
-            $list['finger_hk'] = \Yii::$app->attr->valueName($finger_hk) ?? "";//手寸（港）
+            $list['finger_hk'] = \Yii::$app->attr->valueName($finger_hk) ?? "/";//手寸（港）
             $diamond_carat = $list['diamond_carat'] ?? 0;//主石重
             $second_stone_weight1 = $list['second_stone_weight1'] ?? 0;//副石1重
             $second_stone_weight2 = $list['second_stone_weight2'] ?? 0;//副石2重
             $second_stone_weight3 = $list['second_stone_weight3'] ?? 0;//副石3重
             $diamond_color = $list['diamond_color'] ?? 0;
-            $list['main_stone_color'] = \Yii::$app->attr->valueName($diamond_color) ?? "";//钻石颜色
+            $list['main_stone_color'] = \Yii::$app->attr->valueName($diamond_color) ?? "/";//钻石颜色
             $diamond_clarity = $list['diamond_clarity'] ?? 0;
-            $list['main_stone_clarity'] = \Yii::$app->attr->valueName($diamond_clarity) ?? "";//钻石净度
+            $list['main_stone_clarity'] = \Yii::$app->attr->valueName($diamond_clarity) ?? "/";//钻石净度
             //标签打印
             $list['main_stone_carat'] = $diamond_carat ?? 0;//主石重
-            $list['second_stone_cart'] = $second_stone_weight1 + $second_stone_weight2 + $second_stone_weight3;//总副石重
+            $list['second_stone_carat'] = $second_stone_weight1 + $second_stone_weight2 + $second_stone_weight3;//总副石重
             $list['label_finger'] = $list['finger'] ?? $list['finger_hk'];//美号为空取港号
             $list['qualified'] = "执行标准:GB/T18043-2013 GB11887-2012";
         }
