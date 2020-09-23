@@ -356,9 +356,9 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'footerOptions' => ['class' => 'col-md-1 batch_select_full2', 'attr-name' => 'finger_hk', 'attr-id' => AttrIdEnum::FINGER_HK, 'style' => 'background-color:#F5DEB3;'],
                                 'value' => function ($model, $key, $index, $widget) {
                                     $widget->footer = $model->getAttributeLabel('finger_hk');
-                                    return Html::ajaxSelect($model, 'finger_hk', $model->getPortNoDrop($model), ['data-id' => $model->id, 'prompt' => '请选择']);
+                                    return Html::ajaxSelect($model, 'finger_hk', $model->getFingerHkDrop($model), ['data-id' => $model->id, 'prompt' => '请选择']);
                                 },
-                                'filter' => Html::activeDropDownList($searchModel, 'finger_hk', $model->getPortNoMap(), [
+                                'filter' => Html::activeDropDownList($searchModel, 'finger_hk', $model->getFingerHkMap(), [
                                     'prompt' => '全部',
                                     'class' => 'form-control',
                                     'style' => 'width:100px;'

@@ -337,7 +337,7 @@ $params = $params ? "&".http_build_query($params) : '';
                                     $widget->footer = $model->getAttributeLabel('finger_hk');
                                     return Yii::$app->attr->valueName($model->finger_hk) ?? "";
                                 },
-                                'filter' => Html::activeDropDownList($searchModel, 'finger_hk', $model->getPortNoMap(), [
+                                'filter' => Html::activeDropDownList($searchModel, 'finger_hk', $model->getFingerHkMap(), [
                                     'prompt' => '全部',
                                     'class' => 'form-control',
                                     'style' => 'width:60px;'

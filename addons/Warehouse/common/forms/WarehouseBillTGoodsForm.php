@@ -220,7 +220,7 @@ class WarehouseBillTGoodsForm extends WarehouseBillGoodsL
             $this->formatTitle($this->getMaterialTypeMap()),//'材质' .
             $this->formatTitle($this->getMaterialColorMap()),//'材质颜色' .
             '不填默认为1',
-            $this->formatTitle($this->getPortNoMap()),//'手寸(港号)' .
+            $this->formatTitle($this->getFingerHkMap()),//'手寸(港号)' .
             $this->formatTitle($this->getFingerMap()),//'手寸(美号)' .
             '#', '#',
             $this->formatTitle($this->getXiangkouMap()),//'镶口' .
@@ -527,7 +527,7 @@ class WarehouseBillTGoodsForm extends WarehouseBillGoodsL
      * 港号列表
      * @return array
      */
-    public function getPortNoMap()
+    public function getFingerHkMap()
     {
         return \Yii::$app->attr->valueMap(AttrIdEnum::FINGER_HK) ?? [];
     }
@@ -537,12 +537,12 @@ class WarehouseBillTGoodsForm extends WarehouseBillGoodsL
      * @param WarehouseBillTGoodsForm $form
      * @return array
      */
-    public function getPortNoDrop($form)
+    public function getFingerHkDrop($form)
     {
         if (!empty($form->style_sn)) {
             $data = $this->getAttrValueListByStyle($form->style_sn, AttrIdEnum::FINGER_HK);
         } else {
-            $data = $this->getPortNoMap();
+            $data = $this->getFingerHkMap();
         }
         return $data ?? [];
     }
