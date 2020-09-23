@@ -512,7 +512,7 @@ class BillCController extends BaseController
         ];
         foreach ($lists as &$list) {
             $main_stone_cart = $list['diamond_carat'] ?? 0;//主石重
-            $main_stone_cart = bcmul($main_stone_cart, $list['goods_num'], 3);//主石总重
+            $main_stone_cart = bcmul($main_stone_cart, $list['main_stone_num'], 3);//主石总重=(主石重*主石粒数)
             $second_stone_cart1 = $list['second_stone_weight1'] ?? 0;//副石1重
             $second_stone_cart2 = $list['second_stone_weight2'] ?? 0;//副石2重
             $second_stone_cart3 = $list['second_stone_weight3'] ?? 0;//副石3重

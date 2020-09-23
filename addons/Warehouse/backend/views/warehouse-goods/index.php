@@ -1477,7 +1477,7 @@ $params = $params ? "&".http_build_query($params) : '';
             var url = "<?= Url::to('index?action=export&export_type=1' . $params);?>";
             rfExport(url)
         } else {
-            window.location.href = "<?= Url::buildUrl('export', ['export_type' => 1], ['ids'])?>?ids=" + ids;
+            window.location.href = "<?= Url::buildUrl('export')?>?export_type=1&ids=" + ids;
         }
     }
 </script>

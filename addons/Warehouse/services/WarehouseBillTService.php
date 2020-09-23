@@ -289,6 +289,7 @@ class WarehouseBillTService extends Service
                     $flag = false;
                     $error[$i][] = "款号不能为空";
                     if (!$flag) {
+                        $i++;
                         continue;
                     }
                 }
@@ -299,6 +300,7 @@ class WarehouseBillTService extends Service
                     $flag = false;
                     $error[$i][] = $qiban_error . "[款号]不存在";
                     if (!$flag) {
+                        $i++;
                         continue;
                     }
                 }
@@ -1101,12 +1103,13 @@ class WarehouseBillTService extends Service
             //发生错误
             $message = "*注：填写属性值有误可能为以下情况：①填写格式有误 ②该款式属性下无此属性值<hr><hr>";
             foreach ($error as $k => $v) {
+                $line = $k + 1;
                 $style_sn = "";
                 if (isset($style_sns[$k]) && !empty($style_sns[$k])) {
                     $style_sn = $style_sns[$k] ?? "";
                 }
                 $s = "【" . implode('】,【', $v) . '】';
-                $message .= '第' . ($k + 1) . '行：款号' . $style_sn . $s . '<hr>';
+                $message .= '第' . $line . '行：款号' . $style_sn . $s . '<hr>';
             }
             if ($error_off && count($error) > 0 && $message) {
                 header("Content-Disposition: attachment;filename=错误提示" . date('YmdHis') . ".log");
