@@ -404,7 +404,7 @@ class BillTController extends BaseController
             'wg.*', 'type.name as product_type_name', 'cate.name as style_cate_name','supplier.supplier_name',
             'w.name as warehouse_name'];
         $query =  WarehouseBill::find()->alias('wb')
-            ->leftJoin(WarehouseBillGoodsL::tableName() . " wg", 'wb.id=wg.bill_id')
+            ->innerJoin(WarehouseBillGoodsL::tableName() . " wg", 'wb.id=wg.bill_id')
             ->leftJoin(Warehouse::tableName() . ' w', 'w.id=wg.to_warehouse_id')
             ->leftJoin(ProductType::tableName() . ' type', 'type.id=wg.product_type_id')
             ->leftJoin(Supplier::tableName() . ' supplier', 'supplier.id=wb.supplier_id')
@@ -456,26 +456,25 @@ class BillTController extends BaseController
             ['爪头形状','talon_head_type', 'function', function ($model) {
                 return \Yii::$app->attr->valueName($model['talon_head_type']);
             }],
-            ['配料方式','peiliao_way', 'text', function ($model) {
-                return \addons\Warehouse\common\enums\PeiLiaoWayEnum::getValue($model->peiliao_way) ?? "";
-            }],
+//            ['配料方式','peiliao_way', 'text', function ($model) {
+//                return \addons\Warehouse\common\enums\PeiLiaoWayEnum::getValue($model['peiliao_way']);
+//            }],
             ['连石重[净重](g)', 'suttle_weight', 'text'],
             ['金重(g)', 'gold_weight', 'text'],
             ['损耗[金损](%)', 'gold_loss', 'text', function($model){
-                $gold_loss = $model->gold_loss ?? 0;
+                $gold_loss = $model['gold_loss'];
                 return $gold_loss * 100;
             }],
             ['含耗重(g)', 'lncl_loss_weight', 'text'],
             ['金价/g', 'gold_price', 'text'],
             ['金料额', 'gold_amount', 'text'],
             ['折足率(%)', 'pure_gold_rate', 'function', function($model){
-                $pure_gold_rate = $model->pure_gold_rate ?? 0;
-                return $pure_gold_rate * 100;
+                return $pure_gold_rate = $model['pure_gold_rate'];
             }],
             ['折足(g)', 'pure_gold', 'text'],
-            ['主石配石方式','main_pei_type', 'function', function ($model) {
-                return \addons\Warehouse\common\enums\PeiShiWayEnum::getValue($model->main_pei_type ?? '');
-            }],
+//            ['主石配石方式','main_pei_type', 'function', function ($model) {
+//                return \addons\Warehouse\common\enums\PeiShiWayEnum::getValue($model['main_pei_type']);
+//            }],
             ['主石编号', 'main_stone_sn', 'text'],
             ['主石类型','main_stone_type', 'function', function ($model) {
                 return \Yii::$app->attr->valueName($model['main_stone_type']);
@@ -503,9 +502,9 @@ class BillTController extends BaseController
             ['主石证书类型','main_cert_type', 'function', function ($model) {
                 return \Yii::$app->attr->valueName($model['main_cert_type']);
             }],
-            ['副石1配石方式','second_pei_type', 'function', function ($model) {
-                return \addons\Warehouse\common\enums\PeiShiWayEnum::getValue($model->second_pei_type ?? '');
-            }],
+//            ['副石1配石方式','second_pei_type', 'function', function ($model) {
+//                return \addons\Warehouse\common\enums\PeiShiWayEnum::getValue($model['second_pei_type']);
+//            }],
             ['副石1类型','second_stone_type1', 'function', function ($model) {
                 return \Yii::$app->attr->valueName($model['second_stone_type1']);
             }],
@@ -530,12 +529,12 @@ class BillTController extends BaseController
                 return \Yii::$app->attr->valueName($model['second_stone_colour1']);
             }],
 
-            ['副石2配石方式','second_pei_type2', 'function', function ($model) {
-                return \addons\Warehouse\common\enums\PeiShiWayEnum::getValue($model->second_pei_type2 ?? '');
-            }],
-            ['副石2类型','second_stone_type2', 'function', function ($model) {
-                return \Yii::$app->attr->valueName($model['second_stone_type2']);
-            }],
+//            ['副石2配石方式','second_pei_type2', 'function', function ($model) {
+//                return \addons\Warehouse\common\enums\PeiShiWayEnum::getValue($model['second_pei_type2']);
+//            }],
+//            ['副石2类型','second_stone_type2', 'function', function ($model) {
+//                return \Yii::$app->attr->valueName($model['second_stone_type2']);
+//            }],
             ['副石2编号', 'second_stone_sn2', 'text'],
             ['副石2粒数', 'second_stone_num2', 'text'],
             ['副石2重(ct)', 'second_stone_weight2', 'text'],
@@ -543,11 +542,11 @@ class BillTController extends BaseController
             ['副石2成本价	', 'second_stone_amount2', 'text'],
 
             ['副石3配石方式','second_pei_type3', 'function', function ($model) {
-                return \addons\Warehouse\common\enums\PeiShiWayEnum::getValue($model->second_pei_type3 ?? '');
+                return \addons\Warehouse\common\enums\PeiShiWayEnum::getValue($model['second_pei_type3']);
             }],
-            ['副石3类型','second_stone_type3', 'function', function ($model) {
-                return \Yii::$app->attr->valueName($model['second_stone_type3']);
-            }],
+//            ['副石3类型','second_stone_type3', 'function', function ($model) {
+//                return \Yii::$app->attr->valueName($model['second_stone_type3']);
+//            }],
             ['副石3编号', 'second_stone_sn3', 'text'],
             ['副石3粒数', 'second_stone_num3', 'text'],
             ['副石3重(ct)', 'second_stone_weight3', 'text'],
@@ -555,11 +554,11 @@ class BillTController extends BaseController
             ['副石3成本价	', 'second_stone_amount3', 'text'],
             ['石料备注', 'stone_remark', 'text'],
             ['配件方式','parts_way', 'function', function ($model) {
-                return \addons\Warehouse\common\enums\PeiJianWayEnum::getValue($model->parts_way ?? '');
+                return \addons\Warehouse\common\enums\PeiJianWayEnum::getValue($model['parts_way']);
             }],
-            ['配件类型','parts_type', 'function', function ($model) {
-                return \Yii::$app->attr->valueName($model['parts_type']);
-            }],
+//            ['配件类型','parts_type', 'function', function ($model) {
+//                return \Yii::$app->attr->valueName($model['parts_type']);
+//            }],
             ['配件材质','parts_material', 'function', function ($model) {
                 return \Yii::$app->attr->valueName($model['parts_material']);
             }],
@@ -597,21 +596,21 @@ class BillTController extends BaseController
             ['其它工费', 'other_fee', 'text'],
             ['工厂总成本', 'factory_cost', 'text'],
             ['总成本/件', 'cost_price', 'function',function($model){
-                $cost_price = bcsub($model->cost_price ?? 0, $model->templet_fee ?? 0, 3);
-                return bcdiv($cost_price, $model->goods_num ?? 1, 3) ?? "0.00";
+                $cost_price = bcsub($model['cost_price'], $model['templet_fee'], 3);
+                return bcdiv($cost_price, $model['goods_num'], 3) ?? "0.00";
             }],
             ['公司总成本(成本价)', 'cost_price', 'text'],
             ['倍率[加价率]', 'markup_rate', 'text'],
             ['标签价(市场价)', 'market_price', 'text'],
             ['款式性别','style_sex', 'function', function ($model) {
-                return \addons\Style\common\enums\StyleSexEnum::getValue($model->style_sex ?? '');
+                return \addons\Style\common\enums\StyleSexEnum::getValue($model['style_sex']);
             }],
-            ['金托类型','jintuo_type', 'function', function ($model) {
-                return \addons\Style\common\enums\JintuoTypeEnum::getValue($model->jintuo_type ?? '');
-            }],
-            ['起版类型','qiban_type', 'function', function ($model) {
-                return \addons\Style\common\enums\QibanTypeEnum::getValue($model->qiban_type ?? '');
-            }],
+//            ['金托类型','jintuo_type', 'function', function ($model) {
+//                return \addons\Style\common\enums\JintuoTypeEnum::getValue($model['jintuo_type']);
+//            }],
+//            ['起版类型','qiban_type', 'function', function ($model) {
+//                return \addons\Style\common\enums\QibanTypeEnum::getValue($model['qiban_type']);
+//            }],
 
         ];
         return ExcelHelper::exportData($list, $header, $name . '数据导出_' . date('YmdHis', time()));

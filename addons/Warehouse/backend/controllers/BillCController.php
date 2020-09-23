@@ -410,7 +410,7 @@ class BillCController extends BaseController
             ['商品名称', 'goods_name', 'text'],
             ['商品数量', 'goods_num', 'text'],
             ['商品状态', 'goods_status', 'function',function($model){
-                return GoodsStatusEnum::getValue($model->goods_status ?? '');
+                return GoodsStatusEnum::getValue($model['goods_status']);
             }],
             ['款式分类', 'product_type_name' , 'text'],
             ['产品线', 'style_cate_name' , 'text'],
@@ -431,19 +431,19 @@ class BillCController extends BaseController
             ['副石1粒数', 'second_stone_num1' , 'text'],
             ['手寸', 'finger', 'function', function ($model) {
                 $finger = '';
-                if($model->finger ?? false){
-                    $finger .= Yii::$app->attr->valueName($model->finger ?? '').'(u)';
+                if($model['finger']){
+                    $finger .= Yii::$app->attr->valueName($model['finger']).'(u)';
                 }
-                if($model->finger_hk ?? false){
-                    $finger .= ' '.Yii::$app->attr->valueName($model->finger_hk ?? '').'(u)';
+                if($model['finger_hk']){
+                    $finger .= ' '.Yii::$app->attr->valueName($model['finger_hk']).'(u)';
                 }
                 return $finger;
             }],
             ['证书号	', 'cert_id' , 'text'],
             ['采购成本/单件	', 'cost_price' , 'text'],
             ['采购总成本	', 'cost_price' , 'function', function($model){
-                $cost_price = $model->cost_price ?? 0;
-                $goods_num = $model->goods_num ?? 0;
+                $cost_price = $model['cost_price'];
+                $goods_num = $model['goods_num'];
                 return $cost_price * $goods_num;
             }],
             ['出库成本价		', 'chuku_price' , 'text'],
