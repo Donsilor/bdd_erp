@@ -77,14 +77,14 @@ $this->params['breadcrumbs'][] = $this->title;
                         <?php
                         if(\common\helpers\Auth::verify(\common\enums\SpecialAuthEnum::VIEW_CAIGOU_PRICE)){
                         ?>
-                        <tr>
-                            <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('unit_cost_price') ?>：</td>
-                            <td><?= $model->unit_cost_price ?></td>
-                        </tr>
-                        <tr>
-                            <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('cost_price') ?>：</td>
-                            <td><?= $model->cost_price ?></td>
-                        </tr>
+                            <tr>
+                                <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('cost_price') ?>：</td>
+                                <td><?= $model->cost_price ?></td>
+                            </tr>
+                            <tr>
+                                <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('cost_amount') ?>：</td>
+                                <td><?= $model->cost_amount ?></td>
+                            </tr>
                         <?php } ?>
                         <tr>
                             <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('chuku_price') ?>：</td>

@@ -1209,18 +1209,17 @@ $params = $params ? "&".http_build_query($params) : '';
                             'headerOptions' => [],
                         ],
                         [
-                            'attribute'=>'unit_cost_price',
-                            'filter' => false,
-                            'visible' => \common\helpers\Auth::verify(\common\enums\SpecialAuthEnum::VIEW_CAIGOU_PRICE),
-                            'headerOptions' => [],
-                        ],
-                        [
                             'attribute'=>'cost_price',
                             'filter' => false,
                             'visible' => \common\helpers\Auth::verify(\common\enums\SpecialAuthEnum::VIEW_CAIGOU_PRICE),
                             'headerOptions' => [],
                         ],
-
+                        [
+                            'attribute'=>'cost_amount',
+                            'filter' => false,
+                            'visible' => \common\helpers\Auth::verify(\common\enums\SpecialAuthEnum::VIEW_CAIGOU_PRICE),
+                            'headerOptions' => [],
+                        ],
                         [
                             'attribute'=>'diamond_cert_type',
                             'value' => function($model){
