@@ -295,8 +295,8 @@ $this->params['breadcrumbs'][] = $this->title;
                             [
                                 'attribute' => 'finger_hk',
                                 'format' => 'raw',
-                                'headerOptions' => ['class' => 'col-md-1 batch_select_full', 'attr-name' => 'finger_hk', 'attr-id' => AttrIdEnum::PORT_NO, 'style' => 'background-color:#F5DEB3;'],
-                                'footerOptions' => ['class' => 'col-md-1 batch_select_full2', 'attr-name' => 'finger_hk', 'attr-id' => AttrIdEnum::PORT_NO, 'style' => 'background-color:#F5DEB3;'],
+                                'headerOptions' => ['class' => 'col-md-1 batch_select_full', 'attr-name' => 'finger_hk', 'attr-id' => AttrIdEnum::FINGER_HK, 'style' => 'background-color:#F5DEB3;'],
+                                'footerOptions' => ['class' => 'col-md-1 batch_select_full2', 'attr-name' => 'finger_hk', 'attr-id' => AttrIdEnum::FINGER_HK, 'style' => 'background-color:#F5DEB3;'],
                                 'value' => function ($model, $key, $index, $widget) {
                                     $widget->footer = $model->getAttributeLabel('finger_hk');
                                     return Html::ajaxSelect($model, 'finger_hk', $model->getPortNoDrop($model), ['data-id' => $model->id, 'prompt' => '请选择']);

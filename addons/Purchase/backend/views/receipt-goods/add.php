@@ -199,7 +199,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                             'prompt'=>'请选择',
                                         ],
                                         'defaultValue' => 0,
-                                        'items' => \Yii::$app->attr->valueMap(AttrIdEnum::PORT_NO)
+                                        'items' => \Yii::$app->attr->valueMap(AttrIdEnum::FINGER_HK)
                                     ],
                                     [
                                         'name' => "finger",

@@ -372,7 +372,7 @@ class WarehouseBillTService extends Service
             $finger_hk = $goods['finger_hk'] ?? "";//手寸(港号)
             if (!empty($finger_hk)) {
                 $finger_hk = StringHelper::findNum($finger_hk);
-                $attr_id = $form->getAttrIdByAttrValue($style_sn, $finger_hk, AttrIdEnum::PORT_NO);
+                $attr_id = $form->getAttrIdByAttrValue($style_sn, $finger_hk, AttrIdEnum::FINGER_HK);
                 if (empty($attr_id)) {
                     $flag = false;
                     $error[$i][] = "手寸(港号)：[" . $finger_hk . "]录入值有误";

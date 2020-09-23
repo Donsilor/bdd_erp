@@ -598,8 +598,8 @@ class PurchaseApplyController extends BaseController
                 $finger_str .= $attr[AttrIdEnum::FINGER]."/美号";
                 $finger_str .= "<br/>";
             }
-            if(isset($attr[AttrIdEnum::PORT_NO])){
-                $finger_str .= $attr[AttrIdEnum::PORT_NO]."/港号";
+            if(isset($attr[AttrIdEnum::FINGER_HK])){
+                $finger_str .= $attr[AttrIdEnum::FINGER_HK]."/港号";
             }
             $list['finger'] = $finger_str;
 
