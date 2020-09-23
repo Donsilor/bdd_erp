@@ -574,7 +574,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             ],
                             [
                                 'attribute' => 'lncl_loss_weight',
-                                'headerOptions' => ['class' => 'col-md-1 batch_full', 'attr-name' => 'lncl_loss_weight', 'style' => 'background-color:#afdfe4;'],
+                                'headerOptions' => ['class' => 'col-md-1 batch_full', 'id' => 'gold', 'attr-name' => 'lncl_loss_weight', 'style' => 'background-color:#afdfe4;'],
                                 'footerOptions' => ['class' => 'col-md-1 batch_full2', 'attr-name' => 'lncl_loss_weight', 'style' => 'background-color:#afdfe4;'],
                                 'format' => 'raw',
                                 'value' => function ($model, $key, $index, $widget) use ($total) {
@@ -635,7 +635,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             [
                                 'attribute' => 'pure_gold',
                                 'format' => 'raw',
-                                'headerOptions' => ['class' => 'col-md-1 batch_full', 'id' => 'gold', 'attr-name' => 'pure_gold', 'style' => 'background-color:#afdfe4;'],
+                                'headerOptions' => ['class' => 'col-md-1 batch_full', 'attr-name' => 'pure_gold', 'style' => 'background-color:#afdfe4;'],
                                 'footerOptions' => ['class' => 'col-md-1 batch_full2', 'attr-name' => 'pure_gold', 'style' => 'background-color:#afdfe4;'],
                                 'value' => function ($model, $key, $index, $widget) use ($total) {
                                     $widget->footer = $model->getFooterValues('pure_gold', $total, "0.000");
@@ -947,7 +947,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             [
                                 'attribute' => 'main_stone_price',
                                 'format' => 'raw',
-                                'headerOptions' => ['class' => 'col-md-1 batch_full', 'attr-name' => 'main_stone_price', 'style' => 'background-color:#afb4db;'],
+                                'headerOptions' => ['class' => 'col-md-1 batch_full', 'id' => 'main_stone', 'attr-name' => 'main_stone_price', 'style' => 'background-color:#afb4db;'],
                                 'footerOptions' => ['class' => 'col-md-1 batch_full2', 'attr-name' => 'main_stone_price', 'style' => 'background-color:#afb4db;'],
                                 'value' => function ($model, $key, $index, $widget) {
                                     $widget->footer = $model->getAttributeLabel('main_stone_price');
@@ -990,7 +990,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             [
                                 'attribute' => 'main_stone_color',
                                 'format' => 'raw',
-                                'headerOptions' => ['class' => 'col-md-1 batch_select_full', 'id' => 'main_stone', 'attr-name' => 'main_stone_color', 'attr-id' => AttrIdEnum::MAIN_STONE_COLOR, 'style' => 'background-color:#afb4db;'],
+                                'headerOptions' => ['class' => 'col-md-1 batch_select_full', 'attr-name' => 'main_stone_color', 'attr-id' => AttrIdEnum::MAIN_STONE_COLOR, 'style' => 'background-color:#afb4db;'],
                                 'footerOptions' => ['class' => 'col-md-1 batch_select_full2', 'attr-name' => 'main_stone_color', 'attr-id' => AttrIdEnum::MAIN_STONE_COLOR, 'style' => 'background-color:#afb4db;'],
                                 'value' => function ($model, $key, $index, $widget) {
                                     $widget->footer = $model->getAttributeLabel('main_stone_color');
@@ -1157,7 +1157,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             [
                                 'attribute' => 'second_stone_price1',
                                 'format' => 'raw',
-                                'headerOptions' => ['class' => 'col-md-1 batch_full', 'attr-name' => 'second_stone_price1', 'style' => 'background-color:#dec674;'],
+                                'headerOptions' => ['class' => 'col-md-1 batch_full', 'id' => 'second_stone1', 'attr-name' => 'second_stone_price1', 'style' => 'background-color:#dec674;'],
                                 'footerOptions' => ['class' => 'col-md-1 batch_full2', 'attr-name' => 'second_stone_price1', 'style' => 'background-color:#dec674;'],
                                 'value' => function ($model, $key, $index, $widget) {
                                     $widget->footer = $model->getAttributeLabel('second_stone_price1');
@@ -1200,7 +1200,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             [
                                 'attribute' => 'second_stone_color1',
                                 'format' => 'raw',
-                                'headerOptions' => ['class' => 'col-md-1 batch_select_full', 'id' => 'second_stone1', 'attr-name' => 'second_stone_color1', 'attr-id' => AttrIdEnum::SIDE_STONE1_COLOR, 'style' => 'background-color:#dec674;'],
+                                'headerOptions' => ['class' => 'col-md-1 batch_select_full', 'attr-name' => 'second_stone_color1', 'attr-id' => AttrIdEnum::SIDE_STONE1_COLOR, 'style' => 'background-color:#dec674;'],
                                 'footerOptions' => ['class' => 'col-md-1 batch_select_full2', 'attr-name' => 'second_stone_color1', 'attr-id' => AttrIdEnum::SIDE_STONE1_COLOR, 'style' => 'background-color:#dec674;'],
                                 'value' => function ($model, $key, $index, $widget) {
                                     $widget->footer = $model->getAttributeLabel('second_stone_color1');
@@ -1389,7 +1389,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             [
                                 'attribute' => 'second_stone_weight2',
                                 'format' => 'raw',
-                                'headerOptions' => ['class' => 'col-md-1 batch_full', 'attr-name' => 'second_stone_weight2', 'style' => 'background-color:#84bf96;'],
+                                'headerOptions' => ['class' => 'col-md-1 batch_full', 'id' => 'second_stone2', 'attr-name' => 'second_stone_weight2', 'style' => 'background-color:#84bf96;'],
                                 'footerOptions' => ['class' => 'col-md-1 batch_full2', 'attr-name' => 'second_stone_weight2', 'style' => 'background-color:#84bf96;'],
                                 'value' => function ($model, $key, $index, $widget) use ($total) {
                                     $widget->footer = $model->getFooterValues('second_stone_weight2', $total, "0.000");
@@ -1419,7 +1419,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             [
                                 'attribute' => 'second_stone_amount2',
                                 'format' => 'raw',
-                                'headerOptions' => ['class' => 'col-md-1 batch_full', 'id' => 'second_stone2', 'attr-name' => 'second_stone_amount2', 'style' => 'background-color:#84bf96;'],
+                                'headerOptions' => ['class' => 'col-md-1 batch_full', 'attr-name' => 'second_stone_amount2', 'style' => 'background-color:#84bf96;'],
                                 'footerOptions' => ['class' => 'col-md-1 batch_full2', 'attr-name' => 'second_stone_amount2', 'style' => 'background-color:#84bf96;'],
                                 'value' => function ($model, $key, $index, $widget) use ($total) {
                                     $widget->footer = $model->getFooterValues('second_stone_amount2', $total, "0.000");
@@ -1651,7 +1651,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             [
                                 'attribute' => 'second_stone_weight3',
                                 'format' => 'raw',
-                                'headerOptions' => ['class' => 'col-md-1 batch_full', 'attr-name' => 'second_stone_weight3', 'style' => 'background-color:#6495ED;'],
+                                'headerOptions' => ['class' => 'col-md-1 batch_full', 'id' => 'second_stone3', 'attr-name' => 'second_stone_weight3', 'style' => 'background-color:#6495ED;'],
                                 'footerOptions' => ['class' => 'col-md-1 batch_full2', 'attr-name' => 'second_stone_weight3', 'style' => 'background-color:#6495ED;'],
                                 'value' => function ($model, $key, $index, $widget) use ($total) {
                                     $widget->footer = $model->getFooterValues('second_stone_weight3', $total, "0.000");
@@ -1696,7 +1696,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             [
                                 'attribute' => 'stone_remark',
                                 'format' => 'raw',
-                                'headerOptions' => ['class' => 'col-md-1', 'id' => 'second_stone3', 'style' => 'background-color:#6495ED;'],
+                                'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#6495ED;'],
                                 'footerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#6495ED;'],
                                 'value' => function ($model, $key, $index, $widget) {
                                     $widget->footer = $model->getAttributeLabel('stone_remark');
@@ -1774,7 +1774,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             [
                                 'attribute' => 'parts_num',
                                 'format' => 'raw',
-                                'headerOptions' => ['class' => 'col-md-1 batch_full', 'attr-name' => 'parts_num', 'style' => 'background-color:#cde6c7;'],
+                                'headerOptions' => ['class' => 'col-md-1 batch_full', 'id' => 'parts', 'attr-name' => 'parts_num', 'style' => 'background-color:#cde6c7;'],
                                 'footerOptions' => ['class' => 'col-md-1 batch_full2', 'attr-name' => 'parts_num', 'style' => 'background-color:#cde6c7;'],
                                 'value' => function ($model, $key, $index, $widget) use ($total) {
                                     $widget->footer = $model->getFooterValues('parts_num', $total);
@@ -1819,7 +1819,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             [
                                 'attribute' => 'parts_amount',
                                 'format' => 'raw',
-                                'headerOptions' => ['class' => 'col-md-1 batch_full', 'id' => 'parts', 'attr-name' => 'parts_amount', 'style' => 'background-color:#cde6c7;'],
+                                'headerOptions' => ['class' => 'col-md-1 batch_full', 'attr-name' => 'parts_amount', 'style' => 'background-color:#cde6c7;'],
                                 'footerOptions' => ['class' => 'col-md-1 batch_full2', 'attr-name' => 'parts_amount', 'style' => 'background-color:#cde6c7;'],
                                 'value' => function ($model, $key, $index, $widget) use ($total) {
                                     $widget->footer = $model->getFooterValues('parts_amount', $total, "0.000");
@@ -1926,7 +1926,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             [
                                 'attribute' => 'peishi_fee',
                                 'format' => 'raw',
-                                'headerOptions' => ['class' => 'col-md-1 batch_full', 'attr-name' => 'peishi_fee', 'style' => 'background-color:#FFA500;'],
+                                'headerOptions' => ['class' => 'col-md-1 batch_full', 'id' => 'fee1', 'attr-name' => 'peishi_fee', 'style' => 'background-color:#FFA500;'],
                                 'footerOptions' => ['class' => 'col-md-1 batch_full2', 'attr-name' => 'peishi_fee', 'style' => 'background-color:#FFA500;'],
                                 'value' => function ($model, $key, $index, $widget) use ($total) {
                                     $widget->footer = $model->getFooterValues('peishi_fee', $total, "0.00");
@@ -2016,7 +2016,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             [
                                 'attribute' => 'xianqian_fee',
                                 'format' => 'raw',
-                                'headerOptions' => ['class' => 'col-md-1 batch_full', 'id' => 'fee1', 'attr-name' => 'xianqian_fee', 'style' => 'background-color:#FFA500;'],
+                                'headerOptions' => ['class' => 'col-md-1 batch_full', 'attr-name' => 'xianqian_fee', 'style' => 'background-color:#FFA500;'],
                                 'footerOptions' => ['class' => 'col-md-1 batch_full2', 'attr-name' => 'xianqian_fee', 'style' => 'background-color:#FFA500;'],
                                 'value' => function ($model, $key, $index, $widget) use ($total) {
                                     $widget->footer = $model->getFooterValues('xianqian_fee', $total, "0.000");
@@ -2140,7 +2140,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             [
                                 'attribute' => 'templet_fee',
                                 'format' => 'raw',
-                                'headerOptions' => ['class' => 'col-md-1 batch_full', 'attr-name' => 'templet_fee', 'style' => 'background-color:#E6E6FA;'],
+                                'headerOptions' => ['class' => 'col-md-1 batch_full', 'id' => 'fee2', 'attr-name' => 'templet_fee', 'style' => 'background-color:#E6E6FA;'],
                                 'footerOptions' => ['class' => 'col-md-1 batch_full2', 'attr-name' => 'templet_fee', 'style' => 'background-color:#E6E6FA;'],
                                 'value' => function ($model, $key, $index, $widget) use ($total) {
                                     $widget->footer = $model->getFooterValues('templet_fee', $total, "0.00");
@@ -2200,7 +2200,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             [
                                 'attribute' => 'other_fee',
                                 'format' => 'raw',
-                                'headerOptions' => ['class' => 'col-md-1 batch_full', 'id' => 'fee2', 'attr-name' => 'other_fee', 'style' => 'background-color:#E6E6FA;'],
+                                'headerOptions' => ['class' => 'col-md-1 batch_full', 'attr-name' => 'other_fee', 'style' => 'background-color:#E6E6FA;'],
                                 'footerOptions' => ['class' => 'col-md-1 batch_full2', 'attr-name' => 'other_fee', 'style' => 'background-color:#E6E6FA;'],
                                 'value' => function ($model, $key, $index, $widget) use ($total) {
                                     $widget->footer = $model->getFooterValues('other_fee', $total, "0.00");
@@ -2327,7 +2327,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             [
                                 'attribute' => 'jintuo_type',
                                 'format' => 'raw',
-                                'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#b7ba6b;'],
+                                'headerOptions' => ['class' => 'col-md-1', 'id' => 'price', 'style' => 'background-color:#b7ba6b;'],
                                 'footerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#b7ba6b;'],
                                 'value' => function ($model, $key, $index, $widget) {
                                     $widget->footer = $model->getAttributeLabel('jintuo_type');
@@ -2432,7 +2432,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             [
                                 'attribute' => 'order_sn',
                                 'format' => 'raw',
-                                'headerOptions' => ['class' => 'col-md-1 batch_full', 'id' => 'price', 'attr-name' => 'order_sn', 'style' => 'background-color:#b7ba6b;'],
+                                'headerOptions' => ['class' => 'col-md-1 batch_full', 'attr-name' => 'order_sn', 'style' => 'background-color:#b7ba6b;'],
                                 'footerOptions' => ['class' => 'col-md-1 batch_full2', 'attr-name' => 'order_sn', 'style' => 'background-color:#b7ba6b;'],
                                 'value' => function ($model, $key, $index, $widget) {
                                     $widget->footer = $model->getAttributeLabel('order_sn');
