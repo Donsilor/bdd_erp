@@ -25,8 +25,7 @@ $params = $params ? "&" . http_build_query($params) : '';
     }
 </style>
 <div class="box-body nav-tabs-custom">
-    <h2 class="page-header"><?= $this->title; ?> - <?= $bill->bill_no ?> <i class="fa fa-copy"
-                                                                            onclick="copy('bill_no')"></i>
+    <h2 class="page-header"><?= $this->title; ?> - <span id="bill_no"><?= $bill->bill_no ?></span> <i class="fa fa-copy" onclick="copy('bill_no')"></i>
         - <?= \addons\Warehouse\common\enums\BillStatusEnum::getValue($bill->bill_status) ?></h2>
     <?php echo Html::menuTab($tabList, $tab) ?>
     <div class="box-tools" style="float:right;margin-top:-40px; margin-right: 20px;">
@@ -204,7 +203,7 @@ $params = $params ? "&" . http_build_query($params) : '';
                                 'value' => function ($model, $key, $index, $widget) {
                                     $widget->footer = $model->getAttributeLabel('goods_id');
                                     if($model->goods_id){
-                                        $model->goods_id = $model->goods_id. ' <i class="fa fa-copy" onclick="copy(\'' . $model->goods_id . '\')"></i>';
+                                        $model->goods_id = '<span id="'.$model->goods_id.'">'.$model->goods_id. '</span> <i class="fa fa-copy" onclick="copy(\'' . $model->goods_id . '\')"></i>';
                                     }
                                     return $model->goods_id ?? "";
                                 },
