@@ -619,7 +619,7 @@ class WarehouseGoodsController extends BaseController
         $select = [
             'g.goods_id', 'g.goods_name', 'g.style_sn',
             'g.finger', 'g.finger_hk', 'suttle_weight',
-            'g.diamond_color', 'g.diamond_clarity',
+            'g.diamond_color', 'g.diamond_clarity', 'main_stone_num',
             'diamond_carat', 'g.second_stone_weight1', 'g.second_stone_weight2', 'g.second_stone_weight3',
             'g.finger', 'g.finger',
             'g.diamond_cert_id', 'g.market_price',
@@ -636,6 +636,8 @@ class WarehouseGoodsController extends BaseController
             $finger_hk = $list['finger_hk'] ?? 0;
             $list['finger_hk'] = \Yii::$app->attr->valueName($finger_hk) ?? "/";//手寸（港）
             $diamond_carat = $list['diamond_carat'] ?? 0;//主石重
+            $main_stone_num = $list['main_stone_num'] ?? 0;//主石数量
+            $diamond_carat = bcmul($diamond_carat, $main_stone_num, 3);
             $second_stone_weight1 = $list['second_stone_weight1'] ?? 0;//副石1重
             $second_stone_weight2 = $list['second_stone_weight2'] ?? 0;//副石2重
             $second_stone_weight3 = $list['second_stone_weight3'] ?? 0;//副石3重
