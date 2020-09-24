@@ -203,7 +203,7 @@ $params = $params ? "&" . http_build_query($params) : '';
                                 'value' => function ($model, $key, $index, $widget) {
                                     $widget->footer = $model->getAttributeLabel('goods_id');
                                     if($model->goods_id){
-                                        $model->goods_id = '<span id="'.$model->goods_id.'">'.$model->goods_id. '</span> <i class="fa fa-copy" onclick="copy(\'' . $model->goods_id . '\')"></i>';
+                                        $model->goods_id = '<span id="goods_'.$model->goods_id.'">'.$model->goods_id. '</span> <i class="fa fa-copy" onclick="copy(\'goods_' . $model->goods_id . '\')"></i>';
                                     }
                                     return $model->goods_id ?? "";
                                 },
