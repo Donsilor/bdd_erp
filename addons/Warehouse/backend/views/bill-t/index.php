@@ -145,6 +145,12 @@ $params = $params ? "&" . http_build_query($params) : '';
                         ],
                         [
                             'attribute' => 'send_goods_sn',
+                            'value' => function ($model) {
+                                if($model->send_goods_sn){
+                                    $model->send_goods_sn = "<span id='".$model->send_goods_sn."'>$model->send_goods_sn</span>&nbsp;<i class=\"fa fa-copy\" onclick=\"copy(' . $model->send_goods_sn . ')\"></i>";
+                                }
+                                return $model->send_goods_sn ?? "";
+                            },
                             'filter' => Html::activeTextInput($searchModel, 'send_goods_sn', [
                                 'class' => 'form-control',
                             ]),
