@@ -2,6 +2,7 @@
 
 namespace addons\Warehouse\services;
 
+use addons\Style\common\enums\InlayEnum;
 use Yii;
 use common\components\Service;
 use common\helpers\SnHelper;
@@ -284,6 +285,7 @@ class WarehouseBillTService extends Service
                 }
                 $style_sn = $qiban->style_sn ?? "";
             }
+            $is_inlay = InlayEnum::No;
             if ($qiban_type != QibanTypeEnum::NO_STYLE) {
                 if (empty($style_sn)) {
                     $flag = false;
@@ -312,6 +314,10 @@ class WarehouseBillTService extends Service
                     $flag = false;
                     $error[$i][] = $qiban_error . "[款号]不是启用状态";
                 }
+                if($style->type) {
+                    $is_inlay = $style->type->is_inlay;
+                }
+                $is_inlay = $is_inlay ?? InlayEnum::No;
             }
             if (!$flag) {
                 //$flag = true;
@@ -467,12 +473,12 @@ class WarehouseBillTService extends Service
                 $auto_gold_amount = ConfirmEnum::YES;
             }
             $pure_gold_rate = $form->formatValue($goods['pure_gold_rate'], 0) ?? 0;//折足率
-            if (!empty($peiliao_way)
-                && $peiliao_way == PeiLiaoWayEnum::LAILIAO
-                && empty($pure_gold_rate)) {
-                $flag = false;
-                $error[$i][] = "配料方式为来料加工，折足率必填";
-            }
+//            if (!empty($peiliao_way)
+//                && $peiliao_way == PeiLiaoWayEnum::LAILIAO
+//                && empty($pure_gold_rate)) {
+//                $flag = false;
+//                $error[$i][] = "配料方式为来料加工，折足率必填";
+//            }
             if (empty($peiliao_way) && $pure_gold_rate > 0) {
                 $peiliao_way = PeiLiaoWayEnum::LAILIAO;
             }
@@ -936,8 +942,10 @@ class WarehouseBillTService extends Service
 //            }
             $cost_amount = $form->formatValue($goods['cost_amount'], 0) ?? 0;//公司成本总额
             $is_auto_price = ConfirmEnum::NO;
+            $cost_price = 0;
             if (bccomp($cost_amount, 0, 5) > 0) {
                 $is_auto_price = ConfirmEnum::YES;
+                $cost_price = bcdiv(bcsub($cost_amount, $templet_fee, 3), $goods_num, 3);//单价成本价=(成本总额-版费)/数量
             }
             $markup_rate = $form->formatValue($goods['markup_rate'], 1) ?? 1;//倍率
             $remark = $goods['remark'] ?? "";//货品备注
@@ -1065,7 +1073,7 @@ class WarehouseBillTService extends Service
                 //价格信息
                 'tax_amount' => $tax_amount,
                 'factory_cost' => $factory_cost,
-                //'cost_price' => $cost_price,
+                'cost_price' => $cost_price,
                 'cost_amount' => $cost_amount,
                 //其他信息
                 'is_wholesale' => $is_wholesale,
@@ -1083,6 +1091,7 @@ class WarehouseBillTService extends Service
                 'auto_tax_amount' => $auto_tax_amount,
                 'markup_rate' => $markup_rate,
                 'jintuo_type' => $jintuo_type,
+                'is_inlay' => $is_inlay,
                 'auto_goods_id' => $auto_goods_id,
                 'remark' => $remark,
                 'status' => StatusEnum::ENABLED,
@@ -1512,7 +1521,7 @@ class WarehouseBillTService extends Service
 
     /**
      *
-     * 公司成本/单价(成本价/单价)=(金料额+主石成本+副石1成本+副石2成本+副石3成本+配件额+总工费-版费)/数量
+     * 公司成本/单价(成本价/单价)=(金料额+主石成本+副石1成本+副石2成本+副石3成本+配件额+总工费-版费)
      * @param WarehouseBillTGoodsForm $form
      * @return integer
      * @throws
@@ -1539,22 +1548,20 @@ class WarehouseBillTService extends Service
             $cost_price = bcadd($cost_price, $this->calculatePartsAmount($form), 5);
         }
         $cost_price = bcadd($cost_price, $this->calculateTotalGongFee($form), 5);
-        $cost_price = bcsub($cost_price, $form->templet_fee, 5);//版费
-        $cost_price = bcdiv($cost_price, $form->goods_num, 5);//单价
-
         return sprintf("%.3f", $cost_price) ?? 0;
     }
 
     /**
      *
-     * 公司成本总额=(公司成本/件+版费)*商品数量
+     * 公司成本总额=(公司成本/件+版费/件)*商品数量
      * @param WarehouseBillTGoodsForm $form
      * @return integer
      * @throws
      */
     public function calculateCostAmount($form)
     {
-        $cost_price = bcadd($form->cost_price, $form->templet_fee, 3);//版费
+        $templet_fee = bcdiv($form->templet_fee, $form->goods_num, 3) ?? 0;//单件版费
+        $cost_price = bcadd($form->cost_price, $templet_fee, 3) ?? 0;//版费
         return bcmul($cost_price, $form->goods_num, 3) ?? 0;
     }
 
