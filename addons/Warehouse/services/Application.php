@@ -29,6 +29,7 @@ use common\components\Service;
  * @property \addons\Warehouse\services\WarehouseGoldService $gold 金料库存
  * @property \addons\Warehouse\services\WarehouseGoldBillService $goldBill 金料单据
  * @property \addons\Warehouse\services\WarehouseGoldBillLService $goldL 入库单
+ * @property \addons\Warehouse\services\WarehouseGoldBillTService $goldT 入库单
  * @property \addons\Warehouse\services\WarehouseGoldBillCService $goldC 领料单
  * @property \addons\Warehouse\services\WarehouseGoldBillDService $goldD 退料单
  * @property \addons\Warehouse\services\WarehouseGoldBillWService $goldW 盘点单
@@ -81,6 +82,7 @@ class Application extends Service
         'gold' => 'addons\Warehouse\services\WarehouseGoldService',
         'goldBill' => 'addons\Warehouse\services\WarehouseGoldBillService',
         'goldL' => 'addons\Warehouse\services\WarehouseGoldBillLService',
+        'goldT' => 'addons\Warehouse\services\WarehouseGoldBillTService',
         'goldC' => 'addons\Warehouse\services\WarehouseGoldBillCService',
         'goldD' => 'addons\Warehouse\services\WarehouseGoldBillDService',
         'goldW' => 'addons\Warehouse\services\WarehouseGoldBillWService',

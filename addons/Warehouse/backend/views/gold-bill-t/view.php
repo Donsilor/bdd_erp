@@ -25,43 +25,32 @@ $this->params['breadcrumbs'][] = $this->title;
                         </tr>
                         <tr>
                             <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('bill_type') ?>：</td>
-                            <td><?= \addons\Warehouse\common\enums\BillTypeEnum::getValue($model->bill_type)?></td>
+                            <td><?= \addons\Warehouse\common\enums\GoldBillTypeEnum::getValue($model->bill_type)?></td>
                         </tr>
                         <tr>
                             <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('supplier_id') ?>：</td>
                             <td><?= $model->supplier->supplier_name??"" ?></td>
                         </tr>
-<!--                        <tr>-->
-<!--                            <td class="col-xs-1 text-right">--><?//= $model->getAttributeLabel('to_warehouse_id') ?><!--：</td>-->
-<!--                            <td>--><?//= $model->toWarehouse->name??""?><!--</td>-->
-<!--                        </tr>-->
                         <tr>
                             <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('bill_status') ?>：</td>
                             <td><?= \addons\Warehouse\common\enums\BillStatusEnum::getValue($model->bill_status)?></td>
                         </tr>
                         <tr>
-                            <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('goods_num') ?>：</td>
-                            <td><?= $model->goods_num ?></td>
+                            <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('total_num') ?>：</td>
+                            <td><?= $model->total_num ?></td>
                         </tr>
                         <tr>
                             <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('total_cost') ?>：</td>
                             <td><?= $model->total_cost ?></td>
                         </tr>
-                        <!--<tr>
-                            <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('total_sale') ?>：</td>
-                            <td><?= $model->total_sale ?></td>
-                        </tr>-->
+
                         <tr>
-                            <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('total_market') ?>：</td>
-                            <td><?= $model->total_market ?></td>
+                            <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('total_weight') ?>：</td>
+                            <td><?= $model->total_weight ?></td>
                         </tr>
-                        <!--<tr>
-                            <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('order_sn') ?>：</td>
-                            <td><?= $model->order_sn ?></td>
-                        </tr>-->
                         <tr>
-                            <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('send_goods_sn') ?>：</td>
-                            <td><?= $model->send_goods_sn ?></td>
+                            <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('delivery_no') ?>：</td>
+                            <td><?= $model->delivery_no ?></td>
                         </tr>
                         <tr>
                             <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('creator_id') ?>：</td>

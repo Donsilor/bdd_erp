@@ -136,6 +136,14 @@ return [
                         'title' => '出入库列表',
                         'route' => 'gold-bill/index',
                     ],
+                    [
+                        'title' => '其他入库单',
+                        'route' => 'gold-bill-t/index',
+                    ],
+                    [
+                        'title' => '其他出库单',
+                        'route' => 'gold-bill-o/index',
+                    ],
                 ],
             ],
             [

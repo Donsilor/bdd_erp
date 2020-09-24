@@ -2,6 +2,8 @@
 
 namespace addons\Warehouse\services;
 
+use addons\Warehouse\common\models\WarehouseGoldBill;
+use addons\Warehouse\common\models\WarehouseGoldBillGoods;
 use Yii;
 use common\helpers\Url;
 use common\components\Service;
@@ -101,6 +103,26 @@ class WarehouseGoldService extends Service
             }
         }
         
+    }
+
+
+    /**
+     * 单据汇总
+     * @param int $bill_id
+     * @return bool
+     * @throws
+     */
+    public function goldBillSummary($bill_id)
+    {
+        $result = false;
+        $sum = WarehouseGoldBillGoods::find()
+            ->select(['sum(gold_num) as total_num', 'sum(cost_price) as total_cost', 'sum(gold_weight) as total_weight'])
+            ->where(['bill_id' => $bill_id])
+            ->asArray()->one();
+        if ($sum) {
+            $result = WarehouseGoldBill::updateAll(['total_num' => $sum['total_num'] / 1, 'total_cost' => $sum['total_cost'] / 1, 'total_weight' => $sum['total_weight'] / 1], ['id' => $bill_id]);
+        }
+        return $result;
     }
 
 }

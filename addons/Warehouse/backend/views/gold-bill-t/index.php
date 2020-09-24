@@ -69,22 +69,13 @@ $params = $params ? "&".http_build_query($params) : '';
                             'format' => 'raw',
                             'headerOptions' => ['class' => 'col-md-1'],
                         ],
-                        /*[
-                            'attribute' => 'bill_type',
-                            'format' => 'raw',
-                            'headerOptions' => ['class' => 'col-md-1'],
-                            'value' => function ($model){
-                                return \addons\Warehouse\common\enums\BillTypeEnum::getValue($model->bill_type);
-                            },
-                            'filter' => false,
-                        ],*/
                         [
                             'attribute' => 'supplier_id',
                             'value' =>"supplier.supplier_name",
                             'filter'=>Select2::widget([
                                 'name'=>'SearchModel[supplier_id]',
                                 'value'=>$searchModel->supplier_id,
-                                'data'=>Yii::$app->supplyService->supplier->getDropDown(),
+                                'data'=>Yii::$app->supplyService->supplier->getDropDown(['goods_type'=>\addons\Supply\common\enums\GoodsTypeEnum::RAW_MATERIAL]),
                                 'options' => ['placeholder' =>"请选择"],
                                 'pluginOptions' => [
                                     'allowClear' => true,
@@ -93,33 +84,7 @@ $params = $params ? "&".http_build_query($params) : '';
                             'format' => 'raw',
                             'headerOptions' => ['class' => 'col-md-2'],
                         ],
-//                        [
-//                            'attribute' => 'to_warehouse_id',
-//                            'value' =>"toWarehouse.name",
-//                            'filter'=>Select2::widget([
-//                                'name'=>'SearchModel[to_warehouse_id]',
-//                                'value'=>$searchModel->to_warehouse_id,
-//                                'data'=>Yii::$app->warehouseService->warehouse::getDropDown(),
-//                                'options' => ['placeholder' =>"请选择"],
-//                                'pluginOptions' => [
-//                                    'allowClear' => true,
-//                                ],
-//                            ]),
-//                            'format' => 'raw',
-//                            'headerOptions' => ['class' => 'col-md-2'],
-//                        ],
-                        [
-                            'attribute' => 'put_in_type',
-                            'format' => 'raw',
-                            'value' => function ($model){
-                                return \addons\Warehouse\common\enums\PutInTypeEnum::getValue($model->put_in_type);
-                            },
-                            'filter' => Html::activeDropDownList($searchModel, 'put_in_type',\addons\Warehouse\common\enums\PutInTypeEnum::getMap(), [
-                                'prompt' => '全部',
-                                'class' => 'form-control',
-                            ]),
-                            'headerOptions' => ['class' => 'col-md-1'],
-                        ],
+
                         [
                             'attribute' => 'is_settle_accounts',
                             'format' => 'raw',
@@ -133,9 +98,14 @@ $params = $params ? "&".http_build_query($params) : '';
                             'headerOptions' => ['class' => 'col-md-1'],
                         ],
                         [
-                            'attribute' => 'goods_num',
+                            'attribute' => 'total_num',
                             'filter' => false,
                             'format' => 'raw',
+                            'headerOptions' => ['class' => 'col-md-1'],
+                        ],
+                        [
+                            'attribute'=>'total_weight',
+                            'filter' =>false,
                             'headerOptions' => ['class' => 'col-md-1'],
                         ],
                         [
@@ -143,14 +113,7 @@ $params = $params ? "&".http_build_query($params) : '';
                             'filter' =>false,
                             'headerOptions' => ['class' => 'col-md-1'],
                         ],
-                        [
-                            'attribute'=>'send_goods_sn',
-                            'filter' => Html::activeTextInput($searchModel, 'send_goods_sn', [
-                                'class' => 'form-control',
-                            ]),
-                            'format' => 'raw',
-                            'headerOptions' => ['class' => 'col-md-1'],
-                        ],
+
                         [
                             'attribute' => 'creator_id',
                             'value' => 'creator.username',

@@ -2,6 +2,10 @@
 
 namespace addons\Warehouse\backend\controllers;
 
+use addons\Warehouse\common\enums\GoldBillTypeEnum;
+use addons\Warehouse\common\forms\WarehouseGoldBillTGoodsForm;
+use addons\Warehouse\common\models\WarehouseGoldBill;
+use addons\Warehouse\common\models\WarehouseGoldBillGoods;
 use Yii;
 use common\traits\Curd;
 use common\helpers\Url;
@@ -18,11 +22,11 @@ use yii\web\UploadedFile;
 /**
  * WarehouseBillGoodsController implements the CRUD actions for WarehouseBillGoodsController model.
  */
-class BillTGoodsController extends BaseController
+class GoldBillTGoodsController extends BaseController
 {
     use Curd;
-    public $modelClass = WarehouseBillTGoodsForm::class;
-    public $billType = BillTypeEnum::BILL_TYPE_T;
+    public $modelClass = WarehouseGoldBillTGoodsForm::class;
+    public $billType = GoldBillTypeEnum::GOLD_T;
 
     /**
      * Lists all WarehouseBillGoods models.
@@ -43,23 +47,17 @@ class BillTGoodsController extends BaseController
             ],
             'pageSize' => $this->pageSize,
             'relations' => [
-                'productType' => ['name'],
-                'styleCate' => ['name'],
             ]
         ]);
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
         $dataProvider->query->andWhere(['=', 'bill_id', $bill_id]);
-        $dataProvider->query->andWhere(['>', WarehouseBillGoodsL::tableName() . '.status', -1]);
-        $bill = WarehouseBill::find()->where(['id' => $bill_id])->one();
-        $model = new WarehouseBillTGoodsForm();
-        $total = $model->goodsSummary($bill_id, Yii::$app->request->queryParams);
+        $dataProvider->query->andWhere(['>', WarehouseGoldBillGoods::tableName() . '.status', -1]);
+        $bill = WarehouseGoldBill::find()->where(['id' => $bill_id])->one();
         return $this->render($this->action->id, [
-            'model' => $model,
             'dataProvider' => $dataProvider,
             'searchModel' => $searchModel,
             'bill' => $bill,
-            'total' => $total,
-            'tabList' => \Yii::$app->warehouseService->bill->menuTabList($bill_id, $this->billType, $returnUrl),
+            'tabList' => \Yii::$app->warehouseService->gold->menuTabList($bill_id, $this->billType, $returnUrl),
             'tab' => $tab,
         ]);
     }
@@ -75,14 +73,13 @@ class BillTGoodsController extends BaseController
         $id = \Yii::$app->request->get('id');
         $bill_id = Yii::$app->request->get('bill_id');
         $model = $this->findModel($id);
-        $model = $model ?? new WarehouseBillTGoodsForm();
+        $model = $model ?? new WarehouseGoldBillTGoodsForm();
         // ajax 校验
         $this->activeFormValidate($model);
         if ($model->load(\Yii::$app->request->post())) {
             try {
                 $trans = \Yii::$app->db->beginTransaction();
                 $model->bill_id = $bill_id;
-                Yii::$app->warehouseService->billT->addBillTGoods($model);
                 $trans->commit();
                 \Yii::$app->getSession()->setFlash('success', '保存成功');
                 return $this->redirect(['index', 'bill_id' => $bill_id]);
