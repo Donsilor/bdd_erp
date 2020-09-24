@@ -61,7 +61,7 @@ $params = $params ? "&".http_build_query($params) : '';
                         [
                             'attribute'=>'bill_no',
                             'value'=>function($model) {
-                                return Html::a($model->bill_no, ['view', 'id' => $model->id,'returnUrl'=>Url::getReturnUrl()], ['class'=>'openContab','style'=>"text-decoration:underline;color:#3c8dbc"]);
+                                return Html::a($model->bill_no, ['view', 'id' => $model->id,'returnUrl'=>Url::getReturnUrl()], ['class'=>'openContab','style'=>"text-decoration:underline;color:#3c8dbc"]). ' <i class="fa fa-copy" onclick="copy(\'' . $model->bill_no . '\')"></i>';
                             },
                             'filter' => Html::activeTextInput($searchModel, 'bill_no', [
                                 'class' => 'form-control',

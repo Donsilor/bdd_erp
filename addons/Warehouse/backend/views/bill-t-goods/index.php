@@ -17,7 +17,7 @@ $this->title = Yii::t('bill_t_goods', '其它入库单详情');
 $this->params['breadcrumbs'][] = ['label' => $this->title, 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 $params = Yii::$app->request->queryParams;
-$params = $params ? "&".http_build_query($params) : '';
+$params = $params ? "&" . http_build_query($params) : '';
 ?>
 <style>
     select.form-control {
@@ -25,7 +25,8 @@ $params = $params ? "&".http_build_query($params) : '';
     }
 </style>
 <div class="box-body nav-tabs-custom">
-    <h2 class="page-header"><?= $this->title; ?> - <?= $bill->bill_no ?> <i class="fa fa-copy" onclick="copy('bill_no')"></i>
+    <h2 class="page-header"><?= $this->title; ?> - <?= $bill->bill_no ?> <i class="fa fa-copy"
+                                                                            onclick="copy('bill_no')"></i>
         - <?= \addons\Warehouse\common\enums\BillStatusEnum::getValue($bill->bill_status) ?></h2>
     <?php echo Html::menuTab($tabList, $tab) ?>
     <div class="box-tools" style="float:right;margin-top:-40px; margin-right: 20px;">
@@ -197,10 +198,14 @@ $params = $params ? "&".http_build_query($params) : '';
                             ],
                             [
                                 'attribute' => 'goods_id',
+                                'format' => 'raw',
                                 'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#feeeed;'],
                                 'footerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#feeeed;'],
                                 'value' => function ($model, $key, $index, $widget) {
                                     $widget->footer = $model->getAttributeLabel('goods_id');
+                                    if($model->goods_id){
+                                        $model->goods_id = $model->goods_id. ' <i class="fa fa-copy" onclick="copy(\'' . $model->goods_id . '\')"></i>';
+                                    }
                                     return $model->goods_id ?? "";
                                 },
                                 'filter' => Html::activeTextInput($searchModel, 'goods_id', [
@@ -216,7 +221,7 @@ $params = $params ? "&".http_build_query($params) : '';
                                 'value' => function ($model, $key, $index, $widget) {
                                     $widget->footer = $model->getAttributeLabel('style_sn');
                                     if (false) {//!empty($model->style_sn) && !empty($model->id)
-                                        return Html::a($model->style_sn, ['/style/view', 'id' => $model->id, 'returnUrl' => Url::getReturnUrl()], ['style' => "text-decoration:underline;color:#3c8dbc", 'id' => $model->style_sn . '_' . $model->id]) . ' <i class="fa fa-copy" onclick="copy(\'' . $model->style_sn . '_' . $model->id . '\')"></i>';
+                                        return Html::a($model->style_sn, ['/style/style/view', 'id' => $model->id, 'returnUrl' => Url::getReturnUrl()], ['style' => "text-decoration:underline;color:#3c8dbc", 'id' => $model->style_sn . '_' . $model->id]) . ' <i class="fa fa-copy" onclick="copy(\'' . $model->style_sn . '_' . $model->id . '\')"></i>';
                                     } else {
                                         if ($model->style_sn) {
                                             return "<span id='{$model->style_sn}_{$model->id}'>" . $model->style_sn . "</span>" . ' <i class="fa fa-copy" onclick="copy(\'' . $model->style_sn . '_' . $model->id . '\')"></i>';
@@ -2235,7 +2240,7 @@ $params = $params ? "&".http_build_query($params) : '';
 
 
     function batchExport() {
-        window.location.href = "<?= \common\helpers\Url::buildUrl('../bill-t/export',[],['ids'])?>?ids=<?php echo $bill->id ?>";
+        window.location.href = "<?= \common\helpers\Url::buildUrl('../bill-t/export', [], ['ids'])?>?ids=<?php echo $bill->id ?>";
     }
 
     /**
