@@ -647,14 +647,17 @@ class WarehouseGoodsController extends BaseController
             $list['main_stone_carat'] = $diamond_carat ?? 0;//主石重
             $list['second_stone_carat'] = $second_stone_weight1 + $second_stone_weight2 + $second_stone_weight3;//总副石重
             $list['label_finger'] = $list['finger'] ?? $list['finger_hk'];//美号为空取港号
+            if($list['label_finger']){
+                $list['label_finger'] = $list['label_finger']."#";
+            }
             $list['qualified'] = "执行标准:GB/T18043-2013 GB11887-2012";
         }
         $header = [
             ['条码号', 'goods_id', 'text'],//货号
             ['货品名称', 'goods_name', 'text'],//名称
             ['款号', 'style_sn', 'text'],//款号
-            ['主石重(ct)', 'main_stone_carat', 'text'],//主石重
-            ['副石重(ct)', 'second_stone_carat', 'text'],//副石总重
+            ['主石重D(ct)', 'main_stone_carat', 'text'],//主石重
+            ['副石重d(ct)', 'second_stone_carat', 'text'],//副石总重
             ['货重', 'suttle_weight', 'text'],//连石重
             ['颜色', 'main_stone_color', 'text'],//主石颜色
             ['净度', 'main_stone_clarity', 'text'],//主石净度
