@@ -88,7 +88,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         'filterModel' => $searchModel,
                         'tableOptions' => ['class' => 'table table-hover'],
                         //'options' => ['style'=>' width:120%;white-space:nowrap;'],
-                        'options' => ['style'=>'white-space:nowrap;'],
+                        'options' => ['style' => 'white-space:nowrap;font-size:12px;'],
                         'showFooter' => false,//显示footer行
                         'id'=>'grid',
                         'columns' => [
@@ -101,12 +101,25 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'name'=>'id',  //设置每行数据的复选框属性
                             ],
                             [
+                                'class' => 'yii\grid\ActionColumn',
+                                'header' => '操作',
+                                'template' => '{delete}',
+                                'buttons' => [
+                                    'delete' => function ($url, $model, $key) use ($bill) {
+                                        if ($bill->bill_status == BillStatusEnum::SAVE) {
+                                            return Html::delete(['delete', 'id' => $model->id], '删除', ['class' => 'btn btn-danger btn-xs']);
+                                        }
+                                    },
+                                ],
+                                'headerOptions' => ['class' => 'col-md-3'],
+                            ],
+                            [
                                 'attribute' => 'id',
                                 'filter' => false,
                                 'format' => 'raw',
                             ],
                             [
-                                'attribute'=>'goods_id',
+                                'attribute' => 'goods_id',
                                 'filter' => true,
                                 'headerOptions' => ['class' => 'col-md-1'],
                             ],
@@ -121,9 +134,14 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'headerOptions' => ['class' => 'col-md-2'],
                             ],
                             [
-                                'attribute'=>'goods.goods_status',
-                                'value' => function($model){
-                                     return \addons\Warehouse\common\enums\GoodsStatusEnum::getValue($model->goods->goods_status);
+                                'attribute' => 'goods_num',
+                                'filter' => false,
+                                'headerOptions' => ['class' => 'col-md-1'],
+                            ],
+                            [
+                                'attribute' => 'goods.goods_status',
+                                'value' => function ($model) {
+                                    return \addons\Warehouse\common\enums\GoodsStatusEnum::getValue($model->goods->goods_status);
                                 },
                                 'filter' => true,
                                 'headerOptions' => ['class' => 'col-md-1'],
@@ -140,29 +158,66 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'filter' => true,
                                 'headerOptions' => ['class' => 'col-md-1'],
                             ],
-
                             [
                                 'attribute' => 'warehouse_id',
-                                'value' =>"warehouse.name",
-                                'filter'=>false,
+                                'value' => "warehouse.name",
+                                'filter' => false/* Select2::widget([
+                                    'name'=>'SearchModel[warehouse_id]',
+                                    'value'=>$searchModel->warehouse_id,
+                                    'data'=>Yii::$app->warehouseService->warehouse::getDropDown(),
+                                    'options' => ['placeholder' =>"请选择"],
+                                    'pluginOptions' => [
+                                        'allowClear' => true,
+
+                                    ],
+                                ]) */,
                                 'headerOptions' => ['class' => 'col-md-2'],
                             ],
-
                             [
-                                'attribute' => 'material',
-                                'value' => function($model){
-                                    return Yii::$app->attr->valueName($model->material);
+                                'attribute' => 'material_type',
+                                'value' => function ($model) {
+                                    return Yii::$app->attr->valueName($model->material_type) ?? "";
                                 },
                                 'filter' => false,
                                 'headerOptions' => ['class' => 'col-md-1'],
                             ],
                             [
-                                'attribute' => 'gold_weight',
+                                'attribute' => 'material_color',
+                                'value' => function ($model) {
+                                    return Yii::$app->attr->valueName($model->material_color) ?? "";
+                                },
+                                'filter' => false,
+                                'headerOptions' => ['class' => 'col-md-1'],
+                            ],
+                            [
+                                'label' => '手寸',
+                                'value' => function ($model) {
+                                    $finger = '';
+                                    if ($model->goods->finger ?? false) {
+                                        $finger .= Yii::$app->attr->valueName($model->goods->finger) . '(US)';
+                                    }
+                                    if ($model->goods->finger_hk ?? false) {
+                                        $finger .= ' ' . Yii::$app->attr->valueName($model->goods->finger_hk) . '(HK)';
+                                    }
+                                    return $finger;
+                                },
                                 'filter' => false,
                             ],
-
+                            [
+                                'label' => '连石重',
+                                'value' => function ($model) {
+                                    return $model->goods->suttle_weight ?? '';
+                                },
+                                'filter' => false,
+                            ],
                             [
                                 'attribute' => 'goods.main_stone_type',
+                                'value' => function ($model) {
+                                    if ($model->goods->main_stone_type) {
+                                        return Yii::$app->attr->valueName($model->goods->main_stone_type) ?? "";
+                                    }
+                                    return "";
+                                },
                                 'filter' => false,
                             ],
                             [
@@ -174,6 +229,26 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'filter' => false,
                             ],
                             [
+                                'attribute' => 'goods.diamond_color',
+                                'value' => function ($model) {
+                                    if ($model->goods->diamond_color) {
+                                        return Yii::$app->attr->valueName($model->goods->diamond_color) ?? "";
+                                    }
+                                    return "";
+                                },
+                                'filter' => false,
+                            ],
+                            [
+                                'attribute' => 'goods.diamond_clarity',
+                                'value' => function ($model) {
+                                    if ($model->goods->diamond_clarity) {
+                                        return Yii::$app->attr->valueName($model->goods->diamond_clarity) ?? "";
+                                    }
+                                    return "";
+                                },
+                                'filter' => false,
+                            ],
+                            [
                                 'attribute' => 'goods.second_stone_weight1',
                                 'filter' => false,
                             ],
@@ -182,15 +257,20 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'filter' => false,
                             ],
                             [
-                                'attribute' => 'goods.finger',
-                                'filter' => false,
-                            ],
-                            [
                                 'attribute' => 'goods.cert_id',
                                 'filter' => false,
                             ],
                             [
+                                'label' => '采购成本/单件',
                                 'attribute' => 'cost_price',
+                                'visible' => \common\helpers\Auth::verify(\common\enums\SpecialAuthEnum::VIEW_CAIGOU_PRICE),
+                                'filter' => false,
+                            ],
+                            [
+                                'label' => '采购总成本',
+                                'value' => function ($model) {
+                                    return $model->cost_price * $model->goods_num;
+                                },
                                 'visible' => \common\helpers\Auth::verify(\common\enums\SpecialAuthEnum::VIEW_CAIGOU_PRICE),
                                 'filter' => false,
                             ],

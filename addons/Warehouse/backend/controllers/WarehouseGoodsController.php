@@ -619,7 +619,7 @@ class WarehouseGoodsController extends BaseController
         $select = [
             'g.goods_id', 'g.goods_name', 'g.style_sn',
             'g.finger', 'g.finger_hk', 'suttle_weight',
-            'g.diamond_color', 'g.diamond_clarity',
+            'g.diamond_color', 'g.diamond_clarity', 'main_stone_num',
             'diamond_carat', 'g.second_stone_weight1', 'g.second_stone_weight2', 'g.second_stone_weight3',
             'g.finger', 'g.finger',
             'g.diamond_cert_id', 'g.market_price',
@@ -636,6 +636,8 @@ class WarehouseGoodsController extends BaseController
             $finger_hk = $list['finger_hk'] ?? 0;
             $list['finger_hk'] = \Yii::$app->attr->valueName($finger_hk) ?? "/";//手寸（港）
             $diamond_carat = $list['diamond_carat'] ?? 0;//主石重
+            $main_stone_num = $list['main_stone_num'] ?? 0;//主石数量
+            $diamond_carat = bcmul($diamond_carat, $main_stone_num, 3);
             $second_stone_weight1 = $list['second_stone_weight1'] ?? 0;//副石1重
             $second_stone_weight2 = $list['second_stone_weight2'] ?? 0;//副石2重
             $second_stone_weight3 = $list['second_stone_weight3'] ?? 0;//副石3重
@@ -647,14 +649,17 @@ class WarehouseGoodsController extends BaseController
             $list['main_stone_carat'] = $diamond_carat ?? 0;//主石重
             $list['second_stone_carat'] = $second_stone_weight1 + $second_stone_weight2 + $second_stone_weight3;//总副石重
             $list['label_finger'] = $list['finger'] ?? $list['finger_hk'];//美号为空取港号
+            if($list['label_finger']){
+                $list['label_finger'] = $list['label_finger']."#";
+            }
             $list['qualified'] = "执行标准:GB/T18043-2013 GB11887-2012";
         }
         $header = [
             ['条码号', 'goods_id', 'text'],//货号
             ['货品名称', 'goods_name', 'text'],//名称
             ['款号', 'style_sn', 'text'],//款号
-            ['主石重(ct)', 'main_stone_carat', 'text'],//主石重
-            ['副石重(ct)', 'second_stone_carat', 'text'],//副石总重
+            ['主石重D(ct)', 'main_stone_carat', 'text'],//主石重
+            ['副石重d(ct)', 'second_stone_carat', 'text'],//副石总重
             ['货重', 'suttle_weight', 'text'],//连石重
             ['颜色', 'main_stone_color', 'text'],//主石颜色
             ['净度', 'main_stone_clarity', 'text'],//主石净度

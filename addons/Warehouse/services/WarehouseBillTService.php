@@ -929,9 +929,14 @@ class WarehouseBillTService extends Service
             if (bccomp($factory_cost, 0, 5) > 0) {
                 $auto_factory_cost = ConfirmEnum::YES;
             }
-            $cost_price = $form->formatValue($goods['cost_price'], 0) ?? 0;//公司成本价
+//            $cost_price = $form->formatValue($goods['cost_price'], 0) ?? 0;//公司成本价
+//            $is_auto_price = ConfirmEnum::NO;
+//            if (bccomp($cost_price, 0, 5) > 0) {
+//                $is_auto_price = ConfirmEnum::YES;
+//            }
+            $cost_amount = $form->formatValue($goods['cost_amount'], 0) ?? 0;//公司成本总额
             $is_auto_price = ConfirmEnum::NO;
-            if (bccomp($cost_price, 0, 5) > 0) {
+            if (bccomp($cost_amount, 0, 5) > 0) {
                 $is_auto_price = ConfirmEnum::YES;
             }
             $markup_rate = $form->formatValue($goods['markup_rate'], 1) ?? 1;//倍率
@@ -1060,7 +1065,8 @@ class WarehouseBillTService extends Service
                 //价格信息
                 'tax_amount' => $tax_amount,
                 'factory_cost' => $factory_cost,
-                'cost_price' => $cost_price,
+                //'cost_price' => $cost_price,
+                'cost_amount' => $cost_amount,
                 //其他信息
                 'is_wholesale' => $is_wholesale,
                 'is_auto_price' => $is_auto_price,
