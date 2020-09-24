@@ -1521,7 +1521,7 @@ class WarehouseBillTService extends Service
 
     /**
      *
-     * 公司成本/单价(成本价/单价)=(金料额+主石成本+副石1成本+副石2成本+副石3成本+配件额+总工费-版费)/数量
+     * 公司成本/单价(成本价/单价)=(金料额+主石成本+副石1成本+副石2成本+副石3成本+配件额+总工费-版费)
      * @param WarehouseBillTGoodsForm $form
      * @return integer
      * @throws
