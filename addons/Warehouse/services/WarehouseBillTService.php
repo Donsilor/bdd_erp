@@ -2,6 +2,7 @@
 
 namespace addons\Warehouse\services;
 
+use addons\Style\common\enums\InlayEnum;
 use Yii;
 use common\components\Service;
 use common\helpers\SnHelper;
@@ -284,6 +285,7 @@ class WarehouseBillTService extends Service
                 }
                 $style_sn = $qiban->style_sn ?? "";
             }
+            $is_inlay = InlayEnum::No;
             if ($qiban_type != QibanTypeEnum::NO_STYLE) {
                 if (empty($style_sn)) {
                     $flag = false;
@@ -312,6 +314,10 @@ class WarehouseBillTService extends Service
                     $flag = false;
                     $error[$i][] = $qiban_error . "[款号]不是启用状态";
                 }
+                if($style->type) {
+                    $is_inlay = $style->type->is_inlay;
+                }
+                $is_inlay = $is_inlay ?? InlayEnum::No;
             }
             if (!$flag) {
                 //$flag = true;
@@ -1085,6 +1091,7 @@ class WarehouseBillTService extends Service
                 'auto_tax_amount' => $auto_tax_amount,
                 'markup_rate' => $markup_rate,
                 'jintuo_type' => $jintuo_type,
+                'is_inlay' => $is_inlay,
                 'auto_goods_id' => $auto_goods_id,
                 'remark' => $remark,
                 'status' => StatusEnum::ENABLED,
