@@ -473,12 +473,12 @@ class WarehouseBillTService extends Service
                 $auto_gold_amount = ConfirmEnum::YES;
             }
             $pure_gold_rate = $form->formatValue($goods['pure_gold_rate'], 0) ?? 0;//折足率
-            if (!empty($peiliao_way)
-                && $peiliao_way == PeiLiaoWayEnum::LAILIAO
-                && empty($pure_gold_rate)) {
-                $flag = false;
-                $error[$i][] = "配料方式为来料加工，折足率必填";
-            }
+//            if (!empty($peiliao_way)
+//                && $peiliao_way == PeiLiaoWayEnum::LAILIAO
+//                && empty($pure_gold_rate)) {
+//                $flag = false;
+//                $error[$i][] = "配料方式为来料加工，折足率必填";
+//            }
             if (empty($peiliao_way) && $pure_gold_rate > 0) {
                 $peiliao_way = PeiLiaoWayEnum::LAILIAO;
             }
