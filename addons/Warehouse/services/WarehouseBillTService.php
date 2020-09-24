@@ -936,8 +936,10 @@ class WarehouseBillTService extends Service
 //            }
             $cost_amount = $form->formatValue($goods['cost_amount'], 0) ?? 0;//公司成本总额
             $is_auto_price = ConfirmEnum::NO;
+            $cost_price = 0;
             if (bccomp($cost_amount, 0, 5) > 0) {
                 $is_auto_price = ConfirmEnum::YES;
+                $cost_price = bcdiv(bcsub($cost_amount, $templet_fee, 3), $goods_num, 3);//单价成本价=(成本总额-版费)/数量
             }
             $markup_rate = $form->formatValue($goods['markup_rate'], 1) ?? 1;//倍率
             $remark = $goods['remark'] ?? "";//货品备注
@@ -1065,7 +1067,7 @@ class WarehouseBillTService extends Service
                 //价格信息
                 'tax_amount' => $tax_amount,
                 'factory_cost' => $factory_cost,
-                //'cost_price' => $cost_price,
+                'cost_price' => $cost_price,
                 'cost_amount' => $cost_amount,
                 //其他信息
                 'is_wholesale' => $is_wholesale,
@@ -1547,14 +1549,15 @@ class WarehouseBillTService extends Service
 
     /**
      *
-     * 公司成本总额=(公司成本/件+版费)*商品数量
+     * 公司成本总额=(公司成本/件+版费/件)*商品数量
      * @param WarehouseBillTGoodsForm $form
      * @return integer
      * @throws
      */
     public function calculateCostAmount($form)
     {
-        $cost_price = bcadd($form->cost_price, $form->templet_fee, 3);//版费
+        $templet_fee = bcdiv($form->templet_fee, $form->goods_num, 3) ?? 0;//单件版费
+        $cost_price = bcadd($form->cost_price, $templet_fee, 3) ?? 0;//版费
         return bcmul($cost_price, $form->goods_num, 3) ?? 0;
     }
 
