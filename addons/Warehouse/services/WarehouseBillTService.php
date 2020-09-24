@@ -2,6 +2,7 @@
 
 namespace addons\Warehouse\services;
 
+use addons\Style\common\enums\InlayEnum;
 use Yii;
 use common\components\Service;
 use common\helpers\SnHelper;
@@ -284,6 +285,7 @@ class WarehouseBillTService extends Service
                 }
                 $style_sn = $qiban->style_sn ?? "";
             }
+            $is_inlay = InlayEnum::No;
             if ($qiban_type != QibanTypeEnum::NO_STYLE) {
                 if (empty($style_sn)) {
                     $flag = false;
@@ -312,6 +314,10 @@ class WarehouseBillTService extends Service
                     $flag = false;
                     $error[$i][] = $qiban_error . "[款号]不是启用状态";
                 }
+                if($style->type) {
+                    $is_inlay = $style->type->is_inlay;
+                }
+                $is_inlay = $is_inlay ?? InlayEnum::No;
             }
             if (!$flag) {
                 //$flag = true;
@@ -467,12 +473,12 @@ class WarehouseBillTService extends Service
                 $auto_gold_amount = ConfirmEnum::YES;
             }
             $pure_gold_rate = $form->formatValue($goods['pure_gold_rate'], 0) ?? 0;//折足率
-            if (!empty($peiliao_way)
-                && $peiliao_way == PeiLiaoWayEnum::LAILIAO
-                && empty($pure_gold_rate)) {
-                $flag = false;
-                $error[$i][] = "配料方式为来料加工，折足率必填";
-            }
+//            if (!empty($peiliao_way)
+//                && $peiliao_way == PeiLiaoWayEnum::LAILIAO
+//                && empty($pure_gold_rate)) {
+//                $flag = false;
+//                $error[$i][] = "配料方式为来料加工，折足率必填";
+//            }
             if (empty($peiliao_way) && $pure_gold_rate > 0) {
                 $peiliao_way = PeiLiaoWayEnum::LAILIAO;
             }
@@ -1085,6 +1091,7 @@ class WarehouseBillTService extends Service
                 'auto_tax_amount' => $auto_tax_amount,
                 'markup_rate' => $markup_rate,
                 'jintuo_type' => $jintuo_type,
+                'is_inlay' => $is_inlay,
                 'auto_goods_id' => $auto_goods_id,
                 'remark' => $remark,
                 'status' => StatusEnum::ENABLED,
@@ -1514,7 +1521,7 @@ class WarehouseBillTService extends Service
 
     /**
      *
-     * 公司成本/单价(成本价/单价)=(金料额+主石成本+副石1成本+副石2成本+副石3成本+配件额+总工费-版费)/数量
+     * 公司成本/单价(成本价/单价)=(金料额+主石成本+副石1成本+副石2成本+副石3成本+配件额+总工费-版费)
      * @param WarehouseBillTGoodsForm $form
      * @return integer
      * @throws
@@ -1541,9 +1548,6 @@ class WarehouseBillTService extends Service
             $cost_price = bcadd($cost_price, $this->calculatePartsAmount($form), 5);
         }
         $cost_price = bcadd($cost_price, $this->calculateTotalGongFee($form), 5);
-        $cost_price = bcsub($cost_price, $form->templet_fee, 5);//版费
-        $cost_price = bcdiv($cost_price, $form->goods_num, 5);//单价
-
         return sprintf("%.3f", $cost_price) ?? 0;
     }
 

@@ -374,7 +374,13 @@ class BillTController extends BaseController
     {
         $this->layout = '@backend/views/layouts/print';
         $id = Yii::$app->request->get('id');
+        if(!$id){
+            exit("ID不能为空");
+        }
         $model = $this->findModel($id);
+        if(!$model){
+            exit("单据不存在");
+        }
         $model = $model ?? new WarehouseBillTForm();
         list($lists, $total) = $this->getData($id);
         return $this->render($this->action->id, [
@@ -679,6 +685,9 @@ class BillTController extends BaseController
             'gold_price' => 0,
         ];
         foreach ($lists as &$list) {
+            if(empty($list['goods_id'])){
+                exit("货号不能为空");
+            }
             //金价
             if($total['gold_price'] == 0 && $list['gold_price']){
                 $total['gold_price'] = $list['gold_price'];
@@ -702,7 +711,6 @@ class BillTController extends BaseController
             $finger = empty($list['finger']) ? $list['finger_hk'] : $list['finger'];
             $finger = $finger ?? 0;
             $list['finger'] = Yii::$app->attr->valueName($finger);
-
             //汇总
             $total['goods_num'] = bcadd($total['goods_num'], $list['goods_num']);//数量
             $total['suttle_weight'] = bcadd($total['suttle_weight'], $list['suttle_weight'], 3);//连石重
@@ -730,8 +738,8 @@ class BillTController extends BaseController
 
             $total['tax_amount'] = bcadd($total['tax_amount'], $list['tax_amount'], 3);//税额
             $total['pure_gold'] = bcadd($total['pure_gold'], $list['pure_gold'], 3);//折足
-            $total['factory_cost'] = bcadd($total['factory_cost'], ($list['factory_cost'] / $list['goods_num']), 3);//单件工厂工费
-            $total['one_cost_price'] = bcadd($total['one_cost_price'], ($list['cost_price'] / $list['goods_num']), 3);//成本价/件
+            $total['factory_cost'] = bcadd($total['factory_cost'], bcdiv($list['factory_cost'],$list['goods_num'], 3), 3);//单件工厂工费
+            $total['one_cost_price'] = bcadd($total['one_cost_price'], bcdiv($list['cost_price'], $list['goods_num'], 3), 3);//成本价/件
             $total['cost_price'] = bcadd($total['cost_price'], $list['cost_price'], 3);//总成本价
         }
         return [$lists, $total];

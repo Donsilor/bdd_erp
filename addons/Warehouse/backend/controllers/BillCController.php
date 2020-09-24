@@ -464,7 +464,13 @@ class BillCController extends BaseController
     {
         $this->layout = '@backend/views/layouts/print';
         $id = \Yii::$app->request->get('id');
+        if(empty($id)){
+            exit("ID不能为空");
+        }
         $model = $this->findModel($id);
+        if(!$model){
+            exit("单据不存在");
+        }
         list($lists, $total) = $this->getData($id);
         return $this->render($this->action->id, [
             'model' => $model,
@@ -511,6 +517,9 @@ class BillCController extends BaseController
             //'chuku_price' => 0,
         ];
         foreach ($lists as &$list) {
+            if(empty($list['goods_id'])){
+                exit("货号不能为空");
+            }
             $main_stone_cart = $list['diamond_carat'] ?? 0;//主石重
             $main_stone_cart = bcmul($main_stone_cart, $list['main_stone_num'], 3);//主石总重=(主石重*主石粒数)
             $second_stone_cart1 = $list['second_stone_weight1'] ?? 0;//副石1重
