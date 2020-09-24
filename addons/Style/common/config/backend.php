@@ -156,6 +156,7 @@ return [
                                 ['title' => '新增/编辑(有款)','name'  => 'qiban/edit'],
                                 ['title' => '新增/编辑(无款)','name'  => 'qiban/edit-no-style'],
                                 ['title' => '启用/禁用','name'  => 'qiban/ajax-update'],
+                                ['title' => '板式编辑','name'  => 'qiban/format-edit'],
                                 ['title' => '提交审核','name'  => 'qiban/ajax-apply'],
                                 ['title' => '审核','name'  => 'qiban/ajax-audit'],
                                 ['title' => '详情','name'  => 'qiban/view'],                                
