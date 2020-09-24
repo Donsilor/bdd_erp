@@ -102,6 +102,7 @@ class SupplierController extends BaseController
                 if($model->isNewRecord){
                     $model->creator_id = \Yii::$app->user->id;
                 }
+                if(!$model->follower_id) $model->follower_id = \Yii::$app->user->id;
                 $model->status = StatusEnum::DISABLED;
                 $model->supplier_code = SnHelper::createSupplierSn();
                 if(false === $model->save()){

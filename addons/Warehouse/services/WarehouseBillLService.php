@@ -299,8 +299,9 @@ class WarehouseBillLService extends Service
                     'factory_cost' => $good->factory_cost,//工厂成本
                     'markup_rate' => $good->markup_rate,//加价率(倍率)
                     'market_price' => $good->market_price,//市场价(标签价)
-                    'cost_price' => $good->cost_price,//公司成本价
-                    'unit_cost_price' => $good->unit_cost_price,//成本价/件
+                    'cost_price' => $good->cost_price,//公司成本/件
+                    //'unit_cost_price' => $good->unit_cost_price,//成本价/件
+                    'cost_amount' => $good->cost_amount,//公司成本总额
 
                     //其他
                     'factory_mo' => $good->factory_mo,//模号

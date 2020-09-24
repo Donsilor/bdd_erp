@@ -153,7 +153,8 @@ class WarehouseBillTGoodsForm extends WarehouseBillGoodsL
             'other_fee' => 0,
             'factory_cost' => 0,
             'cost_price' => 0,
-            'unit_cost_price' => 0,
+            //'unit_cost_price' => 0,
+            'cost_amount' => 0,
             'market_price' => 0,
         ];
         $goods = $this->find()->select(array_keys($total))->where(['bill_id' => $bill_id])->all();
@@ -197,7 +198,8 @@ class WarehouseBillTGoodsForm extends WarehouseBillGoodsL
                 $total['other_fee'] = bcadd($total['other_fee'], $good->other_fee, 3);
                 $total['factory_cost'] = bcadd($total['factory_cost'], $good->factory_cost, 3);
                 $total['cost_price'] = bcadd($total['cost_price'], $good->cost_price, 3);
-                $total['unit_cost_price'] = bcadd($total['unit_cost_price'], $good->unit_cost_price, 3);
+                //$total['unit_cost_price'] = bcadd($total['unit_cost_price'], $good->unit_cost_price, 3);
+                $total['cost_amount'] = bcadd($total['cost_amount'], $good->cost_amount, 3);
                 //标签价
                 $total['market_price'] = bcadd($total['market_price'], $good->market_price, 3);
             }
@@ -301,7 +303,7 @@ class WarehouseBillTGoodsForm extends WarehouseBillGoodsL
             '副石3配石方式', '副石3类型', '副石3编号', '副石3粒数', '副石3重(ct)', '副石3单价/ct', '副石3成本', '石料备注',
             '配件方式', '配件类型', '配件材质', '配件数量', '配件金重(g)', '配件金价/g', '配件额',
             '配石重量(ct)', '配石工费/ct', '配石费', '配件工费', '克/工费', '件/工费', '镶嵌工艺', '镶石1工费/颗', '镶石2工费/颗', '镶石3工费/颗', '镶石费', '表面工艺(多个用“|”分割)', '表面工艺费', '分色/分件费', '喷沙费', '拉沙费', '补口费', '版费', '税费', '税额', '证书费', '其它费用',
-            '主石证书号', '主石证书类型', '工厂总成本', '公司成本价', '倍率(默认1)', '备注',
+            '主石证书号', '主石证书类型', '工厂总成本', '公司成本总额', '倍率(默认1)', '备注',
         ];
         return [$values, $fields];
     }
@@ -320,7 +322,7 @@ class WarehouseBillTGoodsForm extends WarehouseBillGoodsL
             'second_pei_type3', 'second_stone_type3', 'second_stone_sn3', 'second_stone_num3', 'second_stone_weight3', 'second_stone_price3', 'second_stone_amount3', 'stone_remark',
             'parts_way', 'parts_type', 'parts_material', 'parts_num', 'parts_gold_weight', 'parts_price', 'parts_amount',
             'peishi_weight', 'peishi_gong_fee', 'peishi_fee', 'parts_fee', 'gong_fee', 'piece_fee', 'xiangqian_craft', 'second_stone_fee1', 'second_stone_fee2', 'second_stone_fee3', 'xianqian_fee', 'biaomiangongyi', 'biaomiangongyi_fee', 'fense_fee', 'penlasha_fee', 'lasha_fee', 'bukou_fee', 'templet_fee', 'tax_fee', 'tax_amount', 'cert_fee', 'other_fee',
-            'main_cert_id', 'main_cert_type', 'factory_cost', 'cost_price', 'markup_rate', 'remark',
+            'main_cert_id', 'main_cert_type', 'factory_cost', 'cost_amount', 'markup_rate', 'remark',
         ];
         return $fieldName ?? [];
     }

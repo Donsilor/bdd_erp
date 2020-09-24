@@ -3,6 +3,7 @@
 namespace addons\Warehouse\backend\controllers;
 
 use addons\Supply\common\models\Supplier;
+use addons\Warehouse\common\enums\GoldBillTypeEnum;
 use addons\Warehouse\common\models\Warehouse;
 use function Clue\StreamFilter\fun;
 use common\models\backend\Member;
@@ -34,12 +35,12 @@ use yii\web\UploadedFile;
 /**
  * WarehouseBillController implements the CRUD actions for WarehouseBillController model.
  */
-class BillTController extends BaseController
+class GoldTController extends BaseController
 {
 
     use Curd;
     public $modelClass = WarehouseBillTForm::class;
-    public $billType = BillTypeEnum::BILL_TYPE_T;
+    public $billType = GoldBillTypeEnum::BILL_TYPE_T;
 
 
     /**
@@ -553,9 +554,9 @@ class BillTController extends BaseController
             ['副石3单价/ct	', 'second_stone_price3', 'text'],
             ['副石3成本价	', 'second_stone_amount3', 'text'],
             ['石料备注', 'stone_remark', 'text'],
-//            ['配件方式','parts_way', 'function', function ($model) {
-//                return \addons\Warehouse\common\enums\PeiJianWayEnum::getValue($model['parts_way']);
-//            }],
+            ['配件方式','parts_way', 'function', function ($model) {
+                return \addons\Warehouse\common\enums\PeiJianWayEnum::getValue($model['parts_way']);
+            }],
 //            ['配件类型','parts_type', 'function', function ($model) {
 //                return \Yii::$app->attr->valueName($model['parts_type']);
 //            }],
@@ -581,16 +582,7 @@ class BillTController extends BaseController
             ['镶石3工费	', 'second_stone_fee3', 'text'],
             ['镶石费', 'xianqian_fee', 'text'],
             ['表面工艺','biaomiangongyi', 'function', function ($model) {
-                if (!empty($model['biaomiangongyi'])) {
-                    $biaomiangongyi = explode(',', $model['biaomiangongyi']);
-                    $biaomiangongyi = array_filter($biaomiangongyi);
-                    $arr = [];
-                    foreach ($biaomiangongyi as $item) {
-                        $arr[] = \Yii::$app->attr->valueName($item);
-                    }
-                    return implode(",", $arr) ?? "";
-                }
-                return "";
+                return \Yii::$app->attr->valueName($model['biaomiangongyi']);
             }],
             ['表面工艺费', 'biaomiangongyi_fee', 'text'],
             ['分色/分件费', 'fense_fee', 'text'],

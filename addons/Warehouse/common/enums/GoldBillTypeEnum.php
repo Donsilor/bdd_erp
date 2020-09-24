@@ -15,6 +15,8 @@ class GoldBillTypeEnum extends \common\enums\BaseEnum
     const GOLD_C   = 'GC';
     const GOLD_D   = 'GD';
     const GOLD_W   = 'GW';
+    const GOLD_T   = 'GT';
+    const GOLD_O   = 'GO';
 
     /**
      * @return array
@@ -26,6 +28,8 @@ class GoldBillTypeEnum extends \common\enums\BaseEnum
             self::GOLD_C   => '领料单',
             self::GOLD_D   => '退料单',
             self::GOLD_W   => '盘点单',
+            self::GOLD_T   => '其他入库单',
+            self::GOLD_O   => '其他出库单',
         ];
     }
 

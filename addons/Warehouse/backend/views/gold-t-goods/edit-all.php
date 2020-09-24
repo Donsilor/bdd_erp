@@ -24,7 +24,7 @@ $this->params['breadcrumbs'][] = $this->title;
     }
 </style>
 <div class="box-body nav-tabs-custom">
-    <h2 class="page-header"><?= $this->title; ?> - <?= $bill->bill_no ?> <i class="fa fa-copy" onclick="copy(<?= $bill->bill_no ?>)"></i>
+    <h2 class="page-header"><?= $this->title; ?> - <?= $bill->bill_no ?>
         - <?= \addons\Warehouse\common\enums\BillStatusEnum::getValue($bill->bill_status) ?></h2>
     <?php echo Html::menuTab($tabList, $tab) ?>
     <div class="box-tools" style="float:right;margin-top:-40px; margin-right: 20px;">

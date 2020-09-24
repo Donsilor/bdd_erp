@@ -325,10 +325,12 @@
         }
     </style>
 </head>
-<div class="text-center Noprint" style="text-align:right;">
+<p class="noprint">
+<div class="text-center noprint" style="text-align:right;">
     <!-- 打印按钮 -->
     <button type="button" class="btn btn-info btn-ms" target="_blank" onclick="preview(10)">打印</button>
 </div>
+</p>
 <body>
 <div class="template">
     <div class="information">
@@ -538,9 +540,11 @@
         </div>
     </div>
 </div>
-<div class="text-center Noprint" style="text-align:center;">
+<p class="noprint">
+<div class="text-center noprint" style="text-align:center;">
     <!-- 打印按钮 -->
     <button type="button" class="btn btn-info btn-ms" onclick="preview(10)">打印</button>
 </div>
+</p>
 </body>
 </html>
