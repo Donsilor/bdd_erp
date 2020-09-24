@@ -41,7 +41,7 @@ class BillCGoodsController extends BaseController
         $searchModel = new SearchModel([
             'model' => $this->modelClass,
             'scenario' => 'default',
-            'partialMatchAttributes' => [], // 模糊查询
+            'partialMatchAttributes' => ['goods_name', 'goods_remark'], // 模糊查询
             'defaultOrder' => [
                 'id' => SORT_DESC
             ],
