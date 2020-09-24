@@ -2,6 +2,7 @@
 
 namespace addons\Warehouse\backend\controllers;
 
+use addons\Style\common\models\GoldStyle;
 use addons\Warehouse\common\enums\GoldBillTypeEnum;
 use addons\Warehouse\common\forms\WarehouseGoldBillTGoodsForm;
 use addons\Warehouse\common\models\WarehouseGoldBill;
@@ -41,7 +42,7 @@ class GoldBillTGoodsController extends BaseController
         $searchModel = new SearchModel([
             'model' => $this->modelClass,
             'scenario' => 'default',
-            'partialMatchAttributes' => ['goods_name', 'stone_remark', 'remark'], // 模糊查询
+            'partialMatchAttributes' => ['gold_name', 'remark'], // 模糊查询
             'defaultOrder' => [
                 'id' => SORT_DESC
             ],
@@ -57,7 +58,7 @@ class GoldBillTGoodsController extends BaseController
             'dataProvider' => $dataProvider,
             'searchModel' => $searchModel,
             'bill' => $bill,
-            'tabList' => \Yii::$app->warehouseService->gold->menuTabList($bill_id, $this->billType, $returnUrl),
+            'tabList' => \Yii::$app->warehouseService->goldT->menuTabList($bill_id, $this->billType, $returnUrl),
             'tab' => $tab,
         ]);
     }
@@ -73,13 +74,23 @@ class GoldBillTGoodsController extends BaseController
         $id = \Yii::$app->request->get('id');
         $bill_id = Yii::$app->request->get('bill_id');
         $model = $this->findModel($id);
+        $bill = WarehouseGoldBill::find()->where(['id'=>$bill_id])->one();
         $model = $model ?? new WarehouseGoldBillTGoodsForm();
         // ajax 校验
         $this->activeFormValidate($model);
         if ($model->load(\Yii::$app->request->post())) {
             try {
                 $trans = \Yii::$app->db->beginTransaction();
-                $model->bill_id = $bill_id;
+                if($model->isNewRecord){
+                    $model->bill_id = $bill_id;
+                    $model->bill_no = $bill->bill_no;
+                    $model->bill_type = $this->billType;
+                }
+                if(false === $model->save()){
+                    throw new \Exception($this->getError($model));
+                }
+
+                \Yii::$app->warehouseService->gold->goldBillSummary($bill_id);
                 $trans->commit();
                 \Yii::$app->getSession()->setFlash('success', '保存成功');
                 return $this->redirect(['index', 'bill_id' => $bill_id]);
@@ -413,33 +424,30 @@ class GoldBillTGoodsController extends BaseController
         }
     }
 
+
+
     /**
-     *
-     * 同步更新价格
-     * @return mixed
+     * 查询石料款号信息
+     * @return array
      */
-    public function actionUpdatePrice()
+    public function actionAjaxGetGold()
     {
-        $ids = Yii::$app->request->post('ids');
-        if (empty($ids)) {
-            return $this->message("ID不能为空", $this->redirect(['index']), 'error');
-        }
-        try {
-            $trans = \Yii::$app->db->beginTransaction();
-            foreach ($ids as $id) {
-                $model = WarehouseBillTGoodsForm::findOne($id);
-                if (!empty($model)) {
-                    \Yii::$app->warehouseService->billT->syncUpdatePrice($model);
-                }
-            }
-            \Yii::$app->warehouseService->billT->WarehouseBillTSummary($model->bill_id);
-            $trans->commit();
-            \Yii::$app->getSession()->setFlash('success', '刷新成功');
-            return $this->redirect(\Yii::$app->request->referrer);
-        } catch (\Exception $e) {
-            $trans->rollBack();
-            return $this->message($e->getMessage(), $this->redirect(\Yii::$app->request->referrer), 'error');
-        }
+        \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+
+        $style_sn = \Yii::$app->request->get('style_sn');
+        $model = GoldStyle::find()->select(['gold_type','gold_name'])->where(['style_sn'=>$style_sn])->one();
+        $data = [
+            'gold_type' => $model->gold_type??"",
+            'gold_name' => $model->gold_name??"",
+        ];
+        return ResultHelper::json(200,'查询成功', $data);
+    }
+
+
+    public function actionGetGoodsSn(){
+        $gold_type = Yii::$app->request->post('gold_type');
+        $model = Yii::$app->styleService->gold::getDropDown($gold_type);
+        return ResultHelper::json(200, 'ok',$model);
     }
 
 }

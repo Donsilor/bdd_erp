@@ -17,36 +17,45 @@ $form = ActiveForm::begin([
 </div>
 <div class="modal-body">
     <div class="col-sm-12">
-        <?= $form->field($model, 'goods_sn')->textInput(["placeholder"=>"请输入款号/起版号"]) ?>
+        <?= $form->field($model, 'gold_sn')->textInput([ "placeholder" => "单据审核自动生成"]) ?>
         <div class="row">
-            <div class="col-sm-7">
-                <?= $form->field($model, 'is_wholesale')->radioList(addons\Warehouse\common\enums\IsWholeSaleEnum::getMap())->label('是否批发(<span style="color: red;">批发入库时出库销售不可拆分</span>)')?>
+
+            <div class="col-lg-6">
+                <?= $form->field($model, 'gold_type')->dropDownList(Yii::$app->attr->valueMap(\addons\Style\common\enums\AttrIdEnum::MAT_GOLD_TYPE),['prompt'=>'请选择']) ?>
             </div>
-            <div class="col-sm-5">
-                <?= $form->field($model, 'auto_goods_id')->radioList(\common\enums\ConfirmEnum::getMap()) ?>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-sm-6">
-                <?= $form->field($model, 'goods_num')->textInput(["placeholder"=>"请输入数量"]) ?>
-            </div>
-            <div class="col-sm-6">
-                <?= $form->field($model, 'to_warehouse_id')->widget(\kartik\select2\Select2::class, [
-                    'data' => Yii::$app->warehouseService->warehouse::getDropDown(),
+            <div class="col-lg-6">
+                <?= $form->field($model, 'style_sn')->widget(\kartik\select2\Select2::class, [
+                    'data' => Yii::$app->styleService->gold->getDropDown(),
                     'options' => ['placeholder' => '请选择'],
                     'pluginOptions' => [
                         'allowClear' => false
                     ],
-                ]); ?>
+                ]);?>
+            </div>
+
+
+        </div>
+        <div class="row">
+            <div class="col-lg-12">
+                <?= $form->field($model, 'gold_name')->textInput() ?>
             </div>
         </div>
         <div class="row">
-            <div class="col-sm-6">
-                <?= $form->field($model, 'order_sn')->textInput(["placeholder"=>"请输入订单号"]) ?>
+            <div class="col-lg-4">
+                <?= $form->field($model, 'gold_weight')->textInput() ?>
             </div>
-            <div class="col-sm-6">
-                <?= $form->field($model, 'cost_price')->textInput(["placeholder"=>"请输入成本单价"]) ?>
+            <div class="col-lg-4">
+                <?= $form->field($model, 'gold_price')->textInput() ?>
             </div>
+            <div class="col-lg-4">
+                <?= $form->field($model, 'incl_tax_price')->textInput() ?>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-12">
+                <?= $form->field($model, 'remark')->textarea() ?>
+            </div>
+
         </div>
     </div>
 </div>
@@ -55,3 +64,51 @@ $form = ActiveForm::begin([
     <button class="btn btn-primary" type="submit">保存</button>
 </div>
 <?php ActiveForm::end(); ?>
+<script>
+    var formId = 'warehousegoldbilltgoodsform';
+    function fillStoneForm(){
+        var style_sn = $("#"+formId+"-style_sn").val();
+        if(style_sn != '') {
+            $.ajax({
+                type: "get",
+                url: '<?php echo Url::to(['ajax-get-gold'])?>',
+                dataType: "json",
+                data: {
+                    'style_sn': style_sn,
+                },
+                success: function (data) {
+                    if (parseInt(data.code) == 200 && data.data) {
+                        $("#"+formId+"-gold_name").val(data.data.gold_name);
+                        $("#"+formId+"-gold_type").val(data.data.gold_type);
+                    }
+                }
+            });
+        }
+    }
+    function getGoodsSn() {
+        var gold_type = $("#"+formId+"-gold_type").val();
+        var html = '<option>请选择</option>';
+        $.ajax({
+            url: '<?php echo Url::to(['get-goods-sn'])?>',
+            type: 'post',
+            dataType: 'json',
+            data: {gold_type: gold_type},
+            success: function (msg) {
+                console.log(msg.data)
+                $.each(msg.data, function (key, val) {
+                    html += '<option value="' + key + '">' + val + '</option>';
+                });
+                $("#"+formId+"-style_sn").html(html);
+                $("#"+formId+"-gold_name").val('');
+            }
+        })
+    }
+
+    $("#"+formId+"-style_sn").change(function(){
+        fillStoneForm();
+    });
+
+    $("#"+formId+"-gold_type").change(function(){
+        getGoodsSn();
+    });
+</script>

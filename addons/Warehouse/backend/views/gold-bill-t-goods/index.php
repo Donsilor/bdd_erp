@@ -35,7 +35,7 @@ $params = $params ? "&".http_build_query($params) : '';
             echo Html::create(['ajax-edit', 'bill_id' => $bill->id], '新增货品', [
                 'class' => 'btn btn-primary btn-xs',
                 'data-toggle' => 'modal',
-                'data-target' => '#ajaxModal',
+                'data-target' => '#ajaxModalLg',
             ]);
         }
 //        echo Html::a('单据打印', ['bill-t/print', 'id' => $bill->id], ['target' => '_blank', 'class' => 'btn btn-info btn-xs',]);
@@ -185,11 +185,10 @@ $params = $params ? "&".http_build_query($params) : '';
                                 'buttons' => [
                                     'edit' => function ($url, $model, $key) use ($bill) {
                                         if ($bill->bill_status == BillStatusEnum::SAVE) {
-                                            return Html::edit(['edit', 'id' => $model->id, 'bill_id' => $bill->id], '编辑', [
-                                                'class' => 'btn btn-primary btn-xs openIframe',
-                                                'data-width' => '90%',
-                                                'data-height' => '90%',
-                                                'data-offset' => '20px',
+                                            return Html::edit(['ajax-edit', 'id' => $model->id, 'bill_id' => $bill->id], '编辑', [
+                                                'class' => 'btn btn-primary btn-xs',
+                                                'data-toggle' => 'modal',
+                                                'data-target' => '#ajaxModalLg',
                                             ]);
                                         }
                                     },

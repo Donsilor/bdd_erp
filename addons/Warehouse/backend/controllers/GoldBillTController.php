@@ -117,6 +117,8 @@ class GoldBillTController extends BaseController
                 if ($isNewRecord) {
                     $model->bill_no = SnHelper::createBillSn($this->billType);
                     $model->bill_type = $this->billType;
+                    $model->to_warehouse_id = 7;
+
                 }
 
                 if (false === $model->save()) {
@@ -137,6 +139,15 @@ class GoldBillTController extends BaseController
                 } else {
                     $log_msg = "修改其它入库单{$model->bill_no}";
                 }
+                $log = [
+                    'bill_id' => $model->id,
+                    'bill_status' => $model->bill_status,
+                    'log_type' => LogTypeEnum::ARTIFICIAL,
+                    'log_module' => '其它入库单',
+                    'log_msg' => $log_msg
+                ];
+                \Yii::$app->warehouseService->goldBillLog->createGoldBillLog($log);
+
                 \Yii::$app->warehouseService->gold->goldBillSummary($model->id);
                 $trans->commit();
 
@@ -200,6 +211,16 @@ class GoldBillTController extends BaseController
             if (false === $model->save()) {
                 return $this->message($this->getError($model), $this->redirect(\Yii::$app->request->referrer), 'error');
             }
+
+            $log = [
+                'bill_id' => $model->id,
+                'bill_status' => $model->bill_status,
+                'log_type' => LogTypeEnum::ARTIFICIAL,
+                'log_module' => '其它入库单',
+                'log_msg' => '单据提审'
+            ];
+            \Yii::$app->warehouseService->goldBillLog->createGoldBillLog($log);
+
             $trans->commit();
             return $this->message('操作成功', $this->redirect(\Yii::$app->request->referrer), 'success');
 
@@ -228,6 +249,23 @@ class GoldBillTController extends BaseController
                 $trans = Yii::$app->trans->beginTransaction();
                 $model->audit_time = time();
                 $model->auditor_id = Yii::$app->user->identity->getId();
+                if($model->audit_status == AuditStatusEnum::PASS){
+                    $model->bill_status = BillStatusEnum::CONFIRM;
+                    \Yii::$app->warehouseService->goldT->createGold($model);
+                }else{
+                    $model->bill_status = BillStatusEnum::SAVE;
+                }
+                if(false === $model->save()){
+                    throw new \Exception($this->getError($model));
+                }
+                $log = [
+                    'bill_id' => $model->id,
+                    'bill_status' => $model->bill_status,
+                    'log_type' => LogTypeEnum::ARTIFICIAL,
+                    'log_module' => '其它入库单',
+                    'log_msg' => '单据审核'
+                ];
+                \Yii::$app->warehouseService->goldBillLog->createGoldBillLog($log);
                 $trans->commit();
                 return $this->message("保存成功", $this->redirect(Yii::$app->request->referrer), 'success');
             } catch (\Exception $e) {
