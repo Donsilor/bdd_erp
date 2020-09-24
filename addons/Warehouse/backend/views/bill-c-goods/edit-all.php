@@ -174,6 +174,17 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'headerOptions' => ['class' => 'col-md-2'],
                             ],
                             [
+                                'attribute' => 'chuku_price',
+                                'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#84bf96;'],
+                                'footerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#84bf96;'],
+                                'visible' => \common\helpers\Auth::verify(\common\enums\SpecialAuthEnum::VIEW_CHUKU_PRICE),
+                                'filter' => false,
+                                'value' =>function($model){
+                                    return Html::ajaxInput('chuku_price', $model->chuku_price);
+                                },
+                                'format' => 'raw',
+                            ],
+                            [
                                 'attribute' => 'material_type',
                                 'value' => function ($model) {
                                     return Yii::$app->attr->valueName($model->material_type) ?? "";
@@ -273,15 +284,6 @@ $this->params['breadcrumbs'][] = $this->title;
                                 },
                                 'visible' => \common\helpers\Auth::verify(\common\enums\SpecialAuthEnum::VIEW_CAIGOU_PRICE),
                                 'filter' => false,
-                            ],
-                            [
-                                'attribute' => 'chuku_price',
-                                'visible' => \common\helpers\Auth::verify(\common\enums\SpecialAuthEnum::VIEW_CHUKU_PRICE),
-                                'filter' => false,
-                                'value' =>function($model){
-                                    return Html::ajaxInput('chuku_price', $model->chuku_price);
-                                },
-                                'format' => 'raw',
                             ],
                             [
                                 'class' => 'yii\grid\ActionColumn',
