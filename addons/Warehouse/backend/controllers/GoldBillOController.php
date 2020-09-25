@@ -8,7 +8,9 @@ use addons\Style\common\models\ProductType;
 use addons\Style\common\models\StyleCate;
 use addons\Supply\common\models\Supplier;
 use addons\Warehouse\common\enums\DeliveryTypeEnum;
+use addons\Warehouse\common\enums\GoldBillTypeEnum;
 use addons\Warehouse\common\forms\WarehouseBillCForm;
+use addons\Warehouse\common\forms\WarehouseGoldBillOForm;
 use addons\Warehouse\common\models\Warehouse;
 use addons\Warehouse\common\models\WarehouseBillGoods;
 use addons\Warehouse\common\models\WarehouseGoods;
@@ -37,8 +39,8 @@ use addons\Warehouse\common\enums\GoodsStatusEnum;
 class GoldBillOController extends BaseController
 {
     use Curd;
-    public $modelClass = WarehouseBillCForm::class;
-    public $billType = BillTypeEnum::BILL_TYPE_C;
+    public $modelClass = WarehouseGoldBillOForm::class;
+    public $billType = GoldBillTypeEnum::GOLD_O;
 
     /**
      * Lists all WarehouseBill models.
@@ -58,7 +60,6 @@ class GoldBillOController extends BaseController
             'relations' => [
                 'creator' => ['username'],
                 'auditor' => ['username'],
-                'salesman' => ['username'],
             ]
         ]);
 
@@ -67,18 +68,18 @@ class GoldBillOController extends BaseController
 
         $created_at = $searchModel->created_at;
         if (!empty($created_at)) {
-            $dataProvider->query->andFilterWhere(['>=',Warehousebill::tableName().'.created_at', strtotime(explode('/', $created_at)[0])]);//起始时间
-            $dataProvider->query->andFilterWhere(['<',Warehousebill::tableName().'.created_at', (strtotime(explode('/', $created_at)[1]) + 86400)] );//结束时间
+            $dataProvider->query->andFilterWhere(['>=',WarehouseGoldBillOForm::tableName().'.created_at', strtotime(explode('/', $created_at)[0])]);//起始时间
+            $dataProvider->query->andFilterWhere(['<',WarehouseGoldBillOForm::tableName().'.created_at', (strtotime(explode('/', $created_at)[1]) + 86400)] );//结束时间
         }
 
         $audit_time = $searchModel->audit_time;
         if (!empty($audit_time)) {
-            $dataProvider->query->andFilterWhere(['>=',Warehousebill::tableName().'.audit_time', strtotime(explode('/', $audit_time)[0])]);//起始时间
-            $dataProvider->query->andFilterWhere(['<',Warehousebill::tableName().'.audit_time', (strtotime(explode('/', $audit_time)[1]) + 86400)] );//结束时间
+            $dataProvider->query->andFilterWhere(['>=',WarehouseGoldBillOForm::tableName().'.audit_time', strtotime(explode('/', $audit_time)[0])]);//起始时间
+            $dataProvider->query->andFilterWhere(['<',WarehouseGoldBillOForm::tableName().'.audit_time', (strtotime(explode('/', $audit_time)[1]) + 86400)] );//结束时间
         }
 
-        $dataProvider->query->andWhere(['>',Warehousebill::tableName().'.status', -1]);
-        $dataProvider->query->andWhere(['=',Warehousebill::tableName().'.bill_type', $this->billType]);
+        $dataProvider->query->andWhere(['>',WarehouseGoldBillOForm::tableName().'.status', -1]);
+        $dataProvider->query->andWhere(['=',WarehouseGoldBillOForm::tableName().'.bill_type', $this->billType]);
 
         //导出
         if(Yii::$app->request->get('action') === 'export'){
@@ -105,7 +106,7 @@ class GoldBillOController extends BaseController
     {
         $id = \Yii::$app->request->get('id');
         $model = $this->findModel($id);
-        $model = $model ?? new WarehouseBillCForm();
+        $model = $model ?? new WarehouseGoldBillOForm();
 
         if($model->isNewRecord){
             $model->bill_type = $this->billType;
@@ -133,7 +134,7 @@ class GoldBillOController extends BaseController
                     'log_module' => '其它出库单',
                     'log_msg' => $log_msg
                 ];
-                \Yii::$app->warehouseService->billLog->createBillLog($log);
+                \Yii::$app->warehouseService->goldBillLog->createGoldBillLog($log);
 
                 $trans->commit();
 

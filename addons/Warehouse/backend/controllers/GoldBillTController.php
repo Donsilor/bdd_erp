@@ -153,7 +153,7 @@ class GoldBillTController extends BaseController
 
                 if ($isNewRecord) {
                     \Yii::$app->getSession()->setFlash('success', '保存成功');
-                    return $this->redirect(['gold-t-goods/index', 'bill_id' => $model->id]);
+                    return $this->redirect(['gold-bill-t-goods/index', 'bill_id' => $model->id]);
                     //return $this->message("保存成功", $this->redirect(['view', 'id' => $model->id]), 'success');
                 } else {
                     \Yii::$app->getSession()->setFlash('success', '保存成功');
