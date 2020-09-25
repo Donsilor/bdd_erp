@@ -1272,6 +1272,9 @@ class WarehouseBillTService extends Service
      */
     public function calculateMainStoneWeight($form)
     {
+        if($form->main_pei_type == PeiShiWayEnum::NO_PEI){
+            return 0;
+        }
         //return bcmul($form->main_stone_weight, $form->main_stone_num, 5) ?? 0;
         return $form->main_stone_weight ?? 0;
     }
@@ -1297,7 +1300,19 @@ class WarehouseBillTService extends Service
      */
     public function calculateSecondStoneWeight($form)
     {
-        return bcadd(bcadd($form->second_stone_weight1, $form->second_stone_weight2, 5), $form->second_stone_weight3, 5) ?? 0;
+        $second_stone_weight1 = $form->second_stone_weight1 ?? 0;
+        $second_stone_weight2 = $form->second_stone_weight2 ?? 0;
+        $second_stone_weight3 = $form->second_stone_weight3 ?? 0;
+        if($form->second_stone_type1 == PeiShiWayEnum::NO_PEI){
+            $second_stone_weight1 = 0;
+        }
+        if($form->second_stone_type2 == PeiShiWayEnum::NO_PEI){
+            $second_stone_weight2 = 0;
+        }
+        if($form->second_stone_type3 == PeiShiWayEnum::NO_PEI){
+            $second_stone_weight3 = 0;
+        }
+        return bcadd(bcadd($second_stone_weight1, $second_stone_weight2, 5), $second_stone_weight3, 5) ?? 0;
     }
 
     /**
@@ -1369,6 +1384,9 @@ class WarehouseBillTService extends Service
      */
     public function calculatePartsWeight($form)
     {
+        if($form->parts_way == PeiJianWayEnum::NO_PEI){
+            return 0;
+        }
         return bcmul($form->parts_gold_weight, 1, 5) ?? 0;//$form->parts_num
     }
 
