@@ -4,6 +4,7 @@ namespace addons\Warehouse\services;
 
 use addons\Warehouse\common\enums\DeliveryTypeEnum;
 use addons\Warehouse\common\models\WarehouseBill;
+use common\helpers\StringHelper;
 use Yii;
 use yii\db\Exception;
 use addons\Warehouse\common\models\WarehouseGoods;
@@ -30,22 +31,21 @@ use addons\Warehouse\common\enums\BillTypeEnum;
  */
 class WarehouseBillCService extends WarehouseBillService
 {
-
     /**
      * 创建其它出库单明细
      * @param WarehouseBillCForm $form
-     * @param array $bill_goods
+     * @param array $saveGoods
      * @throws
      *
      */
-    public function createBillGoodsC($form, $bill_goods)
+    public function createBillGoodsC($form, $saveGoods)
     {
         if(false === $form->validate()) {
             throw new \Exception($this->getError($form));
         }
         //批量创建单据明细
         $goods_ids = $goods_val = [];
-        foreach ($bill_goods as &$goods) {
+        foreach ($saveGoods as &$goods) {
             $goods_id = $goods['goods_id'];
             $goods_ids[] = $goods_id;
             $goods_info = WarehouseGoods::find()->where(['goods_id' => $goods_id, 'goods_status'=>GoodsStatusEnum::IN_STOCK])->one();
@@ -63,7 +63,7 @@ class WarehouseBillCService extends WarehouseBillService
             if(count($goods_val)>=10){
                 $res = \Yii::$app->db->createCommand()->batchInsert(WarehouseBillGoods::tableName(), $goods_key, $goods_val)->execute();
                 if(false === $res){
-                    throw new Exception('更新单据汇总失败1');
+                    throw new Exception('创建单据明细失败1');
                 }
                 $goods_val = [];
             }
@@ -71,7 +71,7 @@ class WarehouseBillCService extends WarehouseBillService
         if(!empty($goods_val)){
             $res = \Yii::$app->db->createCommand()->batchInsert(WarehouseBillGoods::tableName(), $goods_key, $goods_val)->execute();
             if(false === $res){
-                throw new Exception('更新单据汇总失败2');
+                throw new Exception('创建单据明细失败2');
             }
         }
         foreach ($goods_ids as $goods_id){
@@ -86,7 +86,6 @@ class WarehouseBillCService extends WarehouseBillService
                 throw new Exception('更新库存信息失败');
             }
         }
-
         //更新收货单汇总：总金额和总数量
         if(false === $this->billCSummary($form->id)){
             throw new Exception('更新单据汇总失败');

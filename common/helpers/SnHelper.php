@@ -153,4 +153,17 @@ class SnHelper
         $number_max = substr('99999999',0, $number_len);
         return $prefix.date('ymd').mt_rand(3,9).str_pad(mt_rand(1, $number_max),$number_len,'0',STR_PAD_LEFT);
     }
+
+    /**
+     * 入库单编号
+     * @param string $prefix
+     * @param int $number_max
+     * @param int $number_len
+     * @return string
+     */
+    public static function createRkBillSn($prefix = 'RK', $number_max = 0, $number_len = 3)
+    {
+        $number_max++;
+        return $prefix.date('Ymd').'-'.str_pad($number_max, $number_len,'0',STR_PAD_LEFT);
+    }
 }

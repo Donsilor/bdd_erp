@@ -20,7 +20,7 @@ $form = ActiveForm::begin([
 </div>
 <div class="modal-body">
     <div class="col-sm-12">
-        <?= $form->field($model, 'bill_no')->textInput(['disabled' => true, "placeholder" => "系统自动生成"]) ?>
+        <?= $form->field($model, 'bill_no')->textInput(['disabled' => $model->isNewRecord ? null : 'disabled', "placeholder" => "不填则系统自动生成"]) ?>
         <div class="row">
             <div class="col-sm-4">
                 <?= $form->field($model, 'supplier_id')->widget(\kartik\select2\Select2::class, [
