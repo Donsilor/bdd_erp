@@ -2,6 +2,8 @@
 
 namespace addons\Warehouse\services;
 
+use addons\Warehouse\common\enums\BillStatusEnum;
+use addons\Warehouse\common\enums\GoldBillTypeEnum;
 use addons\Warehouse\common\enums\GoldStatusEnum;
 use addons\Warehouse\common\forms\WarehouseGoldBillTGoodsForm;
 use addons\Warehouse\common\models\WarehouseGold;
@@ -39,64 +41,55 @@ class WarehouseGoldBillOService extends Service
     }
 
     /**
-     * 审核金料收货单(入库单)
-     * @param object $form
-     * @throws
+     * 扫码添加出库单明细
+     * @param int $bill_id
+     * @param array $goods_ids
      */
-    public function createGold($form)
+    public function scanGoods($bill_id, $gold_sns)
     {
-            //金料入库
-            $gold = WarehouseGoldBillTGoodsForm::findAll(['bill_id'=>$form->id]);
-            $ids = $g_ids = [];
-            foreach ($gold as $detail){
-                $goldM = new WarehouseGold();
-                $gold_sn = $detail->gold_sn;
-                $good = [
-                    'gold_sn' => empty($gold_sn) ?(string) rand(10000000000,99999999999) : $gold_sn,
-                    'gold_status' => GoldStatusEnum::IN_STOCK,
-                    'style_sn' => $detail->style_sn,
-                    'gold_name' => $detail->gold_name,
-                    'gold_type' => $detail->gold_type,
-                    'supplier_id' => $form->supplier_id,
-                    'gold_num' => $detail->gold_num,
-                    'gold_weight' => $detail->gold_weight,
-                    'first_weight' => $detail->gold_weight,
-                    'cost_price' => $detail->cost_price,
-                    'gold_price' => $detail->gold_price,
-                    'warehouse_id' => $form->to_warehouse_id,
-                    'remark' => $detail->remark,
-                    'status' => StatusEnum::ENABLED,
-                    'creator_id'=>\Yii::$app->user->identity->getId(),
-                    'created_at' => time(),
-
-                ];
-                $goldM->attributes = $good;
-                if(false === $goldM->save()){
-                    throw new \Exception($this->getError($goldM));
-                }
-                $id = $goldM->attributes['id'];
-                if(empty($gold_sn)){
-                    $ids[] = $id;
-                }
-                $g_ids[$id] = $detail->id;
-            }
-            if($ids){
-                foreach ($ids as $id){
-                    $stone = WarehouseGold::findOne(['id'=>$id]);
-                    $gold_sn = \Yii::$app->warehouseService->gold->createGoldSn($stone);
-                    //回写收货单货品批次号
-                    $g_id = $g_ids[$id]??"";
-                    if($g_id){
-                        $res = WarehouseGoldBillGoods::updateAll(['gold_sn' => $gold_sn], ['id' => $g_id]);
-                        if(false === $res){
-                            throw new \Exception("回写收货单货品批次号失败");
-                        }
-                    }
-                }
-            }
-        if(false === $form->save()) {
-            throw new \Exception($this->getError($form));
+        $bill = WarehouseGoldBill::find()->where(['id'=>$bill_id,'bill_type'=>GoldBillTypeEnum::GOLD_O])->one();
+        if(empty($bill) || $bill->bill_status != BillStatusEnum::SAVE) {
+            throw new \Exception("单据不是保存状态");
         }
+        foreach ($gold_sns as $gold_sn) {
+            $goods = WarehouseGold::find()->where(['gold_sn'=>$gold_sn, 'gold_status'=>GoldStatusEnum::IN_STOCK])->one();
+            if(empty($goods)) {
+                throw new \Exception("[{$gold_sn}]批次号不存在或者不是库存中");
+            }
+            $this->createGoldBillGoodsByGoods($bill, $goods);
+        }
+        //更新收货单汇总：总金额和总数量
+        Yii::$app->warehouseService->goldBill->goldBillSummary($bill->id);
+
+        return $bill;
+    }
+
+    /**
+     * 添加单据明细 通用代码
+     * @param WarehouseBillCForm $bill
+     * @param WarehouseGoods $goods
+     * @throws \Exception
+     */
+    private function createGoldBillGoodsByGoods($bill, $goods)
+    {
+        $gold_sn = $goods->gold_sn;
+        $billGoods = new WarehouseGoldBillGoods();
+        $billGoods->attributes = [
+            'bill_id' =>$bill->id,
+            'bill_no' =>$bill->bill_no,
+            'bill_type'=>$bill->bill_type,
+            'gold_sn'=>$gold_sn,
+            'gold_name'=>$goods->gold_name,
+            'style_sn'=>$goods->style_sn,
+            'goods_num'=>1, //无用
+            'gold_type'=>$goods->gold_type,
+            'gold_weight'=>0,
+            'gold_price'=>$goods->gold_price,
+        ];
+        if(false === $billGoods->save()) {
+            throw new \Exception("[{$gold_sn}]".$this->getError($billGoods));
+        }
+
     }
 
 }

@@ -313,7 +313,7 @@ $params = $params ? "&".http_build_query($params) : '';
                                             <?= \kartik\select2\Select2::widget([
                                                 'name'=>'diamond_color',
                                                 'value'=>$search->diamond_color,
-                                                'data'=>Yii::$app->attr->valueMap(AttrIdEnum::MAIN_STONE_SECAI),
+                                                'data'=>Yii::$app->attr->valueMap(AttrIdEnum::DIA_COLOR),
                                                 'options' => ['placeholder' =>"请选择",'multiple'=>false,'style'=>"width:180px"],
                                                 'pluginOptions' => [
                                                     'allowClear' => true,
@@ -333,7 +333,7 @@ $params = $params ? "&".http_build_query($params) : '';
                                             <?= \kartik\select2\Select2::widget([
                                                 'name'=>'diamond_clarity',
                                                 'value'=>$search->diamond_clarity,
-                                                'data'=>Yii::$app->attr->valueMap(AttrIdEnum::MAIN_STONE_CLARITY),
+                                                'data'=>Yii::$app->attr->valueMap(AttrIdEnum::DIA_CLARITY),
                                                 'options' => ['placeholder' =>"请选择",'multiple'=>false,'style'=>"width:180px"],
                                                 'pluginOptions' => [
                                                     'allowClear' => true,

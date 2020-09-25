@@ -148,7 +148,7 @@ class GoldBillTController extends BaseController
                 ];
                 \Yii::$app->warehouseService->goldBillLog->createGoldBillLog($log);
 
-                \Yii::$app->warehouseService->gold->goldBillSummary($model->id);
+                \Yii::$app->warehouseService->goldBill->goldBillSummary($model->id);
                 $trans->commit();
 
                 if ($isNewRecord) {

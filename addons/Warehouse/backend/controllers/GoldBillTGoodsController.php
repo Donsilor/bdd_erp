@@ -90,7 +90,7 @@ class GoldBillTGoodsController extends BaseController
                     throw new \Exception($this->getError($model));
                 }
 
-                \Yii::$app->warehouseService->gold->goldBillSummary($bill_id);
+                \Yii::$app->warehouseService->goldBill->goldBillSummary($bill_id);
                 $trans->commit();
                 \Yii::$app->getSession()->setFlash('success', '保存成功');
                 return $this->redirect(['index', 'bill_id' => $bill_id]);

@@ -9,6 +9,7 @@ use addons\Style\common\models\StyleCate;
 use addons\Supply\common\models\Supplier;
 use addons\Warehouse\common\enums\DeliveryTypeEnum;
 use addons\Warehouse\common\enums\GoldBillTypeEnum;
+use addons\Warehouse\common\enums\OutTypeEnum;
 use addons\Warehouse\common\forms\WarehouseBillCForm;
 use addons\Warehouse\common\forms\WarehouseGoldBillOForm;
 use addons\Warehouse\common\models\Warehouse;
@@ -124,12 +125,13 @@ class GoldBillOController extends BaseController
                     throw new \Exception($this->getError($model));
                 }
                 if($isNewRecord){
-                    $log_msg = "创建其它出库单{$model->bill_no}，出库类型：".DeliveryTypeEnum::getValue($model->delivery_type) ."，参考编号/订单号：{$model->order_sn} ";
+                    $log_msg = "创建其它出库单{$model->bill_no}，出库类型：".OutTypeEnum::getValue($model->out_type);
                 }else{
-                    $log_msg = "修改其它出库单{$model->bill_no}，出库类型：".DeliveryTypeEnum::getValue($model->delivery_type) ."，参考编号/订单号：{$model->order_sn} ";
+                    $log_msg = "修改其它出库单{$model->bill_no}，出库类型：".OutTypeEnum::getValue($model->out_type);
                 }
                 $log = [
                     'bill_id' => $model->id,
+                    'bill_status' => $model->bill_status,
                     'log_type' => LogTypeEnum::ARTIFICIAL,
                     'log_module' => '其它出库单',
                     'log_msg' => $log_msg
@@ -163,11 +165,11 @@ class GoldBillOController extends BaseController
         $id = Yii::$app->request->get('id');
         $tab = Yii::$app->request->get('tab',1);
         $returnUrl = Yii::$app->request->get('returnUrl',Url::to(['bill-c/index', 'id'=>$id]));
-        $model = $this->findModel($id) ?? new WarehouseBillCForm();
+        $model = $this->findModel($id) ?? new WarehouseGoldBillOForm();
         return $this->render($this->action->id, [
             'model' => $model,
             'tab'=>$tab,
-            'tabList'=>\Yii::$app->warehouseService->bill->menuTabList($id,$this->billType,$returnUrl),
+            'tabList'=>\Yii::$app->warehouseService->goldO->menuTabList($id,$this->billType,$returnUrl),
             'returnUrl'=>$returnUrl,
         ]);
     }

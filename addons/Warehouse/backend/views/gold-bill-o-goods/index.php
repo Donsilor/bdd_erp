@@ -21,14 +21,15 @@ $this->params['breadcrumbs'][] = $this->title;
     <div style="float:right;margin-top:-40px;margin-right: 20px;">
         <?php
         if($bill->bill_status == \addons\Warehouse\common\enums\BillStatusEnum::SAVE){
-            echo Html::create(['add', 'bill_id' => $bill->id], '新增货品', [
-                'class' => 'btn btn-primary btn-xs openIframe',
-                'data-width'=>'90%',
-                'data-height'=>'90%',
-                'data-offset'=>'20px',
-            ]);
+//            echo Html::create(['add', 'bill_id' => $bill->id], '新增货品', [
+//                'class' => 'btn btn-primary btn-xs openIframe',
+//                'data-width'=>'90%',
+//                'data-height'=>'90%',
+//                'data-offset'=>'20px',
+//            ]);
+//            echo '&nbsp;';
+            echo Html::edit(['edit-all', 'bill_id' => $bill->id, 'scan' => 1], '商品扫码添加', ['class' => 'btn btn-success btn-xs']);
             echo '&nbsp;';
-
 //            echo Html::edit(['edit-all', 'bill_id' => $bill->id], '编辑货品', ['class'=>'btn btn-info btn-xs']);
         }
         echo Html::a('导出', ['bill-b/export?ids='.$bill->id],[
@@ -67,7 +68,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'format' => 'raw',
                             ],
                             [
-                                'attribute'=>'goods_id',
+                                'attribute'=>'gold_sn',
                                 'filter' => true,
                                 'headerOptions' => ['class' => 'col-md-1'],
                             ],
@@ -77,82 +78,16 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'filter' => true,
                             ],
                             [
-                                'attribute' => 'goods_name',
+                                'attribute' => 'gold_name',
                                 'filter' => true,
                                 'headerOptions' => ['class' => 'col-md-2'],
                             ],
-                            
-                            [
-                                'attribute' => 'goods.style_cate_id',
-                                'value' => 'goods.styleCate.name',
-                                'filter' => true,
-                                'headerOptions' => ['class' => 'col-md-1'],
-                            ],
-                            [
-                                'attribute' => 'goods.product_type_id',
-                                'value' => 'goods.productType.name',
-                                'filter' => true,
-                                'headerOptions' => ['class' => 'col-md-1'],
-                            ],
 
-                            [
-                                'attribute' => 'warehouse_id',
-                                'value' =>"warehouse.name",
-                                'filter'=>Select2::widget([
-                                    'name'=>'SearchModel[warehouse_id]',
-                                    'value'=>$searchModel->warehouse_id,
-                                    'data'=>Yii::$app->warehouseService->warehouse::getDropDown(),
-                                    'options' => ['placeholder' =>"请选择"],
-                                    'pluginOptions' => [
-                                        'allowClear' => true,
-
-                                    ],
-                                ]),
-                                'headerOptions' => ['class' => 'col-md-2'],
-                            ],
-
-                            [
-                                'attribute' => 'material',
-                                'value' => function($model){
-                                    return Yii::$app->attr->valueName($model->material);
-                                },
-                                'filter' => false,
-                                'headerOptions' => ['class' => 'col-md-1'],
-                            ],
                             [
                                 'attribute' => 'gold_weight',
                                 'filter' => false,
                             ],
 
-                            [
-                                'attribute' => 'goods.main_stone_type',
-                                'filter' => false,
-                            ],
-                            [
-                                'attribute' => 'goods.diamond_carat',
-                                'filter' => false,
-                            ],
-                            [
-                                'attribute' => 'goods.main_stone_num',
-                                'filter' => false,
-                            ],
-                            [
-                                'attribute' => 'goods.second_stone_weight1',
-                                'filter' => false,
-                            ],
-                            [
-                                'attribute' => 'goods.second_stone_num1',
-                                'filter' => false,
-                            ],
-                            [
-                                'attribute' => 'goods.finger',
-                                'filter' => false,
-                            ],
-
-                            [
-                                'attribute' => 'goods.cert_id',
-                                'filter' => false,
-                            ],
                             [
                                 'attribute' => 'cost_price',
                                 'visible' => \common\helpers\Auth::verify(\common\enums\SpecialAuthEnum::VIEW_CAIGOU_PRICE),

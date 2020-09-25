@@ -54,9 +54,9 @@ class WarehouseGoldBill extends BaseModel
     {
         return [
 //            [['bill_type'], 'required'],
-            [['bill_status', 'supplier_id', 'put_in_type', 'to_warehouse_id', 'account_type', 'adjust_type', 'is_settle_accounts','total_num', 'auditor_id', 'audit_status', 'audit_time', 'fin_status', 'fin_check_time', 'status', 'creator_id', 'created_at', 'updated_at'], 'integer'],
+            [['bill_status', 'supplier_id', 'put_in_type', 'to_warehouse_id','receiv_id','channel_id','out_type', 'account_type', 'adjust_type', 'is_settle_accounts','total_num', 'auditor_id', 'audit_status', 'audit_time', 'fin_status', 'fin_check_time', 'status', 'creator_id', 'created_at', 'updated_at'], 'integer'],
             [['total_weight', 'total_cost'], 'number'],
-            [['bill_no', 'delivery_no', 'fin_checker'], 'string', 'max' => 30],
+            [['bill_no', 'delivery_no', 'fin_checker','purchase_sn'], 'string', 'max' => 30],
             [['bill_type'], 'string', 'max' => 3],
             [['audit_remark', 'fin_remark', 'remark'], 'string', 'max' => 255],
         ];
@@ -90,6 +90,10 @@ class WarehouseGoldBill extends BaseModel
             'fin_checker' => '财务确认人',
             'fin_check_time' => '财务确认时间',
             'fin_remark' => '财务确认备注',
+            'purchase_sn' => '采购单号',
+            'receiv_id' => '接收人',
+            'channel_id' => '出库渠道',
+            'out_type' => '出库类型',
             'remark' => '备注',
             'status' => '状态',
             'creator_id' => '创建人',

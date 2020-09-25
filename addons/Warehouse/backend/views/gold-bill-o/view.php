@@ -35,31 +35,28 @@ $this->params['breadcrumbs'][] = $this->title;
                         <tr>
                             <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('channel_id') ?>：</td>
                             <td><?= $model->channel->name??"" ?></td>
-                        </tr>                        
-                        <tr>
-                            <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('delivery_type') ?>：</td>
-                            <td><?= \addons\Warehouse\common\enums\DeliveryTypeEnum::getValue($model->delivery_type) ?></td>
                         </tr>
                         <tr>
-                            <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('goods_num') ?>：</td>
-                            <td><?= $model->goods_num ?></td>
+                            <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('receiv_id') ?>：</td>
+                            <td><?= $model->receiv->username??"" ?></td>
+                        </tr>
+                        <tr>
+                            <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('purchase_sn') ?>：</td>
+                            <td><?= $model->purchase_sn ?></td>
+                        </tr>
+                        <tr>
+                            <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('out_type') ?>：</td>
+                            <td><?= \addons\Warehouse\common\enums\OutTypeEnum::getValue($model->out_type) ?></td>
+                        </tr>
+                        <tr>
+                            <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('total_weight') ?>：</td>
+                            <td><?= $model->total_weight ?></td>
                         </tr>
                         <tr>
                             <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('total_cost') ?>：</td>
                             <td><?= $model->total_cost ?></td>
                         </tr>
-                        <tr>
-                            <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('total_sale') ?>：</td>
-                            <td><?= $model->total_sale ?></td>
-                        </tr>
-                        <tr>
-                            <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('total_market') ?>：</td>
-                            <td><?= $model->total_market ?></td>
-                        </tr>
-                        <tr>
-                            <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('order_sn') ?>：</td>
-                            <td><?= $model->order_sn ?></td>
-                        </tr>
+
                         <tr>
                             <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('audit_status') ?>：</td>
                             <td><?= \common\enums\AuditStatusEnum::getValue($model->audit_status)?></td>

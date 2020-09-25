@@ -18,7 +18,7 @@ class WarehouseGoldBillOGoodsForm extends WarehouseGoldBillGoods
     public function rules()
     {
          $rules = [
-             [['gold_type'], 'required'],
+             [['out_type','channel_id'], 'required'],
              [['gold_sn'],'unique'],
              //[['gold_sn','bill_type'],'unique','targetAttribute' => ['gold_sn', 'bill_type'],'comboNotUnique'=>'已被存在'],
              //[['gold_sn'],'unique', 'targetClass' => 'addons\Warehouse\common\models\WarehouseGold', 'message' => '库存已经存在.']

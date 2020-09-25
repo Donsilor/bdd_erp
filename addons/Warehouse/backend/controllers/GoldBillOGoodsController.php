@@ -2,17 +2,18 @@
 
 namespace addons\Warehouse\backend\controllers;
 
+use addons\Warehouse\common\enums\GoldBillTypeEnum;
+use addons\Warehouse\common\forms\WarehouseGoldBillGoodsForm;
+use addons\Warehouse\common\models\WarehouseGoldBill;
+use addons\Warehouse\common\models\WarehouseGoldBillGoods;
 use Yii;
 use common\traits\Curd;
 use common\helpers\Url;
 use common\models\base\SearchModel;
 use addons\Warehouse\common\models\WarehouseBill;
-use addons\Warehouse\common\models\WarehouseBillGoods;
 use addons\Warehouse\common\enums\DeliveryTypeEnum;
 use addons\Warehouse\common\forms\WarehouseBillBForm;
 use addons\Warehouse\common\forms\WarehouseBillCForm;
-use addons\Warehouse\common\enums\BillTypeEnum;
-use addons\Warehouse\common\forms\WarehouseBillCGoodsForm;
 use addons\Warehouse\common\enums\GoodsStatusEnum;
 use addons\Warehouse\common\models\WarehouseGoods;
 use yii\base\Exception;
@@ -26,8 +27,8 @@ class GoldBillOGoodsController extends BaseController
     use Curd;
     
     
-    public $modelClass = WarehouseBillCGoodsForm::class;
-    public $billType = BillTypeEnum::BILL_TYPE_C;
+    public $modelClass = WarehouseGoldBillGoodsForm::class;
+    public $billType = GoldBillTypeEnum::GOLD_O;
 
     /**
      * Lists all WarehouseBillBGoods models.
@@ -53,7 +54,7 @@ class GoldBillOGoodsController extends BaseController
 
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
         $dataProvider->query->andWhere(['=', 'bill_id', $bill_id]);
-        $dataProvider->query->andWhere(['>',WarehousebillGoods::tableName().'.status',-1]);
+        $dataProvider->query->andWhere(['>',WarehouseGoldBillGoodsForm::tableName().'.status',-1]);
 
         $bill = WarehouseBill::find()->where(['id'=>$bill_id])->one();
         return $this->render($this->action->id, [
@@ -61,7 +62,7 @@ class GoldBillOGoodsController extends BaseController
             'searchModel' => $searchModel,
             'bill' => $bill,
             'tab' => $tab,
-            'tabList'=>\Yii::$app->warehouseService->bill->menuTabList($bill_id, $this->billType, $returnUrl),
+            'tabList'=>\Yii::$app->warehouseService->goldO->menuTabList($bill_id, $this->billType, $returnUrl),
         ]);
     }
 
@@ -75,7 +76,7 @@ class GoldBillOGoodsController extends BaseController
     {
         $id = \Yii::$app->request->get('id');
         $model = $this->findModel($id);
-        $model = $model ?? new WarehouseBillCGoodsForm();
+        $model = $model ?? new WarehouseGoldBillGoodsForm();
         // ajax 校验
         $this->activeFormValidate($model);
         if ($model->load(\Yii::$app->request->post())) {
@@ -85,7 +86,7 @@ class GoldBillOGoodsController extends BaseController
                     throw new \Exception($this->getError($model));
                 }
                 //汇总：总金额和总数量
-                $res = \Yii::$app->warehouseService->billC->billCSummary($model->bill_id);
+                $res = \Yii::$app->warehouseService->goldBill->goldBillSummary($model->bill_id);
                 if(false === $res){
                     throw new \Exception('更新单据汇总失败');
                 }
@@ -107,14 +108,14 @@ class GoldBillOGoodsController extends BaseController
     public function actionAjaxScan()
     {
         $bill_id  = Yii::$app->request->post('bill_id');
-        $goods_id = Yii::$app->request->post('goods_id');
-        if($goods_id == "") {
-            \Yii::$app->getSession()->setFlash('error', '条码货号不能为空');
-            return ResultHelper::json(422, "条码货号不能为空");
+        $gold_sn = Yii::$app->request->post('gold_sn');
+        if($gold_sn == "") {
+            \Yii::$app->getSession()->setFlash('error', '批次号不能为空');
+            return ResultHelper::json(422, "批次号不能为空");
         }
         try{
             $trans = \Yii::$app->db->beginTransaction();
-            \Yii::$app->warehouseService->billC->scanGoods($bill_id,[$goods_id]);            
+            \Yii::$app->warehouseService->goldO->scanGoods($bill_id,[$gold_sn]);
             $trans->commit();
             
             \Yii::$app->getSession()->setFlash('success', '添加成功');
@@ -144,7 +145,8 @@ class GoldBillOGoodsController extends BaseController
             if (!$model->save()) {
                 return ResultHelper::json(422, $this->getError($model));
             }
-            \Yii::$app->warehouseService->billC->billCSummary($model->bill_id);
+
+            \Yii::$app->warehouseService->goldBill->goldBillSummary($model->bill_id);
             $trans->commit();
             return ResultHelper::json(200, '修改成功');
         }catch (\Exception $e) {
@@ -244,11 +246,11 @@ class GoldBillOGoodsController extends BaseController
     {
         $bill_id = Yii::$app->request->get('bill_id');
         $tab = Yii::$app->request->get('tab',2);
-        $returnUrl = Yii::$app->request->get('returnUrl',Url::to(['bill-c-goods/index','bill_id'=>$bill_id]));
+        $returnUrl = Yii::$app->request->get('returnUrl',Url::to(['gold-bill-o-goods/index','bill_id'=>$bill_id]));
         $searchModel = new SearchModel([
             'model' => $this->modelClass,
             'scenario' => 'default',
-            'partialMatchAttributes' => ['goods_name', 'goods_remark'], // 模糊查询
+            'partialMatchAttributes' => ['gold_name'], // 模糊查询
             'defaultOrder' => [
                 'id' => SORT_DESC
             ],
@@ -258,13 +260,13 @@ class GoldBillOGoodsController extends BaseController
 
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
         $dataProvider->query->andWhere(['=', 'bill_id', $bill_id]);
-        $dataProvider->query->andWhere(['>',WarehousebillGoods::tableName().'.status',-1]);
-        $bill = WarehouseBill::find()->where(['id'=>$bill_id])->one();
+        $dataProvider->query->andWhere(['>',WarehouseGoldBillGoods::tableName().'.status',-1]);
+        $bill = WarehouseGoldBill::find()->where(['id'=>$bill_id])->one();
         return $this->render($this->action->id, [
             'dataProvider' => $dataProvider,
             'searchModel' => $searchModel,
             'bill' => $bill,
-            'tabList'=>\Yii::$app->warehouseService->bill->menuTabList($bill_id, $this->billType, $returnUrl, $tab),
+            'tabList'=>\Yii::$app->warehouseService->goldO->menuTabList($bill_id, $this->billType, $returnUrl, $tab),
             'tab' => $tab,
         ]);
     }

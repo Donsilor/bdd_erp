@@ -50,7 +50,7 @@ class WarehouseGoldBillGoods extends BaseModel
             [['bill_type', 'gold_type'], 'string', 'max' => 10],
             [['bill_no', 'gold_sn', 'gold_name', 'style_sn'], 'string', 'max' => 30],
             [['remark'], 'string', 'max' => 255],
-            [['supplier_id','creator_id','auditor_id'], 'safe']
+            [['id','supplier_id','creator_id','auditor_id'], 'safe']
         ];
     }
 
