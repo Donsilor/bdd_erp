@@ -2,6 +2,7 @@
 
 namespace addons\Warehouse\services;
 
+use common\helpers\StringHelper;
 use Yii;
 use common\helpers\Url;
 use common\components\Service;
@@ -236,6 +237,24 @@ class WarehouseBillService extends Service
         if (false === $res) {
             throw new \Exception("保存收货单据明细失败");
         }
+    }
+
+    /**
+     * @param string $prefix
+     * @throws \Exception
+     */
+    public function getBillSnMax($prefix)
+    {
+        $number_max = 0;
+        $billM = WarehouseBill::find()->select(['bill_no'])->where(['like', 'bill_no', $prefix . date('Ymd') . '%', false])->orderBy(['id' => SORT_DESC])->one();
+        if($billM){
+            $bill_no = $billM->bill_no ?? 0;
+            if($bill_no){
+                $snInfo = StringHelper::explode($bill_no, '-');
+                $number_max = $snInfo[1] ?? 0;
+            }
+        }
+        return intval($number_max) ?? 0;
     }
 
     /**

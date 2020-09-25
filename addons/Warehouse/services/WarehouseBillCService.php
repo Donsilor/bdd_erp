@@ -4,6 +4,7 @@ namespace addons\Warehouse\services;
 
 use addons\Warehouse\common\enums\DeliveryTypeEnum;
 use addons\Warehouse\common\models\WarehouseBill;
+use common\helpers\StringHelper;
 use Yii;
 use yii\db\Exception;
 use addons\Warehouse\common\models\WarehouseGoods;
@@ -30,6 +31,18 @@ use addons\Warehouse\common\enums\BillTypeEnum;
  */
 class WarehouseBillCService extends WarehouseBillService
 {
+
+    /**
+     * 创建单据编号
+     * @param WarehouseBillCForm $form
+     * @param string $prefix
+     * @return string
+     * @throws \Exception
+     */
+    public function createBillSn($prefix)
+    {
+        return SnHelper::createRkBillSn($prefix, $this->getBillSnMax($prefix), 3) ?? "";
+    }
 
     /**
      * 创建其它出库单明细

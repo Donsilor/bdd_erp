@@ -115,7 +115,7 @@ class BillCController extends BaseController
         if ($model->load(\Yii::$app->request->post())) {
             $isNewRecord = $model->isNewRecord;
             if($model->isNewRecord){
-                $model->bill_no = SnHelper::createBillSn($this->billType);
+                $model->bill_no = \Yii::$app->warehouseService->billC->createBillSn("RK");
             }
             try{
                 $trans = \Yii::$app->db->beginTransaction();
