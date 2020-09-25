@@ -2,7 +2,6 @@
 
 namespace addons\Warehouse\services;
 
-use addons\Style\common\enums\InlayEnum;
 use Yii;
 use common\components\Service;
 use common\helpers\SnHelper;
@@ -22,6 +21,7 @@ use addons\Style\common\enums\StonePositionEnum;
 use addons\Style\common\enums\JintuoTypeEnum;
 use addons\Style\common\enums\QibanTypeEnum;
 use addons\Style\common\enums\AttrIdEnum;
+use addons\Style\common\enums\InlayEnum;
 use common\enums\AuditStatusEnum;
 use common\helpers\UploadHelper;
 use common\enums\StatusEnum;
