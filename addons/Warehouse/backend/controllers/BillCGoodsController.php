@@ -174,12 +174,6 @@ class BillCGoodsController extends BaseController
             $valid_goods_ids = $billM->loadGoods();//查询校验
             $error = $billM->getGoodsMessage();//获取错误
             return ResultHelper::json(200, "", ['valid_goods_ids' => $valid_goods_ids, 'message'=>$error]);
-//            if($error){
-//                return ResultHelper::json(404, $error);
-//            }else{
-//                var_dump($valid_goods_ids);die;
-//                return ResultHelper::json(200, "", ['valid_goods_ids' => $valid_goods_ids, 'message'=>$error]);
-//            }
         }
         $searchGoods = $billM->getSearchGoods();
         if($billM->load(\Yii::$app->request->post()) && !empty($searchGoods)){
