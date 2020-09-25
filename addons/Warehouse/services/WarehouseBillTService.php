@@ -1265,14 +1265,15 @@ class WarehouseBillTService extends Service
 
     /**
      *
-     * 主石总重(ct)=(主石单颗重(ct)*主石数量)
+     * 主石总重(ct)=(主石单颗重(ct)*主石数量)作废
      * @param WarehouseBillTGoodsForm $form
      * @return integer
      * @throws
      */
     public function calculateMainStoneWeight($form)
     {
-        return bcmul($form->main_stone_weight, $form->main_stone_num, 5) ?? 0;
+        //return bcmul($form->main_stone_weight, $form->main_stone_num, 5) ?? 0;
+        return $form->main_stone_weight ?? 0;
     }
 
     /**

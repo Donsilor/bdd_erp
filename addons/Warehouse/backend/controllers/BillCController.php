@@ -65,29 +65,29 @@ class BillCController extends BaseController
         ]);
 
         $dataProvider = $searchModel
-            ->search(\Yii::$app->request->queryParams,['created_at', 'audit_time']);
+            ->search(\Yii::$app->request->queryParams, ['created_at', 'audit_time']);
 
         $created_at = $searchModel->created_at;
         if (!empty($created_at)) {
-            $dataProvider->query->andFilterWhere(['>=',Warehousebill::tableName().'.created_at', strtotime(explode('/', $created_at)[0])]);//起始时间
-            $dataProvider->query->andFilterWhere(['<',Warehousebill::tableName().'.created_at', (strtotime(explode('/', $created_at)[1]) + 86400)] );//结束时间
+            $dataProvider->query->andFilterWhere(['>=', Warehousebill::tableName() . '.created_at', strtotime(explode('/', $created_at)[0])]);//起始时间
+            $dataProvider->query->andFilterWhere(['<', Warehousebill::tableName() . '.created_at', (strtotime(explode('/', $created_at)[1]) + 86400)]);//结束时间
         }
 
         $audit_time = $searchModel->audit_time;
         if (!empty($audit_time)) {
-            $dataProvider->query->andFilterWhere(['>=',Warehousebill::tableName().'.audit_time', strtotime(explode('/', $audit_time)[0])]);//起始时间
-            $dataProvider->query->andFilterWhere(['<',Warehousebill::tableName().'.audit_time', (strtotime(explode('/', $audit_time)[1]) + 86400)] );//结束时间
+            $dataProvider->query->andFilterWhere(['>=', Warehousebill::tableName() . '.audit_time', strtotime(explode('/', $audit_time)[0])]);//起始时间
+            $dataProvider->query->andFilterWhere(['<', Warehousebill::tableName() . '.audit_time', (strtotime(explode('/', $audit_time)[1]) + 86400)]);//结束时间
         }
 
-        $dataProvider->query->andWhere(['>',Warehousebill::tableName().'.status', -1]);
-        $dataProvider->query->andWhere(['=',Warehousebill::tableName().'.bill_type', $this->billType]);
+        $dataProvider->query->andWhere(['>', Warehousebill::tableName() . '.status', -1]);
+        $dataProvider->query->andWhere(['=', Warehousebill::tableName() . '.bill_type', $this->billType]);
 
         //导出
-        if(Yii::$app->request->get('action') === 'export'){
+        if (Yii::$app->request->get('action') === 'export') {
             $dataProvider->setPagination(false);
             $list = $dataProvider->models;
             $list = ArrayHelper::toArray($list);
-            $ids = array_column($list,'id');
+            $ids = array_column($list, 'id');
             $this->actionExport($ids);
         }
 
@@ -109,26 +109,26 @@ class BillCController extends BaseController
         $model = $this->findModel($id);
         $model = $model ?? new WarehouseBillCForm();
 
-        if($model->isNewRecord){
+        if ($model->isNewRecord) {
             $model->bill_type = $this->billType;
         }
         // ajax 校验
         $this->activeFormValidate($model);
         if ($model->load(\Yii::$app->request->post())) {
             $isNewRecord = $model->isNewRecord;
-            if($model->isNewRecord && !$model->bill_no){
+            if ($model->isNewRecord && !$model->bill_no) {
                 //$model->bill_no = SnHelper::createBillSn($this->billType);
                 $model->bill_no = \Yii::$app->warehouseService->bill->createBillSn($this->billFix);
             }
-            try{
+            try {
                 $trans = \Yii::$app->db->beginTransaction();
-                if(false === $model->save()) {
+                if (false === $model->save()) {
                     throw new \Exception($this->getError($model));
                 }
-                if($isNewRecord){
-                    $log_msg = "创建其它出库单{$model->bill_no}，出库类型：".DeliveryTypeEnum::getValue($model->delivery_type) ."，参考编号/订单号：{$model->order_sn} ";
-                }else{
-                    $log_msg = "修改其它出库单{$model->bill_no}，出库类型：".DeliveryTypeEnum::getValue($model->delivery_type) ."，参考编号/订单号：{$model->order_sn} ";
+                if ($isNewRecord) {
+                    $log_msg = "创建其它出库单{$model->bill_no}，出库类型：" . DeliveryTypeEnum::getValue($model->delivery_type) . "，参考编号/订单号：{$model->order_sn} ";
+                } else {
+                    $log_msg = "修改其它出库单{$model->bill_no}，出库类型：" . DeliveryTypeEnum::getValue($model->delivery_type) . "，参考编号/订单号：{$model->order_sn} ";
                 }
                 $log = [
                     'bill_id' => $model->id,
@@ -140,12 +140,12 @@ class BillCController extends BaseController
 
                 $trans->commit();
 
-                if($isNewRecord) {
+                if ($isNewRecord) {
                     return $this->message("保存成功", $this->redirect(['view', 'id' => $model->id]), 'success');
-                }else {
+                } else {
                     return $this->message('保存成功', $this->redirect(Yii::$app->request->referrer), 'success');
                 }
-            }catch (\Exception $e){
+            } catch (\Exception $e) {
                 $trans->rollBack();
                 return $this->message($e->getMessage(), $this->redirect(\Yii::$app->request->referrer), 'error');
             }
@@ -163,14 +163,14 @@ class BillCController extends BaseController
     public function actionView()
     {
         $id = Yii::$app->request->get('id');
-        $tab = Yii::$app->request->get('tab',1);
-        $returnUrl = Yii::$app->request->get('returnUrl',Url::to(['bill-c/index', 'id'=>$id]));
+        $tab = Yii::$app->request->get('tab', 1);
+        $returnUrl = Yii::$app->request->get('returnUrl', Url::to(['bill-c/index', 'id' => $id]));
         $model = $this->findModel($id) ?? new WarehouseBillCForm();
         return $this->render($this->action->id, [
             'model' => $model,
-            'tab'=>$tab,
-            'tabList'=>\Yii::$app->warehouseService->bill->menuTabList($id,$this->billType,$returnUrl),
-            'returnUrl'=>$returnUrl,
+            'tab' => $tab,
+            'tabList' => \Yii::$app->warehouseService->bill->menuTabList($id, $this->billType, $returnUrl),
+            'returnUrl' => $returnUrl,
         ]);
     }
 
@@ -180,22 +180,23 @@ class BillCController extends BaseController
      * @return mixed|string|\yii\web\Response
      * @throws \yii\base\ExitException
      */
-    public function actionAjaxApply($id){
-        
-        $id = \Yii::$app->request->get('id');        
+    public function actionAjaxApply($id)
+    {
+
+        $id = \Yii::$app->request->get('id');
         $model = $this->findModel($id) ?? new WarehouseBillCForm();
-        if($model->bill_status != BillStatusEnum::SAVE){
+        if ($model->bill_status != BillStatusEnum::SAVE) {
             return $this->message('单据不是保存状态', $this->redirect(\Yii::$app->request->referrer), 'error');
         }
-        if($model->goods_num<=0){
+        if ($model->goods_num <= 0) {
             return $this->message('单据明细不能为空', $this->redirect(\Yii::$app->request->referrer), 'error');
-        }        
-        try{
-            
+        }
+        try {
+
             $trans = \Yii::$app->trans->beginTransaction();
             $model->bill_status = BillStatusEnum::PENDING;
             $model->audit_status = AuditStatusEnum::PENDING;
-            if(false === $model->save()){
+            if (false === $model->save()) {
                 return $this->message($this->getError($model), $this->redirect(\Yii::$app->request->referrer), 'error');
             }
             //日志
@@ -209,7 +210,7 @@ class BillCController extends BaseController
             $trans->commit();
             return $this->message('操作成功', $this->redirect(\Yii::$app->request->referrer), 'success');
 
-        }catch (\Exception $e){
+        } catch (\Exception $e) {
             $trans->rollBack();
             return $this->message($e->getMessage(), $this->redirect(\Yii::$app->request->referrer), 'error');
         }
@@ -224,16 +225,16 @@ class BillCController extends BaseController
     public function actionAjaxAudit()
     {
         $id = Yii::$app->request->get('id');
-        $model = $this->findModel($id)  ?? new WarehouseBillCForm();
+        $model = $this->findModel($id) ?? new WarehouseBillCForm();
 
-        if($model->audit_status == AuditStatusEnum::PENDING) {
+        if ($model->audit_status == AuditStatusEnum::PENDING) {
             $model->audit_status = AuditStatusEnum::PASS;
         }
         // ajax 校验
         $this->activeFormValidate($model);
         if ($model->load(Yii::$app->request->post())) {
 
-            try{
+            try {
                 $trans = \Yii::$app->trans->beginTransaction();
 
                 $model->audit_time = time();
@@ -246,14 +247,14 @@ class BillCController extends BaseController
                     'bill_id' => $model->id,
                     'log_type' => LogTypeEnum::ARTIFICIAL,
                     'log_module' => '其它出库单',
-                    'log_msg' => "其它出库单审核, 审核状态：".AuditStatusEnum::getValue($model->audit_status).",审核备注：".$model->audit_remark
+                    'log_msg' => "其它出库单审核, 审核状态：" . AuditStatusEnum::getValue($model->audit_status) . ",审核备注：" . $model->audit_remark
                 ];
                 \Yii::$app->warehouseService->billLog->createBillLog($log);
 
                 $trans->commit();
 
                 $this->message('操作成功', $this->redirect(Yii::$app->request->referrer), 'success');
-            }catch(\Exception $e){
+            } catch (\Exception $e) {
                 $trans->rollBack();
                 $this->message($e->getMessage(), $this->redirect(Yii::$app->request->referrer), 'error');
             }
@@ -275,15 +276,15 @@ class BillCController extends BaseController
         $this->modelClass = WarehouseBill::class;
         if (!($model = $this->modelClass::findOne($id))) {
             return $this->message("找不到数据", $this->redirect(Yii::$app->request->referrer), 'error');
-        }        
-        try{
+        }
+        try {
             $trans = \Yii::$app->trans->beginTransaction();
 
             \Yii::$app->warehouseService->billC->cancelBillC($model);
-            
+
             $trans->commit();
             $this->message('操作成功', $this->redirect(Yii::$app->request->referrer), 'success');
-        }catch (\Exception $e){
+        } catch (\Exception $e) {
             $trans->rollBack();
             return $this->message($e->getMessage(), $this->redirect(\Yii::$app->request->referrer), 'error');
         }
@@ -301,102 +302,105 @@ class BillCController extends BaseController
         if (!($model = $this->modelClass::findOne($id))) {
             return $this->message("找不到数据", $this->redirect(Yii::$app->request->referrer), 'error');
         }
-        try{
+        try {
             $trans = \Yii::$app->trans->beginTransaction();
-            \Yii::$app->warehouseService->billC->deleteBillC($model);            
+            \Yii::$app->warehouseService->billC->deleteBillC($model);
             $trans->commit();
             $this->message('操作成功', $this->redirect(Yii::$app->request->referrer), 'success');
-        }catch (\Exception $e){
+        } catch (\Exception $e) {
             $trans->rollBack();
             return $this->message($e->getMessage(), $this->redirect(\Yii::$app->request->referrer), 'error');
         }
     }
+
     /**
      * 其它出库单批量导入
      */
     public function actionAjaxImport()
     {
-        if(Yii::$app->request->get('download')) {
-            $file = dirname(dirname(__FILE__)).'/resources/excel/其它出库单数据模板导入.xlsx';
+        if (Yii::$app->request->get('download')) {
+            $file = dirname(dirname(__FILE__)) . '/resources/excel/其它出库单数据模板导入.xlsx';
             $content = file_get_contents($file);
             if (!empty($content)) {
                 header("Content-type:application/vnd.ms-excel");
-                header("Content-Disposition: attachment;filename=其它出库单数据模板导入".date("Ymd").".xlsx");
+                header("Content-Disposition: attachment;filename=其它出库单数据模板导入" . date("Ymd") . ".xlsx");
                 header("Content-Transfer-Encoding: binary");
                 exit($content);
             }
         }
-        $model =  new ImportBillCForm();
+        $model = new ImportBillCForm();
         // ajax 校验
         $this->activeFormValidate($model);
-        
+
         if ($model->load(\Yii::$app->request->post())) {
-            
-            try{
+
+            try {
                 $trans = \Yii::$app->trans->beginTransaction();
-                
+
                 $model->file = UploadedFile::getInstance($model, 'file');
                 $model->bill_type = $this->billType;
-                
+
                 \Yii::$app->warehouseService->billC->importBillC($model);
                 $trans->commit();
                 return $this->message('导入成功', $this->redirect(Yii::$app->request->referrer), 'success');
-            }catch (\Exception $e){
+            } catch (\Exception $e) {
                 $trans->rollBack();
                 return $this->message($e->getMessage(), $this->redirect(\Yii::$app->request->referrer), 'error');
             }
         }
         return $this->renderAjax($this->action->id, [
-                'model' => $model,
+            'model' => $model,
         ]);
     }
-    
+
     /**
      * 快捷出库 创建
      */
     public function actionQuick()
     {
         $this->layout = '@backend/views/layouts/iframe';
-        
-         
-        if(\Yii::$app->request->get('popCheck')) {
+
+
+        if (\Yii::$app->request->get('popCheck')) {
             $ids = StringHelper::explodeIds(Yii::$app->request->get('ids'));
             foreach ($ids as $id) {
-                $goods = WarehouseGoods::find()->where(['id'=>$id])->select(['goods_id','goods_status'])->one();
-                if($goods->goods_status != GoodsStatusEnum::IN_STOCK) {
+                $goods = WarehouseGoods::find()->where(['id' => $id])->select(['goods_id', 'goods_status'])->one();
+                if ($goods->goods_status != GoodsStatusEnum::IN_STOCK) {
                     return ResultHelper::json(422, "[{$goods->goods_id}]条码号不是库存状态");
                 }
             }
             return ResultHelper::json(200, "success");
         }
-        
+
         $form = new WarehouseBillCForm();
         if ($form->load(\Yii::$app->request->post())) {
-            try{
+            try {
                 $trans = \Yii::$app->trans->beginTransaction();
                 $form->goods_ids = Yii::$app->request->get('ids');
                 $form->bill_type = $this->billType;
                 $model = Yii::$app->warehouseService->billC->quickBillC($form);
                 $trans->commit();
-                Yii::$app->getSession()->setFlash('success','操作成功，出库单号:'.$model->bill_no);
-                return ResultHelper::json(200,'保存成功', ['jumpUrl'=>Url::to(['bill-c-goods/index','bill_id'=>$model->id])]);
-            }catch (\Exception $e){
+                Yii::$app->getSession()->setFlash('success', '操作成功，出库单号:' . $model->bill_no);
+                return ResultHelper::json(200, '保存成功', ['jumpUrl' => Url::to(['bill-c-goods/index', 'bill_id' => $model->id])]);
+            } catch (\Exception $e) {
                 $trans->rollBack();
-                return ResultHelper::json(423,$e->getMessage());
+                return ResultHelper::json(423, $e->getMessage());
             }
-        }        
+        }
         return $this->render($this->action->id, [
-                'model' => $form,
+            'model' => $form,
         ]);
     }
+
     /***
      * 导出Excel
      */
-    public function actionExport($ids=null){
-        if(!is_array($ids)){
+    public function actionExport($ids = null)
+    {
+        if (!is_array($ids)) {
             $ids = StringHelper::explodeIds($ids);
         }
-        if(!$ids){
+        if (!$ids) {
             return $this->message('单据ID不为空', $this->redirect(['index']), 'warning');
         }
         list($list,) = $this->getData($ids);
@@ -404,56 +408,56 @@ class BillCController extends BaseController
         $header = [
             ['出库单号', 'bill_no', 'text'],
             ['销售渠道', 'channel_name', 'text'],
-            ['制单日期', 'created_at', 'date','Y-m-d'],
-            ['出库日期', 'audit_time', 'date','Y-m-d'],
+            ['制单日期', 'created_at', 'date', 'Y-m-d'],
+            ['出库日期', 'audit_time', 'date', 'Y-m-d'],
             ['制单人', 'creator_name', 'text'],
             ['接收人', 'salesman_name', 'text'],
             ['货号', 'goods_id', 'text'],
             ['款号', 'style_sn', 'text'],
             ['商品名称', 'goods_name', 'text'],
             ['商品数量', 'goods_num', 'text'],
-            ['商品状态', 'goods_status', 'function',function($model){
+            ['商品状态', 'goods_status', 'function', function ($model) {
                 return GoodsStatusEnum::getValue($model['goods_status']);
             }],
-            ['款式分类', 'product_type_name' , 'text'],
-            ['产品线', 'style_cate_name' , 'text'],
-            ['仓库', 'warehouse_name' , 'text'],
+            ['款式分类', 'product_type_name', 'text'],
+            ['产品线', 'style_cate_name', 'text'],
+            ['仓库', 'warehouse_name', 'text'],
             ['材质', 'material_type', 'function', function ($model) {
                 return \Yii::$app->attr->valueName($model['material_type']);
             }],
             ['材质颜色', 'material_color', 'function', function ($model) {
                 return \Yii::$app->attr->valueName($model['material_color']);
             }],
-            ['连石重', 'suttle_weight' , 'text'],
+            ['连石重', 'suttle_weight', 'text'],
             ['主石类型', 'main_stone_type', 'function', function ($model) {
                 return \Yii::$app->attr->valueName($model['main_stone_type']);
             }],
-            ['主石大小（ct)', 'diamond_carat' , 'text'],
-            ['主石粒数', 'main_stone_num' , 'text'],
-            ['副石1重（ct）', 'second_stone_weight1' , 'text'],
-            ['副石1粒数', 'second_stone_num1' , 'text'],
+            ['主石大小（ct)', 'diamond_carat', 'text'],
+            ['主石粒数', 'main_stone_num', 'text'],
+            ['副石1重（ct）', 'second_stone_weight1', 'text'],
+            ['副石1粒数', 'second_stone_num1', 'text'],
             ['手寸', 'finger', 'function', function ($model) {
                 $finger = '';
-                if($model['finger']){
-                    $finger .= Yii::$app->attr->valueName($model['finger']).'(u)';
+                if ($model['finger']) {
+                    $finger .= Yii::$app->attr->valueName($model['finger']) . '(u)';
                 }
-                if($model['finger_hk']){
-                    $finger .= ' '.Yii::$app->attr->valueName($model['finger_hk']).'(u)';
+                if ($model['finger_hk']) {
+                    $finger .= ' ' . Yii::$app->attr->valueName($model['finger_hk']) . '(u)';
                 }
                 return $finger;
             }],
-            ['证书号	', 'cert_id' , 'text'],
-            ['采购成本/单件	', 'cost_price' , 'text'],
-            ['采购总成本	', 'cost_price' , 'function', function($model){
+            ['证书号	', 'cert_id', 'text'],
+            ['采购成本/单件	', 'cost_price', 'text'],
+            ['采购总成本	', 'cost_price', 'function', function ($model) {
                 $cost_price = $model['cost_price'];
                 $goods_num = $model['goods_num'];
                 return $cost_price * $goods_num;
             }],
-            ['出库成本价		', 'chuku_price' , 'text'],
+            ['出库成本价		', 'chuku_price', 'text'],
 
         ];
 
-        return ExcelHelper::exportData($list, $header, '其他出库单_' . date('YmdHis',time()));
+        return ExcelHelper::exportData($list, $header, '其他出库单_' . date('YmdHis', time()));
 
     }
 
@@ -467,11 +471,11 @@ class BillCController extends BaseController
     {
         $this->layout = '@backend/views/layouts/print';
         $id = \Yii::$app->request->get('id');
-        if(empty($id)){
+        if (empty($id)) {
             exit("ID不能为空");
         }
         $model = $this->findModel($id);
-        if(!$model){
+        if (!$model) {
             exit("单据不存在");
         }
         list($lists, $total) = $this->getData($id);
@@ -490,8 +494,8 @@ class BillCController extends BaseController
     {
         $select = [
             'g.*',
-            'w.bill_no', 'w.bill_status','w.created_at','w.audit_time',
-            'channel.name as channel_name','salesman.username as salesman_name',
+            'w.bill_no', 'w.bill_status', 'w.created_at', 'w.audit_time',
+            'channel.name as channel_name', 'salesman.username as salesman_name',
             'creator.username as creator_name',
             'type.name as product_type_name',
             'cate.name as style_cate_name',
@@ -509,7 +513,7 @@ class BillCController extends BaseController
             ->leftJoin(Member::tableName() . ' creator', 'creator.id=w.creator_id')
             ->leftJoin(Member::tableName() . ' salesman', 'salesman.id=w.salesman_id')
             ->where(['w.id' => $ids])
-            ->select($select);
+            ->select($select)->orderBy(['wg.id' => SORT_DESC]);
         $lists = PageHelper::findAll($query, 100);
         //汇总
         $total = [
@@ -520,11 +524,11 @@ class BillCController extends BaseController
             //'chuku_price' => 0,
         ];
         foreach ($lists as &$list) {
-            if(empty($list['goods_id'])){
+            if (empty($list['goods_id'])) {
                 exit("货号不能为空");
             }
             $main_stone_cart = $list['diamond_carat'] ?? 0;//主石重
-            $main_stone_cart = bcmul($main_stone_cart, $list['main_stone_num'], 3);//主石总重=(主石重*主石粒数)
+            //$main_stone_cart = bcmul($main_stone_cart, $list['main_stone_num'], 3);//主石总重=(主石重*主石粒数)
             $second_stone_cart1 = $list['second_stone_weight1'] ?? 0;//副石1重
             $second_stone_cart2 = $list['second_stone_weight2'] ?? 0;//副石2重
             $second_stone_cart3 = $list['second_stone_weight3'] ?? 0;//副石3重
