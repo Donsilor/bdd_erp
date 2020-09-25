@@ -245,19 +245,106 @@ $params = $params ? "&".http_build_query($params) : '';
                                             <label class="control-label" for="cate-sort">主石类型：</label>
                                         </div>
                                         <div class="col-sm-8">
-                                            <?= Html::dropDownList('main_stone_type', $search->main_stone_type, Yii::$app->attr->valueMap(AttrIdEnum::MAIN_STONE_TYPE), [
-                                                'class' => 'form-control',
-                                                'prompt' => '全部',
-                                            ]) ?>
+                                            <?= \kartik\select2\Select2::widget([
+                                                'name'=>'main_stone_type',
+                                                'value'=>$search->main_stone_type,
+                                                'data'=>Yii::$app->attr->valueMap(AttrIdEnum::MAIN_STONE_TYPE),
+                                                'options' => ['placeholder' =>"请选择",'multiple'=>false,'style'=>"width:180px"],
+                                                'pluginOptions' => [
+                                                    'allowClear' => true,
+                                                ],
+                                            ])
+                                            ?>
                                             <div class="help-block"></div>
                                         </div>
                                     </div>
                                 </div>
-
-
                             </div>
 
 
+
+                            <div class="row">
+                                <div class="col-lg-3">
+                                    <div class="form-group field-cate-sort">
+                                        <div class="col-sm-4 text-right">
+                                            <label class="control-label" for="cate-sort">手寸（港）：</label>
+                                        </div>
+                                        <div class="col-sm-8">
+                                            <?= \kartik\select2\Select2::widget([
+                                                'name'=>'finger_hk',
+                                                'value'=>$search->finger_hk,
+                                                'data'=>Yii::$app->attr->valueMap(AttrIdEnum::FINGER_HK),
+                                                'options' => ['placeholder' =>"请选择",'multiple'=>false,'style'=>"width:180px"],
+                                                'pluginOptions' => [
+                                                    'allowClear' => true,
+                                                ],
+                                            ])
+                                            ?>
+                                            <div class="help-block"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-3">
+                                    <div class="form-group field-cate-sort">
+                                        <div class="col-sm-4 text-right">
+                                            <label class="control-label" for="cate-sort">手寸（美）：</label>
+                                        </div>
+                                        <div class="col-sm-8">
+                                            <?= \kartik\select2\Select2::widget([
+                                                'name'=>'finger',
+                                                'value'=>$search->finger,
+                                                'data'=>Yii::$app->attr->valueMap(AttrIdEnum::FINGER),
+                                                'options' => ['placeholder' =>"请选择",'multiple'=>false,'style'=>"width:180px"],
+                                                'pluginOptions' => [
+                                                    'allowClear' => true,
+                                                ],
+                                            ])
+                                            ?>
+                                            <div class="help-block"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-3">
+                                    <div class="form-group field-cate-sort">
+                                        <div class="col-sm-4 text-right">
+                                            <label class="control-label" for="cate-sort">主石颜色：</label>
+                                        </div>
+                                        <div class="col-sm-8">
+                                            <?= \kartik\select2\Select2::widget([
+                                                'name'=>'diamond_color',
+                                                'value'=>$search->diamond_color,
+                                                'data'=>Yii::$app->attr->valueMap(AttrIdEnum::MAIN_STONE_SECAI),
+                                                'options' => ['placeholder' =>"请选择",'multiple'=>false,'style'=>"width:180px"],
+                                                'pluginOptions' => [
+                                                    'allowClear' => true,
+                                                ],
+                                            ])
+                                            ?>
+                                            <div class="help-block"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-3">
+                                    <div class="form-group field-cate-sort">
+                                        <div class="col-sm-4 text-right">
+                                            <label class="control-label" for="cate-sort">主石净度：</label>
+                                        </div>
+                                        <div class="col-sm-8">
+                                            <?= \kartik\select2\Select2::widget([
+                                                'name'=>'diamond_clarity',
+                                                'value'=>$search->diamond_clarity,
+                                                'data'=>Yii::$app->attr->valueMap(AttrIdEnum::MAIN_STONE_CLARITY),
+                                                'options' => ['placeholder' =>"请选择",'multiple'=>false,'style'=>"width:180px"],
+                                                'pluginOptions' => [
+                                                    'allowClear' => true,
+                                                ],
+                                            ])
+                                            ?>
+                                            <div class="help-block"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
 
                             <div class="row">
                                 <div class="col-lg-3">

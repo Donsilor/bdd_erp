@@ -814,4 +814,20 @@ class StyleService extends Service
         return $style_list;
     }
 
+
+    public function updateStyleImage($style){
+        $style_id = $style->id;
+        $styleImage = StyleImages::find()->where(['style_id'=>$style_id ,'status'=>StatusEnum::ENABLED])->one();
+        if($styleImage->image ?? false){
+            $image = $styleImage->image;
+        }else{
+            $image = '';
+        }
+        $style->style_image = $image;
+        if (false === $style->save(true,['style_image'])) {
+            throw new \Exception($this->getError($style));
+        }
+        return $style;
+    }
+
 }

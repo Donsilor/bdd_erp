@@ -17,6 +17,7 @@ use Yii;
  * @property int $put_in_type 入库方式
  * @property int $to_warehouse_id 入库仓库
  * @property int $account_type 结算方式
+ * @property int $is_settle_accounts 是否结价
  * @property int $adjust_type 调整类型 0扣减 1增加
  * @property int $total_num 金料总数量
  * @property string $total_weight 金料总重量(ct)
@@ -52,8 +53,8 @@ class WarehouseGoldBill extends BaseModel
     public function rules()
     {
         return [
-            [['bill_type'], 'required'],
-            [['bill_status', 'supplier_id', 'put_in_type', 'to_warehouse_id', 'account_type', 'adjust_type', 'total_num', 'auditor_id', 'audit_status', 'audit_time', 'fin_status', 'fin_check_time', 'status', 'creator_id', 'created_at', 'updated_at'], 'integer'],
+//            [['bill_type'], 'required'],
+            [['bill_status', 'supplier_id', 'put_in_type', 'to_warehouse_id', 'account_type', 'adjust_type', 'is_settle_accounts','total_num', 'auditor_id', 'audit_status', 'audit_time', 'fin_status', 'fin_check_time', 'status', 'creator_id', 'created_at', 'updated_at'], 'integer'],
             [['total_weight', 'total_cost'], 'number'],
             [['bill_no', 'delivery_no', 'fin_checker'], 'string', 'max' => 30],
             [['bill_type'], 'string', 'max' => 3],
@@ -75,6 +76,7 @@ class WarehouseGoldBill extends BaseModel
             'put_in_type' => '入库方式',
             'to_warehouse_id' => '入库仓库',
             'account_type' => '结算方式',
+            'is_settle_accounts' => '是否结价',
             'adjust_type' => '调整类型 0扣减 1增加',
             'total_num' => '明细数量',
             'total_weight' => '金料总重(g)',

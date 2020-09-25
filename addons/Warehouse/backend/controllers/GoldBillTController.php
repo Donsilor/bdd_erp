@@ -4,7 +4,9 @@ namespace addons\Warehouse\backend\controllers;
 
 use addons\Supply\common\models\Supplier;
 use addons\Warehouse\common\enums\GoldBillTypeEnum;
+use addons\Warehouse\common\forms\WarehouseGoldBillTForm;
 use addons\Warehouse\common\models\Warehouse;
+use addons\Warehouse\common\models\WarehouseGoldBill;
 use function Clue\StreamFilter\fun;
 use common\models\backend\Member;
 use Yii;
@@ -35,12 +37,12 @@ use yii\web\UploadedFile;
 /**
  * WarehouseBillController implements the CRUD actions for WarehouseBillController model.
  */
-class GoldTController extends BaseController
+class GoldBillTController extends BaseController
 {
 
     use Curd;
-    public $modelClass = WarehouseBillTForm::class;
-    public $billType = GoldBillTypeEnum::BILL_TYPE_T;
+    public $modelClass = WarehouseGoldBillTForm::class;
+    public $billType = GoldBillTypeEnum::GOLD_T;
 
 
     /**
@@ -68,16 +70,16 @@ class GoldTController extends BaseController
         $dataProvider = $searchModel->search(\Yii::$app->request->queryParams, ['created_at', 'audit_time']);
         $created_at = $searchModel->created_at;
         if (!empty($created_at)) {
-            $dataProvider->query->andFilterWhere(['>=', Warehousebill::tableName() . '.created_at', strtotime(explode('/', $created_at)[0])]);//起始时间
-            $dataProvider->query->andFilterWhere(['<', Warehousebill::tableName() . '.created_at', (strtotime(explode('/', $created_at)[1]) + 86400)]);//结束时间
+            $dataProvider->query->andFilterWhere(['>=', WarehouseGoldBill::tableName() . '.created_at', strtotime(explode('/', $created_at)[0])]);//起始时间
+            $dataProvider->query->andFilterWhere(['<', WarehouseGoldBill::tableName() . '.created_at', (strtotime(explode('/', $created_at)[1]) + 86400)]);//结束时间
         }
         $audit_time = $searchModel->audit_time;
         if (!empty($audit_time)) {
-            $dataProvider->query->andFilterWhere(['>=', Warehousebill::tableName() . '.audit_time', strtotime(explode('/', $audit_time)[0])]);//起始时间
-            $dataProvider->query->andFilterWhere(['<', Warehousebill::tableName() . '.audit_time', (strtotime(explode('/', $audit_time)[1]) + 86400)]);//结束时间
+            $dataProvider->query->andFilterWhere(['>=', WarehouseGoldBill::tableName() . '.audit_time', strtotime(explode('/', $audit_time)[0])]);//起始时间
+            $dataProvider->query->andFilterWhere(['<', WarehouseGoldBill::tableName() . '.audit_time', (strtotime(explode('/', $audit_time)[1]) + 86400)]);//结束时间
         }
-        $dataProvider->query->andWhere(['>', Warehousebill::tableName() . '.status', -1]);
-        $dataProvider->query->andWhere(['=', Warehousebill::tableName() . '.bill_type', $this->billType]);
+        $dataProvider->query->andWhere(['>', WarehouseGoldBill::tableName() . '.status', -1]);
+        $dataProvider->query->andWhere(['=', WarehouseGoldBill::tableName() . '.bill_type', $this->billType]);
 
         //导出
         if (\Yii::$app->request->get('action') === 'export') {
@@ -105,7 +107,7 @@ class GoldTController extends BaseController
     {
         $id = \Yii::$app->request->get('id');
         $model = $this->findModel($id);
-        $model = $model ?? new WarehouseBillTForm();
+        $model = $model ?? new WarehouseGoldBillTForm();
         // ajax 校验
         $this->activeFormValidate($model);
         if ($model->load(\Yii::$app->request->post())) {
@@ -115,37 +117,43 @@ class GoldTController extends BaseController
                 if ($isNewRecord) {
                     $model->bill_no = SnHelper::createBillSn($this->billType);
                     $model->bill_type = $this->billType;
+                    $model->to_warehouse_id = 7;
+
                 }
+
                 if (false === $model->save()) {
                     throw new \Exception($this->getError($model));
                 }
+
                 if ($isNewRecord) {
-                    $gModel = new WarehouseBillTGoodsForm();
-                    $gModel->bill_id = $model->id;
-                    $gModel->supplier_id = $model->supplier_id;
-                    $gModel->put_in_type = $model->put_in_type;
-                    $gModel->supplier_id = $model->supplier_id;
-                    $gModel->file = UploadedFile::getInstance($model, 'file');
-                    if (!empty($gModel->file) && isset($gModel->file)) {
-                        \Yii::$app->warehouseService->billT->uploadGoods($gModel);
-                    }
+//                    $gModel = new WarehouseBillTGoodsForm();
+//                    $gModel->bill_id = $model->id;
+//                    $gModel->supplier_id = $model->supplier_id;
+//                    $gModel->put_in_type = $model->put_in_type;
+//                    $gModel->supplier_id = $model->supplier_id;
+//                    $gModel->file = UploadedFile::getInstance($model, 'file');
+//                    if (!empty($gModel->file) && isset($gModel->file)) {
+//                        \Yii::$app->warehouseService->billT->uploadGoods($gModel);
+//                    }
                     $log_msg = "创建其它入库单{$model->bill_no}";
                 } else {
                     $log_msg = "修改其它入库单{$model->bill_no}";
                 }
                 $log = [
                     'bill_id' => $model->id,
+                    'bill_status' => $model->bill_status,
                     'log_type' => LogTypeEnum::ARTIFICIAL,
                     'log_module' => '其它入库单',
                     'log_msg' => $log_msg
                 ];
-                \Yii::$app->warehouseService->billLog->createBillLog($log);
-                \Yii::$app->warehouseService->billT->warehouseBillTSummary($model->id);
+                \Yii::$app->warehouseService->goldBillLog->createGoldBillLog($log);
+
+                \Yii::$app->warehouseService->gold->goldBillSummary($model->id);
                 $trans->commit();
 
                 if ($isNewRecord) {
                     \Yii::$app->getSession()->setFlash('success', '保存成功');
-                    return $this->redirect(['bill-t-goods/index', 'bill_id' => $model->id]);
+                    return $this->redirect(['gold-bill-t-goods/index', 'bill_id' => $model->id]);
                     //return $this->message("保存成功", $this->redirect(['view', 'id' => $model->id]), 'success');
                 } else {
                     \Yii::$app->getSession()->setFlash('success', '保存成功');
@@ -156,7 +164,6 @@ class GoldTController extends BaseController
                 return $this->message($e->getMessage(), $this->redirect(\Yii::$app->request->referrer), 'error');
             }
         }
-        $model->put_in_type = PutInTypeEnum::PURCHASE;
         return $this->renderAjax($this->action->id, [
             'model' => $model,
         ]);
@@ -177,7 +184,7 @@ class GoldTController extends BaseController
         return $this->render($this->action->id, [
             'model' => $model,
             'tab' => $tab,
-            'tabList' => \Yii::$app->warehouseService->bill->menuTabList($id, $this->billType, $returnUrl),
+            'tabList' => \Yii::$app->warehouseService->goldT->menuTabList($id, $this->billType, $returnUrl),
             'returnUrl' => $returnUrl,
         ]);
     }
@@ -190,11 +197,11 @@ class GoldTController extends BaseController
     {
         $id = \Yii::$app->request->get('id');
         $model = $this->findModel($id);
-        $model = $model ?? new WarehouseBill();
+        $model = $model ?? new WarehouseGoldBill();
         if ($model->bill_status != BillStatusEnum::SAVE) {
             return $this->message('单据不是保存状态', $this->redirect(\Yii::$app->request->referrer), 'error');
         }
-        if ($model->goods_num <= 0) {
+        if ($model->total_num <= 0) {
             return $this->message('单据明细不能为空', $this->redirect(\Yii::$app->request->referrer), 'error');
         }
         $trans = \Yii::$app->db->beginTransaction();
@@ -204,15 +211,16 @@ class GoldTController extends BaseController
             if (false === $model->save()) {
                 return $this->message($this->getError($model), $this->redirect(\Yii::$app->request->referrer), 'error');
             }
-            \Yii::$app->warehouseService->billT->syncUpdatePriceAll($model);
-            //日志
+
             $log = [
                 'bill_id' => $model->id,
+                'bill_status' => $model->bill_status,
                 'log_type' => LogTypeEnum::ARTIFICIAL,
                 'log_module' => '其它入库单',
                 'log_msg' => '单据提审'
             ];
-            \Yii::$app->warehouseService->billLog->createBillLog($log);
+            \Yii::$app->warehouseService->goldBillLog->createGoldBillLog($log);
+
             $trans->commit();
             return $this->message('操作成功', $this->redirect(\Yii::$app->request->referrer), 'success');
 
@@ -233,7 +241,7 @@ class GoldTController extends BaseController
     {
         $id = Yii::$app->request->get('id');
         $model = $this->findModel($id);
-        $model = $model ?? new WarehouseBill();
+        $model = $model ?? new WarehouseGoldBill();
         // ajax 校验
         $this->activeFormValidate($model);
         if ($model->load(Yii::$app->request->post())) {
@@ -241,16 +249,23 @@ class GoldTController extends BaseController
                 $trans = Yii::$app->trans->beginTransaction();
                 $model->audit_time = time();
                 $model->auditor_id = Yii::$app->user->identity->getId();
-
-                \Yii::$app->warehouseService->billL->auditBillL($model);
-                //日志
+                if($model->audit_status == AuditStatusEnum::PASS){
+                    $model->bill_status = BillStatusEnum::CONFIRM;
+                    \Yii::$app->warehouseService->goldT->createGold($model);
+                }else{
+                    $model->bill_status = BillStatusEnum::SAVE;
+                }
+                if(false === $model->save()){
+                    throw new \Exception($this->getError($model));
+                }
                 $log = [
                     'bill_id' => $model->id,
+                    'bill_status' => $model->bill_status,
                     'log_type' => LogTypeEnum::ARTIFICIAL,
                     'log_module' => '其它入库单',
                     'log_msg' => '单据审核'
                 ];
-                \Yii::$app->warehouseService->billLog->createBillLog($log);
+                \Yii::$app->warehouseService->goldBillLog->createGoldBillLog($log);
                 $trans->commit();
                 return $this->message("保存成功", $this->redirect(Yii::$app->request->referrer), 'success');
             } catch (\Exception $e) {

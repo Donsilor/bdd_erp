@@ -34,6 +34,10 @@ class WarehousGoodsSearchForm extends Model
     public $supplier_id;
     public $style_channel_id;
     public $goods_source;
+    public $finger_hk;
+    public $finger;
+    public $diamond_color;
+    public $diamond_clarity;
 
     /**
      * @return array|array[]
@@ -44,7 +48,8 @@ class WarehousGoodsSearchForm extends Model
 //            ['recommend', 'safe'],
             [['goods_name','goods_id','style_sn'], 'string'],
             [['style_cate_id','product_type_id','goods_status','material_type','jintuo_type','main_stone_type'
-                ,'warehouse_id','supplier_id','style_channel_id','goods_source'], 'integer'],
+                ,'warehouse_id','supplier_id','style_channel_id','goods_source','finger_hk','finger',
+                'diamond_color','diamond_clarity'], 'integer'],
             [['min_suttle_weight','max_suttle_weight','min_gold_weight','max_gold_weight','min_diamond_carat',
                 'max_diamond_carat'],'number'],
         ];

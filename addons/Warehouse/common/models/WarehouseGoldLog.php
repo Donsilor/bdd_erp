@@ -38,7 +38,7 @@ class WarehouseGoldLog extends BaseModel
     public function rules()
     {
         return [
-            [['id', 'gold_id'], 'required'],
+            [['gold_id'], 'required'],
             [['id', 'gold_id', 'adjust_type', 'status', 'creator_id', 'created_at', 'updated_at'], 'integer'],
             [['gold_weight', 'stock_weight'], 'number'],
             [['order_sn', 'bill_no', 'creator'], 'string', 'max' => 30],
