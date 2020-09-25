@@ -104,6 +104,9 @@ class WarehouseBillCForm extends WarehouseBill
                 $valid_goods_ids.= $goods_id.",";
             }
         }
+        if($valid_goods_ids){
+            $valid_goods_ids = trim($valid_goods_ids, ',');
+        }
         return $valid_goods_ids ?? "";
     }
 
