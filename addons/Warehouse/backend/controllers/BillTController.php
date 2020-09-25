@@ -3,6 +3,7 @@
 namespace addons\Warehouse\backend\controllers;
 
 use addons\Supply\common\models\Supplier;
+use addons\Warehouse\common\enums\BillFixEnum;
 use addons\Warehouse\common\models\Warehouse;
 use function Clue\StreamFilter\fun;
 use common\models\backend\Member;
@@ -40,6 +41,7 @@ class BillTController extends BaseController
     use Curd;
     public $modelClass = WarehouseBillTForm::class;
     public $billType = BillTypeEnum::BILL_TYPE_T;
+    public $billFix = BillFixEnum::BILL_RK;
 
 
     /**
@@ -112,7 +114,10 @@ class BillTController extends BaseController
                 $trans = \Yii::$app->db->beginTransaction();
                 $isNewRecord = $model->isNewRecord;
                 if ($isNewRecord) {
-                    $model->bill_no = SnHelper::createBillSn($this->billType);
+                    //$model->bill_no = SnHelper::createBillSn($this->billType);
+                    if(!$model->bill_no){
+                        $model->bill_no = \Yii::$app->warehouseService->bill->createBillSn($this->billFix);
+                    }
                     $model->bill_type = $this->billType;
                 }
                 if (false === $model->save()) {

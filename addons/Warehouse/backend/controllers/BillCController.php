@@ -7,6 +7,7 @@ use addons\Style\common\enums\LogTypeEnum;
 use addons\Style\common\models\ProductType;
 use addons\Style\common\models\StyleCate;
 use addons\Supply\common\models\Supplier;
+use addons\Warehouse\common\enums\BillFixEnum;
 use addons\Warehouse\common\enums\DeliveryTypeEnum;
 use addons\Warehouse\common\forms\WarehouseBillCForm;
 use addons\Warehouse\common\models\Warehouse;
@@ -39,6 +40,7 @@ class BillCController extends BaseController
     use Curd;
     public $modelClass = WarehouseBillCForm::class;
     public $billType = BillTypeEnum::BILL_TYPE_C;
+    public $billFix = BillFixEnum::BILL_CK;
 
     /**
      * Lists all WarehouseBill models.
@@ -114,8 +116,8 @@ class BillCController extends BaseController
         $this->activeFormValidate($model);
         if ($model->load(\Yii::$app->request->post())) {
             $isNewRecord = $model->isNewRecord;
-            if($model->isNewRecord){
-                $model->bill_no = \Yii::$app->warehouseService->billC->createBillSn("RK");
+            if($model->isNewRecord && !$model->bill_no){
+                $model->bill_no = \Yii::$app->warehouseService->bill->createBillSn($this->billFix);
             }
             try{
                 $trans = \Yii::$app->db->beginTransaction();

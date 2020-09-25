@@ -31,19 +31,6 @@ use addons\Warehouse\common\enums\BillTypeEnum;
  */
 class WarehouseBillCService extends WarehouseBillService
 {
-
-    /**
-     * 创建单据编号
-     * @param WarehouseBillCForm $form
-     * @param string $prefix
-     * @return string
-     * @throws \Exception
-     */
-    public function createBillSn($prefix)
-    {
-        return SnHelper::createRkBillSn($prefix, $this->getBillSnMax($prefix), 3) ?? "";
-    }
-
     /**
      * 创建其它出库单明细
      * @param WarehouseBillCForm $form
