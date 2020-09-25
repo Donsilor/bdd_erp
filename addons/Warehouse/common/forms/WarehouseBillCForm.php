@@ -28,7 +28,8 @@ class WarehouseBillCForm extends WarehouseBill
     {
         $rules = [
             [['delivery_type', 'channel_id'], 'required'],
-            [['goods_ids'], 'string']
+            [['goods_ids'], 'string'],
+            [['bill_no'], 'match', 'pattern' => "/^[A-Z][A-Z0-9-]*$/", 'message' => '单据编号必须大写英文字母开头，只能包含大写字母，英文横杠，数字'],
         ];
         return array_merge(parent::rules(), $rules);
     }
