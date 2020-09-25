@@ -2238,6 +2238,11 @@ $params = $params ? "&" . http_build_query($params) : '';
     });
 
     function batchExport() {
-        window.location.href = "<?= \common\helpers\Url::buildUrl('../bill-t/export', [], ['ids'])?>?ids=<?php echo $bill->id ?>";
+        appConfirm("确定要导出明细吗?", '', function (code) {
+            if(code !== "defeat") {
+                return;
+            }
+            window.location.href = "<?= \common\helpers\Url::buildUrl('../bill-t/export', [], ['ids'])?>?ids=<?php echo $bill->id ?>";
+        });
     }
 </script>
