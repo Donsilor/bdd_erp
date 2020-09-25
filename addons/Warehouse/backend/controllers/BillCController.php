@@ -141,7 +141,8 @@ class BillCController extends BaseController
                 $trans->commit();
 
                 if ($isNewRecord) {
-                    return $this->message("保存成功", $this->redirect(['view', 'id' => $model->id]), 'success');
+                    return $this->redirect(['bill-c-goods/index', 'bill_id' => $model->id]);
+                    //return $this->message("保存成功", $this->redirect(['view', 'id' => $model->id]), 'success');
                 } else {
                     return $this->message('保存成功', $this->redirect(Yii::$app->request->referrer), 'success');
                 }
