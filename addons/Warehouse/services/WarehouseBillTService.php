@@ -1541,7 +1541,7 @@ class WarehouseBillTService extends Service
 
     /**
      *
-     * 公司成本/单价(成本价/单价)=(金料额+主石成本+副石1成本+副石2成本+副石3成本+配件额+总工费-版费)
+     * 公司成本/单价(成本价/单价)=(金料额+主石成本+副石1成本+副石2成本+副石3成本+配件额+总工费)/数量
      * @param WarehouseBillTGoodsForm $form
      * @return integer
      * @throws
@@ -1568,6 +1568,7 @@ class WarehouseBillTService extends Service
             $cost_price = bcadd($cost_price, $this->calculatePartsAmount($form), 5);
         }
         $cost_price = bcadd($cost_price, $this->calculateTotalGongFee($form), 5);
+        $cost_price = bcsub($cost_price, $form->templet_fee, 3);
         $cost_price = bcdiv($cost_price, $form->goods_num, 5);
         return sprintf("%.3f", $cost_price) ?? 0;
     }
