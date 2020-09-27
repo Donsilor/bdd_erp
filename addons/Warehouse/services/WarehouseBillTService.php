@@ -1581,9 +1581,9 @@ class WarehouseBillTService extends Service
      */
     public function calculateCostAmount($form)
     {
-        $templet_fee = bcdiv($form->templet_fee, $form->goods_num, 3) ?? 0;//单件版费
-        $cost_price = bcadd($form->cost_price, $templet_fee, 3) ?? 0;//版费
-        return bcmul($cost_price, $form->goods_num, 3) ?? 0;
+        //$templet_fee = bcdiv($form->templet_fee, $form->goods_num, 3) ?? 0;//单件版费
+        $cost_price = bcmul($form->cost_price, $form->goods_num, 3) ?? 0;
+        return bcadd($cost_price, $form->templet_fee, 3) ?? 0;//+版费
     }
 
     /**
