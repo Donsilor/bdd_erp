@@ -5,6 +5,7 @@ namespace addons\Warehouse\services;
 use addons\Style\common\enums\JintuoTypeEnum;
 use addons\Warehouse\common\enums\BillFixEnum;
 use addons\Warehouse\common\enums\GoodSourceEnum;
+use addons\Warehouse\common\forms\WarehouseBillTGoodsForm;
 use common\enums\LogTypeEnum;
 use Yii;
 use common\components\Service;
@@ -318,7 +319,7 @@ class WarehouseBillLService extends Service
             $value = [];
             $key = array_keys($goods[0]);
             foreach ($goods as $item) {
-                //$this->
+                $item = $this->calcSingleGoods($item);
                 $model->setAttributes($item);
                 if (!$model->validate()) {
                     throw new \Exception($this->getError($model));
@@ -427,4 +428,66 @@ class WarehouseBillLService extends Service
         }
     }
 
+    /**
+     * 换算单件货信息
+     * @param array $goods
+     * @return array
+     */
+    public function calcSingleGoods($goods)
+    {
+        $fields = [
+            'gold_weight',//金重
+            'suttle_weight',//连石重
+            //'lncl_loss_weight',//含耗重
+            'pure_gold',//折足
+            //'gross_weight',//毛重
+            'gold_amount',//金料额
+
+            'diamond_carat',//钻石大小
+
+            'main_stone_weight',//主石重
+            'main_stone_amount',//主石成本价
+
+            'second_stone_weight1',//副石1重
+            'second_stone_amount1',//副石1成本价
+            //'second_stone_fee1',//镶石1工费
+
+            'second_stone_weight2',//副石2重
+            'second_stone_amount2',//副石2成本价
+            //'second_stone_fee2',//镶石2工费
+
+            'second_stone_weight3',//副石3重
+            'second_stone_amount3',//副石3成本价
+            //'second_stone_fee3',//镶石3工费
+
+            'parts_gold_weight',//配件金重
+            'parts_amount',//配件总额
+
+            'piece_fee',//件工费
+            'basic_gong_fee',//基本工费
+            'peishi_weight',//配石重量
+            'peishi_gong_fee',//配石工费
+            'peishi_fee',//配石费
+            'bukou_fee',//补口费
+            'xianqian_fee',//镶石费
+            //'parts_fee',//配件工费
+            'templet_fee',//版费
+            'cert_fee',//证书费
+            'fense_fee',//分色分件费
+            'biaomiangongyi_fee',//表面工艺费
+            'penlasha_fee',//喷沙费
+            'lasha_fee',//拉沙费
+            'tax_amount',//税额
+            'other_fee',//其它工费
+            //'factory_cost',//工厂总成本
+            'total_gong_fee',//总工费
+        ];
+        $goods_num = $goods['goods_num'] ?? 1;
+        foreach ($goods as $field => $value) {
+            if (in_array($field, $fields)) {
+                $goods[$field] = bcdiv($value, $goods_num, 3);
+            }
+        }
+        return $goods ?? [];
+    }
 }
