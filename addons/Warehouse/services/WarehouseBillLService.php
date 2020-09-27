@@ -3,6 +3,7 @@
 namespace addons\Warehouse\services;
 
 use addons\Style\common\enums\JintuoTypeEnum;
+use addons\Warehouse\common\enums\BillFixEnum;
 use addons\Warehouse\common\enums\GoodSourceEnum;
 use common\enums\LogTypeEnum;
 use Yii;
@@ -28,7 +29,7 @@ use common\helpers\ArrayHelper;
  */
 class WarehouseBillLService extends Service
 {
-
+    public $billFix = BillFixEnum::BILL_RK;
     /**
      * 收货单据汇总
      * @param integer $bill_id
@@ -59,7 +60,8 @@ class WarehouseBillLService extends Service
     {
         $billM = new WarehouseBill();
         $billM->attributes = $bill;
-        $billM->bill_no = SnHelper::createBillSn($billM->bill_type);
+        //$billM->bill_no = SnHelper::createBillSn($billM->bill_type);
+        $billM->bill_no = \Yii::$app->warehouseService->bill->createBillSn($this->billFix);
         if (false === $billM->save()) {
             throw new \Exception($this->getError($billM));
         }
@@ -316,6 +318,7 @@ class WarehouseBillLService extends Service
             $value = [];
             $key = array_keys($goods[0]);
             foreach ($goods as $item) {
+                //$this->
                 $model->setAttributes($item);
                 if (!$model->validate()) {
                     throw new \Exception($this->getError($model));

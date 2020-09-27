@@ -21,6 +21,7 @@ class WarehouseBillTForm extends WarehouseBill
          $rules = [
             [['put_in_type', 'supplier_id'], 'required'],//, 'to_warehouse_id'
             [['file'], 'file', 'extensions' => ['csv']],//'skipOnEmpty' => false,
+            [['bill_no'], 'match', 'pattern' => "/^[A-Z][A-Z0-9-]*$/", 'message' => '单据编号必须大写英文字母开头，只能包含大写字母，英文横杠，数字'],
          ];
          return array_merge(parent::rules() , $rules);
     }

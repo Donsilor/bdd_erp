@@ -43,6 +43,7 @@ $params = $params ? "&" . http_build_query($params) : '';
             echo '&nbsp;';
         }
         echo Html::a('单据打印', ['bill-t/print', 'id' => $bill->id], ['target' => '_blank', 'class' => 'btn btn-info btn-xs',]);
+        //, 'onclick' => 'rfTwiceAffirm(this,"打印单据", "确定打印吗？");return false;'
         echo '&nbsp;';
         if ($bill->bill_status == \addons\Warehouse\common\enums\BillStatusEnum::SAVE) {
             echo Html::edit(['ajax-upload', 'bill_id' => $bill->id], '批量导入', [
@@ -1963,6 +1964,20 @@ $params = $params ? "&" . http_build_query($params) : '';
                                 },
                                 'filter' => false,
 //                                'filter' => Html::activeTextInput($searchModel, 'other_fee', [
+//                                    'class' => 'form-control',
+//                                    'style' => 'width:80px;'
+//                                ]),
+                            ],
+                            [
+                                'attribute' => 'pure_gold',
+                                'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#b7ba6b;'],
+                                'footerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#b7ba6b;'],
+                                'value' => function ($model, $key, $index, $widget) use ($total) {
+                                    $widget->footer = $model->getFooterValues('pure_gold', $total, "0.000");
+                                    return $model->pure_gold ?? "0.000";
+                                },
+                                'filter' => false,
+//                                'filter' => Html::activeTextInput($searchModel, 'pure_gold', [
 //                                    'class' => 'form-control',
 //                                    'style' => 'width:80px;'
 //                                ]),

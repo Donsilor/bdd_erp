@@ -20,6 +20,7 @@ $form = ActiveForm::begin([
     </div>
     <div class="modal-body">
             <?= $form->field($model, 'name')->textInput(['maxlength' => true]) ?>
+            <?= $form->field($model, 'code')->textInput(); ?>
             <?= $form->field($model, 'tag')->textInput(); ?>
             <?= $form->field($model, 'sort')->textInput() ?>
             <?= $form->field($model, 'status')->radioList(common\enums\StatusEnum::getMap())?>
