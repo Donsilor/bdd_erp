@@ -391,6 +391,7 @@
             <td class="width-80 algin-center font-bold" rowspan="2">条码号</td>
             <td class="width-60 algin-center font-bold" rowspan="2">款号</td>
             <td class="width-60 algin-center font-bold" rowspan="2">货品名称</td>
+            <td class="width-20 algin-center font-bold" rowspan="2">渠道</td>
             <td class="width-30 algin-center font-bold" rowspan="2">材质</td>
             <td class="width-20 algin-center font-bold" rowspan="2">件数</td>
             <td class="width-20 algin-center font-bold" rowspan="2">手寸</td>
@@ -441,6 +442,7 @@
                     <td class="algin-center padding-5"><?= $val['goods_id'] ?? "/" ?></td>
                     <td class="algin-center padding-5"><?= $val['style_sn'] ?? "/" ?></td>
                     <td class="algin-center padding-5"><?= $val['goods_name'] ?? "/" ?></td>
+                    <td class="algin-center padding-5"><?= $val['channel_code'] ?? "/" ?></td>
                     <td class="algin-center padding-5"><?= $val['material_type'] ?? "/" ?></td>
                     <td class="algin-center padding-5"><?= $val['goods_num'] ?? "0" ?></td>
                     <td class="algin-center padding-5"><?= $val['finger'] ?? "/" ?></td>

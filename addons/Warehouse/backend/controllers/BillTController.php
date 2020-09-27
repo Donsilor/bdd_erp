@@ -2,6 +2,7 @@
 
 namespace addons\Warehouse\backend\controllers;
 
+use addons\Sales\common\models\SaleChannel;
 use addons\Supply\common\models\Supplier;
 use addons\Warehouse\common\enums\BillFixEnum;
 use addons\Warehouse\common\models\Warehouse;
@@ -639,7 +640,7 @@ class BillTController extends BaseController
     private function getData($ids)
     {
         $select = [
-            'w.bill_no', 'w.bill_type', 'w.bill_status', 'wg.goods_id', 'wg.style_sn', 'wg.goods_num', 'wg.goods_name',//基本
+            'w.bill_no', 'w.bill_type', 'w.bill_status', 'wg.goods_id', 'wg.style_sn', 'wg.goods_num', 'wg.goods_name','sc.code as channel_code',//基本
             'wg.material_type', 'wg.finger', 'wg.finger_hk',//属性
             'wg.suttle_weight', 'wg.gold_weight', 'wg.gold_loss', 'wg.lncl_loss_weight', 'wg.gold_price', 'wg.gold_amount',//金料
             'wg.main_stone_sn', 'wg.main_stone_num', 'wg.main_stone_weight', 'wg.main_stone_price', 'wg.main_stone_amount',//主石
@@ -652,6 +653,8 @@ class BillTController extends BaseController
             ->leftJoin(WarehouseBillGoodsL::tableName() . " wg", 'w.id=wg.bill_id')
             ->leftJoin(ProductType::tableName() . ' type', 'type.id=wg.product_type_id')
             ->leftJoin(StyleCate::tableName() . ' cate', 'cate.id=wg.style_cate_id')
+            ->leftJoin(Warehouse::tableName() . ' wh', 'wh.id=wg.to_warehouse_id')
+            ->leftJoin(SaleChannel::tableName() . ' sc', 'sc.id=wh.channel_id')
             ->where(['w.id' => $ids])
             ->select($select)->orderBy(['wg.id' => SORT_DESC]);
         $lists = PageHelper::findAll($query, 100);
