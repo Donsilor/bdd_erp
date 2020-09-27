@@ -38,7 +38,7 @@ class BillTypeEnum extends \common\enums\BaseEnum
             self::BILL_TYPE_A   => '货品调整单',
             self::BILL_TYPE_D   => '销售退货单',
             self::BILL_TYPE_B   => '退货返厂单',
-            self::BILL_TYPE_T   => '其它收货单',
+            self::BILL_TYPE_T   => '其他入库单',
             self::BILL_TYPE_C   => '其它出库单',
             self::BILL_TYPE_WX  => '维修单',
 
