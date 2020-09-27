@@ -95,4 +95,14 @@ class WarehouseGoldBillLog extends BaseModel
     {
         return $this->hasOne(Member::class, ['id'=>'creator_id']);
     }
+
+
+    /**
+     * 关联管理员一对一
+     * @return \yii\db\ActiveQuery
+     */
+    public function getGoldBill()
+    {
+        return $this->hasOne(WarehouseGoldBill::class, ['id'=>'bill_id'])->alias('goldBill');
+    }
 }

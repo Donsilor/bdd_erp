@@ -40,6 +40,7 @@ class GoldController extends BaseController
             'pageSize' => $this->pageSize,
             'relations' => [
                 'creator' => ['username'],
+                'goldBill' => ['bill_no']
             ]
         ]);
 
@@ -93,7 +94,7 @@ class GoldController extends BaseController
      * 领料信息
      * @return mixed
      */
-    public function actionLingliao()
+    public function actionWarehouse()
     {
         $this->modelClass = new WarehouseGoldBillGoodsForm();
         $tab = \Yii::$app->request->get('tab', 2);
@@ -103,7 +104,7 @@ class GoldController extends BaseController
             'scenario' => 'default',
             'partialMatchAttributes' => [], // 模糊查询
             'defaultOrder' => [
-                'id' => SORT_DESC
+                'id' => SORT_ASC
             ],
             'pageSize' => $this->pageSize,
             'relations' => [
@@ -122,7 +123,7 @@ class GoldController extends BaseController
         $dataProvider->query->andWhere(['=', 'gold_sn', $gold->gold_sn]);
         $dataProvider->query->andWhere(['>', WarehouseGoldBillGoodsForm::tableName() . '.status', -1]);
 
-        $dataProvider->query->andWhere(['=', 'bill.bill_type', GoldBillTypeEnum::GOLD_C]);
+//        $dataProvider->query->andWhere(['=', 'bill.bill_type', GoldBillTypeEnum::GOLD_C]);
 
         return $this->render($this->action->id, [
             'dataProvider' => $dataProvider,
