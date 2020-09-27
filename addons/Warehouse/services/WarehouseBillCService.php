@@ -2,6 +2,7 @@
 
 namespace addons\Warehouse\services;
 
+use addons\Warehouse\common\enums\BillFixEnum;
 use addons\Warehouse\common\enums\DeliveryTypeEnum;
 use addons\Warehouse\common\models\WarehouseBill;
 use common\helpers\StringHelper;
@@ -31,6 +32,7 @@ use addons\Warehouse\common\enums\BillTypeEnum;
  */
 class WarehouseBillCService extends WarehouseBillService
 {
+    public $billFix = BillFixEnum::BILL_CK;
     /**
      * 创建其它出库单明细
      * @param WarehouseBillCForm $form
@@ -127,7 +129,8 @@ class WarehouseBillCService extends WarehouseBillService
         }
         $bill = new WarehouseBill();
         $bill->attributes = $form->toArray();
-        $bill->bill_no = SnHelper::createBillSn($form->bill_type);
+        //$bill->bill_no = SnHelper::createBillSn($form->bill_type);
+        $bill->bill_no = \Yii::$app->warehouseService->bill->createBillSn($this->billFix);
         if(false === $bill->save()) {
             throw new \Exception($this->getError($bill));
         }
@@ -395,7 +398,8 @@ class WarehouseBillCService extends WarehouseBillService
             $bill = new WarehouseBill();            
             $bill->attributes = $billInfo;
             $bill->bill_type = BillTypeEnum::BILL_TYPE_C;
-            $bill->bill_no = SnHelper::createBillSn($form->bill_type);
+            //$bill->bill_no = SnHelper::createBillSn($form->bill_type);
+            $bill->bill_no = \Yii::$app->warehouseService->bill->createBillSn($this->billFix);
             $bill->bill_status = BillStatusEnum::SAVE;
             if(false == $bill->save()){
                 throw new \Exception("导入失败:".$this->getError($bill));
