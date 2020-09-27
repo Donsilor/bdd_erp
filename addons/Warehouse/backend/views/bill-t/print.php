@@ -373,7 +373,7 @@
                 </div>
                 <div class="three">
                     <span>工厂结算单号：</span>
-                    <span contenteditable="true">无</span>
+                    <span contenteditable="true"><?= $model->send_goods_sn ?? "无" ?></span>
                 </div>
                 <div class="three">
                     <span>结价：</span>
