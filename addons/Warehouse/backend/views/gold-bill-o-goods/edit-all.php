@@ -15,7 +15,7 @@ use common\helpers\Url;
 /* @var $tab yii\data\ActiveDataProvider */
 /* @var $bill yii\data\ActiveDataProvider */
 
-$this->title = Yii::t('bill_b_goods', '其它出库单明细');
+$this->title = Yii::t('bill_b_goods', '(金料)其它出库单明细');
 $this->params['breadcrumbs'][] = ['label' => $this->title, 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>

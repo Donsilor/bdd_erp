@@ -55,7 +55,7 @@ class WarehouseGoldBill extends BaseModel
         return [
 //            [['bill_type'], 'required'],
             [['bill_status', 'supplier_id', 'put_in_type', 'to_warehouse_id','receiv_id','channel_id','out_type', 'account_type', 'adjust_type', 'is_settle_accounts','total_num', 'auditor_id', 'audit_status', 'audit_time', 'fin_status', 'fin_check_time', 'status', 'creator_id', 'created_at', 'updated_at'], 'integer'],
-            [['total_weight', 'total_cost'], 'number'],
+            [['total_weight', 'total_cost','total_tax_price'], 'number'],
             [['bill_no', 'delivery_no', 'fin_checker','purchase_sn'], 'string', 'max' => 30],
             [['bill_type'], 'string', 'max' => 3],
             [['audit_remark', 'fin_remark', 'remark'], 'string', 'max' => 255],
@@ -81,6 +81,7 @@ class WarehouseGoldBill extends BaseModel
             'total_num' => '明细数量',
             'total_weight' => '金料总重(g)',
             'total_cost' => '金料总额',
+            'total_tax_price' => '金料含税总额',
             'delivery_no' => '送货单号',
             'auditor_id' => '审核人',
             'audit_status' => '审核状态',

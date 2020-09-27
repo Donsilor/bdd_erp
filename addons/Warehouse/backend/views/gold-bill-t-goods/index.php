@@ -13,7 +13,7 @@ use kartik\daterange\DateRangePicker;
 /* @var $this yii\web\View */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = Yii::t('bill_t_goods', '其它入库单详情');
+$this->title = Yii::t('bill_t_goods', '(金料)其它入库单详情');
 $this->params['breadcrumbs'][] = ['label' => $this->title, 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 $params = Yii::$app->request->queryParams;
@@ -32,7 +32,7 @@ $params = $params ? "&".http_build_query($params) : '';
         <?php
 
         if ($bill->bill_status == \addons\Warehouse\common\enums\BillStatusEnum::SAVE) {
-            echo Html::create(['ajax-edit', 'bill_id' => $bill->id], '新增货品', [
+            echo Html::create(['ajax-edit', 'bill_id' => $bill->id], '新增金料', [
                 'class' => 'btn btn-primary btn-xs',
                 'data-toggle' => 'modal',
                 'data-target' => '#ajaxModalLg',
@@ -79,11 +79,12 @@ $params = $params ? "&".http_build_query($params) : '';
                             ],
                             [
                                 'class' => 'yii\grid\CheckboxColumn',
+                                'headerOptions' => ['width'=>20],
                                 'name' => 'id',  //设置每行数据的复选框属性
                             ],
                             [
                                 'attribute' => 'id',
-                                'headerOptions' => ['class' => 'col-md-1'],
+                                'headerOptions' => ['width'=>30],
                                 'value' => function ($model, $key, $index) {
                                     return $model->id ?? 0;
                                 },
@@ -91,53 +92,52 @@ $params = $params ? "&".http_build_query($params) : '';
                             ],
                             [
                                 'attribute' => 'gold_sn',
-                                'headerOptions' => ['class' => 'col-md-1'],
+                                'headerOptions' => ['class' => 'col-md-2'],
                                 'value' => function ($model, $key, $index) {
                                     return $model->gold_sn ?? "";
                                 },
                                 'filter' => Html::activeTextInput($searchModel, 'gold_sn', [
                                     'class' => 'form-control',
-                                    'style' => 'width:100px;'
                                 ]),
                             ],
                             [
                                 'attribute' => 'style_sn',
                                 'format' => 'raw',
-                                'headerOptions' => ['class' => 'col-md-1'],
+                                'headerOptions' => ['class' => 'col-md-2'],
                                 'value' => function ($model, $key, $index) {
                                     return $model->style_sn;
                                 },
                                 'filter' => Html::activeTextInput($searchModel, 'style_sn', [
                                     'class' => 'form-control',
-                                    'style' => 'width:100px;'
                                 ]),
                             ],
                             [
                                 'attribute' => 'gold_type',
                                 'format' => 'raw',
-                                'headerOptions' => ['class' => 'col-md-1'],
+                                'headerOptions' => ['width' => 60],
                                 'value' => function ($model, $key, $index) {
                                     return Yii::$app->attr->valueName($model->gold_type)??"";
                                 },
                                 'filter' => Html::activeDropDownList($searchModel, 'gold_type',Yii::$app->attr->valueMap(\addons\Style\common\enums\AttrIdEnum::MAT_GOLD_TYPE), [
                                     'prompt' => '全部',
                                     'class' => 'form-control',
+                                    'style' => 'width:60px;'
                                 ]),
                             ],
 
                             [
                                 'attribute' => 'gold_name',
-                                'headerOptions' => ['class' => 'col-md-1'],
+                                'headerOptions' => ['class' => 'col-md-2'],
                                 'value' => function ($model, $key, $index) {
                                     return $model->gold_name ?? "";
                                 },
                                 'filter' => Html::activeTextInput($searchModel, 'gold_name', [
                                     'class' => 'form-control',
-                                    'style' => 'width:90px;'
                                 ]),
                             ],
                             [
                                 'attribute' => 'gold_weight',
+                                'headerOptions' => ['width'=>60],
                                 'value' => function ($model, $key, $index){
                                     return $model->gold_weight ?? 0;
                                 },
@@ -146,6 +146,7 @@ $params = $params ? "&".http_build_query($params) : '';
 
                             [
                                 'attribute' => 'gold_price',
+                                'headerOptions' => ['width'=>60],
                                 'value' => function ($model, $key, $index) {
                                     return $model->gold_price ?? 0;
                                 },
@@ -153,6 +154,7 @@ $params = $params ? "&".http_build_query($params) : '';
                             ],
                             [
                                 'attribute' => 'cost_price',
+                                'headerOptions' => ['width'=>60],
                                 'value' => function ($model, $key, $index){
                                     return $model->cost_price ?? 0;
                                 },
@@ -160,6 +162,7 @@ $params = $params ? "&".http_build_query($params) : '';
                             ],
                             [
                                 'attribute' => 'incl_tax_price',
+                                'headerOptions' => ['width'=>60],
                                 'value' => function ($model, $key, $index){
                                     return $model->incl_tax_price ?? 0;
                                 },
@@ -169,7 +172,7 @@ $params = $params ? "&".http_build_query($params) : '';
                             [
                                 'attribute' => 'remark',
                                 //'format' => 'raw',
-                                'headerOptions' => ['class' => 'col-md-1'],
+                                'headerOptions' => ['class' => 'col-md-2'],
                                 'value' => function ($model, $key, $index) {
                                     return $model->remark ?? "";
                                 },

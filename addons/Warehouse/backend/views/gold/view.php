@@ -43,22 +43,28 @@ $this->params['breadcrumbs'][] = $this->title;
                                     <td class="col-xs-3 text-right"><?= $model->getAttributeLabel('gold_num') ?>：</td>
                                     <td><?= $model->gold_num ?></td>
                                 </tr>
-                                <tr>
-                                    <td class="col-xs-3 text-right"><?= $model->getAttributeLabel('gold_weight') ?>：</td>
-                                    <td><?= $model->gold_weight ?></td>
-                                </tr>
+
                                 <tr>
                                     <td class="col-xs-3 text-right"><?= $model->getAttributeLabel('gold_price') ?>：</td>
                                     <td><?= $model->gold_price ?></td>
                                 </tr>
                                 <tr>
+                                    <td class="col-xs-3 text-right"><?= $model->getAttributeLabel('gold_weight') ?>：</td>
+                                    <td><?= $model->gold_weight ?></td>
+                                </tr>
+                                <tr>
+                                    <td class="col-xs-3 text-right"><?= $model->getAttributeLabel('first_cost_price') ?>：</td>
+                                    <td><?= $model->first_cost_price ?></td>
+                                </tr>
+                                <tr>
+                                    <td class="col-xs-3 text-right"><?= $model->getAttributeLabel('first_cost_price') ?>：</td>
+                                    <td><?= $model->first_cost_price ?></td>
+                                </tr>
+                                <tr>
                                     <td class="col-xs-3 text-right"><?= $model->getAttributeLabel('cost_price') ?>：</td>
                                     <td><?= $model->cost_price ?></td>
                                 </tr>
-                                <tr>
-                                    <td class="col-xs-3 text-right"><?= $model->getAttributeLabel('supplier_id') ?>：</td>
-                                    <td><?= $model->supplier->supplier_name??"" ?></td>
-                                </tr>
+
                             </table>
                         </div>
                     </div>
@@ -68,6 +74,10 @@ $this->params['breadcrumbs'][] = $this->title;
                     <div class="box" style="margin-bottom: 0px;">
                         <div class="box-body table-responsive" >
                             <table class="table table-hover">
+                                <tr>
+                                    <td class="col-xs-3 text-right"><?= $model->getAttributeLabel('supplier_id') ?>：</td>
+                                    <td><?= $model->supplier->supplier_name??"" ?></td>
+                                </tr>
                                 <tr>
                                     <td class="col-xs-3 text-right"><?= $model->getAttributeLabel('put_in_type') ?>：</td>
                                     <td><?= \addons\Warehouse\common\enums\PutInTypeEnum::getValue($model->put_in_type) ?></td>
@@ -98,7 +108,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 </tr>
                                 <tr>
                                     <td class="col-xs-3 text-right"><?= $model->getAttributeLabel('created_at') ?>：</td>
-                                    <td><?= \Yii::$app->formatter->asDatetime($model->created_at) ?></td>
+                                    <td><?= \Yii::$app->formatter->asDate($model->created_at) ?></td>
                                 </tr>
                                 <tr>
                                     <td class="col-xs-3 text-right"><?= $model->getAttributeLabel('remark') ?>：</td>

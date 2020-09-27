@@ -41,14 +41,17 @@ $form = ActiveForm::begin([
             </div>
         </div>
         <div class="row">
-            <div class="col-lg-4">
+            <div class="col-lg-6">
                 <?= $form->field($model, 'gold_weight')->textInput() ?>
             </div>
-            <div class="col-lg-4">
+            <div class="col-lg-6">
                 <?= $form->field($model, 'gold_price')->textInput() ?>
             </div>
-            <div class="col-lg-4">
-                <?= $form->field($model, 'incl_tax_price')->textInput() ?>
+
+        </div>
+        <div class="row">
+            <div class="col-lg-12">
+                <?= $form->field($model, 'incl_tax_price')->textInput(["placeholder" => "不填：将自动计算：（金料总重*金料单价）"]) ?>
             </div>
         </div>
         <div class="row">
