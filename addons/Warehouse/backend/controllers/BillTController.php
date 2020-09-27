@@ -691,10 +691,15 @@ class BillTController extends BaseController
             'cost_price' => 0,
 
             'gold_price' => 0,
+            'channel' => "",
         ];
+        $channel = [];
         foreach ($lists as &$list) {
             if (empty($list['goods_id'])) {
                 exit("货号不能为空");
+            }
+            if($list['channel_code']){
+                $channel[] = $list['channel_code'] ?? '';
             }
             //金价
             if ($total['gold_price'] == 0 && $list['gold_price']) {
@@ -749,6 +754,9 @@ class BillTController extends BaseController
             $total['factory_cost'] = bcadd($total['factory_cost'], bcdiv($list['factory_cost'], $list['goods_num'], 3), 3);//单件工厂工费
             $total['one_cost_price'] = bcadd($total['one_cost_price'], bcdiv($list['cost_price'], $list['goods_num'], 3), 3);//成本价/件
             $total['cost_price'] = bcadd($total['cost_price'], $list['cost_price'], 3);//总成本价
+        }
+        if($channel){
+            $total['channel'] = implode(",", array_unique($channel));//渠道
         }
         return [$lists, $total];
     }

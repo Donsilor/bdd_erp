@@ -343,8 +343,8 @@
                     <span contenteditable="true"><?= $model->supplier->supplier_name ?? "无"; ?></span>
                 </div>
                 <div class="one">
-                    <span>销售渠道：</span>
-                    <span contenteditable="true"><?= $model->saleChannel->name ?? "无"; ?></span>
+                    <span>订单类型：</span>
+                    <span contenteditable="true">成品采购</span>
                 </div>
                 <div class="one">
                     <span>入库单号：</span>
@@ -358,8 +358,8 @@
                     <span contenteditable="true">无</span>
                 </div>
                 <div class="two">
-                    <span>订单类型：</span>
-                    <span contenteditable="true">成品采购</span>
+                    <span>销售渠道：</span>
+                    <span contenteditable="true"><?= $total['channel'] ?? "无"; ?></span>
                 </div>
                 <div class="two">
                     <span>入库方法：</span>
