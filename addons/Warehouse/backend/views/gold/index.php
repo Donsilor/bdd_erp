@@ -134,7 +134,7 @@ $params = $params ? "&".http_build_query($params) : '';
                             ]),
                             'headerOptions' => ['width' => '120'],
                         ],
-                       
+
                         /*[
                             'attribute' => 'remark',
                             //'filter' => Html::activeTextInput($searchModel, 'remark', [
