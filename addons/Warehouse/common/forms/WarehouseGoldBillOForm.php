@@ -2,6 +2,8 @@
 
 namespace addons\Warehouse\common\forms;
 
+use addons\Sales\common\models\SaleChannel;
+use common\models\backend\Member;
 use Yii;
 use addons\Warehouse\common\models\WarehouseGoldBill;
 use common\helpers\ArrayHelper;
@@ -18,7 +20,7 @@ class WarehouseGoldBillOForm extends WarehouseGoldBill
     public function rules()
     {
          $rules = [
-             [['supplier_id'], 'required'],
+             [['out_type','channel_id'], 'required'],
          ];
          return ArrayHelper::merge(parent::rules() , $rules);
     }
@@ -33,6 +35,22 @@ class WarehouseGoldBillOForm extends WarehouseGoldBill
 
         ]);
     }
+    /**
+     * 创建人
+     * @return \yii\db\ActiveQuery
+     */
+    public function getReceiv()
+    {
+        return $this->hasOne(Member::class, ['id'=>'receiv_id'])->alias('receiv');
+    }
 
+    /**
+     * 入库仓库 一对一
+     * @return \yii\db\ActiveQuery
+     */
+    public function getChannel()
+    {
+        return $this->hasOne(SaleChannel::class, ['id'=>'channel_id'])->alias('channel');
+    }
    
 }

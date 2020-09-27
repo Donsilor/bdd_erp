@@ -1205,6 +1205,7 @@ class WarehouseBillTService extends Service
         $stone_weight = bcmul($stone_weight, 0.2, 5);//ct转换为克重
         $weight = bcsub($form->suttle_weight, $stone_weight, 5) ?? 0;
         $weight = bcsub($weight, $this->calculatePartsWeight($form), 5) ?? 0;
+        //var_dump('主石重:'.$this->calculateMainStoneWeight($form),'副石总重'.$this->calculateSecondStoneWeight($form),'主+副:'.($stone_weight/0.2),'转克重:'.$stone_weight,'配件重:'.$this->calculatePartsWeight($form),'实重:'.$weight);die;
         if (bccomp(0, $weight, 5) == 1) {
             $weight = 0;
         }
@@ -1265,14 +1266,18 @@ class WarehouseBillTService extends Service
 
     /**
      *
-     * 主石总重(ct)=(主石单颗重(ct)*主石数量)
+     * 主石总重(ct)=(主石单颗重(ct)*主石数量)作废
      * @param WarehouseBillTGoodsForm $form
      * @return integer
      * @throws
      */
     public function calculateMainStoneWeight($form)
     {
-        return bcmul($form->main_stone_weight, $form->main_stone_num, 5) ?? 0;
+        if($form->main_pei_type == PeiShiWayEnum::NO_PEI){
+            return 0;
+        }
+        //return bcmul($form->main_stone_weight, $form->main_stone_num, 5) ?? 0;
+        return $form->main_stone_weight ?? 0;
     }
 
     /**
@@ -1296,7 +1301,19 @@ class WarehouseBillTService extends Service
      */
     public function calculateSecondStoneWeight($form)
     {
-        return bcadd(bcadd($form->second_stone_weight1, $form->second_stone_weight2, 5), $form->second_stone_weight3, 5) ?? 0;
+        $second_stone_weight1 = $form->second_stone_weight1 ?? 0;
+        $second_stone_weight2 = $form->second_stone_weight2 ?? 0;
+        $second_stone_weight3 = $form->second_stone_weight3 ?? 0;
+        if($form->second_pei_type == PeiShiWayEnum::NO_PEI){
+            $second_stone_weight1 = 0;
+        }
+        if($form->second_pei_type2 == PeiShiWayEnum::NO_PEI){
+            $second_stone_weight2 = 0;
+        }
+        if($form->second_pei_type3 == PeiShiWayEnum::NO_PEI){
+            $second_stone_weight3 = 0;
+        }
+        return bcadd(bcadd($second_stone_weight1, $second_stone_weight2, 5), $second_stone_weight3, 5) ?? 0;
     }
 
     /**
@@ -1368,6 +1385,9 @@ class WarehouseBillTService extends Service
      */
     public function calculatePartsWeight($form)
     {
+        if($form->parts_way == PeiJianWayEnum::NO_PEI){
+            return 0;
+        }
         return bcmul($form->parts_gold_weight, 1, 5) ?? 0;//$form->parts_num
     }
 

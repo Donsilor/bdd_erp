@@ -21,13 +21,7 @@ $form = ActiveForm::begin([
 <div class="modal-body">
     <div class="col-sm-12">
         <?= $form->field($model, 'bill_no')->textInput(['disabled'=>true, "placeholder"=>"系统自动生成"])?>
-        <?= $form->field($model, 'delivery_type')->widget(\kartik\select2\Select2::class, [
-            'data' => \addons\Warehouse\common\enums\DeliveryTypeEnum::getMap(),
-            'options' => ['placeholder' => '请选择'],
-            'pluginOptions' => [
-                'allowClear' => false
-            ],
-        ]);?>
+        <?= $form->field($model, 'out_type')->dropDownList(\addons\Warehouse\common\enums\OutTypeEnum::getMap(),['prompt'=>'请选择']) ?>
         <div class="row">
             <div class="col-sm-6">
                 <?= $form->field($model, 'channel_id')->widget(\kartik\select2\Select2::class, [
@@ -39,11 +33,11 @@ $form = ActiveForm::begin([
                 ]);?>
             </div>
             <div class="col-sm-6">
-                <?= $form->field($model, 'salesman_id')->widget(kartik\select2\Select2::class, [
+                <?= $form->field($model, 'receiv_id')->widget(kartik\select2\Select2::class, [
                     'data' => Yii::$app->services->backendMember->getDropDown(),
                     'options' => [
                         'placeholder' => '请选择',
-                        'value' => $model->salesman_id??'',
+                        'value' => $model->receiv_id??'',
                     ],
                     'pluginOptions' => [
                         'allowClear' => true
@@ -51,7 +45,7 @@ $form = ActiveForm::begin([
                 ]);?>
             </div>
         </div>
-        <?= $form->field($model, 'order_sn')->textInput() ?>
+        <?= $form->field($model, 'purchase_sn')->textInput() ?>
         <?= $form->field($model, 'remark')->textArea(); ?>
     </div>
 </div>
