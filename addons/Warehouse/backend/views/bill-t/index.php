@@ -147,7 +147,7 @@ $params = $params ? "&" . http_build_query($params) : '';
                             'attribute' => 'send_goods_sn',
                             'value' => function ($model) {
                                 if($model->send_goods_sn){
-                                    $model->send_goods_sn = "<span id='".$model->send_goods_sn."'>$model->send_goods_sn</span>&nbsp;<i class='fa fa-copy' onclick='copy(" . $model->send_goods_sn . ")'></i>";
+                                    $model->send_goods_sn = "<span id='send_goods_sn_".$model->send_goods_sn."'>$model->send_goods_sn</span>&nbsp;<i class='fa fa-copy' onclick='copy(send_goods_sn_" . $model->send_goods_sn . ")'></i>";
                                 }
                                 return $model->send_goods_sn ?? "";
                             },
