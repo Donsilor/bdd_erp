@@ -318,6 +318,7 @@ class WarehouseBillLService extends Service
             $value = [];
             $key = array_keys($goods[0]);
             foreach ($goods as $item) {
+                $this->
                 $model->setAttributes($item);
                 if (!$model->validate()) {
                     throw new \Exception($this->getError($model));

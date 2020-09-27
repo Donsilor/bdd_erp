@@ -640,7 +640,7 @@ class BillTController extends BaseController
     private function getData($ids)
     {
         $select = [
-            'w.bill_no', 'w.bill_type', 'w.bill_status', 'wg.goods_id', 'wg.style_sn', 'wg.goods_num', 'wg.goods_name','sc.code as channel_code',//基本
+            'w.bill_no', 'w.bill_type', 'w.bill_status', 'wg.goods_id', 'wg.style_sn', 'wg.goods_num', 'wg.goods_name', 'sc.name as channel_name', 'sc.code as channel_code',//基本
             'wg.material_type', 'wg.finger', 'wg.finger_hk',//属性
             'wg.suttle_weight', 'wg.gold_weight', 'wg.gold_loss', 'wg.lncl_loss_weight', 'wg.gold_price', 'wg.gold_amount',//金料
             'wg.main_stone_sn', 'wg.main_stone_num', 'wg.main_stone_weight', 'wg.main_stone_price', 'wg.main_stone_amount',//主石
@@ -698,8 +698,8 @@ class BillTController extends BaseController
             if (empty($list['goods_id'])) {
                 exit("货号不能为空");
             }
-            if($list['channel_code']){
-                $channel[] = $list['channel_code'] ?? '';
+            if ($list['channel_name']) {
+                $channel[] = $list['channel_name'] ?? '';
             }
             //金价
             if ($total['gold_price'] == 0 && $list['gold_price']) {
@@ -755,7 +755,7 @@ class BillTController extends BaseController
             $total['one_cost_price'] = bcadd($total['one_cost_price'], bcdiv($list['cost_price'], $list['goods_num'], 3), 3);//成本价/件
             $total['cost_price'] = bcadd($total['cost_price'], $list['cost_price'], 3);//总成本价
         }
-        if($channel){
+        if ($channel) {
             $total['channel'] = implode(",", array_unique($channel));//渠道
         }
         return [$lists, $total];
