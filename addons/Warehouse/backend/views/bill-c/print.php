@@ -287,6 +287,7 @@
                 <th class="width-120 algin-center font-bold" >款号</th>
                 <th class="width-30 algin-center font-bold" >数量</th>
                 <th class="width-50 algin-center font-bold" >尺寸</th>
+                <th class="width-65 algin-center font-bold" >主石重(ct)</th>
                 <th class="width-65 algin-center font-bold" >总石重(ct)</th>
                 <th class="width-65 algin-center font-bold" >总连石重</th>
                 <th class="width-65 algin-center font-bold" >标签价</th>
@@ -307,10 +308,11 @@
                     <td class="algin-center padding-5"><?= $val['style_sn'] ?? "/" ?></td>
                     <td class="algin-center padding-5"><?= $val['goods_num'] ?? "0" ?></td>
                     <td class="algin-center padding-5"><?= $val['product_size'] ?? "/" ?></td>
+                    <td class="algin-center padding-5"><?= floatval($val['main_cart']) ?? "0.00" ?></td>
                     <td class="algin-center padding-5"><?= floatval($val['cart']) ?? "0.00" ?></td>
                     <td class="algin-center padding-5"><?= floatval($val['suttle_weight']) ?? "0.00" ?></td>
                     <td class="algin-center padding-5"><?= floatval($val['market_price']) ?? "0.00" ?></td>
-                    <td class="algin-center padding-5" contenteditable="true">无</td>
+                    <td class="algin-center padding-5" contenteditable="true">0</td>
                     <td class="algin-center padding-5"><?= $val['cert_id'] ?? "/" ?></td>
                     <td class="algin-center padding-5"><?= $val['remark'] ?? "/" ?></td>
                 </tr>
@@ -323,10 +325,11 @@
                     <td class="algin-center padding-5" colspan="5">合计</td>
                     <td class="algin-center padding-5"><?= floatval($total['goods_num']) ?? '0.00'; ?></td>
                     <td class="algin-center padding-5">/</td>
+                    <td class="algin-center padding-5"><?= floatval($total['main_cart']) ?? '0.00'; ?></td>
                     <td class="algin-center padding-5"><?= floatval($total['cart']) ?? '0.00'; ?></td>
                     <td class="algin-center padding-5"><?= floatval($total['suttle_weight']) ?? '0.00'; ?></td>
                     <td class="algin-center padding-5"><?= floatval($total['market_price']) ?? '0.00'; ?></td>
-                    <td class="algin-center padding-5">无</td>
+                    <td class="algin-center padding-5" contenteditable="true">0</td>
                     <td class="algin-center padding-5">/</td>
                     <td class="algin-center padding-5">/</td>
                 </tr>
