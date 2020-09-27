@@ -1969,6 +1969,20 @@ $params = $params ? "&" . http_build_query($params) : '';
 //                                ]),
                             ],
                             [
+                                'attribute' => 'pure_gold',
+                                'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#b7ba6b;'],
+                                'footerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#b7ba6b;'],
+                                'value' => function ($model, $key, $index, $widget) use ($total) {
+                                    $widget->footer = $model->getFooterValues('pure_gold', $total, "0.000");
+                                    return $model->pure_gold ?? "0.000";
+                                },
+                                'filter' => false,
+//                                'filter' => Html::activeTextInput($searchModel, 'pure_gold', [
+//                                    'class' => 'form-control',
+//                                    'style' => 'width:80px;'
+//                                ]),
+                            ],
+                            [
                                 'attribute' => 'factory_cost',
                                 //'format' => 'raw',
                                 'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#9b95c9;'],
