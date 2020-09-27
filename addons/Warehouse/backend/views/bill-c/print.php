@@ -102,7 +102,7 @@
             }
             table,table tr th, table tr td {
                 border:1px solid #000;
-                font-size: 12px;
+                font-size: 16px;
             }
             table tr th{
                 /* padding: 10px 20px; */
