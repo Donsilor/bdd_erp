@@ -281,10 +281,10 @@
             <table class="table">
                 <thead>
                 <th class="width-30 algin-center font-bold">序号</th>
-                <th class="width-80 algin-center font-bold" >品类</th>
+                <th class="width-60 algin-center font-bold" >品类</th>
                 <th class="width-150 algin-center font-bold" >货品名称</th>
-                <th class="width-140 algin-center font-bold" >条码号</th>
-                <th class="width-120 algin-center font-bold" >款号</th>
+                <th class="width-80 algin-center font-bold" >条码号</th>
+                <th class="width-80 algin-center font-bold" >款号</th>
                 <th class="width-30 algin-center font-bold" >数量</th>
                 <th class="width-50 algin-center font-bold" >尺寸</th>
                 <th class="width-65 algin-center font-bold" >主石重(ct)</th>
@@ -303,7 +303,7 @@
                 <tr class="algin-left">
                     <td class="algin-center padding-5"><?= $key + 1 ?></td>
                     <td class="algin-center padding-5"><?= $val['style_cate_name'] ?? "/" ?></td>
-                    <td class="algin-center padding-5"><?= $val['goods_name'] ?? "/" ?></td>
+                    <td class="algin-left padding-5"><?= $val['goods_name'] ?? "/" ?></td>
                     <td class="algin-center padding-5"><?= $val['goods_id'] ?? "/" ?></td>
                     <td class="algin-center padding-5"><?= $val['style_sn'] ?? "/" ?></td>
                     <td class="algin-center padding-5"><?= $val['goods_num'] ?? "0" ?></td>
