@@ -2,8 +2,11 @@
 
 namespace addons\Warehouse\backend\controllers;
 
+use addons\Warehouse\common\enums\AdjustTypeEnum;
 use addons\Warehouse\common\enums\GoldBillTypeEnum;
+use addons\Warehouse\common\enums\GoldStatusEnum;
 use addons\Warehouse\common\forms\WarehouseGoldBillGoodsForm;
+use addons\Warehouse\common\models\WarehouseGold;
 use addons\Warehouse\common\models\WarehouseGoldBill;
 use addons\Warehouse\common\models\WarehouseGoldBillGoods;
 use Yii;
@@ -56,7 +59,7 @@ class GoldBillOGoodsController extends BaseController
         $dataProvider->query->andWhere(['=', 'bill_id', $bill_id]);
         $dataProvider->query->andWhere(['>',WarehouseGoldBillGoodsForm::tableName().'.status',-1]);
 
-        $bill = WarehouseBill::find()->where(['id'=>$bill_id])->one();
+        $bill = WarehouseGoldBill::find()->where(['id'=>$bill_id])->one();
         return $this->render($this->action->id, [
             'dataProvider' => $dataProvider,
             'searchModel' => $searchModel,
@@ -138,6 +141,7 @@ class GoldBillOGoodsController extends BaseController
         if (!($model = $this->modelClass::findOne($id))) {
             return ResultHelper::json(404, '找不到数据');
         }
+        $old_gold_weight = $model->gold_weight; //原有
         $data = Yii::$app->request->get();
         $model->attributes = ArrayHelper::filter($data, array_keys($data));
         try{
@@ -145,13 +149,20 @@ class GoldBillOGoodsController extends BaseController
             if (!$model->save()) {
                 return ResultHelper::json(422, $this->getError($model));
             }
-
+            $new_gold_weight = $model->gold_weight;
+            $adjust_weight = $old_gold_weight - $new_gold_weight;
+            //更新库存金重
+            $res = Yii::$app->warehouseService->goldO->updateGoldWeight($model->gold_sn, $adjust_weight);
+            if($res['status'] == false){
+                return ResultHelper::json(404, $res['msg']);
+            }
+            //更新单据库存
             \Yii::$app->warehouseService->goldBill->goldBillSummary($model->bill_id);
             $trans->commit();
             return ResultHelper::json(200, '修改成功');
         }catch (\Exception $e) {
             $trans->rollback();
-            return ResultHelper::json(404, '找不到数据');
+            return ResultHelper::json(404, $e);
         }
         
     }
@@ -283,26 +294,30 @@ class GoldBillOGoodsController extends BaseController
     {
         $billGoods = $this->findModel($id);
         $bill_id = $billGoods->bill_id;
-        $bill = WarehouseBill::find()->where(['id'=>$bill_id])->one();
         try{
             $trans = Yii::$app->db->beginTransaction();
-            //删除
-            $billGoods->delete();
-            //更新单据数量和金额
-            $bill->goods_num = Yii::$app->warehouseService->bill->sumGoodsNum($bill_id);
-            $bill->total_cost = Yii::$app->warehouseService->bill->sumCostPrice($bill_id);
-            $bill->total_sale = Yii::$app->warehouseService->bill->sumSalePrice($bill_id);
-            $bill->total_market = Yii::$app->warehouseService->bill->sumMarketPrice($bill_id);
-            $bill->save();
 
-            //更新库存表商品状态为库存
-            WarehouseGoods::updateAll(['goods_status'=>GoodsStatusEnum::IN_STOCK],['goods_id'=>$billGoods->goods_id]);
+            //更新库存金重
+            $adjust_weight = $billGoods->gold_weight;
+            $res = Yii::$app->warehouseService->goldO->updateGoldWeight($billGoods->gold_sn, $adjust_weight);
+            if($res['status'] == false){
+                return ResultHelper::json(404, $res['msg']);
+            }
+            //删除
+            if(false === $billGoods->delete()){
+                throw new \Exception($this->getError($billGoods));
+            }
+            //更新单据数量和金额
+            \Yii::$app->warehouseService->goldBill->goldBillSummary($bill_id);
             $trans->commit();
-            return $this->message("删除成功", $this->redirect(['bill-c-goods/index','bill_id'=>$bill_id]));
+            return $this->message("删除成功", $this->redirect(['gold-bill-o-goods/index','bill_id'=>$bill_id]));
         }catch (\Exception $e){
             $trans->rollBack();
-            return $this->message($e->getMessage(), $this->redirect(['bill-c-goods/index','bill_id'=>$bill_id]), 'error');
+            return $this->message($e->getMessage(), $this->redirect(['gold-bill-o-goods/index','bill_id'=>$bill_id]), 'error');
         }
     }
+
+
+
 
 }

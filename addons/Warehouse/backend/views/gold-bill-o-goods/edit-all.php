@@ -27,7 +27,7 @@ $this->params['breadcrumbs'][] = $this->title;
         if($bill->bill_status == \addons\Warehouse\common\enums\BillStatusEnum::SAVE) {
             echo Html::edit(['edit-all', 'bill_id' => $bill->id,'scan'=>1], '商品扫码添加', ['class'=>'btn btn-success btn-xs']);
             echo '&nbsp;';
-            echo Html::a('返回列表', ['bill-c-goods/index', 'bill_id' => $bill->id], ['class' => 'btn btn-info btn-xs']);
+            echo Html::a('返回列表', ['gold-bill-o-goods/index', 'bill_id' => $bill->id], ['class' => 'btn btn-info btn-xs']);
         }
         ?>
     </div>
@@ -122,7 +122,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             ],
                             [
                                 'attribute' => 'gold_name',
-                                'filter' => true,
+                                'filter' => false,
                                 'headerOptions' => ['class' => 'col-md-2'],
                             ],
                             [
@@ -134,6 +134,16 @@ $this->params['breadcrumbs'][] = $this->title;
                                     return Html::ajaxInput('gold_weight', $model->gold_weight);
                                 },
                                 'format' => 'raw',
+                            ],
+                            [
+                                'attribute' => 'gold_price',
+                                'filter' => false,
+                                'headerOptions' => ['class' => 'col-md-2'],
+                            ],
+                            [
+                                'attribute' => 'cost_price',
+                                'filter' => false,
+                                'headerOptions' => ['class' => 'col-md-2'],
                             ],
                             [
                                 'class' => 'yii\grid\ActionColumn',

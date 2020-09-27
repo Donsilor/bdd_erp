@@ -97,12 +97,26 @@ $params = $params ? "&".http_build_query($params) : '';
                             'headerOptions' => ['width'=>'100'],
                         ],*/
                         [
+                            'attribute'=>'gold_price',
+                            'filter' => Html::activeTextInput($searchModel, 'gold_price', [
+                                'class' => 'form-control',
+                            ]),
+                            'headerOptions' => ['width' => '120'],
+                        ],
+                        [
                             'attribute'=>'first_weight',
                             'filter' => Html::activeTextInput($searchModel, 'first_weight', [
                                 'class' => 'form-control',
                             ]),
                             'headerOptions' => ['width'=>'100'],
                             'contentOptions' => ['style'=>'color:green'],
+                        ],
+                        [
+                            'attribute'=>'first_cost_price',
+                            'filter' => Html::activeTextInput($searchModel, 'first_cost_price', [
+                                'class' => 'form-control',
+                            ]),
+                            'headerOptions' => ['width' => '120'],
                         ],
                         [
                             'attribute'=>'gold_weight',
@@ -112,13 +126,7 @@ $params = $params ? "&".http_build_query($params) : '';
                             'headerOptions' => ['width'=>'100'],
                             'contentOptions' => ['style'=>'color:red'],
                         ],
-                        [
-                            'attribute'=>'gold_price',
-                            'filter' => Html::activeTextInput($searchModel, 'gold_price', [
-                                'class' => 'form-control',
-                            ]),
-                            'headerOptions' => ['width' => '120'],
-                        ],
+
                         [
                             'attribute'=>'cost_price',
                             'filter' => Html::activeTextInput($searchModel, 'cost_price', [

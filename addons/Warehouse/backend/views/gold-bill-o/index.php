@@ -188,7 +188,7 @@ $params = $params ? "&".http_build_query($params) : '';
                             'class' => 'yii\grid\ActionColumn',
                             'header' => '操作',
                             'contentOptions' => ['style' => ['white-space' => 'nowrap']],
-                            'template' => '{edit} {apply} {audit} {goods} {cancel} {delete}',
+                            'template' => '{edit} {apply} {audit} {goods} {cancel}',
                             'buttons' => [
                                 'edit' => function($url, $model, $key){
                                     if($model->bill_status == BillStatusEnum::SAVE) {
@@ -216,7 +216,7 @@ $params = $params ? "&".http_build_query($params) : '';
                                     }
                                 },
                                 'goods' => function($url, $model, $key){
-                                    return Html::a('明细', ['bill-c-goods/index', 'bill_id' => $model->id,'returnUrl'=>Url::getReturnUrl()], ['class' => 'btn btn-info btn-sm']);
+                                    return Html::a('明细', ['gold-bill-o-goods/index', 'bill_id' => $model->id,'returnUrl'=>Url::getReturnUrl()], ['class' => 'btn btn-info btn-sm']);
                                 },
                                 /*'status' => function($url, $model, $key){
                                     return Html::status($model->status);

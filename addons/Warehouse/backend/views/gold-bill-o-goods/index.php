@@ -11,7 +11,7 @@ use yii\web\View;
 /* @var $this yii\web\View */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = Yii::t('bill_b_goods', '退货返厂单明细');
+$this->title = Yii::t('bill_b_goods', '其他出库单明细');
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 
@@ -73,6 +73,17 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'headerOptions' => ['class' => 'col-md-1'],
                             ],
                             [
+                                'attribute' => 'gold_type',
+                                'value' => function($model){
+                                    return Yii::$app->attr->valueName($model->gold_type) ?? "";
+                                },
+                                'filter' => Html::activeDropDownList($searchModel, 'gold_type',Yii::$app->attr->valueMap(\addons\Style\common\enums\AttrIdEnum::MAT_GOLD_TYPE), [
+                                    'prompt' => '全部',
+                                    'class' => 'form-control',
+                                ]),
+                                'headerOptions' => ['class' => 'col-md-2'],
+                            ],
+                            [
                                 'attribute' => 'style_sn',
                                 'headerOptions' => ['class' => 'col-md-1'],
                                 'filter' => true,
@@ -87,7 +98,11 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'attribute' => 'gold_weight',
                                 'filter' => false,
                             ],
-
+                            [
+                                'attribute' => 'gold_price',
+                                'visible' => \common\helpers\Auth::verify(\common\enums\SpecialAuthEnum::VIEW_CAIGOU_PRICE),
+                                'filter' => false,
+                            ],
                             [
                                 'attribute' => 'cost_price',
                                 'visible' => \common\helpers\Auth::verify(\common\enums\SpecialAuthEnum::VIEW_CAIGOU_PRICE),

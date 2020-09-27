@@ -14,6 +14,7 @@ use addons\Warehouse\common\forms\WarehouseBillCForm;
 use addons\Warehouse\common\forms\WarehouseGoldBillOForm;
 use addons\Warehouse\common\models\Warehouse;
 use addons\Warehouse\common\models\WarehouseBillGoods;
+use addons\Warehouse\common\models\WarehouseGoldBill;
 use addons\Warehouse\common\models\WarehouseGoods;
 use common\helpers\ArrayHelper;
 use common\helpers\PageHelper;
@@ -183,11 +184,11 @@ class GoldBillOController extends BaseController
     public function actionAjaxApply($id){
         
         $id = \Yii::$app->request->get('id');        
-        $model = $this->findModel($id) ?? new WarehouseBillCForm();
+        $model = $this->findModel($id) ?? new WarehouseGoldBillOForm();
         if($model->bill_status != BillStatusEnum::SAVE){
             return $this->message('单据不是保存状态', $this->redirect(\Yii::$app->request->referrer), 'error');
         }
-        if($model->goods_num<=0){
+        if($model->total_weight<=0){
             return $this->message('单据明细不能为空', $this->redirect(\Yii::$app->request->referrer), 'error');
         }        
         try{
@@ -201,11 +202,12 @@ class GoldBillOController extends BaseController
             //日志
             $log = [
                 'bill_id' => $model->id,
+                'bill_status' => $model->bill_status,
                 'log_type' => LogTypeEnum::ARTIFICIAL,
                 'log_module' => '提交审核',
                 'log_msg' => "其它出库单申请审核"
             ];
-            \Yii::$app->warehouseService->billLog->createBillLog($log);
+            \Yii::$app->warehouseService->goldBillLog->createGoldBillLog($log);
             $trans->commit();
             return $this->message('操作成功', $this->redirect(\Yii::$app->request->referrer), 'success');
 
@@ -239,19 +241,28 @@ class GoldBillOController extends BaseController
                 $model->audit_time = time();
                 $model->auditor_id = \Yii::$app->user->identity->getId();
 
-                \Yii::$app->warehouseService->billC->auditBillC($model);
-
+                if($model->bill_status != BillStatusEnum::PENDING) {
+                    throw new \Exception("单据不是待审核状态");
+                }
+                if($model->audit_status == AuditStatusEnum::PASS){
+                    $model->bill_status = BillStatusEnum::CONFIRM;
+                }else{
+                    $model->bill_status = BillStatusEnum::SAVE;
+                }
+                if(false === $model->save()) {
+                    throw new \Exception($this->getError($model));
+                }
                 //日志
                 $log = [
                     'bill_id' => $model->id,
+                    'bill_status' => $model->bill_status,
                     'log_type' => LogTypeEnum::ARTIFICIAL,
                     'log_module' => '其它出库单',
                     'log_msg' => "其它出库单审核, 审核状态：".AuditStatusEnum::getValue($model->audit_status).",审核备注：".$model->audit_remark
                 ];
-                \Yii::$app->warehouseService->billLog->createBillLog($log);
+                \Yii::$app->warehouseService->goldBillLog->createGoldBillLog($log);
 
                 $trans->commit();
-
                 $this->message('操作成功', $this->redirect(Yii::$app->request->referrer), 'success');
             }catch(\Exception $e){
                 $trans->rollBack();
@@ -272,15 +283,14 @@ class GoldBillOController extends BaseController
      */
     public function actionCancel($id)
     {
-        $this->modelClass = WarehouseBill::class;
         if (!($model = $this->modelClass::findOne($id))) {
             return $this->message("找不到数据", $this->redirect(Yii::$app->request->referrer), 'error');
         }        
         try{
             $trans = \Yii::$app->trans->beginTransaction();
 
-            \Yii::$app->warehouseService->billC->cancelBillC($model);
-            
+            \Yii::$app->warehouseService->goldO->cancelBillO($model);
+
             $trans->commit();
             $this->message('操作成功', $this->redirect(Yii::$app->request->referrer), 'success');
         }catch (\Exception $e){
@@ -297,13 +307,12 @@ class GoldBillOController extends BaseController
      */
     public function actionDelete($id)
     {
-        $this->modelClass = WarehouseBill::class;
         if (!($model = $this->modelClass::findOne($id))) {
             return $this->message("找不到数据", $this->redirect(Yii::$app->request->referrer), 'error');
         }
         try{
             $trans = \Yii::$app->trans->beginTransaction();
-            \Yii::$app->warehouseService->billC->deleteBillC($model);            
+            \Yii::$app->warehouseService->goldO->deleteBillO($model);
             $trans->commit();
             $this->message('操作成功', $this->redirect(Yii::$app->request->referrer), 'success');
         }catch (\Exception $e){
