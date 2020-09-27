@@ -945,7 +945,7 @@ class WarehouseBillTService extends Service
             $cost_price = 0;
             if (bccomp($cost_amount, 0, 5) > 0) {
                 $is_auto_price = ConfirmEnum::YES;
-                //$cost_price = bcdiv(bcsub($cost_amount, $templet_fee, 3), $goods_num, 3);//单价成本价=(成本总额-版费)/数量
+                $cost_price = bcdiv(bcsub($cost_amount, $templet_fee, 3), $goods_num, 3);//单价成本价=(成本总额-版费)/数量
             }
             $markup_rate = $form->formatValue($goods['markup_rate'], 1) ?? 1;//倍率
             $remark = $goods['remark'] ?? "";//货品备注
