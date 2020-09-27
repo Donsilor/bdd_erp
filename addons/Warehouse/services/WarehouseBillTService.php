@@ -1568,6 +1568,7 @@ class WarehouseBillTService extends Service
             $cost_price = bcadd($cost_price, $this->calculatePartsAmount($form), 5);
         }
         $cost_price = bcadd($cost_price, $this->calculateTotalGongFee($form), 5);
+        $cost_price = bcdiv($cost_price, $form->goods_num, 5);
         return sprintf("%.3f", $cost_price) ?? 0;
     }
 
