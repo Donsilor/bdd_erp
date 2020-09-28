@@ -42,6 +42,14 @@ $params = $params ? "&" . http_build_query($params) : '';
             echo Html::edit(['edit-all', 'bill_id' => $bill->id], '编辑货品', ['class' => 'btn btn-info btn-xs']);
             echo '&nbsp;';
         }
+        if ($bill->bill_status == \addons\Warehouse\common\enums\BillStatusEnum::SAVE) {
+            echo Html::create(['pay', 'bill_id' => $bill->id], '创建结算信息', [
+                'class' => 'btn btn-primary btn-xs openIframe',
+                'data-width' => '90%',
+                'data-height' => '90%',
+                'data-offset' => '20px',
+            ]);
+        }
         echo Html::a('单据打印', ['bill-t/print', 'id' => $bill->id], ['target' => '_blank', 'class' => 'btn btn-info btn-xs',]);
         //, 'onclick' => 'rfTwiceAffirm(this,"打印单据", "确定打印吗？");return false;'
         echo '&nbsp;';
