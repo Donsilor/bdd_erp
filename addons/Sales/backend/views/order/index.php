@@ -23,6 +23,11 @@ $this->params['breadcrumbs'][] = $this->title;
                         'data-toggle' => 'modal',
                         'data-target' => '#ajaxModalLg',
                     ]); ?>
+                    <?= Html::create(['ajax-import-k'], '批量导入', [
+                        //'class'=>'btn btn-success btn-xs',
+                        'data-toggle' => 'modal',
+                        'data-target' => '#ajaxModal',
+                    ]); ?>
                     <?= Html::button('导出', [
                         'class'=>'btn btn-success btn-xs',
                         'onclick' => 'batchExport()',

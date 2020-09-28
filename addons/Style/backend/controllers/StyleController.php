@@ -94,45 +94,58 @@ class StyleController extends BaseController
         $id = Yii::$app->request->get('id');
         $model = $this->findModel($id);
         $model = $model ?? new Style();
+        $isNewRecord = $model->isNewRecord;
         // ajax 校验
         $this->activeFormValidate($model);
+        $oldinfo = $model->toArray();
         if ($model->load(Yii::$app->request->post())) {
-            //重新编辑后，审核状态改为未审核
-            $model->audit_status = AuditStatusEnum::SAVE;
-
-            if($model->isNewRecord){                
+            //重新编辑后，审核状态改为待审核
+            if($isNewRecord){ 
+                $model->audit_status = AuditStatusEnum::SAVE;
                 $model->creator_id = \Yii::$app->user->id;
+            }else{
+                $model->audit_status = AuditStatusEnum::PENDING;
             }
-            if($model->type) {
-                $model->is_inlay = $model->type->is_inlay;
-            }
-            $isNewRecord = $model->isNewRecord;
+            $model->is_inlay = $model->type->is_inlay ?? 0;         
             try{                
                 $trans = Yii::$app->trans->beginTransaction();
                 if(false === $model->save()) {
                     throw new \Exception($this->getError($model));
                 }
-                //自动创建款号
-                if($isNewRecord && trim($model->style_sn) == "") {
-                    Yii::$app->styleService->style->createStyleSn($model);                    
+                //创建款号
+                if($isNewRecord === true) {
+                    if($model->style_sn != '') {
+                        Yii::$app->styleService->style->createStyleSort($model);
+                    }else {
+                        Yii::$app->styleService->style->createStyleSn($model);
+                    }                    
+                }else if($model->audit_status != AuditStatusEnum::PASS){
+                    if($model->is_autosn == 1) {
+                        if($oldinfo['style_channel_id'] != $model->style_channel_id || $oldinfo['style_sex'] != $model->style_sex || $oldinfo['style_cate_id'] != $model->style_cate_id || $oldinfo['style_material'] != $model->style_material) {
+                            Yii::$app->styleService->style->createStyleSn($model);
+                        }
+                    }else {
+                       Yii::$app->styleService->style->createStyleSort($model);
+                    }
                 }
-                //创建自定义属性值
-                $command = \Yii::$app->db->createCommand("call sp_create_style_attributes(" . $model->id . ");");
-                $command->execute();
-                //镶嵌类(创建一条主石信息)
-                if ($model->is_inlay) {
-                    $styleForm = new StyleForm();
-                    $stoneM = new StyleStone();
-                    $stone = [
-                        'style_id' => $model->id,
-                        'position' => StonePositionEnum::MAIN_STONE,
-                        'stone_type' => $styleForm->getStoneTypeByProduct($model),
-                        'creator_id' => \Yii::$app->user->identity->getId(),
-                        'created_at' => time(),
-                    ];
-                    $stoneM->attributes = $stone;
-                    if (false === $stoneM->save()) {
-                        throw new \Exception($this->getError($stoneM));
+                if($isNewRecord === true) { 
+                    //创建自定义属性值
+                    $command = \Yii::$app->db->createCommand("call sp_create_style_attributes(" . $model->id . ");");
+                    $command->execute();
+                    //镶嵌类(创建一条主石信息)
+                    if ($model->is_inlay) {
+                        $stoneM = new StyleStone();
+                        $stone = [
+                            'style_id' => $model->id,
+                            'position' => StonePositionEnum::MAIN_STONE,
+                            'stone_type' => StyleForm::getStoneTypeByProduct($model),
+                            'creator_id' => \Yii::$app->user->identity->getId(),
+                            'created_at' => time(),
+                        ];
+                        $stoneM->attributes = $stone;
+                        if (false === $stoneM->save()) {
+                            throw new \Exception($this->getError($stoneM));
+                        }
                     }
                 }
                 $trans->commit();
@@ -177,11 +190,9 @@ class StyleController extends BaseController
                 $model->file = UploadedFile::getInstance($model, 'file');
                 \Yii::$app->styleService->style->uploadStyles($model);
                 $trans->commit();
-                \Yii::$app->getSession()->setFlash('success', '保存成功');
-                return $this->redirect(\Yii::$app->request->referrer);
+                return $this->message("保存成功", $this->redirect(\Yii::$app->request->referrer), 'success');
             } catch (\Exception $e) {
                 $trans->rollBack();
-                //var_dump($e->getTraceAsString());die;
                 return $this->message($e->getMessage(), $this->redirect(\Yii::$app->request->referrer), 'error');
             }
         }
@@ -298,8 +309,6 @@ class StyleController extends BaseController
             'current_detail_id'=> $current_detail_id
         ]);
     }
-
-
     /**
      * 删除
      *
@@ -333,12 +342,33 @@ class StyleController extends BaseController
             }
 
             $trans->commit();
-            return $this->message("删除成功", $this->redirect(['index']));
+            return $this->message("操作成功". $e->getMessage(),  $this->redirect(Yii::$app->request->referrer), 'success');
         }catch (\Exception $e){
             $trans->rollBack();
-            return $this->message("删除失败:". $e->getMessage(),  $this->redirect(Yii::$app->request->referrer), 'error');
+            return $this->message($e->getMessage(),  $this->redirect(Yii::$app->request->referrer), 'error');
         }
-
-        return $this->message("删除失败", $this->redirect(['index']), 'error');
+    }
+    /**
+     * 作废
+     * @param $id
+     * @return mixed
+     * @throws \Throwable
+     */
+    public function actionDestroy($id)
+    {
+        $model = $this->findModel($id);
+        try{            
+            //$trans = Yii::$app->trans->beginTransaction();
+            $model->status = StatusEnum::DELETE;     
+            $model->audit_status = AuditStatusEnum::DESTORY;
+            if(false === $model->save()){
+                throw new \Exception($this->getError($model));
+            }
+            //$trans->commit();
+            return $this->message("操作成功",  $this->redirect(Yii::$app->request->referrer), 'success');
+        }catch (\Exception $e){
+           // $trans->rollBack();
+            return $this->message($e->getMessage(),  $this->redirect(Yii::$app->request->referrer), 'error');
+        }        
     }
 }

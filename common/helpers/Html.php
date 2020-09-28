@@ -65,7 +65,23 @@ class Html extends BaseHtml
 
         return self::a($content, $url, $options);
     }
-
+    /**
+     * 作废
+     *
+     * @param $url
+     * @param array $options
+     * @return string
+     */
+    public static function destory(array $url, $content = '作废', $options = [])
+    {
+        $options = ArrayHelper::merge([
+                'class' => 'btn btn-danger btn-sm',
+                'onclick' => "rfDestory(this);return false;"
+        ], $options);
+        
+        return self::a($content, $url, $options);
+    }
+    
     /**
      * 普通按钮
      *

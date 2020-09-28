@@ -6,6 +6,7 @@ use yii\grid\GridView;
 use common\helpers\ImageHelper;
 use common\enums\AuditStatusEnum;
 use kartik\daterange\DateRangePicker;
+use common\enums\StatusEnum;
 
 /* @var $this yii\web\View */
 /* @var $dataProvider yii\data\ActiveDataProvider */
@@ -138,29 +139,6 @@ $this->params['breadcrumbs'][] = $this->title;
                             'format' => 'raw',
                             'headerOptions' => ['width' => '100'],
                         ],
-//                        [
-//                            'attribute' => 'is_autosn',
-//                            'value' => function ($model) {
-//                                return \common\enums\AutoSnEnum::getValue($model->is_autosn);
-//                            },
-//                            'filter' => Html::activeDropDownList($searchModel, 'is_autosn', \common\enums\AutoSnEnum::getMap(), [
-//                                'prompt' => '全部',
-//                                'class' => 'form-control',
-//                                'style' => 'width:100px'
-//                            ]),
-//                            'format' => 'raw',
-//                            'headerOptions' => ['width' => '100'],
-//                        ],
-//                        [
-//                            'attribute' => 'goods_num',
-//                            'value' => "goods_num",
-//                            'filter' => Html::activeTextInput($searchModel, 'goods_num', [
-//                                'class' => 'form-control',
-//                                'style' => 'width:80px'
-//                            ]),
-//                            'format' => 'raw',
-//                            'headerOptions' => ['width' => '80'],
-//                        ],
                         [
                             'attribute' => 'audit_status',
                             'value' => function ($model) {
@@ -176,15 +154,6 @@ $this->params['breadcrumbs'][] = $this->title;
                             'format' => 'raw',
                             'headerOptions' => ['width' => '100'],
                         ],
-//            [
-//                'attribute' => 'creator_id',
-//                'value' => 'creator.username',
-//                'headerOptions' => ['class' => 'col-md-1'],
-//                'filter' => Html::activeTextInput($searchModel, 'creator.username', [
-//                    'class' => 'form-control',
-//                    'style'=> 'width:100px;'
-//                ]),
-//            ],
                         [
                             'attribute' => 'creator_id',
                             'value' => "creator.username",
@@ -229,9 +198,13 @@ $this->params['breadcrumbs'][] = $this->title;
                         [
                             'attribute' => 'status',
                             'value' => function ($model) {
-                                return \common\enums\StatusEnum::getValue($model->status);
+                                 $str = \common\enums\StatusEnum::getValue($model->status,'getDestroyMap');
+                                 if($model->status == StatusEnum::DELETE) {
+                                     $str = "<font color='red'>".$str."</font>";
+                                 }
+                                 return $str;
                             },
-                            'filter' => Html::activeDropDownList($searchModel, 'status', \common\enums\StatusEnum::getMap(), [
+                            'filter' => Html::activeDropDownList($searchModel, 'status', \common\enums\StatusEnum::getDestroyMap(), [
                                 'prompt' => '全部',
                                 'class' => 'form-control',
                                 'style' => 'width:80px'
@@ -242,9 +215,9 @@ $this->params['breadcrumbs'][] = $this->title;
                         [
                             'class' => 'yii\grid\ActionColumn',
                             'header' => '操作',
-                            'template' => '{edit} {image} {ajax-apply} {audit} {status} {delete}',
+                            'template' => '{attribute} {image} {apply} {audit} {status} {delete} {destroy}',
                             'buttons' => [
-                                'edit' => function ($url, $model, $key) {
+                                'attribute' => function ($url, $model, $key) {
                                     return Html::edit(['style-attribute/edit', 'style_id' => $model->id, 'returnUrl' => Url::getReturnUrl()], '属性', [
                                         'class' => 'btn btn-primary btn-sm openIframe',
                                         'data-width' => '90%',
@@ -259,7 +232,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                         'data-target' => '#ajaxModalLg',
                                     ]);
                                 },
-                                'ajax-apply' => function ($url, $model, $key) {
+                                'apply' => function ($url, $model, $key) {
                                     if ($model->audit_status == AuditStatusEnum::SAVE) {
                                         return Html::edit(['ajax-apply', 'id' => $model->id], '提审', [
                                             'class' => 'btn btn-success btn-sm',
@@ -284,7 +257,14 @@ $this->params['breadcrumbs'][] = $this->title;
                                     }
                                 },
                                 'delete' => function ($url, $model, $key) {
-                                    return Html::delete(['delete', 'id' => $model->id]);
+                                    if($model->audit_status == AuditStatusEnum::SAVE) {
+                                        return Html::delete(['delete', 'id' => $model->id]);
+                                    }
+                                },
+                                'destroy' => function ($url, $model, $key) {
+                                    if($model->audit_status == AuditStatusEnum::PASS) {
+                                        return Html::destory(['destroy', 'id' => $model->id],'作废');
+                                    }
                                 },
                             ]
                         ]
@@ -295,59 +275,3 @@ $this->params['breadcrumbs'][] = $this->title;
         </div>
     </div>
 </div>
-<script type="text/javascript">
-    /**
-     * 一键粘贴
-     * @param  {String} id [需要粘贴的内容]
-     * @param  {String} attr [需要 copy 的属性，默认是 innerText，主要用途例如赋值 a 标签上的 href 链接]
-     *
-     * range + selection
-     *
-     * 1.创建一个 range
-     * 2.把内容放入 range
-     * 3.把 range 放入 selection
-     *
-     * 注意：参数 attr 不能是自定义属性
-     * 注意：对于 user-select: none 的元素无效
-     * 注意：当 id 为 false 且 attr 不会空，会直接复制 attr 的内容
-     */
-    function copy (id, attr = null) {
-        let target = null;
-        if (attr) {
-            target = document.createElement('div');
-            target.id = 'tempTarget';
-            target.style.opacity = '0';
-            if (id) {
-                let curNode = document.querySelector('#' + id);
-                target.innerText = curNode[attr];
-            } else {
-                target.innerText = attr;
-            }
-            document.body.appendChild(target);
-        } else {
-            target = document.querySelector('#' + id);
-        }
-
-        try {
-            let range = document.createRange();
-            range.selectNode(target);
-            window.getSelection().removeAllRanges();
-            window.getSelection().addRange(range);
-            document.execCommand('copy');
-            window.getSelection().removeAllRanges();
-            rfMsg('复制成功');
-            console.log('复制成功')
-        } catch (e) {
-            console.log('复制失败')
-        }
-
-        if (attr) {
-            // remove temp target
-            target.parentElement.removeChild(target);
-        }
-    }
-
-    function cleardd() {
-        $('#select select').prop('selectedIndex', 0);
-    }
-</script>

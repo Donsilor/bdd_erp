@@ -379,7 +379,7 @@ class StyleForm extends Style
      * @param StyleForm $form
      * @return int
      */
-    public function getStoneTypeByProduct($form)
+    public static function getStoneTypeByProduct($form)
     {
         $stone = Yii::$app->attr->valueMap(\addons\Style\common\enums\AttrIdEnum::MAIN_STONE_TYPE, $key = 'name', $value = "id", $language = null,true);
         $type = $form->type->name ?? 0;

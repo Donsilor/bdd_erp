@@ -589,7 +589,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     ]); ?>
                 </div>
                 <div class="box-footer">
-                    <div class="col-lg-12">
+                    <div class="col-lg-12" style="margin-top:15px">
                         <div class="row">
                             <div class="col-lg-8 text-right"><label><?= $model->getAttributeLabel('goods_num') ?>：</label></div>
                             <div class="col-lg-4"><?= $model->goods_num ?></div>

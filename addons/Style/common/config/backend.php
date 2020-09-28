@@ -136,6 +136,7 @@ return [
                        'child' =>[
                                ['title' => '新增/编辑','name'  => 'style/ajax-edit'],
                                ['title' => '删除','name'  => 'style/delete'],
+                               ['title' => '作废','name'  => 'style/destory'],
                                ['title' => '启用/禁用','name'  => 'style/ajax-update'],
                                ['title' => '提交审核','name'  => 'style/ajax-apply'],                           
                                ['title' => '审核','name'  => 'style/ajax-audit'],                           

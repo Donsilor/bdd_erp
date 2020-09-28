@@ -71,17 +71,41 @@ class StyleService extends Service
     {
         return StyleAttribute::find()->where(['style_id' => $style_id])->asArray()->all();
     }
-
+    /**
+     * 创建款式排序
+     * @param unknown $model
+     * @param string $save
+     * @return unknown
+     */
+    public function createStyleSort(& $model, $save = true)
+    {    
+         if(!$model->style_sn) {
+             throw new \Exception("款号不能为空");
+         }
+         if(strlen($model->style_sn) != 9 ){
+             throw new \Exception("款号编码错误,需要9位字符");
+         }         
+         $sort = substr($model->style_sn, 2,strlen($model->style_sn)-3);
+         $model->style_sort = $sort/1;
+         
+         if($save === true) {
+             $result = $model->save(true, ['id','style_sn','style_sort']);
+             if ($result === false) {
+                 throw new \Exception("编款失败：保存款号失败");
+             }
+         }         
+         return $model->style_sort;
+    }
     /**
      * 创建款式编号
      * @param Style $model
      * @throws
      */
-    public static function createStyleSn($model, $save = true)
+    public function createStyleSn(& $model, $save = true)
     {
         if (!$model->id) {
             throw new \Exception("编款失败：款式ID不能为空");
-        }
+        }        
         $channel_tag = $model->channel->tag ?? null;
         if (empty($channel_tag)) {
             throw new \Exception("编款失败：款式渠道未配置编码规则");
@@ -100,16 +124,42 @@ class StyleService extends Service
         } else {
             $prefix .= $cate_w;
         }
+        if ($model->style_sn && strpos($model->style_sn, $prefix) !== false) {
+            if(strlen($model->style_sn) == 9){
+                $sort = substr($model->style_sn, 2,strlen($model->style_sn)-3)/1;
+            }else{
+                //不足9位数的不处理
+                return ;
+            }            
+        }else {
+            //款号分组排序生成        
+            $sort = Style::find()->where(['style_channel_id'=>$model->style_channel_id,'style_cate_id'=>$model->style_cate_id])->andWhere(['<>','id',$model->id])->max("style_sort");
+            $sort = $sort > 0 ? $sort +1 : 200;
+            $sortArray = Style::find()->select(['style_sort'])->where(['style_channel_id'=>$model->style_channel_id,'style_cate_id'=>$model->style_cate_id,'is_autosn'=>0])->andWhere(['>','style_sort',0])->orderBy("style_sort asc")->asArray()->all();
+            if(!empty($sortArray)) {
+                foreach ($sortArray as $k=>$v) {
+                     $current = $v['style_sort'];                
+                     if($current < $sort) {
+                         $sort = $current + 1;
+                     }else if($current == $sort) {
+                         $sort = $sort + 1;
+                     }else{
+                         break;
+                     }
+                 }
+            }
+        }
+        $model->style_sort = $sort;
         //3.中间部分
-        $middle = str_pad($model->id, 6, '0', STR_PAD_LEFT);
+        $middle = str_pad($model->style_sort, 6, '0', STR_PAD_LEFT);
         //4.结尾部分-金属材质
         $last = $model->style_material;
         $model->style_sn = $prefix . $middle . $last;
         if ($save === true) {
             $model->is_autosn = AutoSnEnum::YES;
-            $result = $model->save(true, ['id', 'style_sn', 'is_autosn']);
+            $result = $model->save(true, ['id', 'style_sn','style_sort', 'is_autosn']);
             if ($result === false) {
-                throw new \Exception("编款失败：保存款号失败");
+                throw new \Exception("更新款号失败：".$this->getError($model));
             }
         }
         return $model->style_sn;
@@ -218,22 +268,27 @@ class StyleService extends Service
             $style_name = $form->formatValue($style['style_name'] ?? "", "");
             $style_sn = $form->formatValue($style['style_sn'] ?? "", "");
             if (!empty($style_sn)) {
-                if ($key = array_search($style_sn, $style_sns)) {
+                if(strlen($style_sn) != 9) {
                     $flag = false;
-                    $error[$i][] = "款号与第" . ($key + 1) . "行款号重复";
+                    $error[$i][] = "款式编码错误，必须9位字符";
+                }else{
+                    if ($key = array_search($style_sn, $style_sns)) {
+                        $flag = false;
+                        $error[$i][] = "款号与第" . ($key + 1) . "行款号重复";
+                    }
+                    $style_sns[$i] = $style_sn;
+    
+                    $styleModel = Style::findOne(['style_sn' => $style_sn]);
+                    if (!empty($styleModel)) {
+                        $flag = false;
+                        $error[$i][] = "款号在系统已存在，不能重复";
+                    }                    
                 }
-                $style_sns[$i] = $style_sn;
-
-                $styleModel = Style::findOne(['style_sn' => $style_sn]);
-                if (!empty($styleModel)) {
-                    $flag = false;
-                    $error[$i][] = "款号在系统已存在，不能重复";
-                }
-                $is_autosn = ConfirmEnum::NO;
+                $is_autosn = AutoSnEnum::NO;
             } else {
                 $flag = false;
                 $error[$i][] = "款号不能为空";
-                $is_autosn = ConfirmEnum::YES;
+                $is_autosn = AutoSnEnum::YES;
             }
             $styleAttr = $this->extendAttrByStyleSn($style_sn);//款号获取款式属性
             $style_cate_id = $form->formatValue($style['style_cate_id'] ?? 0, 0);
@@ -464,6 +519,7 @@ class StyleService extends Service
             $styleM = new StyleForm();
             $styleM->id = rand(1000000000, 9999999999);
             $styleM->setAttributes($styleInfo);
+            $styleM->style_sort = $this->createStyleSort($styleM,false);
             if (!$styleM->validate()) {
                 $flag = false;
                 $error[$i][] = $this->getError($styleM);
