@@ -57,7 +57,7 @@ $params = $params ? "&".http_build_query($params) : '';
                             'attribute'=>'gold_sn',
                             'format' => 'raw',
                             'value'=>function($model) {
-                                return Html::a($model->gold_sn, ['view', 'id' => $model->id,'returnUrl'=>Url::getReturnUrl()], ['class'=>'openContab','style'=>"text-decoration:underline;color:#3c8dbc"]);
+                                return Html::a($model->gold_sn, ['view', 'id' => $model->id,'returnUrl'=>Url::getReturnUrl()], ['class'=>'openContab','style'=>"text-decoration:underline;color:#3c8dbc",'id'=>"goods_".$model->gold_sn]).' <i class="fa fa-copy" onclick="copy(\''. "goods_".$model->gold_sn .'\')"></i>';
                             },
                             'filter' => Html::activeTextInput($searchModel, 'gold_sn', [
                                 'class' => 'form-control',
@@ -97,12 +97,26 @@ $params = $params ? "&".http_build_query($params) : '';
                             'headerOptions' => ['width'=>'100'],
                         ],*/
                         [
+                            'attribute'=>'gold_price',
+                            'filter' => Html::activeTextInput($searchModel, 'gold_price', [
+                                'class' => 'form-control',
+                            ]),
+                            'headerOptions' => ['width' => '120'],
+                        ],
+                        [
                             'attribute'=>'first_weight',
                             'filter' => Html::activeTextInput($searchModel, 'first_weight', [
                                 'class' => 'form-control',
                             ]),
                             'headerOptions' => ['width'=>'100'],
                             'contentOptions' => ['style'=>'color:green'],
+                        ],
+                        [
+                            'attribute'=>'first_cost_price',
+                            'filter' => Html::activeTextInput($searchModel, 'first_cost_price', [
+                                'class' => 'form-control',
+                            ]),
+                            'headerOptions' => ['width' => '120'],
                         ],
                         [
                             'attribute'=>'gold_weight',
@@ -112,13 +126,7 @@ $params = $params ? "&".http_build_query($params) : '';
                             'headerOptions' => ['width'=>'100'],
                             'contentOptions' => ['style'=>'color:red'],
                         ],
-                        [
-                            'attribute'=>'gold_price',
-                            'filter' => Html::activeTextInput($searchModel, 'gold_price', [
-                                'class' => 'form-control',
-                            ]),
-                            'headerOptions' => ['width' => '120'],
-                        ],
+
                         [
                             'attribute'=>'cost_price',
                             'filter' => Html::activeTextInput($searchModel, 'cost_price', [
@@ -126,13 +134,7 @@ $params = $params ? "&".http_build_query($params) : '';
                             ]),
                             'headerOptions' => ['width' => '120'],
                         ],
-                        [
-                            'attribute'=>'incl_tax_price',
-                            'filter' => Html::activeTextInput($searchModel, 'incl_tax_price', [
-                                'class' => 'form-control',
-                            ]),
-                            'headerOptions' => ['width' => '120'],
-                        ],
+
                         /*[
                             'attribute' => 'remark',
                             //'filter' => Html::activeTextInput($searchModel, 'remark', [
@@ -202,7 +204,7 @@ $params = $params ? "&".http_build_query($params) : '';
                                 ],
                             ]),
                             'value'=>function($model){
-                                return Yii::$app->formatter->asDatetime($model->created_at);
+                                return Yii::$app->formatter->asDate($model->created_at);
                             }
                         ],
                         [

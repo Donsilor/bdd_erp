@@ -64,7 +64,26 @@ class StyleImageController extends BaseController
         ]);
     }
 
+    /**
+     * 删除
+     *
+     * @param $id
+     * @return mixed
+     * @throws \Throwable
+     * @throws \yii\db\StaleObjectException
+     */
+    public function actionDelete($id)
+    {
+        $model = $this->findModel($id);
+        if ($this->findModel($id)->delete()) {
 
+            $style = Style::find()->where(['id'=>$model->style_id])->one();
+            Yii::$app->styleService->style->updateStyleImage($style);
+            return $this->message("删除成功", $this->redirect(['index','style_id'=>$model->style_id]));
+        }
+
+        return $this->message("删除失败", $this->redirect(['index','style_id'=>$model->style_id]), 'error');
+    }
 
     public function actionGetPosition(){
         $type = Yii::$app->request->post('type');
@@ -81,6 +100,9 @@ class StyleImageController extends BaseController
         // ajax 校验
         $this->activeFormValidate($model);
         if ($model->load(Yii::$app->request->post())) {
+            if(!$model->validate()) {
+                return $this->message($this->getError($model), $this->redirect(\Yii::$app->request->referrer), 'error');
+            }
             $images_list = $model->image;
             foreach ($images_list as $image){
                 $new_model = new StyleImages();

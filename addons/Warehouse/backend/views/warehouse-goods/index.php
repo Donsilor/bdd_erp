@@ -230,9 +230,9 @@ $params = $params ? "&".http_build_query($params) : '';
                                         <div class="col-sm-8 ">
                                             <div class="col-lg-12 input-group">
                                                 <div class="input-group">
-                                                    <?= Html::textInput('min_diamond_carat', $search->min_diamond_carat, ['class' => 'form-control', 'placeholder' => '最低主石价']) ?>
+                                                    <?= Html::textInput('min_diamond_carat', $search->min_diamond_carat, ['class' => 'form-control', 'placeholder' => '最低主石重']) ?>
                                                     <span class="input-group-addon" style="border-color: #fff">-</span>
-                                                    <?= Html::textInput('max_diamond_carat', $search->max_diamond_carat, ['class' => 'form-control', 'placeholder' => '最高主石价']) ?>
+                                                    <?= Html::textInput('max_diamond_carat', $search->max_diamond_carat, ['class' => 'form-control', 'placeholder' => '最高主石重']) ?>
                                                 </div>
                                                 <div class="help-block"></div>
                                             </div>
@@ -245,19 +245,106 @@ $params = $params ? "&".http_build_query($params) : '';
                                             <label class="control-label" for="cate-sort">主石类型：</label>
                                         </div>
                                         <div class="col-sm-8">
-                                            <?= Html::dropDownList('main_stone_type', $search->main_stone_type, Yii::$app->attr->valueMap(AttrIdEnum::MAIN_STONE_TYPE), [
-                                                'class' => 'form-control',
-                                                'prompt' => '全部',
-                                            ]) ?>
+                                            <?= \kartik\select2\Select2::widget([
+                                                'name'=>'main_stone_type',
+                                                'value'=>$search->main_stone_type,
+                                                'data'=>Yii::$app->attr->valueMap(AttrIdEnum::MAIN_STONE_TYPE),
+                                                'options' => ['placeholder' =>"请选择",'multiple'=>false,'style'=>"width:180px"],
+                                                'pluginOptions' => [
+                                                    'allowClear' => true,
+                                                ],
+                                            ])
+                                            ?>
                                             <div class="help-block"></div>
                                         </div>
                                     </div>
                                 </div>
-
-
                             </div>
 
 
+
+                            <div class="row">
+                                <div class="col-lg-3">
+                                    <div class="form-group field-cate-sort">
+                                        <div class="col-sm-4 text-right">
+                                            <label class="control-label" for="cate-sort">手寸（港）：</label>
+                                        </div>
+                                        <div class="col-sm-8">
+                                            <?= \kartik\select2\Select2::widget([
+                                                'name'=>'finger_hk',
+                                                'value'=>$search->finger_hk,
+                                                'data'=>Yii::$app->attr->valueMap(AttrIdEnum::FINGER_HK),
+                                                'options' => ['placeholder' =>"请选择",'multiple'=>false,'style'=>"width:180px"],
+                                                'pluginOptions' => [
+                                                    'allowClear' => true,
+                                                ],
+                                            ])
+                                            ?>
+                                            <div class="help-block"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-3">
+                                    <div class="form-group field-cate-sort">
+                                        <div class="col-sm-4 text-right">
+                                            <label class="control-label" for="cate-sort">手寸（美）：</label>
+                                        </div>
+                                        <div class="col-sm-8">
+                                            <?= \kartik\select2\Select2::widget([
+                                                'name'=>'finger',
+                                                'value'=>$search->finger,
+                                                'data'=>Yii::$app->attr->valueMap(AttrIdEnum::FINGER),
+                                                'options' => ['placeholder' =>"请选择",'multiple'=>false,'style'=>"width:180px"],
+                                                'pluginOptions' => [
+                                                    'allowClear' => true,
+                                                ],
+                                            ])
+                                            ?>
+                                            <div class="help-block"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-3">
+                                    <div class="form-group field-cate-sort">
+                                        <div class="col-sm-4 text-right">
+                                            <label class="control-label" for="cate-sort">主石颜色：</label>
+                                        </div>
+                                        <div class="col-sm-8">
+                                            <?= \kartik\select2\Select2::widget([
+                                                'name'=>'diamond_color',
+                                                'value'=>$search->diamond_color,
+                                                'data'=>Yii::$app->attr->valueMap(AttrIdEnum::DIA_COLOR),
+                                                'options' => ['placeholder' =>"请选择",'multiple'=>false,'style'=>"width:180px"],
+                                                'pluginOptions' => [
+                                                    'allowClear' => true,
+                                                ],
+                                            ])
+                                            ?>
+                                            <div class="help-block"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-3">
+                                    <div class="form-group field-cate-sort">
+                                        <div class="col-sm-4 text-right">
+                                            <label class="control-label" for="cate-sort">主石净度：</label>
+                                        </div>
+                                        <div class="col-sm-8">
+                                            <?= \kartik\select2\Select2::widget([
+                                                'name'=>'diamond_clarity',
+                                                'value'=>$search->diamond_clarity,
+                                                'data'=>Yii::$app->attr->valueMap(AttrIdEnum::DIA_CLARITY),
+                                                'options' => ['placeholder' =>"请选择",'multiple'=>false,'style'=>"width:180px"],
+                                                'pluginOptions' => [
+                                                    'allowClear' => true,
+                                                ],
+                                            ])
+                                            ?>
+                                            <div class="help-block"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
 
                             <div class="row">
                                 <div class="col-lg-3">
@@ -535,6 +622,14 @@ $params = $params ? "&".http_build_query($params) : '';
                                 'prompt' => '全部',
                                 'class' => 'form-control',
                                 'style'=> 'width:80px;'
+                            ]),
+                            'headerOptions' => [],
+                        ],
+                        [
+                            'attribute'=>'stock_cnt',
+                            'filter' => Html::activeTextInput($searchModel, 'stock_cnt', [
+                                'class' => 'form-control',
+                                'style'=> 'width:60px;'
                             ]),
                             'headerOptions' => [],
                         ],
@@ -1209,18 +1304,17 @@ $params = $params ? "&".http_build_query($params) : '';
                             'headerOptions' => [],
                         ],
                         [
-                            'attribute'=>'unit_cost_price',
-                            'filter' => false,
-                            'visible' => \common\helpers\Auth::verify(\common\enums\SpecialAuthEnum::VIEW_CAIGOU_PRICE),
-                            'headerOptions' => [],
-                        ],
-                        [
                             'attribute'=>'cost_price',
                             'filter' => false,
                             'visible' => \common\helpers\Auth::verify(\common\enums\SpecialAuthEnum::VIEW_CAIGOU_PRICE),
                             'headerOptions' => [],
                         ],
-
+                        [
+                            'attribute'=>'cost_amount',
+                            'filter' => false,
+                            'visible' => \common\helpers\Auth::verify(\common\enums\SpecialAuthEnum::VIEW_CAIGOU_PRICE),
+                            'headerOptions' => [],
+                        ],
                         [
                             'attribute'=>'diamond_cert_type',
                             'value' => function($model){
@@ -1474,10 +1568,10 @@ $params = $params ? "&".http_build_query($params) : '';
     function batchLabelExport() {
         var ids = $("#grid").yiiGridView("getSelectedRows");
         if (ids.length == 0) {
-            var url = "<?= Url::to('index?action=export&export_type=1' . $params);?>";
+            var url = "<?= Url::to('index?action=label-export' . $params);?>";
             rfExport(url)
         } else {
-            window.location.href = "<?= Url::buildUrl('export', ['export_type' => 1], ['ids'])?>?ids=" + ids;
+            window.location.href = "<?= Url::buildUrl('label-export', [], ['ids'])?>?&ids=" + ids;
         }
     }
 </script>

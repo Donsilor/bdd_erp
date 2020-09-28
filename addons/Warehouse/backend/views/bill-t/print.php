@@ -325,12 +325,10 @@
         }
     </style>
 </head>
-<p class="noprint">
-<div class="text-center noprint" style="text-align:right;">
+<div class="text-center Noprint" style="text-align:right;">
     <!-- 打印按钮 -->
     <button type="button" class="btn btn-info btn-ms" target="_blank" onclick="preview(10)">打印</button>
 </div>
-</p>
 <body>
 <div class="template">
     <div class="information">
@@ -345,8 +343,8 @@
                     <span contenteditable="true"><?= $model->supplier->supplier_name ?? "无"; ?></span>
                 </div>
                 <div class="one">
-                    <span>销售渠道：</span>
-                    <span contenteditable="true"><?= $model->saleChannel->name ?? "无"; ?></span>
+                    <span>订单类型：</span>
+                    <span contenteditable="true">成品采购</span>
                 </div>
                 <div class="one">
                     <span>入库单号：</span>
@@ -360,8 +358,8 @@
                     <span contenteditable="true">无</span>
                 </div>
                 <div class="two">
-                    <span>订单类型：</span>
-                    <span contenteditable="true">成品采购</span>
+                    <span>销售渠道：</span>
+                    <span contenteditable="true"><?= $total['channel'] ?? "无"; ?></span>
                 </div>
                 <div class="two">
                     <span>入库方法：</span>
@@ -375,7 +373,7 @@
                 </div>
                 <div class="three">
                     <span>工厂结算单号：</span>
-                    <span contenteditable="true">无</span>
+                    <span contenteditable="true"><?= $model->send_goods_sn ?? "无" ?></span>
                 </div>
                 <div class="three">
                     <span>结价：</span>
@@ -393,20 +391,21 @@
             <td class="width-80 algin-center font-bold" rowspan="2">条码号</td>
             <td class="width-60 algin-center font-bold" rowspan="2">款号</td>
             <td class="width-60 algin-center font-bold" rowspan="2">货品名称</td>
+            <td class="width-20 algin-center font-bold" rowspan="2">渠道</td>
             <td class="width-30 algin-center font-bold" rowspan="2">材质</td>
             <td class="width-20 algin-center font-bold" rowspan="2">件数</td>
             <td class="width-20 algin-center font-bold" rowspan="2">手寸</td>
             <td class="width-160 algin-center font-bold" colspan="4">金料</td>
-            <td class="width-180 algin-center font-bold" colspan="5">主石</td>
-            <td class="width-180 algin-center font-bold" colspan="5">副石1</td>
+            <td class="width-170 algin-center font-bold" colspan="5">主石</td>
+            <td class="width-170 algin-center font-bold" colspan="5">副石1</td>
             <td class="width-30 algin-center font-bold" rowspan="2">配件(g)</td>
             <td class="width-30 algin-center font-bold" rowspan="2">配件额</td>
             <td class="width-30 algin-center font-bold" rowspan="2">配件<br>工费</td>
             <td class="width-30 algin-center font-bold" rowspan="2">工费</td>
-            <td class="width-35 algin-center font-bold" rowspan="2">镶石费</td>
-            <td class="width-35 algin-center font-bold" rowspan="2">车花片</td>
+            <td class="width-30 algin-center font-bold" rowspan="2">镶石费</td>
+            <td class="width-30 algin-center font-bold" rowspan="2">车花片</td>
             <td class="width-30 algin-center font-bold" rowspan="2">分色/分件</td>
-            <td class="width-35 algin-center font-bold" rowspan="2">补口费</td>
+            <td class="width-30 algin-center font-bold" rowspan="2">补口费</td>
             <td class="width-30 algin-center font-bold" rowspan="2">版费</td>
 <!--            <td class="width-35 algin-center font-bold" rowspan="2">证书号</td>-->
             <td class="width-30 algin-center font-bold" rowspan="2">税额</td>
@@ -443,6 +442,7 @@
                     <td class="algin-center padding-5"><?= $val['goods_id'] ?? "/" ?></td>
                     <td class="algin-center padding-5"><?= $val['style_sn'] ?? "/" ?></td>
                     <td class="algin-center padding-5"><?= $val['goods_name'] ?? "/" ?></td>
+                    <td class="algin-center padding-5"><?= $val['channel_code'] ?? "/" ?></td>
                     <td class="algin-center padding-5"><?= $val['material_type'] ?? "/" ?></td>
                     <td class="algin-center padding-5"><?= $val['goods_num'] ?? "0" ?></td>
                     <td class="algin-center padding-5"><?= $val['finger'] ?? "/" ?></td>
@@ -488,7 +488,7 @@
             ?>
             <tfoot>
             <tr>
-                <td class="algin-center padding-5" colspan="5">合计</td>
+                <td class="algin-center padding-5" colspan="6">合计</td>
                 <td class="algin-center padding-5"><?= $total['goods_num'] ?? 0; ?></td>
                 <td class="algin-center padding-5">/</td>
                 <td class="algin-center padding-5"><?= floatval($total['suttle_weight']) ?? '0.00'; ?></td>
@@ -540,11 +540,9 @@
         </div>
     </div>
 </div>
-<p class="noprint">
-<div class="text-center noprint" style="text-align:center;">
+<div class="text-center Noprint" style="text-align:center;">
     <!-- 打印按钮 -->
     <button type="button" class="btn btn-info btn-ms" onclick="preview(10)">打印</button>
 </div>
-</p>
 </body>
 </html>

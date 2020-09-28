@@ -67,6 +67,19 @@ return [
                     ],
 
             ],
+
+            [
+                'title' => '客服管理',
+                'route' => 'indexFollower',
+                'icon' => 'fa fa-superpowers',
+                'child' => [
+                    [
+                        'title' => '客服管理',
+                        'route' => 'follower/index',
+                    ],
+                ],
+
+            ],
         [
             'title' => '专题管理',
             'route' => 'indexOrder',

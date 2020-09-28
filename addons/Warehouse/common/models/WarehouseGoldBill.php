@@ -17,6 +17,7 @@ use Yii;
  * @property int $put_in_type 入库方式
  * @property int $to_warehouse_id 入库仓库
  * @property int $account_type 结算方式
+ * @property int $is_settle_accounts 是否结价
  * @property int $adjust_type 调整类型 0扣减 1增加
  * @property int $total_num 金料总数量
  * @property string $total_weight 金料总重量(ct)
@@ -52,10 +53,10 @@ class WarehouseGoldBill extends BaseModel
     public function rules()
     {
         return [
-            [['bill_type'], 'required'],
-            [['bill_status', 'supplier_id', 'put_in_type', 'to_warehouse_id', 'account_type', 'adjust_type', 'total_num', 'auditor_id', 'audit_status', 'audit_time', 'fin_status', 'fin_check_time', 'status', 'creator_id', 'created_at', 'updated_at'], 'integer'],
-            [['total_weight', 'total_cost'], 'number'],
-            [['bill_no', 'delivery_no', 'fin_checker'], 'string', 'max' => 30],
+//            [['bill_type'], 'required'],
+            [['bill_status', 'supplier_id', 'put_in_type', 'to_warehouse_id','receiv_id','channel_id','out_type', 'account_type', 'adjust_type', 'is_settle_accounts','total_num', 'auditor_id', 'audit_status', 'audit_time', 'fin_status', 'fin_check_time', 'status', 'creator_id', 'created_at', 'updated_at'], 'integer'],
+            [['total_weight', 'total_cost','total_tax_price'], 'number'],
+            [['bill_no', 'delivery_no', 'fin_checker','purchase_sn'], 'string', 'max' => 30],
             [['bill_type'], 'string', 'max' => 3],
             [['audit_remark', 'fin_remark', 'remark'], 'string', 'max' => 255],
         ];
@@ -75,10 +76,12 @@ class WarehouseGoldBill extends BaseModel
             'put_in_type' => '入库方式',
             'to_warehouse_id' => '入库仓库',
             'account_type' => '结算方式',
+            'is_settle_accounts' => '是否结价',
             'adjust_type' => '调整类型 0扣减 1增加',
             'total_num' => '明细数量',
             'total_weight' => '金料总重(g)',
             'total_cost' => '金料总额',
+            'total_tax_price' => '金料含税总额',
             'delivery_no' => '送货单号',
             'auditor_id' => '审核人',
             'audit_status' => '审核状态',
@@ -88,6 +91,10 @@ class WarehouseGoldBill extends BaseModel
             'fin_checker' => '财务确认人',
             'fin_check_time' => '财务确认时间',
             'fin_remark' => '财务确认备注',
+            'purchase_sn' => '采购单号',
+            'receiv_id' => '接收人',
+            'channel_id' => '出库渠道',
+            'out_type' => '出库类型',
             'remark' => '备注',
             'status' => '状态',
             'creator_id' => '创建人',

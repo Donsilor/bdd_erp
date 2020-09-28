@@ -36,7 +36,7 @@ class WarehouseGoldBillLog extends BaseModel
     public function rules()
     {
         return [
-            [['bill_id', 'log_module', 'creator_id'], 'required'],
+            [['bill_id', 'log_module'], 'required'],
             [['bill_id', 'bill_status', 'log_type', 'creator_id', 'created_at'], 'integer'],
             [['log_msg'], 'string', 'max' => 500],
             [['log_module', 'creator'], 'string', 'max' => 30],
@@ -94,5 +94,15 @@ class WarehouseGoldBillLog extends BaseModel
     public function getMember()
     {
         return $this->hasOne(Member::class, ['id'=>'creator_id']);
+    }
+
+
+    /**
+     * 关联管理员一对一
+     * @return \yii\db\ActiveQuery
+     */
+    public function getGoldBill()
+    {
+        return $this->hasOne(WarehouseGoldBill::class, ['id'=>'bill_id'])->alias('goldBill');
     }
 }

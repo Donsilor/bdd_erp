@@ -126,24 +126,24 @@ $position_arr = \addons\Style\common\enums\ImageTypeEnum::getPosition($searchMod
 
                                 ]),
                             ],
-                            [
-                                'attribute' => 'status',
-                                'format' => 'raw',
-                                'headerOptions' => ['class' => 'col-md-1','style'=>'width:100px;'],
-                                'value' => function ($model){
-                                    return \common\enums\StatusEnum::getValue($model->status);
-                                },
-                                'filter' => Html::activeDropDownList($searchModel, 'status',\common\enums\StatusEnum::getMap(), [
-                                    'prompt' => '全部',
-                                    'class' => 'form-control',
-
-                                ]),
-                            ],
+//                            [
+//                                'attribute' => 'status',
+//                                'format' => 'raw',
+//                                'headerOptions' => ['class' => 'col-md-1','style'=>'width:100px;'],
+//                                'value' => function ($model){
+//                                    return \common\enums\StatusEnum::getValue($model->status);
+//                                },
+//                                'filter' => Html::activeDropDownList($searchModel, 'status',\common\enums\StatusEnum::getMap(), [
+//                                    'prompt' => '全部',
+//                                    'class' => 'form-control',
+//
+//                                ]),
+//                            ],
 
                             [
                                 'class' => 'yii\grid\ActionColumn',
                                 'header' => '操作',
-                                'template' => '{edit} {info} {status}',
+                                'template' => '{edit} {info} {delete}',
                                 'buttons' => [
                                     'edit' => function($url, $model, $key){
                                         return Html::edit(['ajax-edit','id' => $model->id,'returnUrl' => Url::getReturnUrl(), 'style_id' => $model->style_id ,'returnUrl' => Url::getReturnUrl()], '编辑', [
@@ -151,7 +151,6 @@ $position_arr = \addons\Style\common\enums\ImageTypeEnum::getPosition($searchMod
                                             'data-target' => '#ajaxModalLg',
                                         ]);
                                     },
-
                                     'status' => function($url, $model, $key){
                                         return Html::status($model->status);
                                     },

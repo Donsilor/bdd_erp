@@ -8,9 +8,12 @@ use common\helpers\Url;
 use common\models\base\SearchModel;
 use addons\Warehouse\common\models\WarehouseBill;
 use addons\Warehouse\common\models\WarehouseBillGoodsL;
+use addons\Warehouse\common\forms\WarehouseBillPayForm;
 use addons\Warehouse\common\forms\WarehouseBillTGoodsForm;
 use addons\Warehouse\common\enums\BillStatusEnum;
 use addons\Warehouse\common\enums\BillTypeEnum;
+use addons\Warehouse\common\enums\PayMethodEnum;
+use addons\Warehouse\common\enums\PayTaxEnum;
 use common\helpers\ArrayHelper;
 use common\helpers\ResultHelper;
 use yii\web\UploadedFile;
@@ -443,6 +446,47 @@ class BillTGoodsController extends BaseController
             $trans->rollBack();
             return $this->message($e->getMessage(), $this->redirect(\Yii::$app->request->referrer), 'error');
         }
+    }
+
+    /**
+     * 创建结算信息
+     * @throws
+     * @return mixed
+     */
+    public function actionPay()
+    {
+        $this->layout = '@backend/views/layouts/iframe';
+
+        $ids = Yii::$app->request->get('ids');
+        $check = Yii::$app->request->get('check', null);
+        $model = new WarehouseBillPayForm();
+        $model->ids = $ids;
+        if($check){
+            try{
+                \Yii::$app->warehouseService->billPay->billPayValidate($model);
+                return ResultHelper::json(200, '', ['url'=>Url::to([$this->action->id, 'ids'=>$ids])]);
+            }catch (\Exception $e){
+                return ResultHelper::json(422, $e->getMessage());
+            }
+        }
+        if ($model->load(Yii::$app->request->post())) {
+            try{
+                $trans = Yii::$app->trans->beginTransaction();
+
+                \Yii::$app->warehouseService->billPay->createBillPay($model);
+                $trans->commit();
+                Yii::$app->getSession()->setFlash('success','保存成功');
+                return ResultHelper::json(200, '保存成功');
+            }catch (\Exception $e){
+                $trans->rollBack();
+                return ResultHelper::json(422, $e->getMessage());
+            }
+        }
+        $model->pay_method = PayMethodEnum::TALLY;
+        $model->pay_tax = PayTaxEnum::NO_TAX;
+        return $this->render($this->action->id, [
+            'model' => $model,
+        ]);
     }
 
 }

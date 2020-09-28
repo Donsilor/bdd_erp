@@ -21,6 +21,7 @@ use addons\Style\common\enums\StonePositionEnum;
 use addons\Style\common\enums\JintuoTypeEnum;
 use addons\Style\common\enums\QibanTypeEnum;
 use addons\Style\common\enums\AttrIdEnum;
+use addons\Style\common\enums\InlayEnum;
 use common\enums\AuditStatusEnum;
 use common\helpers\UploadHelper;
 use common\enums\StatusEnum;
@@ -284,11 +285,13 @@ class WarehouseBillTService extends Service
                 }
                 $style_sn = $qiban->style_sn ?? "";
             }
+            $is_inlay = InlayEnum::No;
             if ($qiban_type != QibanTypeEnum::NO_STYLE) {
                 if (empty($style_sn)) {
                     $flag = false;
                     $error[$i][] = "款号不能为空";
                     if (!$flag) {
+                        $i++;
                         continue;
                     }
                 }
@@ -299,6 +302,7 @@ class WarehouseBillTService extends Service
                     $flag = false;
                     $error[$i][] = $qiban_error . "[款号]不存在";
                     if (!$flag) {
+                        $i++;
                         continue;
                     }
                 }
@@ -310,6 +314,10 @@ class WarehouseBillTService extends Service
                     $flag = false;
                     $error[$i][] = $qiban_error . "[款号]不是启用状态";
                 }
+                if($style->type) {
+                    $is_inlay = $style->type->is_inlay;
+                }
+                $is_inlay = $is_inlay ?? InlayEnum::No;
             }
             if (!$flag) {
                 //$flag = true;
@@ -465,12 +473,12 @@ class WarehouseBillTService extends Service
                 $auto_gold_amount = ConfirmEnum::YES;
             }
             $pure_gold_rate = $form->formatValue($goods['pure_gold_rate'], 0) ?? 0;//折足率
-            if (!empty($peiliao_way)
-                && $peiliao_way == PeiLiaoWayEnum::LAILIAO
-                && empty($pure_gold_rate)) {
-                $flag = false;
-                $error[$i][] = "配料方式为来料加工，折足率必填";
-            }
+//            if (!empty($peiliao_way)
+//                && $peiliao_way == PeiLiaoWayEnum::LAILIAO
+//                && empty($pure_gold_rate)) {
+//                $flag = false;
+//                $error[$i][] = "配料方式为来料加工，折足率必填";
+//            }
             if (empty($peiliao_way) && $pure_gold_rate > 0) {
                 $peiliao_way = PeiLiaoWayEnum::LAILIAO;
             }
@@ -927,10 +935,17 @@ class WarehouseBillTService extends Service
             if (bccomp($factory_cost, 0, 5) > 0) {
                 $auto_factory_cost = ConfirmEnum::YES;
             }
-            $cost_price = $form->formatValue($goods['cost_price'], 0) ?? 0;//公司成本价
+//            $cost_price = $form->formatValue($goods['cost_price'], 0) ?? 0;//公司成本价
+//            $is_auto_price = ConfirmEnum::NO;
+//            if (bccomp($cost_price, 0, 5) > 0) {
+//                $is_auto_price = ConfirmEnum::YES;
+//            }
+            $cost_amount = $form->formatValue($goods['cost_amount'], 0) ?? 0;//公司成本总额
             $is_auto_price = ConfirmEnum::NO;
-            if (bccomp($cost_price, 0, 5) > 0) {
+            $cost_price = 0;
+            if (bccomp($cost_amount, 0, 5) > 0) {
                 $is_auto_price = ConfirmEnum::YES;
+                $cost_price = bcdiv(bcsub($cost_amount, $templet_fee, 3), $goods_num, 3);//单价成本价=(成本总额-版费)/数量
             }
             $markup_rate = $form->formatValue($goods['markup_rate'], 1) ?? 1;//倍率
             $remark = $goods['remark'] ?? "";//货品备注
@@ -1059,6 +1074,7 @@ class WarehouseBillTService extends Service
                 'tax_amount' => $tax_amount,
                 'factory_cost' => $factory_cost,
                 'cost_price' => $cost_price,
+                'cost_amount' => $cost_amount,
                 //其他信息
                 'is_wholesale' => $is_wholesale,
                 'is_auto_price' => $is_auto_price,
@@ -1075,6 +1091,7 @@ class WarehouseBillTService extends Service
                 'auto_tax_amount' => $auto_tax_amount,
                 'markup_rate' => $markup_rate,
                 'jintuo_type' => $jintuo_type,
+                'is_inlay' => $is_inlay,
                 'auto_goods_id' => $auto_goods_id,
                 'remark' => $remark,
                 'status' => StatusEnum::ENABLED,
@@ -1101,12 +1118,13 @@ class WarehouseBillTService extends Service
             //发生错误
             $message = "*注：填写属性值有误可能为以下情况：①填写格式有误 ②该款式属性下无此属性值<hr><hr>";
             foreach ($error as $k => $v) {
+                $line = $k + 1;
                 $style_sn = "";
                 if (isset($style_sns[$k]) && !empty($style_sns[$k])) {
                     $style_sn = $style_sns[$k] ?? "";
                 }
                 $s = "【" . implode('】,【', $v) . '】';
-                $message .= '第' . ($k + 1) . '行：款号' . $style_sn . $s . '<hr>';
+                $message .= '第' . $line . '行：款号' . $style_sn . $s . '<hr>';
             }
             if ($error_off && count($error) > 0 && $message) {
                 header("Content-Disposition: attachment;filename=错误提示" . date('YmdHis') . ".log");
@@ -1187,6 +1205,7 @@ class WarehouseBillTService extends Service
         $stone_weight = bcmul($stone_weight, 0.2, 5);//ct转换为克重
         $weight = bcsub($form->suttle_weight, $stone_weight, 5) ?? 0;
         $weight = bcsub($weight, $this->calculatePartsWeight($form), 5) ?? 0;
+        //var_dump('主石重:'.$this->calculateMainStoneWeight($form),'副石总重'.$this->calculateSecondStoneWeight($form),'主+副:'.($stone_weight/0.2),'转克重:'.$stone_weight,'配件重:'.$this->calculatePartsWeight($form),'实重:'.$weight);die;
         if (bccomp(0, $weight, 5) == 1) {
             $weight = 0;
         }
@@ -1247,14 +1266,18 @@ class WarehouseBillTService extends Service
 
     /**
      *
-     * 主石总重(ct)=(主石单颗重(ct)*主石数量)
+     * 主石总重(ct)=(主石单颗重(ct)*主石数量)作废
      * @param WarehouseBillTGoodsForm $form
      * @return integer
      * @throws
      */
     public function calculateMainStoneWeight($form)
     {
-        return bcmul($form->main_stone_weight, $form->main_stone_num, 5) ?? 0;
+        if($form->main_pei_type == PeiShiWayEnum::NO_PEI){
+            return 0;
+        }
+        //return bcmul($form->main_stone_weight, $form->main_stone_num, 5) ?? 0;
+        return $form->main_stone_weight ?? 0;
     }
 
     /**
@@ -1278,7 +1301,19 @@ class WarehouseBillTService extends Service
      */
     public function calculateSecondStoneWeight($form)
     {
-        return bcadd(bcadd($form->second_stone_weight1, $form->second_stone_weight2, 5), $form->second_stone_weight3, 5) ?? 0;
+        $second_stone_weight1 = $form->second_stone_weight1 ?? 0;
+        $second_stone_weight2 = $form->second_stone_weight2 ?? 0;
+        $second_stone_weight3 = $form->second_stone_weight3 ?? 0;
+        if($form->second_pei_type == PeiShiWayEnum::NO_PEI){
+            $second_stone_weight1 = 0;
+        }
+        if($form->second_pei_type2 == PeiShiWayEnum::NO_PEI){
+            $second_stone_weight2 = 0;
+        }
+        if($form->second_pei_type3 == PeiShiWayEnum::NO_PEI){
+            $second_stone_weight3 = 0;
+        }
+        return bcadd(bcadd($second_stone_weight1, $second_stone_weight2, 5), $second_stone_weight3, 5) ?? 0;
     }
 
     /**
@@ -1350,6 +1385,9 @@ class WarehouseBillTService extends Service
      */
     public function calculatePartsWeight($form)
     {
+        if($form->parts_way == PeiJianWayEnum::NO_PEI){
+            return 0;
+        }
         return bcmul($form->parts_gold_weight, 1, 5) ?? 0;//$form->parts_num
     }
 
@@ -1503,7 +1541,7 @@ class WarehouseBillTService extends Service
 
     /**
      *
-     * 公司成本(成本价)=(金料额+主石成本+副石1成本+副石2成本+副石3成本+配件额+总工费)
+     * 公司成本/单价(成本价/单价)=(金料额+主石成本+副石1成本+副石2成本+副石3成本+配件额+总工费-版费)/数量
      * @param WarehouseBillTGoodsForm $form
      * @return integer
      * @throws
@@ -1530,21 +1568,23 @@ class WarehouseBillTService extends Service
             $cost_price = bcadd($cost_price, $this->calculatePartsAmount($form), 5);
         }
         $cost_price = bcadd($cost_price, $this->calculateTotalGongFee($form), 5);
-
+        $cost_price = bcsub($cost_price, $form->templet_fee, 3);//版费
+        $cost_price = bcdiv($cost_price, $form->goods_num, 5);
         return sprintf("%.3f", $cost_price) ?? 0;
     }
 
     /**
      *
-     * 单件成本=(公司总成本-版费)/商品数量
+     * 公司成本总额=(公司成本/件+版费/件)*商品数量
      * @param WarehouseBillTGoodsForm $form
      * @return integer
      * @throws
      */
-    public function calculateUnitCostPrice($form)
+    public function calculateCostAmount($form)
     {
-        $cost_price = bcsub($form->cost_price, $form->templet_fee, 3);
-        return bcdiv($cost_price, $form->goods_num, 3) ?? 0;
+        //$templet_fee = bcdiv($form->templet_fee, $form->goods_num, 3) ?? 0;//单件版费
+        $cost_price = bcmul($form->cost_price, $form->goods_num, 3) ?? 0;
+        return bcadd($cost_price, $form->templet_fee, 3) ?? 0;//+版费
     }
 
     /**
@@ -1556,7 +1596,7 @@ class WarehouseBillTService extends Service
      */
     public function calculateMarketPrice($form)
     {
-        return bcmul($form->markup_rate, $form->unit_cost_price, 5) ?? 0;
+        return bcmul($form->markup_rate, $form->cost_price, 5) ?? 0;
     }
 
     /**
@@ -1642,9 +1682,9 @@ class WarehouseBillTService extends Service
             $form->tax_amount = $this->calculateTaxAmount($form);//税额
         }
         if (empty($form->is_auto_price) || bccomp($form->cost_price, 0, 5) != 1) {
-            $form->cost_price = $this->calculateCostPrice($form);//公司成本
+            $form->cost_price = $this->calculateCostPrice($form);//公司成本/件
         }
-        $form->unit_cost_price = $this->calculateUnitCostPrice($form);//单件成本
+        $form->cost_amount = $this->calculateCostAmount($form);//公司成本总额
         $form->market_price = $this->calculateMarketPrice($form);//标签价
         if (false === $form->save()) {
             throw new \Exception($this->getError($form));

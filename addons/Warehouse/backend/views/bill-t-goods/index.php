@@ -13,11 +13,11 @@ use kartik\daterange\DateRangePicker;
 /* @var $this yii\web\View */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = Yii::t('bill_t_goods', '其它入库单详情');
+$this->title = Yii::t('bill_t_goods', '其它入库单明细');
 $this->params['breadcrumbs'][] = ['label' => $this->title, 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 $params = Yii::$app->request->queryParams;
-$params = $params ? "&".http_build_query($params) : '';
+$params = $params ? "&" . http_build_query($params) : '';
 ?>
 <style>
     select.form-control {
@@ -25,7 +25,7 @@ $params = $params ? "&".http_build_query($params) : '';
     }
 </style>
 <div class="box-body nav-tabs-custom">
-    <h2 class="page-header"><?= $this->title; ?> - <?= $bill->bill_no ?>
+    <h2 class="page-header"><?= $this->title; ?> - <span id="bill_no"><?= $bill->bill_no ?></span> <i class="fa fa-copy" onclick="copy('bill_no')"></i>
         - <?= \addons\Warehouse\common\enums\BillStatusEnum::getValue($bill->bill_status) ?></h2>
     <?php echo Html::menuTab($tabList, $tab) ?>
     <div class="box-tools" style="float:right;margin-top:-40px; margin-right: 20px;">
@@ -42,7 +42,16 @@ $params = $params ? "&".http_build_query($params) : '';
             echo Html::edit(['edit-all', 'bill_id' => $bill->id], '编辑货品', ['class' => 'btn btn-info btn-xs']);
             echo '&nbsp;';
         }
+        if ($bill->bill_status == \addons\Warehouse\common\enums\BillStatusEnum::SAVE) {
+            echo Html::create(['pay', 'bill_id' => $bill->id], '创建结算信息', [
+                'class' => 'btn btn-primary btn-xs openIframe',
+                'data-width' => '90%',
+                'data-height' => '90%',
+                'data-offset' => '20px',
+            ]);
+        }
         echo Html::a('单据打印', ['bill-t/print', 'id' => $bill->id], ['target' => '_blank', 'class' => 'btn btn-info btn-xs',]);
+        //, 'onclick' => 'rfTwiceAffirm(this,"打印单据", "确定打印吗？");return false;'
         echo '&nbsp;';
         if ($bill->bill_status == \addons\Warehouse\common\enums\BillStatusEnum::SAVE) {
             echo Html::edit(['ajax-upload', 'bill_id' => $bill->id], '批量导入', [
@@ -52,9 +61,9 @@ $params = $params ? "&".http_build_query($params) : '';
             ]);
             echo '&nbsp;';
         }
-        echo Html::tag('span', '刷新价格', ["class" => "btn btn-warning btn-xs jsBatchStatus", "data-grid" => "grid", "data-url" => Url::to(['update-price']),]);
-        echo '&nbsp;';
         echo Html::button('明细导出', ['class' => 'btn btn-inverse btn-xs', 'onclick' => 'batchExport()',]);
+        echo '&nbsp;';
+        echo Html::tag('span', '刷新价格', ["class" => "btn btn-warning btn-xs jsBatchStatus", "data-grid" => "grid", "data-url" => Url::to(['update-price']),]);
         echo '&nbsp;';
         if ($bill->bill_status == \addons\Warehouse\common\enums\BillStatusEnum::SAVE) {
             echo Html::tag('span', '批量删除', ["class" => "btn btn-danger btn-xs jsBatchStatus", "data-grid" => "grid", "data-url" => Url::to(['batch-delete']),]);
@@ -197,10 +206,14 @@ $params = $params ? "&".http_build_query($params) : '';
                             ],
                             [
                                 'attribute' => 'goods_id',
+                                'format' => 'raw',
                                 'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#feeeed;'],
                                 'footerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#feeeed;'],
                                 'value' => function ($model, $key, $index, $widget) {
                                     $widget->footer = $model->getAttributeLabel('goods_id');
+                                    if($model->goods_id){
+                                        $model->goods_id = '<span id="goods_'.$model->goods_id.'">'.$model->goods_id. '</span> <i class="fa fa-copy" onclick="copy(\'goods_' . $model->goods_id . '\')"></i>';
+                                    }
                                     return $model->goods_id ?? "";
                                 },
                                 'filter' => Html::activeTextInput($searchModel, 'goods_id', [
@@ -216,7 +229,7 @@ $params = $params ? "&".http_build_query($params) : '';
                                 'value' => function ($model, $key, $index, $widget) {
                                     $widget->footer = $model->getAttributeLabel('style_sn');
                                     if (false) {//!empty($model->style_sn) && !empty($model->id)
-                                        return Html::a($model->style_sn, ['/style/view', 'id' => $model->id, 'returnUrl' => Url::getReturnUrl()], ['style' => "text-decoration:underline;color:#3c8dbc", 'id' => $model->style_sn]) . ' <i class="fa fa-copy" onclick="copy(\'' . $model->style_sn . '\')"></i>';
+                                        return Html::a($model->style_sn, ['/style/style/view', 'id' => $model->id, 'returnUrl' => Url::getReturnUrl()], ['style' => "text-decoration:underline;color:#3c8dbc", 'id' => $model->style_sn . '_' . $model->id]) . ' <i class="fa fa-copy" onclick="copy(\'' . $model->style_sn . '_' . $model->id . '\')"></i>';
                                     } else {
                                         if ($model->style_sn) {
                                             return "<span id='{$model->style_sn}_{$model->id}'>" . $model->style_sn . "</span>" . ' <i class="fa fa-copy" onclick="copy(\'' . $model->style_sn . '_' . $model->id . '\')"></i>';
@@ -1964,6 +1977,20 @@ $params = $params ? "&".http_build_query($params) : '';
 //                                ]),
                             ],
                             [
+                                'attribute' => 'pure_gold',
+                                'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#b7ba6b;'],
+                                'footerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#b7ba6b;'],
+                                'value' => function ($model, $key, $index, $widget) use ($total) {
+                                    $widget->footer = $model->getFooterValues('pure_gold', $total, "0.000");
+                                    return $model->pure_gold ?? "0.000";
+                                },
+                                'filter' => false,
+//                                'filter' => Html::activeTextInput($searchModel, 'pure_gold', [
+//                                    'class' => 'form-control',
+//                                    'style' => 'width:80px;'
+//                                ]),
+                            ],
+                            [
                                 'attribute' => 'factory_cost',
                                 //'format' => 'raw',
                                 'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#9b95c9;'],
@@ -1974,23 +2001,6 @@ $params = $params ? "&".http_build_query($params) : '';
                                 },
                                 'filter' => false,
 //                                'filter' => Html::activeTextInput($searchModel, 'factory_cost', [
-//                                    'class' => 'form-control',
-//                                    'style' => 'width:100px;'
-//                                ]),
-                            ],
-                            [
-                                'attribute' => 'unit_cost_price',
-                                //'format' => 'raw',
-                                'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#9b95c9;'],
-                                'contentOptions' => ['style' => 'color:red'],
-                                'footerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#9b95c9;'],
-                                'value' => function ($model, $key, $index, $widget) use ($total) {
-                                    $widget->footer = $model->getFooterValues('unit_cost_price', $total, "0.00");
-                                    return $model->unit_cost_price ?? "0.00";
-                                },
-                                'visible' => \common\helpers\Auth::verify(\common\enums\SpecialAuthEnum::VIEW_CAIGOU_PRICE),
-                                'filter' => false,
-//                                'filter' => Html::activeTextInput($searchModel, 'cost_price', [
 //                                    'class' => 'form-control',
 //                                    'style' => 'width:100px;'
 //                                ]),
@@ -2024,6 +2034,23 @@ $params = $params ? "&".http_build_query($params) : '';
                                 'visible' => \common\helpers\Auth::verify(\common\enums\SpecialAuthEnum::VIEW_CAIGOU_PRICE),
                                 'filter' => false,
 //                                'filter' => Html::activeTextInput($searchModel, 'cost_price', [
+//                                    'class' => 'form-control',
+//                                    'style' => 'width:100px;'
+//                                ]),
+                            ],
+                            [
+                                'attribute' => 'cost_amount',
+                                //'format' => 'raw',
+                                'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#9b95c9;'],
+                                'contentOptions' => ['style' => 'color:red'],
+                                'footerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#9b95c9;'],
+                                'value' => function ($model, $key, $index, $widget) use ($total) {
+                                    $widget->footer = $model->getFooterValues('cost_amount', $total, "0.00");
+                                    return $model->cost_amount ?? "0.00";
+                                },
+                                'visible' => \common\helpers\Auth::verify(\common\enums\SpecialAuthEnum::VIEW_CAIGOU_PRICE),
+                                'filter' => false,
+//                                'filter' => Html::activeTextInput($searchModel, 'cost_amount', [
 //                                    'class' => 'form-control',
 //                                    'style' => 'width:100px;'
 //                                ]),
@@ -2233,57 +2260,12 @@ $params = $params ? "&".http_build_query($params) : '';
         $("input[name='id[]']").trigger("click");
     });
 
-    //导出
-    //function batchExport() {
-    //    window.location.href = "<?//= Url::buildUrl('bill-t/export')?>//;
-    //}
-
-    /**
-     * 一键粘贴
-     * @param  {String} id [需要粘贴的内容]
-     * @param  {String} attr [需要 copy 的属性，默认是 innerText，主要用途例如赋值 a 标签上的 href 链接]
-     *
-     * range + selection
-     *
-     * 1.创建一个 range
-     * 2.把内容放入 range
-     * 3.把 range 放入 selection
-     *
-     * 注意：参数 attr 不能是自定义属性
-     * 注意：对于 user-select: none 的元素无效
-     * 注意：当 id 为 false 且 attr 不会空，会直接复制 attr 的内容
-     */
-    function copy(id, attr = null) {
-        let target = null;
-        if (attr) {
-            target = document.createElement('div');
-            target.id = 'tempTarget';
-            target.style.opacity = '0';
-            if (id) {
-                let curNode = document.querySelector('#' + id);
-                target.innerText = curNode[attr];
-            } else {
-                target.innerText = attr;
+    function batchExport() {
+        appConfirm("确定要导出明细吗?", '', function (code) {
+            if(code !== "defeat") {
+                return;
             }
-            document.body.appendChild(target);
-        } else {
-            target = document.querySelector('#' + id);
-        }
-        try {
-            let range = document.createRange();
-            range.selectNode(target);
-            window.getSelection().removeAllRanges();
-            window.getSelection().addRange(range);
-            document.execCommand('copy');
-            window.getSelection().removeAllRanges();
-            rfMsg('复制成功');
-            console.log('复制成功')
-        } catch (e) {
-            console.log('复制失败')
-        }
-        if (attr) {
-            // remove temp target
-            target.parentElement.removeChild(target);
-        }
+            window.location.href = "<?= \common\helpers\Url::buildUrl('../bill-t/export', [], ['ids'])?>?ids=<?php echo $bill->id ?>";
+        });
     }
 </script>

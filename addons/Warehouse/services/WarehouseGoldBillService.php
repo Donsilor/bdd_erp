@@ -117,11 +117,13 @@ class WarehouseGoldBillService extends Service
     public function goldBillSummary($bill_id)
     {
         $sum = WarehouseGoldBillGoods::find()
-            ->select(['sum(1) as total_num','sum(gold_weight) as total_weight','sum(cost_price) as total_cost'])
+            ->select(['sum(1) as total_num','sum(gold_weight) as total_weight','sum(cost_price) as total_cost',
+                'sum(incl_tax_price) as total_tax_price'])
             ->where(['bill_id'=>$bill_id, 'status'=>StatusEnum::ENABLED])
             ->asArray()->one();
         if($sum) {
-            $result = WarehouseGoldBill::updateAll(['total_num'=>$sum['total_num']/1,'total_weight'=>$sum['total_weight']/1,'total_cost'=>$sum['total_cost']/1],['id'=>$bill_id]);
+            $result = WarehouseGoldBill::updateAll(['total_num'=>$sum['total_num']/1,'total_weight'=>$sum['total_weight']/1,
+                'total_cost'=>$sum['total_cost']/1,'total_tax_price'=>$sum['total_tax_price']/1,],['id'=>$bill_id]);
         }
         return $result?:null;
     }

@@ -63,6 +63,13 @@ $params = $params ? "&".http_build_query($params) : '';
                             'headerOptions' => [],
                         ],
                         [
+                            'attribute'=>'code',
+                            'filter' => Html::activeTextInput($searchModel, 'code', [
+                                'class' => 'form-control',
+                            ]),
+                            'headerOptions' => [],
+                        ],
+                        [
                             'attribute'=>'tag',
                             'filter' => Html::activeTextInput($searchModel, 'tag', [
                                 'class' => 'form-control',

@@ -95,6 +95,7 @@ class WarehouseGoldBillLService extends Service
                     'gold_weight' => $detail->gold_weight,
                     'first_weight' => $detail->gold_weight,
                     'cost_price' => $detail->cost_price,
+                    'first_cost_price' => $detail->cost_price,
                     'gold_price' => $detail->gold_price,
                     'warehouse_id' => $form->to_warehouse_id,
                     'remark' => $detail->remark,

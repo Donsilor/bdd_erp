@@ -117,7 +117,7 @@ return [
                         'route' => 'gold-apply/index',
                     ],
                     [
-                        'title' => '入库单',
+                        'title' => '入库单（金料）',
                         'route' => 'gold-bill-l/index',
                     ],
                     [
@@ -129,12 +129,20 @@ return [
                         'route' => 'gold-bill-d/index',
                     ],
                     [
-                        'title' => '盘点单',
+                        'title' => '盘点单（金料）',
                         'route' => 'gold-bill-w/index',
                     ],
                     [
-                        'title' => '出入库列表',
+                        'title' => '出入库列表（金料）',
                         'route' => 'gold-bill/index',
+                    ],
+                    [
+                        'title' => '其他入库单（金料）',
+                        'route' => 'gold-bill-t/index',
+                    ],
+                    [
+                        'title' => '其他出库单（金料）',
+                        'route' => 'gold-bill-o/index',
                     ],
                 ],
             ],

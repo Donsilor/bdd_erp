@@ -60,7 +60,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         </div>
                         <div class="col-lg-4">
                         <?= $form->field($model, 'follower_id')->widget(kartik\select2\Select2::class, [
-                            'data' => Yii::$app->services->backendMember->getDropDown(),
+                            'data' => Yii::$app->gdzbService->follower->getDropDown(),
                             'options' => ['placeholder' => '请选择'],
                             'pluginOptions' => [
                                 'allowClear' => true

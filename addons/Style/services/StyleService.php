@@ -863,11 +863,70 @@ class StyleService extends Service
     }
 
 
-
+    /***
+     * @param string $index_key
+     * @return array|\yii\db\ActiveRecord[]
+     * 获取款下拉信息
+     */
     public function getStyleList($index_key='id'){
         $style_list = Style::find()->where(['status'=>StatusEnum::ENABLED])->select(['id','style_sn'])->asArray()->all();
         $style_list = array_column($style_list,'style_sn',$index_key);
         return $style_list;
     }
+
+    /***
+     * @param $style
+     * @return mixed
+     * @throws \Exception
+     * 更新款主图
+     */
+    public function updateStyleImage($style){
+        $style_id = $style->id;
+        $styleImage = StyleImages::find()->where(['style_id'=>$style_id ,'status'=>StatusEnum::ENABLED])->one();
+        if($styleImage->image ?? false){
+            $image = $styleImage->image;
+        }else{
+            $image = '';
+        }
+        $style->style_image = $image;
+        if (false === $style->save(true,['style_image'])) {
+            throw new \Exception($this->getError($style));
+        }
+        return $style;
+    }
+
+    /****
+     * @WarehouseGoods $goods
+     *根据入库信息自动添加款式工厂
+     */
+    public function createStyleFactory($goods){
+        $style_sn = $goods->style_sn;
+        $supplier_id = $goods->supplier_id;
+        $style = Style::find()->where(['style_sn'=>$style_sn])->one();
+        if($style && $supplier_id){
+            //判断是否存在，存在不在重复添加
+            $styleFactory = StyleFactory::find()->where(['style_id'=>$style->id, 'factory_id'=> $supplier_id])->one();
+            if($styleFactory){
+                return;
+            }
+            $model = new StyleFactory();
+            $is_default = StyleFactory::find()->where(['style_id'=>$style->id, 'is_default'=> ConfirmEnum::YES])->count();
+            $style_factory = [
+                'factory_id' => $supplier_id,
+                'style_id' => $style->id,
+                'is_default' => $is_default == ConfirmEnum::YES ? ConfirmEnum::NO : ConfirmEnum::YES ,
+            ];
+            $model->attributes = $style_factory;
+            if (false === $model->save()) {
+                throw new \Exception($this->getError($model));
+            }
+
+        }
+
+    }
+
+
+
+
 
 }

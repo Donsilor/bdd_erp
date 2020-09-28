@@ -20,7 +20,7 @@ $form = ActiveForm::begin([
 </div>
 <div class="modal-body">
     <div class="col-sm-12">
-        <?= $form->field($model, 'bill_no')->textInput(['disabled'=>true, "placeholder"=>"系统自动生成"])?>
+        <?= $form->field($model, 'bill_no')->textInput(['disabled' => 'disabled', "placeholder"=>"系统自动生成"])?>
         <?= $form->field($model, 'delivery_type')->widget(\kartik\select2\Select2::class, [
             'data' => \addons\Warehouse\common\enums\DeliveryTypeEnum::getMap(),
             'options' => ['placeholder' => '请选择'],
