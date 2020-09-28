@@ -37,7 +37,7 @@ class WarehouseBillPayService extends Service
      * @param WarehouseBillTGoodsForm $form
      * @throws \Exception
      */
-    public function payValidate($form){
+    public function billPayValidate($form){
         $ids = $form->getIds();
         if(is_array($ids)){
             foreach ($ids as $id) {

@@ -8,6 +8,7 @@ use common\helpers\Url;
 use common\models\base\SearchModel;
 use addons\Warehouse\common\models\WarehouseBill;
 use addons\Warehouse\common\models\WarehouseBillGoodsL;
+use addons\Warehouse\common\forms\WarehouseBillPayForm;
 use addons\Warehouse\common\forms\WarehouseBillTGoodsForm;
 use addons\Warehouse\common\enums\BillStatusEnum;
 use addons\Warehouse\common\enums\BillTypeEnum;
@@ -458,11 +459,11 @@ class BillTGoodsController extends BaseController
 
         $ids = Yii::$app->request->get('ids');
         $check = Yii::$app->request->get('check', null);
-        $model = new WarehouseBillTGoodsForm();
+        $model = new WarehouseBillPayForm();
         $model->ids = $ids;
         if($check){
             try{
-                \Yii::$app->warehouseService->billPay->payValidate($model);
+                \Yii::$app->warehouseService->billPay->billPayValidate($model);
                 return ResultHelper::json(200, '', ['url'=>Url::to([$this->action->id, 'ids'=>$ids])]);
             }catch (\Exception $e){
                 return ResultHelper::json(422, $e->getMessage());
