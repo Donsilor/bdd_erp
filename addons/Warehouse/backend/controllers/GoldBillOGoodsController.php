@@ -66,7 +66,7 @@ class GoldBillOGoodsController extends BaseController
             'searchModel' => $searchModel,
             'bill' => $bill,
             'tab' => $tab,
-            'tabList'=>\Yii::$app->warehouseService->goldO->menuTabList($bill_id, $this->billType, $returnUrl),
+            'tabList'=>\Yii::$app->warehouseService->goldBill->menuTabList($bill_id, $this->billType, $returnUrl),
         ]);
     }
 

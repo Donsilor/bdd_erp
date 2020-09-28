@@ -184,7 +184,7 @@ class GoldBillTController extends BaseController
         return $this->render($this->action->id, [
             'model' => $model,
             'tab' => $tab,
-            'tabList' => \Yii::$app->warehouseService->goldT->menuTabList($id, $this->billType, $returnUrl),
+            'tabList' => \Yii::$app->warehouseService->goldBill->menuTabList($id, $this->billType, $returnUrl),
             'returnUrl' => $returnUrl,
         ]);
     }
