@@ -2,6 +2,7 @@
 
 namespace addons\Style\common\models;
 
+use addons\Supply\common\models\Supplier;
 use Yii;
 
 /**
@@ -36,7 +37,7 @@ class StyleFactoryFee extends BaseModel
     {
         return [
             [['style_id','fee_type'], 'required'],
-            [[ 'style_id','fee_type', 'creator_id', 'sort', 'status', 'created_at', 'updated_at'], 'integer'],
+            [[ 'style_id','fee_type', 'creator_id', 'factory_id','sort', 'status', 'created_at', 'updated_at'], 'integer'],
             [['remark'], 'string', 'max' => 255],
             [['fee_price'], 'number'],
             [['style_id','fee_type'],'unique','targetAttribute' => [ 'style_id','fee_type'],'comboNotUnique'=>'已经存在']
@@ -53,6 +54,7 @@ class StyleFactoryFee extends BaseModel
             'id' => 'ID',
             'style_id' => '款号ID',
             'fee_type' => '工费类型',
+            'factory_id' => '供应商',
             'fee_price' => '费用',
             'remark' => '备注',
             'creator_id' => '配置人',
@@ -95,4 +97,15 @@ class StyleFactoryFee extends BaseModel
     {
         return $this->hasOne(\common\models\backend\Member::class, ['id'=>'creator_id'])->alias('member');
     }
+
+
+    /**
+     * 关联供应商一对一
+     * @return \yii\db\ActiveQuery
+     */
+    public function getSupplier()
+    {
+        return $this->hasOne(Supplier::class, ['id'=>'factory_id'])->alias('supplier');
+    }
+
 }

@@ -385,11 +385,14 @@ class WarehouseBillLService extends Service
                     ];
                     Yii::$app->warehouseService->goodsLog->createGoodsLog($log);
 
+                    //同步数据到款工厂
                     Yii::$app->styleService->style->createStyleFactory($goods);
-
-
+                    //同步数据到款工费
+                    Yii::$app->styleService->style->createStyleFactoryFee($goods);
+                    
                 }
             }
+
             //创建单据明细信息
             if(!empty($bill_goods)){
                 $value = [];
