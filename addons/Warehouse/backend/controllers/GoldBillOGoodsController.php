@@ -5,10 +5,11 @@ namespace addons\Warehouse\backend\controllers;
 use addons\Warehouse\common\enums\AdjustTypeEnum;
 use addons\Warehouse\common\enums\GoldBillTypeEnum;
 use addons\Warehouse\common\enums\GoldStatusEnum;
-use addons\Warehouse\common\forms\WarehouseGoldBillGoodsForm;
+use addons\Warehouse\common\forms\WarehouseGoldBillOGoodsForm;
 use addons\Warehouse\common\models\WarehouseGold;
 use addons\Warehouse\common\models\WarehouseGoldBill;
 use addons\Warehouse\common\models\WarehouseGoldBillGoods;
+use common\helpers\StringHelper;
 use Yii;
 use common\traits\Curd;
 use common\helpers\Url;
@@ -30,7 +31,7 @@ class GoldBillOGoodsController extends BaseController
     use Curd;
     
     
-    public $modelClass = WarehouseGoldBillGoodsForm::class;
+    public $modelClass = WarehouseGoldBillOGoodsForm::class;
     public $billType = GoldBillTypeEnum::GOLD_O;
 
     /**
@@ -57,7 +58,7 @@ class GoldBillOGoodsController extends BaseController
 
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
         $dataProvider->query->andWhere(['=', 'bill_id', $bill_id]);
-        $dataProvider->query->andWhere(['>',WarehouseGoldBillGoodsForm::tableName().'.status',-1]);
+        $dataProvider->query->andWhere(['>',WarehouseGoldBillOGoodsForm::tableName().'.status',-1]);
 
         $bill = WarehouseGoldBill::find()->where(['id'=>$bill_id])->one();
         return $this->render($this->action->id, [
@@ -79,7 +80,7 @@ class GoldBillOGoodsController extends BaseController
     {
         $id = \Yii::$app->request->get('id');
         $model = $this->findModel($id);
-        $model = $model ?? new WarehouseGoldBillGoodsForm();
+        $model = $model ?? new WarehouseGoldBillOGoodsForm();
         // ajax 校验
         $this->activeFormValidate($model);
         if ($model->load(\Yii::$app->request->post())) {
@@ -116,9 +117,10 @@ class GoldBillOGoodsController extends BaseController
             \Yii::$app->getSession()->setFlash('error', '批次号不能为空');
             return ResultHelper::json(422, "批次号不能为空");
         }
+        $gold_sns = StringHelper::explodeIds($gold_sn);
         try{
             $trans = \Yii::$app->db->beginTransaction();
-            \Yii::$app->warehouseService->goldO->scanGoods($bill_id,[$gold_sn]);
+            \Yii::$app->warehouseService->goldO->scanGoods($bill_id,$gold_sns);
             $trans->commit();
             
             \Yii::$app->getSession()->setFlash('success', '添加成功');
@@ -144,9 +146,14 @@ class GoldBillOGoodsController extends BaseController
         $old_gold_weight = $model->gold_weight; //原有
         $data = Yii::$app->request->get();
         $model->attributes = ArrayHelper::filter($data, array_keys($data));
+        $key = array_keys($data);
+        if(isset($key['id'])){
+            unset($key['id']);
+        }
+        $key[] = 'cost_price';
         try{
             $trans = Yii::$app->trans->beginTransaction();
-            if (!$model->save()) {
+            if (!$model->save(true,$key)) {
                 return ResultHelper::json(422, $this->getError($model));
             }
             $new_gold_weight = $model->gold_weight;

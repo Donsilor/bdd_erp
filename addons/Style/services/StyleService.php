@@ -2,6 +2,7 @@
 
 namespace addons\Style\services;
 
+use addons\Style\common\enums\FactoryFeeEnum;
 use addons\Style\common\enums\StonePositionEnum;
 use addons\Style\common\models\StyleStone;
 use Yii;
@@ -926,6 +927,110 @@ class StyleService extends Service
 
 
 
+    /****
+     * @WarehouseGoods $goods
+     *根据入库信息自动添加款式工厂
+     */
+    public function createStyleFactoryFee($goods){
+        $style_sn = $goods->style_sn;
+        $supplier_id = $goods->supplier_id;
+        $style = Style::find()->where(['style_sn'=>$style_sn])->one();
+        if($style && $supplier_id){
+            //判断是否存在，存在不在重复添加
+            $i=0;
+            foreach (FactoryFeeEnum::getMap() as $key => $value){
+                $fee_price = 0;
+                switch ($key){
+                    //基本工费
+                    case FactoryFeeEnum::BASIC_GF :
+                        $fee_price = $goods->gong_fee;
+                        break;
+                        //镶石费/颗
+                    case FactoryFeeEnum::INLAID_GF :
+                        $fee_price = $goods->xianqian_fee;
+                        break;
+                        //配件工费
+                    case FactoryFeeEnum::PARTS_GF :
+                        $fee_price = $goods->parts_fee;
+                        break;
+                        //克/工费
+                    case FactoryFeeEnum::GEAM_GF :
+                        $fee_price = $goods->ke_gong_fee;
+                        break;
+                        //配石工费
+                    case FactoryFeeEnum::PEISHI_GF :
+                        $fee_price = $goods->peishi_fee;
+                        break;
+                        //分色费
+                    case FactoryFeeEnum::FENSE_GF :
+                        $fee_price = $goods->fense_fee;
+                        break;
+                        //喷沙费
+                    case FactoryFeeEnum::PENSHA_GF :
+                        $fee_price = $goods->penrasa_fee;
+                        break;
+                        //拉沙费
+                    case FactoryFeeEnum::LASHA_GF :
+                        $fee_price = $goods->lasha_fee;
+                        break;
+                        //补口费
+                    case FactoryFeeEnum::BUKOU_GF :
+                        $fee_price = $goods->bukou_fee;
+                        break;
+                        //版费
+                    case FactoryFeeEnum::TEMPLET_GF :
+                        $fee_price = $goods->edition_fee;
+                        break;
+                        //证书费
+                    case FactoryFeeEnum::CERT_GF :
+                        $fee_price = $goods->cert_fee;
+                        break;
+                        //分件费
+                    case FactoryFeeEnum::FENJIAN_GF :
+                        $fee_price = $goods->piece_fee;
+                        break;
+                        //表面工艺费
+                    case FactoryFeeEnum::TECHNOLOGY_GF :
+                        $fee_price = $goods->biaomiangongyi_fee;
+                        break;
+                    case FactoryFeeEnum::OTHER_GF :
+                        $fee_price = $goods->other_fee;
+                        break;
+                }
+
+                $style_id = $style->id;
+                $fee_type = $key;
+
+                if(empty($fee_price) || $fee_price == 0){
+                    continue;
+                }
+
+                $styleFactory = StyleFactoryFee::find()->where(['style_id'=>$style->id, 'factory_id'=> $supplier_id, 'fee_type'=>$fee_type])->one();
+                if($styleFactory){
+                    continue;
+                }
+                $model = new StyleFactoryFee();
+                $style_factory_fee = [
+                    'factory_id' => $supplier_id,
+                    'style_id' => $style_id,
+                    'fee_type' =>$fee_type,
+                    'fee_price' => $fee_price
+                ];
+                $model->attributes = $style_factory_fee;
+
+                if (false === $model->save()) {
+                    throw new \Exception($this->getError($model));
+                }
+            }
+
+        }
+
+    }
+
+    public function createStyleFactoryFeeOne($style_id, $supplier_id, $fee_type, $fee_price){
+
+
+    }
 
 
 }

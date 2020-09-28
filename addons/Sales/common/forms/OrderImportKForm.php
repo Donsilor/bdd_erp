@@ -198,17 +198,21 @@ class OrderImportKForm extends ImportForm
     public function loadRow($row,$rowIndex)
     {
          parent::loadRow($row, $rowIndex);
-        //销售渠道
-        if(!$this->_channelCache) {
+         //销售渠道
+         if(!$this->_channelCache){
              $channelMap = Yii::$app->salesService->saleChannel->getDropDown();
-             $channelMap = array_flip($channelMap);
-             if(isset($channelMap[$this->channel_id])) {
-                 $this->channel_id = $channelMap[$this->channel_id];
-             } else{
+             $this->_channelCache = array_flip($channelMap);
+         }
+         if($this->channel_id) {
+             if(isset($this->_channelCache[$this->channel_id])) {
+                 $this->channel_id = $this->_channelCache[$this->channel_id];
+                 $this->_order[$this->order_sn]['channel_id'] = $this->channel_id;
+             }else{
                  $this->addRowError($rowIndex, 'channel_id', "[{$this->channel_id}]不存在");
              }
-             $this->_channelCache = $channelMap;
-        }
+         }else if(isset($this->_order[$this->order_sn]['channel_id'])) {
+             $this->channel_id = $this->_order[$this->order_sn]['channel_id'];
+         }
         if($this->follower_id) {
             $member = Member::find()->where(['username'=>$this->follower_id])->one();
             if($member) {
@@ -266,7 +270,7 @@ class OrderImportKForm extends ImportForm
             }else if($this->customer_email){
                 $customer = Customer::find()->where(['email'=>$this->customer_email,'channel_id'=>$this->channel_id])->one();
                 if(empty($customer)) {
-                    $this->addRowError($rowIndex, 'customer_email', "[{$this->customer_email}]查询不到客户");
+                    $this->addRowError($rowIndex, 'customer_email', "[{$this->customer_email}]查询不到客户".var_export(['email'=>$this->customer_email,'channel_id'=>$this->channel_id],true));
                 }
             }else{                
                 $this->addRowError($rowIndex, 'customer_no', "客户编号和客户邮箱 不能同时为空");

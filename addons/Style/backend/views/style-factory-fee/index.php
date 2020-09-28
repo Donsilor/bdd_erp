@@ -66,6 +66,21 @@ $this->params['breadcrumbs'][] = $this->title;
                                 }
                             ],
                             [
+                                'attribute' => 'factory_id',
+                                'value' =>"supplier.supplier_name",
+                                'filter'=>\kartik\select2\Select2::widget([
+                                    'name'=>'SearchModel[factory_id]',
+                                    'value'=>$searchModel->factory_id,
+                                    'data'=>Yii::$app->supplyService->supplier->getDropDown(),
+                                    'options' => ['placeholder' =>"请选择",'style'=>"width:180px"],
+                                    'pluginOptions' => [
+                                        'allowClear' => true,
+                                    ],
+                                ]),
+                                'format' => 'raw',
+                                'headerOptions' => ['class' => 'col-md-2'],
+                            ],
+                            [
                                 'label' => '费用',
                                 'attribute'=>'fee_price',
                                 'filter' => false,
