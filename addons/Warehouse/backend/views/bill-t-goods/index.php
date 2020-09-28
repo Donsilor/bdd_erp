@@ -44,7 +44,7 @@ $params = $params ? "&" . http_build_query($params) : '';
             echo '&nbsp;';
         }
         if ($bill->bill_status == \addons\Warehouse\common\enums\BillStatusEnum::CONFIRM) {
-            echo Html::batchPopButton(['pay', 'bill_id' => $bill->id, 'check' => 1], '单据结算', [
+            echo Html::batchPopButton(['create-pay', 'bill_id' => $bill->id, 'check' => 1], '单据结算', [
                 'class' => 'btn btn-primary btn-xs',
                 'data-width' => '60%',
                 'data-height' => '60%',
