@@ -454,7 +454,7 @@ class BillTGoodsController extends BaseController
      * @return mixed
      * @throws
      */
-    public function actionPay()
+    public function actionCreatePay()
     {
         $this->layout = '@backend/views/layouts/iframe';
 

@@ -38,6 +38,14 @@ use yii\widgets\ActiveForm;
                         <?= $form->field($model, 'pay_gold_weight')->textInput(['value'=> $total['pay_gold_weight']]) ?>
                     </div>
                 </div>
+                <div class="row" style="display: none" id="pay2">
+                    <div class="col-sm-6">
+                        <?= $form->field($model, 'pay_material')->radioList(\addons\Warehouse\common\enums\PayMaterialEnum::getMap()) ?>
+                    </div>
+                    <div class="col-sm-6">
+                        <?= $form->field($model, 'pay_gold_weight')->textInput() ?>
+                    </div>
+                </div>
                 <div class="row">
                     <div class="col-sm-6">
                         <?= $form->field($model, 'pay_method')->radioList(\addons\Warehouse\common\enums\PayMethodEnum::getMap()) ?>

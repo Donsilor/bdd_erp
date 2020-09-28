@@ -25,7 +25,7 @@ $this->params['breadcrumbs'][] = $this->title;
     <div class="box-tools" style="float:right;margin-top:-40px; margin-right: 20px;">
         <?php
         if($bill->bill_status == \addons\Warehouse\common\enums\BillStatusEnum::SAVE) {
-            echo Html::edit(['edit-all', 'bill_id' => $bill->id,'scan'=>1], '商品扫码添加', ['class'=>'btn btn-success btn-xs']);
+            echo Html::edit(['edit-all', 'bill_id' => $bill->id,'scan'=>1], '添加金料', ['class'=>'btn btn-success btn-xs']);
             echo '&nbsp;';
             echo Html::a('返回列表', ['gold-bill-o-goods/index', 'bill_id' => $bill->id], ['class' => 'btn btn-info btn-xs']);
         }
@@ -112,6 +112,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'filter' => Html::activeDropDownList($searchModel, 'gold_type',Yii::$app->attr->valueMap(\addons\Style\common\enums\AttrIdEnum::MAT_GOLD_TYPE), [
                                     'prompt' => '全部',
                                     'class' => 'form-control',
+                                    'style'=> 'width:80px'
                                 ]),
                                 'headerOptions' => ['class' => 'col-md-2'],
                             ],
@@ -138,12 +139,22 @@ $this->params['breadcrumbs'][] = $this->title;
                             [
                                 'attribute' => 'gold_price',
                                 'filter' => false,
-                                'headerOptions' => ['class' => 'col-md-2'],
+                                'headerOptions' => ['width' => '100'],
                             ],
                             [
                                 'attribute' => 'cost_price',
                                 'filter' => false,
-                                'headerOptions' => ['class' => 'col-md-2'],
+                                'headerOptions' => ['width' => '100'],
+                            ],
+                            [
+                                'attribute' => 'remark',
+                                'headerOptions' => ['class' => 'col-md-2', 'style' => 'background-color:#84bf96;'],
+                                'footerOptions' => ['class' => 'col-md-2', 'style' => 'background-color:#84bf96;'],
+                                'filter' => false,
+                                'value' =>function($model){
+                                    return Html::ajaxInput('remark', $model->remark);
+                                },
+                                'format' => 'raw',
                             ],
                             [
                                 'class' => 'yii\grid\ActionColumn',

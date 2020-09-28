@@ -31,7 +31,7 @@ class WarehouseGoldBillGoodsForm extends WarehouseGoldBillGoods
     {
         //合并
         return ArrayHelper::merge(parent::attributeLabels() , [
-
+            'gold_weight' => '出库金重(g)',
         ]);
     }
 
