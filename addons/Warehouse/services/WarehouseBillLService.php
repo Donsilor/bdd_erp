@@ -492,7 +492,8 @@ class WarehouseBillLService extends Service
         $goods_num = $goods['goods_num'] ?? 1;
         foreach ($goods as $field => $value) {
             if (in_array($field, $fields) && bccomp($value, 0, 5) == 1) {
-                $goods[$field] = bcdiv($value, $goods_num, 3);
+                $price = bcdiv($value, $goods_num, 3);
+                $goods[$field] = floatval($price);
             }
         }
         return $goods ?? [];
