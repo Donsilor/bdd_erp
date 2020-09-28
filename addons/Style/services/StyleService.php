@@ -135,13 +135,11 @@ class StyleService extends Service
             //款号分组排序生成        
             $sort = Style::find()->where(['style_channel_id'=>$model->style_channel_id,'style_cate_id'=>$model->style_cate_id,'is_autosn'=>1])->andWhere(['<>','id',$model->id])->max("style_sort");
             $sort = $sort > 0 ? $sort +1 : 200;
-            $sortArray = Style::find()->select(['style_sort'])->where(['style_channel_id'=>$model->style_channel_id,'style_cate_id'=>$model->style_cate_id,'is_autosn'=>0])->andWhere(['>','style_sort',0])->orderBy("style_sort asc")->asArray()->all();
+            $sortArray = Style::find()->select(['style_sort'])->where(['style_channel_id'=>$model->style_channel_id,'style_cate_id'=>$model->style_cate_id,'is_autosn'=>0])->andWhere(['>=','style_sort',$sort])->orderBy("style_sort asc")->asArray()->all();
             if(!empty($sortArray)) {
                 foreach ($sortArray as $k=>$v) {
                      $current = $v['style_sort'];                
-                     if($current < $sort) {
-                         $sort = $current + 1;
-                     }else if($current == $sort) {
+                     if($current == $sort) {
                          $sort = $sort + 1;
                      }else{
                          break;
