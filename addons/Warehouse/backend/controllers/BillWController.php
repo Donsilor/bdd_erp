@@ -230,7 +230,7 @@ class BillWController extends BaseController
      * 盘点
      * @return mixed
      */
-    public function actionPandian()
+    /* public function actionPandian()
     {
         $id = Yii::$app->request->get('id');
         
@@ -265,7 +265,7 @@ class BillWController extends BaseController
         return $this->render($this->action->id, [
                 'model' => $model,
         ]);
-    }
+    } */
     /**
      * ajax 审核
      *

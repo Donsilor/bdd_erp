@@ -8,7 +8,6 @@ use common\helpers\Url;
 use common\models\base\SearchModel;
 use addons\Warehouse\common\models\WarehouseBill;
 use addons\Warehouse\common\models\WarehouseBillGoods;
-use addons\Warehouse\common\enums\DeliveryTypeEnum;
 use addons\Warehouse\common\forms\WarehouseBillBForm;
 use addons\Warehouse\common\forms\WarehouseBillCForm;
 use addons\Warehouse\common\enums\BillTypeEnum;

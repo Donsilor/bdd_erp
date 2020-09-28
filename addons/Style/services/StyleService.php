@@ -517,7 +517,6 @@ class StyleService extends Service
             $styleM = new StyleForm();
             $styleM->id = rand(1000000000, 9999999999);
             $styleM->setAttributes($styleInfo);
-            $styleM->style_sort = $this->createStyleSort($styleM,false);
             if (!$styleM->validate()) {
                 $flag = false;
                 $error[$i][] = $this->getError($styleM);
@@ -592,7 +591,9 @@ class StyleService extends Service
             }
             $style_ids[] = $styleM->id;
             if (empty($styleM->style_sn)) {//款号为空自动创建
-                Yii::$app->styleService->style->createStyleSn($styleM);
+                $this->createStyleSn($styleM);
+            }else {
+                $this->createStyleSort($styleM);
             }
             //创建审批流程
             if ($styleM->status != StatusEnum::ENABLED) {//未启用走审批流程
