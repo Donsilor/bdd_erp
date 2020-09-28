@@ -1,5 +1,7 @@
 <?php
+
 use yii\widgets\ActiveForm;
+
 ?>
 <div class="row">
     <div class="col-lg-12">
@@ -24,8 +26,16 @@ use yii\widgets\ActiveForm;
                             ],
                         ]); ?>
                     </div>
-                    <div class="col-sm-6">
+                    <div class="col-sm-6" id="pay1">
                         <?= $form->field($model, 'pay_amount')->textInput() ?>
+                    </div>
+                </div>
+                <div class="row" style="display: none" id="pay2">
+                    <div class="col-sm-6">
+                        <?= $form->field($model, 'pay_material')->radioList(\addons\Warehouse\common\enums\PayMaterialEnum::getMap()) ?>
+                    </div>
+                    <div class="col-sm-6">
+                        <?= $form->field($model, 'pay_gold_weight')->textInput() ?>
                     </div>
                 </div>
                 <div class="row">
@@ -42,14 +52,18 @@ use yii\widgets\ActiveForm;
     </div>
 </div>
 <script>
-    $("#purchasereceiptgoodsform-goods_status").change(function(){
-        var status = $(this).find(':checked').val();
-        if(status == 0){
-            $("#nopass_param").show();
-        }else {
-            $("#select2-purchasereceiptgoodsform-iqc_reason-container").find('select').find("option:first").prop("selected",true);
-            $("#purchasereceiptgoodsform-iqc_remark").val("");
-            $("#nopass_param").hide();
+    var formId = 'warehousebillpayform';
+    $("#"+formId+"-pay_content").change(function () {
+        var pay_content = $(this).find(':checked').val();
+        if (pay_content == 1) {
+            $("#pay1").show();
+            $("#pay2").hide();
+            $("#"+formId+"-pay_material").attr("checked",false);
+            $("#"+formId+"-pay_gold_weight").val("");
+        } else {
+            $("#pay2").show();
+            $("#pay1").hide();
+            $("#"+formId+"-pay_amount").val("");
         }
     })
 </script>

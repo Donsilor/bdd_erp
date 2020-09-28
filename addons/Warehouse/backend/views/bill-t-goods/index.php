@@ -44,10 +44,10 @@ $params = $params ? "&" . http_build_query($params) : '';
             echo '&nbsp;';
         }
         if ($bill->bill_status == \addons\Warehouse\common\enums\BillStatusEnum::CONFIRM) {
-            echo Html::create(['pay', 'bill_id' => $bill->id], '结算', [
-                'class' => 'btn btn-primary btn-xs openIframe',
-                'data-width' => '90%',
-                'data-height' => '90%',
+            echo Html::batchPopButton(['pay', 'bill_id' => $bill->id, 'check' => 1], '单据结算', [
+                'class' => 'btn btn-primary btn-xs',
+                'data-width' => '60%',
+                'data-height' => '60%',
                 'data-offset' => '20px',
             ]);
             echo '&nbsp;';
@@ -2142,6 +2142,21 @@ $params = $params ? "&" . http_build_query($params) : '';
                                     return \addons\Style\common\enums\InlayEnum::getValue($model->is_inlay) ?? "";
                                 },
                                 'filter' => Html::activeDropDownList($searchModel, 'is_inlay', $model->getIsInlayMap(), [
+                                    'prompt' => '全部',
+                                    'class' => 'form-control',
+                                    'style' => 'width:60px;'
+                                ]),
+                            ],
+                            [
+                                'attribute' => 'pay_status',
+                                'format' => 'raw',
+                                'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#9b95c9;'],
+                                'footerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#9b95c9;'],
+                                'value' => function ($model, $key, $index, $widget) {
+                                    $widget->footer = $model->getAttributeLabel('pay_status');
+                                    return \addons\Warehouse\common\enums\IsSettleAccountsEnum::getValue($model->pay_status) ?? "";
+                                },
+                                'filter' => Html::activeDropDownList($searchModel, 'pay_status', $model->getPayStatusMap(), [
                                     'prompt' => '全部',
                                     'class' => 'form-control',
                                     'style' => 'width:60px;'

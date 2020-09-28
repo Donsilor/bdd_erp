@@ -2,6 +2,7 @@
 
 namespace addons\Warehouse\backend\controllers;
 
+use addons\Warehouse\common\enums\PayContentEnum;
 use Yii;
 use common\traits\Curd;
 use common\helpers\Url;
@@ -185,7 +186,7 @@ class BillTGoodsController extends BaseController
                 $trans = \Yii::$app->db->beginTransaction();
                 //$model->biaomiangongyi = join(',',$model->biaomiangongyi);
                 $result = $model->updateFromValidate($model);
-                if($result['error'] == false){
+                if ($result['error'] == false) {
                     throw new \Exception($result['msg']);
                 }
                 if (false === $model->save()) {
@@ -224,7 +225,7 @@ class BillTGoodsController extends BaseController
             $trans = \Yii::$app->db->beginTransaction();
             $model->attributes = ArrayHelper::filter($params, $keys);
             $result = $model->updateFromValidate($model);
-            if($result['error'] == false){
+            if ($result['error'] == false) {
                 throw new \Exception($result['msg']);
             }
             if (!$model->save()) {
@@ -278,7 +279,7 @@ class BillTGoodsController extends BaseController
                         throw new \Exception($this->getError($goods));
                     }
                     $result = $model->updateFromValidate($goods);
-                    if($result['error'] == false){
+                    if ($result['error'] == false) {
                         throw new \Exception($result['msg']);
                     }
                     if (false === $goods->save(true, [$name])) {
@@ -450,40 +451,44 @@ class BillTGoodsController extends BaseController
 
     /**
      * 创建结算信息
-     * @throws
      * @return mixed
+     * @throws
      */
     public function actionPay()
     {
         $this->layout = '@backend/views/layouts/iframe';
 
         $ids = Yii::$app->request->get('ids');
+        $bill_id = Yii::$app->request->get('bill_id');
         $check = Yii::$app->request->get('check', null);
         $model = new WarehouseBillPayForm();
+        $billM = WarehouseBill::findOne($bill_id);
+        $model->supplier_id = $billM->supplier_id;
         $model->ids = $ids;
-        if($check){
-            try{
+        if ($check) {
+            try {
                 \Yii::$app->warehouseService->billPay->billPayValidate($model);
-                return ResultHelper::json(200, '', ['url'=>Url::to([$this->action->id, 'ids'=>$ids])]);
-            }catch (\Exception $e){
+                return ResultHelper::json(200, '', ['url' => Url::to([$this->action->id, 'bill_id' => $bill_id, 'ids' => $ids])]);
+            } catch (\Exception $e) {
                 return ResultHelper::json(422, $e->getMessage());
             }
         }
         if ($model->load(Yii::$app->request->post())) {
-            try{
+            try {
                 $trans = Yii::$app->trans->beginTransaction();
 
                 \Yii::$app->warehouseService->billPay->createBillPay($model);
                 $trans->commit();
-                Yii::$app->getSession()->setFlash('success','保存成功');
+                Yii::$app->getSession()->setFlash('success', '保存成功');
                 return ResultHelper::json(200, '保存成功');
-            }catch (\Exception $e){
+            } catch (\Exception $e) {
                 $trans->rollBack();
                 return ResultHelper::json(422, $e->getMessage());
             }
         }
+        //$model->pay_content = PayContentEnum::FACTORY_COST;
         $model->pay_method = PayMethodEnum::TALLY;
-        $model->pay_tax = PayTaxEnum::NO_TAX;
+        $model->pay_tax = PayTaxEnum::YES_TAX;
         return $this->render($this->action->id, [
             'model' => $model,
         ]);

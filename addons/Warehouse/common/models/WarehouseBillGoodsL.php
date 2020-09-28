@@ -411,7 +411,7 @@ class WarehouseBillGoodsL extends BaseModel
             'auto_factory_cost' => '自动计算工厂成本',
             'auto_tax_amount' => '自动计算税额',
             'source_detail_id' => '来源明细ID',
-            'pay_status' => '结算状态',
+            'pay_status' => '结价状态',
             'pay_id' => '结算ID',
             'remark' => '备注',
             'status' => '状态',

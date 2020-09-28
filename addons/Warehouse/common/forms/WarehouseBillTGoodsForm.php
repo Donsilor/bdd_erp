@@ -415,6 +415,15 @@ class WarehouseBillTGoodsForm extends WarehouseBillGoodsL
     }
 
     /**
+     * 结算状态
+     * @return array
+     */
+    public function getPayStatusMap()
+    {
+        return \addons\Warehouse\common\enums\IsSettleAccountsEnum::getMap() ?? [];
+    }
+
+    /**
      * 配料方式
      * @return array
      */
