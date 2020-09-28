@@ -377,7 +377,7 @@ class OrderService extends Service
                     $orderGoods->order_id = $order->id;
                 }else {
                     //从款式信息自动带出款的信息
-                    $styleInfo = $style->toArray(['style_cate_id','product_type_id','is_inlay','style_channel_id','style_sex']);
+                    $styleInfo = $style->toArray(['style_name','style_cate_id','product_type_id','is_inlay','style_channel_id','style_sex']);
                     $orderGoods = new OrderGoods();
                     $orderGoods->attributes = $goodsInfo;
                     $orderGoods->jintuo_type = 1;
@@ -386,7 +386,8 @@ class OrderService extends Service
                     $orderGoods->is_inlay = $style->is_inlay;
                     $orderGoods->style_channel_id = $style->style_channel_id;
                     $orderGoods->style_sex = $style->style_sex;
-                    
+                    $orderGoods->goods_name = $orderGoods->goods_name ? $orderGoods->goods_name : $style->style_name;
+   
                     $orderGoods->order_id = $order->id;
                     if(empty($goodsInfo['goods_image'])) {
                         $orderGoods->goods_image = $style->style_image;
@@ -431,7 +432,7 @@ class OrderService extends Service
         }else {
             $address->attributes = $form->address->toArray();
         }       
-        if(false == $address->save()) {
+        if(false == $address->save(false)) {
             throw new \Exception("同步收货地址失败：".$this->getError($address));
         } 
         //6.同步订单发票信息

@@ -69,7 +69,7 @@ class ImportForm extends Model
     {
         foreach ($row as $attribute=> $colValue) {
            
-            $this->{$attribute} = trim($colValue);
+            $this->{$attribute} = trim(preg_replace("/[|]|【|】/is",'',$colValue));
             
             if($this->isNeedCheck($attribute)) {
                 //必填校验

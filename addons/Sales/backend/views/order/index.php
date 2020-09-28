@@ -23,7 +23,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         'data-toggle' => 'modal',
                         'data-target' => '#ajaxModalLg',
                     ]); ?>
-                    <?= Html::create(['ajax-import-k'], '批量导入', [
+                    <?= Html::create(['ajax-import-k'], '国际批发导入', [
                         //'class'=>'btn btn-success btn-xs',
                         'data-toggle' => 'modal',
                         'data-target' => '#ajaxModal',

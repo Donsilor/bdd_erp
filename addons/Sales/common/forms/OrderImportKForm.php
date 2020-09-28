@@ -75,30 +75,29 @@ class OrderImportKForm extends ImportForm
             8=>'pay_amount',
             9=>'paid_amount',
             10=>'customer_no',
-            11=>'customer_mobile',
-            12=>'customer_email',
-            13=>'style_sn',
-            14=>'goods_name',
-            15=>'material_type',
-            16=>'material_color',
-            17=>'goods_num',
-            18=>'goods_price',
-            19=>'goods_weight',
-            20=>'finger',
-            21=>'finger_hk',
-            22=>'size',
-            23=>'main_stone_type',
-            24=>'main_stone_weight',
-            25=>'main_stone_num',
-            26=>'main_stone_color',
-            27=>'main_stone_clarity',
-            28=>'main_stone_price',
-            29=>'second_stone_type1',
-            30=>'second_stone_weight1',
-            31=>'second_stone_num1',
-            32=>'second_stone_price1',
-            33=>'stone_spec',
-            34=>'remark',
+            11=>'customer_email',
+            12=>'style_sn',
+            13=>'goods_name',
+            14=>'material_type',
+            15=>'material_color',
+            16=>'goods_num',
+            17=>'goods_price',
+            18=>'goods_weight',
+            19=>'finger',
+            20=>'finger_hk',
+            21=>'size',
+            22=>'main_stone_type',
+            23=>'main_stone_weight',
+            24=>'main_stone_num',
+            25=>'main_stone_color',
+            26=>'main_stone_clarity',
+            27=>'main_stone_price',
+            28=>'second_stone_type1',
+            29=>'second_stone_weight1',
+            30=>'second_stone_num1',
+            31=>'second_stone_price1',
+            32=>'stone_spec',
+            33=>'remark',
     ];
     //唯一行的字段
     public $uniqueKey = 'order_sn';
@@ -139,7 +138,7 @@ class OrderImportKForm extends ImportForm
             'second_stone_num1',
             'second_stone_weight1',
             'second_stone_price1',
-    ];    
+    ];
     //文本属性
     public $attrInputColumns = [
             AttrIdEnum::CHAIN_LENGTH =>'size',
@@ -247,6 +246,10 @@ class OrderImportKForm extends ImportForm
             }else{
                 $this->currency = $currency;
             }
+        }
+        //商品金额验证
+        if($this->goods_price <=0) {            
+            $this->addRowError($rowIndex, 'goods_price', "[{$this->goods_price}]填写错误，不能小于0");
         }
         //款号信息
         if($this->style_sn) {

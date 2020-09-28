@@ -17,7 +17,8 @@ $form = ActiveForm::begin([
     <h4 class="modal-title">基本信息</h4>
 </div>
 <div class="modal-body">
-    <div class="col-sm-12">      
+    <div class="col-sm-12">  
+        <h4 style="color:red">国际批发订单导入</h4>   
         <?= $form->field($model, 'file')->fileInput() ?>
         <?= Html::a("下载数据导入模板", ['ajax-import-k','download' => 1], ['style' => "text-decoration:underline;color:#3c8dbc"]).'<br/>' ?>        
     </div>
