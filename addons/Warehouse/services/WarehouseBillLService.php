@@ -382,6 +382,10 @@ class WarehouseBillLService extends Service
                         'log_msg' => '入库单：' . $form->bill_no . ";货品状态:“" . GoodsStatusEnum::getValue(GoodsStatusEnum::IN_STOCK) . "”"
                     ];
                     Yii::$app->warehouseService->goodsLog->createGoodsLog($log);
+
+                    Yii::$app->styleService->style->createStyleFactory($goods);
+
+
                 }
             }
             //创建单据明细信息
