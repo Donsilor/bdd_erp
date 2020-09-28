@@ -25,7 +25,8 @@ $params = $params ? "&" . http_build_query($params) : '';
     }
 </style>
 <div class="box-body nav-tabs-custom">
-    <h2 class="page-header"><?= $this->title; ?> - <span id="bill_no"><?= $bill->bill_no ?></span> <i class="fa fa-copy" onclick="copy('bill_no')"></i>
+    <h2 class="page-header"><?= $this->title; ?> - <span id="bill_no"><?= $bill->bill_no ?></span> <i class="fa fa-copy"
+                                                                                                      onclick="copy('bill_no')"></i>
         - <?= \addons\Warehouse\common\enums\BillStatusEnum::getValue($bill->bill_status) ?></h2>
     <?php echo Html::menuTab($tabList, $tab) ?>
     <div class="box-tools" style="float:right;margin-top:-40px; margin-right: 20px;">
@@ -42,13 +43,14 @@ $params = $params ? "&" . http_build_query($params) : '';
             echo Html::edit(['edit-all', 'bill_id' => $bill->id], '编辑货品', ['class' => 'btn btn-info btn-xs']);
             echo '&nbsp;';
         }
-        if ($bill->bill_status == \addons\Warehouse\common\enums\BillStatusEnum::SAVE) {
-            echo Html::create(['pay', 'bill_id' => $bill->id], '创建结算信息', [
+        if ($bill->bill_status == \addons\Warehouse\common\enums\BillStatusEnum::CONFIRM) {
+            echo Html::create(['pay', 'bill_id' => $bill->id], '结算', [
                 'class' => 'btn btn-primary btn-xs openIframe',
                 'data-width' => '90%',
                 'data-height' => '90%',
                 'data-offset' => '20px',
             ]);
+            echo '&nbsp;';
         }
         echo Html::a('单据打印', ['bill-t/print', 'id' => $bill->id], ['target' => '_blank', 'class' => 'btn btn-info btn-xs',]);
         //, 'onclick' => 'rfTwiceAffirm(this,"打印单据", "确定打印吗？");return false;'
@@ -211,8 +213,8 @@ $params = $params ? "&" . http_build_query($params) : '';
                                 'footerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#feeeed;'],
                                 'value' => function ($model, $key, $index, $widget) {
                                     $widget->footer = $model->getAttributeLabel('goods_id');
-                                    if($model->goods_id){
-                                        $model->goods_id = '<span id="goods_'.$model->goods_id.'">'.$model->goods_id. '</span> <i class="fa fa-copy" onclick="copy(\'goods_' . $model->goods_id . '\')"></i>';
+                                    if ($model->goods_id) {
+                                        $model->goods_id = '<span id="goods_' . $model->goods_id . '">' . $model->goods_id . '</span> <i class="fa fa-copy" onclick="copy(\'goods_' . $model->goods_id . '\')"></i>';
                                     }
                                     return $model->goods_id ?? "";
                                 },
@@ -2262,7 +2264,7 @@ $params = $params ? "&" . http_build_query($params) : '';
 
     function batchExport() {
         appConfirm("确定要导出明细吗?", '', function (code) {
-            if(code !== "defeat") {
+            if (code !== "defeat") {
                 return;
             }
             window.location.href = "<?= \common\helpers\Url::buildUrl('../bill-t/export', [], ['ids'])?>?ids=<?php echo $bill->id ?>";

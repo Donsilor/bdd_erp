@@ -127,6 +127,7 @@ class WarehouseBillLService extends Service
                 if (empty($good->jintuo_type)) {
                     $good->jintuo_type = JintuoTypeEnum::Chengpin;
                 }
+                $good = $this->calcSingleGoods($good);
                 $goods[] = [
                     //基本信息
                     'goods_id' => $good->goods_id,//条码号
@@ -321,10 +322,9 @@ class WarehouseBillLService extends Service
             $value = [];
             $key = array_keys($goods[0]);
             foreach ($goods as $item) {
-                $item = $this->calcSingleGoods($item);
                 $model->setAttributes($item);
                 if (!$model->validate()) {
-                    throw new \Exception($this->getError($model));
+                    throw new \Exception("货号：".$item['goods_id'].$this->getError($model));
                 }
                 $value[] = array_values($item);
                 if (count($value) >= 10) {
