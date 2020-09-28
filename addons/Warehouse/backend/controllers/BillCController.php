@@ -20,7 +20,6 @@ use common\models\backend\Member;
 use Yii;
 use common\traits\Curd;
 use common\helpers\Url;
-use common\helpers\SnHelper;
 use common\helpers\ExcelHelper;
 use common\models\base\SearchModel;
 use addons\Warehouse\common\models\WarehouseBill;

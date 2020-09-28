@@ -135,13 +135,11 @@ class StyleService extends Service
             //款号分组排序生成        
             $sort = Style::find()->where(['style_channel_id'=>$model->style_channel_id,'style_cate_id'=>$model->style_cate_id,'is_autosn'=>1])->andWhere(['<>','id',$model->id])->max("style_sort");
             $sort = $sort > 0 ? $sort +1 : 200;
-            $sortArray = Style::find()->select(['style_sort'])->where(['style_channel_id'=>$model->style_channel_id,'style_cate_id'=>$model->style_cate_id,'is_autosn'=>0])->andWhere(['>','style_sort',0])->orderBy("style_sort asc")->asArray()->all();
+            $sortArray = Style::find()->select(['style_sort'])->where(['style_channel_id'=>$model->style_channel_id,'style_cate_id'=>$model->style_cate_id,'is_autosn'=>0])->andWhere(['>=','style_sort',$sort])->orderBy("style_sort asc")->asArray()->all();
             if(!empty($sortArray)) {
                 foreach ($sortArray as $k=>$v) {
                      $current = $v['style_sort'];                
-                     if($current < $sort) {
-                         $sort = $current + 1;
-                     }else if($current == $sort) {
+                     if($current == $sort) {
                          $sort = $sort + 1;
                      }else{
                          break;
@@ -519,7 +517,6 @@ class StyleService extends Service
             $styleM = new StyleForm();
             $styleM->id = rand(1000000000, 9999999999);
             $styleM->setAttributes($styleInfo);
-            $styleM->style_sort = $this->createStyleSort($styleM,false);
             if (!$styleM->validate()) {
                 $flag = false;
                 $error[$i][] = $this->getError($styleM);
@@ -594,7 +591,9 @@ class StyleService extends Service
             }
             $style_ids[] = $styleM->id;
             if (empty($styleM->style_sn)) {//款号为空自动创建
-                Yii::$app->styleService->style->createStyleSn($styleM);
+                $this->createStyleSn($styleM);
+            }else {
+                $this->createStyleSort($styleM);
             }
             //创建审批流程
             if ($styleM->status != StatusEnum::ENABLED) {//未启用走审批流程

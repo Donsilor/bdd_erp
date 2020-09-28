@@ -12,14 +12,24 @@ $this->params['breadcrumbs'][] = $this->title;
     <h2 class="page-header">盘点单详情 - <?php echo $bill->bill_no?> - <?php echo BillStatusEnum::getValue($bill->bill_status)?></h2>
     <?php echo Html::menuTab($tabList,$tab)?>
     <div class="box-tools" style="float:right;margin-top:-40px; margin-right: 20px;">
-        <?php if($bill->bill_status == BillStatusEnum::SAVE) {?>
-            <?= Html::create(['bill-w-goods/edit-all', 'bill_id' => $bill->id,'returnUrl'=>Url::getReturnUrl()], '盘点', []); ?>
-        <?php }?>    
+        <?= Html::create(['bill-w-goods/index', 'bill_id' => $bill->id,'returnUrl'=>Url::getReturnUrl()], '返回列表', []); ?>
     </div>
     <div class="tab-content">
         <div class="row col-xs-15">
             <div class="box">
-               <div class="box-body table-responsive">  
+               <div class="box-body table-responsive"> 
+                    <div class="row">
+                        <div class="col-lg-8">
+                            <div class="form-group field-cate-sort">
+                                <div class="col-sm-6">
+                                    <?= Html::textInput('goods_id', '', ['id'=>'goods_id','class' => 'form-control','placeholder'=>'请输入货号 或 扫商品条码盘点']).'<br/>' ?>
+                                </div>
+                                <div class="col-sm-2 text-left">
+                                    <button id="pandianBtn" type="button" class="btn btn-primary" >盘点</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                     <?= GridView::widget([
                         'dataProvider' => $dataProvider,
                         'filterModel' => $searchModel,
@@ -129,3 +139,30 @@ $this->params['breadcrumbs'][] = $this->title;
         </div>
     </div>
 </div>
+
+<script type="text/javascript">
+    $('#goods_id').focus();
+    $('#goods_id').keydown(function(e){
+        if(e.keyCode == 13){
+        	scanGoods();
+        }
+    });
+     $("#pandianBtn").click(function(){
+    	 scanGoods();
+     });
+     function scanGoods(){
+    	 var goods_id = $("#goods_id").val();
+         $.ajax({
+             type: "post",
+             url: '<?php echo Url::to(['bill-w-goods/ajax-pandian'])?>',
+             dataType: "json",
+             data: {
+                 bill_id: '<?php echo $bill->id?>',
+                 goods_id:goods_id,
+             },
+             success: function (data) {
+                 window.location.href='<?= \Yii::$app->request->getUrl(); ?>';
+             }
+         });
+     }                       
+</script>
