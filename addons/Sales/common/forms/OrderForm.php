@@ -24,6 +24,9 @@ class OrderForm extends Order
     public $customer_email_2;
     public $customer_source;
     public $customer_level;
+    //订单商品列表
+    public $post_goods_list;
+    public $post_customer;
     /**
      * {@inheritdoc}
      */

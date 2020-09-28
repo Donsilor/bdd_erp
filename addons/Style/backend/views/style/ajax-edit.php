@@ -2,6 +2,7 @@
 
 use yii\widgets\ActiveForm;
 use common\helpers\Url;
+use common\enums\AuditStatusEnum;
 
 $form = ActiveForm::begin([
     'id' => $model->formName(),
@@ -21,8 +22,8 @@ $form = ActiveForm::begin([
     <div class="modal-body">
         <div class="col-sm-12">
             <div class="row">
-                <div class="col-lg-6"><?= $form->field($model, 'style_name')->textInput() ?></div>
-                <div class="col-lg-6"><?= $form->field($model, 'style_sn')->textInput(['disabled' => $model->isNewRecord ? null : 'disabled', 'placeholder' => '编号为空时系统自动生成']) ?></div>
+                <div class="col-lg-6"><?= $form->field($model, 'style_name')->textInput()->label() ?></div>
+                <div class="col-lg-6"><?= $form->field($model, 'style_sn')->textInput(['disabled' => $model->isNewRecord ? null : 'disabled', 'placeholder' => '编号为空时系统自动生成'])->label($model->is_autosn == 1 || $model->isNewRecord ?null:"款式编号(<font color='red'>人工编款)</font>") ?></div>
             </div>
             <div class="row">
                 <div class="col-lg-6">
@@ -52,7 +53,8 @@ $form = ActiveForm::begin([
                         'data' => \Yii::$app->styleService->styleChannel->getDropDown(),
                         'options' => ['placeholder' => '请选择'],
                         'pluginOptions' => [
-                            'allowClear' => true
+                            'allowClear' => true,
+                            'disabled' => $model->isNewRecord || $model->is_autosn == 0 ? null : 'disabled'
                         ],
                     ]); ?>
                 </div>
@@ -67,8 +69,8 @@ $form = ActiveForm::begin([
                 </div>
             </div>
             <div class="row">
-                <div class="col-lg-6"><?= $form->field($model, 'style_material')->radioList(\addons\Style\common\enums\StyleMaterialEnum::getMap()) ?></div>
-                <div class="col-lg-6"><?= $form->field($model, 'style_sex')->radioList(\addons\Style\common\enums\StyleSexEnum::getMap()) ?></div>
+                <div class="col-lg-6"><?= $form->field($model, 'style_material')->radioList(\addons\Style\common\enums\StyleMaterialEnum::getMap(),['onclick'=>$model->isNewRecord || $model->is_autosn == 0 ? null : 'return false;']) ?></div>
+                <div class="col-lg-6"><?= $form->field($model, 'style_sex')->radioList(\addons\Style\common\enums\StyleSexEnum::getMap(),['onclick'=>$model->isNewRecord || $model->is_autosn == 0 ? null : 'return false;']) ?></div>
             </div>
             <div class="row">
                 <div class="col-lg-6"><?= $form->field($model, 'is_made')->radioList(\common\enums\ConfirmEnum::getMap()) ?></div>

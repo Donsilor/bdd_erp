@@ -70,7 +70,7 @@ class Customer extends BaseModel
             [['qq', 'mobile', 'home_phone'], 'string', 'max' => 20],
             [['customer_no'], 'string', 'max' => 30],
             [['address', 'invoice_tax', 'remark'], 'string', 'max' => 255],
-            [['language', 'currency'], 'string', 'max' => 10],
+            [['language', 'currency','zip_code'], 'string', 'max' => 10],
             [['birthday'], 'safe'],
         ];
     }
@@ -104,6 +104,7 @@ class Customer extends BaseModel
             'city_id' => '城市',
             'area_id' => '地区',
             'address' => '详细地址',
+            'zip_code' => '邮编',
             'age' => '客户年龄',
             'level' => '客户级别',
             'language' => '语言',
