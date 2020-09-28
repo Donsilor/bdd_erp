@@ -27,7 +27,7 @@ use yii\widgets\ActiveForm;
                         ]); ?>
                     </div>
                     <div class="col-sm-6" id="pay1">
-                        <?= $form->field($model, 'pay_amount')->textInput() ?>
+                        <?= $form->field($model, 'pay_amount')->textInput(['value'=> $total['pay_amount']]) ?>
                     </div>
                 </div>
                 <div class="row" style="display: none" id="pay2">
@@ -35,7 +35,7 @@ use yii\widgets\ActiveForm;
                         <?= $form->field($model, 'pay_material')->radioList(\addons\Warehouse\common\enums\PayMaterialEnum::getMap()) ?>
                     </div>
                     <div class="col-sm-6">
-                        <?= $form->field($model, 'pay_gold_weight')->textInput() ?>
+                        <?= $form->field($model, 'pay_gold_weight')->textInput(['value'=> $total['pay_gold_weight']]) ?>
                     </div>
                 </div>
                 <div class="row">
@@ -58,12 +58,12 @@ use yii\widgets\ActiveForm;
         if (pay_content == 1) {
             $("#pay1").show();
             $("#pay2").hide();
-            $("#"+formId+"-pay_material").attr("checked",false);
-            $("#"+formId+"-pay_gold_weight").val("");
+            // $("#"+formId+"-pay_material").attr("checked",false);
+            // $("#"+formId+"-pay_gold_weight").val("");
         } else {
             $("#pay2").show();
             $("#pay1").hide();
-            $("#"+formId+"-pay_amount").val("");
+            //$("#"+formId+"-pay_amount").val("");
         }
     })
 </script>

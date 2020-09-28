@@ -38,11 +38,14 @@ class WarehouseBillPayService extends Service
         }
         if ($form->pay_content == PayContentEnum::FACTORY_COST) {
             $form->pay_amount = $pay_amount ?? 0;
+            $form->pay_material = null;
+            $form->pay_gold_weight = 0;
         } elseif ($form->pay_content == PayContentEnum::LAILIAO) {
             if (!$form->pay_material) {
                 throw new \Exception("结算材质不能为空");
             }
             $form->pay_gold_weight = $pay_gold_weight ?? 0;
+            $form->pay_amount = 0;
         }
         $form->creator_id = \Yii::$app->user->identity->getId();
         $form->created_at = time();
