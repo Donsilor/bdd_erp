@@ -364,12 +364,12 @@ class WarehouseBillLService extends Service
                         'bill_no' => $bill->bill_no,//单据编号
                         'bill_type' => $bill->bill_type,//单据类型
                         'goods_id' => $goods_id,//货号
-                        'goods_name' => $good->goods_name,//商品名称
-                        'style_sn' => $good->style_sn,//款式编号
-                        'goods_num' => $good->goods_num,//商品数量
-                        'warehouse_id' => $good->to_warehouse_id,//入库仓库
+                        'goods_name' => $goods->goods_name,//商品名称
+                        'style_sn' => $goods->style_sn,//款式编号
+                        'goods_num' => $goods->goods_num,//商品数量
+                        'warehouse_id' => $goods->warehouse_id,//入库仓库
                         'put_in_type' => $bill->put_in_type,//入库方式
-                        'cost_price' => $good->cost_price,//成本价
+                        'cost_price' => $goods->cost_price,//成本价
                         //'sale_price' => $good->sale_price,//销售价
                         //'market_price' => $good->market_price,//市场价
                         'status' => StatusEnum::ENABLED,//状态

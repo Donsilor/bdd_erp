@@ -127,8 +127,8 @@ $this->params['breadcrumbs'][] = $this->title;
                     'data-toggle' => 'modal',
                     'data-target' => '#ajaxModal',
                 ]);
+                echo '&nbsp;';
             }
-            echo '&nbsp;';
             ?>
             <?php
             echo Html::a('打印', ['print', 'id' => $model->id], [
