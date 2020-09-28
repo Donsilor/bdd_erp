@@ -64,7 +64,7 @@ class WarehouseGoldBillGoods extends BaseModel
             'bill_id' => '单据ID',
             'bill_no' => '单据编号',
             'bill_type' => '单据类型',
-            'gold_sn' => '金料编号',
+            'gold_sn' => '金料编号/批次号',
             'gold_name' => '金料名称',
             'gold_type' => '金料类型',
             'style_sn' => '金料款号',

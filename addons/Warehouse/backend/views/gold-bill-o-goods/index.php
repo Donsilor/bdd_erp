@@ -28,7 +28,7 @@ $this->params['breadcrumbs'][] = $this->title;
 //                'data-offset'=>'20px',
 //            ]);
 //            echo '&nbsp;';
-            echo Html::edit(['edit-all', 'bill_id' => $bill->id, 'scan' => 1], '金料扫码添加', ['class' => 'btn btn-success btn-xs']);
+            echo Html::edit(['edit-all', 'bill_id' => $bill->id, 'scan' => 1], '添加金料', ['class' => 'btn btn-success btn-xs']);
             echo '&nbsp;';
 //            echo Html::edit(['edit-all', 'bill_id' => $bill->id], '编辑货品', ['class'=>'btn btn-info btn-xs']);
         }
@@ -106,6 +106,10 @@ $this->params['breadcrumbs'][] = $this->title;
                             [
                                 'attribute' => 'cost_price',
                                 'visible' => \common\helpers\Auth::verify(\common\enums\SpecialAuthEnum::VIEW_CAIGOU_PRICE),
+                                'filter' => false,
+                            ],
+                            [
+                                'attribute' => 'remark',
                                 'filter' => false,
                             ],
                             [
