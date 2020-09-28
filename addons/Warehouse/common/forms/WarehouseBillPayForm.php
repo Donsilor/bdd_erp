@@ -20,7 +20,7 @@ class WarehouseBillPayForm extends WarehouseBill
     public function rules()
     {
         $rules = [
-
+            ['ids', 'string', 'max' => 255],
         ];
         return array_merge(parent::rules(), $rules);
     }

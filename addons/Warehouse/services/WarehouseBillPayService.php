@@ -4,7 +4,7 @@ namespace addons\Warehouse\services;
 
 use Yii;
 use common\components\Service;
-use addons\Warehouse\common\models\WarehouseBillPay;
+use addons\Warehouse\common\forms\WarehouseBillPayForm;
 use addons\Warehouse\common\forms\WarehouseBillTGoodsForm;
 use addons\Warehouse\common\enums\IsSettleAccountsEnum;
 
@@ -18,18 +18,17 @@ class WarehouseBillPayService extends Service
 {
     /**
      * 创建结算信息
-     * @param WarehouseBillTGoodsForm $form
+     * @param WarehouseBillPayForm $form
      * @throws \Exception
      * @return object
      */
     public function createBillPay($form)
     {
-        $model = new WarehouseBillPay();
-        $model->attributes = $form;
-        if(false === $model->save()){
-            throw new \Exception($this->getError($model));
+        $ids = $form->getIds();
+        if(false === $form->save()){
+            throw new \Exception($this->getError($form));
         }
-        return $model;
+        return $form;
     }
 
     /**
