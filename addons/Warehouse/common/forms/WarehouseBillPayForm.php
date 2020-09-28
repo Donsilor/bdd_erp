@@ -2,7 +2,7 @@
 
 namespace addons\Warehouse\common\forms;
 
-use addons\Warehouse\common\models\WarehouseBill;
+use addons\Warehouse\common\models\WarehouseBillPay;
 use common\helpers\ArrayHelper;
 use common\helpers\StringHelper;
 
@@ -10,7 +10,7 @@ use common\helpers\StringHelper;
  * 供应商结算 Form
  *
  */
-class WarehouseBillPayForm extends WarehouseBill
+class WarehouseBillPayForm extends WarehouseBillPay
 {
     public $ids;
 
