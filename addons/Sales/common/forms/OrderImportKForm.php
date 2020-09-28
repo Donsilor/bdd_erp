@@ -208,7 +208,7 @@ class OrderImportKForm extends ImportForm
                  $this->channel_id = $this->_channelCache[$this->channel_id];
                  $this->_order[$this->order_sn]['channel_id'] = $this->channel_id;
              }else{
-                 $this->addRowError($rowIndex, 'channel_id', "[{$this->channel_id}]不存在".var_export($this->_order,true));
+                 $this->addRowError($rowIndex, 'channel_id', "[{$this->channel_id}]不存在");
              }
          }else if(isset($this->_order[$this->order_sn]['channel_id'])) {
              $this->channel_id = $this->_order[$this->order_sn]['channel_id'];
