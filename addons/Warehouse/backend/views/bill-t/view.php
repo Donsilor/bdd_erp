@@ -12,8 +12,10 @@ $this->params['breadcrumbs'][] = ['label' => $this->title, 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="box-body nav-tabs-custom">
-    <h2 class="page-header"><?= $this->title; ?> - <span id="bill_no"><?= $model->bill_no ?></span> <i class="fa fa-copy" onclick="copy('bill_no')"></i> - <?= \addons\Warehouse\common\enums\BillStatusEnum::getValue($model->bill_status)?></h2>
-    <?php echo Html::menuTab($tabList,$tab)?>
+    <h2 class="page-header"><?= $this->title; ?> - <span id="bill_no"><?= $model->bill_no ?></span> <i
+                class="fa fa-copy" onclick="copy('bill_no')"></i>
+        - <?= \addons\Warehouse\common\enums\BillStatusEnum::getValue($model->bill_status) ?></h2>
+    <?php echo Html::menuTab($tabList, $tab) ?>
     <div class="tab-content">
         <div class="col-xs-12" style="padding-left: 0px;padding-right: 0px;">
             <div class="box">
@@ -25,19 +27,20 @@ $this->params['breadcrumbs'][] = $this->title;
                         </tr>
                         <tr>
                             <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('bill_type') ?>：</td>
-                            <td><?= \addons\Warehouse\common\enums\BillTypeEnum::getValue($model->bill_type)?></td>
+                            <td><?= \addons\Warehouse\common\enums\BillTypeEnum::getValue($model->bill_type) ?></td>
                         </tr>
                         <tr>
                             <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('supplier_id') ?>：</td>
-                            <td><?= $model->supplier->supplier_name??"" ?></td>
+                            <td><?= $model->supplier->supplier_name ?? "" ?></td>
                         </tr>
-<!--                        <tr>-->
-<!--                            <td class="col-xs-1 text-right">--><?//= $model->getAttributeLabel('to_warehouse_id') ?><!--：</td>-->
-<!--                            <td>--><?//= $model->toWarehouse->name??""?><!--</td>-->
-<!--                        </tr>-->
+                        <!--                        <tr>-->
+                        <!--                            <td class="col-xs-1 text-right">-->
+                        <? //= $model->getAttributeLabel('to_warehouse_id') ?><!--：</td>-->
+                        <!--                            <td>--><? //= $model->toWarehouse->name??""?><!--</td>-->
+                        <!--                        </tr>-->
                         <tr>
                             <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('bill_status') ?>：</td>
-                            <td><?= \addons\Warehouse\common\enums\BillStatusEnum::getValue($model->bill_status)?></td>
+                            <td><?= \addons\Warehouse\common\enums\BillStatusEnum::getValue($model->bill_status) ?></td>
                         </tr>
                         <tr>
                             <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('goods_num') ?>：</td>
@@ -65,7 +68,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         </tr>
                         <tr>
                             <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('creator_id') ?>：</td>
-                            <td><?= $model->creator ? $model->creator->username:''  ?></td>
+                            <td><?= $model->creator ? $model->creator->username : '' ?></td>
                         </tr>
                         <tr>
                             <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('created_at') ?>：</td>
@@ -73,11 +76,11 @@ $this->params['breadcrumbs'][] = $this->title;
                         </tr>
                         <tr>
                             <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('auditor_id') ?>：</td>
-                            <td><?= $model->auditor ? $model->auditor->username:''  ?></td>
+                            <td><?= $model->auditor ? $model->auditor->username : '' ?></td>
                         </tr>
                         <tr>
                             <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('audit_status') ?>：</td>
-                            <td><?= \common\enums\AuditStatusEnum::getValue($model->audit_status)?></td>
+                            <td><?= \common\enums\AuditStatusEnum::getValue($model->audit_status) ?></td>
                         </tr>
                         <tr>
                             <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('audit_time') ?>：</td>
@@ -93,7 +96,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         </tr>
                         <tr>
                             <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('status') ?>：</td>
-                            <td><?= \common\enums\StatusEnum::getValue($model->status)?></td>
+                            <td><?= \common\enums\StatusEnum::getValue($model->status) ?></td>
                         </tr>
                     </table>
                 </div>
@@ -103,33 +106,35 @@ $this->params['breadcrumbs'][] = $this->title;
 
         <div class="box-footer text-center">
             <?php
-                if($model->bill_status == \addons\Warehouse\common\enums\BillStatusEnum::SAVE) {
-                    echo Html::edit(['ajax-edit', 'id' => $model->id], '编辑', [
-                        'data-toggle' => 'modal',
-                        'class' => 'btn btn-primary btn-ms',
-                        'data-target' => '#ajaxModal',
-                    ]);
-                    echo '&nbsp;';
-                    echo Html::edit(['ajax-apply','id'=>$model->id], '提审', [
-                        'class'=>'btn btn-success btn-ms',
-                        'onclick' => 'rfTwiceAffirm(this,"提交审核","确定提交吗？");return false;',
-                    ]);
-                    echo '&nbsp;';
-                }
-                echo Html::a('打印', ['print', 'id' => $model->id], [
-                    'target' => '_blank',
-                    'class' => 'btn btn-info btn-ms',
+            if ($model->bill_status == \addons\Warehouse\common\enums\BillStatusEnum::SAVE) {
+                echo Html::edit(['ajax-edit', 'id' => $model->id], '编辑', [
+                    'data-toggle' => 'modal',
+                    'class' => 'btn btn-primary btn-ms',
+                    'data-target' => '#ajaxModal',
                 ]);
                 echo '&nbsp;';
+                echo Html::edit(['ajax-apply', 'id' => $model->id], '提审', [
+                    'class' => 'btn btn-success btn-ms',
+                    'onclick' => 'rfTwiceAffirm(this,"提交审核","确定提交吗？");return false;',
+                ]);
+                echo '&nbsp;';
+            }
             ?>
             <?php
-            if ($model->bill_status == \addons\Warehouse\common\enums\BillStatusEnum::PENDING){
-                echo Html::edit(['ajax-audit','id'=>$model->id], '审核', [
-                    'class'=>'btn btn-success btn-ms',
+            if ($model->bill_status == \addons\Warehouse\common\enums\BillStatusEnum::PENDING) {
+                echo Html::edit(['ajax-audit', 'id' => $model->id], '审核', [
+                    'class' => 'btn btn-success btn-ms',
                     'data-toggle' => 'modal',
                     'data-target' => '#ajaxModal',
                 ]);
             }
+            echo '&nbsp;';
+            ?>
+            <?php
+            echo Html::a('打印', ['print', 'id' => $model->id], [
+                'target' => '_blank',
+                'class' => 'btn btn-info btn-ms',
+            ]);
             ?>
         </div>
 

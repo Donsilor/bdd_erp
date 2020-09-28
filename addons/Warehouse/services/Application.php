@@ -23,6 +23,7 @@ use common\components\Service;
  * @property \addons\Warehouse\services\WarehouseBillBService $billB 退货返厂单据
  * @property \addons\Warehouse\services\WarehouseBillLogService $billLog 单据日志
  * @property \addons\Warehouse\services\WarehouseGoodsLogService $goodsLog 单据日志
+ * @property \addons\Warehouse\services\WarehouseBillPayService $billPay 供应商结算
  * @property \addons\Warehouse\services\WarehouseBillRepairService $repair 维修单据
  * @property \addons\Warehouse\services\WarehouseGiftService $gift 赠品库存
  *

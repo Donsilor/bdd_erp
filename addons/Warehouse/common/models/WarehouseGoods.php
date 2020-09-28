@@ -70,6 +70,7 @@ use addons\Warehouse\common\enums\GoodsStatusEnum;
  * @property string $extra_stone_fee 超石费
  * @property string $bukou_fee 补口工费
  * @property string $tax_fee 税费
+ * @property string $tax_amount 税额
  * @property string $xianqian_fee 镶石费
  * @property string $cert_fee 证书费
  * @property string $markup_rate 加价率
@@ -155,7 +156,7 @@ class WarehouseGoods extends BaseModel
                 'parts_num','sales_time','peiliao_way','peijian_way','main_peishi_way','second_peishi_way1','second_peishi_way2','second_peishi_way3','chuku_time'], 'integer'],
             [['goods_id','warehouse_id', 'jintuo_type'], 'required'],
             [['gold_weight','suttle_weight', 'gold_loss', 'diamond_carat', 'market_price','cost_price','cost_amount','chuku_price', 'factory_cost', 'xiangkou', 'bukou_fee','gong_fee','biaomiangongyi_fee','parts_gold_weight','main_stone_price', 'second_stone_weight1', 'second_stone_price1', 'second_stone_weight2',
-                'second_stone_price2','second_stone_weight3','second_stone_price3' ,'gold_price','gold_amount','markup_rate','parts_fee','fense_fee','cert_fee','extra_stone_fee','tax_fee','other_fee','total_gong_fee','parts_price','xianqian_price','peishi_fee','peishi_amount','penrasa_fee',
+                'second_stone_price2','second_stone_weight3','second_stone_price3' ,'gold_price','gold_amount','markup_rate','parts_fee','fense_fee','cert_fee','extra_stone_fee','tax_fee','tax_amount','other_fee','total_gong_fee','parts_price','xianqian_price','peishi_fee','peishi_amount','penrasa_fee',
                 'edition_fee','parts_amount','second_stone_cost3','ke_gong_fee','main_stone_cost','second_stone_cost1','second_stone_cost2','peishi_weight','pure_gold','lasha_fee','piece_fee'], 'number'],
             [['goods_name', 'cert_id', 'length','kezi', 'main_stone_size','second_stone_size1','goods_color','biaomiangongyi'], 'string', 'max' => 100],
             [['style_sn','goods_id','qiban_sn'], 'string', 'max' => 30],
@@ -209,7 +210,7 @@ class WarehouseGoods extends BaseModel
             'produce_sn' => '布产号',
             'cert_type' => '证书类别',
             'cert_id' => '证书号',
-            'goods_num' => '商品数量',
+            'goods_num' => '入库数量',
             'stock_cnt' => '库存数量',
             'material' => '主成色',
             'material_type' => '材质',
@@ -235,6 +236,7 @@ class WarehouseGoods extends BaseModel
             'factory_cost' => '工厂成本',
             'bukou_fee' => '补口费',
             'tax_fee' => '税费',
+            'tax_amount' => '税额/件',
             'other_fee' => '其它费用',
             'biaomiangongyi_fee' => '表面工艺费',
             'xianqian_fee' => '镶石费',
@@ -278,8 +280,8 @@ class WarehouseGoods extends BaseModel
             'second_stone_type3' => '副石3类型',
             'second_stone_num3' => '副石3数量',
             'second_stone_weight3' => '副石3重量(ct)',
-            'second_stone_price3' => '副石3买入单价',
-            'second_stone_cost3' => '副石3成本',
+            'second_stone_price3' => '副石3单价',
+            'second_stone_cost3' => '副石3成本/件',
             'is_inlay' => '是否镶嵌',
             'chain_long' => '链长(mm)',
             'chain_type' => '链类型',
@@ -305,7 +307,7 @@ class WarehouseGoods extends BaseModel
             'peijian_type' => '配件类型',
             'shiliao_remark' => '石料备注',
             'parts_material' => '配件材质',
-            'parts_amount' => '配件额',
+            'parts_amount' => '配件额/件',
             'parts_price' => '配件金价',
             'xianqian_price' => '镶石单价/颗',
             'peishi_fee' => '配石工费/ct',
@@ -324,9 +326,9 @@ class WarehouseGoods extends BaseModel
             'second_peishi_way1' => '副石1配石方式',
             'second_peishi_way2' => '副石2配石方式',
             'second_peishi_way3' => '副石3配石方式',
-            'main_stone_cost' => '主石成本',
-            'second_stone_cost1' => '副石1成本',
-            'second_stone_cost2' => '副石2成本',
+            'main_stone_cost' => '主石成本/件',
+            'second_stone_cost1' => '副石1成本/件',
+            'second_stone_cost2' => '副石2成本/件',
             'second_stone_fee1' => '镶石1工费/单颗',
             'second_stone_fee2' => '镶石2工费/单颗',
             'second_stone_fee3' => '镶石3工费/单颗',

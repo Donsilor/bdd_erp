@@ -139,6 +139,7 @@ class WarehouseBillLService extends Service
                     'style_channel_id' => $good->style_channel_id,//款式渠道
                     'qiban_sn' => $good->qiban_sn,//起版号
                     'qiban_type' => $good->qiban_type,//起版类型
+                    'stock_cnt' => $good->goods_num,//入库数量
                     'goods_num' => $good->goods_num,//商品数量
                     'goods_status' => GoodsStatusEnum::IN_STOCK,//库存状态
                     'goods_source' => GoodSourceEnum::QUICK_STORAGE,//数据来源方式
@@ -294,6 +295,7 @@ class WarehouseBillLService extends Service
                     'fense_fee' => $good->fense_fee,//分色/分件费
                     'biaomiangongyi_fee' => $good->biaomiangongyi_fee,//表面工艺费
                     'tax_fee' => $good->tax_fee,//税费
+                    'tax_amount' => $good->tax_amount,//税额
                     'cert_fee' => $good->cert_fee,//证书费
                     'other_fee' => $good->other_fee,//其它工费
                     'total_gong_fee' => $good->total_gong_fee,//总工费
@@ -449,21 +451,26 @@ class WarehouseBillLService extends Service
 
             'diamond_carat',//钻石大小
 
+            'main_stone_num',//主石粒数
             'main_stone_weight',//主石重
             'main_stone_amount',//主石成本价
 
+            'second_stone_num1',//副石1粒数
             'second_stone_weight1',//副石1重
             'second_stone_amount1',//副石1成本价
             //'second_stone_fee1',//镶石1工费
 
+            'second_stone_num2',//副石2粒数
             'second_stone_weight2',//副石2重
             'second_stone_amount2',//副石2成本价
             //'second_stone_fee2',//镶石2工费
 
+            'second_stone_num3',//副石3粒数
             'second_stone_weight3',//副石3重
             'second_stone_amount3',//副石3成本价
             //'second_stone_fee3',//镶石3工费
 
+            'parts_num',//配件数量
             'parts_gold_weight',//配件金重
             'parts_amount',//配件总额
 
@@ -488,8 +495,9 @@ class WarehouseBillLService extends Service
         ];
         $goods_num = $goods['goods_num'] ?? 1;
         foreach ($goods as $field => $value) {
-            if (in_array($field, $fields)) {
-                $goods[$field] = bcdiv($value, $goods_num, 3);
+            if (in_array($field, $fields) && bccomp($value, 0, 5) == 1) {
+                $price = bcdiv($value, $goods_num, 3);
+                $goods[$field] = floatval($price);
             }
         }
         return $goods ?? [];
