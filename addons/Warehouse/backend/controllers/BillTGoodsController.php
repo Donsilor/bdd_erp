@@ -486,11 +486,13 @@ class BillTGoodsController extends BaseController
                 return ResultHelper::json(422, $e->getMessage());
             }
         }
+        $total = \Yii::$app->warehouseService->billPay->calcPaySummary($model);
         //$model->pay_content = PayContentEnum::FACTORY_COST;
         $model->pay_method = PayMethodEnum::TALLY;
         $model->pay_tax = PayTaxEnum::YES_TAX;
         return $this->render($this->action->id, [
             'model' => $model,
+            'total' => $total,
         ]);
     }
 

@@ -20,8 +20,8 @@ class WarehouseBillPayService extends Service
     /**
      * 创建结算信息
      * @param WarehouseBillPayForm $form
-     * @throws \Exception
      * @return object
+     * @throws \Exception
      */
     public function createBillPay($form)
     {
@@ -59,8 +59,31 @@ class WarehouseBillPayService extends Service
     }
 
     /**
+     *  结算
+     * @param WarehouseBillPayForm $form
+     * @return array
+     * @throws \Exception
+     */
+    public function calcPaySummary($form)
+    {
+        $total = [
+            'pay_amount' => 0,
+            'pay_gold_weight' => 0,
+        ];
+        $ids = $form->getIds();
+        if (is_array($ids)) {
+            foreach ($ids as $id) {
+                $goods = WarehouseBillTGoodsForm::findOne(['id' => $id]);
+                $total['pay_amount'] = bcadd($total['pay_amount'], $goods->factory_cost, 3);//工厂成本
+                $total['pay_gold_weight'] = bcadd($total['pay_gold_weight'], $goods->pure_gold, 3);//折足汇总
+            }
+        }
+        return $total ?? [];
+    }
+
+    /**
      *  供应商结算验证
-     * @param WarehouseBillTGoodsForm $form
+     * @param WarehouseBillPayForm $form
      * @throws \Exception
      */
     public function billPayValidate($form)
