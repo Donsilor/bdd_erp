@@ -23,22 +23,6 @@ class WarehouseGoldBillTService extends Service
 {
 
     /**
-     * 金料其他入库单tab
-     * @param int $id ID
-     * @param $returnUrl URL
-     * @return array
-     */
-    public function menuTabList($id, $returnUrl = null)
-    {
-        $tabList = [
-            1=>['name'=>'单据详情','url'=>Url::to(['gold-bill-t/view','id'=>$id,'tab'=>1,'returnUrl'=>$returnUrl])],
-            2=>['name'=>'单据明细列表','url'=>Url::to(['gold-bill-t-goods/index','bill_id'=>$id,'tab'=>2,'returnUrl'=>$returnUrl])],
-
-        ];
-        return $tabList;
-    }
-
-    /**
      * 审核金料收货单(入库单)
      * @param object $form
      * @throws

@@ -389,7 +389,7 @@ class WarehouseBillLService extends Service
                     Yii::$app->styleService->style->createStyleFactory($goods);
                     //同步数据到款工费
                     Yii::$app->styleService->style->createStyleFactoryFee($goods);
-                    
+
                 }
             }
 
