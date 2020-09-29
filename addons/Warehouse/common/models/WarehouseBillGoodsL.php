@@ -81,6 +81,9 @@ use Yii;
  * @property string $main_stone_color 主石颜色
  * @property string $main_stone_clarity 主石净度
  * @property string $main_stone_cut 主石切工
+ * @property string $main_stone_polish 主石抛光
+ * @property string $main_stone_symmetry 主石对称
+ * @property string $main_stone_fluorescence 主石荧光
  * @property string $main_stone_colour 主石色彩
  * @property string $main_stone_size 主石规格
  * @property string $main_stone_price 主石单价/ct
@@ -119,6 +122,8 @@ use Yii;
  * @property string $second_stone_type3 副石3类型
  * @property int $second_stone_num3 副石3粒数
  * @property string $second_stone_weight3 副石3重量(ct)
+ * @property string $second_stone_color3 副石3颜色
+ * @property string $second_stone_clarity3 副石3净度
  * @property string $second_stone_price3 副石3单价/ct
  * @property string $second_stone_amount3 副石3成本(副石3额)
  * @property string $stone_remark 石料备注
@@ -208,9 +213,9 @@ class WarehouseBillGoodsL extends BaseModel
             [['bill_type'], 'string', 'max' => 3],
             [['goods_name'], 'string', 'max' => 150],
             [['goods_image', 'stone_remark', 'remark'], 'string', 'max' => 255],
-            [['material', 'material_type', 'material_color', 'xiangkou', 'finger', 'finger_hk', 'chain_type', 'cramp_ring', 'talon_head_type', 'xiangqian_craft', 'gross_weight', 'diamond_color', 'diamond_shape', 'diamond_clarity', 'diamond_cut', 'diamond_polish', 'diamond_symmetry', 'diamond_fluorescence', 'diamond_discount', 'diamond_cert_type', 'main_stone_type', 'main_stone_shape', 'main_stone_color', 'main_stone_clarity', 'main_stone_cut', 'main_stone_colour', 'main_cert_type', 'second_stone_type1', 'second_stone_shape1', 'second_stone_color1', 'second_stone_clarity1', 'second_stone_cut1', 'second_stone_colour1', 'second_stone_type2', 'second_stone_shape2', 'second_stone_color2', 'second_stone_clarity2', 'second_stone_colour2', 'second_stone_type3', 'parts_type', 'parts_material'], 'string', 'max' => 10],
+            [['material', 'material_type', 'material_color', 'xiangkou', 'finger', 'finger_hk', 'chain_type', 'cramp_ring', 'talon_head_type', 'xiangqian_craft', 'gross_weight', 'diamond_color', 'diamond_shape', 'diamond_clarity', 'diamond_cut', 'diamond_polish', 'diamond_symmetry', 'diamond_fluorescence', 'diamond_discount', 'diamond_cert_type', 'main_stone_type', 'main_stone_shape', 'main_stone_color', 'main_stone_clarity', 'main_stone_cut', 'main_stone_polish', 'main_stone_symmetry', 'main_stone_fluorescence', 'main_stone_colour', 'main_cert_type', 'second_stone_type1', 'second_stone_shape1', 'second_stone_color1', 'second_stone_clarity1', 'second_stone_cut1', 'second_stone_colour1', 'second_stone_type2', 'second_stone_shape2', 'second_stone_color2', 'second_stone_clarity2', 'second_stone_colour2', 'second_stone_type3', 'second_stone_color3', 'second_stone_clarity3', 'parts_type', 'parts_material'], 'string', 'max' => 10],
             [['goods_color', 'main_stone_size', 'second_stone_size1', 'second_stone_size2'], 'string', 'max' => 100],
-            [['biaomiangongyi'], 'parseFaceCraft'],
+            [['biaomiangongyi'], 'parseFaceCraft'],//表面工艺多选
             [['goods_id'], 'unique'],
         ];
     }
@@ -302,6 +307,9 @@ class WarehouseBillGoodsL extends BaseModel
             'main_stone_color' => '主石颜色',
             'main_stone_clarity' => '主石净度',
             'main_stone_cut' => '主石切工',
+            'main_stone_polish' => '主石抛光',
+            'main_stone_symmetry' => '主石对称',
+            'main_stone_fluorescence' => '主石荧光',
             'main_stone_colour' => '主石色彩',
             'main_stone_size' => '主石规格',
             'main_cert_id' => '主石证书号',
@@ -348,6 +356,8 @@ class WarehouseBillGoodsL extends BaseModel
             'second_stone_type3' => '副石3类型',
             'second_stone_num3' => '副石3数量',
             'second_stone_weight3' => '副石3重量(ct)',
+            'second_stone_color3' => '副石3颜色',
+            'second_stone_clarity3' => '副石3净度',
             'second_stone_price3' => '副石3单价/ct',
             'second_stone_amount3' => '副石3成本价',
             'second_stone_fee3' => '镶石3工费',

@@ -1039,6 +1039,78 @@ class WarehouseBillTGoodsForm extends WarehouseBillGoodsL
     }
 
     /**
+     * 主石抛光列表
+     * @return array
+     */
+    public function getMainStonePolishMap()
+    {
+        return \Yii::$app->attr->valueMap(AttrIdEnum::MAIN_STONE_POLISH) ?? [];
+    }
+
+    /**
+     * 主石抛光
+     * @param WarehouseBillTGoodsForm $form
+     * @return array
+     */
+    public function getMainStonePolishDrop($form)
+    {
+        if (!empty($form->style_sn)) {
+            $data = $this->getAttrValueListByStyle($form->style_sn, AttrIdEnum::MAIN_STONE_POLISH);
+        } else {
+            $data = $this->getMainStonePolishMap();
+        }
+        return $data ?? [];
+    }
+
+    /**
+     * 主石对称列表
+     * @return array
+     */
+    public function getMainStoneSymmetryMap()
+    {
+        return \Yii::$app->attr->valueMap(AttrIdEnum::MAIN_STONE_SYMMETRY) ?? [];
+    }
+
+    /**
+     * 主石对称
+     * @param WarehouseBillTGoodsForm $form
+     * @return array
+     */
+    public function getMainStoneSymmetryDrop($form)
+    {
+        if (!empty($form->style_sn)) {
+            $data = $this->getAttrValueListByStyle($form->style_sn, AttrIdEnum::MAIN_STONE_SYMMETRY);
+        } else {
+            $data = $this->getMainStoneSymmetryMap();
+        }
+        return $data ?? [];
+    }
+
+    /**
+     * 主石荧光列表
+     * @return array
+     */
+    public function getMainStoneFluorescenceMap()
+    {
+        return \Yii::$app->attr->valueMap(AttrIdEnum::MAIN_STONE_FLUORESCENCE) ?? [];
+    }
+
+    /**
+     * 主石荧光
+     * @param WarehouseBillTGoodsForm $form
+     * @return array
+     */
+    public function getMainStoneFluorescenceDrop($form)
+    {
+        if (!empty($form->style_sn)) {
+            $data = $this->getAttrValueListByStyle($form->style_sn, AttrIdEnum::MAIN_STONE_FLUORESCENCE);
+        } else {
+            $data = $this->getMainStoneFluorescenceMap();
+        }
+        return $data ?? [];
+    }
+
+    /**
      * 主石色彩列表
      * @return array
      */
@@ -1346,6 +1418,54 @@ class WarehouseBillTGoodsForm extends WarehouseBillGoodsL
             $data = $this->getAttrValueListByStyle($form->style_sn, AttrIdEnum::SIDE_STONE3_TYPE);
         } else {
             $data = $this->getSecondStoneType3Map();
+        }
+        return $data ?? [];
+    }
+
+    /**
+     * 副石3颜色列表
+     * @return array
+     */
+    public function getSecondStoneColor3Map()
+    {
+        return \Yii::$app->attr->valueMap(AttrIdEnum::SIDE_STONE3_COLOR) ?? [];
+    }
+
+    /**
+     * 副石3颜色
+     * @param WarehouseBillTGoodsForm $form
+     * @return array
+     */
+    public function getSecondStoneColor3Drop($form)
+    {
+        if (!empty($form->style_sn)) {
+            $data = $this->getAttrValueListByStyle($form->style_sn, AttrIdEnum::SIDE_STONE3_COLOR);
+        } else {
+            $data = $this->getSecondStoneColor3Map();
+        }
+        return $data ?? [];
+    }
+
+    /**
+     * 副石3净度列表
+     * @return array
+     */
+    public function getSecondStoneClarity3Map()
+    {
+        return \Yii::$app->attr->valueMap(AttrIdEnum::SIDE_STONE3_CLARITY) ?? [];
+    }
+
+    /**
+     * 副石3净度
+     * @param WarehouseBillTGoodsForm $form
+     * @return array
+     */
+    public function getSecondStoneClarity3Drop($form)
+    {
+        if (!empty($form->style_sn)) {
+            $data = $this->getAttrValueListByStyle($form->style_sn, AttrIdEnum::SIDE_STONE3_CLARITY);
+        } else {
+            $data = $this->getSecondStoneClarity3Map();
         }
         return $data ?? [];
     }
