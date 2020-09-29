@@ -247,7 +247,7 @@ class WarehouseBillWService extends WarehouseBillService
      * @param unknown $bill_id
      */
     public function adjustBillW($bill_id){        
-            
+        
         $pandianStatusArray = [PandianStatusEnum::LOSS,PandianStatusEnum::PROFIT];
         $goodsStatusArray1  = [GoodsStatusEnum::HAS_SOLD];
         $goodsStatusArray2  = [GoodsStatusEnum::IN_TRANSFER,GoodsStatusEnum::IN_RETURN_FACTORY,GoodsStatusEnum::IN_SALE,GoodsStatusEnum::IN_REFUND];
@@ -261,7 +261,7 @@ class WarehouseBillWService extends WarehouseBillService
             $goods = WarehouseGoods::find()->select(['id','goods_id','goods_status','warehouse_id'])->where(['goods_id'=>$billGoods->goods_id])->one();
             if(empty($goods)){
                 continue;
-            }
+            } 
             $billGoods->from_warehouse_id = $goods->warehouse_id;
             if($billGoods->status == PandianStatusEnum::LOSS && in_array($goods->goods_status,$goodsStatusArray1)){
                 //如果盘亏-货品状态【已销售】 调整状态：【已销售】                
@@ -281,15 +281,14 @@ class WarehouseBillWService extends WarehouseBillService
             } 
 
         }
-        
         $this->billWSummary($bill_id);
         
         //日志
         $log = [
-                'bill_id' => $id,
+                'bill_id' => $bill_id,
                 'log_type' => LogTypeEnum::ARTIFICIAL,
                 'log_module' => '盘点单',
-                'log_msg' => '盘点单校正'
+                'log_msg' => '盘点自动校正'
         ];
         \Yii::$app->warehouseService->billLog->createBillLog($log);
         return true;
