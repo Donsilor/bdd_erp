@@ -171,7 +171,7 @@ class WarehouseBillWService extends WarehouseBillService
                 $billGoods = new WarehouseBillGoods();
                 $billGoods->bill_id = $bill->id;
                 $billGoods->bill_type = $bill->bill_type;
-                $billGoods->style_sn = $billGoods->style_sn;
+                $billGoods->style_sn = $goods->style_sn;
                 $billGoods->bill_no = $bill->bill_no;
                 $billGoods->goods_id = $goods_id;
                 $billGoods->to_warehouse_id = $bill->to_warehouse_id;//盘点仓库
