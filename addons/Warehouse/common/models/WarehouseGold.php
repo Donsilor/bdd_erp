@@ -53,7 +53,7 @@ class WarehouseGold extends BaseModel
             [['gold_sn', 'gold_name', 'style_sn'], 'string', 'max' => 30],
             [['gold_type'], 'string', 'max' => 10],
             [['remark'], 'string', 'max' => 255],
-            [['gold_name'], 'unique'],
+//            [['gold_name'], 'unique'],
         ];
     }
 
