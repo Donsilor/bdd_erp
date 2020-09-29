@@ -289,9 +289,11 @@ class OrderService extends Service
                 $form->titles = $row;
                 continue;
             }
-            
+            if(($form->titles['remark'] ?? '') != '商品备注') {
+                throw new \Exception("数据模板有变动，请下载最新模板");
+            }
             //加载表格行数据 并且数据校验
-            if(false === $form->loadRow($row,$rowIndex)){
+            if(empty(array_filter($row)) || false === $form->loadRow($row,$rowIndex)){
                 continue;
             }
         }

@@ -66,10 +66,10 @@ class ImportForm extends Model
      * @return boolean
      */
     public function loadRow($row,$rowIndex)
-    {
+    {    
         foreach ($row as $attribute=> $colValue) {
-           
-            $this->{$attribute} = trim(preg_replace("/[|]|【|】/is",'',$colValue));
+            
+            $this->{$attribute} = trim(preg_replace("/\[|\]|\【|\】/is",'',$colValue));
             
             if($this->isNeedCheck($attribute)) {
                 //必填校验
