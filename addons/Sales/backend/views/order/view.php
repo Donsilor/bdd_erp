@@ -38,8 +38,8 @@ $this->params['breadcrumbs'][] = $this->title;
                             <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('sale_channel_id') ?>：</td>
                             <td><?= $model->saleChannel->name ?? '' ?></td>
                             <td class="col-xs-1 text-right no-border-top">语言/货币：</td>
-                            <td class="col-xs-3 no-border-top"><?= common\enums\LanguageEnum::getValue($model->language) ?>
-                                （<?= common\enums\CurrencyEnum::getValue($model->currency) ?>）
+                            <td class="col-xs-3 no-border-top">
+                            <?= common\enums\LanguageEnum::getValue($model->language) ?> / <?= common\enums\CurrencyEnum::getValue($model->currency) ?>
                             </td>
 
                         </tr>
@@ -58,7 +58,9 @@ $this->params['breadcrumbs'][] = $this->title;
                             <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('delivery_status') ?>：</td>
                             <td><?= addons\Sales\common\enums\DeliveryStatusEnum::getValue($model->delivery_status) ?></td>
                             <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('pay_status') ?>：</td>
-                            <td><?= addons\Sales\common\enums\PayStatusEnum::getValue($model->pay_status) ?></td>
+                            <td class="<?= $model->pay_status != PayStatusEnum::HAS_PAY ? 'red':''?>">                            
+                            <?= addons\Sales\common\enums\PayStatusEnum::getValue($model->pay_status) ?>
+                            </td>
                         </tr>
                         <tr>
                             <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('customer_name') ?>：</td>
@@ -66,7 +68,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('express_id') ?>：</td>
                             <td><?= $model->express->name ?? '' ?></td>
                             <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('refund_status') ?>：</td>
-                            <td><?= addons\Sales\common\enums\RefundStatusEnum::getValue($model->refund_status) ?></td>
+                            <td><?=  addons\Sales\common\enums\RefundStatusEnum::getValue($model->refund_status) ?></td>
                         </tr>
                         <tr>
                             <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('customer_email') ?>：</td>
@@ -96,12 +98,13 @@ $this->params['breadcrumbs'][] = $this->title;
                             <td><?= $model->out_pay_no ?></td>
                         </tr>
                         <tr>
+                            <td class="col-xs-1 text-right">客户编号：</td>
+                            <td><?= $model->customer->customer_no ?? '' ?></td>
                             <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('customer_account') ?>：</td>
                             <td><?= $model->customer_account ?></td>
                             <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('store_account') ?>：</td>
                             <td><?= $model->store_account ?></td>
-                            <td class="col-xs-1 text-right"></td>
-                            <td></td>
+                            
                         </tr>
                         <tr>
                             <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('customer_message') ?>：</td>
@@ -248,14 +251,6 @@ $this->params['breadcrumbs'][] = $this->title;
                         ]);
                     }
                     ?>
-                    <?php
-                    //                    if($model->order_status == \addons\Sales\common\enums\OrderStatusEnum::CONFORMED) {
-                    //                        echo Html::button('布产', [
-                    //                            'class'=>'btn btn-success btn-xs',
-                    //                            'onclick' => 'batchBuchan()',
-                    //                        ]);
-                    //                    }
-                    ?>
                 </div>
                 <div class="table-responsive col-lg-12">
                     <?php $order = $model ?>
@@ -376,20 +371,20 @@ $this->params['breadcrumbs'][] = $this->title;
                             ],
                             [
                                 'attribute' => 'goods_price',
-                                'value' => function ($model) {
-                                    return common\helpers\AmountHelper::outputAmount($model->goods_price, 2, $model->currency);
+                                'value' => function ($model) use($order){
+                                    return common\helpers\AmountHelper::outputAmount($model->goods_price, 2, $order->currency);
                                 }
                             ],
                             [
                                 'attribute' => 'goods_discount',
-                                'value' => function ($model) {
-                                    return common\helpers\AmountHelper::outputAmount($model->goods_discount, 2, $model->currency);
+                                'value' => function ($model) use($order) {
+                                    return common\helpers\AmountHelper::outputAmount($model->goods_discount, 2, $order->currency);
                                 }
                             ],
                             [
                                 'attribute' => 'goods_pay_price',
-                                'value' => function ($model) {
-                                    return common\helpers\AmountHelper::outputAmount($model->goods_pay_price, 2, $model->currency);
+                                'value' => function ($model) use($order){
+                                    return common\helpers\AmountHelper::outputAmount($model->goods_pay_price, 2, $order->currency);
                                 }
                             ],
                             [
@@ -397,10 +392,6 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'name' => 'id',  //设置每行数据的复选框属性
                                 'headerOptions' => ['width' => '30'],
                             ],
-                            /* [
-                                    'attribute'=>'produce_sn',
-                                    'value' => 'produce_sn'
-                            ], */
                             [
                                 'attribute' => 'bc_status',
                                 'value' => function ($model) {

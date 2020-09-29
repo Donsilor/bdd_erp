@@ -47,7 +47,7 @@ use addons\Warehouse\common\enums\GoodsStatusEnum;
  * @property string $cert_type 证书类别
  * @property string $cert_id 证书号
  * @property int $goods_num 商品数量
- * @property int $stock_cnt 库存数量
+ * @property int $stock_num 库存数量
  * @property string $material 主成色
  * @property string $material_type 材质
  * @property string $material_color 材质颜色
@@ -151,7 +151,7 @@ class WarehouseGoods extends BaseModel
     public function rules()
     {
         return [
-            [['product_type_id','style_sex' ,'style_cate_id', 'style_channel_id','goods_status', 'supplier_id', 'put_in_type','qiban_type', 'company_id', 'warehouse_id', 'goods_num', 'stock_cnt', 'jintuo_type', 'weixiu_status', 'weixiu_warehouse_id', 'parts_num', 'main_stone_type',
+            [['product_type_id','style_sex' ,'style_cate_id', 'style_channel_id','goods_status', 'supplier_id', 'put_in_type','qiban_type', 'company_id', 'warehouse_id', 'goods_num', 'stock_num', 'jintuo_type', 'weixiu_status', 'weixiu_warehouse_id', 'parts_num', 'main_stone_type',
                 'main_stone_num', 'second_stone_num1', 'second_stone_num2','second_stone_num3', 'creator_id','apply_id','auditor_id','audit_time','audit_status', 'created_at', 'updated_at','is_inlay','goods_source','peiliao_type',
                 'parts_num','sales_time','peiliao_way','peijian_way','main_peishi_way','second_peishi_way1','second_peishi_way2','second_peishi_way3','chuku_time'], 'integer'],
             [['goods_id','warehouse_id', 'jintuo_type'], 'required'],
@@ -211,7 +211,7 @@ class WarehouseGoods extends BaseModel
             'cert_type' => '证书类别',
             'cert_id' => '证书号',
             'goods_num' => '入库数量',
-            'stock_cnt' => '库存数量',
+            'stock_num' => '库存数量',
             'material' => '主成色',
             'material_type' => '材质',
             'material_color' => '材质颜色',

@@ -112,4 +112,14 @@ class WarehouseGoldBillGoods extends BaseModel
     {
         return $this->hasOne(ProduceGold::class, ['id'=>'source_detail_id'])->alias('produceGold');
     }
+
+
+    /**
+     * 金料库存
+     * @return \yii\db\ActiveQuery
+     */
+    public function getWarehouseGold()
+    {
+        return $this->hasOne(WarehouseGold::class, ['gold_sn'=>'gold_sn'])->alias('warehouseGold');
+    }
 }

@@ -1033,6 +1033,51 @@ $this->params['breadcrumbs'][] = $this->title;
                                 ]),
                             ],
                             [
+                                'attribute' => 'main_stone_polish',
+                                'format' => 'raw',
+                                'headerOptions' => ['class' => 'col-md-1 batch_select_full', 'attr-name' => 'main_stone_polish', 'attr-id' => AttrIdEnum::MAIN_STONE_POLISH, 'style' => 'background-color:#afb4db;'],
+                                'footerOptions' => ['class' => 'col-md-1 batch_select_full2', 'attr-name' => 'main_stone_polish', 'attr-id' => AttrIdEnum::MAIN_STONE_POLISH, 'style' => 'background-color:#afb4db;'],
+                                'value' => function ($model, $key, $index, $widget) {
+                                    $widget->footer = $model->getAttributeLabel('main_stone_polish');
+                                    return Html::ajaxSelect($model, 'main_stone_polish', $model->getMainStonePolishDrop($model), ['data-id' => $model->id, 'prompt' => '请选择']);
+                                },
+                                'filter' => Html::activeDropDownList($searchModel, 'main_stone_polish', $model->getMainStonePolishMap(), [
+                                    'prompt' => '全部',
+                                    'class' => 'form-control',
+                                    'style' => 'width:80px;'
+                                ]),
+                            ],
+                            [
+                                'attribute' => 'main_stone_symmetry',
+                                'format' => 'raw',
+                                'headerOptions' => ['class' => 'col-md-1 batch_select_full', 'attr-name' => 'main_stone_symmetry', 'attr-id' => AttrIdEnum::MAIN_STONE_SYMMETRY, 'style' => 'background-color:#afb4db;'],
+                                'footerOptions' => ['class' => 'col-md-1 batch_select_full2', 'attr-name' => 'main_stone_symmetry', 'attr-id' => AttrIdEnum::MAIN_STONE_SYMMETRY, 'style' => 'background-color:#afb4db;'],
+                                'value' => function ($model, $key, $index, $widget) {
+                                    $widget->footer = $model->getAttributeLabel('main_stone_symmetry');
+                                    return Html::ajaxSelect($model, 'main_stone_symmetry', $model->getMainStoneSymmetryDrop($model), ['data-id' => $model->id, 'prompt' => '请选择']);
+                                },
+                                'filter' => Html::activeDropDownList($searchModel, 'main_stone_symmetry', $model->getMainStoneSymmetryMap(), [
+                                    'prompt' => '全部',
+                                    'class' => 'form-control',
+                                    'style' => 'width:80px;'
+                                ]),
+                            ],
+                            [
+                                'attribute' => 'main_stone_fluorescence',
+                                'format' => 'raw',
+                                'headerOptions' => ['class' => 'col-md-1 batch_select_full', 'attr-name' => 'main_stone_fluorescence', 'attr-id' => AttrIdEnum::MAIN_STONE_FLUORESCENCE, 'style' => 'background-color:#afb4db;'],
+                                'footerOptions' => ['class' => 'col-md-1 batch_select_full2', 'attr-name' => 'main_stone_fluorescence', 'attr-id' => AttrIdEnum::MAIN_STONE_FLUORESCENCE, 'style' => 'background-color:#afb4db;'],
+                                'value' => function ($model, $key, $index, $widget) {
+                                    $widget->footer = $model->getAttributeLabel('main_stone_fluorescence');
+                                    return Html::ajaxSelect($model, 'main_stone_fluorescence', $model->getMainStoneFluorescenceDrop($model), ['data-id' => $model->id, 'prompt' => '请选择']);
+                                },
+                                'filter' => Html::activeDropDownList($searchModel, 'main_stone_fluorescence', $model->getMainStoneFluorescenceMap(), [
+                                    'prompt' => '全部',
+                                    'class' => 'form-control',
+                                    'style' => 'width:80px;'
+                                ]),
+                            ],
+                            [
                                 'attribute' => 'main_stone_colour',
                                 'format' => 'raw',
                                 'headerOptions' => ['class' => 'col-md-1 batch_select_full', 'attr-name' => 'main_stone_colour', 'attr-id' => AttrIdEnum::MAIN_STONE_COLOUR, 'style' => 'background-color:#afb4db;'],
@@ -1402,6 +1447,36 @@ $this->params['breadcrumbs'][] = $this->title;
 //                                ]),
                             ],
                             [
+                                'attribute' => 'second_stone_color2',
+                                'format' => 'raw',
+                                'headerOptions' => ['class' => 'col-md-1 batch_select_full', 'attr-name' => 'second_stone_color2', 'attr-id' => AttrIdEnum::SIDE_STONE2_COLOR, 'style' => 'background-color:#84bf96;'],
+                                'footerOptions' => ['class' => 'col-md-1 batch_select_full2', 'attr-name' => 'second_stone_color2', 'attr-id' => AttrIdEnum::SIDE_STONE2_COLOR, 'style' => 'background-color:#84bf96;'],
+                                'value' => function ($model, $key, $index, $widget) {
+                                    $widget->footer = $model->getAttributeLabel('second_stone_color2');
+                                    return Html::ajaxSelect($model, 'second_stone_color2', $model->getSecondStoneColor2Drop($model), ['data-id' => $model->id, 'prompt' => '请选择']);
+                                },
+                                'filter' => Html::activeDropDownList($searchModel, 'second_stone_color2', $model->getSecondStoneColor2Map(), [
+                                    'prompt' => '全部',
+                                    'class' => 'form-control',
+                                    'style' => 'width:80px;'
+                                ]),
+                            ],
+                            [
+                                'attribute' => 'second_stone_clarity2',
+                                'format' => 'raw',
+                                'headerOptions' => ['class' => 'col-md-1 batch_select_full', 'attr-name' => 'second_stone_clarity2', 'attr-id' => AttrIdEnum::SIDE_STONE2_CLARITY, 'style' => 'background-color:#84bf96;'],
+                                'footerOptions' => ['class' => 'col-md-1 batch_select_full2', 'attr-name' => 'second_stone_clarity2', 'attr-id' => AttrIdEnum::SIDE_STONE2_CLARITY, 'style' => 'background-color:#84bf96;'],
+                                'value' => function ($model, $key, $index, $widget) {
+                                    $widget->footer = $model->getAttributeLabel('second_stone_clarity2');
+                                    return Html::ajaxSelect($model, 'second_stone_clarity2', $model->getSecondStoneClarity2Drop($model), ['data-id' => $model->id, 'prompt' => '请选择']);
+                                },
+                                'filter' => Html::activeDropDownList($searchModel, 'second_stone_clarity2', $model->getSecondStoneClarity2Map(), [
+                                    'prompt' => '全部',
+                                    'class' => 'form-control',
+                                    'style' => 'width:80px;'
+                                ]),
+                            ],
+                            [
                                 'attribute' => 'second_stone_price2',
                                 'format' => 'raw',
                                 'headerOptions' => ['class' => 'col-md-1 batch_full', 'attr-name' => 'second_stone_price2', 'style' => 'background-color:#84bf96;'],
@@ -1662,6 +1737,36 @@ $this->params['breadcrumbs'][] = $this->title;
 //                                    'class' => 'form-control',
 //                                    'style' => 'width:80px;'
 //                                ]),
+                            ],
+                            [
+                                'attribute' => 'second_stone_color3',
+                                'format' => 'raw',
+                                'headerOptions' => ['class' => 'col-md-1 batch_select_full', 'attr-name' => 'second_stone_color3', 'attr-id' => AttrIdEnum::SIDE_STONE3_COLOR, 'style' => 'background-color:#6495ED;'],
+                                'footerOptions' => ['class' => 'col-md-1 batch_select_full2', 'attr-name' => 'second_stone_color3', 'attr-id' => AttrIdEnum::SIDE_STONE3_COLOR, 'style' => 'background-color:#6495ED;'],
+                                'value' => function ($model, $key, $index, $widget) {
+                                    $widget->footer = $model->getAttributeLabel('second_stone_color3');
+                                    return Html::ajaxSelect($model, 'second_stone_color3', $model->getSecondStoneColor3Drop($model), ['data-id' => $model->id, 'prompt' => '请选择']);
+                                },
+                                'filter' => Html::activeDropDownList($searchModel, 'second_stone_color3', $model->getSecondStoneColor3Map(), [
+                                    'prompt' => '全部',
+                                    'class' => 'form-control',
+                                    'style' => 'width:80px;'
+                                ]),
+                            ],
+                            [
+                                'attribute' => 'second_stone_clarity3',
+                                'format' => 'raw',
+                                'headerOptions' => ['class' => 'col-md-1 batch_select_full', 'attr-name' => 'second_stone_clarity3', 'attr-id' => AttrIdEnum::SIDE_STONE3_CLARITY, 'style' => 'background-color:#6495ED;'],
+                                'footerOptions' => ['class' => 'col-md-1 batch_select_full2', 'attr-name' => 'second_stone_clarity3', 'attr-id' => AttrIdEnum::SIDE_STONE3_CLARITY, 'style' => 'background-color:#6495ED;'],
+                                'value' => function ($model, $key, $index, $widget) {
+                                    $widget->footer = $model->getAttributeLabel('second_stone_clarity3');
+                                    return Html::ajaxSelect($model, 'second_stone_clarity3', $model->getSecondStoneClarity3Drop($model), ['data-id' => $model->id, 'prompt' => '请选择']);
+                                },
+                                'filter' => Html::activeDropDownList($searchModel, 'second_stone_clarity3', $model->getSecondStoneClarity3Map(), [
+                                    'prompt' => '全部',
+                                    'class' => 'form-control',
+                                    'style' => 'width:80px;'
+                                ]),
                             ],
                             [
                                 'attribute' => 'second_stone_price3',

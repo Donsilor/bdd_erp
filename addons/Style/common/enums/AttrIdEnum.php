@@ -69,9 +69,9 @@ class AttrIdEnum
     const SIDE_STONE1_TYPE = 60;//副石1类型
     const SIDE_STONE1_SHAPE = 84;//副石1形状
     const SIDE_STONE1_COLOR = 46;//副石1颜色
+    const SIDE_STONE1_CLARITY = 47;//副石1净度
     const SIDE_STONE1_SECAI = 88;//副石1色彩
     const SIDE_STONE1_PRICE = 95;//副石1单价
-    const SIDE_STONE1_CLARITY = 47;//副石1净度
     const SIDE_STONE1_WEIGHT = 44;//副石1重量(ct)
     const SIDE_STONE1_NUM = 45;//副石1数量
     const SIDE_STONE1_CUT = 97;//副石1切工
@@ -81,10 +81,10 @@ class AttrIdEnum
     //副石2信息
     const SIDE_STONE2_TYPE = 64;//副石2类型
     const SIDE_STONE2_SHAPE = 85;//副石2形状
-    const SIDE_STONE2_COLOR = 46;//副石2颜色
+    const SIDE_STONE2_COLOR = 106;//副石2颜色
+    const SIDE_STONE2_CLARITY = 104;//副石2净度
     const SIDE_STONE2_SECAI = 89;//副石2色彩
     const SIDE_STONE2_PRICE = 96;//副石2单价
-    const SIDE_STONE2_CLARITY = 47;//副石2净度
     const SIDE_STONE2_WEIGHT = 63;//副石2重量(ct)
     const SIDE_STONE2_NUM = 62;//副石2数量
     const SIDE_STONE2_SPEC = 999;//副石2规格
@@ -94,6 +94,8 @@ class AttrIdEnum
     const SIDE_STONE3_TYPE = 98;//副石3类型
     const SIDE_STONE3_WEIGHT = 102;//副石3重量(ct)
     const SIDE_STONE3_NUM = 103;//副石3数量
+    const SIDE_STONE3_COLOR = 107;//副石3颜色
+    const SIDE_STONE3_CLARITY = 105;//副石3净度
     const SIDE_STONE3_SPEC = 999;//副石3规格
     const SIDE_STONE3_PRICE = 99;//副石3单价
 

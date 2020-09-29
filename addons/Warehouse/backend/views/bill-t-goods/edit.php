@@ -227,16 +227,25 @@ $this->params['breadcrumbs'][] = $this->title;
                         <?= $form->field($model, 'main_stone_cut')->dropDownList($model->getMainStoneCutDrop($model), ['prompt' => '请选择']) ?>
                     </div>
                     <div class="col-lg-4">
+                        <?= $form->field($model, 'main_stone_polish')->dropDownList($model->getMainStonePolishDrop($model), ['prompt' => '请选择']) ?>
+                    </div>
+                    <div class="col-lg-4">
+                        <?= $form->field($model, 'main_stone_symmetry')->dropDownList($model->getMainStoneSymmetryDrop($model), ['prompt' => '请选择']) ?>
+                    </div>
+                    <div class="col-lg-4">
+                        <?= $form->field($model, 'main_stone_fluorescence')->dropDownList($model->getMainStoneFluorescenceDrop($model), ['prompt' => '请选择']) ?>
+                    </div>
+                    <div class="col-lg-4">
                         <?= $form->field($model, 'main_stone_colour')->dropDownList($model->getMainStoneColourDrop($model), ['prompt' => '请选择']) ?>
                     </div>
 <!--                    <div class="col-lg-4">-->
 <!--                        --><?//= $form->field($model, 'main_stone_size')->textInput() ?>
 <!--                    </div>-->
                     <div class="col-lg-4">
-                        <?= $form->field($model, 'main_cert_id')->textInput() ?>
+                        <?= $form->field($model, 'main_cert_type')->dropDownList($model->getMainCertTypeDrop($model), ['prompt' => '请选择']) ?>
                     </div>
                     <div class="col-lg-4">
-                        <?= $form->field($model, 'main_cert_type')->dropDownList($model->getMainCertTypeDrop($model), ['prompt' => '请选择']) ?>
+                        <?= $form->field($model, 'main_cert_id')->textInput() ?>
                     </div>
                 </div>
                 <div class="row">
@@ -312,6 +321,12 @@ $this->params['breadcrumbs'][] = $this->title;
                         <?= $form->field($model, 'second_stone_weight2')->textInput(['onblur' => 'rfClearVal(this)']) ?>
                     </div>
                     <div class="col-lg-4">
+                        <?= $form->field($model, 'second_stone_color2')->dropDownList($model->getSecondStoneColor2Drop($model), ['prompt' => '请选择']) ?>
+                    </div>
+                    <div class="col-lg-4">
+                        <?= $form->field($model, 'second_stone_clarity2')->dropDownList($model->getSecondStoneClarity2Drop($model), ['prompt' => '请选择']) ?>
+                    </div>
+                    <div class="col-lg-4">
                         <?= $form->field($model, 'second_stone_price2')->textInput(['onblur' => 'rfClearVal(this)']) ?>
                     </div>
                     <div class="col-lg-4">
@@ -322,9 +337,6 @@ $this->params['breadcrumbs'][] = $this->title;
 <!--                    </div>-->
 <!--                    <div class="col-lg-4">-->
 <!--                        --><?//= $form->field($model, 'second_stone_color2')->dropDownList($model->getSecondStoneClarity2Drop($model), ['prompt' => '请选择']) ?>
-<!--                    </div>-->
-<!--                    <div class="col-lg-4">-->
-<!--                        --><?//= $form->field($model, 'second_stone_clarity2')->dropDownList($model->getSecondStoneClarity2Drop($model), ['prompt' => '请选择']) ?>
 <!--                    </div>-->
 <!--                    <div class="col-lg-4">-->
 <!--                        --><?//= $form->field($model, 'second_stone_colour2')->dropDownList($model->getSecondStoneColour2Drop($model), ['prompt' => '请选择']) ?>
@@ -359,12 +371,18 @@ $this->params['breadcrumbs'][] = $this->title;
                         <?= $form->field($model, 'second_stone_weight3')->textInput(['onblur' => 'rfClearVal(this)']) ?>
                     </div>
                     <div class="col-lg-4">
+                        <?= $form->field($model, 'second_stone_color3')->dropDownList($model->getSecondStoneColor3Drop($model), ['prompt' => '请选择']) ?>
+                    </div>
+                    <div class="col-lg-4">
+                        <?= $form->field($model, 'second_stone_clarity3')->dropDownList($model->getSecondStoneClarity3Drop($model), ['prompt' => '请选择']) ?>
+                    </div>
+                    <div class="col-lg-4">
                         <?= $form->field($model, 'second_stone_price3')->textInput(['onblur' => 'rfClearVal(this)']) ?>
                     </div>
                     <div class="col-lg-4">
                         <?= $form->field($model, 'second_stone_amount3')->textInput(['onblur' => 'rfClearVal(this)']) ?>
                     </div>
-                    <div class="col-lg-4">
+                    <div class="col-lg-8">
                         <?= $form->field($model, 'stone_remark')->textInput() ?>
                     </div>
                 </div>
