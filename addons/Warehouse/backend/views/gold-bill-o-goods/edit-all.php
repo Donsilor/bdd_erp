@@ -39,8 +39,8 @@ $this->params['breadcrumbs'][] = $this->title;
                         <div class="row">
                             <div class="col-lg-8">
                                 <div class="form-group field-cate-sort">
-                                    <div class="col-sm-6">
-                                        <?= Html::textInput('scan_gold_sn', '', ['id'=>'scan_gold_sn','on','class' => 'form-control','placeholder'=>'请输入货号 或 扫商品条码录入']).'<br/>' ?>
+                                    <div class="col-sm-9">
+                                        <?= Html::textInput('scan_gold_sn', '', ['id'=>'scan_gold_sn','on','class' => 'form-control','placeholder'=>'请输入货号或扫码（多个货号用：“, ”“空格“)']).'<br/>' ?>
                                     </div>
                                     <div class="col-sm-2 text-left">
                                         <button id="scan_submit" type="button" class="btn btn-primary" >保存</button>
