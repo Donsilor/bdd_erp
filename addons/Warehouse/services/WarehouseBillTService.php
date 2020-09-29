@@ -220,7 +220,7 @@ class WarehouseBillTService extends Service
                 $i++;
                 continue;
             }
-            if (count($goods) != 99) {
+            if (count($goods) != 106) {
                 throw new \Exception("模板格式不正确，请下载最新模板");
             }
             $goods = $form->trimField($goods);
