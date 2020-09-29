@@ -157,7 +157,7 @@ class WarehouseBillWService extends WarehouseBillService
         }
        // $bill_detail_ids = [];
         foreach ($goods_ids as $goods_id) {            
-           
+            $isNewRecord = false;
             $billGoods = WarehouseBillGoods::find()->where(['goods_id'=>$goods_id,'bill_id'=>$bill->id])->one();
             if($billGoods && $billGoods->status == PandianStatusEnum::NORMAL) {
                 //已盘点且正常的忽略
@@ -168,14 +168,17 @@ class WarehouseBillWService extends WarehouseBillService
                 throw new \Exception("[{$goods_id}]货号不存在");
             }
             if(!$billGoods) {
+                $isNewRecord = true;
                 $billGoods = new WarehouseBillGoods();
                 $billGoods->bill_id = $bill->id;
                 $billGoods->bill_type = $bill->bill_type;
                 $billGoods->style_sn = $goods->style_sn;
                 $billGoods->bill_no = $bill->bill_no;
-                $billGoods->goods_id = $goods_id;
-                $billGoods->to_warehouse_id = $bill->to_warehouse_id;//盘点仓库
+                $billGoods->to_warehouse_id = $bill->to_warehouse_id;//盘点仓库                
                 $billGoods->status = PandianStatusEnum::PROFIT;//盘盈
+                //商品属性
+                $billGoods->goods_id = $goods->goods_id;
+                $billGoods->goods_num = $goods->stock_num;
             }else {
                 if($billGoods->goods_num >1) {
                     $billGoods->status = PandianStatusEnum::DOING;//盘点中
@@ -188,10 +191,15 @@ class WarehouseBillWService extends WarehouseBillService
             $billGoods->goods_name = $goods->goods_name;            
             $billGoods->from_warehouse_id = $goods->warehouse_id;//归属仓库
             //更多商品属性
-            //............
-            
+            //............            
             if(false === $billGoods->save()) {
                 throw new \Exception($this->getError($billGoods));
+            }
+            
+            //盘点明细关系表数据更新
+            if($isNewRecord) {
+                $sql = "insert into ".WarehouseBillGoodsW::tableName().'(id,should_num) select id,goods_num from '.WarehouseBillGoods::tableName()." where id=".$billGoods->id;
+                Yii::$app->db->createCommand($sql)->execute();
             }
             if($billGoods->goods_num > 1) {
                 WarehouseBillGoodsW::updateAll(['actual_num'=>0,'status'=>ConfirmEnum::YES],['id'=>$billGoods->id]);
