@@ -27,15 +27,8 @@ class WarehouseBillGoodsW extends BaseModel
     public function rules()
     {
         return [
-            [['id','adjust_status','status'], 'integer'],
+            [['id','should_num','actual_num','adjust_status','status','created_at','updated_at'], 'integer'],
         ];
-    }
-    /**
-     * @return array
-     */
-    public function behaviors()
-    {
-        return [];
     }
     /**
      * {@inheritdoc}
@@ -44,8 +37,10 @@ class WarehouseBillGoodsW extends BaseModel
     {
         return [
             'id' => 'ID',
-            'adjust_status' => '目标仓库',
-            'status' => '状态',
+            'should_num' => '应盘数量',
+            'actual_num' => '实盘数量',
+            'adjust_status' => '调整状态',
+            'status' => '盘点状态',
         ];
     }
 }

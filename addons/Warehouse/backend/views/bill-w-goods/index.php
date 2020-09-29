@@ -53,7 +53,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                          return $str;
                                     },
                                     'format' => 'raw',
-                                    'headerOptions' => ['width'=>'300'],
+                                    'headerOptions' => ['width'=>'250'],
                             ],
                             [
                                     'attribute' => 'style_sn',
@@ -73,18 +73,28 @@ $this->params['breadcrumbs'][] = $this->title;
                                     'label' => '归属仓库',
                                     'attribute' => 'from_warehouse_id',
                                     'value' =>"fromWarehouse.name",
-                                    'filter'=> \kartik\select2\Select2::widget([
-                                            'name'=>'SearchModel[from_warehouse_id]',
-                                            'value'=>$searchModel->from_warehouse_id,
-                                            'data'=>Yii::$app->warehouseService->warehouse->getDropDown(),
-                                            'options' => ['placeholder' =>"请选择"],
-                                            'pluginOptions' => [
-                                                  'allowClear' => true,
-                                            ],
-                                    ]),
+                                    'filter'=> false,
                                     'format' => 'raw',
-                                    'headerOptions' => ['width'=>'180'],
+                                    'headerOptions' => ['width'=>'150'],
                             ], 
+                            [
+                                    'attribute'=>'goodsW.should_num',
+                                    'filter' => false,
+                                    'value' => function ($model) {
+                                            return $model->goodsW->should_num;
+                                    },
+                                    'format' => 'raw',
+                                    'headerOptions' => ['width'=>'100'],
+                            ],
+                            [
+                                    'attribute'=>'goodsW.actual_num',
+                                    'filter' => false,
+                                    'value' => function ($model) {
+                                        return $model->goodsW->actual_num;
+                                    },
+                                    'format' => 'raw',
+                                    'headerOptions' => ['width'=>'100'],
+                            ],
                             [
                                     'label' => '盘点状态',
                                     'attribute' => 'status',

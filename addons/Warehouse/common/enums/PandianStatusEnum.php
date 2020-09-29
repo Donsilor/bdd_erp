@@ -11,7 +11,8 @@ namespace addons\Warehouse\common\enums;
  */
 class PandianStatusEnum extends \common\enums\BaseEnum
 {
-    const SAVE = 1;
+    const SAVE = 0;
+    const DOING = 1;
     const LOSS = 2;
     const PROFIT = 3;
     const NORMAL = 4;
@@ -21,7 +22,8 @@ class PandianStatusEnum extends \common\enums\BaseEnum
     public static function getMap(): array
     {
         return [
-                self::SAVE => '待盘点',
+                self::SAVE => '未盘点',
+                self::DOING => '盘点中',
                 self::LOSS => '盘亏',
                 self::PROFIT => '盘盈',
                 self::NORMAL => '正常', 

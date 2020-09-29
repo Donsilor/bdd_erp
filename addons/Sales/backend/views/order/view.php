@@ -376,15 +376,21 @@ $this->params['breadcrumbs'][] = $this->title;
                                 }
                             ],
                             [
+                                'attribute' => 'goods_amount',
+                                'value' => function ($model) use($order){
+                                    return common\helpers\AmountHelper::outputAmount($model->goods_price * $model->goods_num, 2, $order->currency);
+                                }
+                            ],
+                            [
                                 'attribute' => 'goods_discount',
                                 'value' => function ($model) use($order) {
                                     return common\helpers\AmountHelper::outputAmount($model->goods_discount, 2, $order->currency);
                                 }
                             ],
                             [
-                                'attribute' => 'goods_pay_price',
+                                'attribute' => 'goods_pay_amount',
                                 'value' => function ($model) use($order){
-                                    return common\helpers\AmountHelper::outputAmount($model->goods_pay_price, 2, $order->currency);
+                                    return common\helpers\AmountHelper::outputAmount($model->goods_pay_price * $model->goods_num, 2, $order->currency);
                                 }
                             ],
                             [

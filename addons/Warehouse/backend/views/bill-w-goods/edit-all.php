@@ -63,7 +63,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                          return $str;
                                     },
                                     'format' => 'raw',
-                                    'headerOptions' => ['width'=>'300'],
+                                    'headerOptions' => ['width'=>'250'],
                             ],
                             [
                                     'attribute' => 'style_sn',
@@ -83,7 +83,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                     'label' => '归属仓库',
                                     'attribute' => 'from_warehouse_id',
                                     'value' =>"fromWarehouse.name",
-                                    'filter'=> \kartik\select2\Select2::widget([
+                                    'filter'=> false,/*\kartik\select2\Select2::widget([
                                             'name'=>'SearchModel[from_warehouse_id]',
                                             'value'=>$searchModel->from_warehouse_id,
                                             'data'=>Yii::$app->warehouseService->warehouse->getDropDown(),
@@ -91,10 +91,32 @@ $this->params['breadcrumbs'][] = $this->title;
                                             'pluginOptions' => [
                                                   'allowClear' => true,
                                             ],
-                                    ]),
+                                    ]),*/
                                     'format' => 'raw',
-                                    'headerOptions' => ['width'=>'180'],
+                                    'headerOptions' => ['width'=>'150'],
                             ], 
+                            [
+                                    'attribute'=>'goodsW.should_num',
+                                    'filter' => false,
+                                    'value' => function ($model) {
+                                        return $model->goodsW->should_num;
+                                    },
+                                    'format' => 'raw',
+                                    'headerOptions' => ['width'=>'100'],
+                            ],
+                            [
+                                    'attribute'=>'goodsW.actual_num',
+                                    'filter' => false,
+                                    'value' => function ($model) {
+                                        if($model->goodsW->should_num > 1 ) {
+                                            return Html::ajaxInput('actual_num', $model->goodsW->actual_num, ['data-id' => $model->id,'data-url'=>'ajax-pandian-num']);
+                                        }else{
+                                            return $model->goodsW->actual_num;
+                                        }                                        
+                                    },
+                                    'format' => 'raw',
+                                    'headerOptions' => ['width'=>'100'],
+                            ],
                             [
                                     'label' => '盘点状态',
                                     'attribute' => 'status',

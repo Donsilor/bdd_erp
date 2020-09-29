@@ -12,6 +12,7 @@ use addons\Warehouse\common\enums\BillTypeEnum;
 use addons\Warehouse\common\models\WarehouseBillGoods;
 use addons\Warehouse\common\forms\WarehouseBillWForm;
 use addons\Warehouse\common\enums\PandianStatusEnum;
+use addons\Warehouse\common\models\WarehouseBillGoodsW;
 
 
 /**
@@ -40,7 +41,7 @@ class BillWGoodsController extends BaseController
                 ],
                 'pageSize' =>  $this->getPageSize(15),
                 'relations' => [
-                     "goodsW"=> ["adjust_status"]
+                     "goodsW"=> ['should_num','actual_num',"adjust_status"]
                 ]
         ]);
         
@@ -73,11 +74,11 @@ class BillWGoodsController extends BaseController
                 'scenario' => 'default',
                 'partialMatchAttributes' => [], // 模糊查询
                 'defaultOrder' => [
-                        'id' => SORT_DESC
+                        'updated_at' => SORT_DESC
                 ],
                 'pageSize' =>  $this->getPageSize(15),
                 'relations' => [
-                        "goodsW"=> ["adjust_status"]
+                        "goodsW"=> ['should_num','actual_num',"adjust_status"]
                 ]
         ]);
         
@@ -119,6 +120,24 @@ class BillWGoodsController extends BaseController
             $trans->rollBack();
             
             \Yii::$app->getSession()->setFlash('error', $e->getMessage());
+            return ResultHelper::json(422, $e->getMessage());
+        }
+    }
+    /**
+     * 更改实盘数量
+     * @return array|mixed
+     */
+    public function actionAjaxPandianNum()
+    {
+        $id = Yii::$app->request->get("id");
+        $actual_num = Yii::$app->request->get("actual_num");       
+        try{
+            $trans = \Yii::$app->trans->beginTransaction();
+            Yii::$app->warehouseService->billW->pandianNum($id, $actual_num);
+            $trans->commit();
+            return ResultHelper::json(200, "操作成功");
+        }catch (\Exception $e){
+            $trans->rollBack();            
             return ResultHelper::json(422, $e->getMessage());
         }
     }

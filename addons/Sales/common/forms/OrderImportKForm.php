@@ -316,6 +316,7 @@ class OrderImportKForm extends ImportForm
             
             //订单金额
             $form->account = new OrderAccount();
+            $form->account->other_fee = $this->other_fee;
             $form->account->order_amount = $this->order_amount;
             $form->account->paid_amount = $this->paid_amount;
             //收货地址
