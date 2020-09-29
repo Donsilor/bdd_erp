@@ -298,6 +298,10 @@ $this->params['breadcrumbs'][] = $this->title;
                             <td><?= $model->gong_fee ?></td>
                         </tr>
                         <tr>
+                            <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('ke_gong_fee') ?>：</td>
+                            <td><?= $model->ke_gong_fee ?></td>
+                        </tr>
+                        <tr>
                             <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('bukou_fee') ?>：</td>
                             <td><?= $model->bukou_fee ?></td>
                         </tr>
@@ -343,6 +347,10 @@ $this->params['breadcrumbs'][] = $this->title;
                             <td><?= $model->lasha_fee ?></td>
                         </tr>
                         <tr>
+                            <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('peishi_amount') ?>：</td>
+                            <td><?= $model->peishi_amount ?></td>
+                        </tr>
+                        <tr>
                             <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('piece_fee') ?>：</td>
                             <td><?= $model->piece_fee ?></td>
                         </tr>
@@ -351,13 +359,21 @@ $this->params['breadcrumbs'][] = $this->title;
                             <td><?= $model->peishi_fee ?></td>
                         </tr>
                         <tr>
+                            <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('tax_fee') ?>：</td>
+                            <td><?= $model->tax_fee ?></td>
+                        </tr>
+                        <tr>
                             <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('tax_amount') ?>：</td>
                             <td><?= $model->tax_amount ?></td>
                         </tr>
                         <tr>
-                            <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('total_gong_fee') ?>：</td>
-                            <td><?= $model->total_gong_fee ?></td>
+                            <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('other_fee') ?>：</td>
+                            <td><?= $model->other_fee ?></td>
                         </tr>
+<!--                        <tr>-->
+<!--                            <td class="col-xs-2 text-right">--><?//= $model->getAttributeLabel('total_gong_fee') ?><!--：</td>-->
+<!--                            <td>--><?//= $model->total_gong_fee ?><!--</td>-->
+<!--                        </tr>-->
                         <tr>
                             <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('cert_type') ?>：</td>
                             <td><?= Yii::$app->attr->valueName($model->cert_type) ?></td>

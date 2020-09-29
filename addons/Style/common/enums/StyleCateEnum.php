@@ -16,7 +16,9 @@ class StyleCateEnum extends \common\enums\BaseEnum
     const BRACELET = 8;
     const BANGLES = 9;
     const LOVE_RING = 23;
-
+    const BANGLE  = 24;
+    const BROOCH = 26;
+    const DECORATION = 27;
 
     /**
      * @return array
@@ -32,6 +34,9 @@ class StyleCateEnum extends \common\enums\BaseEnum
             self::BANGLES => '手镯',
             self::LOVE_RING => '情侣戒',
             self::ANKLET => '脚链',
+            self::BANGLE => '手串',
+            self::BROOCH => '胸针',
+            self::DECORATION => '摆件',
         ];
     }
 
@@ -49,6 +54,9 @@ class StyleCateEnum extends \common\enums\BaseEnum
             self::BANGLES => [StyleSexEnum::MAN => 'Z', StyleSexEnum::WOMEN => 'S'],
             self::LOVE_RING => [StyleSexEnum::COMMON => 'L'],
             self::ANKLET => [StyleSexEnum::COMMON => 'J'],
+            self::BANGLE => [StyleSexEnum::COMMON => 'C'],
+            self::BROOCH => [StyleSexEnum::COMMON => 'X'],
+            self::DECORATION => [StyleSexEnum::COMMON => 'T'],
         ];
     }
 
