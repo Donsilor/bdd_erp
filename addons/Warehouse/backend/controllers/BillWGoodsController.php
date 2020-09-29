@@ -78,7 +78,7 @@ class BillWGoodsController extends BaseController
                 ],
                 'pageSize' =>  $this->getPageSize(15),
                 'relations' => [
-                        "goodsW"=> ['should_num','actual_num',"adjust_status"]
+                        "goodsW"=> ['should_num','actual_num',"adjust_status"],
                 ]
         ]);
         
@@ -114,8 +114,7 @@ class BillWGoodsController extends BaseController
             $trans = \Yii::$app->db->beginTransaction();
             \Yii::$app->warehouseService->billW->pandianGoods($bill_id,[$goods_id]);
             $trans->commit();            
-            \Yii::$app->getSession()->setFlash('success', '操作成功');
-            return ResultHelper::json(200, "操作成功");
+            return $this->message("操作成功", $this->redirect(\Yii::$app->request->referrer), 'success');
         }catch (\Exception $e){
             $trans->rollBack();
             
@@ -135,7 +134,9 @@ class BillWGoodsController extends BaseController
             $trans = \Yii::$app->trans->beginTransaction();
             Yii::$app->warehouseService->billW->pandianNum($id, $actual_num);
             $trans->commit();
-            return ResultHelper::json(200, "操作成功");
+            //\Yii::$app->getSession()->setFlash('success', '操作成功');
+            //return ResultHelper::json(200, "操作成功");
+            return $this->message("操作成功", $this->redirect(\Yii::$app->request->referrer), 'success');
         }catch (\Exception $e){
             $trans->rollBack();            
             return ResultHelper::json(422, $e->getMessage());
