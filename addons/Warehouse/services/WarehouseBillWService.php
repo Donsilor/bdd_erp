@@ -178,7 +178,7 @@ class WarehouseBillWService extends WarehouseBillService
                 $billGoods->status = PandianStatusEnum::PROFIT;//盘盈
                 //商品属性
                 $billGoods->goods_id = $goods->goods_id;
-                $billGoods->goods_num = $goods->stock_num;
+                $billGoods->goods_num = 0;
             }else {
                 if($billGoods->goods_num >1) {
                     $billGoods->status = PandianStatusEnum::DOING;//盘点中
