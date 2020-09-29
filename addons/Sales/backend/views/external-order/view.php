@@ -96,14 +96,10 @@ $this->params['breadcrumbs'][] = $this->title;
                             <td><?= $model->out_pay_no ?></td>
                         </tr>
                         <tr>
-                            <td class="col-xs-1 text-right">客户编号：</td>
-                            <td><?= $model->customer->customer_no ?? '' ?></td>
+                            <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('pay_remark') ?>：</td>
+                            <td colspan="3"><?= $model->pay_remark ?></td>
                             <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('account.arrive_amount') ?>：</td>
                             <td><?= AmountHelper::outputAmount($model->account->arrive_amount ?? 0, 2, $model->currency) ?></td>                            
-                        </tr>
-                        <tr>
-                            <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('pay_remark') ?>：</td>
-                            <td colspan="5"><?= $model->pay_remark ?></td>                                                  
                         </tr>
                         <tr>
                             <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('remark') ?>：</td>
@@ -317,10 +313,6 @@ $this->params['breadcrumbs'][] = $this->title;
                                     return $model->attr[AttrIdEnum::DIA_CERT_TYPE] ?? "";
                                 },
                             ],
-                            /* [
-                                'attribute'=>'qiban_sn',
-                                'value' => 'qiban_sn'
-                            ], */
                             [
                                 'attribute' => 'qiban_type',
                                 'value' => function ($model) {
@@ -359,20 +351,20 @@ $this->params['breadcrumbs'][] = $this->title;
                             ],
                             [
                                 'attribute' => 'goods_price',
-                                'value' => function ($model) {
-                                    return common\helpers\AmountHelper::outputAmount($model->goods_price, 2, $model->currency);
+                                'value' => function ($model) use($order){
+                                    return common\helpers\AmountHelper::outputAmount($model->goods_price, 2, $order->currency);
                                 }
                             ],
                             [
                                 'attribute' => 'goods_discount',
-                                'value' => function ($model) {
-                                    return common\helpers\AmountHelper::outputAmount($model->goods_discount, 2, $model->currency);
+                                'value' => function ($model) use($order) {
+                                    return common\helpers\AmountHelper::outputAmount($model->goods_discount, 2, $order->currency);
                                 }
                             ],
                             [
                                 'attribute' => 'goods_pay_price',
-                                'value' => function ($model) {
-                                    return common\helpers\AmountHelper::outputAmount($model->goods_pay_price, 2, $model->currency);
+                                'value' => function ($model) use($order){
+                                    return common\helpers\AmountHelper::outputAmount($model->goods_pay_price, 2, $order->currency);
                                 }
                             ],
                             [
