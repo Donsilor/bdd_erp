@@ -155,7 +155,7 @@ class WarehouseBillWService extends WarehouseBillService
         if ($bill->bill_status != BillStatusEnum::SAVE) {
             throw new \Exception("盘点单已结束");
         }
-        $bill_detail_ids = [];
+       // $bill_detail_ids = [];
         foreach ($goods_ids as $goods_id) {            
            
             $billGoods = WarehouseBillGoods::find()->where(['goods_id'=>$goods_id,'bill_id'=>$bill->id])->one();
@@ -171,7 +171,7 @@ class WarehouseBillWService extends WarehouseBillService
                 $billGoods = new WarehouseBillGoods();
                 $billGoods->bill_id = $bill->id;
                 $billGoods->bill_type = $bill->bill_type;
-                $billGoods->style_sn = $bill->style_sn;
+                $billGoods->style_sn = $billGoods->style_sn;
                 $billGoods->bill_no = $bill->bill_no;
                 $billGoods->goods_id = $goods_id;
                 $billGoods->to_warehouse_id = $bill->to_warehouse_id;//盘点仓库
@@ -198,7 +198,7 @@ class WarehouseBillWService extends WarehouseBillService
             }else{
                 WarehouseBillGoodsW::updateAll(['actual_num'=>1,'status'=>ConfirmEnum::YES],['id'=>$billGoods->id]);
             }            
-            $bill_detail_ids[] = $billGoods->id;            
+            //$bill_detail_ids[] = $billGoods->id;            
         }        
         $this->billWSummary($bill->id);
         
