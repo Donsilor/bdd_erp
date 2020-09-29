@@ -53,14 +53,15 @@ class Supplier extends BaseModel
     {
         return [
             [['merchant_id', 'auditor_id', 'audit_status', 'audit_time', 'sort', 'status', 'follower_id', 'trade_num','type','level','creator_id','channel_id', 'created_at', 'updated_at'], 'integer'],
-            [['contactor','wechat','channel_id','source_id'], 'required'],
-            [['supplier_code', 'bank_account', 'bank_account_name', 'contactor', 'telephone', 'mobile', 'bdd_contactor', 'bdd_mobile', 'bdd_telephone','wechat'], 'string', 'max' => 30],
+            [['contactor','channel_id','source_id'], 'required'],
+            [['supplier_code', 'bank_account', 'bank_account_name', 'contactor', 'telephone', 'mobile', 'bdd_contactor', 'bdd_mobile', 'bdd_telephone','wechat','supplier_gate'], 'string', 'max' => 30],
             [['supplier_name', 'address'], 'string', 'max' => 120],
             [['audit_remark', 'remark'], 'string', 'max' => 255],
             [['bank_name'], 'string', 'max' => 100],
-            [['business_scope'], 'safe'],
+            [['business_scope','product_type_id'], 'safe'],
             [['wechat'], 'unique'],
             [['business_scope'], 'parseBusinessScope'],
+            [['product_type_id'], 'parseProductType'],
         ];
     }
 
@@ -73,8 +74,10 @@ class Supplier extends BaseModel
             'id' => '供应商ID',
             'merchant_id' => '商户ID',
             'supplier_code' => '供应商编码',
-            'supplier_name' => '供应商档口',
+            'supplier_name' => '供应商名称',
+            'supplier_gate' => '供应商档口',
             'business_scope' => '经营范围',
+            'product_type_id' => '产品分类',
             'bank_name' => '开户行',
             'bank_account' => '银行账户',
             'bank_account_name' => '开户姓名',
@@ -124,6 +127,17 @@ class Supplier extends BaseModel
             $this->business_scope = ','.implode(',',$this->business_scope).',';
         }
         return $this->business_scope;
+    }
+
+    /**
+     * 经营范围
+     */
+    public function parseProductType()
+    {
+        if(is_array($this->product_type_id)){
+            $this->product_type_id = ','.implode(',',$this->product_type_id).',';
+        }
+        return $this->product_type_id;
     }
 
     /**

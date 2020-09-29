@@ -151,7 +151,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'model' => $searchModel,
                                 'attribute' => 'created_at',
                                 'value' => '',
-                                'options' => ['readonly' => true, 'class' => 'form-control','style'=>'background-color:#fff;width:200px;'],
+                                'options' => ['readonly' => false, 'class' => 'form-control','style'=>'background-color:#fff;width:200px;'],
                                 'pluginOptions' => [
                                     'format' => 'yyyy-mm-dd',
                                     'locale' => [
@@ -165,7 +165,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 ],
                             ]),
                             'value' => function ($model) {
-                                return Yii::$app->formatter->asDatetime($model->created_at);
+                                return Yii::$app->formatter->asDate($model->created_at);
                             },
                             'format' => 'raw',
                             'headerOptions' => ['class' => 'col-md-1'],
@@ -176,7 +176,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'model' => $searchModel,
                                 'attribute' => 'audit_time',
                                 'value' => '',
-                                'options' => ['readonly' => true, 'class' => 'form-control','style'=>'background-color:#fff;width:200px;'],
+                                'options' => ['readonly' => false, 'class' => 'form-control','style'=>'background-color:#fff;width:200px;'],
                                 'pluginOptions' => [
                                     'format' => 'yyyy-mm-dd',
                                     'locale' => [
@@ -190,7 +190,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 ],
                             ]),
                             'value' => function ($model) {
-                                return Yii::$app->formatter->asDatetime($model->audit_time);
+                                return Yii::$app->formatter->asDate($model->audit_time);
                             },
                             'format' => 'raw',
                             'headerOptions' => ['class' => 'col-md-1'],
