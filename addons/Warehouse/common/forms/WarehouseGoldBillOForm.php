@@ -20,7 +20,7 @@ class WarehouseGoldBillOForm extends WarehouseGoldBill
     public function rules()
     {
          $rules = [
-             [['out_type','channel_id'], 'required'],
+             [['out_type','supplier_id'], 'required'],
          ];
          return ArrayHelper::merge(parent::rules() , $rules);
     }

@@ -57,7 +57,7 @@ class StyleController extends BaseController
         $searchModel = new SearchModel([
             'model' => $this->modelClass,
             'scenario' => 'default',
-            'partialMatchAttributes' => ['style_name'], // 模糊查询
+            'partialMatchAttributes' => [], // 模糊查询
             'defaultOrder' => [
                 'id' => SORT_DESC
             ],
@@ -75,8 +75,8 @@ class StyleController extends BaseController
             $dataProvider->query->andFilterWhere(['<',Style::tableName().'.created_at', (strtotime($created_ats[1]) + 86400)] );//结束时间
         }
 
-        $dataProvider->query->andFilterWhere(['=',Style::tableName().'.style_sn', trim($searchModel->style_sn)]);
-        $dataProvider->query->andFilterWhere(['=',Style::tableName().'.style_name', trim($searchModel->style_name)]);
+        $dataProvider->query->andFilterWhere(['like',Style::tableName().'.style_sn', trim($searchModel->style_sn)]);
+        $dataProvider->query->andFilterWhere(['like',Style::tableName().'.style_name', trim($searchModel->style_name)]);
 
         return $this->render('index', [
             'dataProvider' => $dataProvider,

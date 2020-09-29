@@ -127,6 +127,11 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'headerOptions' => ['class' => 'col-md-2'],
                             ],
                             [
+                                'attribute' => 'warehouseGold.gold_weight',
+                                'filter' => false,
+                                'headerOptions' => ['class' => 'col-md-2'],
+                            ],
+                            [
                                 'attribute' => 'gold_weight',
                                 'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#84bf96;'],
                                 'footerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#84bf96;'],

@@ -33,13 +33,13 @@ $this->params['breadcrumbs'][] = $this->title;
                             <td><?= \addons\Warehouse\common\enums\BillStatusEnum::getValue($model->bill_status)?></td>
                         </tr>
                         <tr>
-                            <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('channel_id') ?>：</td>
-                            <td><?= $model->channel->name??"" ?></td>
+                            <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('supplier_id') ?>：</td>
+                            <td><?= $model->supplier->supplier_name??"" ?></td>
                         </tr>
-                        <tr>
-                            <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('receiv_id') ?>：</td>
-                            <td><?= $model->receiv->username??"" ?></td>
-                        </tr>
+<!--                        <tr>-->
+<!--                            <td class="col-xs-1 text-right">--><?//= $model->getAttributeLabel('receiv_id') ?><!--：</td>-->
+<!--                            <td>--><?//= $model->receiv->username??"" ?><!--</td>-->
+<!--                        </tr>-->
                         <tr>
                             <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('purchase_sn') ?>：</td>
                             <td><?= $model->purchase_sn ?></td>

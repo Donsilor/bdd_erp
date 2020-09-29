@@ -18,7 +18,7 @@ class WarehouseGoldBillOGoodsForm extends WarehouseGoldBillGoods
     public function rules()
     {
          $rules = [
-             [['out_type','channel_id','gold_weight'], 'required'],
+             [['out_type','gold_weight'], 'required'],
              [['gold_sn'],'unique'],
              ['gold_weight','compare','compareValue' => 0, 'operator' => '>'],
              //[['gold_sn','bill_type'],'unique','targetAttribute' => ['gold_sn', 'bill_type'],'comboNotUnique'=>'已被存在'],
