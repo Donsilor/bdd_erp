@@ -2,6 +2,7 @@
 
 namespace addons\Warehouse\backend\controllers;
 
+use addons\Warehouse\common\models\WarehouseGoldBillLog;
 use common\helpers\Url;
 use common\models\base\SearchModel;
 use addons\Warehouse\common\models\WarehouseGold;
@@ -22,7 +23,7 @@ class GoldLogController extends BaseController
     /**
      * @var Attribute
      */
-    public $modelClass = WarehouseGoldLog::class;
+    public $modelClass = WarehouseGoldBillLog::class;
     /**
     * 首页
     *
@@ -54,7 +55,6 @@ class GoldLogController extends BaseController
             $dataProvider->query->andFilterWhere(['<',WarehouseGoldLog::tableName().'.created_at', (strtotime(explode('/', $created_at)[1]) + 86400)] );//结束时间
         }
         $id = Yii::$app->request->get('id');
-        $dataProvider->query->andWhere(['=','gold_id', $id]);
         $gold = WarehouseGold::find()->where(['id'=>$id])->one();
         $dataProvider->query->andWhere(['>',WarehouseGoldLog::tableName().'.status',-1]);
         return $this->render($this->action->id, [

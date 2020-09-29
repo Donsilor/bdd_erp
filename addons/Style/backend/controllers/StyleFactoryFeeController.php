@@ -39,6 +39,7 @@ class StyleFactoryFeeController extends BaseController
             'relations' => [
                 'member' => ['username'],
                 'style' => ['style_sn'],
+                'supplier' => ['supplier_name'],
             ]
         ]);
 

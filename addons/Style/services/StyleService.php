@@ -2,6 +2,7 @@
 
 namespace addons\Style\services;
 
+use addons\Style\common\enums\FactoryFeeEnum;
 use addons\Style\common\enums\StonePositionEnum;
 use addons\Style\common\models\StyleStone;
 use Yii;
@@ -71,17 +72,41 @@ class StyleService extends Service
     {
         return StyleAttribute::find()->where(['style_id' => $style_id])->asArray()->all();
     }
-
+    /**
+     * 创建款式排序
+     * @param unknown $model
+     * @param string $save
+     * @return unknown
+     */
+    public function createStyleSort(& $model, $save = true)
+    {    
+         if(!$model->style_sn) {
+             throw new \Exception("款号不能为空");
+         }
+         if(strlen($model->style_sn) != 9 ){
+             throw new \Exception("款号编码错误,需要9位字符");
+         }         
+         $sort = substr($model->style_sn, 2,strlen($model->style_sn)-3);
+         $model->style_sort = $sort/1;
+         
+         if($save === true) {
+             $result = $model->save(true, ['id','style_sn','style_sort']);
+             if ($result === false) {
+                 throw new \Exception("编款失败：保存款号失败");
+             }
+         }         
+         return $model->style_sort;
+    }
     /**
      * 创建款式编号
      * @param Style $model
      * @throws
      */
-    public static function createStyleSn($model, $save = true)
+    public function createStyleSn(& $model, $save = true)
     {
         if (!$model->id) {
             throw new \Exception("编款失败：款式ID不能为空");
-        }
+        }        
         $channel_tag = $model->channel->tag ?? null;
         if (empty($channel_tag)) {
             throw new \Exception("编款失败：款式渠道未配置编码规则");
@@ -100,16 +125,40 @@ class StyleService extends Service
         } else {
             $prefix .= $cate_w;
         }
+        if ($model->style_sn && strpos($model->style_sn, $prefix) !== false) {
+            if(strlen($model->style_sn) == 9){
+                $sort = substr($model->style_sn, 2,strlen($model->style_sn)-3)/1;
+            }else{
+                //不足9位数的不处理
+                return ;
+            }            
+        }else {
+            //款号分组排序生成        
+            $sort = Style::find()->where(['style_channel_id'=>$model->style_channel_id,'style_cate_id'=>$model->style_cate_id,'is_autosn'=>1])->andWhere(['<>','id',$model->id])->max("style_sort");
+            $sort = $sort > 0 ? $sort +1 : 200;
+            $sortArray = Style::find()->select(['style_sort'])->where(['style_channel_id'=>$model->style_channel_id,'style_cate_id'=>$model->style_cate_id,'is_autosn'=>0])->andWhere(['>=','style_sort',$sort])->orderBy("style_sort asc")->asArray()->all();
+            if(!empty($sortArray)) {
+                foreach ($sortArray as $k=>$v) {
+                     $current = $v['style_sort'];                
+                     if($current == $sort) {
+                         $sort = $sort + 1;
+                     }else{
+                         break;
+                     }
+                 }
+            }
+        }
+        $model->style_sort = $sort;
         //3.中间部分
-        $middle = str_pad($model->id, 6, '0', STR_PAD_LEFT);
+        $middle = str_pad($model->style_sort, 6, '0', STR_PAD_LEFT);
         //4.结尾部分-金属材质
         $last = $model->style_material;
         $model->style_sn = $prefix . $middle . $last;
         if ($save === true) {
             $model->is_autosn = AutoSnEnum::YES;
-            $result = $model->save(true, ['id', 'style_sn', 'is_autosn']);
+            $result = $model->save(true, ['id', 'style_sn','style_sort', 'is_autosn']);
             if ($result === false) {
-                throw new \Exception("编款失败：保存款号失败");
+                throw new \Exception("更新款号失败：".$this->getError($model));
             }
         }
         return $model->style_sn;
@@ -218,22 +267,27 @@ class StyleService extends Service
             $style_name = $form->formatValue($style['style_name'] ?? "", "");
             $style_sn = $form->formatValue($style['style_sn'] ?? "", "");
             if (!empty($style_sn)) {
-                if ($key = array_search($style_sn, $style_sns)) {
+                if(strlen($style_sn) != 9) {
                     $flag = false;
-                    $error[$i][] = "款号与第" . ($key + 1) . "行款号重复";
+                    $error[$i][] = "款式编码错误，必须9位字符";
+                }else{
+                    if ($key = array_search($style_sn, $style_sns)) {
+                        $flag = false;
+                        $error[$i][] = "款号与第" . ($key + 1) . "行款号重复";
+                    }
+                    $style_sns[$i] = $style_sn;
+    
+                    $styleModel = Style::findOne(['style_sn' => $style_sn]);
+                    if (!empty($styleModel)) {
+                        $flag = false;
+                        $error[$i][] = "款号在系统已存在，不能重复";
+                    }                    
                 }
-                $style_sns[$i] = $style_sn;
-
-                $styleModel = Style::findOne(['style_sn' => $style_sn]);
-                if (!empty($styleModel)) {
-                    $flag = false;
-                    $error[$i][] = "款号在系统已存在，不能重复";
-                }
-                $is_autosn = ConfirmEnum::NO;
+                $is_autosn = AutoSnEnum::NO;
             } else {
                 $flag = false;
                 $error[$i][] = "款号不能为空";
-                $is_autosn = ConfirmEnum::YES;
+                $is_autosn = AutoSnEnum::YES;
             }
             $styleAttr = $this->extendAttrByStyleSn($style_sn);//款号获取款式属性
             $style_cate_id = $form->formatValue($style['style_cate_id'] ?? 0, 0);
@@ -538,7 +592,9 @@ class StyleService extends Service
             }
             $style_ids[] = $styleM->id;
             if (empty($styleM->style_sn)) {//款号为空自动创建
-                Yii::$app->styleService->style->createStyleSn($styleM);
+                $this->createStyleSn($styleM);
+            }else {
+                $this->createStyleSort($styleM);
             }
             //创建审批流程
             if ($styleM->status != StatusEnum::ENABLED) {//未启用走审批流程
@@ -807,14 +863,23 @@ class StyleService extends Service
     }
 
 
-
+    /***
+     * @param string $index_key
+     * @return array|\yii\db\ActiveRecord[]
+     * 获取款下拉信息
+     */
     public function getStyleList($index_key='id'){
         $style_list = Style::find()->where(['status'=>StatusEnum::ENABLED])->select(['id','style_sn'])->asArray()->all();
         $style_list = array_column($style_list,'style_sn',$index_key);
         return $style_list;
     }
 
-
+    /***
+     * @param $style
+     * @return mixed
+     * @throws \Exception
+     * 更新款主图
+     */
     public function updateStyleImage($style){
         $style_id = $style->id;
         $styleImage = StyleImages::find()->where(['style_id'=>$style_id ,'status'=>StatusEnum::ENABLED])->one();
@@ -829,5 +894,143 @@ class StyleService extends Service
         }
         return $style;
     }
+
+    /****
+     * @WarehouseGoods $goods
+     *根据入库信息自动添加款式工厂
+     */
+    public function createStyleFactory($goods){
+        $style_sn = $goods->style_sn;
+        $supplier_id = $goods->supplier_id;
+        $style = Style::find()->where(['style_sn'=>$style_sn])->one();
+        if($style && $supplier_id){
+            //判断是否存在，存在不在重复添加
+            $styleFactory = StyleFactory::find()->where(['style_id'=>$style->id, 'factory_id'=> $supplier_id])->one();
+            if($styleFactory){
+                return;
+            }
+            $model = new StyleFactory();
+            $is_default = StyleFactory::find()->where(['style_id'=>$style->id, 'is_default'=> ConfirmEnum::YES])->count();
+            $style_factory = [
+                'factory_id' => $supplier_id,
+                'style_id' => $style->id,
+                'is_default' => $is_default == ConfirmEnum::YES ? ConfirmEnum::NO : ConfirmEnum::YES ,
+            ];
+            $model->attributes = $style_factory;
+            if (false === $model->save()) {
+                throw new \Exception($this->getError($model));
+            }
+
+        }
+
+    }
+
+
+
+    /****
+     * @WarehouseGoods $goods
+     *根据入库信息自动添加款式工厂
+     */
+    public function createStyleFactoryFee($goods){
+        $style_sn = $goods->style_sn;
+        $supplier_id = $goods->supplier_id;
+        $style = Style::find()->where(['style_sn'=>$style_sn])->one();
+        if($style && $supplier_id){
+            //判断是否存在，存在不在重复添加
+            $i=0;
+            foreach (FactoryFeeEnum::getMap() as $key => $value){
+                $fee_price = 0;
+                switch ($key){
+                    //基本工费
+                    case FactoryFeeEnum::BASIC_GF :
+                        $fee_price = $goods->gong_fee;
+                        break;
+                        //镶石费/颗
+                    case FactoryFeeEnum::INLAID_GF :
+                        $fee_price = $goods->xianqian_fee;
+                        break;
+                        //配件工费
+                    case FactoryFeeEnum::PARTS_GF :
+                        $fee_price = $goods->parts_fee;
+                        break;
+                        //克/工费
+                    case FactoryFeeEnum::GEAM_GF :
+                        $fee_price = $goods->ke_gong_fee;
+                        break;
+                        //配石工费
+                    case FactoryFeeEnum::PEISHI_GF :
+                        $fee_price = $goods->peishi_fee;
+                        break;
+                        //分色费
+                    case FactoryFeeEnum::FENSE_GF :
+                        $fee_price = $goods->fense_fee;
+                        break;
+                        //喷沙费
+                    case FactoryFeeEnum::PENSHA_GF :
+                        $fee_price = $goods->penrasa_fee;
+                        break;
+                        //拉沙费
+                    case FactoryFeeEnum::LASHA_GF :
+                        $fee_price = $goods->lasha_fee;
+                        break;
+                        //补口费
+                    case FactoryFeeEnum::BUKOU_GF :
+                        $fee_price = $goods->bukou_fee;
+                        break;
+                        //版费
+                    case FactoryFeeEnum::TEMPLET_GF :
+                        $fee_price = $goods->edition_fee;
+                        break;
+                        //证书费
+                    case FactoryFeeEnum::CERT_GF :
+                        $fee_price = $goods->cert_fee;
+                        break;
+                        //分件费
+                    case FactoryFeeEnum::FENJIAN_GF :
+                        $fee_price = $goods->piece_fee;
+                        break;
+                        //表面工艺费
+                    case FactoryFeeEnum::TECHNOLOGY_GF :
+                        $fee_price = $goods->biaomiangongyi_fee;
+                        break;
+                    case FactoryFeeEnum::OTHER_GF :
+                        $fee_price = $goods->other_fee;
+                        break;
+                }
+
+                $style_id = $style->id;
+                $fee_type = $key;
+
+                if(empty($fee_price) || $fee_price == 0){
+                    continue;
+                }
+
+                $styleFactory = StyleFactoryFee::find()->where(['style_id'=>$style->id, 'factory_id'=> $supplier_id, 'fee_type'=>$fee_type])->one();
+                if($styleFactory){
+                    continue;
+                }
+                $model = new StyleFactoryFee();
+                $style_factory_fee = [
+                    'factory_id' => $supplier_id,
+                    'style_id' => $style_id,
+                    'fee_type' =>$fee_type,
+                    'fee_price' => $fee_price
+                ];
+                $model->attributes = $style_factory_fee;
+
+                if (false === $model->save()) {
+                    throw new \Exception($this->getError($model));
+                }
+            }
+
+        }
+
+    }
+
+    public function createStyleFactoryFeeOne($style_id, $supplier_id, $fee_type, $fee_price){
+
+
+    }
+
 
 }

@@ -21,6 +21,13 @@ $form = ActiveForm::begin([
     </div>
     <div class="modal-body">
         <?= $form->field($model, 'fee_type')->dropDownList(\addons\Style\common\enums\FactoryFeeEnum::getMap(),['prompt'=>'请选择']);?>
+        <?= $form->field($model, 'factory_id')->widget(kartik\select2\Select2::class, [
+            'data' => Yii::$app->supplyService->supplier->getDropDown(),
+            'options' => ['placeholder' => '请选择'],
+            'pluginOptions' => [
+                'allowClear' => true
+            ],
+        ]);?>
         <?= $form->field($model, 'fee_price')->textInput() ?>
         <?= $form->field($model, 'remark')->textInput() ?>
         <?= $form->field($model, 'status')->radioList(common\enums\StatusEnum::getMap())?>

@@ -33,35 +33,18 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'visible' => true,
                                 'headerOptions' => ['class' => 'col-md-1','style'=>'width:30px'],
                             ],
+
                             [
-                                'attribute'=>'order_sn',
+                                'attribute'=>'goldBill.bill_no',
                                 'filter' => true,
                                 'headerOptions' => ['class' => 'col-md-2'],
                             ],
+
                             [
-                                'attribute'=>'bill_no',
-                                'filter' => true,
-                                'headerOptions' => ['class' => 'col-md-2'],
-                            ],
-                            [
-                                'attribute' => 'adjust_type',
-                                'value' => function ($model){
-                                    return AdjustTypeEnum::getValue($model->adjust_type);
+                                'attribute' => 'bill_status',
+                                'value' => function($model){
+                                    return \addons\Warehouse\common\enums\BillStatusEnum::getValue($model->bill_status);
                                 },
-                                'filter' => Html::activeDropDownList($searchModel, 'adjust_type', AdjustTypeEnum::getMap(), [
-                                    'prompt' => '全部',
-                                    'class' => 'form-control',
-                                    'style'=> 'width:100px;'
-                                ]),
-                                'headerOptions' => ['class' => 'col-md-1'],
-                            ],
-                            [
-                                'attribute' => 'gold_weight',
-                                'filter' => true,
-                                'headerOptions' => ['class' => 'col-md-2'],
-                            ],
-                            [
-                                'attribute' => 'stock_weight',
                                 'filter' => true,
                                 'headerOptions' => ['class' => 'col-md-2'],
                             ],

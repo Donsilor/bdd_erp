@@ -18,8 +18,7 @@ class WarehouseGoldBillGoodsForm extends WarehouseGoldBillGoods
     public function rules()
     {
          $rules = [
-             [['gold_weight'], 'required'],
-             ['gold_weight','compare','compareValue' => 0, 'operator' => '>'],
+
          ];
          return ArrayHelper::merge(parent::rules() , $rules);
     }
@@ -31,7 +30,6 @@ class WarehouseGoldBillGoodsForm extends WarehouseGoldBillGoods
     {
         //合并
         return ArrayHelper::merge(parent::attributeLabels() , [
-
         ]);
     }
 

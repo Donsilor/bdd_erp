@@ -185,15 +185,15 @@ class QibanController extends BaseController
         }
         if ($model->load(Yii::$app->request->post())) {
             //重新编辑后，审核状态改为未审核
-            $model->audit_status = AuditStatusEnum::SAVE;            
-            if($isNewRecord) {
-                $model->qiban_sn = SnHelper::createQibanSn();
-            }            
+            $model->audit_status = AuditStatusEnum::SAVE;
             try{
                 $trans = Yii::$app->trans->beginTransaction();
                 if(false === $model->save()){
                     throw new \Exception($this->getError($model));
                 }
+                if($isNewRecord) {
+                    \Yii::$app->styleService->qiban->createQibanSn($model);
+                } 
                 //创建属性关系表数据
                 $model->createAttrs();
                 $trans->commit();
@@ -250,14 +250,14 @@ class QibanController extends BaseController
         if ($model->load(Yii::$app->request->post())) {
             //重新编辑后，审核状态改为未审核
             $model->audit_status = AuditStatusEnum::SAVE;            
-            if($isNewRecord) {
-                $model->qiban_sn = SnHelper::createQibanSn();
-            }
             try{
                 $trans = Yii::$app->trans->beginTransaction();
                 if(false === $model->save()){
                     throw new \Exception($this->getError($model));
                 }
+                if($isNewRecord) {
+                    \Yii::$app->styleService->qiban->createQibanSn($model);
+                }                
                 //创建属性关系表数据
                 $model->createAttrs();
 
@@ -266,8 +266,8 @@ class QibanController extends BaseController
                     return $this->message("保存成功", $this->redirect(['view', 'id' => $model->id]), 'success');
                 }else{
                     //前端提示
-                Yii::$app->getSession()->setFlash('success','保存成功');
-                return ResultHelper::json(200, '保存成功');
+                    Yii::$app->getSession()->setFlash('success','保存成功');
+                    return ResultHelper::json(200, '保存成功');
                 }
 
             }catch (\Exception $e){

@@ -173,6 +173,9 @@ $this->params['breadcrumbs'][] = $this->title;
                         <div class="col-lg-6">
                             <?= $form->field($model, 'address')->textInput(['maxlength' => true]) ?>
                         </div>
+                        <div class="col-lg-3">
+                            <?= $form->field($model, 'zip_code')->textInput(['maxlength' => true]) ?>
+                        </div>
                     </div>
                 </div>
               <!-- ./box-body -->

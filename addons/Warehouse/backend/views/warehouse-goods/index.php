@@ -230,9 +230,9 @@ $params = $params ? "&".http_build_query($params) : '';
                                         <div class="col-sm-8 ">
                                             <div class="col-lg-12 input-group">
                                                 <div class="input-group">
-                                                    <?= Html::textInput('min_diamond_carat', $search->min_diamond_carat, ['class' => 'form-control', 'placeholder' => '最低主石价']) ?>
+                                                    <?= Html::textInput('min_diamond_carat', $search->min_diamond_carat, ['class' => 'form-control', 'placeholder' => '最低主石重']) ?>
                                                     <span class="input-group-addon" style="border-color: #fff">-</span>
-                                                    <?= Html::textInput('max_diamond_carat', $search->max_diamond_carat, ['class' => 'form-control', 'placeholder' => '最高主石价']) ?>
+                                                    <?= Html::textInput('max_diamond_carat', $search->max_diamond_carat, ['class' => 'form-control', 'placeholder' => '最高主石重']) ?>
                                                 </div>
                                                 <div class="help-block"></div>
                                             </div>
@@ -622,6 +622,14 @@ $params = $params ? "&".http_build_query($params) : '';
                                 'prompt' => '全部',
                                 'class' => 'form-control',
                                 'style'=> 'width:80px;'
+                            ]),
+                            'headerOptions' => [],
+                        ],
+                        [
+                            'attribute'=>'stock_cnt',
+                            'filter' => Html::activeTextInput($searchModel, 'stock_cnt', [
+                                'class' => 'form-control',
+                                'style'=> 'width:60px;'
                             ]),
                             'headerOptions' => [],
                         ],

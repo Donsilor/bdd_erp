@@ -170,7 +170,7 @@ class GoldBillOController extends BaseController
         return $this->render($this->action->id, [
             'model' => $model,
             'tab'=>$tab,
-            'tabList'=>\Yii::$app->warehouseService->goldO->menuTabList($id,$this->billType,$returnUrl),
+            'tabList'=>\Yii::$app->warehouseService->goldBill->menuTabList($id,$this->billType,$returnUrl),
             'returnUrl'=>$returnUrl,
         ]);
     }
@@ -189,7 +189,7 @@ class GoldBillOController extends BaseController
             return $this->message('单据不是保存状态', $this->redirect(\Yii::$app->request->referrer), 'error');
         }
         if($model->total_weight<=0){
-            return $this->message('单据明细不能为空', $this->redirect(\Yii::$app->request->referrer), 'error');
+            return $this->message('金料重量不能为空', $this->redirect(\Yii::$app->request->referrer), 'error');
         }        
         try{
             

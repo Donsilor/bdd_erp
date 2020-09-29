@@ -28,6 +28,8 @@ use addons\Sales\common\models\Customer;
 use common\enums\LogTypeEnum;
 use common\helpers\Auth;
 use addons\Finance\common\forms\OrderPayForm;
+use addons\Sales\common\forms\OrderImportKForm;
+use yii\web\UploadedFile;
 
 /**
  * Default controller for the `order` module
@@ -164,6 +166,48 @@ class OrderController extends BaseController
                 'model' => $model,
         ]);
     }
+    /**
+     * ajax 国际批发订单导入
+     *
+     * @return mixed|string|\yii\web\Response
+     * @throws \yii\base\ExitException
+     */
+    public function actionAjaxImportK()
+    {
+        if(Yii::$app->request->get('download')) {
+            $file = dirname(dirname(__FILE__)).'/resources/excel/国际批发订单模板导入.xlsx';
+            $content = file_get_contents($file);
+            if (!empty($content)) {
+                header("Content-type:application/vnd.ms-excel");
+                header("Content-Disposition: attachment;filename=国际批发订单模板导入".date("Ymd").".xlsx");
+                header("Content-Transfer-Encoding: binary");
+                exit($content);
+            }
+        }
+        
+        $model = new OrderImportKForm();
+        
+        // ajax 校验
+        $this->activeFormValidate($model);
+        if ($model->load(Yii::$app->request->post())) {
+            try{
+                $trans = Yii::$app->trans->beginTransaction();
+                $model->file = UploadedFile::getInstance($model, 'file');
+                \Yii::$app->salesService->order->importOrderK($model);
+                $trans->commit();
+                return $this->message('导入完成', $this->redirect(Yii::$app->request->referrer), 'success');
+            }catch (\Exception $e){
+                $trans->rollBack();
+                return $this->message($e->getMessage(), $this->redirect(Yii::$app->request->referrer), 'error');
+            }
+            
+        }
+        
+        return $this->renderAjax($this->action->id, [
+                'model' => $model,
+        ]);
+    }
+    
     /**
      * 查询客户信息
      * @return array|\yii\db\ActiveRecord|NULL
@@ -486,7 +530,8 @@ class OrderController extends BaseController
             $model->country_id = $model->customer->country_id ?? null;
             $model->province_id = $model->customer->province_id ?? null;
             $model->city_id = $model->customer->city_id ?? null;
-            $model->address_details = $model->customer->address_details ?? null;
+            $model->address_details = $model->customer->address ?? null;
+            $model->zip_code = $model->customer->zip_code ?? null;
         }
         return $this->renderAjax($this->action->id, [
                 'model' => $model,

@@ -106,6 +106,40 @@ class WarehouseGoldBillService extends Service
                     }
                     break;
                 }
+            case GoldBillTypeEnum::GOLD_T:
+                {
+                    if(!$tag){
+                        $tabList = [
+                            1=>['name'=>'单据详情','url'=>Url::to(['gold-bill-t/view','id'=>$bill_id,'tab'=>1,'returnUrl'=>$returnUrl])],
+                            2=>['name'=>'单据明细','url'=>Url::to(['gold-bill-t-goods/index','bill_id'=>$bill_id,'tab'=>2,'returnUrl'=>$returnUrl])],
+                            4=>['name'=>'日志列表','url'=>Url::to(['gold-bill-log/index','bill_id'=>$bill_id,'tab'=>4,'returnUrl'=>$returnUrl])]
+                        ];
+                    }else{
+                        $tabList = [
+                            1=>['name'=>'单据详情','url'=>Url::to(['gold-bill-t/view','id'=>$bill_id,'tab'=>1,'returnUrl'=>$returnUrl])],
+                            3=>['name'=>'单据明细(编辑)','url'=>Url::to(['gold-bill-t-goods/edit-all','bill_id'=>$bill_id,'tab'=>3,'returnUrl'=>$returnUrl])],
+                            4=>['name'=>'日志列表','url'=>Url::to(['gold-bill-log/index','bill_id'=>$bill_id,'tab'=>4,'returnUrl'=>$returnUrl])]
+                        ];
+                    }
+                    break;
+                }
+            case GoldBillTypeEnum::GOLD_O:
+                {
+                    if(!$tag){
+                        $tabList = [
+                            1=>['name'=>'单据详情','url'=>Url::to(['gold-bill-o/view','id'=>$bill_id,'tab'=>1,'returnUrl'=>$returnUrl])],
+                            2=>['name'=>'单据明细列表','url'=>Url::to(['gold-bill-o-goods/index','bill_id'=>$bill_id,'tab'=>2,'returnUrl'=>$returnUrl])],
+                            4=>['name'=>'日志列表','url'=>Url::to(['gold-bill-log/index','bill_id'=>$bill_id,'tab'=>4,'returnUrl'=>$returnUrl])]
+                        ];
+                    }else{
+                        $tabList = [
+                            1=>['name'=>'单据详情','url'=>Url::to(['gold-bill-o/view','id'=>$bill_id,'tab'=>1,'returnUrl'=>$returnUrl])],
+                            3=>['name'=>'单据明细(编辑)','url'=>Url::to(['gold-bill-o-goods/edit-all','bill_id'=>$bill_id,'tab'=>3,'returnUrl'=>$returnUrl])],
+                            4=>['name'=>'日志列表','url'=>Url::to(['gold-bill-log/index','bill_id'=>$bill_id,'tab'=>4,'returnUrl'=>$returnUrl])]
+                        ];
+                    }
+                    break;
+                }
         }
         return $tabList;
     }
@@ -117,11 +151,13 @@ class WarehouseGoldBillService extends Service
     public function goldBillSummary($bill_id)
     {
         $sum = WarehouseGoldBillGoods::find()
-            ->select(['sum(1) as total_num','sum(gold_weight) as total_weight','sum(cost_price) as total_cost'])
+            ->select(['sum(1) as total_num','sum(gold_weight) as total_weight','sum(cost_price) as total_cost',
+                'sum(incl_tax_price) as total_tax_price'])
             ->where(['bill_id'=>$bill_id, 'status'=>StatusEnum::ENABLED])
             ->asArray()->one();
         if($sum) {
-            $result = WarehouseGoldBill::updateAll(['total_num'=>$sum['total_num']/1,'total_weight'=>$sum['total_weight']/1,'total_cost'=>$sum['total_cost']/1],['id'=>$bill_id]);
+            $result = WarehouseGoldBill::updateAll(['total_num'=>$sum['total_num']/1,'total_weight'=>$sum['total_weight']/1,
+                'total_cost'=>$sum['total_cost']/1,'total_tax_price'=>$sum['total_tax_price']/1,],['id'=>$bill_id]);
         }
         return $result?:null;
     }

@@ -25,7 +25,18 @@ class StatusEnum extends BaseEnum
             self::DISABLED => '禁用',
         ];
     }
-    
+    /**
+     * 作废状态列表
+     * @return array
+     */
+    public static function getDestroyMap(): array
+    {
+        return [
+                self::ENABLED => '启用',
+                self::DISABLED => '禁用',
+                self::DELETE => '作废',
+        ];
+    }
     /**
      * 锁定状态列表
      * @return array

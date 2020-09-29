@@ -885,7 +885,6 @@ h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6 {
 label {
     color: rgb(55, 71, 79);
     font-weight: 500;
-	margin-top:5px
 }
 
 button, select {
@@ -1641,3 +1640,4 @@ tr.filters{
 .no-border-top { border-top:none !important}
 .nowrap {white-space:nowrap !important;}
 .form-control{ padding:6px 8px !important}
+form label {margin-top:5px !important;}

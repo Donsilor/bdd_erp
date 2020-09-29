@@ -15,6 +15,7 @@ class AuditStatusEnum extends BaseEnum
     const PENDING = 1;
     const PASS = 2;
     const UNPASS = 3;
+    const DESTORY = 4;
     /**
      * @return array
      */
@@ -25,6 +26,7 @@ class AuditStatusEnum extends BaseEnum
                 self::PENDING => '待审核',
                 self::PASS => '审核通过',
                 self::UNPASS => '不通过',
+                self::DESTORY => '已作废',
         ];
     }
     /**

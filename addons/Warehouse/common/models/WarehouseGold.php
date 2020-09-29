@@ -64,7 +64,7 @@ class WarehouseGold extends BaseModel
     {
         return [
             'id' => 'ID',
-            'gold_sn' => '金料编号',
+            'gold_sn' => '金料编号/批次号',
             'gold_name' => '金料名称',
             'gold_type' => '金料类型',
             'gold_status' => '库存状态',

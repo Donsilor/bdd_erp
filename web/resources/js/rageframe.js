@@ -316,6 +316,22 @@ function rfDelete(obj, text) {
     })
 }
 
+//作废提示
+function rfDestory(obj, text) {
+    if (!text) {
+        text = '请谨慎操作';
+    }
+
+    appConfirm("您确定要作废这条记录吗?", text, function (value) {
+        switch (value) {
+            case "defeat":
+                window.location = $(obj).attr('href');
+                break;
+            default:
+        }
+    })
+}
+
 // 二次确认提示
 function rfTwiceAffirm(obj, title, text) {
     var dialogText = rfText(text);

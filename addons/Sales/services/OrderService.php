@@ -30,6 +30,9 @@ use common\helpers\UploadHelper;
 use common\helpers\ExcelHelper;
 use addons\Sales\common\models\Platform;
 use common\enums\LanguageEnum;
+use addons\Sales\common\forms\OrderImportKForm;
+use addons\Sales\common\forms\OrderFullForm;
+use common\helpers\ArrayHelper;
 
 /**
  * Class SaleChannelService
@@ -62,7 +65,7 @@ class OrderService extends Service
      * 
      * @param OrderForm $form
      */
-    public function createOrder($form)
+    public function createOrder($form,$mode = 'form')
     {
         if(false == $form->validate()) {
             throw new \Exception($this->getError($form));
@@ -73,7 +76,11 @@ class OrderService extends Service
         if(false == $order->save()) {
             throw new \Exception($this->getError($order));
         }
-        $customer = Customer::find()->where(['mobile'=>$order->customer_mobile,'channel_id'=>$order->sale_channel_id])->one();
+        if($order->customer_mobile) {
+            $customer = Customer::find()->where(['mobile'=>$order->customer_mobile,'channel_id'=>$order->sale_channel_id])->one();
+        }else if($order->customer_email) {
+            $customer = Customer::find()->where(['email'=>$order->customer_email,'channel_id'=>$order->sale_channel_id])->one();
+        }
         if(!$customer) {          
             //2.创建用户信息
             $customer = new Customer();
@@ -105,7 +112,7 @@ class OrderService extends Service
         if(false == $order->save()) {
             throw new \Exception($this->getError($order));
         }
-        //3.创建订单金额
+
         if($isNewOrder === true){
             $account = new OrderAccount();
             $account->order_id = $order->id;
@@ -129,11 +136,13 @@ class OrderService extends Service
             $address->province_id = $customer->province_id;
             $address->city_id = $customer->city_id;
             $address->address_details = $customer->address;
-            //$address->zip_code = $customer->zip_code;
         }        
         if(false == $address->save(false)) {
             throw new \Exception("同步收货地址失败：".$this->getError($address));
         }
+        
+        //商品金额汇总
+        $this->orderSummary($order->id);
         
         //创建订单日志
         if($isNewOrder === true) {
@@ -255,7 +264,200 @@ class OrderService extends Service
         }
         return $order;
     }
+    /**
+     *  国际批发订单导入
+     * @param OrderImportKForm $form
+     */
+    public function importOrderK($form)
+    { 
+        if (!($form->file->tempName ?? true)) {
+            throw new \Exception("请上传文件");
+        }
+        if (UploadHelper::getExt($form->file->name) != 'xlsx') {
+            throw new \Exception("请上传xlsx格式文件");
+        }
+       
+        $startRow = 2;
+        $endColumn = count($form->columns);
+        $rows = ExcelHelper::import($form->file->tempName, $startRow, $endColumn, $form->columns);//从第1行开始,第4列结束取值
+        if(!isset($rows[$startRow+1])) {
+            throw new \Exception("导入数据不能为空");
+        }
+        //1.数据校验及格式化
+        foreach ($rows as $rowIndex=> & $row) {
+            if($rowIndex == $startRow) {
+                $form->titles = $row;
+                continue;
+            }
+            if(($form->titles['remark'] ?? '') != '商品备注') {
+                throw new \Exception("数据模板有变动，请下载最新模板");
+            }
+            //加载表格行数据 并且数据校验
+            if(empty(array_filter($row)) || false === $form->loadRow($row,$rowIndex)){
+                continue;
+            }
+        }
+        if($form->hasError() === false) {
+            foreach ($form->order_list as $rowIndex=>$order) {
+                try{
+                    $order = $this->createFullOrder($order);
+                    
+                    $log = [
+                            'order_id' => $order->id,
+                            'order_sn' => $order->order_sn,
+                            'order_status' => $order->order_status,
+                            'log_type' => LogTypeEnum::ARTIFICIAL,
+                            'log_time' => time(),
+                            'log_module' => '创建订单',
+                            'log_msg' => "订单批量导入, 订单号:".$order->order_sn
+                    ];                
+                    \Yii::$app->salesService->orderLog->createOrderLog($log);
+                }catch (\Exception $e) {
+                    $form->addRowError($rowIndex, 'error', "创建订单失败：".$e->getMessage());
+                } 
+            }
+        }
+        $form->showImportMessage();
+    }
     
+    /**
+     * 订单全量添加/更新
+     * @param OrderFullForm $form
+     */
+    public function createFullOrder($form)
+    {
+        //1.订单
+        $isNewOrder = false;
+        $order = $form->order;
+        if(!$order->id) {
+            $isNewOrder = true;
+        }
+        if(false === $order->save()) {
+            throw new \Exception($this->getError($order));
+        }
+        //2.同步订单金额
+        $account = OrderAccount::find()->where(['order_id'=>$order->id])->one();
+        if(!$account) {
+            $account = $form->account;
+            $account->order_id = $order->id;
+        }else {
+            $account->attributes = $form->account->toArray();
+        }
+        $account->currency = $order->currency;
+        if(false == $account->save()) {
+            throw new \Exception($this->getError($account));
+        }
+        if($account->paid_amount > 0) {
+            //3.创建点款记录
+            $orderPay = OrderPay::find()->where(['pay_sn'=>$order->pay_sn])->one();
+            if(!$orderPay) {
+                $orderPay = new OrderPay();
+                $orderPay->order_id = $order->id;
+                $orderPay->pay_sn = SnHelper::createOrderPaySn();
+                $orderPay->pay_amount = $account->paid_amount;
+                $orderPay->pay_type =  $order->pay_type;
+                $orderPay->pay_status = PayStatusEnum::HAS_PAY;
+                $orderPay->currency = $account->currency;
+                $orderPay->exchange_rate = $account->exchange_rate;
+                if(false === $orderPay->save()) {
+                    throw new \Exception($this->getError($orderPay));
+                }
+            }
+            $order->pay_sn = $orderPay->pay_sn;//点款单号            
+        }
+        
+        //4.同步订单商品明细
+        if($isNewOrder === true) {
+            $goods_num = 0;//商品总数
+            $goods_discount = 0;//商品优惠金额
+            foreach ($form->goods_list ?? [] as $goodsInfo) {
+                $style_sn = $goodsInfo['style_sn'] ?? '';
+                $style = Style::find()->where(['style_sn'=>$style_sn])->one();
+                if(!$style) {
+                    $orderGoods = new OrderGoods();
+                    $orderGoods->attributes = $goodsInfo;
+                    $orderGoods->order_id = $order->id;
+                }else {
+                    //从款式信息自动带出款的信息
+                    $styleInfo = $style->toArray(['style_name','style_cate_id','product_type_id','is_inlay','style_channel_id','style_sex']);
+                    $orderGoods = new OrderGoods();
+                    $orderGoods->attributes = $goodsInfo;
+                    $orderGoods->jintuo_type = 1;
+                    $orderGoods->style_cate_id = $style->style_cate_id;
+                    $orderGoods->product_type_id = $style->product_type_id;
+                    $orderGoods->is_inlay = $style->is_inlay;
+                    $orderGoods->style_channel_id = $style->style_channel_id;
+                    $orderGoods->style_sex = $style->style_sex;
+                    $orderGoods->goods_name = $orderGoods->goods_name ? $orderGoods->goods_name : $style->style_name;
+   
+                    $orderGoods->order_id = $order->id;
+                    if(empty($goodsInfo['goods_image'])) {
+                        $orderGoods->goods_image = $style->style_image;
+                    }
+                }
+                if(false === $orderGoods->save()) {
+                    throw new \Exception("同步订单商品失败：".$this->getError($orderGoods));
+                }
+                /**
+                 * [attr_id] => 6[attr_value_id] => 16[attr_value] => 圆形
+                 */
+                foreach ($goodsInfo['goods_attrs'] ??[] as $goods_attr) {
+                    if(empty($goods_attr)){
+                        continue;
+                    }
+                    $goodsAttr = new OrderGoodsAttribute();
+                    $goodsAttr->attributes = $goods_attr;
+                    if($goodsAttr->attr_value_id) {
+                        $goodsAttr->attr_value = Yii::$app->attr->valueName($goodsAttr->attr_value_id);
+                    }
+                    $goodsAttr->id = $orderGoods->id;
+                    if(false === $goodsAttr->save()) {
+                          throw new \Exception("同步商品属性失败：".$this->getError($goodsAttr));
+                    }
+                }
+                $goods_discount += $orderGoods->goods_discount;
+                $goods_num += $orderGoods->goods_num;
+            }
+            $order->goods_num   = $goods_num;
+            
+            $account->goods_discount = $goods_discount;
+            $account->order_discount = $account->discount_amount - $goods_discount;
+            if(false === $account->save()) {
+                throw new \Exception("同步订单金额失败：".$this->getError($account));
+            }
+        }
+        //6.同步订单收货地址
+        $address = OrderAddress::find()->where(['order_id'=>$order->id])->one();
+        if(!$address) {
+            $address = $form->address;
+            $address->order_id = $order->id;
+        }else {
+            $address->attributes = $form->address->toArray();
+        }       
+        if(false == $address->save(false)) {
+            throw new \Exception("同步收货地址失败：".$this->getError($address));
+        } 
+        //6.同步订单发票信息
+        $invoice = OrderInvoice::find()->where(['order_id'=>$order->id])->one();
+        if(!$invoice) {
+            $invoice = $form->invoice;
+            $invoice->order_id = $order->id;
+        }
+        $invoice->attributes = $form->invoice->toArray();
+        if(false == $invoice->save()) {
+            throw new \Exception("同步发票失败：".$this->getError($invoice));
+        }      
+        
+        if($order->order_sn == ''){
+            $order->order_sn = $this->createOrderSn($order);
+        }
+        if(false == $order->save()) {
+            throw new \Exception($this->getError($order));
+        }
+        //商品金额汇总
+        $this->orderSummary($order->id);
+        return $order;
+    }
     /**
      *  外部订单导入
      * @param OrderImportForm $form
@@ -286,6 +488,7 @@ class OrderService extends Service
             }
             //加载表格行数据 并且数据校验
             if(false === $form->loadRow($row,$rowIndex)){
+                $error_flag = true;
                 continue;
             }            
             
@@ -309,7 +512,6 @@ class OrderService extends Service
                         'goods_name'=>$form->goods_name_1,
                         'size' =>$form->size_1,
                         'finger_type' =>$form->finger_type_1,
-                        'goods_spec' =>$form->goods_spec_2,
                         'goods_price'=>$form->goods_price_1
                 ];
             }
@@ -391,7 +593,9 @@ class OrderService extends Service
             }
         }
         $order->pay_sn = $orderPay->pay_sn;//点款单号
-
+        if($account->paid_amount < $account->pay_amount) {
+            $order->pay_status  = PayStatusEnum::PART_PAY;
+        }
         //4.同步订单商品明细
         if($isNewOrder === true) {
             $goods_num = 0;//商品总数
@@ -443,7 +647,11 @@ class OrderService extends Service
             }            
         }
         //5.同步客户信息
-        $customer = Customer::find()->where(['mobile'=>$order->customer_mobile,'channel_id'=>$order->sale_channel_id])->one();
+        if($order->customer_mobile) {
+            $customer = Customer::find()->where(['mobile'=>$order->customer_mobile,'channel_id'=>$order->sale_channel_id])->one();
+        }else if($order->customer_email) {
+            $customer = Customer::find()->where(['email'=>$order->customer_email,'channel_id'=>$order->sale_channel_id])->one();
+        }
         if(!$customer) {
             //2.创建用户信息
             $customer = new Customer();
@@ -494,7 +702,8 @@ class OrderService extends Service
         if(false == $order->save()) {
             throw new \Exception($this->getError($order));
         }
-        
+        //商品金额汇总
+        $this->orderSummary($order->id);
         //创建订单日志
         if($isNewOrder === true) {
             $log = [
@@ -660,22 +869,30 @@ class OrderService extends Service
             ->select(['sum(goods_num) as total_num','sum(goods_price*goods_num) as total_goods_price','sum(goods_discount) as total_goods_discount','sum(goods_pay_price*goods_num) as total_pay_price','min(is_stock) as is_stock','min(is_gift) as is_gift'])
             ->where(['order_id'=>$order_id])
             ->asArray()->one();
-        if($sum) {
+        if($sum) { 
+            $account = OrderAccount::find()->where(['order_id'=>$order_id])->one();
+            if(empty($account)){
+                $account = new OrderAccount();
+                $account->order_id = $order_id;
+            }
+            $account->discount_amount = $sum['total_goods_discount'];
+            $account->goods_amount = $sum['total_goods_price'];
+            $account->order_amount = $account->goods_amount + $account->shipping_fee + $account->tax_fee + $account->safe_fee
+                        + $account->other_fee; // 商品总金额+运费，税费，保险费
+            $account->pay_amount = $account->order_amount - $account->discount_amount;
+            if(false === $account->save()){
+                throw new \Exception("订单金额汇总失败:".$this->getError($account));
+            }
+            //更新订单信息
             $order_type = $sum['is_stock'] == 1 ? 1 : 2; //1现货 2定制
-            Order::updateAll(['goods_num'=>$sum['total_num'], 'order_type'=>$order_type],['id'=>$order_id]);
-            $order_account = OrderAccount::find()->where(['order_id'=>$order_id])->one();
-            if(empty($order_account)){
-                $order_account = new OrderAccount();
-                $order_account->order_id = $order_id;
+            $order_data = ['goods_num'=>$sum['total_num'], 'order_type'=> $order_type];
+            if($account->paid_amount < $account->pay_amount) {
+                $order_data['pay_status']  = PayStatusEnum::PART_PAY;
+            }else {
+                $order_data['pay_status']  = PayStatusEnum::HAS_PAY;
             }
-            $order_account->discount_amount = $sum['total_goods_discount'];
-            $order_account->goods_amount = $sum['total_goods_price'];
-            $order_account->order_amount = $order_account->goods_amount + $order_account->shipping_fee + $order_account->tax_fee + $order_account->safe_fee
-                        + $order_account->other_fee; // 商品总金额+运费，税费，保险费
-            $order_account->pay_amount = $order_account->order_amount - $order_account->discount_amount;
-            if(false === $order_account->save()){
-                throw new \Exception("订单金额汇总失败:".$this->getError($order_account));
-            }
+            Order::updateAll($order_data,['id'=>$order_id]);
+            
         }
     }
     

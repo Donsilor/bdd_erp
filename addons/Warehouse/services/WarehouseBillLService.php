@@ -2,10 +2,6 @@
 
 namespace addons\Warehouse\services;
 
-use addons\Style\common\enums\JintuoTypeEnum;
-use addons\Warehouse\common\enums\BillFixEnum;
-use addons\Warehouse\common\enums\GoodSourceEnum;
-use common\enums\LogTypeEnum;
 use Yii;
 use common\components\Service;
 use common\helpers\SnHelper;
@@ -14,10 +10,15 @@ use addons\Warehouse\common\models\WarehouseGoods;
 use addons\Warehouse\common\models\WarehouseBillGoods;
 use addons\Warehouse\common\models\WarehouseBillGoodsL;
 use addons\Purchase\common\models\PurchaseReceiptGoods;
+use addons\Warehouse\common\forms\WarehouseBillTGoodsForm;
 use addons\Purchase\common\enums\ReceiptGoodsStatusEnum;
+use addons\Warehouse\common\enums\BillFixEnum;
+use addons\Warehouse\common\enums\GoodSourceEnum;
 use addons\Warehouse\common\enums\BillStatusEnum;
 use addons\Warehouse\common\enums\GoodsStatusEnum;
 use addons\Warehouse\common\enums\OrderTypeEnum;
+use addons\Style\common\enums\JintuoTypeEnum;
+use common\enums\LogTypeEnum;
 use common\enums\AuditStatusEnum;
 use common\enums\StatusEnum;
 use common\helpers\ArrayHelper;
@@ -126,6 +127,7 @@ class WarehouseBillLService extends Service
                 if (empty($good->jintuo_type)) {
                     $good->jintuo_type = JintuoTypeEnum::Chengpin;
                 }
+                $good = $this->calcSingleGoods($good);
                 $goods[] = [
                     //基本信息
                     'goods_id' => $good->goods_id,//条码号
@@ -138,6 +140,7 @@ class WarehouseBillLService extends Service
                     'style_channel_id' => $good->style_channel_id,//款式渠道
                     'qiban_sn' => $good->qiban_sn,//起版号
                     'qiban_type' => $good->qiban_type,//起版类型
+                    'stock_cnt' => $good->goods_num,//入库数量
                     'goods_num' => $good->goods_num,//商品数量
                     'goods_status' => GoodsStatusEnum::IN_STOCK,//库存状态
                     'goods_source' => GoodSourceEnum::QUICK_STORAGE,//数据来源方式
@@ -293,6 +296,7 @@ class WarehouseBillLService extends Service
                     'fense_fee' => $good->fense_fee,//分色/分件费
                     'biaomiangongyi_fee' => $good->biaomiangongyi_fee,//表面工艺费
                     'tax_fee' => $good->tax_fee,//税费
+                    'tax_amount' => $good->tax_amount,//税额
                     'cert_fee' => $good->cert_fee,//证书费
                     'other_fee' => $good->other_fee,//其它工费
                     'total_gong_fee' => $good->total_gong_fee,//总工费
@@ -318,10 +322,9 @@ class WarehouseBillLService extends Service
             $value = [];
             $key = array_keys($goods[0]);
             foreach ($goods as $item) {
-                //$this->
                 $model->setAttributes($item);
                 if (!$model->validate()) {
-                    throw new \Exception($this->getError($model));
+                    throw new \Exception("货号：".$item['goods_id'].$this->getError($model));
                 }
                 $value[] = array_values($item);
                 if (count($value) >= 10) {
@@ -361,12 +364,12 @@ class WarehouseBillLService extends Service
                         'bill_no' => $bill->bill_no,//单据编号
                         'bill_type' => $bill->bill_type,//单据类型
                         'goods_id' => $goods_id,//货号
-                        'goods_name' => $good->goods_name,//商品名称
-                        'style_sn' => $good->style_sn,//款式编号
-                        'goods_num' => $good->goods_num,//商品数量
-                        'warehouse_id' => $good->to_warehouse_id,//入库仓库
+                        'goods_name' => $goods->goods_name,//商品名称
+                        'style_sn' => $goods->style_sn,//款式编号
+                        'goods_num' => $goods->goods_num,//商品数量
+                        'warehouse_id' => $goods->warehouse_id,//入库仓库
                         'put_in_type' => $bill->put_in_type,//入库方式
-                        'cost_price' => $good->cost_price,//成本价
+                        'cost_price' => $goods->cost_price,//成本价
                         //'sale_price' => $good->sale_price,//销售价
                         //'market_price' => $good->market_price,//市场价
                         'status' => StatusEnum::ENABLED,//状态
@@ -381,8 +384,14 @@ class WarehouseBillLService extends Service
                         'log_msg' => '入库单：' . $form->bill_no . ";货品状态:“" . GoodsStatusEnum::getValue(GoodsStatusEnum::IN_STOCK) . "”"
                     ];
                     Yii::$app->warehouseService->goodsLog->createGoodsLog($log);
+
+                    //同步数据到款工厂
+                    Yii::$app->styleService->style->createStyleFactory($goods);
+                    //同步数据到款工费
+                    Yii::$app->styleService->style->createStyleFactoryFee($goods);
                 }
             }
+
             //创建单据明细信息
             if(!empty($bill_goods)){
                 $value = [];
@@ -427,4 +436,72 @@ class WarehouseBillLService extends Service
         }
     }
 
+    /**
+     * 换算单件货信息
+     * @param array $goods
+     * @return array
+     */
+    public function calcSingleGoods($goods)
+    {
+        $fields = [
+            'gold_weight',//金重
+            'suttle_weight',//连石重
+            //'lncl_loss_weight',//含耗重
+            'pure_gold',//折足
+            //'gross_weight',//毛重
+            'gold_amount',//金料额
+
+            'diamond_carat',//钻石大小
+
+            'main_stone_num',//主石粒数
+            'main_stone_weight',//主石重
+            'main_stone_amount',//主石成本价
+
+            'second_stone_num1',//副石1粒数
+            'second_stone_weight1',//副石1重
+            'second_stone_amount1',//副石1成本价
+            //'second_stone_fee1',//镶石1工费
+
+            'second_stone_num2',//副石2粒数
+            'second_stone_weight2',//副石2重
+            'second_stone_amount2',//副石2成本价
+            //'second_stone_fee2',//镶石2工费
+
+            'second_stone_num3',//副石3粒数
+            'second_stone_weight3',//副石3重
+            'second_stone_amount3',//副石3成本价
+            //'second_stone_fee3',//镶石3工费
+
+            'parts_num',//配件数量
+            'parts_gold_weight',//配件金重
+            'parts_amount',//配件总额
+
+            'piece_fee',//件工费
+            'basic_gong_fee',//基本工费
+            'peishi_weight',//配石重量
+            'peishi_gong_fee',//配石工费
+            'peishi_fee',//配石费
+            'bukou_fee',//补口费
+            'xianqian_fee',//镶石费
+            //'parts_fee',//配件工费
+            //'templet_fee',//版费
+            'cert_fee',//证书费
+            'fense_fee',//分色分件费
+            'biaomiangongyi_fee',//表面工艺费
+            'penlasha_fee',//喷沙费
+            'lasha_fee',//拉沙费
+            'tax_amount',//税额
+            'other_fee',//其它工费
+            //'factory_cost',//工厂总成本
+            'total_gong_fee',//总工费
+        ];
+        $goods_num = $goods['goods_num'] ?? 1;
+        foreach ($goods as $field => $value) {
+            if (in_array($field, $fields) && bccomp($value, 0, 5) == 1) {
+                $price = bcdiv($value, $goods_num, 3);
+                $goods[$field] = floatval($price);
+            }
+        }
+        return $goods ?? [];
+    }
 }

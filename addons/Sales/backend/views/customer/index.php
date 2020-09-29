@@ -40,24 +40,9 @@ $this->params['breadcrumbs'][] = ['label' => $this->title];
                             'headerOptions' => [],
                         ],
                         [
-                            'attribute' => 'head_portrait',
-                            'value' => function ($model) {
-                                return Html::img(ImageHelper::defaultHeaderPortrait(Html::encode($model->head_portrait)),
-                                    [
-                                        'class' => 'img-circle rf-img-md img-bordered-sm',
-                                    ]);
-                            },
-                            'filter' => false,
+                            'attribute' => 'customer_no',                            
                             'format' => 'raw',
                         ],
-                        /*[
-                            'attribute' => 'firstname',
-                            'filter' => true,
-                        ],
-                        [
-                            'attribute' => 'lastname',
-                            'filter' => true,
-                        ],*/
                         [
                             'attribute' => 'realname',
                             'format' => 'raw',

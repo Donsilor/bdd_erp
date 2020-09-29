@@ -10,7 +10,7 @@ use kartik\daterange\DateRangePicker;
 /* @var $this yii\web\View */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = Yii::t('bill_t', '其它入库单列表');
+$this->title = Yii::t('bill_t', '(金料)其它入库单列表');
 $this->params['breadcrumbs'][] = $this->title;
 $params = Yii::$app->request->queryParams;
 $params = $params ? "&".http_build_query($params) : '';
@@ -113,7 +113,11 @@ $params = $params ? "&".http_build_query($params) : '';
                             'filter' =>false,
                             'headerOptions' => ['class' => 'col-md-1'],
                         ],
-
+                        [
+                            'attribute'=>'total_tax_price',
+                            'filter' =>false,
+                            'headerOptions' => ['class' => 'col-md-1'],
+                        ],
                         [
                             'attribute' => 'creator_id',
                             'value' => 'creator.username',

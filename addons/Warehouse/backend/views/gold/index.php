@@ -134,13 +134,7 @@ $params = $params ? "&".http_build_query($params) : '';
                             ]),
                             'headerOptions' => ['width' => '120'],
                         ],
-                        [
-                            'attribute'=>'incl_tax_price',
-                            'filter' => Html::activeTextInput($searchModel, 'incl_tax_price', [
-                                'class' => 'form-control',
-                            ]),
-                            'headerOptions' => ['width' => '120'],
-                        ],
+
                         /*[
                             'attribute' => 'remark',
                             //'filter' => Html::activeTextInput($searchModel, 'remark', [
@@ -210,7 +204,7 @@ $params = $params ? "&".http_build_query($params) : '';
                                 ],
                             ]),
                             'value'=>function($model){
-                                return Yii::$app->formatter->asDatetime($model->created_at);
+                                return Yii::$app->formatter->asDate($model->created_at);
                             }
                         ],
                         [

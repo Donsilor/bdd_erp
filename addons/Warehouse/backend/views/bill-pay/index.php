@@ -3,6 +3,7 @@
 use addons\Warehouse\common\enums\BillStatusEnum;
 use common\helpers\Html;
 use common\helpers\Url;
+use kartik\daterange\DateRangePicker;
 use kartik\select2\Select2;
 use yii\data\ActiveDataProvider;
 use yii\grid\GridView;
@@ -21,14 +22,14 @@ $this->params['breadcrumbs'][] = $this->title;
         <div class="row col-xs-12">
             <div class="box-header">
                 <h3 class="box-title"><?= Html::encode($this->title) ?></h3>
-                <div class="box-tools">
-                    <?php if($bill->bill_status == BillStatusEnum::SAVE){ ?>
-                    <?= Html::create(['ajax-edit', 'bill_id' => $bill->id,'returnUrl' => Url::getReturnUrl()], '创建', [
-                        'data-toggle' => 'modal',
-                        'data-target' => '#ajaxModal',
-                    ]); ?>
-                    <?php }?>
-                </div>
+<!--                <div class="box-tools">-->
+<!--                    --><?php //if($bill->bill_status == BillStatusEnum::SAVE){ ?>
+<!--                    --><?//= Html::create(['ajax-edit', 'bill_id' => $bill->id,'returnUrl' => Url::getReturnUrl()], '创建', [
+//                        'data-toggle' => 'modal',
+//                        'data-target' => '#ajaxModal',
+//                    ]); ?>
+<!--                    --><?php //}?>
+<!--                </div>-->
             </div>
             <div class="box">
                 <div class="box-body table-responsive">
@@ -74,7 +75,31 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'headerOptions' => ['class' => 'col-md-2','style'=>'width:120px;'],
                             ],
                             [
+                                'attribute' => 'pay_material',
+                                'value' => function ($model){
+                                    return \addons\Warehouse\common\enums\PayMaterialEnum::getValue($model->pay_material);
+                                },
+                                'filter' => Html::activeDropDownList($searchModel, 'pay_material',\addons\Warehouse\common\enums\PayMaterialEnum::getMap(), [
+                                    'prompt' => '全部',
+                                    'class' => 'form-control',
+                                    'style' => 'width:120px;'
+                                ]),
+                                'format' => 'raw',
+                                'headerOptions' => ['class' => 'col-md-2','style'=>'width:120px;'],
+                            ],
+                            [
+                                'attribute'=>'pay_gold_weight',
+                                'filter' => true,
+                                'headerOptions' => ['class' => 'col-md-2','style'=>'width:100px;'],
+                            ],
+                            [
+                                'attribute'=>'pay_amount',
+                                'filter' => true,
+                                'headerOptions' => ['class' => 'col-md-2','style'=>'width:100px;'],
+                            ],
+                            [
                                 'attribute' => 'pay_method',
+                                'headerOptions' => ['class' => 'col-md-2','style'=>'width:120px;'],
                                 'value' => function ($model){
                                     return \addons\Warehouse\common\enums\PayMethodEnum::getValue($model->pay_method);
                                 },
@@ -84,10 +109,10 @@ $this->params['breadcrumbs'][] = $this->title;
                                     'style' => 'width:120px;'
                                 ]),
                                 'format' => 'raw',
-                                'headerOptions' => ['class' => 'col-md-2','style'=>'width:120px;'],
                             ],
                             [
                                 'attribute' => 'pay_tax',
+                                'headerOptions' => ['class' => 'col-md-2','style'=>'width:120px;'],
                                 'value' => function ($model){
                                     return \addons\Warehouse\common\enums\PayTaxEnum::getValue($model->pay_tax);
                                 },
@@ -97,33 +122,59 @@ $this->params['breadcrumbs'][] = $this->title;
                                     'style' => 'width:120px;'
                                 ]),
                                 'format' => 'raw',
-                                'headerOptions' => ['class' => 'col-md-2','style'=>'width:120px;'],
                             ],
                             [
-                                'attribute'=>'pay_amount',
-                                'filter' => true,
-                                'headerOptions' => ['class' => 'col-md-2','style'=>'width:100px;'],
+                                'attribute' => 'creator_id',
+                                'headerOptions' => ['class' => 'col-md-1'],
+                                'value' => 'creator.username',
+                                'filter' => Html::activeTextInput($searchModel, 'creator.username', [
+                                    'class' => 'form-control',
+                                ]),
+                            ],
+                            [
+                                'attribute' => 'created_at',
+                                'headerOptions' => ['class' => 'col-md-1'],
+                                'value' => function ($model) {
+                                    return Yii::$app->formatter->asDate($model->created_at);
+                                },
+                                'filter' => DateRangePicker::widget([    // 日期组件
+                                    'model' => $searchModel,
+                                    'attribute' => 'created_at',
+                                    'value' => $searchModel->created_at,
+                                    'options' => ['readonly' => false, 'class' => 'form-control', 'style' => 'background-color:#fff;width:100px;'],
+                                    'pluginOptions' => [
+                                        'format' => 'yyyy-mm-dd',
+                                        'locale' => [
+                                            'separator' => '/',
+                                        ],
+                                        'endDate' => date('Y-m-d', time()),
+                                        'todayHighlight' => true,
+                                        'autoclose' => true,
+                                        'todayBtn' => 'linked',
+                                        'clearBtn' => true,
+                                    ],
+                                ]),
                             ],
                             [
                                 'class' => 'yii\grid\ActionColumn',
                                 'header' => '操作',
-                                'template' => ' {edit} {delete} ',
+                                'template' => '{delete} ',
                                 'buttons' => [
                                     'edit' => function($url, $model, $key) use($bill) {
-                                        if($bill->bill_status == BillStatusEnum::SAVE) {
+                                        //if($bill->bill_status == BillStatusEnum::SAVE) {
                                             return Html::edit(['ajax-edit', 'id' => $model->id, 'bill_id' => $model->bill_id, 'returnUrl' => Url::getReturnUrl()], '编辑', [
                                                 'data-toggle' => 'modal',
                                                 'data-target' => '#ajaxModal',
                                             ]);
-                                        }
+                                       // }
                                     },
                                     'status' => function($url, $model, $key){
                                         return Html::status($model->status);
                                     },
                                     'delete' => function($url, $model, $key) use($bill) {
-                                        if($bill->bill_status == BillStatusEnum::SAVE) {
+                                        //if($bill->bill_status == BillStatusEnum::SAVE) {
                                             return Html::delete(['delete', 'id' => $model->id, 'returnUrl' => Url::getReturnUrl()]);
-                                        }
+                                        //}
                                     },
                                 ],
                                 'headerOptions' => ['class' => 'col-md-2','style'=>'width:100px;'],

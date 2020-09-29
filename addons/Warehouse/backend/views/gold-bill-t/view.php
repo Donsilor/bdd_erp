@@ -7,7 +7,7 @@ use common\enums\AuditStatusEnum;
 /* @var $model common\models\WarehouseBill */
 /* @var $form yii\widgets\ActiveForm */
 
-$this->title = '其它入库单详情';
+$this->title = '(金料)其它入库单详情';
 $this->params['breadcrumbs'][] = ['label' => $this->title, 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
@@ -40,13 +40,16 @@ $this->params['breadcrumbs'][] = $this->title;
                             <td><?= $model->total_num ?></td>
                         </tr>
                         <tr>
+                            <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('total_weight') ?>：</td>
+                            <td><?= $model->total_weight ?></td>
+                        </tr>
+                        <tr>
                             <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('total_cost') ?>：</td>
                             <td><?= $model->total_cost ?></td>
                         </tr>
-
                         <tr>
-                            <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('total_weight') ?>：</td>
-                            <td><?= $model->total_weight ?></td>
+                            <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('total_tax_price') ?>：</td>
+                            <td><?= $model->total_tax_price ?></td>
                         </tr>
                         <tr>
                             <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('delivery_no') ?>：</td>

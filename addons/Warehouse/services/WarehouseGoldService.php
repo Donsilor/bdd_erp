@@ -31,8 +31,8 @@ class WarehouseGoldService extends Service
     {
         $tabList = [
             1=>['name'=>'金料详情','url'=>Url::to(['gold/view','id'=>$id,'tab'=>1,'returnUrl'=>$returnUrl])],
-            2=>['name'=>'领料信息','url'=>Url::to(['gold/lingliao','id'=>$id,'tab'=>2,'returnUrl'=>$returnUrl])],
-            3=>['name'=>'金料日志','url'=>Url::to(['gold-log/index','id'=>$id,'tab'=>3,'returnUrl'=>$returnUrl])],
+            2=>['name'=>'出入库列表','url'=>Url::to(['gold/warehouse','id'=>$id,'tab'=>2,'returnUrl'=>$returnUrl])],
+//            3=>['name'=>'金料日志','url'=>Url::to(['gold-log/index','id'=>$id,'tab'=>3,'returnUrl'=>$returnUrl])],
         ];
         return $tabList;
     }
