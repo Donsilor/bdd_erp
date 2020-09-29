@@ -1841,13 +1841,13 @@ class WarehouseBillTService extends Service
                 case StonePositionEnum::SECOND_STONE2:
                     $stoneAttr['stone_type'] = $stone_type[2] ?? "";
                     $stoneAttr['stone_shape'] = $stone_shape[1] ?? "";
-                    $stoneAttr['stone_color'] = $stone_color[0] ?? "";
-                    $stoneAttr['stone_clarity'] = $stone_clarity[0] ?? "";
+                    $stoneAttr['stone_color'] = $stone_color[1] ?? "";
+                    $stoneAttr['stone_clarity'] = $stone_clarity[1] ?? "";
                     break;
                 case StonePositionEnum::SECOND_STONE3:
                     $stoneAttr['stone_type'] = $stone_type[3] ?? "";
-                    $stoneAttr['stone_color'] = $stone_color[0] ?? "";
-                    $stoneAttr['stone_clarity'] = $stone_clarity[0] ?? "";
+                    $stoneAttr['stone_color'] = $stone_color[2] ?? "";
+                    $stoneAttr['stone_clarity'] = $stone_clarity[2] ?? "";
                     break;
                 default:
                     break;
