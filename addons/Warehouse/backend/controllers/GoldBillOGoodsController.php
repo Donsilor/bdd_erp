@@ -284,7 +284,7 @@ class GoldBillOGoodsController extends BaseController
             'dataProvider' => $dataProvider,
             'searchModel' => $searchModel,
             'bill' => $bill,
-            'tabList'=>\Yii::$app->warehouseService->goldO->menuTabList($bill_id, $this->billType, $returnUrl, $tab),
+            'tabList'=>\Yii::$app->warehouseService->goldBill->menuTabList($bill_id, $this->billType, $returnUrl, $tab),
             'tab' => $tab,
         ]);
     }
