@@ -70,8 +70,8 @@ $this->params['breadcrumbs'][] = $this->title;
                             <td><?= \addons\Style\common\enums\JintuoTypeEnum::getValue($model->jintuo_type) ?></td>
                         </tr>
                         <tr>
-                            <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('stock_cnt') ?>：</td>
-                            <td><?= $model->stock_cnt ?></td>
+                            <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('stock_num') ?>：</td>
+                            <td><?= $model->stock_num ?></td>
                         </tr>
                         <tr>
                             <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('goods_num') ?>：</td>

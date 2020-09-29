@@ -626,8 +626,8 @@ $params = $params ? "&".http_build_query($params) : '';
                             'headerOptions' => [],
                         ],
                         [
-                            'attribute'=>'stock_cnt',
-                            'filter' => Html::activeTextInput($searchModel, 'stock_cnt', [
+                            'attribute'=>'stock_num',
+                            'filter' => Html::activeTextInput($searchModel, 'stock_num', [
                                 'class' => 'form-control',
                                 'style'=> 'width:60px;'
                             ]),

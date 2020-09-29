@@ -140,8 +140,8 @@ class WarehouseBillLService extends Service
                     'style_channel_id' => $good->style_channel_id,//款式渠道
                     'qiban_sn' => $good->qiban_sn,//起版号
                     'qiban_type' => $good->qiban_type,//起版类型
-                    'stock_cnt' => $good->goods_num,//入库数量
                     'goods_num' => $good->goods_num,//商品数量
+                    'stock_num' => $good->goods_num,//入库数量
                     'goods_status' => GoodsStatusEnum::IN_STOCK,//库存状态
                     'goods_source' => GoodSourceEnum::QUICK_STORAGE,//数据来源方式
                     'supplier_id' => $bill->supplier_id,//供应商
