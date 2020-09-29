@@ -93,7 +93,11 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'filter' => true,
                                 'headerOptions' => ['class' => 'col-md-2'],
                             ],
-
+                            [
+                                'attribute' => 'warehouseGold.gold_weight',
+                                'filter' => false,
+                                'headerOptions' => ['class' => 'col-md-2'],
+                            ],
                             [
                                 'attribute' => 'gold_weight',
                                 'filter' => false,
