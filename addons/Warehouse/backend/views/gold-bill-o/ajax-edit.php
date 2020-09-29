@@ -21,29 +21,29 @@ $form = ActiveForm::begin([
 <div class="modal-body">
     <div class="col-sm-12">
         <?= $form->field($model, 'bill_no')->textInput(['disabled'=>true, "placeholder"=>"系统自动生成"])?>
-        <?= $form->field($model, 'out_type')->dropDownList(\addons\Warehouse\common\enums\OutTypeEnum::getMap(),['prompt'=>'请选择']) ?>
         <div class="row">
+            <div class="col-sm-6"><?= $form->field($model, 'out_type')->dropDownList(\addons\Warehouse\common\enums\OutTypeEnum::getMap(),['prompt'=>'请选择']) ?></div>
             <div class="col-sm-6">
-                <?= $form->field($model, 'channel_id')->widget(\kartik\select2\Select2::class, [
-                    'data' => \Yii::$app->salesService->saleChannel->getDropDown(),
+                <?= $form->field($model, 'supplier_id')->widget(\kartik\select2\Select2::class, [
+                    'data' => \Yii::$app->supplyService->supplier->getDropDown(),
                     'options' => ['placeholder' => '请选择'],
                     'pluginOptions' => [
                         'allowClear' => true
                     ],
                 ]);?>
             </div>
-            <div class="col-sm-6">
-                <?= $form->field($model, 'receiv_id')->widget(kartik\select2\Select2::class, [
-                    'data' => Yii::$app->services->backendMember->getDropDown(),
-                    'options' => [
-                        'placeholder' => '请选择',
-                        'value' => $model->receiv_id??'',
-                    ],
-                    'pluginOptions' => [
-                        'allowClear' => true
-                    ],
-                ]);?>
-            </div>
+<!--            <div class="col-sm-6">-->
+<!--                --><?//= $form->field($model, 'receiv_id')->widget(kartik\select2\Select2::class, [
+//                    'data' => Yii::$app->services->backendMember->getDropDown(),
+//                    'options' => [
+//                        'placeholder' => '请选择',
+//                        'value' => $model->receiv_id??'',
+//                    ],
+//                    'pluginOptions' => [
+//                        'allowClear' => true
+//                    ],
+//                ]);?>
+<!--            </div>-->
         </div>
         <?= $form->field($model, 'purchase_sn')->textInput() ?>
         <?= $form->field($model, 'remark')->textArea(); ?>

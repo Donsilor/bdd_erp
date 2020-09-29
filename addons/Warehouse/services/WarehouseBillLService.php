@@ -140,8 +140,8 @@ class WarehouseBillLService extends Service
                     'style_channel_id' => $good->style_channel_id,//款式渠道
                     'qiban_sn' => $good->qiban_sn,//起版号
                     'qiban_type' => $good->qiban_type,//起版类型
-                    'stock_cnt' => $good->goods_num,//入库数量
                     'goods_num' => $good->goods_num,//商品数量
+                    'stock_num' => $good->goods_num,//入库数量
                     'goods_status' => GoodsStatusEnum::IN_STOCK,//库存状态
                     'goods_source' => GoodSourceEnum::QUICK_STORAGE,//数据来源方式
                     'supplier_id' => $bill->supplier_id,//供应商
@@ -190,9 +190,9 @@ class WarehouseBillLService extends Service
 //                    'diamond_cut' => $good->diamond_cut,
 //                    'diamond_shape' => $good->diamond_shape,
 //                    'diamond_color' => $good->diamond_color,
-                    'diamond_polish' => $good->diamond_polish,//钻石抛光
-                    'diamond_symmetry' => $good->diamond_symmetry,//钻石对称
-                    'diamond_fluorescence' => $good->diamond_fluorescence,//钻石荧光
+//                    'diamond_polish' => $good->diamond_polish,//钻石抛光
+//                    'diamond_symmetry' => $good->diamond_symmetry,//钻石对称
+//                    'diamond_fluorescence' => $good->diamond_fluorescence,//钻石荧光
                     'diamond_discount' => $good->diamond_discount,//钻石折扣
 //                    'diamond_cert_type' => $good->diamond_cert_type,
 //                    'diamond_cert_id' => $good->diamond_cert_id,
@@ -212,7 +212,7 @@ class WarehouseBillLService extends Service
                     'main_stone_size' => $good->main_stone_size,//主石规格
                     //'main_cert_id' => $good->main_cert_type,//主石证书号
                     //'main_cert_type' => $good->main_cert_id,//主石证书类型
-                    'main_stone_price' => $good->main_cert_type,//主石单价
+                    'main_stone_price' => $good->main_stone_price,//主石单价
                     'main_stone_cost' => $good->main_stone_amount,//主石成本价
                     //-----------------------------------//差异
                     'diamond_carat' => $good->main_stone_weight,//主石重
@@ -220,6 +220,9 @@ class WarehouseBillLService extends Service
                     'diamond_color' => $good->main_stone_color,//主石颜色
                     'diamond_clarity' => $good->main_stone_clarity,//主石净度
                     'diamond_cut' => $good->main_stone_cut,//主石切工
+                    'diamond_polish' => $good->main_stone_polish,//钻石抛光
+                    'diamond_symmetry' => $good->main_stone_symmetry,//钻石对称
+                    'diamond_fluorescence' => $good->main_stone_fluorescence,//钻石荧光
                     'diamond_cert_id' => $good->main_cert_id,//主石证书号
                     'diamond_cert_type' => $good->main_cert_type,//主石证书类型
 
@@ -260,6 +263,8 @@ class WarehouseBillLService extends Service
                     'second_stone_type3' => $good->second_stone_type3,//副石3类型
                     'second_stone_num3' => $good->second_stone_num3,//副石3粒数
                     'second_stone_weight3' => $good->second_stone_weight3,//副石3重量
+                    'second_stone_color3' => $good->second_stone_color3,//副石3颜色
+                    'second_stone_clarity3' => $good->second_stone_clarity3,//副石3净度
                     'second_stone_price3' => $good->second_stone_price3,//副石3单价
                     'second_stone_cost3' => $good->second_stone_amount3,//副石3成本价
                     'shiliao_remark' => $good->stone_remark,
