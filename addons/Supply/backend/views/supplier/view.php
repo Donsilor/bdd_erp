@@ -15,6 +15,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
 <div class="box-body nav-tabs-custom">
     <h2 class="page-header"><?= $this->title ?> - <?= $model->supplier_name?> - <?= \common\enums\AuditStatusEnum::getValue($model->audit_status)?></h2>
+    <?php echo Html::menuTab($tabList,$tab)?>
     <div class="row">
          <div class="col-xs-12">
              <div class="box">

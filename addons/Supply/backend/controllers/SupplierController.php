@@ -247,42 +247,39 @@ class SupplierController extends BaseController
 
     public function actionStyle(){
         $supplier_id = Yii::$app->request->get('supplier_id');
-        $tab = Yii::$app->request->get('tab',1);
+        $model = $this->findModel($supplier_id);
+        $tab = Yii::$app->request->get('tab',3);
         $returnUrl = Yii::$app->request->get('returnUrl',Url::to(['supplier/index']));
         $searchModel = new SearchModel([
             'model' => StyleFactory::class,
             'scenario' => 'default',
-            'partialMatchAttributes' => [], // 模糊查询
+            'partialMatchAttributes' => ['style.style_name'], // 模糊查询
             'defaultOrder' => [
                 'id' => SORT_DESC
             ],
             'pageSize' => $this->pageSize,
             'relations' => [
-                'creator' => ['username'],
-                'auditor' => ['username'],
+                'style' => ['id','style_image','style_sn','style_name','style_cate_id','product_type_id',
+                    'style_channel_id','is_inlay','audit_status','creator_id','created_at','status'],
             ]
         ]);
 
         $dataProvider = $searchModel
             ->search(Yii::$app->request->queryParams,['audit_time']);
 
-        $audit_time = $searchModel->audit_time;
-        if (!empty($audit_time)) {
-            $dataProvider->query->andFilterWhere(['>=',Supplier::tableName().'.audit_time', strtotime(explode('/', $audit_time)[0])]);//起始时间
-            $dataProvider->query->andFilterWhere(['<',Supplier::tableName().'.audit_time', (strtotime(explode('/', $audit_time)[1]) + 86400)] );//结束时间
-        }
-
-        $dataProvider->query->andWhere(['>',Supplier::tableName().'.status',-1]);
+        $dataProvider->query->andWhere(['=',StyleFactory::tableName().'.factory_id',$supplier_id]);
+        $dataProvider->query->andWhere(['>',StyleFactory::tableName().'.status',-1]);
 
         //导出
         if(\Yii::$app->request->get('action') === 'export'){
-            $queryIds = $dataProvider->query->select(Supplier::tableName().'.id');
-            $this->actionExport($queryIds);
+            $queryIds = $dataProvider->query->select(StyleFactory::tableName().'.id');
+            $this->actionExportStyle($queryIds);
         }
 
         return $this->render($this->action->id, [
             'dataProvider' => $dataProvider,
             'searchModel' => $searchModel,
+            'model' =>$model,
             'tab'=>$tab,
             'tabList'=>\Yii::$app->supplyService->supplier->menuTabList($supplier_id,$returnUrl),
             'returnUrl'=>$returnUrl,

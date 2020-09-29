@@ -63,9 +63,25 @@ $this->params['breadcrumbs'][] = $this->title;
                                 ],
                             ]);?>
                         </div>
+                        <div class="col-lg-4">
+                            <?php $model->product_type_id = !empty($model->product_type_id)?array_filter(explode(',', $model->product_type_id)):null;?>
+                            <?=$form->field($model, 'product_type_id')->widget(kartik\select2\Select2::class, [
+                                'data' => Yii::$app->styleService->productType::getDropDown(),
+                                'options' => ['placeholder' => '请选择','multiple'=>true],
+                                'pluginOptions' => [
+                                    'allowClear' => true,
+                                    'multiple'=>true
+                                ],
+                            ]);?>
+                        </div>
+
                     </div>
-                    <?php $model->business_scope = !empty($model->business_scope)?array_filter(explode(',', $model->business_scope)):null;?>
-                    <?= $form->field($model, 'business_scope')->checkboxList(\addons\Gdzb\common\enums\BusinessScopeEnum::getMap()) ?>
+                    <div class="row">
+                        <div class="col-lg-4">
+                            <?= $form->field($model, 'supplier_name')->textInput()?>
+                        </div>
+                    </div>
+
                     <!-- ./nav-tabs-custom -->
                 </div>
             <!-- ./box-body -->
@@ -108,7 +124,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     </div>
                     <div class="row">
                         <div class="col-lg-4">
-                            <?= $form->field($model, 'supplier_name')->textInput()?>
+                            <?= $form->field($model, 'supplier_gate')->textInput()?>
                         </div>
                         <div class="col-lg-4">
                             <?= $form->field($model, 'address')->textInput(['maxlength' => true]) ?>
