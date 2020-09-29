@@ -20,6 +20,7 @@ use addons\Warehouse\common\enums\BillTypeEnum;
 use addons\Warehouse\common\enums\PandianAdjustEnum;
 use addons\Warehouse\common\models\WarehouseBillGoodsW;
 use common\enums\ConfirmEnum;
+use common\enums\LogTypeEnum;
 
 /**
  * 盘点单
@@ -273,6 +274,16 @@ class WarehouseBillWService extends WarehouseBillService
 
         }
         
+        $this->billWSummary($bill_id);
+        
+        //日志
+        $log = [
+                'bill_id' => $id,
+                'log_type' => LogTypeEnum::ARTIFICIAL,
+                'log_module' => '盘点单',
+                'log_msg' => '盘点单校正'
+        ];
+        \Yii::$app->warehouseService->billLog->createBillLog($log);
         return true;
 
     }

@@ -189,17 +189,7 @@ class BillWController extends BaseController
         $id = Yii::$app->request->get('id');
         try{
             $trans = Yii::$app->trans->beginTransaction();
-            \Yii::$app->warehouseService->billW->adjustBillW($id);
-            \Yii::$app->warehouseService->billW->billWSummary($id);
-
-            //日志
-            $log = [
-                'bill_id' => $id,
-                'log_type' => LogTypeEnum::ARTIFICIAL,
-                'log_module' => '盘点单',
-                'log_msg' => '盘点单校正'
-            ];
-            \Yii::$app->warehouseService->billLog->createBillLog($log);
+            \Yii::$app->warehouseService->billW->adjustBillW($id);            
             $trans->commit();
             return $this->message('操作成功',$this->redirect(Yii::$app->request->referrer),'success');
 
@@ -214,58 +204,15 @@ class BillWController extends BaseController
      */
     public function actionView()
     {
-        $id = Yii::$app->request->get('id');
-        $tab = Yii::$app->request->get('tab',1);
-        $returnUrl = Yii::$app->request->get('returnUrl',Url::to(['index']));
-        
+        $id = Yii::$app->request->get('id');        
         $model = $this->findModel($id);
         return $this->render($this->action->id, [
                 'model' => $model,
-                'tab'=>$tab,
-                'tabList'=>\Yii::$app->warehouseService->bill->menuTabList($id,$this->billType,$returnUrl),
-                'returnUrl'=>$returnUrl,
+                'tab'=>Yii::$app->request->get('tab',1),
+                'tabList'=>\Yii::$app->warehouseService->bill->menuTabList($id,$this->billType,$this->returnUrl),
+                'returnUrl'=>$this->returnUrl,
         ]);
-    }
-    /**
-     * 盘点
-     * @return mixed
-     */
-    /* public function actionPandian()
-    {
-        $id = Yii::$app->request->get('id');
-        
-        $model = $this->findModel($id) ?? new WarehouseBillWForm();      
-        
-        $this->activeFormValidate($model);
-        if ($model->load(Yii::$app->request->post())) {
-            try{
-                $trans = Yii::$app->trans->beginTransaction();
-                
-                Yii::$app->warehouseService->billW->pandianGoods($model);
-
-                //日志
-                $log = [
-                    'bill_id' => $id,
-                    'log_type' => LogTypeEnum::ARTIFICIAL,
-                    'log_module' => '盘点单',
-                    'log_msg' => '盘点单盘点'
-                ];
-                \Yii::$app->warehouseService->billLog->createBillLog($log);
-                $trans->commit();
-                
-                return $this->message("操作成功",$this->redirect(Yii::$app->request->referrer),'success');
-            }catch(\Exception $e) {
-                
-                $trans->rollback();
-
-                return $this->message($e->getMessage(),$this->redirect(Yii::$app->request->referrer),'error');
-            }
-        }
-        
-        return $this->render($this->action->id, [
-                'model' => $model,
-        ]);
-    } */
+    }    
     /**
      * ajax 审核
      *

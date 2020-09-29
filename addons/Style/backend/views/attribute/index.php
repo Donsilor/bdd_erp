@@ -118,14 +118,14 @@ $this->params['breadcrumbs'][] = $this->title;
             [
                 'class' => 'yii\grid\ActionColumn',
                 'header' => '操作',
-                'template' => '{edit} {add} {status} ',
+                'template' => '{edit} {status} ',
                 'buttons' => [
                 'edit' => function($url, $model, $key){
                         return Html::edit(['edit-lang', 'id' => $model->id,'returnUrl' => Url::getReturnUrl()]);
                 },                
                 'status' => function($url, $model, $key){
                         return Html::status($model['status']);
-                  },
+                },
                 'delete' => function($url, $model, $key){
                         return Html::delete(['delete', 'id' => $model->id]);
                 },

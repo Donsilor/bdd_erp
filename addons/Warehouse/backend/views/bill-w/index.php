@@ -34,7 +34,6 @@ $params = $params ? "&".http_build_query($params) : '';
                 </div>
             </div>
             <div class="box-body table-responsive">
-                <?php echo Html::batchButtons(false)?>
                 <?= GridView::widget([
                     'dataProvider' => $dataProvider,
                     'filterModel' => $searchModel,
@@ -61,7 +60,7 @@ $params = $params ? "&".http_build_query($params) : '';
                         [
                                 'attribute'=>'bill_no',
                                 'value'=>function ($model){
-                                    return Html::a($model->bill_no, ['view', 'id' => $model->id,'returnUrl'=>Url::getReturnUrl()], ['class'=>'openContab','style'=>"text-decoration:underline;color:#3c8dbc"]);
+                                    return Html::a($model->bill_no, ['view', 'id' => $model->id], ['class'=>'openContab','style'=>"text-decoration:underline;color:#3c8dbc"]);
                                 },
                                 'filter' => Html::activeTextInput($searchModel, 'bill_no', [
                                     'class' => 'form-control',
