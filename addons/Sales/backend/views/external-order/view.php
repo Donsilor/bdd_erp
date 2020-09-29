@@ -31,15 +31,13 @@ $this->params['breadcrumbs'][] = $this->title;
                 <div class=" table-responsive">
                     <table class="table table-hover">
                         <tr>
-                            <td class="col-xs-1 text-right no-border-top"><?= $model->getAttributeLabel('out_trade_no') ?>
-                                ：
-                            </td>
+                            <td class="col-xs-1 text-right no-border-top"><?= $model->getAttributeLabel('out_trade_no') ?>：</td>
                             <td class="col-xs-3 no-border-top"><?= $model->out_trade_no ?></td>
                             <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('sale_channel_id') ?>：</td>
                             <td><?= $model->saleChannel->name ?? '' ?></td>
                             <td class="col-xs-1 text-right no-border-top">语言/货币：</td>
-                            <td class="col-xs-3 no-border-top"><?= common\enums\LanguageEnum::getValue($model->language) ?>
-                                （<?= common\enums\CurrencyEnum::getValue($model->currency) ?>）
+                            <td class="col-xs-3 no-border-top">
+                            <?= common\enums\LanguageEnum::getValue($model->language) ?> / <?= common\enums\CurrencyEnum::getValue($model->currency) ?>
                             </td>
 
                         </tr>
@@ -58,7 +56,9 @@ $this->params['breadcrumbs'][] = $this->title;
                             <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('delivery_status') ?>：</td>
                             <td><?= addons\Sales\common\enums\DeliveryStatusEnum::getValue($model->delivery_status) ?></td>
                             <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('pay_status') ?>：</td>
-                            <td><?= addons\Sales\common\enums\PayStatusEnum::getValue($model->pay_status) ?></td>
+                            <td class="<?= $model->pay_status < PayStatusEnum::HAS_PAY ? 'red':''?>">                            
+                            <?= addons\Sales\common\enums\PayStatusEnum::getValue($model->pay_status) ?>
+                            </td>
                         </tr>
                         <tr>
                             <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('customer_name') ?>：</td>
@@ -96,10 +96,14 @@ $this->params['breadcrumbs'][] = $this->title;
                             <td><?= $model->out_pay_no ?></td>
                         </tr>
                         <tr>
-                            <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('pay_remark') ?>：</td>
-                            <td colspan="3"><?= $model->pay_remark ?></td>
+                            <td class="col-xs-1 text-right">客户编号：</td>
+                            <td><?= $model->customer->customer_no ?? '' ?></td>
                             <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('account.arrive_amount') ?>：</td>
                             <td><?= AmountHelper::outputAmount($model->account->arrive_amount ?? 0, 2, $model->currency) ?></td>                            
+                        </tr>
+                        <tr>
+                            <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('pay_remark') ?>：</td>
+                            <td colspan="5"><?= $model->pay_remark ?></td>                                                  
                         </tr>
                         <tr>
                             <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('remark') ?>：</td>

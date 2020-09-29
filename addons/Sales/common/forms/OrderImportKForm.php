@@ -306,6 +306,7 @@ class OrderImportKForm extends ImportForm
             $form->order->language = $this->language;
             $form->order->currency = $this->currency;
             $form->order->sale_channel_id = $this->channel_id;
+            $form->order->customer_id = $this->_customer->id;//客户id
             $form->order->customer_name = $this->_customer->realname;//客户姓名
             $form->order->customer_mobile = $this->_customer->mobile;//客户电话
             $form->order->customer_email = $this->_customer->email;//客户邮箱
