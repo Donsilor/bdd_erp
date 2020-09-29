@@ -640,10 +640,10 @@ class WarehouseBillTService extends Service
             if($main_pei_type != PeiShiWayEnum::NO_PEI
                 && $main_stone_type == 169){//主石类型=钻石
                 if(empty($main_stone_color)){
-                    $main_stone_color = 51;//主石颜色=H
+                    $main_stone_color = '51';//主石颜色=H
                 }
                 if(empty($main_stone_clarity)){
-                    $main_stone_clarity = 448;//主石净度=SI
+                    $main_stone_clarity = '448';//主石净度=SI
                 }
             }
 //            $main_stone_size = $goods[31] ?? "";
@@ -766,10 +766,10 @@ class WarehouseBillTService extends Service
             if($second_pei_type != PeiShiWayEnum::NO_PEI
                 && $second_stone_type1 == 211){//副石1类型=钻石
                 if(empty($second_stone_color1)){
-                    $second_stone_color1 = 135;//副石1颜色=H
+                    $second_stone_color1 = '135';//副石1颜色=H
                 }
                 if(empty($second_stone_clarity1)){
-                    $second_stone_clarity1 = 604;//副石1净度=SI
+                    $second_stone_clarity1 = '604';//副石1净度=SI
                 }
             }
             $second_pei_type2 = $form->formatValue($goods['second_pei_type2'], 0) ?? 0;//副石2配石方式
@@ -848,10 +848,10 @@ class WarehouseBillTService extends Service
             if($second_pei_type2 != PeiShiWayEnum::NO_PEI
                 && $second_stone_type2 == 225){//副石2类型=钻石
                 if(empty($second_stone_color2)){
-                    $second_stone_color2 = 636;//副石2颜色=H
+                    $second_stone_color2 = '636';//副石2颜色=H
                 }
                 if(empty($second_stone_clarity2)){
-                    $second_stone_clarity2 = 613;//副石2净度=SI
+                    $second_stone_clarity2 = '613';//副石2净度=SI
                 }
             }
             $second_pei_type3 = $form->formatValue($goods['second_pei_type3'], 0) ?? 0;//副石3配石方式
@@ -930,10 +930,10 @@ class WarehouseBillTService extends Service
             if($second_pei_type3 != PeiShiWayEnum::NO_PEI
                 && $second_stone_type3 == 481){//副石3类型=钻石
                 if(empty($second_stone_color3)){
-                    $second_stone_color3 = 649;//副石3颜色=H
+                    $second_stone_color3 = '649';//副石3颜色=H
                 }
                 if(empty($second_stone_clarity3)){
-                    $second_stone_clarity3 = 625;//副石3净度=SI
+                    $second_stone_clarity3 = '625';//副石3净度=SI
                 }
             }
             $stone_remark = $goods['stone_remark'] ?? "";
