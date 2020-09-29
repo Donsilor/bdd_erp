@@ -2,11 +2,6 @@
 
 namespace addons\Warehouse\services;
 
-use addons\Style\common\enums\JintuoTypeEnum;
-use addons\Warehouse\common\enums\BillFixEnum;
-use addons\Warehouse\common\enums\GoodSourceEnum;
-use addons\Warehouse\common\forms\WarehouseBillTGoodsForm;
-use common\enums\LogTypeEnum;
 use Yii;
 use common\components\Service;
 use common\helpers\SnHelper;
@@ -15,10 +10,15 @@ use addons\Warehouse\common\models\WarehouseGoods;
 use addons\Warehouse\common\models\WarehouseBillGoods;
 use addons\Warehouse\common\models\WarehouseBillGoodsL;
 use addons\Purchase\common\models\PurchaseReceiptGoods;
+use addons\Warehouse\common\forms\WarehouseBillTGoodsForm;
 use addons\Purchase\common\enums\ReceiptGoodsStatusEnum;
+use addons\Warehouse\common\enums\BillFixEnum;
+use addons\Warehouse\common\enums\GoodSourceEnum;
 use addons\Warehouse\common\enums\BillStatusEnum;
 use addons\Warehouse\common\enums\GoodsStatusEnum;
 use addons\Warehouse\common\enums\OrderTypeEnum;
+use addons\Style\common\enums\JintuoTypeEnum;
+use common\enums\LogTypeEnum;
 use common\enums\AuditStatusEnum;
 use common\enums\StatusEnum;
 use common\helpers\ArrayHelper;
@@ -389,7 +389,6 @@ class WarehouseBillLService extends Service
                     Yii::$app->styleService->style->createStyleFactory($goods);
                     //同步数据到款工费
                     Yii::$app->styleService->style->createStyleFactoryFee($goods);
-
                 }
             }
 
@@ -485,7 +484,7 @@ class WarehouseBillLService extends Service
             'bukou_fee',//补口费
             'xianqian_fee',//镶石费
             //'parts_fee',//配件工费
-            'templet_fee',//版费
+            //'templet_fee',//版费
             'cert_fee',//证书费
             'fense_fee',//分色分件费
             'biaomiangongyi_fee',//表面工艺费
