@@ -48,7 +48,7 @@ class BillWGoodsController extends BaseController
             ->search(Yii::$app->request->queryParams);
         
         $dataProvider->query->andWhere(['=',WarehousebillGoods::tableName().'.bill_id',$bill_id]);
-        $dataProvider->query->andWhere(['>',WarehousebillGoods::tableName().'.status',PandianStatusEnum::SAVE]);
+        //$dataProvider->query->andWhere(['>',WarehousebillGoods::tableName().'.status',PandianStatusEnum::SAVE]);
         
         return $this->render($this->action->id, [
                 'dataProvider' => $dataProvider,

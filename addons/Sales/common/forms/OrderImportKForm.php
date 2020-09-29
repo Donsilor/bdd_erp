@@ -196,7 +196,7 @@ class OrderImportKForm extends ImportForm
      */
     public function loadRow($row,$rowIndex)
     {
-         parent::loadRow($row, $rowIndex);
+         parent::loadRow($row, $rowIndex);         
          //销售渠道
          if(!$this->_channelCache){
              $channelMap = Yii::$app->salesService->saleChannel->getDropDown();
