@@ -296,9 +296,12 @@ class OrderService extends Service
             if(empty(array_filter($row)) || false === $form->loadRow($row,$rowIndex)){
                 continue;
             }
-        }
+        }        
+        //订单再次校验
+        $form->validateOrders();
+        
         if($form->hasError() === false) {
-            foreach ($form->order_list as $rowIndex=>$order) {
+            foreach ($form->order_list as $k=>$order) {
                 try{
                     $order = $this->createFullOrder($order);
                     

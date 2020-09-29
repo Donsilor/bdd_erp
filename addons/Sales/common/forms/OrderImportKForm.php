@@ -36,7 +36,7 @@ class OrderImportKForm extends ImportForm
     public $language;
     public $currency;
     public $other_fee;
-    public $pay_amount;
+    public $order_amount;
     public $paid_amount;
     public $customer_no;
     public $customer_mobile;
@@ -72,7 +72,7 @@ class OrderImportKForm extends ImportForm
             5=>'language',
             6=>'currency',
             7=>'other_fee',
-            8=>'pay_amount',
+            8=>'order_amount',
             9=>'paid_amount',
             10=>'customer_no',
             11=>'customer_email',
@@ -109,7 +109,7 @@ class OrderImportKForm extends ImportForm
             'language',
             'currency',
             'other_fee',
-            'pay_amount',
+            'order_amount',
             'paid_amount',
             'customer_no',
             'customer_mobile',
@@ -121,7 +121,7 @@ class OrderImportKForm extends ImportForm
             'order_time',
             'language',
             'currency',
-            'pay_amount',
+            'order_amount',
             'paid_amount',
             'customer_email',
             'style_sn',
@@ -130,7 +130,7 @@ class OrderImportKForm extends ImportForm
     ];
     public $numberColumns = [
             'goods_price',
-            'pay_amount',
+            'order_amount',
             'paid_amount',
             'main_stone_price',            
             'main_stone_weight',
@@ -316,6 +316,7 @@ class OrderImportKForm extends ImportForm
             
             //订单金额
             $form->account = new OrderAccount();
+            $form->account->order_amount = $this->order_amount;
             $form->account->paid_amount = $this->paid_amount;
             //收货地址
             $form->address = new OrderAddress();
@@ -357,5 +358,30 @@ class OrderImportKForm extends ImportForm
         $form->goods_list[] = $goods;
         
         $this->order_list[$this->order_sn] = $form;
+    }
+    /**
+     * 订单校验
+     */
+    public function validateOrders()
+    {   
+        //订单金额校验
+        $rowIndex = 3;
+        foreach ($this->order_list ?? [] as $order) {
+            if($order->account->order_amount > 0) {
+                $goods_amount = 0;
+                foreach ($order->goods_list as $goods){
+                    $goods_amount += $goods['goods_pay_price'] * $goods['goods_num'];
+                }                
+                $other_fee = $order->account->other_fee/1;
+                $paid_amount = $order->account->paid_amount/1;
+                $_order_amount = $other_fee + $goods_amount;
+                if($order->account->order_amount != $_order_amount) {
+                    $this->addRowError($rowIndex, 'order_amount', "订单总金额({$order->account->order_amount})不对,系统计算总金额:{$_order_amount}(订单总金额=商品价格*商品数量+订单其它费用)");
+                }else if($order->account->paid_amount > $_order_amount) {
+                    $this->addRowError($rowIndex, 'paid_amount', "订单已付金额({$order->account->paid_amount})不能大于订单总金额({$_order_amount})");
+                }
+            }
+            $rowIndex += count($order->goods_list);             
+        }
     }
 }
