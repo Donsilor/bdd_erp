@@ -115,6 +115,8 @@ use addons\Warehouse\common\enums\GoodsStatusEnum;
  * @property string $second_stone_type3 副石3类型
  * @property int $second_stone_num3 副石3数量
  * @property string $second_stone_weight3 副石3重量(ct)
+ * @property string $second_stone_color3 副石3颜色
+ * @property string $second_stone_clarity3 副石3净度
  * @property string $second_stone_price3 副石3买入单价
  * @property int $apply_id 当前编辑人
  * @property int $auditor_id 审核人
@@ -163,7 +165,7 @@ class WarehouseGoods extends BaseModel
             [['gross_weight', 'produce_sn', 'diamond_cert_id','second_cert_id1','second_stone_sn1','main_stone_sn','parts_material'], 'string', 'max' => 20],
             [['finger','finger_hk','order_detail_id', 'material', 'material_type', 'material_color', 'diamond_clarity','diamond_shape','diamond_color', 'diamond_cut', 'diamond_polish', 'diamond_symmetry', 'diamond_fluorescence', 'diamond_discount', 'diamond_cert_type', 'second_stone_type1',
                 'second_stone_color1', 'second_stone_clarity1', 'second_stone_shape1', 'second_stone_type2','second_stone_sn2','second_stone_sn3','chain_type','cramp_ring','talon_head_type','xiangqian_craft' ,'main_stone_colour','second_stone_shape2','second_stone_color2','second_stone_clarity2',
-                'second_stone_type3','second_stone_colour1','second_stone_colour2','peijian_type'], 'string', 'max' => 10],
+                'second_stone_type3','second_stone_color3','second_stone_clarity3','second_stone_colour1','second_stone_colour2','peijian_type'], 'string', 'max' => 10],
             [['order_sn'], 'string', 'max' => 40],
             [['cert_type','factory_mo','chain_long'], 'string', 'max' => 50],
             [['audit_remark','remark','shiliao_remark'], 'string', 'max' => 255],
@@ -235,7 +237,7 @@ class WarehouseGoods extends BaseModel
             'xiangkou' => '戒托镶口',
             'factory_cost' => '工厂成本',
             'bukou_fee' => '补口费',
-            'tax_fee' => '税费',
+            'tax_fee' => '税费/克',
             'tax_amount' => '税额/件',
             'other_fee' => '其它费用',
             'biaomiangongyi_fee' => '表面工艺费',
@@ -280,6 +282,8 @@ class WarehouseGoods extends BaseModel
             'second_stone_type3' => '副石3类型',
             'second_stone_num3' => '副石3数量',
             'second_stone_weight3' => '副石3重量(ct)',
+            'second_stone_color3' => '副石3颜色',
+            'second_stone_clarity3' => '副石3净度',
             'second_stone_price3' => '副石3单价',
             'second_stone_cost3' => '副石3成本/件',
             'is_inlay' => '是否镶嵌',
@@ -314,7 +318,7 @@ class WarehouseGoods extends BaseModel
             'peishi_amount' => '配石费',
             'peishi_weight' => '配石重量（ct）',
             'pure_gold' => '折足(g)',
-            'penrasa_fee' => '喷拉沙费',
+            'penrasa_fee' => '喷沙费',
             'lasha_fee' => '拉沙费',
             'piece_fee' => '件/工费',
             'edition_fee' => '版费',

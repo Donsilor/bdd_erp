@@ -12,9 +12,20 @@ $this->params['breadcrumbs'][] = $this->title;
     <h2 class="page-header">盘点单详情 - <?php echo $bill->bill_no?> - <?php echo BillStatusEnum::getValue($bill->bill_status)?></h2>
     <?php echo Html::menuTab($tabList,$tab)?>
     <div class="box-tools" style="float:right;margin-top:-40px; margin-right: 20px;">
-        <?php if($bill->bill_status == BillStatusEnum::SAVE) {?>
-            <?= Html::create(['bill-w-goods/edit-all', 'bill_id' => $bill->id,'returnUrl'=>Url::getReturnUrl()], '盘点', []); ?>
-        <?php }?>    
+          <?php if($bill->bill_status < BillStatusEnum::CONFIRM) {?>
+                <?= Html::create(['bill-w-goods/edit-all', 'bill_id' => $bill->id,'returnUrl'=>Url::getReturnUrl()], '盘点', [
+                        'class'=>'btn btn-success btn-xs',
+                        
+                ]); ?>               
+           		<?= Html::create(['bill-w/ajax-adjust', 'id' => $bill->id], '刷新盘点', [
+           		        'onclick' => 'rfTwiceAffirm(this,"刷新盘点","确定刷新盘点单吗？");return false;']
+           		);?>
+                <?= Html::create(['bill-w/ajax-finish','id'=>$bill->id], '盘点结束', [
+                        'class'=>'btn btn-warning btn-xs',
+                        'onclick' => 'rfTwiceAffirm(this,"盘点结束","确定结束盘点单吗？");return false;',
+                ]);?>
+           <?php }?>      
+   
     </div>
     <div class="tab-content">
         <div class="row col-xs-15">
@@ -53,7 +64,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                          return $str;
                                     },
                                     'format' => 'raw',
-                                    'headerOptions' => ['width'=>'300'],
+                                    'headerOptions' => ['width'=>'250'],
                             ],
                             [
                                     'attribute' => 'style_sn',
@@ -73,18 +84,37 @@ $this->params['breadcrumbs'][] = $this->title;
                                     'label' => '归属仓库',
                                     'attribute' => 'from_warehouse_id',
                                     'value' =>"fromWarehouse.name",
-                                    'filter'=> \kartik\select2\Select2::widget([
-                                            'name'=>'SearchModel[from_warehouse_id]',
-                                            'value'=>$searchModel->from_warehouse_id,
-                                            'data'=>Yii::$app->warehouseService->warehouse->getDropDown(),
-                                            'options' => ['placeholder' =>"请选择"],
-                                            'pluginOptions' => [
-                                                  'allowClear' => true,
-                                            ],
-                                    ]),
+                                    'filter'=> false,
                                     'format' => 'raw',
-                                    'headerOptions' => ['width'=>'180'],
+                                    'headerOptions' => ['width'=>'150'],
                             ], 
+                            [
+                                    'attribute'=>'goods.goods_status',
+                                    'filter' => false,
+                                    'value' => function ($model) {
+                                        return \addons\Warehouse\common\enums\GoodsStatusEnum::getValue($model->goods->goods_status);
+                                    },
+                                    'format' => 'raw',
+                                    'headerOptions' => ['width'=>'100'],
+                            ],
+                            [
+                                    'attribute'=>'goodsW.should_num',
+                                    'filter' => false,
+                                    'value' => function ($model) {
+                                            return $model->goodsW->should_num;
+                                    },
+                                    'format' => 'raw',
+                                    'headerOptions' => ['width'=>'100'],
+                            ],
+                            [
+                                    'attribute'=>'goodsW.actual_num',
+                                    'filter' => false,
+                                    'value' => function ($model) {
+                                        return $model->goodsW->actual_num;
+                                    },
+                                    'format' => 'raw',
+                                    'headerOptions' => ['width'=>'100'],
+                            ],
                             [
                                     'label' => '盘点状态',
                                     'attribute' => 'status',

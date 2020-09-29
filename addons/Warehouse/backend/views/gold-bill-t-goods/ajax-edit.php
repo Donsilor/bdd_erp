@@ -51,7 +51,7 @@ $form = ActiveForm::begin([
         </div>
         <div class="row">
             <div class="col-lg-12">
-                <?= $form->field($model, 'incl_tax_price')->textInput(["placeholder" => "不填：将自动计算：（金料总重*金料单价）"]) ?>
+                <?= $form->field($model, 'incl_tax_price')->textInput(["placeholder" => "不填：将自动计算：（金料总重*金料单价）"])->hint('<font color="red">（自动计算：“金料总重*金料单价”，可编辑）</font>') ?>
             </div>
         </div>
         <div class="row">
@@ -107,6 +107,17 @@ $form = ActiveForm::begin([
         })
     }
 
+    function getInclTaxPrice(){
+        var incl_tax_price = $("#"+formId+"-gold_price").val() * $("#"+formId+"-gold_weight").val();
+        $("#"+formId+"-incl_tax_price").val(incl_tax_price);
+    }
+    $("#"+formId+"-gold_price").blur(function(){
+        getInclTaxPrice();
+    });
+    $("#"+formId+"-gold_weight").blur(function(){
+        getInclTaxPrice();
+    });
+
     $("#"+formId+"-style_sn").change(function(){
         fillStoneForm();
     });
@@ -114,4 +125,6 @@ $form = ActiveForm::begin([
     $("#"+formId+"-gold_type").change(function(){
         getGoodsSn();
     });
+
+
 </script>

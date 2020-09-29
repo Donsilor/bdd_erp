@@ -120,14 +120,14 @@ $this->params['breadcrumbs'][] = $this->title;
             ?>
                        
             <?php if($model->status == BillWStatusEnum::SAVE) {?>
-                <?= Html::edit(['pandian', 'id' => $model->id,'returnUrl'=>Url::getReturnUrl()], '盘点', ['class'=>'btn btn-warning btn-ms']);?>
+                <?= Html::edit(['bill-w-goods/edit-all', 'bill_id' => $model->id,'returnUrl'=>Url::getReturnUrl()], '盘点', ['class'=>'btn btn-warning btn-ms']);?>
                 <?= Html::edit(['ajax-finish','id'=>$model->id], '盘点结束', [
                         'class'=>'btn btn-success btn-ms',
-                        'onclick' => 'rfTwiceAffirm(this,"盘点结束","确定结束吗？");return false;',
+                        'onclick' => 'rfTwiceAffirm(this,"盘点结束","确定结束盘点单吗？");return false;',
                 ]);?>
            <?php }?>
            <?php if($model->bill_status < BillStatusEnum::CONFIRM) {?>
-           		<?= Html::edit(['ajax-adjust', 'id' => $model->id], '刷新盘点', ['class'=>'btn btn-primary btn-ms','onclick' => 'rfTwiceAffirm(this,"刷新盘点","确定刷新吗？");return false;']);?>
+           		<?= Html::edit(['ajax-adjust', 'id' => $model->id], '刷新盘点', ['class'=>'btn btn-primary btn-ms','onclick' => 'rfTwiceAffirm(this,"刷新盘点","确定刷新盘点单吗？");return false;']);?>
            <?php }?>
             <?php
                 if($model->bill_status == BillStatusEnum::PENDING){

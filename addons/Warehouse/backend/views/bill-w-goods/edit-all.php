@@ -4,6 +4,8 @@ use common\helpers\Html;
 use common\helpers\Url;
 use yii\grid\GridView;
 use addons\Warehouse\common\enums\BillStatusEnum;
+use addons\Warehouse\common\enums\BillWStatusEnum;
+use addons\Warehouse\common\enums\GoodsStatusEnum;
 
 $this->title = '盘点单明细';
 $this->params['breadcrumbs'][] = $this->title;
@@ -12,7 +14,19 @@ $this->params['breadcrumbs'][] = $this->title;
     <h2 class="page-header">盘点单详情 - <?php echo $bill->bill_no?> - <?php echo BillStatusEnum::getValue($bill->bill_status)?></h2>
     <?php echo Html::menuTab($tabList,$tab)?>
     <div class="box-tools" style="float:right;margin-top:-40px; margin-right: 20px;">
-        <?= Html::create(['bill-w-goods/index', 'bill_id' => $bill->id,'returnUrl'=>Url::getReturnUrl()], '返回列表', []); ?>
+           <?php if($bill->bill_status < BillStatusEnum::CONFIRM) {?>
+           		<?= Html::create(['bill-w/ajax-adjust', 'id' => $bill->id], '刷新盘点', [
+           		        'class'=>'btn btn-success btn-xs',
+           		        'onclick' => 'rfTwiceAffirm(this,"刷新盘点","确定刷新盘点单吗？");return false;']
+           		);?>
+           <?php }?>
+           <?php if($bill->status == BillWStatusEnum::SAVE) {?>
+                <?= Html::create(['bill-w/ajax-finish','id'=>$bill->id], '盘点结束', [
+                        'class'=>'btn btn-warning btn-xs',
+                        'onclick' => 'rfTwiceAffirm(this,"盘点结束","确定结束盘点单吗？");return false;',
+                ]);?>
+           <?php }?>           
+          <?= Html::create(['bill-w-goods/index', 'bill_id' => $bill->id,'returnUrl'=>Url::getReturnUrl()], '返回列表', []); ?>
     </div>
     <div class="tab-content">
         <div class="row col-xs-15">
@@ -63,7 +77,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                          return $str;
                                     },
                                     'format' => 'raw',
-                                    'headerOptions' => ['width'=>'300'],
+                                    'headerOptions' => ['width'=>'250'],
                             ],
                             [
                                     'attribute' => 'style_sn',
@@ -83,7 +97,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                     'label' => '归属仓库',
                                     'attribute' => 'from_warehouse_id',
                                     'value' =>"fromWarehouse.name",
-                                    'filter'=> \kartik\select2\Select2::widget([
+                                    'filter'=> false,/*\kartik\select2\Select2::widget([
                                             'name'=>'SearchModel[from_warehouse_id]',
                                             'value'=>$searchModel->from_warehouse_id,
                                             'data'=>Yii::$app->warehouseService->warehouse->getDropDown(),
@@ -91,10 +105,41 @@ $this->params['breadcrumbs'][] = $this->title;
                                             'pluginOptions' => [
                                                   'allowClear' => true,
                                             ],
-                                    ]),
+                                    ]),*/
                                     'format' => 'raw',
-                                    'headerOptions' => ['width'=>'180'],
+                                    'headerOptions' => ['width'=>'150'],
                             ], 
+                            [
+                                    'attribute'=>'goods.goods_status',
+                                    'filter' => false,
+                                    'value' => function ($model) {
+                                        return \addons\Warehouse\common\enums\GoodsStatusEnum::getValue($model->goods->goods_status);
+                                    },
+                                    'format' => 'raw',
+                                    'headerOptions' => ['width'=>'100'],
+                           ],
+                            [
+                                    'attribute'=>'goodsW.should_num',
+                                    'filter' => false,
+                                    'value' => function ($model) {
+                                        return $model->goodsW->should_num;
+                                    },
+                                    'format' => 'raw',
+                                    'headerOptions' => ['width'=>'100'],
+                            ],
+                            [
+                                    'attribute'=>'goodsW.actual_num',
+                                    'filter' => false,
+                                    'value' => function ($model) {
+                                        if($model->goodsW->should_num > 1 ) {
+                                            return Html::ajaxInput('actual_num', $model->goodsW->actual_num, ['data-id' => $model->id,'data-url'=>'ajax-pandian-num']);
+                                        }else{
+                                            return $model->goodsW->actual_num;
+                                        }                                        
+                                    },
+                                    'format' => 'raw',
+                                    'headerOptions' => ['width'=>'100'],
+                            ],
                             [
                                     'label' => '盘点状态',
                                     'attribute' => 'status',

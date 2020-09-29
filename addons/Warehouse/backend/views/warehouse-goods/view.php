@@ -265,7 +265,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         </tr>
                         <tr>
                             <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('parts_material') ?>：</td>
-                            <td><?= $model->parts_material ?></td>
+                            <td><?= Yii::$app->attr->valueName($model->parts_material) ?? "" ?></td>
                         </tr>
                         <tr>
                             <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('parts_price') ?>：</td>
@@ -287,12 +287,6 @@ $this->params['breadcrumbs'][] = $this->title;
                             <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('parts_amount') ?>：</td>
                             <td><?= $model->parts_amount ?></td>
                         </tr>
-
-
-                    </table>
-                </div>
-                <div class="col-xs-6">
-                    <table class="table table-hover">
                         <tr>
                             <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('gong_fee') ?>：</td>
                             <td><?= $model->gong_fee ?></td>
@@ -305,6 +299,12 @@ $this->params['breadcrumbs'][] = $this->title;
                             <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('bukou_fee') ?>：</td>
                             <td><?= $model->bukou_fee ?></td>
                         </tr>
+
+                    </table>
+                </div>
+                <div class="col-xs-6">
+                    <table class="table table-hover">
+
                         <tr>
                             <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('second_stone_fee1') ?>：</td>
                             <td><?= $model->second_stone_fee1 ?></td>
@@ -603,6 +603,14 @@ $this->params['breadcrumbs'][] = $this->title;
                         <tr>
                             <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('second_stone_weight3') ?>：</td>
                             <td><?= $model->second_stone_weight3 ?></td>
+                        </tr>
+                        <tr>
+                            <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('second_stone_color3') ?>：</td>
+                            <td><?= Yii::$app->attr->valueName($model->second_stone_color3) ?></td>
+                        </tr>
+                        <tr>
+                            <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('second_stone_clarity3') ?>：</td>
+                            <td><?= Yii::$app->attr->valueName($model->second_stone_clarity3) ?></td>
                         </tr>
                         <tr>
                             <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('second_stone_price3') ?>：</td>
