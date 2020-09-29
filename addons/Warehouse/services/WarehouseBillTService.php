@@ -595,7 +595,7 @@ class WarehouseBillTService extends Service
                     $main_stone_polish = $attr_id;
                 }
             } elseif (!empty($stone)) {
-                $main_stone_polish = $stone->stone_polish ?? "";
+                $main_stone_polish = $mainAttr['stone_polish'] ?? "";
             }
             $main_stone_symmetry = $goods['main_stone_symmetry'] ?? "";//主石对称
             if (!empty($main_stone_symmetry)) {
@@ -608,10 +608,10 @@ class WarehouseBillTService extends Service
                     $main_stone_symmetry = $attr_id;
                 }
             } elseif (!empty($stone)) {
-                $main_stone_symmetry = $stone->stone_symmetry ?? "";
+                $main_stone_symmetry = $mainAttr['stone_symmetry'] ?? "";
             }
             $main_stone_fluorescence = $goods['main_stone_fluorescence'] ?? "";//主石荧光
-            if (!empty($main_stone_cut)) {
+            if (!empty($main_stone_fluorescence)) {
                 $attr_id = $form->getAttrIdByAttrValue($style_sn, $main_stone_fluorescence, AttrIdEnum::MAIN_STONE_FLUORESCENCE);
                 if (empty($attr_id)) {
                     $flag = false;
@@ -621,7 +621,7 @@ class WarehouseBillTService extends Service
                     $main_stone_fluorescence = $attr_id;
                 }
             } elseif (!empty($stone)) {
-                $main_stone_fluorescence = $stone->stone_fluorescence ?? "";
+                $main_stone_fluorescence = $mainAttr['stone_fluorescence'] ?? "";
             }
             $main_stone_colour = $goods['main_stone_colour'] ?? "";//主石色彩
             if (!empty($main_stone_colour)) {
@@ -1236,6 +1236,8 @@ class WarehouseBillTService extends Service
         } else {
             $saveData = array_reverse($saveData);//倒序
         }
+//        echo '<pre>';
+//        var_dump($saveData);die;
         $value = [];
         $key = array_keys($saveData[0]);
         foreach ($saveData as $item) {
@@ -1829,6 +1831,9 @@ class WarehouseBillTService extends Service
                     $stoneAttr['stone_clarity'] = $stone_clarity[0] ?? "";
                     $stoneAttr['stone_cut'] = $stone_cut[0] ?? "";
                     $stoneAttr['stone_colour'] = $stone_colour[0] ?? "";
+                    $stoneAttr['stone_polish'] = $stone->stone_polish ?? "";
+                    $stoneAttr['stone_symmetry'] = $stone->stone_symmetry ?? "";
+                    $stoneAttr['stone_fluorescence'] = $stone->stone_fluorescence ?? "";
                     break;
                 case StonePositionEnum::SECOND_STONE1:
                     $stoneAttr['stone_type'] = $stone_type[1] ?? "";
