@@ -6,6 +6,7 @@ use yii\grid\GridView;
 use common\enums\AuditStatusEnum;
 use kartik\daterange\DateRangePicker;
 use addons\Style\common\enums\QibanTypeEnum;
+use common\enums\StatusEnum;
 
 /* @var $this yii\web\View */
 /* @var $dataProvider yii\data\ActiveDataProvider */
@@ -61,8 +62,7 @@ $this->params['breadcrumbs'][] = $this->title;
             [
                 'attribute' => 'style_image',
                 'value' => function ($model) {
-                    $style_image = !empty($model->style_image)?explode(',', $model->style_image):null;
-                    return \common\helpers\ImageHelper::fancyBox($style_image[0],90,90);
+                    return \common\helpers\ImageHelper::fancyBox($model->getStyleImage());
                 },
                 'filter' => false,
                 'format' => 'raw',
@@ -177,9 +177,14 @@ $this->params['breadcrumbs'][] = $this->title;
             [
                 'attribute' => 'status',
                 'value' => function ($model){
-                    return \common\enums\StatusEnum::getValue($model->status);
+                    $str = \common\enums\StatusEnum::getValue($model->status,'getDestroyMap');
+                    if($model->status === \common\enums\StatusEnum::DELETE) {
+                        return "<font color='red'>".$str.'</font>';
+                    }else{
+                        return $str;
+                    }                    
                 },
-                'filter' => Html::activeDropDownList($searchModel, 'status',\common\enums\StatusEnum::getMap(), [
+                'filter' => Html::activeDropDownList($searchModel, 'status',\common\enums\StatusEnum::getDestroyMap(), [
                     'prompt' => '全部',
                     'class' => 'form-control',
                     'style' => 'width:80px;'
@@ -214,8 +219,6 @@ $this->params['breadcrumbs'][] = $this->title;
                         'autoclose' => true,
                         'todayBtn' => 'linked',
                         'clearBtn' => true,
-
-
                     ],
                 ]),
 
@@ -223,7 +226,7 @@ $this->params['breadcrumbs'][] = $this->title;
             [
                 'class' => 'yii\grid\ActionColumn',
                 'header' => '操作',
-                'template' => '{edit} {format-edit} {apply} {audit} {status}',
+                'template' => '{edit} {format-edit} {apply} {audit} {delete} {destroy} {status}',
                 'buttons' => [
                     'view'=> function($url, $model, $key){
                         return Html::edit(['view','id' => $model->id,'search'=>1,'returnUrl' => Url::getReturnUrl()],'详情',[
@@ -231,8 +234,8 @@ $this->params['breadcrumbs'][] = $this->title;
                         ]);
                     },
                     'edit' => function($url, $model, $key){
-                        //审核后不能编辑
-                        //if(!$model->purchaseGoods){
+                      //作废后不能编辑
+                      if($model->status != \common\enums\StatusEnum::DELETE) {
                             if($model->qiban_type == QibanTypeEnum::HAVE_STYLE){
                                 return Html::edit(['edit','id' => $model->id,'returnUrl' => Url::getReturnUrl()],'编辑',[
                                     'class' => 'btn btn-primary btn-sm openIframe',
@@ -248,16 +251,18 @@ $this->params['breadcrumbs'][] = $this->title;
                                     'data-offset'=>'20px',
                                 ]);
                             }
-                        //}
+                       }
 
                     },
                     'format-edit' => function($url, $model, $key){
-                        return Html::edit(['format-edit','id' => $model->id,'returnUrl' => Url::getReturnUrl()],'版式编辑',[
-                            'class' => 'btn btn-primary btn-sm openIframe',
-                            'data-width'=>'90%',
-                            'data-height'=>'90%',
-                            'data-offset'=>'20px',
-                        ]);
+                        if($model->status != \common\enums\StatusEnum::DELETE) {
+                            return Html::edit(['format-edit','id' => $model->id,'returnUrl' => Url::getReturnUrl()],'版式编辑',[
+                                'class' => 'btn btn-primary btn-sm openIframe',
+                                'data-width'=>'90%',
+                                'data-height'=>'90%',
+                                'data-offset'=>'20px',
+                            ]);
+                        }
                     },
                     'apply' => function($url, $model, $key){
                         if($model->audit_status == AuditStatusEnum::SAVE){
@@ -268,8 +273,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         }
                     },
                     'audit' => function($url, $model, $key){
-                        $isAudit = Yii::$app->services->flowType->isAudit(\common\enums\TargetTypeEnum::STYLE_QIBAN,$model->id);
-                        if($model->audit_status == AuditStatusEnum::PENDING && $isAudit){
+                        if($model->audit_status == AuditStatusEnum::PENDING && Yii::$app->services->flowType->isAudit(\common\enums\TargetTypeEnum::STYLE_QIBAN,$model->id)){
                             return Html::edit(['ajax-audit','id'=>$model->id], '审核', [
                                     'class'=>'btn btn-success btn-sm',
                                     'data-toggle' => 'modal',
@@ -283,9 +287,15 @@ $this->params['breadcrumbs'][] = $this->title;
                             return Html::status($model->status);
                         }                        
                     },
-                    'delete' => function($url, $model, $key){
-                        if($model->audit_status <= AuditStatusEnum::PENDING){
+                    'delete' => function ($url, $model, $key) {
+                        //未审核 + 保存 才可以删除
+                        if($model->audit_status == AuditStatusEnum::SAVE && $model->status == StatusEnum::DISABLED) {
                             return Html::delete(['delete', 'id' => $model->id]);
+                        }
+                    },
+                    'destroy' => function ($url, $model, $key) {
+                        if($model->audit_status == AuditStatusEnum::PASS) {
+                            return Html::destory(['destroy', 'id' => $model->id]);
                         }
                     },
                     

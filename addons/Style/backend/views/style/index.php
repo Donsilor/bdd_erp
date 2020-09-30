@@ -217,20 +217,24 @@ $this->params['breadcrumbs'][] = $this->title;
                             'header' => '操作',
                             'template' => '{attribute} {image} {apply} {audit} {status} {delete} {destroy}',
                             'buttons' => [
-                                'attribute' => function ($url, $model, $key) {
-                                    return Html::edit(['style-attribute/edit', 'style_id' => $model->id, 'returnUrl' => Url::getReturnUrl()], '属性', [
-                                        'class' => 'btn btn-primary btn-sm openIframe',
-                                        'data-width' => '90%',
-                                        'data-height' => '90%',
-                                        'data-offset' => '20px',
-                                    ]);
+                               'attribute' => function ($url, $model, $key) {
+                                    if($model->status != \common\enums\StatusEnum::DELETE) {
+                                        return Html::edit(['style-attribute/edit', 'style_id' => $model->id, 'returnUrl' => Url::getReturnUrl()], '属性', [
+                                            'class' => 'btn btn-primary btn-sm openIframe',
+                                            'data-width' => '90%',
+                                            'data-height' => '90%',
+                                            'data-offset' => '20px',
+                                        ]);
+                                    }
 
-                                },
-                                'image' => function($url, $model, $key){
-                                    return Html::edit(['style-image/ajax-edit-multe','style_id' => $model->id,'returnUrl' => Url::getReturnUrl(),'returnUrl' => Url::getReturnUrl()], '传图', [
-                                        'data-toggle' => 'modal',
-                                        'data-target' => '#ajaxModalLg',
-                                    ]);
+                               },
+                               'image' => function($url, $model, $key){
+                                    if($model->status != \common\enums\StatusEnum::DELETE) {
+                                        return Html::edit(['style-image/ajax-edit-multe','style_id' => $model->id,'returnUrl' => Url::getReturnUrl(),'returnUrl' => Url::getReturnUrl()], '传图', [
+                                            'data-toggle' => 'modal',
+                                            'data-target' => '#ajaxModalLg',
+                                        ]);
+                                    }
                                 },
                                 'apply' => function ($url, $model, $key) {
                                     if ($model->audit_status == AuditStatusEnum::SAVE) {
@@ -257,13 +261,13 @@ $this->params['breadcrumbs'][] = $this->title;
                                     }
                                 },
                                 'delete' => function ($url, $model, $key) {
-                                    if($model->audit_status == AuditStatusEnum::SAVE) {
+                                    if($model->audit_status == AuditStatusEnum::SAVE && $model->status == StatusEnum::DISABLED) {
                                         return Html::delete(['delete', 'id' => $model->id]);
                                     }
                                 },
                                 'destroy' => function ($url, $model, $key) {
                                     if($model->audit_status == AuditStatusEnum::PASS) {
-                                        return Html::destory(['destroy', 'id' => $model->id],'作废');
+                                        return Html::destory(['destroy', 'id' => $model->id]);
                                     }
                                 },
                             ]

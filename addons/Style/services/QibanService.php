@@ -9,6 +9,8 @@ use addons\Style\common\models\QibanAttribute;
 use common\components\Service;
 use common\enums\AuditStatusEnum;
 use common\enums\StatusEnum;
+use addons\Style\common\enums\QibanTypeEnum;
+use addons\Style\common\models\Style;
 
 
 /**
@@ -26,34 +28,31 @@ class QibanService extends Service
      * @return \addons\Style\common\models\Qiban
      */
     public function createQiban($goods ,$attr_list){
-        $qiban = new Qiban();
-        $qiban->audit_status = AuditStatusEnum::PENDING;
-        $qiban->status = StatusEnum::DISABLED;
-        $qiban->is_apply = IsApply::Wait;
-        $qiban->attributes = $goods;
-        $qiban->qiban_source_id = QibanSourceEnum::BUSINESS_APPLI;
-        $qiban->creator_id = \Yii::$app->user->identity->getId();
-        $qiban->created_at = time();
-        if(false === $qiban->save()){
-            throw new \Exception($this->getError($qiban));
+        
+        $model = new Qiban();
+        $model->audit_status = AuditStatusEnum::PENDING;
+        $model->status = StatusEnum::DISABLED;
+        $model->is_apply = IsApply::Wait;
+        $model->attributes = $goods;
+        $model->qiban_source_id = QibanSourceEnum::BUSINESS_APPLI;
+        $model->creator_id = \Yii::$app->user->identity->getId();
+        $model->created_at = time();
+        if(false === $model->save()){
+            throw new \Exception($this->getError($model));
         }
 
         foreach ($attr_list as $attr){
-            $qibanAttr = new QibanAttribute();
-            $qibanAttr->attr_id = $attr['attr_id'];
-            $qibanAttr->attr_values = $attr['attr_value'];
-            $qibanAttr->sort = $attr['sort'];
-            $qibanAttr->qiban_id = $qiban->id;
-            if(false === $qibanAttr->save()){
-                throw new \Exception($this->getError($qibanAttr));
+            $attr = new QibanAttribute();
+            $attr->attr_id = $attr['attr_id'];
+            $attr->attr_values = $attr['attr_value'];
+            $attr->sort = $attr['sort'];
+            $attr->qiban_id = $model->id;
+            if(false === $attr->save()){
+                throw new \Exception($this->getError($attr));
             }
         }
-        /* //更新布产单属性到布产单横向字段
-        if(false === $qiban->save(true)) {
-            throw new \Exception($this->getError($qiban));
-        } */
         $this->createQibanSn($model); 
-        return $qiban ;
+        return $model ;
     }
     
     public function isExist($qiban_sn = null){
@@ -61,6 +60,58 @@ class QibanService extends Service
         $qiban = Qiban::find()->where(['qiban_sn'=>$qiban_sn])->select(['id'])->one();
         return $qiban;
     }
+    
+    /**
+     * 创建起版款号
+     * @param Qiban $model
+     * @param string $save
+     */
+    public function createStyleSn($model) 
+    {
+        if(!$model->id) {
+            throw new \Exception("起版ID不能为空");
+        }        
+        if($model->style_id >0 || $model->qiban_type != QibanTypeEnum::NO_STYLE) {
+            return ;
+        }
+        $style_material = $model->getStyleMaterial();
+        if($style_material === false) {
+            throw new \Exception("请完善起版信息中的材质");
+        }
+        if($model->style_channel_id == '') {
+            throw new \Exception("请完善起版信息中的款式渠道");
+        }else if(!in_array($model->style_channel_id,[3,12,16])) {
+            //非 国际批发，国内电商，国际电商 不用创建款号
+            return;
+        }
+        if($model->style_cate_id == '') {
+            throw new \Exception("请完善起版信息中的款式分类");
+        }
+        if($model->style_sex == '') {
+            throw new \Exception("请完善起版信息中的款式性别");
+        }
+        $style = new Style();
+        $style->style_name = $model->qiban_name;
+        $style->style_channel_id = $model->style_channel_id;
+        $style->style_sex = $model->style_sex;
+        $style->style_cate_id = $model->style_cate_id;
+        $style->product_type_id = $model->product_type_id;        
+        $style->style_material = $style_material;
+        $style->status = -2;
+        if(false === $style->save(true)) {
+            throw new \Exception("创建款号失败:".$this->getError($style));
+        }
+        
+        $model->style_sn = \Yii::$app->styleService->style->createStyleSn($style,true);
+        $model->style_id = $style->id;
+        
+        if(false === $model->save(true,['style_id','style_sn'])) {
+            throw new \Exception("更新款号失败:".$this->getError($model));
+        }
+        
+        return true;
+    }
+
     /**
      * 创建起版号编码
      * @param Qiban $model

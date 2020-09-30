@@ -6,6 +6,8 @@ use addons\Purchase\common\models\PurchaseGoods;
 use common\models\backend\Member;
 use Yii;
 use common\helpers\StringHelper;
+use addons\Style\common\enums\AttrIdEnum;
+use addons\Style\common\enums\StyleMaterialEnum;
 
 /**
  * This is the model class for table "style_qiban".
@@ -66,7 +68,7 @@ class Qiban extends BaseModel
     public function rules()
     {
         return [
-            [['style_cate_id','product_type_id','jintuo_type'],'required'],
+            [['style_cate_id','product_type_id','style_channel_id','qiban_name','style_sex','jintuo_type'],'required'],
             [['merchant_id', 'qiban_type', 'style_id', 'style_cate_id', 'product_type_id', 'jintuo_type', 'style_source_id','qiban_source_id', 'style_channel_id', 'style_sex', 'goods_num', 'is_inlay', 'audit_status', 'audit_time', 'auditor_id', 'sort', 'status', 'creator_id',
                 'created_at', 'updated_at', 'is_apply'], 'integer'],
             [['warranty_period'],'safe'],
@@ -103,10 +105,10 @@ class Qiban extends BaseModel
             'style_images' => Yii::t('app', '起版图库'),
             'sale_price' => Yii::t('app', '销售价'),
             'market_price' => Yii::t('app', '市场价'),
-            'cost_price' => Yii::t('app', '单品单价'),
+            'cost_price' => Yii::t('app', '商品单价'),
             'goods_num' => Yii::t('app', '商品数量'),
             'is_inlay' => Yii::t('app', '是否镶嵌'),
-            'audit_status' => Yii::t('app', '款式审核'),
+            'audit_status' => Yii::t('app', '审核状态'),
             'audit_remark' => Yii::t('app', '审核失败原因'),
             'audit_time' => Yii::t('app', '审核时间'),
             'auditor_id' => Yii::t('app', '审核人'),
@@ -144,7 +146,7 @@ class Qiban extends BaseModel
             $this->style_images = join(',',$style_images);
         }
 
-        $this->warranty_period = StringHelper::dateToInt($this->warranty_period);
+        $this->warranty_period = StringHelper::dateToInt($this->warranty_period);  
         return parent::beforeValidate();
     }
 
@@ -214,5 +216,40 @@ class Qiban extends BaseModel
     public function getStyle()
     {
         return $this->hasOne(Style::class, ['style_sn'=>'style_sn'])->alias('style');
+    }
+    /**
+     * 起版属性列表
+     * @return \yii\db\ActiveQuery
+     */
+    public function getAttrs()
+    {
+        return $this->hasMany(QibanAttribute::class, ['qiban_id'=>'id'])->alias('attrs');
+    }
+    /**
+     * 起版款式材质 ID
+     * @return boolean|string
+     */
+    public function getStyleMaterial()
+    {
+        $style_material = false;
+        $attrs = array_column($this->attrs ??[],'attr_values','attr_id');
+        $value_id = $attrs[AttrIdEnum::MATERIAL_TYPE] ?? '';
+        if(is_numeric($value_id)) {
+            $value  = Yii::$app->attr->valueName($value_id);
+            $style_material = StyleMaterialEnum::mapValue($value);
+        }        
+        return $style_material;
+    }
+    /**
+     * 款式图片
+     * @return string|mixed
+     */
+    public function getStyleImage()
+    {
+        $image = '';
+        if($this->style_image != '') {
+            $image = explode(',', $this->style_image)[0];
+        }
+        return $image;        
     }
 }
