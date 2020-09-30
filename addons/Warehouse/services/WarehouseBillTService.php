@@ -993,10 +993,10 @@ class WarehouseBillTService extends Service
             }
             $gong_fee = $form->formatValue($goods['gong_fee'], 0) ?? 0;//克工费
             $piece_fee = $form->formatValue($goods['piece_fee'], 0) ?? 0;//件工费
-            if (!empty($gong_fee) && !empty($piece_fee)) {
-                $flag = false;
-                $error[$i][] = "[克/工费]和[件/工费]只能填其一";
-            }
+//            if (!empty($gong_fee) && !empty($piece_fee)) {
+//                $flag = false;
+//                $error[$i][] = "[克/工费]和[件/工费]只能填其一";
+//            }
             $xiangqian_craft = $goods['xiangqian_craft'] ?? "";//镶嵌工艺
             if (!empty($xiangqian_craft)) {
                 $attr_id = $form->getAttrIdByAttrValue($style_sn, $xiangqian_craft, AttrIdEnum::XIANGQIAN_CRAFT);
