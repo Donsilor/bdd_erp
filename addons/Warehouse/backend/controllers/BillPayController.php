@@ -2,6 +2,8 @@
 
 namespace addons\Warehouse\backend\controllers;
 
+use addons\Warehouse\common\enums\IsSettleAccountsEnum;
+use addons\Warehouse\common\models\WarehouseBillGoodsL;
 use Yii;
 use common\helpers\Url;
 use common\traits\Curd;
@@ -47,6 +49,7 @@ class BillPayController extends BaseController
             ],
             'pageSize' => $this->pageSize,
             'relations' => [
+                'creator' => ['username'],
                 'supplier' => ['supplier_name']
             ]
 
@@ -109,13 +112,22 @@ class BillPayController extends BaseController
         if (!($model = $this->modelClass::findOne($id))) {
             return $this->message("找不到数据", $this->redirect(['index']), 'error');
         }
-
-        $model = WarehouseBillPay::find()->where(['id' => $id])->one();
-        if (false === $model->delete()) {
-            return $this->message("删除失败", $this->redirect(\Yii::$app->request->referrer), 'error');
+        try{
+            $trans = \Yii::$app->db->beginTransaction();
+            $res = WarehouseBillGoodsL::updateAll(['pay_status' => IsSettleAccountsEnum::NO_SETTLEMENT, 'pay_id' => null], ['pay_id' => $id]);
+            if (false === $res) {
+                throw new \Exception("还原货品结价状态失败");
+            }
+            $model = WarehouseBillPay::find()->where(['id' => $id])->one();
+            if (false === $model->delete()) {
+                throw new \Exception("删除失败");
+            }
+            $trans->commit();
+            \Yii::$app->getSession()->setFlash('success', '删除成功');
+            return $this->redirect(\Yii::$app->request->referrer);
+        }catch (\Exception $e){
+            $trans->rollBack();
+            return $this->message($e->getMessage(), $this->redirect(\Yii::$app->request->referrer), 'error');
         }
-
-        \Yii::$app->getSession()->setFlash('success', '删除成功');
-        return $this->redirect(\Yii::$app->request->referrer);
     }
 }

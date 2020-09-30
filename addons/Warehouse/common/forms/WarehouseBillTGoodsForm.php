@@ -216,80 +216,87 @@ class WarehouseBillTGoodsForm extends WarehouseBillGoodsL
             '条码号(货号)为空则系统自动生成',
             '[非起版]和[有款起版]款号不能为空',
             '#',
-            $this->formatTitle($this->getJietuoTypeMap()),//'金托类型' .
+            $this->formatTitle($this->getJietuoTypeMap()),//'金托类型'
             '[起版号]和[款号]必填其一',
-            $this->formatTitle($this->getWarehouseMap()),//'入库仓库' .
-            $this->formatTitle($this->getMaterialTypeMap()),//'材质' .
-            $this->formatTitle($this->getMaterialColorMap()),//'材质颜色' .
+            $this->formatTitle($this->getWarehouseMap()),//'入库仓库'
+            $this->formatTitle($this->getMaterialTypeMap()),//'材质'
+            $this->formatTitle($this->getMaterialColorMap()),//'材质颜色'
             '不填默认为1',
-            $this->formatTitle($this->getFingerHkMap()),//'手寸(港号)' .
-            $this->formatTitle($this->getFingerMap()),//'手寸(美号)' .
+            $this->formatTitle($this->getFingerHkMap()),//'手寸(港号)'
+            $this->formatTitle($this->getFingerMap()),//'手寸(美号)'
             '#', '#',
-            $this->formatTitle($this->getXiangkouMap()),//'镶口' .
+            $this->formatTitle($this->getXiangkouMap()),//'镶口'
             '#',
-            $this->formatTitle($this->getChainTypeMap()),//'链类型' .
-            $this->formatTitle($this->getCrampRingMap()),//'扣环' .
-            $this->formatTitle($this->getTalonHeadTypeMap()),//'爪头形状' .
+            $this->formatTitle($this->getChainTypeMap()),//'链类型'
+            $this->formatTitle($this->getCrampRingMap()),//'扣环'
+            $this->formatTitle($this->getTalonHeadTypeMap()),//'爪头形状'
 
-            $this->formatTitle($this->getPeiLiaoWayMap()),//'配料方式' .
+            $this->formatTitle($this->getPeiLiaoWayMap()),//'配料方式'
             '#', '#',
             '填写则不自动计算',//含耗重
             '#',
             '填写则不自动计算',//金料额
             '#',
 
-            $this->formatTitle($this->getPeiShiWayMap()),//'主石配石方式' .
+            $this->formatTitle($this->getPeiShiWayMap()),//'主石配石方式'
             '#',
-            $this->formatTitle($this->getMainStoneTypeMap()),//'主石类型' .
+            $this->formatTitle($this->getMainStoneTypeMap()),//'主石类型'
             '#', '#', '#',
             '填写则不自动计算',//主石成本
-            $this->formatTitle($this->getMainStoneShapeMap()),//'主石形状' .
-            $this->formatTitle($this->getMainStoneColorMap()),//'主石颜色' .
-            $this->formatTitle($this->getMainStoneClarityMap()),//'主石净度' .
-            $this->formatTitle($this->getMainStoneCutMap()),//'主石切工' .
-            $this->formatTitle($this->getMainStoneColourMap()),//'主石色彩' .
+            $this->formatTitle($this->getMainStoneShapeMap()),//'主石形状'
+            $this->formatTitle($this->getMainStoneColorMap()),//'主石颜色'
+            $this->formatTitle($this->getMainStoneClarityMap()),//'主石净度'
+            $this->formatTitle($this->getMainStoneCutMap()),//'主石切工'
+            $this->formatTitle($this->getMainStonePolishMap()),//'主石抛光'
+            $this->formatTitle($this->getMainStoneSymmetryMap()),//'主石对称'
+            $this->formatTitle($this->getMainStoneFluorescenceMap()),//'主石荧光'
+            $this->formatTitle($this->getMainStoneColourMap()),//'主石色彩'
 
-            $this->formatTitle($this->getPeiShiWayMap()),//'副石1配石方式' .
-            $this->formatTitle($this->getSecondStoneType1Map()),//'副石1类型' .
+            $this->formatTitle($this->getPeiShiWayMap()),//'副石1配石方式'
+            $this->formatTitle($this->getSecondStoneType1Map()),//'副石1类型'
             '#',
             '#', '#', '#',
             '填写则不自动计算',//副石1成本
-            $this->formatTitle($this->getSecondStoneShape1Map()),//'副石1形状' .
-            $this->formatTitle($this->getSecondStoneColor1Map()),//'副石1颜色' .
-            $this->formatTitle($this->getSecondStoneClarity1Map()),//'副石1净度' .
-            $this->formatTitle($this->getSecondStoneCut1Map()),//'副石1切工' .
-            $this->formatTitle($this->getSecondStoneColour1Map()),//'副石1色彩' .
+            $this->formatTitle($this->getSecondStoneShape1Map()),//'副石1形状'
+            $this->formatTitle($this->getSecondStoneColor1Map()),//'副石1颜色'
+            $this->formatTitle($this->getSecondStoneClarity1Map()),//'副石1净度'
+            $this->formatTitle($this->getSecondStoneCut1Map()),//'副石1切工'
+            $this->formatTitle($this->getSecondStoneColour1Map()),//'副石1色彩'
 
-            $this->formatTitle($this->getPeiShiWayMap()),//'副石2配石方式' .
-            $this->formatTitle($this->getSecondStoneType2Map()),//'副石2类型' .
+            $this->formatTitle($this->getPeiShiWayMap()),//'副石2配石方式'
+            $this->formatTitle($this->getSecondStoneType2Map()),//'副石2类型'
             '#',
             '#', '#', '#',
             '填写则不自动计算',//副石2成本
+            $this->formatTitle($this->getSecondStoneColor2Map()),//'副石2颜色'
+            $this->formatTitle($this->getSecondStoneClarity2Map()),//'副石2净度'
 
-            $this->formatTitle($this->getPeiShiWayMap()),//'副石3配石方式' .
-            $this->formatTitle($this->getSecondStoneType3Map()),//'副石3类型' .
+            $this->formatTitle($this->getPeiShiWayMap()),//'副石3配石方式'
+            $this->formatTitle($this->getSecondStoneType3Map()),//'副石3类型'
             '#',
             '#', '#', '#',
             '填写则不自动计算',//副石3成本
+            $this->formatTitle($this->getSecondStoneColor3Map()),//'副石3颜色'
+            $this->formatTitle($this->getSecondStoneClarity3Map()),//'副石3净度'
             '#',
 
-            $this->formatTitle($this->getPeiJianWayMap()),//'配件方式' .
-            $this->formatTitle($this->getPartsTypeMap()),//'配件类型' .
-            $this->formatTitle($this->getPartsMaterialMap()),//'配件材质' .
+            $this->formatTitle($this->getPeiJianWayMap()),//'配件方式'
+            $this->formatTitle($this->getPartsTypeMap()),//'配件类型'
+            $this->formatTitle($this->getPartsMaterialMap()),//'配件材质'
             '#', '#', '#',
             '填写则不自动计算',//配件额
 
             '#', '#',
             '填写则不自动计算',//配石费
             '#', '#', '#',
-            $this->formatTitle($this->getXiangqianCraftMap()),//'镶嵌工艺' .
+            $this->formatTitle($this->getXiangqianCraftMap()),//'镶嵌工艺'
             '#', '#', '#',
             '填写则不自动计算',//镶石费
-            $this->formatTitle($this->getFaceCraftMap(), "|"),//'表面工艺' .
+            $this->formatTitle($this->getFaceCraftMap(), "|"),//'表面工艺'
             '#', '#', '#', '#', '#', '#', '#',
             '填写则不自动计算',//税额
             '#', '#', '#',
-            $this->formatTitle($this->getCertTypeMap()),//'主石证书类型' .
+            $this->formatTitle($this->getCertTypeMap()),//'主石证书类型'
             '填写则不自动计算',//工厂总成本
             '填写则不自动计算',//公司成本价
             '#', '#',
@@ -297,10 +304,10 @@ class WarehouseBillTGoodsForm extends WarehouseBillGoodsL
         $fields = [
             '条码号(货号)', '(*)款号', '商品名称', '(*)金托类型', '起版号', '(*)入库仓库', '材质', '材质颜色', '货品数量', '手寸(港号)', '手寸(美号)', '尺寸(cm)', '成品尺寸(mm)', '镶口(ct)', '刻字', '链类型', '扣环', '爪头形状',
             '配料方式', '连石重(g)', '损耗(%)', '含耗重(g)', '金价/g', '金料额', '折足率(%)',
-            '主石配石方式', '主石编号', '主石类型', '主石粒数', '主石重(ct)', '主石单价/ct', '主石成本', '主石形状', '主石颜色', '主石净度', '主石切工', '主石色彩',
+            '主石配石方式', '主石编号', '主石类型', '主石粒数', '主石重(ct)', '主石单价/ct', '主石成本', '主石形状', '主石颜色', '主石净度', '主石切工', '主石抛光', '主石对称', '主石荧光', '主石色彩',
             '副石1配石方式', '副石1类型', '副石1编号', '副石1粒数', '副石1重(ct)', '副石1单价/ct', '副石1成本', '副石1形状', '副石1颜色', '副石1净度', '副石1切工', '副石1色彩',
-            '副石2配石方式', '副石2类型', '副石2编号', '副石2粒数', '副石2重(ct)', '副石2单价/ct', '副石2成本',
-            '副石3配石方式', '副石3类型', '副石3编号', '副石3粒数', '副石3重(ct)', '副石3单价/ct', '副石3成本', '石料备注',
+            '副石2配石方式', '副石2类型', '副石2编号', '副石2粒数', '副石2重(ct)', '副石2单价/ct', '副石2成本', '副石2颜色', '副石2净度',
+            '副石3配石方式', '副石3类型', '副石3编号', '副石3粒数', '副石3重(ct)', '副石3单价/ct', '副石3成本', '副石3颜色', '副石3净度', '石料备注',
             '配件方式', '配件类型', '配件材质', '配件数量', '配件金重(g)', '配件金价/g', '配件额',
             '配石重量(ct)', '配石工费/ct', '配石费', '配件工费', '克/工费', '件/工费', '镶嵌工艺', '镶石1工费/颗', '镶石2工费/颗', '镶石3工费/颗', '镶石费', '表面工艺(多个用“|”分割)', '表面工艺费', '分色/分件费', '喷沙费', '拉沙费', '补口费', '版费', '税费', '税额', '证书费', '其它费用',
             '主石证书号', '主石证书类型', '工厂总成本', '公司成本总额', '倍率(默认1)', '备注',
@@ -316,10 +323,10 @@ class WarehouseBillTGoodsForm extends WarehouseBillGoodsL
         $fieldName = [
             'goods_id', 'style_sn', 'goods_name', 'jintuo_type', 'qiban_sn', 'to_warehouse_id', 'material_type', 'material_color', 'goods_num', 'finger_hk', 'finger', 'length', 'product_size', 'xiangkou', 'kezi', 'chain_type', 'cramp_ring', 'talon_head_type',
             'peiliao_way', 'suttle_weight', 'gold_loss', 'lncl_loss_weight', 'gold_price', 'gold_amount', 'pure_gold_rate',
-            'main_pei_type', 'main_stone_sn', 'main_stone_type', 'main_stone_num', 'main_stone_weight', 'main_stone_price', 'main_stone_amount', 'main_stone_shape', 'main_stone_color', 'main_stone_clarity', 'main_stone_cut', 'main_stone_colour',
+            'main_pei_type', 'main_stone_sn', 'main_stone_type', 'main_stone_num', 'main_stone_weight', 'main_stone_price', 'main_stone_amount', 'main_stone_shape', 'main_stone_color', 'main_stone_clarity', 'main_stone_cut', 'main_stone_polish', 'main_stone_symmetry', 'main_stone_fluorescence', 'main_stone_colour',
             'second_pei_type', 'second_stone_type1', 'second_stone_sn1', 'second_stone_num1', 'second_stone_weight1', 'second_stone_price1', 'second_stone_amount1', 'second_stone_shape1', 'second_stone_color1', 'second_stone_clarity1', 'second_stone_cut1', 'second_stone_colour1',
-            'second_pei_type2', 'second_stone_type2', 'second_stone_sn2', 'second_stone_num2', 'second_stone_weight2', 'second_stone_price2', 'second_stone_amount2',
-            'second_pei_type3', 'second_stone_type3', 'second_stone_sn3', 'second_stone_num3', 'second_stone_weight3', 'second_stone_price3', 'second_stone_amount3', 'stone_remark',
+            'second_pei_type2', 'second_stone_type2', 'second_stone_sn2', 'second_stone_num2', 'second_stone_weight2', 'second_stone_price2', 'second_stone_amount2', 'second_stone_color2', 'second_stone_clarity2',
+            'second_pei_type3', 'second_stone_type3', 'second_stone_sn3', 'second_stone_num3', 'second_stone_weight3', 'second_stone_price3', 'second_stone_amount3', 'second_stone_color3', 'second_stone_clarity3', 'stone_remark',
             'parts_way', 'parts_type', 'parts_material', 'parts_num', 'parts_gold_weight', 'parts_price', 'parts_amount',
             'peishi_weight', 'peishi_gong_fee', 'peishi_fee', 'parts_fee', 'gong_fee', 'piece_fee', 'xiangqian_craft', 'second_stone_fee1', 'second_stone_fee2', 'second_stone_fee3', 'xianqian_fee', 'biaomiangongyi', 'biaomiangongyi_fee', 'fense_fee', 'penlasha_fee', 'lasha_fee', 'bukou_fee', 'templet_fee', 'tax_fee', 'tax_amount', 'cert_fee', 'other_fee',
             'main_cert_id', 'main_cert_type', 'factory_cost', 'cost_amount', 'markup_rate', 'remark',
@@ -412,6 +419,15 @@ class WarehouseBillTGoodsForm extends WarehouseBillGoodsL
     public function getIsInlayMap()
     {
         return \addons\Style\common\enums\InlayEnum::getMap() ?? [];
+    }
+
+    /**
+     * 结算状态
+     * @return array
+     */
+    public function getPayStatusMap()
+    {
+        return \addons\Warehouse\common\enums\IsSettleAccountsEnum::getMap() ?? [];
     }
 
     /**
@@ -1030,6 +1046,78 @@ class WarehouseBillTGoodsForm extends WarehouseBillGoodsL
     }
 
     /**
+     * 主石抛光列表
+     * @return array
+     */
+    public function getMainStonePolishMap()
+    {
+        return \Yii::$app->attr->valueMap(AttrIdEnum::MAIN_STONE_POLISH) ?? [];
+    }
+
+    /**
+     * 主石抛光
+     * @param WarehouseBillTGoodsForm $form
+     * @return array
+     */
+    public function getMainStonePolishDrop($form)
+    {
+        if (!empty($form->style_sn)) {
+            $data = $this->getAttrValueListByStyle($form->style_sn, AttrIdEnum::MAIN_STONE_POLISH);
+        } else {
+            $data = $this->getMainStonePolishMap();
+        }
+        return $data ?? [];
+    }
+
+    /**
+     * 主石对称列表
+     * @return array
+     */
+    public function getMainStoneSymmetryMap()
+    {
+        return \Yii::$app->attr->valueMap(AttrIdEnum::MAIN_STONE_SYMMETRY) ?? [];
+    }
+
+    /**
+     * 主石对称
+     * @param WarehouseBillTGoodsForm $form
+     * @return array
+     */
+    public function getMainStoneSymmetryDrop($form)
+    {
+        if (!empty($form->style_sn)) {
+            $data = $this->getAttrValueListByStyle($form->style_sn, AttrIdEnum::MAIN_STONE_SYMMETRY);
+        } else {
+            $data = $this->getMainStoneSymmetryMap();
+        }
+        return $data ?? [];
+    }
+
+    /**
+     * 主石荧光列表
+     * @return array
+     */
+    public function getMainStoneFluorescenceMap()
+    {
+        return \Yii::$app->attr->valueMap(AttrIdEnum::MAIN_STONE_FLUORESCENCE) ?? [];
+    }
+
+    /**
+     * 主石荧光
+     * @param WarehouseBillTGoodsForm $form
+     * @return array
+     */
+    public function getMainStoneFluorescenceDrop($form)
+    {
+        if (!empty($form->style_sn)) {
+            $data = $this->getAttrValueListByStyle($form->style_sn, AttrIdEnum::MAIN_STONE_FLUORESCENCE);
+        } else {
+            $data = $this->getMainStoneFluorescenceMap();
+        }
+        return $data ?? [];
+    }
+
+    /**
      * 主石色彩列表
      * @return array
      */
@@ -1337,6 +1425,54 @@ class WarehouseBillTGoodsForm extends WarehouseBillGoodsL
             $data = $this->getAttrValueListByStyle($form->style_sn, AttrIdEnum::SIDE_STONE3_TYPE);
         } else {
             $data = $this->getSecondStoneType3Map();
+        }
+        return $data ?? [];
+    }
+
+    /**
+     * 副石3颜色列表
+     * @return array
+     */
+    public function getSecondStoneColor3Map()
+    {
+        return \Yii::$app->attr->valueMap(AttrIdEnum::SIDE_STONE3_COLOR) ?? [];
+    }
+
+    /**
+     * 副石3颜色
+     * @param WarehouseBillTGoodsForm $form
+     * @return array
+     */
+    public function getSecondStoneColor3Drop($form)
+    {
+        if (!empty($form->style_sn)) {
+            $data = $this->getAttrValueListByStyle($form->style_sn, AttrIdEnum::SIDE_STONE3_COLOR);
+        } else {
+            $data = $this->getSecondStoneColor3Map();
+        }
+        return $data ?? [];
+    }
+
+    /**
+     * 副石3净度列表
+     * @return array
+     */
+    public function getSecondStoneClarity3Map()
+    {
+        return \Yii::$app->attr->valueMap(AttrIdEnum::SIDE_STONE3_CLARITY) ?? [];
+    }
+
+    /**
+     * 副石3净度
+     * @param WarehouseBillTGoodsForm $form
+     * @return array
+     */
+    public function getSecondStoneClarity3Drop($form)
+    {
+        if (!empty($form->style_sn)) {
+            $data = $this->getAttrValueListByStyle($form->style_sn, AttrIdEnum::SIDE_STONE3_CLARITY);
+        } else {
+            $data = $this->getSecondStoneClarity3Map();
         }
         return $data ?? [];
     }

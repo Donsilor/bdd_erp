@@ -23,6 +23,11 @@ $this->params['breadcrumbs'][] = $this->title;
                         'data-toggle' => 'modal',
                         'data-target' => '#ajaxModalLg',
                     ]); ?>
+                    <?= Html::create(['ajax-import-k'], '国际批发导入', [
+                        //'class'=>'btn btn-success btn-xs',
+                        'data-toggle' => 'modal',
+                        'data-target' => '#ajaxModal',
+                    ]); ?>
                     <?= Html::button('导出', [
                         'class'=>'btn btn-success btn-xs',
                         'onclick' => 'batchExport()',
@@ -361,13 +366,12 @@ $this->params['breadcrumbs'][] = $this->title;
                         if($model->order_status == OrderStatusEnum::CONFORMED){
                             return Html::edit(['order/ajax-pay', 'id' => $model->id], '点款', [
                                     'data-toggle' => 'modal',
-                                    'class' => 'btn btn-primary btn-ms',
+                                    'class' => 'btn btn-primary btn-sm',
                                     'data-target' => '#ajaxModalLg',
                             ]);
                         }
                     },
-                    'close' => function($url, $model, $key){
-                       
+                    'close' => function($url, $model, $key){                       
                             return Html::delete(['delete', 'id' => $model->id],'关闭',[
                                 'onclick' => 'rfTwiceAffirm(this,"关闭单据", "确定关闭吗？");return false;',
                             ]);

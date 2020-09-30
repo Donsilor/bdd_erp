@@ -70,8 +70,8 @@ $this->params['breadcrumbs'][] = $this->title;
                             <td><?= \addons\Style\common\enums\JintuoTypeEnum::getValue($model->jintuo_type) ?></td>
                         </tr>
                         <tr>
-                            <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('stock_cnt') ?>：</td>
-                            <td><?= $model->stock_cnt ?></td>
+                            <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('stock_num') ?>：</td>
+                            <td><?= $model->stock_num ?></td>
                         </tr>
                         <tr>
                             <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('goods_num') ?>：</td>
@@ -265,7 +265,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         </tr>
                         <tr>
                             <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('parts_material') ?>：</td>
-                            <td><?= $model->parts_material ?></td>
+                            <td><?= Yii::$app->attr->valueName($model->parts_material) ?? "" ?></td>
                         </tr>
                         <tr>
                             <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('parts_price') ?>：</td>
@@ -287,20 +287,24 @@ $this->params['breadcrumbs'][] = $this->title;
                             <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('parts_amount') ?>：</td>
                             <td><?= $model->parts_amount ?></td>
                         </tr>
-
-
-                    </table>
-                </div>
-                <div class="col-xs-6">
-                    <table class="table table-hover">
                         <tr>
                             <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('gong_fee') ?>：</td>
                             <td><?= $model->gong_fee ?></td>
                         </tr>
                         <tr>
+                            <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('ke_gong_fee') ?>：</td>
+                            <td><?= $model->ke_gong_fee ?></td>
+                        </tr>
+                        <tr>
                             <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('bukou_fee') ?>：</td>
                             <td><?= $model->bukou_fee ?></td>
                         </tr>
+
+                    </table>
+                </div>
+                <div class="col-xs-6">
+                    <table class="table table-hover">
+
                         <tr>
                             <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('second_stone_fee1') ?>：</td>
                             <td><?= $model->second_stone_fee1 ?></td>
@@ -343,6 +347,10 @@ $this->params['breadcrumbs'][] = $this->title;
                             <td><?= $model->lasha_fee ?></td>
                         </tr>
                         <tr>
+                            <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('peishi_amount') ?>：</td>
+                            <td><?= $model->peishi_amount ?></td>
+                        </tr>
+                        <tr>
                             <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('piece_fee') ?>：</td>
                             <td><?= $model->piece_fee ?></td>
                         </tr>
@@ -351,13 +359,21 @@ $this->params['breadcrumbs'][] = $this->title;
                             <td><?= $model->peishi_fee ?></td>
                         </tr>
                         <tr>
+                            <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('tax_fee') ?>：</td>
+                            <td><?= $model->tax_fee ?></td>
+                        </tr>
+                        <tr>
                             <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('tax_amount') ?>：</td>
                             <td><?= $model->tax_amount ?></td>
                         </tr>
                         <tr>
-                            <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('total_gong_fee') ?>：</td>
-                            <td><?= $model->total_gong_fee ?></td>
+                            <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('other_fee') ?>：</td>
+                            <td><?= $model->other_fee ?></td>
                         </tr>
+<!--                        <tr>-->
+<!--                            <td class="col-xs-2 text-right">--><?//= $model->getAttributeLabel('total_gong_fee') ?><!--：</td>-->
+<!--                            <td>--><?//= $model->total_gong_fee ?><!--</td>-->
+<!--                        </tr>-->
                         <tr>
                             <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('cert_type') ?>：</td>
                             <td><?= Yii::$app->attr->valueName($model->cert_type) ?></td>
@@ -587,6 +603,14 @@ $this->params['breadcrumbs'][] = $this->title;
                         <tr>
                             <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('second_stone_weight3') ?>：</td>
                             <td><?= $model->second_stone_weight3 ?></td>
+                        </tr>
+                        <tr>
+                            <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('second_stone_color3') ?>：</td>
+                            <td><?= Yii::$app->attr->valueName($model->second_stone_color3) ?></td>
+                        </tr>
+                        <tr>
+                            <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('second_stone_clarity3') ?>：</td>
+                            <td><?= Yii::$app->attr->valueName($model->second_stone_clarity3) ?></td>
                         </tr>
                         <tr>
                             <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('second_stone_price3') ?>：</td>

@@ -25,7 +25,8 @@ $params = $params ? "&" . http_build_query($params) : '';
     }
 </style>
 <div class="box-body nav-tabs-custom">
-    <h2 class="page-header"><?= $this->title; ?> - <span id="bill_no"><?= $bill->bill_no ?></span> <i class="fa fa-copy" onclick="copy('bill_no')"></i>
+    <h2 class="page-header"><?= $this->title; ?> - <span id="bill_no"><?= $bill->bill_no ?></span> <i class="fa fa-copy"
+                                                                                                      onclick="copy('bill_no')"></i>
         - <?= \addons\Warehouse\common\enums\BillStatusEnum::getValue($bill->bill_status) ?></h2>
     <?php echo Html::menuTab($tabList, $tab) ?>
     <div class="box-tools" style="float:right;margin-top:-40px; margin-right: 20px;">
@@ -42,13 +43,14 @@ $params = $params ? "&" . http_build_query($params) : '';
             echo Html::edit(['edit-all', 'bill_id' => $bill->id], '编辑货品', ['class' => 'btn btn-info btn-xs']);
             echo '&nbsp;';
         }
-        if ($bill->bill_status == \addons\Warehouse\common\enums\BillStatusEnum::SAVE) {
-            echo Html::create(['pay', 'bill_id' => $bill->id], '创建结算信息', [
-                'class' => 'btn btn-primary btn-xs openIframe',
-                'data-width' => '90%',
-                'data-height' => '90%',
+        if ($bill->bill_status == \addons\Warehouse\common\enums\BillStatusEnum::CONFIRM) {
+            echo Html::batchPopButton(['create-pay', 'bill_id' => $bill->id, 'check' => 1], '单据结算', [
+                'class' => 'btn btn-primary btn-xs',
+                'data-width' => '60%',
+                'data-height' => '60%',
                 'data-offset' => '20px',
             ]);
+            echo '&nbsp;';
         }
         echo Html::a('单据打印', ['bill-t/print', 'id' => $bill->id], ['target' => '_blank', 'class' => 'btn btn-info btn-xs',]);
         //, 'onclick' => 'rfTwiceAffirm(this,"打印单据", "确定打印吗？");return false;'
@@ -211,8 +213,8 @@ $params = $params ? "&" . http_build_query($params) : '';
                                 'footerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#feeeed;'],
                                 'value' => function ($model, $key, $index, $widget) {
                                     $widget->footer = $model->getAttributeLabel('goods_id');
-                                    if($model->goods_id){
-                                        $model->goods_id = '<span id="goods_'.$model->goods_id.'">'.$model->goods_id. '</span> <i class="fa fa-copy" onclick="copy(\'goods_' . $model->goods_id . '\')"></i>';
+                                    if ($model->goods_id) {
+                                        $model->goods_id = '<span id="goods_' . $model->goods_id . '">' . $model->goods_id . '</span> <i class="fa fa-copy" onclick="copy(\'goods_' . $model->goods_id . '\')"></i>';
                                     }
                                     return $model->goods_id ?? "";
                                 },
@@ -917,6 +919,51 @@ $params = $params ? "&" . http_build_query($params) : '';
                                 ]),
                             ],
                             [
+                                'attribute' => 'main_stone_polish',
+                                'format' => 'raw',
+                                'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#afb4db;'],
+                                'footerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#afb4db;'],
+                                'value' => function ($model, $key, $index, $widget) {
+                                    $widget->footer = $model->getAttributeLabel('main_stone_polish');
+                                    return Yii::$app->attr->valueName($model->main_stone_polish) ?? "";
+                                },
+                                'filter' => Html::activeDropDownList($searchModel, 'main_stone_polish', $model->getMainStonePolishMap(), [
+                                    'prompt' => '全部',
+                                    'class' => 'form-control',
+                                    'style' => 'width:60px;'
+                                ]),
+                            ],
+                            [
+                                'attribute' => 'main_stone_symmetry',
+                                'format' => 'raw',
+                                'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#afb4db;'],
+                                'footerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#afb4db;'],
+                                'value' => function ($model, $key, $index, $widget) {
+                                    $widget->footer = $model->getAttributeLabel('main_stone_symmetry');
+                                    return Yii::$app->attr->valueName($model->main_stone_symmetry) ?? "";
+                                },
+                                'filter' => Html::activeDropDownList($searchModel, 'main_stone_symmetry', $model->getMainStoneSymmetryMap(), [
+                                    'prompt' => '全部',
+                                    'class' => 'form-control',
+                                    'style' => 'width:60px;'
+                                ]),
+                            ],
+                            [
+                                'attribute' => 'main_stone_fluorescence',
+                                'format' => 'raw',
+                                'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#afb4db;'],
+                                'footerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#afb4db;'],
+                                'value' => function ($model, $key, $index, $widget) {
+                                    $widget->footer = $model->getAttributeLabel('main_stone_fluorescence');
+                                    return Yii::$app->attr->valueName($model->main_stone_fluorescence) ?? "";
+                                },
+                                'filter' => Html::activeDropDownList($searchModel, 'main_stone_fluorescence', $model->getMainStoneFluorescenceMap(), [
+                                    'prompt' => '全部',
+                                    'class' => 'form-control',
+                                    'style' => 'width:60px;'
+                                ]),
+                            ],
+                            [
                                 'attribute' => 'main_stone_colour',
                                 'format' => 'raw',
                                 'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#afb4db;'],
@@ -1258,6 +1305,36 @@ $params = $params ? "&" . http_build_query($params) : '';
 //                                ]),
                             ],
                             [
+                                'attribute' => 'second_stone_color2',
+                                'format' => 'raw',
+                                'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#84bf96;'],
+                                'footerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#84bf96;'],
+                                'value' => function ($model, $key, $index, $widget) {
+                                    $widget->footer = $model->getAttributeLabel('second_stone_color2');
+                                    return Yii::$app->attr->valueName($model->second_stone_color2) ?? "";
+                                },
+                                'filter' => Html::activeDropDownList($searchModel, 'second_stone_color2', $model->getSecondStoneColor2Map(), [
+                                    'prompt' => '全部',
+                                    'class' => 'form-control',
+                                    'style' => 'width:60px;'
+                                ]),
+                            ],
+                            [
+                                'attribute' => 'second_stone_clarity2',
+                                'format' => 'raw',
+                                'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#84bf96;'],
+                                'footerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#84bf96;'],
+                                'value' => function ($model, $key, $index, $widget) {
+                                    $widget->footer = $model->getAttributeLabel('second_stone_clarity2');
+                                    return Yii::$app->attr->valueName($model->second_stone_clarity2) ?? "";
+                                },
+                                'filter' => Html::activeDropDownList($searchModel, 'second_stone_clarity2', $model->getSecondStoneClarity2Map(), [
+                                    'prompt' => '全部',
+                                    'class' => 'form-control',
+                                    'style' => 'width:60px;'
+                                ]),
+                            ],
+                            [
                                 'attribute' => 'second_stone_price2',
                                 //'format' => 'raw',
                                 'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#84bf96;'],
@@ -1455,6 +1532,36 @@ $params = $params ? "&" . http_build_query($params) : '';
 //                                    'class' => 'form-control',
 //                                    'style' => 'width:80px;'
 //                                ]),
+                            ],
+                            [
+                                'attribute' => 'second_stone_color3',
+                                'format' => 'raw',
+                                'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#6495ED;'],
+                                'footerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#6495ED;'],
+                                'value' => function ($model, $key, $index, $widget) {
+                                    $widget->footer = $model->getAttributeLabel('second_stone_color3');
+                                    return Yii::$app->attr->valueName($model->second_stone_color3) ?? "";
+                                },
+                                'filter' => Html::activeDropDownList($searchModel, 'second_stone_color3', $model->getSecondStoneColor3Map(), [
+                                    'prompt' => '全部',
+                                    'class' => 'form-control',
+                                    'style' => 'width:60px;'
+                                ]),
+                            ],
+                            [
+                                'attribute' => 'second_stone_clarity3',
+                                'format' => 'raw',
+                                'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#6495ED;'],
+                                'footerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#6495ED;'],
+                                'value' => function ($model, $key, $index, $widget) {
+                                    $widget->footer = $model->getAttributeLabel('second_stone_clarity3');
+                                    return Yii::$app->attr->valueName($model->second_stone_clarity3) ?? "";
+                                },
+                                'filter' => Html::activeDropDownList($searchModel, 'second_stone_clarity3', $model->getSecondStoneClarity3Map(), [
+                                    'prompt' => '全部',
+                                    'class' => 'form-control',
+                                    'style' => 'width:60px;'
+                                ]),
                             ],
                             [
                                 'attribute' => 'second_stone_price3',
@@ -2146,6 +2253,21 @@ $params = $params ? "&" . http_build_query($params) : '';
                                 ]),
                             ],
                             [
+                                'attribute' => 'pay_status',
+                                'format' => 'raw',
+                                'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#9b95c9;'],
+                                'footerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#9b95c9;'],
+                                'value' => function ($model, $key, $index, $widget) {
+                                    $widget->footer = $model->getAttributeLabel('pay_status');
+                                    return \addons\Warehouse\common\enums\IsSettleAccountsEnum::getValue($model->pay_status) ?? "";
+                                },
+                                'filter' => Html::activeDropDownList($searchModel, 'pay_status', $model->getPayStatusMap(), [
+                                    'prompt' => '全部',
+                                    'class' => 'form-control',
+                                    'style' => 'width:60px;'
+                                ]),
+                            ],
+                            [
                                 'label' => '是否批发',
                                 'attribute' => 'is_wholesale',
                                 'format' => 'raw',
@@ -2262,7 +2384,7 @@ $params = $params ? "&" . http_build_query($params) : '';
 
     function batchExport() {
         appConfirm("确定要导出明细吗?", '', function (code) {
-            if(code !== "defeat") {
+            if (code !== "defeat") {
                 return;
             }
             window.location.href = "<?= \common\helpers\Url::buildUrl('../bill-t/export', [], ['ids'])?>?ids=<?php echo $bill->id ?>";

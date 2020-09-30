@@ -78,6 +78,7 @@ class Application extends Service
         'billS' => 'addons\Warehouse\services\WarehouseBillSService',
         'billD' => 'addons\Warehouse\services\WarehouseBillDService',
         'billLog' => 'addons\Warehouse\services\WarehouseBillLogService',
+        'billPay' => 'addons\Warehouse\services\WarehouseBillPayService',
         'goodsLog' => 'addons\Warehouse\services\WarehouseGoodsLogService',
         'repair' => 'addons\Warehouse\services\WarehouseBillRepairService',
         'gift' => 'addons\Warehouse\services\WarehouseGiftService',

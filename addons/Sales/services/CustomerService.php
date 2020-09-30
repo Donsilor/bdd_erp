@@ -37,7 +37,10 @@ class CustomerService extends Service
     public function createCustomerNo($model, $save = true)
     {
         //1.渠道标签
-        $customer_no = $model->channel->tag ?? '00';
+        $customer_no = $model->channel->tag ?? '';
+        if($customer_no == '') {
+            $customer_no = '00';
+        }
         //2.数字编号
         $customer_no .= str_pad($model->id,8,'0',STR_PAD_LEFT);
         if($save === true) {

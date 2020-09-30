@@ -66,6 +66,7 @@ class Qiban extends BaseModel
     public function rules()
     {
         return [
+            [['style_cate_id','product_type_id','jintuo_type'],'required'],
             [['merchant_id', 'qiban_type', 'style_id', 'style_cate_id', 'product_type_id', 'jintuo_type', 'style_source_id','qiban_source_id', 'style_channel_id', 'style_sex', 'goods_num', 'is_inlay', 'audit_status', 'audit_time', 'auditor_id', 'sort', 'status', 'creator_id',
                 'created_at', 'updated_at', 'is_apply'], 'integer'],
             [['warranty_period'],'safe'],
@@ -75,6 +76,7 @@ class Qiban extends BaseModel
             [['qiban_sn', 'style_sn', 'format_sn'], 'string', 'max' => 30],
             [['style_image', 'format_images', 'format_video'], 'string', 'max' => 500],
             [['style_images'], 'string', 'max' => 2000],
+            [['qiban_sn'], 'unique'],
         ];
     }
     /**

@@ -2,11 +2,6 @@
 
 namespace addons\Warehouse\services;
 
-use addons\Style\common\enums\JintuoTypeEnum;
-use addons\Warehouse\common\enums\BillFixEnum;
-use addons\Warehouse\common\enums\GoodSourceEnum;
-use addons\Warehouse\common\forms\WarehouseBillTGoodsForm;
-use common\enums\LogTypeEnum;
 use Yii;
 use common\components\Service;
 use common\helpers\SnHelper;
@@ -15,10 +10,15 @@ use addons\Warehouse\common\models\WarehouseGoods;
 use addons\Warehouse\common\models\WarehouseBillGoods;
 use addons\Warehouse\common\models\WarehouseBillGoodsL;
 use addons\Purchase\common\models\PurchaseReceiptGoods;
+use addons\Warehouse\common\forms\WarehouseBillTGoodsForm;
 use addons\Purchase\common\enums\ReceiptGoodsStatusEnum;
+use addons\Warehouse\common\enums\BillFixEnum;
+use addons\Warehouse\common\enums\GoodSourceEnum;
 use addons\Warehouse\common\enums\BillStatusEnum;
 use addons\Warehouse\common\enums\GoodsStatusEnum;
 use addons\Warehouse\common\enums\OrderTypeEnum;
+use addons\Style\common\enums\JintuoTypeEnum;
+use common\enums\LogTypeEnum;
 use common\enums\AuditStatusEnum;
 use common\enums\StatusEnum;
 use common\helpers\ArrayHelper;
@@ -127,6 +127,7 @@ class WarehouseBillLService extends Service
                 if (empty($good->jintuo_type)) {
                     $good->jintuo_type = JintuoTypeEnum::Chengpin;
                 }
+                $good = $this->calcSingleGoods($good);
                 $goods[] = [
                     //基本信息
                     'goods_id' => $good->goods_id,//条码号
@@ -139,8 +140,8 @@ class WarehouseBillLService extends Service
                     'style_channel_id' => $good->style_channel_id,//款式渠道
                     'qiban_sn' => $good->qiban_sn,//起版号
                     'qiban_type' => $good->qiban_type,//起版类型
-                    'stock_cnt' => $good->goods_num,//入库数量
                     'goods_num' => $good->goods_num,//商品数量
+                    'stock_num' => $good->goods_num,//入库数量
                     'goods_status' => GoodsStatusEnum::IN_STOCK,//库存状态
                     'goods_source' => GoodSourceEnum::QUICK_STORAGE,//数据来源方式
                     'supplier_id' => $bill->supplier_id,//供应商
@@ -189,9 +190,9 @@ class WarehouseBillLService extends Service
 //                    'diamond_cut' => $good->diamond_cut,
 //                    'diamond_shape' => $good->diamond_shape,
 //                    'diamond_color' => $good->diamond_color,
-                    'diamond_polish' => $good->diamond_polish,//钻石抛光
-                    'diamond_symmetry' => $good->diamond_symmetry,//钻石对称
-                    'diamond_fluorescence' => $good->diamond_fluorescence,//钻石荧光
+//                    'diamond_polish' => $good->diamond_polish,//钻石抛光
+//                    'diamond_symmetry' => $good->diamond_symmetry,//钻石对称
+//                    'diamond_fluorescence' => $good->diamond_fluorescence,//钻石荧光
                     'diamond_discount' => $good->diamond_discount,//钻石折扣
 //                    'diamond_cert_type' => $good->diamond_cert_type,
 //                    'diamond_cert_id' => $good->diamond_cert_id,
@@ -211,7 +212,7 @@ class WarehouseBillLService extends Service
                     'main_stone_size' => $good->main_stone_size,//主石规格
                     //'main_cert_id' => $good->main_cert_type,//主石证书号
                     //'main_cert_type' => $good->main_cert_id,//主石证书类型
-                    'main_stone_price' => $good->main_cert_type,//主石单价
+                    'main_stone_price' => $good->main_stone_price,//主石单价
                     'main_stone_cost' => $good->main_stone_amount,//主石成本价
                     //-----------------------------------//差异
                     'diamond_carat' => $good->main_stone_weight,//主石重
@@ -219,6 +220,9 @@ class WarehouseBillLService extends Service
                     'diamond_color' => $good->main_stone_color,//主石颜色
                     'diamond_clarity' => $good->main_stone_clarity,//主石净度
                     'diamond_cut' => $good->main_stone_cut,//主石切工
+                    'diamond_polish' => $good->main_stone_polish,//钻石抛光
+                    'diamond_symmetry' => $good->main_stone_symmetry,//钻石对称
+                    'diamond_fluorescence' => $good->main_stone_fluorescence,//钻石荧光
                     'diamond_cert_id' => $good->main_cert_id,//主石证书号
                     'diamond_cert_type' => $good->main_cert_type,//主石证书类型
 
@@ -259,6 +263,8 @@ class WarehouseBillLService extends Service
                     'second_stone_type3' => $good->second_stone_type3,//副石3类型
                     'second_stone_num3' => $good->second_stone_num3,//副石3粒数
                     'second_stone_weight3' => $good->second_stone_weight3,//副石3重量
+                    'second_stone_color3' => $good->second_stone_color3,//副石3颜色
+                    'second_stone_clarity3' => $good->second_stone_clarity3,//副石3净度
                     'second_stone_price3' => $good->second_stone_price3,//副石3单价
                     'second_stone_cost3' => $good->second_stone_amount3,//副石3成本价
                     'shiliao_remark' => $good->stone_remark,
@@ -321,10 +327,9 @@ class WarehouseBillLService extends Service
             $value = [];
             $key = array_keys($goods[0]);
             foreach ($goods as $item) {
-                $item = $this->calcSingleGoods($item);
                 $model->setAttributes($item);
                 if (!$model->validate()) {
-                    throw new \Exception($this->getError($model));
+                    throw new \Exception("货号：".$item['goods_id'].$this->getError($model));
                 }
                 $value[] = array_values($item);
                 if (count($value) >= 10) {
@@ -364,12 +369,12 @@ class WarehouseBillLService extends Service
                         'bill_no' => $bill->bill_no,//单据编号
                         'bill_type' => $bill->bill_type,//单据类型
                         'goods_id' => $goods_id,//货号
-                        'goods_name' => $good->goods_name,//商品名称
-                        'style_sn' => $good->style_sn,//款式编号
-                        'goods_num' => $good->goods_num,//商品数量
-                        'warehouse_id' => $good->to_warehouse_id,//入库仓库
+                        'goods_name' => $goods->goods_name,//商品名称
+                        'style_sn' => $goods->style_sn,//款式编号
+                        'goods_num' => $goods->goods_num,//商品数量
+                        'warehouse_id' => $goods->warehouse_id,//入库仓库
                         'put_in_type' => $bill->put_in_type,//入库方式
-                        'cost_price' => $good->cost_price,//成本价
+                        'cost_price' => $goods->cost_price,//成本价
                         //'sale_price' => $good->sale_price,//销售价
                         //'market_price' => $good->market_price,//市场价
                         'status' => StatusEnum::ENABLED,//状态
@@ -389,7 +394,6 @@ class WarehouseBillLService extends Service
                     Yii::$app->styleService->style->createStyleFactory($goods);
                     //同步数据到款工费
                     Yii::$app->styleService->style->createStyleFactoryFee($goods);
-
                 }
             }
 
@@ -485,7 +489,7 @@ class WarehouseBillLService extends Service
             'bukou_fee',//补口费
             'xianqian_fee',//镶石费
             //'parts_fee',//配件工费
-            'templet_fee',//版费
+            //'templet_fee',//版费
             'cert_fee',//证书费
             'fense_fee',//分色分件费
             'biaomiangongyi_fee',//表面工艺费

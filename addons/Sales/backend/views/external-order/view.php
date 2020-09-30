@@ -31,15 +31,13 @@ $this->params['breadcrumbs'][] = $this->title;
                 <div class=" table-responsive">
                     <table class="table table-hover">
                         <tr>
-                            <td class="col-xs-1 text-right no-border-top"><?= $model->getAttributeLabel('out_trade_no') ?>
-                                ：
-                            </td>
+                            <td class="col-xs-1 text-right no-border-top"><?= $model->getAttributeLabel('out_trade_no') ?>：</td>
                             <td class="col-xs-3 no-border-top"><?= $model->out_trade_no ?></td>
                             <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('sale_channel_id') ?>：</td>
                             <td><?= $model->saleChannel->name ?? '' ?></td>
                             <td class="col-xs-1 text-right no-border-top">语言/货币：</td>
-                            <td class="col-xs-3 no-border-top"><?= common\enums\LanguageEnum::getValue($model->language) ?>
-                                （<?= common\enums\CurrencyEnum::getValue($model->currency) ?>）
+                            <td class="col-xs-3 no-border-top">
+                            <?= common\enums\LanguageEnum::getValue($model->language) ?> / <?= common\enums\CurrencyEnum::getValue($model->currency) ?>
                             </td>
 
                         </tr>
@@ -58,7 +56,9 @@ $this->params['breadcrumbs'][] = $this->title;
                             <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('delivery_status') ?>：</td>
                             <td><?= addons\Sales\common\enums\DeliveryStatusEnum::getValue($model->delivery_status) ?></td>
                             <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('pay_status') ?>：</td>
-                            <td><?= addons\Sales\common\enums\PayStatusEnum::getValue($model->pay_status) ?></td>
+                            <td class="<?= $model->pay_status < PayStatusEnum::HAS_PAY ? 'red':''?>">                            
+                            <?= addons\Sales\common\enums\PayStatusEnum::getValue($model->pay_status) ?>
+                            </td>
                         </tr>
                         <tr>
                             <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('customer_name') ?>：</td>
@@ -313,10 +313,6 @@ $this->params['breadcrumbs'][] = $this->title;
                                     return $model->attr[AttrIdEnum::DIA_CERT_TYPE] ?? "";
                                 },
                             ],
-                            /* [
-                                'attribute'=>'qiban_sn',
-                                'value' => 'qiban_sn'
-                            ], */
                             [
                                 'attribute' => 'qiban_type',
                                 'value' => function ($model) {
@@ -355,20 +351,26 @@ $this->params['breadcrumbs'][] = $this->title;
                             ],
                             [
                                 'attribute' => 'goods_price',
-                                'value' => function ($model) {
-                                    return common\helpers\AmountHelper::outputAmount($model->goods_price, 2, $model->currency);
+                                'value' => function ($model) use($order){
+                                    return common\helpers\AmountHelper::outputAmount($model->goods_price, 2, $order->currency);
+                                }
+                            ],
+                            [
+                                'attribute' => 'goods_amount',
+                                'value' => function ($model) use($order){
+                                        return common\helpers\AmountHelper::outputAmount($model->goods_price * $model->goods_num, 2, $order->currency);
                                 }
                             ],
                             [
                                 'attribute' => 'goods_discount',
-                                'value' => function ($model) {
-                                    return common\helpers\AmountHelper::outputAmount($model->goods_discount, 2, $model->currency);
+                                'value' => function ($model) use($order) {
+                                        return common\helpers\AmountHelper::outputAmount($model->goods_discount, 2, $order->currency);
                                 }
                             ],
                             [
-                                'attribute' => 'goods_pay_price',
-                                'value' => function ($model) {
-                                    return common\helpers\AmountHelper::outputAmount($model->goods_pay_price, 2, $model->currency);
+                                'attribute' => 'goods_pay_amount',
+                                'value' => function ($model) use($order){
+                                        return common\helpers\AmountHelper::outputAmount($model->goods_pay_price * $model->goods_num, 2, $order->currency);
                                 }
                             ],
                             [
@@ -589,7 +591,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     ]); ?>
                 </div>
                 <div class="box-footer">
-                    <div class="col-lg-12">
+                    <div class="col-lg-12" style="margin-top:15px">
                         <div class="row">
                             <div class="col-lg-8 text-right"><label><?= $model->getAttributeLabel('goods_num') ?>：</label></div>
                             <div class="col-lg-4"><?= $model->goods_num ?></div>

@@ -47,7 +47,7 @@ use addons\Warehouse\common\enums\GoodsStatusEnum;
  * @property string $cert_type 证书类别
  * @property string $cert_id 证书号
  * @property int $goods_num 商品数量
- * @property int $stock_cnt 库存数量
+ * @property int $stock_num 库存数量
  * @property string $material 主成色
  * @property string $material_type 材质
  * @property string $material_color 材质颜色
@@ -115,6 +115,8 @@ use addons\Warehouse\common\enums\GoodsStatusEnum;
  * @property string $second_stone_type3 副石3类型
  * @property int $second_stone_num3 副石3数量
  * @property string $second_stone_weight3 副石3重量(ct)
+ * @property string $second_stone_color3 副石3颜色
+ * @property string $second_stone_clarity3 副石3净度
  * @property string $second_stone_price3 副石3买入单价
  * @property int $apply_id 当前编辑人
  * @property int $auditor_id 审核人
@@ -151,7 +153,7 @@ class WarehouseGoods extends BaseModel
     public function rules()
     {
         return [
-            [['product_type_id','style_sex' ,'style_cate_id', 'style_channel_id','goods_status', 'supplier_id', 'put_in_type','qiban_type', 'company_id', 'warehouse_id', 'goods_num', 'stock_cnt', 'jintuo_type', 'weixiu_status', 'weixiu_warehouse_id', 'parts_num', 'main_stone_type',
+            [['product_type_id','style_sex' ,'style_cate_id', 'style_channel_id','goods_status', 'supplier_id', 'put_in_type','qiban_type', 'company_id', 'warehouse_id', 'goods_num', 'stock_num', 'jintuo_type', 'weixiu_status', 'weixiu_warehouse_id', 'parts_num', 'main_stone_type',
                 'main_stone_num', 'second_stone_num1', 'second_stone_num2','second_stone_num3', 'creator_id','apply_id','auditor_id','audit_time','audit_status', 'created_at', 'updated_at','is_inlay','goods_source','peiliao_type',
                 'parts_num','sales_time','peiliao_way','peijian_way','main_peishi_way','second_peishi_way1','second_peishi_way2','second_peishi_way3','chuku_time'], 'integer'],
             [['goods_id','warehouse_id', 'jintuo_type'], 'required'],
@@ -163,7 +165,7 @@ class WarehouseGoods extends BaseModel
             [['gross_weight', 'produce_sn', 'diamond_cert_id','second_cert_id1','second_stone_sn1','main_stone_sn','parts_material'], 'string', 'max' => 20],
             [['finger','finger_hk','order_detail_id', 'material', 'material_type', 'material_color', 'diamond_clarity','diamond_shape','diamond_color', 'diamond_cut', 'diamond_polish', 'diamond_symmetry', 'diamond_fluorescence', 'diamond_discount', 'diamond_cert_type', 'second_stone_type1',
                 'second_stone_color1', 'second_stone_clarity1', 'second_stone_shape1', 'second_stone_type2','second_stone_sn2','second_stone_sn3','chain_type','cramp_ring','talon_head_type','xiangqian_craft' ,'main_stone_colour','second_stone_shape2','second_stone_color2','second_stone_clarity2',
-                'second_stone_type3','second_stone_colour1','second_stone_colour2','peijian_type'], 'string', 'max' => 10],
+                'second_stone_type3','second_stone_color3','second_stone_clarity3','second_stone_colour1','second_stone_colour2','peijian_type'], 'string', 'max' => 10],
             [['order_sn'], 'string', 'max' => 40],
             [['cert_type','factory_mo','chain_long'], 'string', 'max' => 50],
             [['audit_remark','remark','shiliao_remark'], 'string', 'max' => 255],
@@ -211,7 +213,7 @@ class WarehouseGoods extends BaseModel
             'cert_type' => '证书类别',
             'cert_id' => '证书号',
             'goods_num' => '入库数量',
-            'stock_cnt' => '库存数量',
+            'stock_num' => '库存数量',
             'material' => '主成色',
             'material_type' => '材质',
             'material_color' => '材质颜色',
@@ -235,13 +237,13 @@ class WarehouseGoods extends BaseModel
             'xiangkou' => '戒托镶口',
             'factory_cost' => '工厂成本',
             'bukou_fee' => '补口费',
-            'tax_fee' => '税费',
+            'tax_fee' => '税费/克',
             'tax_amount' => '税额/件',
             'other_fee' => '其它费用',
             'biaomiangongyi_fee' => '表面工艺费',
             'xianqian_fee' => '镶石费',
             'extra_stone_fee' => '超石费',
-            'gong_fee' => '工费',
+            'gong_fee' => '基本工费',
             'cert_fee' => '证书费',
             'fense_fee' => '分色费',
             'parts_fee' => '配件工费',
@@ -280,6 +282,8 @@ class WarehouseGoods extends BaseModel
             'second_stone_type3' => '副石3类型',
             'second_stone_num3' => '副石3数量',
             'second_stone_weight3' => '副石3重量(ct)',
+            'second_stone_color3' => '副石3颜色',
+            'second_stone_clarity3' => '副石3净度',
             'second_stone_price3' => '副石3单价',
             'second_stone_cost3' => '副石3成本/件',
             'is_inlay' => '是否镶嵌',
@@ -314,9 +318,9 @@ class WarehouseGoods extends BaseModel
             'peishi_amount' => '配石费',
             'peishi_weight' => '配石重量（ct）',
             'pure_gold' => '折足(g)',
-            'penrasa_fee' => '喷拉沙费',
+            'penrasa_fee' => '喷沙费',
             'lasha_fee' => '拉沙费',
-            'piece_fee' => '喷拉沙费',
+            'piece_fee' => '件/工费',
             'edition_fee' => '版费',
             'sales_time' => '销售时间',
             'ke_gong_fee' => '克/工费',

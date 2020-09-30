@@ -2,34 +2,29 @@
 
 namespace addons\Warehouse\backend\controllers;
 
-use addons\Sales\common\models\SaleChannel;
-use addons\Supply\common\models\Supplier;
-use addons\Warehouse\common\enums\BillFixEnum;
-use addons\Warehouse\common\models\Warehouse;
-use function Clue\StreamFilter\fun;
-use common\models\backend\Member;
 use Yii;
 use common\traits\Curd;
 use common\models\base\SearchModel;
-use common\helpers\ExcelHelper;
-use addons\Warehouse\common\models\WarehouseGoods;
+use addons\Warehouse\common\models\Warehouse;
 use addons\Warehouse\common\models\WarehouseBill;
-use addons\Warehouse\common\models\WarehouseBillGoods;
 use addons\Warehouse\common\models\WarehouseBillGoodsL;
 use addons\Warehouse\common\forms\WarehouseBillTForm;
 use addons\Warehouse\common\forms\WarehouseBillTGoodsForm;
-use addons\Warehouse\common\forms\WarehouseBillLGoodsForm;
+use addons\Warehouse\common\enums\BillFixEnum;
 use addons\Warehouse\common\enums\BillStatusEnum;
 use addons\Warehouse\common\enums\BillTypeEnum;
 use addons\Warehouse\common\enums\PutInTypeEnum;
 use addons\Style\common\enums\LogTypeEnum;
 use addons\Style\common\models\ProductType;
 use addons\Style\common\models\StyleCate;
+use addons\Sales\common\models\SaleChannel;
+use addons\Supply\common\models\Supplier;
+use common\enums\AuditStatusEnum;
+use common\models\backend\Member;
 use common\helpers\ArrayHelper;
 use common\helpers\StringHelper;
-use common\enums\AuditStatusEnum;
+use common\helpers\ExcelHelper;
 use common\helpers\PageHelper;
-use common\helpers\SnHelper;
 use common\helpers\Url;
 use yii\web\UploadedFile;
 
@@ -38,12 +33,10 @@ use yii\web\UploadedFile;
  */
 class BillTController extends BaseController
 {
-
     use Curd;
     public $modelClass = WarehouseBillTForm::class;
     public $billType = BillTypeEnum::BILL_TYPE_T;
     public $billFix = BillFixEnum::BILL_RK;
-
 
     /**
      * Lists all StyleChannel models.
@@ -147,14 +140,10 @@ class BillTController extends BaseController
                 \Yii::$app->warehouseService->billLog->createBillLog($log);
                 \Yii::$app->warehouseService->billT->warehouseBillTSummary($model->id);
                 $trans->commit();
-
                 if ($isNewRecord) {
-                    \Yii::$app->getSession()->setFlash('success', '保存成功');
-                    return $this->redirect(['bill-t-goods/index', 'bill_id' => $model->id]);
-                    //return $this->message("保存成功", $this->redirect(['view', 'id' => $model->id]), 'success');
+                    return $this->message("保存成功", $this->redirect(['bill-t-goods/index', 'bill_id' => $model->id]), 'success');
                 } else {
-                    \Yii::$app->getSession()->setFlash('success', '保存成功');
-                    return $this->redirect(\Yii::$app->request->referrer);
+                    return $this->message("保存成功", $this->redirect(\Yii::$app->request->referrer), 'success');
                 }
             } catch (\Exception $e) {
                 $trans->rollBack();
