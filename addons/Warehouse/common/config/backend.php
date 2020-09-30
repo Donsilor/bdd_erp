@@ -160,7 +160,7 @@ return [
                          'route' => 'stone-apply/index',
                     ],
                     [
-                        'title' => '入库单',
+                        'title' => '入库单(石料)',
                         'route' => 'stone-bill-ms/index',
                     ],
                     [
@@ -172,12 +172,20 @@ return [
                         'route' => 'stone-bill-ts/index',
                     ],
                     [
-                        'title' => '盘点单',
+                        'title' => '盘点单(石料)',
                         'route' => 'stone-bill-w/index',
                     ],
                     [
-                        'title' => '出入库列表',
+                        'title' => '出入库列表(石料)',
                         'route' => 'stone-bill/index',
+                    ],
+                    [
+                        'title' => '其他入库单(石料)',
+                        'route' => 'stone-bill-rk/index',
+                    ],
+                    [
+                        'title' => '其他出库单(石料)',
+                        'route' => 'stone-bill-ck/index',
                     ],
                 ],
             ],
