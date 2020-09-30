@@ -1691,25 +1691,31 @@ class WarehouseBillTGoodsForm extends WarehouseBillGoodsL
 //            }
 //        }
         }
-        if(!is_int(($form->main_stone_num/$form->goods_num))){
+        //主石粒数/商品数量，必须为整数
+        $main_stone_num = $form->main_stone_num/$form->goods_num;
+        if(!is_int($main_stone_num)){
             $result['error'] = false;
-            $result['msg'] = "主石粒数除于商品数量，必须为整数";
+            $result['msg'] = "主石粒数[$form->main_stone_num]/商品数量[$form->goods_num]=[$main_stone_num]，必须为整数";
         }
-        if(!is_int(($form->second_stone_num1/$form->goods_num))){
+        $second_stone_num1 = $form->second_stone_num1/$form->goods_num;
+        if(!is_int($second_stone_num1)){
             $result['error'] = false;
-            $result['msg'] = "副石1粒数除于商品数量，必须为整数";
+            $result['msg'] = "副石1粒数[$form->second_stone_num1]/商品数量[$form->main_stone_num]=[$second_stone_num1]，必须为整数";
         }
-        if(!is_int(($form->second_stone_num2/$form->goods_num))){
+        $second_stone_num2 = $form->second_stone_num2/$form->goods_num;
+        if(!is_int($second_stone_num2)){
             $result['error'] = false;
-            $result['msg'] = "副石2粒数除于商品数量，必须为整数";
+            $result['msg'] = "副石2粒数[$form->second_stone_num2]/商品数量[$form->main_stone_num]=[$second_stone_num2]，必须为整数";
         }
-        if(!is_int(($form->second_stone_num3/$form->goods_num))){
+        $second_stone_num3 = $form->second_stone_num3/$form->goods_num;
+        if(!is_int($second_stone_num3)){
             $result['error'] = false;
-            $result['msg'] = "副石3粒数除于商品数量，必须为整数";
+            $result['msg'] = "副石3粒数[$form->second_stone_num3]/商品数量[$form->main_stone_num]=[$second_stone_num3]，必须为整数";
         }
-        if(!is_int(($form->parts_num/$form->goods_num))){
+        $parts_num = $form->parts_num/$form->goods_num;
+        if(!is_int($parts_num)){
             $result['error'] = false;
-            $result['msg'] = "配件数量除于商品数量，必须为整数";
+            $result['msg'] = "配件数量[$form->parts_num]/商品数量[$form->main_stone_num]=[$parts_num]，必须为整数";
         }
         //工费
         if ($form->gong_fee > 0 && $form->piece_fee > 0) {
