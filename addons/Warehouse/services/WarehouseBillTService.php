@@ -911,7 +911,7 @@ class WarehouseBillTService extends Service
                     $second_stone_color3 = $attr_id;
                 }
             } elseif (!empty($stone)) {
-                $second_stone_color3 = $second2Attr['stone_color'] ?? "";
+                $second_stone_color3 = $second3Attr['stone_color'] ?? "";
             }
             $second_stone_clarity3 = $goods['second_stone_clarity3'] ?? "";//副石3净度
             if (!empty($second_stone_clarity3)) {
