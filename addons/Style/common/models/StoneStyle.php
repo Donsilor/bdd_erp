@@ -47,7 +47,7 @@ class StoneStyle extends BaseModel
     public function rules()
     {
         return [
-            [['stone_type', 'style_sn','style_name'], 'required'],
+            [['stone_type', 'style_sn','stone_name'], 'required'],
             [['stone_weight_min', 'stone_weight_max', 'stone_carat'], 'number'],
             [['cert_type', 'auditor_id', 'audit_status', 'audit_time', 'sort', 'status', 'creator_id', 'created_at', 'updated_at'], 'integer'],
             [['stone_type', 'stone_shape'], 'string', 'max' => 10],

@@ -19,16 +19,18 @@ $form = ActiveForm::begin([
     </div>
     <div class="modal-body">
         <div class="row">
-            <div class="col-lg-4">
+            <div class="col-lg-6">
                 <?= $form->field($model, 'style_sn')->textInput() ?>
             </div>
-            <div class="col-lg-4">
+            <div class="col-lg-6">
                 <?= $form->field($model, 'stone_name')->textInput() ?>
             </div>
-            <div class="col-lg-4">
+        </div>
+        <div class="row">
+            <div class="col-lg-6">
                 <?= $form->field($model, 'stone_type')->dropDownList(Yii::$app->attr->valueMap(AttrIdEnum::MAT_STONE_TYPE),['prompt'=>'请选择']);?>
             </div>
-            <div class="col-lg-4">
+            <div class="col-lg-6">
                 <?= $form->field($model, 'stone_shape')->widget(\kartik\select2\Select2::class, [
                     'data' => \Yii::$app->attr->valueMap(AttrIdEnum::DIA_SHAPE),
                     'options' => ['placeholder' => '请选择'],
