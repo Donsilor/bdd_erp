@@ -23,6 +23,9 @@ $form = ActiveForm::begin([
                 <?= $form->field($model, 'style_sn')->textInput() ?>
             </div>
             <div class="col-lg-4">
+                <?= $form->field($model, 'stone_name')->textInput() ?>
+            </div>
+            <div class="col-lg-4">
                 <?= $form->field($model, 'stone_type')->dropDownList(Yii::$app->attr->valueMap(AttrIdEnum::MAT_STONE_TYPE),['prompt'=>'请选择']);?>
             </div>
             <div class="col-lg-4">

@@ -44,6 +44,7 @@ use common\components\Service;
  * @property \addons\Warehouse\services\WarehouseStoneBillSsService $stoneSs 领石单(送石单)
  * @property \addons\Warehouse\services\WarehouseStoneBillTsService $stoneTs 工厂退石单(退石单)
  * @property \addons\Warehouse\services\WarehouseStoneBillWService $stoneW 石料盘点单
+ * @property \addons\Warehouse\services\WarehouseStoneBillLogService $stoneBillLog 单据日志
  *
  * @property \addons\Warehouse\services\WarehousePartsService $parts 配件库存
  * @property \addons\Warehouse\services\WarehousePartsBillService $partsBill 配件单据
@@ -100,6 +101,7 @@ class Application extends Service
         'stoneMs' => 'addons\Warehouse\services\WarehouseStoneBillMsService',
         'stoneTs' => 'addons\Warehouse\services\WarehouseStoneBillTsService',
         'stoneW' => 'addons\Warehouse\services\WarehouseStoneBillWService',
+        'stoneBillLog' => 'addons\Warehouse\services\WarehouseStoneBillLogService',
 
         'parts' => 'addons\Warehouse\services\WarehousePartsService',
         'partsBill' => 'addons\Warehouse\services\WarehousePartsBillService',

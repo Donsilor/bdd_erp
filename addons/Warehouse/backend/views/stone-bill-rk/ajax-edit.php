@@ -24,7 +24,7 @@ $form = ActiveForm::begin([
         <div class="row">
             <div class="col-sm-4">
                 <?= $form->field($model, 'supplier_id')->widget(\kartik\select2\Select2::class, [
-                    'data' => \Yii::$app->supplyService->supplier->getDropDown(['goods_type'=>\addons\Supply\common\enums\GoodsTypeEnum::RAW_MATERIAL]),
+                    'data' => \Yii::$app->supplyService->supplier->getDropDown(['like','goods_type',\addons\Supply\common\enums\GoodsTypeEnum::RAW_MATERIAL]),
                     'options' => ['placeholder' => '请选择'],
                     'pluginOptions' => [
                         'allowClear' => false
@@ -37,15 +37,15 @@ $form = ActiveForm::begin([
             </div>
 
         </div>
-<!--        <div class="row">-->
-<!--            -->
-<!--            --><?php //if ($model->isNewRecord) { ?>
-<!--                <div class="col-sm-4">-->
-<!--                    --><?//= $form->field($model, 'file')->fileInput() ?>
-<!--                    --><?//= Html::a("下载数据导入格式", ['bill-t-goods/ajax-upload', 'download' => 1], ['style' => "text-decoration:underline;color:#3c8dbc"]) ?>
-<!--                </div>-->
-<!--            --><?php //} ?>
-<!--        </div>-->
+        <div class="row">
+
+            <?php if ($model->isNewRecord) { ?>
+                <div class="col-sm-4">
+                    <?= $form->field($model, 'file')->fileInput() ?>
+                    <?= Html::a("下载数据导入格式", ['bill-t-goods/ajax-upload', 'download' => 1], ['style' => "text-decoration:underline;color:#3c8dbc"]) ?>
+                </div>
+            <?php } ?>
+        </div>
         <?= $form->field($model, 'remark')->textArea(); ?>
     </div>
 </div>
