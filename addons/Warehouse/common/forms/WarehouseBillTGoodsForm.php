@@ -57,6 +57,21 @@ class WarehouseBillTGoodsForm extends WarehouseBillGoodsL
     /**
      * {@inheritdoc}
      */
+    public function getCopyGoodsIds($goods)
+    {
+        $goods_ids = "";
+        if ($goods) {
+            foreach ($goods as $good) {
+                $goods_ids .= $good->goods_id . ",";
+            }
+            $goods_ids = rtrim($goods_ids, ",");
+        }
+        return $goods_ids ?? "";
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function trimField($data)
     {
         $res = [];
@@ -1589,10 +1604,11 @@ class WarehouseBillTGoodsForm extends WarehouseBillGoodsL
 //                || $form->pure_gold_rate > 0
 //                || $form->gold_price > 0) {
 //                $result['error'] = false;
-//                $result['msg'] = "配料方式为不需配料，金料信息不能填写";
+//                $msg[]= "配料方式为不需配料，金料信息不能填写";
 //            }
 //        }
-        if(!$is_import){
+        $msg = [];
+        if (!$is_import) {
             //主石
             if ($form->main_pei_type == PeiShiWayEnum::NO_PEI) {
                 if (
@@ -1614,7 +1630,7 @@ class WarehouseBillTGoodsForm extends WarehouseBillGoodsL
 //                || $form->main_stone_amount > 0
                 ) {
                     $result['error'] = false;
-                    $result['msg'] = "主石配石方式为不需配石，主石信息不能填写";
+                    $msg[] = "主石配石方式为不需配石，主石信息不能填写";
                 }
             }
             //副石1
@@ -1637,7 +1653,7 @@ class WarehouseBillTGoodsForm extends WarehouseBillGoodsL
 //                || $form->second_stone_amount1 > 0
                 ) {
                     $result['error'] = false;
-                    $result['msg'] = "副石1配石方式为不需配石，副石1信息不能填写";
+                    $msg[] = "副石1配石方式为不需配石，副石1信息不能填写";
                 }
             }
             //副石2
@@ -1659,7 +1675,7 @@ class WarehouseBillTGoodsForm extends WarehouseBillGoodsL
 //                || $form->second_stone_amount2 > 0
                 ) {
                     $result['error'] = false;
-                    $result['msg'] = "副石2配石方式为不需配石，副石2信息不能填写";
+                    $msg[] = "副石2配石方式为不需配石，副石2信息不能填写";
                 }
             }
             //副石3
@@ -1675,7 +1691,7 @@ class WarehouseBillTGoodsForm extends WarehouseBillGoodsL
 //                || $form->second_stone_amount3 > 0
                 ) {
                     $result['error'] = false;
-                    $result['msg'] = "副石3配石方式为不需配石，副石3信息不能填写";
+                    $msg[] = "副石3配石方式为不需配石，副石3信息不能填写";
                 }
             }
             //配件
@@ -1687,40 +1703,43 @@ class WarehouseBillTGoodsForm extends WarehouseBillGoodsL
 //                || $form->parts_price > 0
 //                || $form->parts_amount > 0) {
 //                $result['error'] = false;
-//                $result['msg'] = "配件方式为不需配件，配件信息不能填写";
+//                $msg[]= "配件方式为不需配件，配件信息不能填写";
 //            }
 //        }
         }
         //主石粒数/商品数量，必须为整数
-        $main_stone_num = $form->main_stone_num/$form->goods_num;
-        if(!is_int($main_stone_num)){
+        $main_stone_num = $form->main_stone_num / $form->goods_num;
+        if (!is_int($main_stone_num)) {
             $result['error'] = false;
-            $result['msg'] = "主石粒数[$form->main_stone_num]/商品数量[$form->goods_num]=[$main_stone_num]，必须为整数";
+            $msg[] = "主石粒数[$form->main_stone_num]/商品数量[$form->goods_num]=[$main_stone_num]，必须为整数";
         }
-        $second_stone_num1 = $form->second_stone_num1/$form->goods_num;
-        if(!is_int($second_stone_num1)){
+        $second_stone_num1 = $form->second_stone_num1 / $form->goods_num;
+        if (!is_int($second_stone_num1)) {
             $result['error'] = false;
-            $result['msg'] = "副石1粒数[$form->second_stone_num1]/商品数量[$form->main_stone_num]=[$second_stone_num1]，必须为整数";
+            $msg[] = "副石1粒数[$form->second_stone_num1]/商品数量[$form->main_stone_num]=[$second_stone_num1]，必须为整数";
         }
-        $second_stone_num2 = $form->second_stone_num2/$form->goods_num;
-        if(!is_int($second_stone_num2)){
+        $second_stone_num2 = $form->second_stone_num2 / $form->goods_num;
+        if (!is_int($second_stone_num2)) {
             $result['error'] = false;
-            $result['msg'] = "副石2粒数[$form->second_stone_num2]/商品数量[$form->main_stone_num]=[$second_stone_num2]，必须为整数";
+            $msg[] = "副石2粒数[$form->second_stone_num2]/商品数量[$form->main_stone_num]=[$second_stone_num2]，必须为整数";
         }
-        $second_stone_num3 = $form->second_stone_num3/$form->goods_num;
-        if(!is_int($second_stone_num3)){
+        $second_stone_num3 = $form->second_stone_num3 / $form->goods_num;
+        if (!is_int($second_stone_num3)) {
             $result['error'] = false;
-            $result['msg'] = "副石3粒数[$form->second_stone_num3]/商品数量[$form->main_stone_num]=[$second_stone_num3]，必须为整数";
+            $msg[] = "副石3粒数[$form->second_stone_num3]/商品数量[$form->main_stone_num]=[$second_stone_num3]，必须为整数";
         }
-        $parts_num = $form->parts_num/$form->goods_num;
-        if(!is_int($parts_num)){
+        $parts_num = $form->parts_num / $form->goods_num;
+        if (!is_int($parts_num)) {
             $result['error'] = false;
-            $result['msg'] = "配件数量[$form->parts_num]/商品数量[$form->main_stone_num]=[$parts_num]，必须为整数";
+            $msg[] = "配件数量[$form->parts_num]/商品数量[$form->main_stone_num]=[$parts_num]，必须为整数";
         }
         //工费
         if ($form->gong_fee > 0 && $form->piece_fee > 0) {
             $result['error'] = false;
-            $result['msg'] = "克工费与件工费只能填写一个";
+            $msg[] = "克工费与件工费只能填写一个";
+        }
+        if (!empty($msg)) {
+            $result['msg'] = implode('】,【', $msg);
         }
         return $result;
     }
