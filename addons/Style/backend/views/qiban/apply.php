@@ -58,7 +58,22 @@ $this->params['breadcrumbs'][] = $this->title;
                     'value'=>function($model) {
                         return Html::a($model->qiban_sn, ['view', 'id' => $model->id,'returnUrl'=>Url::getReturnUrl()], ['class'=>'openContab','style'=>"text-decoration:underline;color:#3c8dbc"]);
                     },
-                    'filter' => true,
+                    'filter' => Html::activeTextInput($searchModel, 'qiban_name', [
+                            'class' => 'form-control',
+                            'style' =>'width:100px',
+                    ]),
+                    'format' => 'raw',
+                    'headerOptions' => ['width'=>'100'],
+            ],
+            [
+                    'attribute' => 'apply_sn',
+                    'value'=>function($model) {
+                        return $model->apply_sn;
+                    },
+                    'filter' => Html::activeTextInput($searchModel, 'apply_sn', [
+                            'class' => 'form-control',
+                            'style' =>'width:150px',
+                    ]),
                     'format' => 'raw',
                     'headerOptions' => ['width'=>'150'],
             ],

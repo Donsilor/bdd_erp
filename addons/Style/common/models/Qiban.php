@@ -68,14 +68,14 @@ class Qiban extends BaseModel
     public function rules()
     {
         return [
-            [['style_cate_id','product_type_id','style_channel_id','qiban_name','style_sex','jintuo_type'],'required'],
+            [['style_cate_id','product_type_id','style_channel_id','qiban_name','jintuo_type'],'required'],
             [['merchant_id', 'qiban_type', 'style_id', 'style_cate_id', 'product_type_id', 'jintuo_type', 'style_source_id','qiban_source_id', 'style_channel_id', 'style_sex', 'goods_num', 'is_inlay', 'audit_status', 'audit_time', 'auditor_id', 'sort', 'status', 'creator_id',
                 'created_at', 'updated_at', 'is_apply'], 'integer'],
             [['warranty_period'],'safe'],
             [['sale_price', 'market_price','kinto_price','starting_fee', 'cost_price'], 'number'],
             [['format_info'], 'string'],
             [['qiban_name', 'audit_remark', 'stone_info', 'parts_info', 'remark', 'format_remark'], 'string', 'max' => 255],
-            [['qiban_sn', 'style_sn', 'format_sn'], 'string', 'max' => 30],
+            [['qiban_sn', 'style_sn', 'format_sn','apply_sn'], 'string', 'max' => 30],
             [['style_image', 'format_images', 'format_video'], 'string', 'max' => 500],
             [['style_images'], 'string', 'max' => 2000],
             [['qiban_sn'], 'unique'],
@@ -105,7 +105,7 @@ class Qiban extends BaseModel
             'style_images' => '起版图库',
             'sale_price' => '销售价',
             'market_price' => '市场价',
-            'cost_price' => '商品单价',
+            'cost_price' => '成本单价',
             'goods_num' => '商品数量',
             'is_inlay' => '是否镶嵌',
             'audit_status' => '审核状态',
@@ -127,6 +127,7 @@ class Qiban extends BaseModel
             'format_info' => '版式工艺信息',
             'format_remark' => '版式备注',
             'is_apply' => '是否采购申请',
+            'apply_sn' => '采购申请单号',    
             'kinto_price' => '金托总价(含副石)',
             'starting_fee' => '起版费',
 
@@ -147,6 +148,11 @@ class Qiban extends BaseModel
         }
 
         $this->warranty_period = StringHelper::dateToInt($this->warranty_period);  
+        if($this->isNewRecord) {
+            if($this->creator_id == '') {
+                $this->creator_id = \Yii::$app->user->identity->getId() ?? null;
+            }
+        }
         return parent::beforeValidate();
     }
 

@@ -9,12 +9,12 @@ use addons\Style\common\enums\QibanTypeEnum;
 use addons\Style\common\models\Qiban;
 use addons\Style\common\models\Style;
 use common\enums\AuditStatusEnum;
-use common\enums\ConfirmEnum;
-use common\enums\StatusEnum;
 use Yii;
 use common\components\Service;
 use addons\Purchase\common\models\Purchase;
-use addons\Purchase\common\models\PurchaseGoodsAttribute;
+use addons\Style\common\enums\IsApply;
+use addons\Style\common\enums\QibanSourceEnum;
+use addons\Purchase\common\models\PurchaseApply;
 
 /**
  * Class PurchaseGoodsService
@@ -23,25 +23,9 @@ use addons\Purchase\common\models\PurchaseGoodsAttribute;
  */
 class PurchaseApplyGoodsService extends Service
 {    
-   
-    /**
-     * 列表自定义字段
-     * @param unknown $id
-     * @return boolean[][]|string[][]|NULL[][]
-     */
-    public function listColmuns($id)
-    {
-        $models = PurchaseGoodsAttribute::find()->select(['attr_id','input_type','GROUP_CONCAT(attr_value order by sort asc) as attr_values'])->where(['id'=>$id])->groupBy(['attr_id'])->asArray()->all();
-        $columns = [];
-        if($models) {
-            foreach ($models as $model) {
-                $columns[$model['attr_id']] =  \Yii::$app->attr->attrName($model['attr_id']);
-            }
-        }
-        return $columns;
-    }
 
     public function getStyleImage($model){
+        
         if($model->qiban_sn){
             $qiban = Qiban::find()->where(['qiban_sn'=>$model->qiban_sn])->one();
             $image = !empty($qiban->style_image)?explode(',', $qiban->style_image):[];
@@ -55,11 +39,14 @@ class PurchaseApplyGoodsService extends Service
 
     }
 
-    /*
-     * 同步申请采购明细到起版
+    /**
+     * 
+     * @param PurchaseApply $apply
+     * @throws \Exception
      */
-    public function syncApplyToQiban($apply_id){
-        $apply_goods = PurchaseApplyGoods::find()->where(['apply_id'=>$apply_id])->all();
+    public function syncApplyToQiban($apply){
+
+        $apply_goods = PurchaseApplyGoods::find()->where(['apply_id'=>$apply->id])->all();
         foreach ($apply_goods as $model){
             if($model->confirm_status != ApplyConfirmEnum::CONFIRM){
                 throw new \Exception("明细{$model->id}没有被确认");
@@ -72,11 +59,10 @@ class PurchaseApplyGoodsService extends Service
                     $format_images = explode(',', $model->format_images);
                     $model->goods_image = $format_images[0];
                 }
-
-
                 $goods = [
                     'qiban_name' => $model->goods_name,
                     'qiban_type' => $model->qiban_type,
+                    'qiban_source_id' => QibanSourceEnum::BUSINESS_APPLI,                    
                     'style_id' => $model->style_id,
                     'style_sn' => $model->style_sn,
                     'style_cate_id' => $model->style_cate_id,
@@ -93,17 +79,24 @@ class PurchaseApplyGoodsService extends Service
                     'parts_info' => $model->parts_info,
                     'remark' => $model->remark,
                     'creator_id' => $model->creator_id,
-                    'created_at' => $model->created_at,
-                    'updated_at' => $model->updated_at,
                     'format_sn' => $model->format_sn,
                     'format_images' => $model->format_images,
                     'format_video' => $model->format_video,
                     'format_info' => $model->format_info,
                     'format_remark' => $model->format_remark,
-
+                    'is_apply' => IsApply::Wait,
+                    'apply_sn' => $apply->apply_sn,
+                    'audit_status' => AuditStatusEnum::PENDING,
                 ];
-
-                $goods_attrs = PurchaseApplyGoodsAttribute::find()->where(['id'=>$model->id])->asArray()->all();
+                $goods_attrs = [];
+                $attrs = PurchaseApplyGoodsAttribute::find()->where(['id'=>$model->id])->all();
+                foreach ($attrs as $attr) {
+                    $goods_attrs[] = [
+                         'attr_id' => $attr->attr_id,
+                         'attr_values' => $attr->attr_value_id == 0 ? $attr->attr_value : $attr->attr_value_id.'',
+                         'sort' =>  $attr->sort,
+                    ];
+                }
                 $qiban = \Yii::$app->styleService->qiban->createQiban($goods ,$goods_attrs);
                 if($qiban) {
                     $model->qiban_sn = $qiban->qiban_sn;

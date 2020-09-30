@@ -2,8 +2,6 @@
 
 namespace addons\Style\services;
 
-use addons\Style\common\enums\IsApply;
-use addons\Style\common\enums\QibanSourceEnum;
 use addons\Style\common\models\Qiban;
 use addons\Style\common\models\QibanAttribute;
 use common\components\Service;
@@ -21,7 +19,7 @@ use addons\Style\common\models\Style;
 class QibanService extends Service
 {
     /**
-     * 创建起版号
+     * 创建起版信息
      * @param unknown $goods
      * @param unknown $attr_list
      * @throws \Exception
@@ -29,26 +27,18 @@ class QibanService extends Service
      */
     public function createQiban($goods ,$attr_list){
         
-        $model = new Qiban();
-        $model->audit_status = AuditStatusEnum::PENDING;
+        $model = new Qiban();        
         $model->status = StatusEnum::DISABLED;
-        $model->is_apply = IsApply::Wait;
-        $model->attributes = $goods;
-        $model->qiban_source_id = QibanSourceEnum::BUSINESS_APPLI;
-        $model->creator_id = \Yii::$app->user->identity->getId();
-        $model->created_at = time();
+        $model->attributes = $goods; 
         if(false === $model->save()){
             throw new \Exception($this->getError($model));
         }
-
         foreach ($attr_list as $attr){
-            $attr = new QibanAttribute();
-            $attr->attr_id = $attr['attr_id'];
-            $attr->attr_values = $attr['attr_value'];
-            $attr->sort = $attr['sort'];
-            $attr->qiban_id = $model->id;
-            if(false === $attr->save()){
-                throw new \Exception($this->getError($attr));
+            $attrModel = new QibanAttribute();
+            $attrModel->attributes = $attr;
+            $attrModel->qiban_id = $model->id;
+            if(false === $attrModel->save()){
+                throw new \Exception($this->getError($attrModel));
             }
         }
         $this->createQibanSn($model); 
