@@ -911,7 +911,7 @@ class WarehouseBillTService extends Service
                     $second_stone_color3 = $attr_id;
                 }
             } elseif (!empty($stone)) {
-                $second_stone_color3 = $second2Attr['stone_color'] ?? "";
+                $second_stone_color3 = $second3Attr['stone_color'] ?? "";
             }
             $second_stone_clarity3 = $goods['second_stone_clarity3'] ?? "";//副石3净度
             if (!empty($second_stone_clarity3)) {
@@ -928,7 +928,7 @@ class WarehouseBillTService extends Service
             }
             //公司配或工厂配，且颜色，净度未填，且石头类型为：钻石，则默认：颜色：H，净度：SI，填写了以填写为准
             if($second_pei_type3 != PeiShiWayEnum::NO_PEI
-                && $second_stone_type3 == 481){//副石3类型=钻石
+                && $second_stone_type3 == 480){//副石3类型=钻石
                 if(empty($second_stone_color3)){
                     $second_stone_color3 = '649';//副石3颜色=H
                 }
