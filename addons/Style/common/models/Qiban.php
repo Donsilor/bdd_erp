@@ -103,7 +103,7 @@ class Qiban extends BaseModel
             'style_images' => Yii::t('app', '起版图库'),
             'sale_price' => Yii::t('app', '销售价'),
             'market_price' => Yii::t('app', '市场价'),
-            'cost_price' => Yii::t('app', '单品单价'),
+            'cost_price' => Yii::t('app', '成本单价'),
             'goods_num' => Yii::t('app', '商品数量'),
             'is_inlay' => Yii::t('app', '是否镶嵌'),
             'audit_status' => Yii::t('app', '款式审核'),
