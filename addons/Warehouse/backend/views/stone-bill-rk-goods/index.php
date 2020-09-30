@@ -13,7 +13,7 @@ use kartik\daterange\DateRangePicker;
 /* @var $this yii\web\View */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = Yii::t('bill_t_goods', '(金料)其它入库单详情');
+$this->title = Yii::t('bill_t_goods', '其它入库单详情(石料)');
 $this->params['breadcrumbs'][] = ['label' => $this->title, 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 $params = Yii::$app->request->queryParams;
@@ -91,12 +91,12 @@ $params = $params ? "&".http_build_query($params) : '';
                                 'filter' => false,
                             ],
                             [
-                                'attribute' => 'gold_sn',
+                                'attribute' => 'stone_sn',
                                 'headerOptions' => ['class' => 'col-md-2'],
                                 'value' => function ($model, $key, $index) {
-                                    return $model->gold_sn ?? "";
+                                    return $model->stone_sn ?? "";
                                 },
-                                'filter' => Html::activeTextInput($searchModel, 'gold_sn', [
+                                'filter' => Html::activeTextInput($searchModel, 'stone_sn', [
                                     'class' => 'form-control',
                                 ]),
                             ],
@@ -112,13 +112,13 @@ $params = $params ? "&".http_build_query($params) : '';
                                 ]),
                             ],
                             [
-                                'attribute' => 'gold_type',
+                                'attribute' => 'stone_type',
                                 'format' => 'raw',
                                 'headerOptions' => ['width' => 60],
                                 'value' => function ($model, $key, $index) {
-                                    return Yii::$app->attr->valueName($model->gold_type)??"";
+                                    return Yii::$app->attr->valueName($model->stone_type)??"";
                                 },
-                                'filter' => Html::activeDropDownList($searchModel, 'gold_type',Yii::$app->attr->valueMap(\addons\Style\common\enums\AttrIdEnum::MAT_GOLD_TYPE), [
+                                'filter' => Html::activeDropDownList($searchModel, 'stone_type',Yii::$app->attr->valueMap(\addons\Style\common\enums\AttrIdEnum::MAT_STONE_TYPE), [
                                     'prompt' => '全部',
                                     'class' => 'form-control',
                                     'style' => 'width:60px;'
@@ -126,29 +126,29 @@ $params = $params ? "&".http_build_query($params) : '';
                             ],
 
                             [
-                                'attribute' => 'gold_name',
+                                'attribute' => 'stone_name',
                                 'headerOptions' => ['class' => 'col-md-2'],
                                 'value' => function ($model, $key, $index) {
-                                    return $model->gold_name ?? "";
+                                    return $model->stone_name ?? "";
                                 },
-                                'filter' => Html::activeTextInput($searchModel, 'gold_name', [
+                                'filter' => Html::activeTextInput($searchModel, 'stone_name', [
                                     'class' => 'form-control',
                                 ]),
                             ],
                             [
-                                'attribute' => 'gold_weight',
+                                'attribute' => 'stone_weight',
                                 'headerOptions' => ['width'=>60],
                                 'value' => function ($model, $key, $index){
-                                    return $model->gold_weight ?? 0;
+                                    return $model->stone_weight ?? 0;
                                 },
                                 'filter' => false,
                             ],
 
                             [
-                                'attribute' => 'gold_price',
+                                'attribute' => 'stone_price',
                                 'headerOptions' => ['width'=>60],
                                 'value' => function ($model, $key, $index) {
-                                    return $model->gold_price ?? 0;
+                                    return $model->stone_price ?? 0;
                                 },
                                 'filter' => false,
                             ],

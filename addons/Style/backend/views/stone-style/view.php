@@ -33,6 +33,10 @@ $this->params['breadcrumbs'][] = $this->title;
                                      <td><?= $model->style_sn ?></td>
                                  </tr>
                                  <tr>
+                                     <td class="col-xs-3 text-right"><?= $model->getAttributeLabel('stone_name') ?>：</td>
+                                     <td><?= $model->stone_name ?></td>
+                                 </tr>
+                                 <tr>
                                      <td class="col-xs-3 text-right"><?= $model->getAttributeLabel('stone_weight_min') ?>：</td>
                                      <td><?= $model->stone_weight_min ?></td>
                                  </tr>

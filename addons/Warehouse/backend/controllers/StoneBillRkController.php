@@ -5,10 +5,8 @@ namespace addons\Warehouse\backend\controllers;
 use addons\Supply\common\models\Supplier;
 use addons\Warehouse\common\enums\GoldBillTypeEnum;
 use addons\Warehouse\common\enums\StoneBillTypeEnum;
-use addons\Warehouse\common\forms\WarehouseGoldBillTForm;
 use addons\Warehouse\common\forms\WarehouseStoneBillRkForm;
 use addons\Warehouse\common\models\Warehouse;
-use addons\Warehouse\common\models\WarehouseGoldBill;
 use function Clue\StreamFilter\fun;
 use common\models\backend\Member;
 use Yii;
@@ -66,16 +64,16 @@ class StoneBillRkController extends BaseController
         $dataProvider = $searchModel->search(\Yii::$app->request->queryParams, ['created_at', 'audit_time']);
         $created_at = $searchModel->created_at;
         if (!empty($created_at)) {
-            $dataProvider->query->andFilterWhere(['>=', WarehouseGoldBill::tableName() . '.created_at', strtotime(explode('/', $created_at)[0])]);//起始时间
-            $dataProvider->query->andFilterWhere(['<', WarehouseGoldBill::tableName() . '.created_at', (strtotime(explode('/', $created_at)[1]) + 86400)]);//结束时间
+            $dataProvider->query->andFilterWhere(['>=', WarehouseStoneBillRkForm::tableName() . '.created_at', strtotime(explode('/', $created_at)[0])]);//起始时间
+            $dataProvider->query->andFilterWhere(['<', WarehouseStoneBillRkForm::tableName() . '.created_at', (strtotime(explode('/', $created_at)[1]) + 86400)]);//结束时间
         }
         $audit_time = $searchModel->audit_time;
         if (!empty($audit_time)) {
-            $dataProvider->query->andFilterWhere(['>=', WarehouseGoldBill::tableName() . '.audit_time', strtotime(explode('/', $audit_time)[0])]);//起始时间
-            $dataProvider->query->andFilterWhere(['<', WarehouseGoldBill::tableName() . '.audit_time', (strtotime(explode('/', $audit_time)[1]) + 86400)]);//结束时间
+            $dataProvider->query->andFilterWhere(['>=', WarehouseStoneBillRkForm::tableName() . '.audit_time', strtotime(explode('/', $audit_time)[0])]);//起始时间
+            $dataProvider->query->andFilterWhere(['<', WarehouseStoneBillRkForm::tableName() . '.audit_time', (strtotime(explode('/', $audit_time)[1]) + 86400)]);//结束时间
         }
-        $dataProvider->query->andWhere(['>', WarehouseGoldBill::tableName() . '.status', -1]);
-        $dataProvider->query->andWhere(['=', WarehouseGoldBill::tableName() . '.bill_type', $this->billType]);
+        $dataProvider->query->andWhere(['>', WarehouseStoneBillRkForm::tableName() . '.status', -1]);
+        $dataProvider->query->andWhere(['=', WarehouseStoneBillRkForm::tableName() . '.bill_type', $this->billType]);
 
         //导出
         if (\Yii::$app->request->get('action') === 'export') {
@@ -103,7 +101,7 @@ class StoneBillRkController extends BaseController
     {
         $id = \Yii::$app->request->get('id');
         $model = $this->findModel($id);
-        $model = $model ?? new WarehouseGoldBillTForm();
+        $model = $model ?? new WarehouseStoneBillRkForm();
         // ajax 校验
         $this->activeFormValidate($model);
         if ($model->load(\Yii::$app->request->post())) {
@@ -113,7 +111,7 @@ class StoneBillRkController extends BaseController
                 if ($isNewRecord) {
                     $model->bill_no = SnHelper::createBillSn($this->billType);
                     $model->bill_type = $this->billType;
-                    $model->to_warehouse_id = 7;
+                    $model->to_warehouse_id = 8;
 
                 }
 
@@ -142,9 +140,9 @@ class StoneBillRkController extends BaseController
                     'log_module' => '其它入库单',
                     'log_msg' => $log_msg
                 ];
-                \Yii::$app->warehouseService->goldBillLog->createGoldBillLog($log);
+                \Yii::$app->warehouseService->stoneBillLog->createStoneBillLog($log);
 
-                \Yii::$app->warehouseService->goldBill->goldBillSummary($model->id);
+                \Yii::$app->warehouseService->stoneBill->stoneBillSummary($model->id);
                 $trans->commit();
 
                 if ($isNewRecord) {
@@ -174,14 +172,13 @@ class StoneBillRkController extends BaseController
     {
         $id = Yii::$app->request->get('id');
         $tab = Yii::$app->request->get('tab', 1);
-        $returnUrl = Yii::$app->request->get('returnUrl', Url::to(['bill-t/index', 'id' => $id]));
         $model = $this->findModel($id);
         $model = $model ?? new WarehouseBill();
         return $this->render($this->action->id, [
             'model' => $model,
             'tab' => $tab,
-            'tabList' => \Yii::$app->warehouseService->goldBill->menuTabList($id, $this->billType, $returnUrl),
-            'returnUrl' => $returnUrl,
+            'tabList' => \Yii::$app->warehouseService->stoneBill->menuTabList($id, $this->billType, $this->returnUrl),
+            'returnUrl' => $this->returnUrl,
         ]);
     }
 
@@ -193,7 +190,7 @@ class StoneBillRkController extends BaseController
     {
         $id = \Yii::$app->request->get('id');
         $model = $this->findModel($id);
-        $model = $model ?? new WarehouseGoldBill();
+        $model = $model ?? new WarehouseStoneBillRkForm();
         if ($model->bill_status != BillStatusEnum::SAVE) {
             return $this->message('单据不是保存状态', $this->redirect(\Yii::$app->request->referrer), 'error');
         }
@@ -215,7 +212,7 @@ class StoneBillRkController extends BaseController
                 'log_module' => '其它入库单',
                 'log_msg' => '单据提审'
             ];
-            \Yii::$app->warehouseService->goldBillLog->createGoldBillLog($log);
+            \Yii::$app->warehouseService->stoneBillLog->createStoneBillLog($log);
 
             $trans->commit();
             return $this->message('操作成功', $this->redirect(\Yii::$app->request->referrer), 'success');
@@ -237,7 +234,7 @@ class StoneBillRkController extends BaseController
     {
         $id = Yii::$app->request->get('id');
         $model = $this->findModel($id);
-        $model = $model ?? new WarehouseGoldBill();
+        $model = $model ?? new WarehouseStoneBillRkForm();
         // ajax 校验
         $this->activeFormValidate($model);
         if ($model->load(Yii::$app->request->post())) {
@@ -261,7 +258,7 @@ class StoneBillRkController extends BaseController
                     'log_module' => '其它入库单',
                     'log_msg' => '单据审核'
                 ];
-                \Yii::$app->warehouseService->goldBillLog->createGoldBillLog($log);
+                \Yii::$app->warehouseService->stoneBillLog->createStoneBillLog($log);
                 $trans->commit();
                 return $this->message("保存成功", $this->redirect(Yii::$app->request->referrer), 'success');
             } catch (\Exception $e) {
@@ -326,11 +323,12 @@ class StoneBillRkController extends BaseController
             //日志
             $log = [
                 'bill_id' => $model->id,
+                'bill_status' => $model->bill_status,
                 'log_type' => LogTypeEnum::ARTIFICIAL,
                 'log_module' => '单据取消',
                 'log_msg' => '取消其它收货单'
             ];
-            \Yii::$app->warehouseService->billLog->createBillLog($log);
+            \Yii::$app->warehouseService->stoneBillLog->createStoneBillLog($log);
             \Yii::$app->getSession()->setFlash('success', '操作成功');
             $trans->commit();
             return $this->redirect(\Yii::$app->request->referrer);
@@ -363,11 +361,12 @@ class StoneBillRkController extends BaseController
             }
             $log = [
                 'bill_id' => $model->id,
+                'bill_status' => $model->bill_status,
                 'log_type' => LogTypeEnum::ARTIFICIAL,
                 'log_module' => '单据删除',
                 'log_msg' => '删除其它入库单'
             ];
-            \Yii::$app->warehouseService->billLog->createBillLog($log);
+            \Yii::$app->warehouseService->stoneBillLog->createStoneBillLog($log);
             \Yii::$app->getSession()->setFlash('success', '操作成功');
             $trans->commit();
             return $this->redirect(\Yii::$app->request->referrer);

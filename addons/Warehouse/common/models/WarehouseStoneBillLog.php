@@ -36,7 +36,7 @@ class WarehouseStoneBillLog extends BaseModel
     public function rules()
     {
         return [
-            [['bill_id', 'log_module', 'creator_id'], 'required'],
+            [['bill_id', 'log_module'], 'required'],
             [['bill_id', 'bill_status', 'log_type', 'creator_id', 'created_at'], 'integer'],
             [['log_msg'], 'string', 'max' => 500],
             [['log_module', 'creator'], 'string', 'max' => 30],

@@ -3,10 +3,12 @@
 namespace addons\Warehouse\backend\controllers;
 
 use addons\Style\common\models\GoldStyle;
+use addons\Style\common\models\StoneStyle;
 use addons\Warehouse\common\enums\GoldBillTypeEnum;
-use addons\Warehouse\common\forms\WarehouseGoldBillTGoodsForm;
+use addons\Warehouse\common\enums\StoneBillTypeEnum;
+use addons\Warehouse\common\forms\WarehouseStoneBillRkGoodsForm;
 use addons\Warehouse\common\models\WarehouseGoldBill;
-use addons\Warehouse\common\models\WarehouseGoldBillGoods;
+use addons\Warehouse\common\models\WarehouseStoneBill;
 use Yii;
 use common\traits\Curd;
 use common\helpers\Url;
@@ -26,8 +28,8 @@ use yii\web\UploadedFile;
 class StoneBillRkGoodsController extends BaseController
 {
     use Curd;
-    public $modelClass = WarehouseGoldBillTGoodsForm::class;
-    public $billType = GoldBillTypeEnum::GOLD_T;
+    public $modelClass = WarehouseStoneBillRkGoodsForm::class;
+    public $billType = StoneBillTypeEnum::STONE_RK;
 
     /**
      * Lists all WarehouseBillGoods models.
@@ -52,13 +54,13 @@ class StoneBillRkGoodsController extends BaseController
         ]);
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
         $dataProvider->query->andWhere(['=', 'bill_id', $bill_id]);
-        $dataProvider->query->andWhere(['>', WarehouseGoldBillGoods::tableName() . '.status', -1]);
-        $bill = WarehouseGoldBill::find()->where(['id' => $bill_id])->one();
+        $dataProvider->query->andWhere(['>', WarehouseStoneBillRkGoodsForm::tableName() . '.status', -1]);
+        $bill = WarehouseStoneBill::find()->where(['id' => $bill_id])->one();
         return $this->render($this->action->id, [
             'dataProvider' => $dataProvider,
             'searchModel' => $searchModel,
             'bill' => $bill,
-            'tabList' => \Yii::$app->warehouseService->goldBill->menuTabList($bill_id, $this->billType, $returnUrl),
+            'tabList' => \Yii::$app->warehouseService->stoneBill->menuTabList($bill_id, $this->billType, $returnUrl),
             'tab' => $tab,
         ]);
     }
@@ -75,7 +77,7 @@ class StoneBillRkGoodsController extends BaseController
         $bill_id = Yii::$app->request->get('bill_id');
         $model = $this->findModel($id);
         $bill = WarehouseGoldBill::find()->where(['id'=>$bill_id])->one();
-        $model = $model ?? new WarehouseGoldBillTGoodsForm();
+        $model = $model ?? new WarehouseStoneBillRkGoodsForm();
         // ajax 校验
         $this->activeFormValidate($model);
         if ($model->load(\Yii::$app->request->post())) {
@@ -90,7 +92,7 @@ class StoneBillRkGoodsController extends BaseController
                     throw new \Exception($this->getError($model));
                 }
 
-                \Yii::$app->warehouseService->goldBill->goldBillSummary($bill_id);
+                \Yii::$app->warehouseService->stoneBill->stoneBillSummary($bill_id);
                 $trans->commit();
                 \Yii::$app->getSession()->setFlash('success', '保存成功');
                 return $this->redirect(['index', 'bill_id' => $bill_id]);
@@ -430,23 +432,23 @@ class StoneBillRkGoodsController extends BaseController
      * 查询石料款号信息
      * @return array
      */
-    public function actionAjaxGetGold()
+    public function actionAjaxGetStone()
     {
         \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
 
         $style_sn = \Yii::$app->request->get('style_sn');
-        $model = GoldStyle::find()->select(['gold_type','gold_name'])->where(['style_sn'=>$style_sn])->one();
+        $model = StoneStyle::find()->select(['stone_type','stone_name'])->where(['style_sn'=>$style_sn])->one();
         $data = [
-            'gold_type' => $model->gold_type??"",
-            'gold_name' => $model->gold_name??"",
+            'stone_type' => $model->stone_type??"",
+            'stone_name' => $model->stone_name??"",
         ];
         return ResultHelper::json(200,'查询成功', $data);
     }
 
 
     public function actionGetGoodsSn(){
-        $gold_type = Yii::$app->request->post('gold_type');
-        $model = Yii::$app->styleService->gold::getDropDown($gold_type);
+        $stone_type = Yii::$app->request->post('stone_type');
+        $model = Yii::$app->styleService->stone::getDropDown($stone_type);
         return ResultHelper::json(200, 'ok',$model);
     }
 

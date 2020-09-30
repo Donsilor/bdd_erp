@@ -20,7 +20,7 @@ class WarehouseStoneBillRkForm extends WarehouseStoneBill
     public function rules()
     {
          $rules = [
-             [['created_at'], 'integer'],
+             [['supplier_id'], 'required'],
              [['file'], 'file', 'extensions' => ['csv']],//'skipOnEmpty' => false,
          ];
          return ArrayHelper::merge(parent::rules() , $rules);
@@ -34,6 +34,7 @@ class WarehouseStoneBillRkForm extends WarehouseStoneBill
         //合并
         return ArrayHelper::merge(parent::attributeLabels() , [
             'delivery_no' => '采购收货单号',
+            'total_num' => '石包总数',
             'creator_id' => '制单人',
             'created_at' => '制单时间',
             'file' => '上传石料明细',
