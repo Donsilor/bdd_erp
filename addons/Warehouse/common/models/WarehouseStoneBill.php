@@ -55,7 +55,7 @@ class WarehouseStoneBill extends BaseModel
     {
         return [
             [['bill_type'], 'required'],
-            [['bill_status', 'supplier_id', 'put_in_type', 'to_warehouse_id', 'adjust_type', 'account_type', 'total_num', 'total_grain', 'auditor_id', 'audit_status', 'audit_time', 'fin_status', 'fin_check_time', 'status', 'creator_id', 'created_at', 'updated_at'], 'integer'],
+            [['bill_status', 'supplier_id', 'put_in_type', 'to_warehouse_id', 'adjust_type', 'account_type', 'total_num', 'total_grain','is_settle_accounts', 'auditor_id', 'audit_status', 'audit_time', 'fin_status', 'fin_check_time', 'status', 'creator_id', 'created_at', 'updated_at'], 'integer'],
             [['total_weight', 'total_cost', 'pay_amount'], 'number'],
             [['bill_no', 'fin_checker'], 'string', 'max' => 30],
             [['bill_type'], 'string', 'max' => 3],
@@ -85,6 +85,7 @@ class WarehouseStoneBill extends BaseModel
             'total_cost' => '石料总成本',
             'pay_amount' => '采购支付金额',
             'delivery_no' => '送货单号',
+            'is_settle_accounts' => '是否结价',
             'auditor_id' => '审核人',
             'audit_status' => '审核状态',
             'audit_time' => '审核时间',

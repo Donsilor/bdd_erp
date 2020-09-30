@@ -62,7 +62,12 @@ $this->params['breadcrumbs'][] = $this->title;
                             'attribute' => 'goods_type',
                             'headerOptions' => ['class' => 'col-md-1','width'=>'60'],
                             'value' => function ($model){
-                                return \addons\Supply\common\enums\GoodsTypeEnum::getValue($model->goods_type);
+                                $goods_type_arr = !empty($model->goods_type)?array_filter(explode(',', $model->goods_type)):array();
+                                $goods_type_str = '';
+                                foreach ($goods_type_arr as $goods_type){
+                                    $goods_type_str .= \addons\Supply\common\enums\GoodsTypeEnum::getValue($goods_type) ." ";
+                                }
+                                return $goods_type_str;
                             },
                             'filter' => Html::activeDropDownList($searchModel, 'goods_type',\addons\Supply\common\enums\GoodsTypeEnum::getMap(), [
                                 'prompt' => '全部',

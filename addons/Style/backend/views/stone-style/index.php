@@ -75,6 +75,14 @@ $this->params['breadcrumbs'][] = $this->title;
                             'headerOptions' => ['class' => 'col-md-1'],
                         ],
                         [
+                            'attribute' => 'stone_name',
+                            'value' => 'stone_name',
+                            'headerOptions' => ['class' => 'col-md-1'],
+                            'filter' => Html::activeTextInput($searchModel, 'stone_name', [
+                                'class' => 'form-control',
+                            ]),
+                        ],
+                        [
                             'label' => '石重范围(ct)',
                             'attribute' => 'stone_weight_min',
                             'value' => function ($model){

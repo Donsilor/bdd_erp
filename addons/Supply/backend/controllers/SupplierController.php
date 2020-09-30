@@ -44,7 +44,7 @@ class SupplierController extends BaseController
         $searchModel = new SearchModel([
             'model' => $this->modelClass,
             'scenario' => 'default',
-            'partialMatchAttributes' => ['supplier_name', 'contactor', 'mobile', 'telephone', 'address'], // 模糊查询
+            'partialMatchAttributes' => ['supplier_name', 'contactor', 'mobile', 'telephone', 'address','goods_type'], // 模糊查询
             'defaultOrder' => [
                 'id' => SORT_DESC
             ],

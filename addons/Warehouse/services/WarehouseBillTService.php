@@ -911,7 +911,7 @@ class WarehouseBillTService extends Service
                     $second_stone_color3 = $attr_id;
                 }
             } elseif (!empty($stone)) {
-                $second_stone_color3 = $second2Attr['stone_color'] ?? "";
+                $second_stone_color3 = $second3Attr['stone_color'] ?? "";
             }
             $second_stone_clarity3 = $goods['second_stone_clarity3'] ?? "";//副石3净度
             if (!empty($second_stone_clarity3)) {
@@ -928,7 +928,7 @@ class WarehouseBillTService extends Service
             }
             //公司配或工厂配，且颜色，净度未填，且石头类型为：钻石，则默认：颜色：H，净度：SI，填写了以填写为准
             if($second_pei_type3 != PeiShiWayEnum::NO_PEI
-                && $second_stone_type3 == 481){//副石3类型=钻石
+                && $second_stone_type3 == 480){//副石3类型=钻石
                 if(empty($second_stone_color3)){
                     $second_stone_color3 = '649';//副石3颜色=H
                 }
@@ -993,10 +993,10 @@ class WarehouseBillTService extends Service
             }
             $gong_fee = $form->formatValue($goods['gong_fee'], 0) ?? 0;//克工费
             $piece_fee = $form->formatValue($goods['piece_fee'], 0) ?? 0;//件工费
-            if (!empty($gong_fee) && !empty($piece_fee)) {
-                $flag = false;
-                $error[$i][] = "[克/工费]和[件/工费]只能填其一";
-            }
+//            if (!empty($gong_fee) && !empty($piece_fee)) {
+//                $flag = false;
+//                $error[$i][] = "[克/工费]和[件/工费]只能填其一";
+//            }
             $xiangqian_craft = $goods['xiangqian_craft'] ?? "";//镶嵌工艺
             if (!empty($xiangqian_craft)) {
                 $attr_id = $form->getAttrIdByAttrValue($style_sn, $xiangqian_craft, AttrIdEnum::XIANGQIAN_CRAFT);
@@ -1242,11 +1242,11 @@ class WarehouseBillTService extends Service
                 $flag = false;
                 $error[$i][] = $this->getError($goodsM);
             }
-//            $result = $form->updateFromValidate($goodsM);
-//            if ($result['error'] == false) {
-//                $flag = false;
-//                $error[$i][] = $result['msg'];
-//            }
+            $result = $form->updateFromValidate($goodsM);
+            if ($result['error'] == false) {
+                $flag = false;
+                $error[$i][] = $result['msg'];
+            }
             if (!$flag && !empty($style_sn)) {
                 //$error[$i] = array_unshift($error[$i], "[" . $style_sn . "]");
             }

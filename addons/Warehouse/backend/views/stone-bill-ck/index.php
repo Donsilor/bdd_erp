@@ -3,17 +3,17 @@
 use common\helpers\Html;
 use common\helpers\Url;
 use kartik\select2\Select2;
-use addons\Warehouse\common\enums\BillStatusEnum;
 use yii\grid\GridView;
 use kartik\daterange\DateRangePicker;
+use addons\Warehouse\common\enums\BillStatusEnum;
 
 /* @var $this yii\web\View */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = Yii::t('bill_t', '其它入库单列表');
+$this->title = Yii::t('bill_c', '(金料)其它出库单');
 $this->params['breadcrumbs'][] = $this->title;
 $params = Yii::$app->request->queryParams;
-$params = $params ? "&" . http_build_query($params) : '';
+$params = $params ? "&".http_build_query($params) : '';
 ?>
 
 <div class="row">
@@ -24,32 +24,36 @@ $params = $params ? "&" . http_build_query($params) : '';
                 <div class="box-tools">
                     <?= Html::create(['ajax-edit'], '创建', [
                         'data-toggle' => 'modal',
-                        'data-target' => '#ajaxModalLg',
+                        'data-target' => '#ajaxModal',
+                    ]); ?>
+                    <?= Html::create(['ajax-import'], '批量导入', [
+                        'data-toggle' => 'modal',
+                        'data-target' => '#ajaxModal',
                     ]); ?>
                     <?= Html::button('导出', [
-                        'class' => 'btn btn-success btn-xs',
+                        'class'=>'btn btn-success btn-xs',
                         'onclick' => 'batchExport()',
-                    ]); ?>
+                    ]);?>
                 </div>
             </div>
             <div class="box-body table-responsive">
-                <?php echo Html::batchButtons(false) ?>
+                <?php echo Html::batchButtons(false)?>
                 <?= GridView::widget([
                     'dataProvider' => $dataProvider,
                     'filterModel' => $searchModel,
                     'tableOptions' => ['class' => 'table table-hover'],
-                    //'options' => ['style'=>' width:140%;'],
-                    'options' => ['style' => 'white-space:nowrap;'],
+                    //'options' => ['style'=>' width:150%;'],
+                    'options' => ['style'=>'white-space:nowrap;'],
                     'showFooter' => false,//显示footer行
-                    'id' => 'grid',
+                    'id'=>'grid',
                     'columns' => [
                         [
                             'class' => 'yii\grid\SerialColumn',
                             'visible' => false,
                         ],
                         [
-                            'class' => 'yii\grid\CheckboxColumn',
-                            'name' => 'id',  //设置每行数据的复选框属性
+                            'class'=>'yii\grid\CheckboxColumn',
+                            'name'=>'id',  //设置每行数据的复选框属性
                             'headerOptions' => [],
                         ],
                         [
@@ -59,9 +63,9 @@ $params = $params ? "&" . http_build_query($params) : '';
                             'headerOptions' => [],
                         ],
                         [
-                            'attribute' => 'bill_no',
-                            'value' => function ($model) {
-                                return Html::a($model->bill_no, ['view', 'id' => $model->id, 'returnUrl' => Url::getReturnUrl()], ['class' => 'openContab', 'style' => "text-decoration:underline;color:#3c8dbc", 'id' => $model->bill_no]) . ' <i class="fa fa-copy" onclick="copy(\'' . $model->bill_no . '\')"></i>';
+                            'attribute'=>'bill_no',
+                            'value'=>function($model) {
+                                return Html::a($model->bill_no, ['view', 'id' => $model->id,'returnUrl'=>Url::getReturnUrl()], ['class'=>'openContab','style'=>"text-decoration:underline;color:#3c8dbc"]);
                             },
                             'filter' => Html::activeTextInput($searchModel, 'bill_no', [
                                 'class' => 'form-control',
@@ -69,23 +73,14 @@ $params = $params ? "&" . http_build_query($params) : '';
                             'format' => 'raw',
                             'headerOptions' => ['class' => 'col-md-1'],
                         ],
-                        /*[
-                            'attribute' => 'bill_type',
-                            'format' => 'raw',
-                            'headerOptions' => ['class' => 'col-md-1'],
-                            'value' => function ($model){
-                                return \addons\Warehouse\common\enums\BillTypeEnum::getValue($model->bill_type);
-                            },
-                            'filter' => false,
-                        ],*/
                         [
                             'attribute' => 'supplier_id',
-                            'value' => "supplier.supplier_name",
-                            'filter' => Select2::widget([
-                                'name' => 'SearchModel[supplier_id]',
-                                'value' => $searchModel->supplier_id,
-                                'data' => Yii::$app->supplyService->supplier->getDropDown(),
-                                'options' => ['placeholder' => "请选择"],
+                            'value' =>"supplier.supplier_name",
+                            'filter'=>Select2::widget([
+                                'name'=>'SearchModel[supplier_id]',
+                                'value'=>$searchModel->supplier_id,
+                                'data'=>Yii::$app->supplyService->supplier->getDropDown(['goods_type'=>\addons\Supply\common\enums\GoodsTypeEnum::RAW_MATERIAL]),
+                                'options' => ['placeholder' =>"请选择"],
                                 'pluginOptions' => [
                                     'allowClear' => true,
                                 ],
@@ -93,100 +88,48 @@ $params = $params ? "&" . http_build_query($params) : '';
                             'format' => 'raw',
                             'headerOptions' => ['class' => 'col-md-2'],
                         ],
-//                        [
-//                            'attribute' => 'to_warehouse_id',
-//                            'value' =>"toWarehouse.name",
-//                            'filter'=>Select2::widget([
-//                                'name'=>'SearchModel[to_warehouse_id]',
-//                                'value'=>$searchModel->to_warehouse_id,
-//                                'data'=>Yii::$app->warehouseService->warehouse::getDropDown(),
-//                                'options' => ['placeholder' =>"请选择"],
-//                                'pluginOptions' => [
-//                                    'allowClear' => true,
-//                                ],
-//                            ]),
-//                            'format' => 'raw',
-//                            'headerOptions' => ['class' => 'col-md-2'],
-//                        ],
+
+
                         [
-                            'attribute' => 'put_in_type',
-                            'format' => 'raw',
-                            'value' => function ($model) {
-                                return \addons\Warehouse\common\enums\PutInTypeEnum::getValue($model->put_in_type);
-                            },
-                            'filter' => Html::activeDropDownList($searchModel, 'put_in_type', \addons\Warehouse\common\enums\PutInTypeEnum::getMap(), [
-                                'prompt' => '全部',
+                            'attribute'=>'total_cost',
+                            'filter' => Html::activeTextInput($searchModel, 'total_cost', [
                                 'class' => 'form-control',
                             ]),
                             'headerOptions' => ['class' => 'col-md-1'],
                         ],
-                        [
-                            'attribute' => 'is_settle_accounts',
-                            'format' => 'raw',
-                            'value' => function ($model) {
-                                return \addons\Warehouse\common\enums\IsSettleAccountsEnum::getValue($model->is_settle_accounts);
-                            },
-                            'filter' => Html::activeDropDownList($searchModel, 'is_settle_accounts', \addons\Warehouse\common\enums\IsSettleAccountsEnum::getMap(), [
-                                'prompt' => '全部',
-                                'class' => 'form-control',
-                            ]),
-                            'headerOptions' => ['class' => 'col-md-1'],
-                        ],
-                        [
-                            'attribute' => 'goods_num',
-                            'filter' => false,
-                            'format' => 'raw',
-                            'headerOptions' => ['class' => 'col-md-1'],
-                        ],
-                        [
-                            'attribute' => 'total_cost',
-                            'filter' => false,
-                            'headerOptions' => ['class' => 'col-md-1'],
-                        ],
-                        [
-                            'attribute' => 'send_goods_sn',
-                            'value' => function ($model) {
-//                                if($model->send_goods_sn){
-//                                    $model->send_goods_sn = "<span id='send_goods_sn_".$model->send_goods_sn."'>$model->send_goods_sn</span>&nbsp;<i class='fa fa-copy' onclick='copy(send_goods_sn_" . $model->send_goods_sn . ")'></i>";
-//                                }
-                                return $model->send_goods_sn ?? "";
-                            },
-                            'filter' => Html::activeTextInput($searchModel, 'send_goods_sn', [
-                                'class' => 'form-control',
-                            ]),
-                            'format' => 'raw',
-                            'headerOptions' => ['class' => 'col-md-1'],
-                        ],
+
+
+
                         [
                             'attribute' => 'creator_id',
                             'value' => 'creator.username',
-                            'headerOptions' => ['class' => 'col-md-1'],
                             'filter' => Html::activeTextInput($searchModel, 'creator.username', [
                                 'class' => 'form-control',
                             ]),
+                            'headerOptions' => ['class' => 'col-md-1'],
                         ],
                         [
-                            'attribute' => 'created_at',
+                            'attribute'=>'created_at',
                             'filter' => DateRangePicker::widget([    // 日期组件
                                 'model' => $searchModel,
                                 'attribute' => 'created_at',
                                 'value' => $searchModel->created_at,
-                                'options' => ['readonly' => false, 'class' => 'form-control', 'style' => 'background-color:#fff;width:150px;'],
+                                'options' => ['readonly' => false,'class'=>'form-control','style'=>'background-color:#fff;width:150px;'],
                                 'pluginOptions' => [
                                     'format' => 'yyyy-mm-dd',
                                     'locale' => [
                                         'separator' => '/',
                                     ],
-                                    'endDate' => date('Y-m-d', time()),
+                                    'endDate' => date('Y-m-d',time()),
                                     'todayHighlight' => true,
                                     'autoclose' => true,
                                     'todayBtn' => 'linked',
                                     'clearBtn' => true,
                                 ],
                             ]),
-                            'value' => function ($model) {
+                            'value'=>function($model){
                                 return Yii::$app->formatter->asDate($model->created_at);
-                            },
+                            }
                         ],
                         /*[
                             'attribute' => 'auditor_id',
@@ -217,30 +160,31 @@ $params = $params ? "&" . http_build_query($params) : '';
                                 ],
                             ]),
                             'value'=>function($model){
-                                return Yii::$app->formatter->asDatetime($model->audit_time);
+                                return Yii::$app->formatter->asDatetime($model->updated_at);
                             }
                         ],*/
                         [
                             'attribute' => 'audit_status',
                             'format' => 'raw',
                             'headerOptions' => ['class' => 'col-md-1'],
-                            'value' => function ($model) {
+                            'value' => function ($model){
                                 return \common\enums\AuditStatusEnum::getValue($model->audit_status);
                             },
-                            'filter' => Html::activeDropDownList($searchModel, 'audit_status', \common\enums\AuditStatusEnum::getMap(), [
+                            'filter' => Html::activeDropDownList($searchModel, 'audit_status',\common\enums\AuditStatusEnum::getMap(), [
                                 'prompt' => '全部',
                                 'class' => 'form-control',
-                                'style' => 'width:80px;'
+                                'style'=> 'width:100px;'
+
                             ]),
                         ],
                         [
                             'attribute' => 'bill_status',
                             'format' => 'raw',
                             'headerOptions' => ['class' => 'col-md-1'],
-                            'value' => function ($model) {
+                            'value' => function ($model){
                                 return \addons\Warehouse\common\enums\BillStatusEnum::getValue($model->bill_status);
                             },
-                            'filter' => Html::activeDropDownList($searchModel, 'bill_status', \addons\Warehouse\common\enums\BillStatusEnum::getMap(), [
+                            'filter' => Html::activeDropDownList($searchModel, 'bill_status',\addons\Warehouse\common\enums\BillStatusEnum::getMap(), [
                                 'prompt' => '全部',
                                 'class' => 'form-control',
                                 'style' => 'width:80px;',
@@ -250,50 +194,50 @@ $params = $params ? "&" . http_build_query($params) : '';
                             'class' => 'yii\grid\ActionColumn',
                             'header' => '操作',
                             'contentOptions' => ['style' => ['white-space' => 'nowrap']],
-                            'template' => '{edit} {apply} {audit} {goods} {cancel} {delete}',
+                            'template' => '{edit} {apply} {audit} {goods} {cancel}',
                             'buttons' => [
-                                'edit' => function ($url, $model, $key) {
-                                    if ($model->bill_status == BillStatusEnum::SAVE) {
+                                'edit' => function($url, $model, $key){
+                                    if($model->bill_status == BillStatusEnum::SAVE) {
                                         return Html::edit(['ajax-edit', 'id' => $model->id, 'returnUrl' => Url::getReturnUrl()], '编辑', [
-                                            'data-toggle' => 'modal',
-                                            'data-target' => '#ajaxModalLg',
-                                        ]);
-                                    }
-                                },
-                                'apply' => function ($url, $model, $key) {
-                                    if ($model->bill_status == BillStatusEnum::SAVE) {
-                                        return Html::edit(['ajax-apply', 'id' => $model->id], '提审', [
-                                            'class' => 'btn btn-success btn-sm',
-                                            'onclick' => 'rfTwiceAffirm(this,"提交审核", "确定提交吗？");return false;',
-                                        ]);
-                                    }
-                                },
-                                'audit' => function ($url, $model, $key) {
-                                    if ($model->bill_status == BillStatusEnum::PENDING) {
-                                        return Html::edit(['ajax-audit', 'id' => $model->id], '审核', [
-                                            'class' => 'btn btn-success btn-sm',
                                             'data-toggle' => 'modal',
                                             'data-target' => '#ajaxModal',
                                         ]);
                                     }
                                 },
-                                'goods' => function ($url, $model, $key) {
-                                    return Html::a('明细', ['bill-t-goods/index', 'bill_id' => $model->id, 'returnUrl' => Url::getReturnUrl()], ['class' => 'btn btn-info btn-sm']);
+                                'apply' => function($url, $model, $key){
+                                    if($model->bill_status == BillStatusEnum::SAVE){
+                                        return Html::edit(['ajax-apply','id'=>$model->id], '提审', [
+                                            'class'=>'btn btn-success btn-sm',
+                                            'onclick' => 'rfTwiceAffirm(this,"提交审核", "确定操作吗？");return false;',
+                                        ]);
+                                    }
                                 },
-                                'status' => function ($url, $model, $key) {
+                                'audit' => function($url, $model, $key){
+                                    if($model->bill_status == BillStatusEnum::PENDING){
+                                        return Html::edit(['ajax-audit','id'=>$model->id], '审核', [
+                                            'class'=>'btn btn-success btn-sm',
+                                            'data-toggle' => 'modal',
+                                            'data-target' => '#ajaxModal',
+                                        ]);
+                                    }
+                                },
+                                'goods' => function($url, $model, $key){
+                                    return Html::a('明细', ['gold-bill-o-goods/index', 'bill_id' => $model->id,'returnUrl'=>Url::getReturnUrl()], ['class' => 'btn btn-info btn-sm']);
+                                },
+                                /*'status' => function($url, $model, $key){
                                     return Html::status($model->status);
-                                },
-                                'cancel' => function ($url, $model, $key) {
-                                    if ($model->bill_status == BillStatusEnum::SAVE) {
-                                        return Html::delete(['cancel', 'id' => $model->id], '取消', [
+                                },*/
+                                'cancel' => function($url, $model, $key){
+                                    if($model->bill_status == BillStatusEnum::SAVE) {
+                                        return Html::delete(['cancel', 'id' => $model->id], '取消',[
                                             'class' => 'btn btn-warning btn-sm',
                                             'onclick' => 'rfTwiceAffirm(this,"取消单据", "确定取消吗？");return false;',
                                         ]);
                                     }
                                 },
-                                'delete' => function ($url, $model, $key) {
-                                    if ($model->bill_status == BillStatusEnum::CANCEL) {
-                                        return Html::delete(['delete', 'id' => $model->id], '删除', [
+                                'delete' => function($url, $model, $key){
+                                    if($model->bill_status == BillStatusEnum::CANCEL) {
+                                        return Html::delete(['delete', 'id' => $model->id], '删除',[
                                             'onclick' => 'rfTwiceAffirm(this,"删除单据", "确定删除吗？");return false;',
                                         ]);
                                     }
@@ -310,11 +254,11 @@ $params = $params ? "&" . http_build_query($params) : '';
 <script>
     function batchExport() {
         var ids = $("#grid").yiiGridView("getSelectedRows");
-        if (ids.length == 0) {
-            var url = "<?= Url::to('index?action=export' . $params);?>";
+        if(ids.length == 0){
+            var url = "<?= Url::to('index?action=export'.$params);?>";
             rfExport(url)
-        } else {
-            window.location.href = "<?= Url::buildUrl('export', [], ['ids'])?>?ids=" + ids;
+        }else{
+            window.location.href = url = "<?= Url::buildUrl('export',[],['ids'])?>?ids=" + ids;
         }
 
     }
