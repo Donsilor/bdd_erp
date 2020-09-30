@@ -1242,11 +1242,11 @@ class WarehouseBillTService extends Service
                 $flag = false;
                 $error[$i][] = $this->getError($goodsM);
             }
-//            $result = $form->updateFromValidate($goodsM);
-//            if ($result['error'] == false) {
-//                $flag = false;
-//                $error[$i][] = $result['msg'];
-//            }
+            $result = $form->updateFromValidate($goodsM);
+            if ($result['error'] == false) {
+                $flag = false;
+                $error[$i][] = $result['msg'];
+            }
             if (!$flag && !empty($style_sn)) {
                 //$error[$i] = array_unshift($error[$i], "[" . $style_sn . "]");
             }
