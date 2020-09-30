@@ -267,7 +267,7 @@ class WarehouseBillLService extends Service
                     'second_stone_clarity3' => $good->second_stone_clarity3,//副石3净度
                     'second_stone_price3' => $good->second_stone_price3,//副石3单价
                     'second_stone_cost3' => $good->second_stone_amount3,//副石3成本价
-                    'shiliao_remark' => $good->stone_remark,
+                    'shiliao_remark' => $good->stone_remark,//石料备注
 
                     //配件信息
                     'peijian_way' => $good->parts_way,//配件方式
@@ -296,7 +296,7 @@ class WarehouseBillLService extends Service
                     'edition_fee' => $good->templet_fee,//版费
                     'penrasa_fee' => $good->penlasha_fee,//喷沙费
                     'lasha_fee' => $good->lasha_fee,//拉沙费
-                    'bukou_fee' => $good->bukou_fee,//补扣费
+                    'bukou_fee' => $good->bukou_fee,//补口费
                     'extra_stone_fee' => $good->extra_stone_fee,//超石费
                     'fense_fee' => $good->fense_fee,//分色/分件费
                     'biaomiangongyi_fee' => $good->biaomiangongyi_fee,//表面工艺费
