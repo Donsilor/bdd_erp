@@ -864,7 +864,7 @@ $params = $params ? "&" . http_build_query($params) : '';
                                 'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#afb4db;'],
                                 'footerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#afb4db;'],
                                 'value' => function ($model, $key, $index, $widget) {
-                                    $widget->footer = $model->getAttributeLabel('main_stone_price');
+                                    $widget->footer = $model->getAttributeLabel('main_stone_shape');
                                     return Yii::$app->attr->valueName($model->main_stone_shape) ?? "";
                                 },
                                 'filter' => Html::activeDropDownList($searchModel, 'main_stone_shape', $model->getMainStoneShapeMap(), [
