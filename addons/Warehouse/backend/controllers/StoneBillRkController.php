@@ -6,6 +6,7 @@ use addons\Supply\common\models\Supplier;
 use addons\Warehouse\common\enums\GoldBillTypeEnum;
 use addons\Warehouse\common\enums\StoneBillTypeEnum;
 use addons\Warehouse\common\forms\WarehouseGoldBillTForm;
+use addons\Warehouse\common\forms\WarehouseStoneBillRkForm;
 use addons\Warehouse\common\models\Warehouse;
 use addons\Warehouse\common\models\WarehouseGoldBill;
 use function Clue\StreamFilter\fun;
@@ -14,16 +15,10 @@ use Yii;
 use common\traits\Curd;
 use common\models\base\SearchModel;
 use common\helpers\ExcelHelper;
-use addons\Warehouse\common\models\WarehouseGoods;
 use addons\Warehouse\common\models\WarehouseBill;
-use addons\Warehouse\common\models\WarehouseBillGoods;
 use addons\Warehouse\common\models\WarehouseBillGoodsL;
 use addons\Warehouse\common\forms\WarehouseBillTForm;
-use addons\Warehouse\common\forms\WarehouseBillTGoodsForm;
-use addons\Warehouse\common\forms\WarehouseBillLGoodsForm;
 use addons\Warehouse\common\enums\BillStatusEnum;
-use addons\Warehouse\common\enums\BillTypeEnum;
-use addons\Warehouse\common\enums\PutInTypeEnum;
 use addons\Style\common\enums\LogTypeEnum;
 use addons\Style\common\models\ProductType;
 use addons\Style\common\models\StyleCate;
@@ -42,7 +37,7 @@ class StoneBillRkController extends BaseController
 {
 
     use Curd;
-    public $modelClass = WarehouseGoldBillTForm::class;
+    public $modelClass = WarehouseStoneBillRkForm::class;
     public $billType = StoneBillTypeEnum::STONE_RK;
 
 
