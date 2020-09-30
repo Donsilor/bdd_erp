@@ -14,8 +14,6 @@ use common\traits\Curd;
 use common\helpers\Url;
 use common\models\base\SearchModel;
 use addons\Warehouse\common\models\WarehouseBill;
-use addons\Warehouse\common\models\WarehouseBillGoodsL;
-use addons\Warehouse\common\forms\WarehouseBillTGoodsForm;
 use addons\Warehouse\common\enums\BillStatusEnum;
 use addons\Warehouse\common\enums\BillTypeEnum;
 use common\helpers\ArrayHelper;
@@ -76,7 +74,7 @@ class StoneBillRkGoodsController extends BaseController
         $id = \Yii::$app->request->get('id');
         $bill_id = Yii::$app->request->get('bill_id');
         $model = $this->findModel($id);
-        $bill = WarehouseGoldBill::find()->where(['id'=>$bill_id])->one();
+        $bill = WarehouseStoneBill::find()->where(['id'=>$bill_id])->one();
         $model = $model ?? new WarehouseStoneBillRkGoodsForm();
         // ajax 校验
         $this->activeFormValidate($model);
@@ -101,6 +99,7 @@ class StoneBillRkGoodsController extends BaseController
                 return $this->message($e->getMessage(), $this->redirect(\Yii::$app->request->referrer), 'error');
             }
         }
+
         return $this->renderAjax($this->action->id, [
             'model' => $model,
         ]);
@@ -116,7 +115,7 @@ class StoneBillRkGoodsController extends BaseController
     {
         $id = \Yii::$app->request->get('id');
         $model = $this->findModel($id);
-        $model = $model ?? new WarehouseBillTGoodsForm();
+        $model = $model ?? new WarehouseStoneBillRkGoodsForm();
         return $this->renderAjax($this->action->id, [
             'model' => $model,
         ]);
@@ -124,7 +123,7 @@ class StoneBillRkGoodsController extends BaseController
 
     /**
      *
-     * ajax批量导入
+     * ajax批量
      * @return mixed|string|\yii\web\Response
      * @throws
      */
@@ -135,7 +134,7 @@ class StoneBillRkGoodsController extends BaseController
         $download = \Yii::$app->request->get('download', 0);
         $bill = WarehouseBill::findOne($bill_id);
         if ($download) {
-            $model = new WarehouseBillTGoodsForm();
+            $model = new WarehouseStoneBillRkGoodsForm();
             list($values, $fields) = $model->getTitleList();
             if (empty($bill_id)) {
                 header("Content-Disposition: attachment;filename=【" . rand(100, 999) . "】入库单明细导入(" . date('Ymd') . ").csv");
@@ -147,7 +146,7 @@ class StoneBillRkGoodsController extends BaseController
             exit();
         }
         $model = $this->findModel($id);
-        $model = $model ?? new WarehouseBillTGoodsForm();
+        $model = $model ?? new WarehouseStoneBillRkGoodsForm();
         // ajax 校验
         $this->activeFormValidate($model);
         if (Yii::$app->request->isPost) {
@@ -171,48 +170,7 @@ class StoneBillRkGoodsController extends BaseController
         ]);
     }
 
-    /**
-     *
-     * ajax编辑
-     * @return mixed|string|\yii\web\Response
-     * @throws
-     */
-    public function actionEdit()
-    {
-        $this->layout = '@backend/views/layouts/iframe';
 
-        $id = \Yii::$app->request->get('id');
-        //$bill_id = Yii::$app->request->get('bill_id');
-        $model = $this->findModel($id);
-        $model = $model ?? new WarehouseBillTGoodsForm();
-        // ajax 校验
-        //$this->activeFormValidate($model);
-        if ($model->load(\Yii::$app->request->post())) {
-            try {
-                $trans = \Yii::$app->db->beginTransaction();
-                //$model->biaomiangongyi = join(',',$model->biaomiangongyi);
-                $result = $model->updateFromValidate($model);
-                if($result['error'] == false){
-                    throw new \Exception($result['msg']);
-                }
-                if (false === $model->save()) {
-                    throw new \Exception($this->getError($model));
-                }
-                \Yii::$app->warehouseService->billT->syncUpdatePrice($model);
-                \Yii::$app->warehouseService->billT->WarehouseBillTSummary($model->bill_id);
-                $trans->commit();
-                Yii::$app->getSession()->setFlash('success', '保存成功');
-                return ResultHelper::json(200, '保存成功');
-            } catch (\Exception $e) {
-                $trans->rollBack();
-                return ResultHelper::json(422, $e->getMessage());
-            }
-        }
-        $model->biaomiangongyi = explode(',', $model->biaomiangongyi);
-        return $this->render($this->action->id, [
-            'model' => $model,
-        ]);
-    }
 
     /**
      * ajax更新排序/状态
@@ -259,7 +217,7 @@ class StoneBillRkGoodsController extends BaseController
 
         $ids = Yii::$app->request->post('ids');
         $ids = $ids ?? Yii::$app->request->get('ids');
-        $model = new WarehouseBillTGoodsForm();
+        $model = new WarehouseStoneBillRkGoodsForm();
         $model->ids = $ids;
         $id_arr = $model->getIds();
         if (!$id_arr) {
@@ -279,7 +237,7 @@ class StoneBillRkGoodsController extends BaseController
                 $trans = Yii::$app->trans->beginTransaction();
                 $id_arr = array_unique($id_arr);
                 foreach ($id_arr as $id) {
-                    $goods = WarehouseBillTGoodsForm::findOne(['id' => $id]);
+                    $goods = WarehouseStoneBillRkGoodsForm::findOne(['id' => $id]);
                     $goods->$name = $value;
                     if (false === $goods->validate()) {
                         throw new \Exception($this->getError($goods));
@@ -354,7 +312,7 @@ class StoneBillRkGoodsController extends BaseController
         if ($bill->bill_status != BillStatusEnum::SAVE) {
             exit("单据不是保存状态");
         }
-        $model = new WarehouseBillTGoodsForm();
+        $model = new WarehouseStoneBillRkGoodsForm();
         $total = $model->goodsSummary($bill_id);
         return $this->render($this->action->id, [
             'model' => $model,
@@ -415,7 +373,7 @@ class StoneBillRkGoodsController extends BaseController
         }
         try {
             $trans = \Yii::$app->db->beginTransaction();
-            WarehouseBillTGoodsForm::deleteAll(['id' => $ids]);
+            WarehouseStoneBillRkGoodsForm::deleteAll(['id' => $ids]);
             \Yii::$app->warehouseService->billT->WarehouseBillTSummary($model->bill_id);
             $trans->commit();
             \Yii::$app->getSession()->setFlash('success', '删除成功');
@@ -437,10 +395,12 @@ class StoneBillRkGoodsController extends BaseController
         \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
 
         $style_sn = \Yii::$app->request->get('style_sn');
-        $model = StoneStyle::find()->select(['stone_type','stone_name'])->where(['style_sn'=>$style_sn])->one();
+        $model = StoneStyle::find()->select(['stone_type','stone_name','cert_type','stone_shape'])->where(['style_sn'=>$style_sn])->one();
         $data = [
             'stone_type' => $model->stone_type??"",
             'stone_name' => $model->stone_name??"",
+            'cert_type' => $model->cert_type??"",
+            'stone_shape' => $model->stone_shape??"",
         ];
         return ResultHelper::json(200,'查询成功', $data);
     }

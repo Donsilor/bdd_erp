@@ -244,7 +244,7 @@ class StoneBillRkController extends BaseController
                 $model->auditor_id = Yii::$app->user->identity->getId();
                 if($model->audit_status == AuditStatusEnum::PASS){
                     $model->bill_status = BillStatusEnum::CONFIRM;
-                    \Yii::$app->warehouseService->goldT->createGold($model);
+                    \Yii::$app->warehouseService->stoneRk->createStone($model);
                 }else{
                     $model->bill_status = BillStatusEnum::SAVE;
                 }
