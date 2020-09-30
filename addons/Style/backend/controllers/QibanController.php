@@ -358,14 +358,15 @@ class QibanController extends BaseController
             try{
                 $trans = Yii::$app->trans->beginTransaction();
 
-                $audit = [
+                /* $audit = [
                     'audit_status' =>  $model->audit_status ,
                     'audit_time' => time(),
                     'audit_remark' => $model->audit_remark
-                ];
-                $res = \Yii::$app->services->flowType->flowAudit($this->targetType,$id,$audit);
+                ]; */
+                //$flow = \Yii::$app->services->flowType->flowAudit($this->targetType,$id,$audit);
                 //审批完结或者审批不通过才会走下面
-                if($res->flow_status == FlowStatusEnum::COMPLETE || $res->flow_status == FlowStatusEnum::CANCEL){
+                //if($flow->flow_status == FlowStatusEnum::COMPLETE || $flow->flow_status == FlowStatusEnum::CANCEL){
+                    
                     $model->auditor_id = \Yii::$app->user->identity->getId();
                     $model->audit_time = time();
                     if ($model->audit_status == AuditStatusEnum::PASS) {
@@ -381,13 +382,13 @@ class QibanController extends BaseController
                     if (false === $model->save()) {
                         throw new \Exception($this->getError($model));
                     }
-                }
+                //}
                 $trans->commit();
             }catch (\Exception $e){
                 $trans->rollBack();
-                return $this->message("审核失败:". $e->getMessage(),  $this->redirect(Yii::$app->request->referrer), 'error');
+                return $this->message($e->getMessage(),  $this->redirect(Yii::$app->request->referrer), 'error');
             }
-            return $this->message("保存成功", $this->redirect(Yii::$app->request->referrer), 'success');
+            return $this->message("审核成功", $this->redirect(Yii::$app->request->referrer), 'success');
         }
         if($model->audit_status == 0){
             $model->audit_status = 1;
