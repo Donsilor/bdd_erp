@@ -62,7 +62,7 @@ $this->params['breadcrumbs'][] = $this->title;
             [
                 'attribute' => 'style_image',
                 'value' => function ($model) {
-                    return \common\helpers\ImageHelper::fancyBox($model->getStyleImage());
+                    return \common\helpers\ImageHelper::fancyBox($model->style_image);
                 },
                 'filter' => false,
                 'format' => 'raw',
