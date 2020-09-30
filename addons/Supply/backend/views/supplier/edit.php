@@ -51,7 +51,8 @@ $this->params['breadcrumbs'][] = $this->title;
                     </div>
                     <div class="row">
                         <div class="col-lg-4">
-                            <?= $form->field($model, 'goods_type')->dropDownList(\addons\Supply\common\enums\GoodsTypeEnum::getMap(),['prompt'=>'请选择']) ?>
+                            <?php $model->goods_type = !empty($model->goods_type)?array_filter(explode(',', $model->goods_type)):null;?>
+                            <?= $form->field($model, 'goods_type')->checkboxList(\addons\Supply\common\enums\GoodsTypeEnum::getMap()) ?>
                         </div>
                         <div class="col-lg-4">
                             <?= $form->field($model, 'supplier_status')->dropDownList(\addons\Supply\common\enums\SupplierStatusEnum::getMap(),['prompt'=>'请选择']) ?>

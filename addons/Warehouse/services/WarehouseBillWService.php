@@ -20,6 +20,7 @@ use addons\Warehouse\common\enums\BillTypeEnum;
 use addons\Warehouse\common\enums\PandianAdjustEnum;
 use addons\Warehouse\common\models\WarehouseBillGoodsW;
 use common\enums\ConfirmEnum;
+use common\enums\LogTypeEnum;
 
 /**
  * 盘点单
@@ -154,9 +155,9 @@ class WarehouseBillWService extends WarehouseBillService
         if ($bill->bill_status != BillStatusEnum::SAVE) {
             throw new \Exception("盘点单已结束");
         }
-        $bill_detail_ids = [];
+       // $bill_detail_ids = [];
         foreach ($goods_ids as $goods_id) {            
-           
+            $isNewRecord = false;
             $billGoods = WarehouseBillGoods::find()->where(['goods_id'=>$goods_id,'bill_id'=>$bill->id])->one();
             if($billGoods && $billGoods->status == PandianStatusEnum::NORMAL) {
                 //已盘点且正常的忽略
@@ -167,14 +168,17 @@ class WarehouseBillWService extends WarehouseBillService
                 throw new \Exception("[{$goods_id}]货号不存在");
             }
             if(!$billGoods) {
+                $isNewRecord = true;
                 $billGoods = new WarehouseBillGoods();
                 $billGoods->bill_id = $bill->id;
                 $billGoods->bill_type = $bill->bill_type;
-                $billGoods->style_sn = $bill->style_sn;
+                $billGoods->style_sn = $goods->style_sn;
                 $billGoods->bill_no = $bill->bill_no;
-                $billGoods->goods_id = $goods_id;
-                $billGoods->to_warehouse_id = $bill->to_warehouse_id;//盘点仓库
+                $billGoods->to_warehouse_id = $bill->to_warehouse_id;//盘点仓库                
                 $billGoods->status = PandianStatusEnum::PROFIT;//盘盈
+                //商品属性
+                $billGoods->goods_id = $goods->goods_id;
+                $billGoods->goods_num = 0;
             }else {
                 if($billGoods->goods_num >1) {
                     $billGoods->status = PandianStatusEnum::DOING;//盘点中
@@ -187,17 +191,22 @@ class WarehouseBillWService extends WarehouseBillService
             $billGoods->goods_name = $goods->goods_name;            
             $billGoods->from_warehouse_id = $goods->warehouse_id;//归属仓库
             //更多商品属性
-            //............
-            
+            //............            
             if(false === $billGoods->save()) {
                 throw new \Exception($this->getError($billGoods));
+            }
+            
+            //盘点明细关系表数据更新
+            if($isNewRecord) {
+                $sql = "insert into ".WarehouseBillGoodsW::tableName().'(id,should_num) select id,goods_num from '.WarehouseBillGoods::tableName()." where id=".$billGoods->id;
+                Yii::$app->db->createCommand($sql)->execute();
             }
             if($billGoods->goods_num > 1) {
                 WarehouseBillGoodsW::updateAll(['actual_num'=>0,'status'=>ConfirmEnum::YES],['id'=>$billGoods->id]);
             }else{
                 WarehouseBillGoodsW::updateAll(['actual_num'=>1,'status'=>ConfirmEnum::YES],['id'=>$billGoods->id]);
             }            
-            $bill_detail_ids[] = $billGoods->id;            
+            //$bill_detail_ids[] = $billGoods->id;            
         }        
         $this->billWSummary($bill->id);
         
@@ -238,7 +247,7 @@ class WarehouseBillWService extends WarehouseBillService
      * @param unknown $bill_id
      */
     public function adjustBillW($bill_id){        
-            
+        
         $pandianStatusArray = [PandianStatusEnum::LOSS,PandianStatusEnum::PROFIT];
         $goodsStatusArray1  = [GoodsStatusEnum::HAS_SOLD];
         $goodsStatusArray2  = [GoodsStatusEnum::IN_TRANSFER,GoodsStatusEnum::IN_RETURN_FACTORY,GoodsStatusEnum::IN_SALE,GoodsStatusEnum::IN_REFUND];
@@ -252,7 +261,7 @@ class WarehouseBillWService extends WarehouseBillService
             $goods = WarehouseGoods::find()->select(['id','goods_id','goods_status','warehouse_id'])->where(['goods_id'=>$billGoods->goods_id])->one();
             if(empty($goods)){
                 continue;
-            }
+            } 
             $billGoods->from_warehouse_id = $goods->warehouse_id;
             if($billGoods->status == PandianStatusEnum::LOSS && in_array($goods->goods_status,$goodsStatusArray1)){
                 //如果盘亏-货品状态【已销售】 调整状态：【已销售】                
@@ -272,7 +281,16 @@ class WarehouseBillWService extends WarehouseBillService
             } 
 
         }
+        $this->billWSummary($bill_id);
         
+        //日志
+        $log = [
+                'bill_id' => $bill_id,
+                'log_type' => LogTypeEnum::ARTIFICIAL,
+                'log_module' => '盘点单',
+                'log_msg' => '盘点自动校正'
+        ];
+        \Yii::$app->warehouseService->billLog->createBillLog($log);
         return true;
 
     }
