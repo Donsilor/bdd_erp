@@ -8,6 +8,7 @@ use addons\Warehouse\common\models\WarehouseStone;
 use addons\Warehouse\common\models\WarehouseStoneBill;
 use addons\Warehouse\common\models\WarehouseStoneBillGoods;
 use common\enums\AuditStatusEnum;
+use common\enums\LogTypeEnum;
 use common\helpers\ExcelHelper;
 use Yii;
 use common\components\Service;
@@ -134,26 +135,25 @@ class WarehouseStoneBillRkService extends Service
                 continue;
             }
         }
-        //订单再次校验
-        $form->validateOrders();
 
         if($form->hasError() === false) {
-            foreach ($form->order_list as $k=>$order) {
+            foreach ($form->goods_list as $k=>$stoneBillGoods) {
                 try{
-                    $order = $this->createFullOrder($order);
+                    if(false === $stoneBillGoods->save()) {
+                        throw new \Exception($this->getError($stoneBillGoods));
+                    }
 
                     $log = [
-                        'order_id' => $order->id,
-                        'order_sn' => $order->order_sn,
-                        'order_status' => $order->order_status,
+                        'bill_id' => $stoneBillGoods->bill_id,
+                        'bill_status' => BillStatusEnum::SAVE,
                         'log_type' => LogTypeEnum::ARTIFICIAL,
-                        'log_time' => time(),
-                        'log_module' => '创建订单',
-                        'log_msg' => "订单批量导入, 订单号:".$order->order_sn
+                        'log_module' => '创建其他入库单',
+                        'log_msg' => '其他入库单'.$stoneBillGoods->bill_no.'批量导入明细'
                     ];
-                    \Yii::$app->salesService->orderLog->createOrderLog($log);
+                    \Yii::$app->warehouseService->stoneBillLog->createStoneBillLog($log);
+
                 }catch (\Exception $e) {
-                    $form->addRowError($rowIndex, 'error', "创建订单失败：".$e->getMessage());
+                    $form->addRowError($rowIndex, 'error', "创建失败：".$e->getMessage());
                 }
             }
         }

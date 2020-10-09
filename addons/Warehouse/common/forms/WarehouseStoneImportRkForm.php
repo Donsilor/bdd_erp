@@ -78,7 +78,7 @@ class WarehouseStoneImportRkForm extends ImportForm
             21=>'remark',
     ];
     //唯一行的字段
-    public $uniqueKey = 'stone_sn';
+    public $uniqueKey = '';
     //只需要填写第一行的字段
     public $uniqueColumn = [
     ];
@@ -90,14 +90,13 @@ class WarehouseStoneImportRkForm extends ImportForm
             'stone_num',
             'stone_weight',
             'stone_price',
-            'incl_tax_price',
+
 
     ];
     public $numberColumns = [
             'stone_num',
             'stone_weight',
             'stone_price',
-            'incl_tax_price',
 
     ];
     //文本属性
@@ -106,6 +105,8 @@ class WarehouseStoneImportRkForm extends ImportForm
     ];
     //单选下拉属性
     public $attrSelectColumns = [
+            AttrIdEnum::MAT_STONE_TYPE =>'stone_type',
+            AttrIdEnum::MAIN_STONE_SHAPE =>'shape',
             AttrIdEnum::MAIN_STONE_COLOR =>'color',
             AttrIdEnum::MAIN_STONE_CLARITY =>'clarity',
             AttrIdEnum::MAIN_STONE_CUT =>'cut',
@@ -179,20 +180,21 @@ class WarehouseStoneImportRkForm extends ImportForm
         }
 
         if($this->hasError() === false) {
-            $this->loadWarehouseStoneGoods();
+            $this->loadWarehouseStoneGoods($rowIndex);
         }        
         return $this->hasError();
     }
     /**
      * 组装数据
      */
-    private function loadWarehouseStoneGoods()
+    private function loadWarehouseStoneGoods($rowIndex)
     {
-        if(!isset($this->goods_list[$this->stone_sn])){
+        if(!isset($this->goods_list[$rowIndex])){
             $form = new WarehouseStoneBillGoods();
             $form->bill_id = $this->bill_id;
-            $form->bill_sn = $this->bill_sn;
+            $form->bill_no = $this->bill_no;
             $form->bill_type = $this->bill_type;
+            $form->stone_type = $this->stone_type;
             $form->stone_sn = $this->stone_sn;
             $form->style_sn = $this->style_sn;
             $form->stone_name = $this->stone_name;
@@ -200,52 +202,32 @@ class WarehouseStoneImportRkForm extends ImportForm
             $form->stone_num = $this->stone_num;
             $form->stone_weight = $this->stone_weight;
             $form->stone_price = $this->stone_price;
-
-            foreach ($this->attrSelectColumns as $attr_id => $attr_name){
-                $valueList = \Yii::$app->attr->valueMap($attr_id);
-                $valueList = array_flip($valueList);
-                $attr_value_id = isset($valueList[$this->$attr_name]) ? $valueList[$this->$attr_name] : "";
-                $form->$attr_name =  (string)$attr_value_id ?? "";
-            }
-//            $form->color = $this->color;
-//            $form->clarity = $this->clarity;
-//            $form->cut = $this->cut;
-//            $form->polish = $this->polish;
-//            $form->symmetry = $this->symmetry;
-//            $form->fluorescence = $this->fluorescence;
-//            $form->stone_colour = $this->stone_colour;
-//            $form->cert_type = $this->cert_type;
-
+            $form->incl_tax_price = empty($this->incl_tax_price)? round($this->stone_weight * $this->stone_price,3) : $this->incl_tax_price;
+            $form->shape = $this->shape;
+            $form->color = $this->color;
+            $form->clarity = $this->clarity;
+            $form->cut = $this->cut;
+            $form->polish = $this->polish;
+            $form->symmetry = $this->symmetry;
+            $form->fluorescence = $this->fluorescence;
+            $form->stone_colour = $this->stone_colour;
+            $form->stone_size = $this->stone_size;
+            $form->cert_type = $this->cert_type;
             $form->cert_id = $this->cert_id;
+            $form->remark = $this->remark;
 
         }else{
-            $form = $this->goods_list[$this->stone_sn];
+            $form = $this->goods_list[$rowIndex];
         }
-        $this->goods_list[$this->stone_sn] = $form;
+        $this->goods_list[$rowIndex] = $form;
     }
+
+
     /**
-     * 订单校验
+     * 校验
      */
-    public function validateOrders()
-    {   
-        //订单金额校验
-        $rowIndex = 3;
-        foreach ($this->order_list ?? [] as $order) {
-            if($order->account->order_amount > 0) {
-                $goods_amount = 0;
-                foreach ($order->goods_list as $goods){
-                    $goods_amount += $goods['goods_pay_price'] * $goods['goods_num'];
-                }                
-                $other_fee = $order->account->other_fee/1;
-                $paid_amount = $order->account->paid_amount/1;
-                $_order_amount = $other_fee + $goods_amount;
-                if($order->account->order_amount != $_order_amount) {
-                    $this->addRowError($rowIndex, 'order_amount', "订单总金额({$order->account->order_amount})不对,系统计算总金额:{$_order_amount}(订单总金额=商品价格*商品数量+订单其它费用)");
-                }else if($order->account->paid_amount > $_order_amount) {
-                    $this->addRowError($rowIndex, 'paid_amount', "订单已付金额({$order->account->paid_amount})不能大于订单总金额({$_order_amount})");
-                }
-            }
-            $rowIndex += count($order->goods_list);             
-        }
+    public function validateStoneGoods()
+    {
+
     }
 }

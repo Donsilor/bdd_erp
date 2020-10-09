@@ -32,6 +32,7 @@ use Yii;
  * @property string $stone_norms 规格
  * @property string $stone_size 石料尺寸(mm)
  * @property string $cost_price 成本价
+ * @property string $incl_tax_price 成本价
  * @property string $stone_price 石料单价/ct
  * @property string $sale_price 销售价格
  * @property int $channel_id 渠道
