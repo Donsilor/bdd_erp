@@ -82,8 +82,9 @@ class WarehouseStoneBillMsService extends Service
             foreach ($billGoodsList as $billGoods) {
                 //$billGoods = new WarehouseStoneBillGoods();
                 $stoneM = new WarehouseStone();
+                $stone_sn = $billGoods->stone_sn;
                 $stoneData = [
-                    'stone_sn' => (string) rand(10000000000,99999999999),//临时
+                    'stone_sn' =>(string) rand(10000000000,99999999999),//临时
                     'stone_name' => $billGoods->stone_name,
                     'stone_status' => StoneStatusEnum::IN_STOCK,
                     'style_sn' => $billGoods->style_sn,
@@ -118,7 +119,11 @@ class WarehouseStoneBillMsService extends Service
                 if(false === $stoneM->save()){
                     throw new \Exception($this->getError($stoneM));
                 }
-                \Yii::$app->warehouseService->stone->createStoneSn($stoneM);
+                if(empty($stone_sn)){
+                    \Yii::$app->warehouseService->stone->createStoneSn($stoneM);
+                }else{
+                    $stoneM->stone_sn = $stone_sn;
+                }
                 //同步更新石料编号到单据明细
                 $billGoods->stone_sn = $stoneM->stone_sn;
                 if(false === $billGoods->save(true,['id','stone_sn'])) {

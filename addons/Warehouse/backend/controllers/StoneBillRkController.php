@@ -5,8 +5,11 @@ namespace addons\Warehouse\backend\controllers;
 use addons\Supply\common\models\Supplier;
 use addons\Warehouse\common\enums\GoldBillTypeEnum;
 use addons\Warehouse\common\enums\StoneBillTypeEnum;
+use addons\Warehouse\common\forms\WarehouseStoneBillGoodsForm;
 use addons\Warehouse\common\forms\WarehouseStoneBillRkForm;
+use addons\Warehouse\common\forms\WarehouseStoneImportRkForm;
 use addons\Warehouse\common\models\Warehouse;
+use addons\Warehouse\common\models\WarehouseStoneBillGoods;
 use function Clue\StreamFilter\fun;
 use common\models\backend\Member;
 use Yii;
@@ -120,15 +123,14 @@ class StoneBillRkController extends BaseController
                 }
 
                 if ($isNewRecord) {
-//                    $gModel = new WarehouseBillTGoodsForm();
-//                    $gModel->bill_id = $model->id;
-//                    $gModel->supplier_id = $model->supplier_id;
-//                    $gModel->put_in_type = $model->put_in_type;
-//                    $gModel->supplier_id = $model->supplier_id;
-//                    $gModel->file = UploadedFile::getInstance($model, 'file');
-//                    if (!empty($gModel->file) && isset($gModel->file)) {
-//                        \Yii::$app->warehouseService->billT->uploadGoods($gModel);
-//                    }
+                    $gModel = new WarehouseStoneImportRkForm();
+                    $gModel->bill_id = $model->id;
+                    $gModel->bill_no = $model->bill_no;
+                    $gModel->bill_type = $model->bill_type;
+                    $gModel->file = UploadedFile::getInstance($model, 'file');
+                    if (!empty($gModel->file) && isset($gModel->file)) {
+                        \Yii::$app->warehouseService->stoneRk->importStoneRk($gModel);
+                    }
                     $log_msg = "创建其它入库单{$model->bill_no}";
                 } else {
                     $log_msg = "修改其它入库单{$model->bill_no}";
@@ -147,7 +149,7 @@ class StoneBillRkController extends BaseController
 
                 if ($isNewRecord) {
                     \Yii::$app->getSession()->setFlash('success', '保存成功');
-                    return $this->redirect(['gold-bill-t-goods/index', 'bill_id' => $model->id]);
+                    return $this->redirect(['stone-bill-rk-goods/index', 'bill_id' => $model->id]);
                     //return $this->message("保存成功", $this->redirect(['view', 'id' => $model->id]), 'success');
                 } else {
                     \Yii::$app->getSession()->setFlash('success', '保存成功');
@@ -244,7 +246,7 @@ class StoneBillRkController extends BaseController
                 $model->auditor_id = Yii::$app->user->identity->getId();
                 if($model->audit_status == AuditStatusEnum::PASS){
                     $model->bill_status = BillStatusEnum::CONFIRM;
-                    \Yii::$app->warehouseService->stoneRk->createStone($model);
+                    \Yii::$app->warehouseService->stoneRk->auditBillMs($model);
                 }else{
                     $model->bill_status = BillStatusEnum::SAVE;
                 }
@@ -272,35 +274,6 @@ class StoneBillRkController extends BaseController
         ]);
     }
 
-    /**
-     *
-     * 同步更新价格
-     * @param $id
-     * @return mixed
-     */
-    /* public function actionSyncUpdatePrice($id)
-    {
-        if (!($model = $this->modelClass::findOne($id))) {
-            return $this->message("找不到数据", $this->redirect(['index']), 'error');
-        }
-        try {
-            $trans = \Yii::$app->db->beginTransaction();
-
-            \Yii::$app->warehouseService->billT->syncUpdatePriceAll($id);
-
-            //更新收货单汇总：总金额和总数量
-            $res = \Yii::$app->warehouseService->billT->warehouseBillTSummary($id);
-            if (false === $res) {
-                throw new \yii\db\Exception('更新单据汇总失败');
-            }
-            $trans->commit();
-            \Yii::$app->getSession()->setFlash('success', '更新成功');
-            return $this->redirect(\Yii::$app->request->referrer);
-        } catch (\Exception $e) {
-            $trans->rollBack();
-            return $this->message($e->getMessage(), $this->redirect(\Yii::$app->request->referrer), 'error');
-        }
-    } */
 
     /**
      *
@@ -375,6 +348,52 @@ class StoneBillRkController extends BaseController
             return $this->message($e->getMessage(), $this->redirect(\Yii::$app->request->referrer), 'error');
         }
     }
+
+
+
+    /**
+     * ajax 导入
+     *
+     * @return mixed|string|\yii\web\Response
+     * @throws \yii\base\ExitException
+     */
+    public function actionAjaxImportRk()
+    {
+        if(Yii::$app->request->get('download')) {
+            $file = dirname(dirname(__FILE__)).'/resources/excel/石料其他入库单模板导入.xlsx';
+            $content = file_get_contents($file);
+            if (!empty($content)) {
+                header("Content-type:application/vnd.ms-excel");
+                header("Content-Disposition: attachment;filename=石料其他入库单模板导入".date("Ymd").".xlsx");
+                header("Content-Transfer-Encoding: binary");
+                exit($content);
+            }
+        }
+
+        $model = new WarehouseStoneImportRkForm();
+
+        // ajax 校验
+        $this->activeFormValidate($model);
+        if ($model->load(Yii::$app->request->post())) {
+            try{
+                $trans = Yii::$app->trans->beginTransaction();
+                $model->file = UploadedFile::getInstance($model, 'file');
+                \Yii::$app->salesService->order->importOrderK($model);
+                $trans->commit();
+                return $this->message('导入完成', $this->redirect(Yii::$app->request->referrer), 'success');
+            }catch (\Exception $e){
+                $trans->rollBack();
+                return $this->message($e->getMessage(), $this->redirect(Yii::$app->request->referrer), 'error');
+            }
+
+        }
+
+        return $this->renderAjax($this->action->id, [
+            'model' => $model,
+        ]);
+    }
+
+
 
     /**
      * 单据打印
