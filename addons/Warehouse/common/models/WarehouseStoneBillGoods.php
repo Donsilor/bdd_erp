@@ -154,4 +154,13 @@ class WarehouseStoneBillGoods extends BaseModel
     {
         return $this->hasOne(SaleChannel::class, ['id'=>'channel_id']);
     }
+
+    /**
+     * 金料库存
+     * @return \yii\db\ActiveQuery
+     */
+    public function getWarehouseStone()
+    {
+        return $this->hasOne(WarehouseStone::class, ['stone_sn'=>'stone_sn'])->alias('warehouseStone');
+    }
 }

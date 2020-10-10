@@ -123,6 +123,25 @@ class WarehouseStoneBillService extends Service
                     }
                     break;
                 }
+
+
+            case StoneBillTypeEnum::STONE_CK:
+                {
+                    if(!$tag){
+                        $tabList = [
+                            1=>['name'=>'单据详情','url'=>Url::to(['stone-bill-ck/view','id'=>$bill_id,'tab'=>1,'returnUrl'=>$returnUrl])],
+                            2=>['name'=>'单据明细','url'=>Url::to(['stone-bill-ck-goods/index','bill_id'=>$bill_id,'tab'=>2,'returnUrl'=>$returnUrl])],
+                            4=>['name'=>'日志列表','url'=>Url::to(['stone-bill-log/index','bill_id'=>$bill_id,'tab'=>4,'returnUrl'=>$returnUrl])]
+                        ];
+                    }else{
+                        $tabList = [
+                            1=>['name'=>'单据详情','url'=>Url::to(['stone-bill-ck/view','id'=>$bill_id,'tab'=>1,'returnUrl'=>$returnUrl])],
+                            3=>['name'=>'单据明细(编辑)','url'=>Url::to(['stone-bill-ck-goods/edit-all','bill_id'=>$bill_id,'tab'=>3,'returnUrl'=>$returnUrl])],
+                            4=>['name'=>'日志列表','url'=>Url::to(['stone-bill-log/index','bill_id'=>$bill_id,'tab'=>4,'returnUrl'=>$returnUrl])]
+                        ];
+                    }
+                    break;
+                }
         }
         return $tabList;
     }
