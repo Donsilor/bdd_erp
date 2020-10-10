@@ -2,19 +2,15 @@
 
 namespace addons\Warehouse\backend\controllers;
 
-use addons\Warehouse\common\enums\AdjustTypeEnum;
-use addons\Warehouse\common\enums\GoldBillTypeEnum;
-use addons\Warehouse\common\enums\GoldStatusEnum;
-use addons\Warehouse\common\forms\WarehouseGoldBillOGoodsForm;
-use addons\Warehouse\common\models\WarehouseGold;
-use addons\Warehouse\common\models\WarehouseGoldBill;
-use addons\Warehouse\common\models\WarehouseGoldBillGoods;
+use addons\Warehouse\common\enums\StoneBillTypeEnum;
+use addons\Warehouse\common\forms\WarehouseStoneBillCkGoodsForm;
+use addons\Warehouse\common\models\WarehouseStoneBill;
+use addons\Warehouse\common\models\WarehouseStoneBillGoods;
 use common\helpers\StringHelper;
 use Yii;
 use common\traits\Curd;
 use common\helpers\Url;
 use common\models\base\SearchModel;
-use addons\Warehouse\common\models\WarehouseBill;
 use addons\Warehouse\common\enums\DeliveryTypeEnum;
 use addons\Warehouse\common\forms\WarehouseBillBForm;
 use addons\Warehouse\common\forms\WarehouseBillCForm;
@@ -31,8 +27,8 @@ class StoneBillCkGoodsController extends BaseController
     use Curd;
     
     
-    public $modelClass = WarehouseGoldBillOGoodsForm::class;
-    public $billType = GoldBillTypeEnum::GOLD_O;
+    public $modelClass = WarehouseStoneBillCkGoodsForm::class;
+    public $billType = StoneBillTypeEnum::STONE_CK;
 
     /**
      * Lists all WarehouseBillBGoods models.
@@ -58,15 +54,15 @@ class StoneBillCkGoodsController extends BaseController
 
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
         $dataProvider->query->andWhere(['=', 'bill_id', $bill_id]);
-        $dataProvider->query->andWhere(['>',WarehouseGoldBillOGoodsForm::tableName().'.status',-1]);
+        $dataProvider->query->andWhere(['>',WarehouseStoneBillCkGoodsForm::tableName().'.status',-1]);
 
-        $bill = WarehouseGoldBill::find()->where(['id'=>$bill_id])->one();
+        $bill = WarehouseStoneBill::find()->where(['id'=>$bill_id])->one();
         return $this->render($this->action->id, [
             'dataProvider' => $dataProvider,
             'searchModel' => $searchModel,
             'bill' => $bill,
             'tab' => $tab,
-            'tabList'=>\Yii::$app->warehouseService->goldBill->menuTabList($bill_id, $this->billType, $returnUrl),
+            'tabList'=>\Yii::$app->warehouseService->stoneBill->menuTabList($bill_id, $this->billType, $returnUrl),
         ]);
     }
 
@@ -80,7 +76,7 @@ class StoneBillCkGoodsController extends BaseController
     {
         $id = \Yii::$app->request->get('id');
         $model = $this->findModel($id);
-        $model = $model ?? new WarehouseGoldBillOGoodsForm();
+        $model = $model ?? new WarehouseStoneBillCkGoodsForm();
         // ajax 校验
         $this->activeFormValidate($model);
         if ($model->load(\Yii::$app->request->post())) {
@@ -90,7 +86,7 @@ class StoneBillCkGoodsController extends BaseController
                     throw new \Exception($this->getError($model));
                 }
                 //汇总：总金额和总数量
-                $res = \Yii::$app->warehouseService->goldBill->goldBillSummary($model->bill_id);
+                $res = \Yii::$app->warehouseService->stoneBill->stoneBillSummary($model->bill_id);
                 if(false === $res){
                     throw new \Exception('更新单据汇总失败');
                 }
@@ -112,15 +108,15 @@ class StoneBillCkGoodsController extends BaseController
     public function actionAjaxScan()
     {
         $bill_id  = Yii::$app->request->post('bill_id');
-        $gold_sn = Yii::$app->request->post('gold_sn');
-        if($gold_sn == "") {
+        $stone_sn = Yii::$app->request->post('stone_sn');
+        if($stone_sn == "") {
             \Yii::$app->getSession()->setFlash('error', '批次号不能为空');
             return ResultHelper::json(422, "批次号不能为空");
         }
-        $gold_sns = StringHelper::explodeIds($gold_sn);
+        $stone_sns = StringHelper::explodeIds($stone_sn);
         try{
             $trans = \Yii::$app->db->beginTransaction();
-            \Yii::$app->warehouseService->goldO->scanGoods($bill_id,$gold_sns);
+            \Yii::$app->warehouseService->stoneCk->scanGoods($bill_id,$stone_sns);
             $trans->commit();
             
             \Yii::$app->getSession()->setFlash('success', '添加成功');
@@ -143,7 +139,8 @@ class StoneBillCkGoodsController extends BaseController
         if (!($model = $this->modelClass::findOne($id))) {
             return ResultHelper::json(404, '找不到数据');
         }
-        $old_gold_weight = $model->gold_weight; //原有
+        $old_stone_weight = $model->stone_weight; //原有
+        $old_stone_num = $model->stone_num; //原有
         $data = Yii::$app->request->get();
         $model->attributes = ArrayHelper::filter($data, array_keys($data));
         $key = array_keys($data);
@@ -156,15 +153,17 @@ class StoneBillCkGoodsController extends BaseController
             if (!$model->save(true,$key)) {
                 return ResultHelper::json(422, $this->getError($model));
             }
-            $new_gold_weight = $model->gold_weight;
-            $adjust_weight = $old_gold_weight - $new_gold_weight;
+            $new_stone_weight = $model->stone_weight;
+            $new_stone_num = $model->stone_num;
+            $adjust_weight = $old_stone_weight - $new_stone_weight;
+            $adjust_num = $old_stone_num - $new_stone_num;
             //更新库存金重
-            $res = Yii::$app->warehouseService->goldO->updateGoldWeight($model->gold_sn, $adjust_weight);
+            $res = Yii::$app->warehouseService->stoneCk->updatestoneWeight($model->stone_sn, $adjust_weight,$adjust_num);
             if($res['status'] == false){
                 return ResultHelper::json(404, $res['msg']);
             }
             //更新单据库存
-            \Yii::$app->warehouseService->goldBill->goldBillSummary($model->bill_id);
+            \Yii::$app->warehouseService->stoneBill->stoneBillSummary($model->bill_id);
             $trans->commit();
             return ResultHelper::json(200, '修改成功');
         }catch (\Exception $e) {
@@ -222,8 +221,8 @@ class StoneBillCkGoodsController extends BaseController
                 $goods_info['warehouse_id'] = $goods->warehouse_id;
                 $goods_info['from_warehouse_id'] = $goods->warehouse_id;
                 $goods_info['material'] = $goods->material;
-                $goods_info['gold_weight'] = $goods->gold_weight;
-                $goods_info['gold_loss'] = $goods->gold_loss;
+                $goods_info['stone_weight'] = $goods->stone_weight;
+                $goods_info['stone_loss'] = $goods->stone_loss;
                 $goods_info['diamond_carat'] = $goods->diamond_carat;
                 $goods_info['diamond_color'] = $goods->diamond_color;
                 $goods_info['diamond_clarity'] = $goods->diamond_clarity;
@@ -264,11 +263,11 @@ class StoneBillCkGoodsController extends BaseController
     {
         $bill_id = Yii::$app->request->get('bill_id');
         $tab = Yii::$app->request->get('tab',2);
-        $returnUrl = Yii::$app->request->get('returnUrl',Url::to(['gold-bill-o-goods/index','bill_id'=>$bill_id]));
+        $returnUrl = Yii::$app->request->get('returnUrl',Url::to(['stone-bill-o-goods/index','bill_id'=>$bill_id]));
         $searchModel = new SearchModel([
             'model' => $this->modelClass,
             'scenario' => 'default',
-            'partialMatchAttributes' => ['gold_name'], // 模糊查询
+            'partialMatchAttributes' => ['stone_name'], // 模糊查询
             'defaultOrder' => [
                 'id' => SORT_DESC
             ],
@@ -278,13 +277,13 @@ class StoneBillCkGoodsController extends BaseController
 
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
         $dataProvider->query->andWhere(['=', 'bill_id', $bill_id]);
-        $dataProvider->query->andWhere(['>',WarehouseGoldBillGoods::tableName().'.status',-1]);
-        $bill = WarehouseGoldBill::find()->where(['id'=>$bill_id])->one();
+        $dataProvider->query->andWhere(['>',WarehouseStoneBillGoods::tableName().'.status',-1]);
+        $bill = WarehouseStoneBill::find()->where(['id'=>$bill_id])->one();
         return $this->render($this->action->id, [
             'dataProvider' => $dataProvider,
             'searchModel' => $searchModel,
             'bill' => $bill,
-            'tabList'=>\Yii::$app->warehouseService->goldBill->menuTabList($bill_id, $this->billType, $returnUrl, $tab),
+            'tabList'=>\Yii::$app->warehouseService->stoneBill->menuTabList($bill_id, $this->billType, $returnUrl, $tab),
             'tab' => $tab,
         ]);
     }
@@ -305,8 +304,9 @@ class StoneBillCkGoodsController extends BaseController
             $trans = Yii::$app->db->beginTransaction();
 
             //更新库存金重
-            $adjust_weight = $billGoods->gold_weight;
-            $res = Yii::$app->warehouseService->goldO->updateGoldWeight($billGoods->gold_sn, $adjust_weight);
+            $adjust_weight = $billGoods->stone_weight;
+            $adjust_num = $billGoods->stone_num;
+            $res = Yii::$app->warehouseService->stoneCk->updatestoneWeight($billGoods->stone_sn, $adjust_weight, $adjust_num);
             if($res['status'] == false){
                 return ResultHelper::json(404, $res['msg']);
             }
@@ -315,12 +315,12 @@ class StoneBillCkGoodsController extends BaseController
                 throw new \Exception($this->getError($billGoods));
             }
             //更新单据数量和金额
-            \Yii::$app->warehouseService->goldBill->goldBillSummary($bill_id);
+            \Yii::$app->warehouseService->stoneBill->stoneBillSummary($bill_id);
             $trans->commit();
-            return $this->message("删除成功", $this->redirect(['gold-bill-o-goods/index','bill_id'=>$bill_id]));
+            return $this->message("删除成功", $this->redirect(['stone-bill-ck-goods/index','bill_id'=>$bill_id]));
         }catch (\Exception $e){
             $trans->rollBack();
-            return $this->message($e->getMessage(), $this->redirect(['gold-bill-o-goods/index','bill_id'=>$bill_id]), 'error');
+            return $this->message($e->getMessage(), $this->redirect(['stone-bill-ck-goods/index','bill_id'=>$bill_id]), 'error');
         }
     }
 

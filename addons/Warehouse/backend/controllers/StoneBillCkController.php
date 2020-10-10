@@ -10,11 +10,11 @@ use addons\Supply\common\models\Supplier;
 use addons\Warehouse\common\enums\DeliveryTypeEnum;
 use addons\Warehouse\common\enums\GoldBillTypeEnum;
 use addons\Warehouse\common\enums\OutTypeEnum;
+use addons\Warehouse\common\enums\StoneBillTypeEnum;
 use addons\Warehouse\common\forms\WarehouseBillCForm;
-use addons\Warehouse\common\forms\WarehouseGoldBillOForm;
+use addons\Warehouse\common\forms\WarehouseStoneBillCkForm;
 use addons\Warehouse\common\models\Warehouse;
 use addons\Warehouse\common\models\WarehouseBillGoods;
-use addons\Warehouse\common\models\WarehouseGoldBill;
 use addons\Warehouse\common\models\WarehouseGoods;
 use common\helpers\ArrayHelper;
 use common\helpers\PageHelper;
@@ -41,8 +41,8 @@ use addons\Warehouse\common\enums\GoodsStatusEnum;
 class StoneBillCkController extends BaseController
 {
     use Curd;
-    public $modelClass = WarehouseGoldBillOForm::class;
-    public $billType = GoldBillTypeEnum::GOLD_O;
+    public $modelClass = WarehouseStoneBillCkForm::class;
+    public $billType = StoneBillTypeEnum::STONE_CK;
 
     /**
      * Lists all WarehouseBill models.
@@ -70,18 +70,18 @@ class StoneBillCkController extends BaseController
 
         $created_at = $searchModel->created_at;
         if (!empty($created_at)) {
-            $dataProvider->query->andFilterWhere(['>=',WarehouseGoldBillOForm::tableName().'.created_at', strtotime(explode('/', $created_at)[0])]);//起始时间
-            $dataProvider->query->andFilterWhere(['<',WarehouseGoldBillOForm::tableName().'.created_at', (strtotime(explode('/', $created_at)[1]) + 86400)] );//结束时间
+            $dataProvider->query->andFilterWhere(['>=',WarehouseStoneBillCkForm::tableName().'.created_at', strtotime(explode('/', $created_at)[0])]);//起始时间
+            $dataProvider->query->andFilterWhere(['<',WarehouseStoneBillCkForm::tableName().'.created_at', (strtotime(explode('/', $created_at)[1]) + 86400)] );//结束时间
         }
 
         $audit_time = $searchModel->audit_time;
         if (!empty($audit_time)) {
-            $dataProvider->query->andFilterWhere(['>=',WarehouseGoldBillOForm::tableName().'.audit_time', strtotime(explode('/', $audit_time)[0])]);//起始时间
-            $dataProvider->query->andFilterWhere(['<',WarehouseGoldBillOForm::tableName().'.audit_time', (strtotime(explode('/', $audit_time)[1]) + 86400)] );//结束时间
+            $dataProvider->query->andFilterWhere(['>=',WarehouseStoneBillCkForm::tableName().'.audit_time', strtotime(explode('/', $audit_time)[0])]);//起始时间
+            $dataProvider->query->andFilterWhere(['<',WarehouseStoneBillCkForm::tableName().'.audit_time', (strtotime(explode('/', $audit_time)[1]) + 86400)] );//结束时间
         }
 
-        $dataProvider->query->andWhere(['>',WarehouseGoldBillOForm::tableName().'.status', -1]);
-        $dataProvider->query->andWhere(['=',WarehouseGoldBillOForm::tableName().'.bill_type', $this->billType]);
+        $dataProvider->query->andWhere(['>',WarehouseStoneBillCkForm::tableName().'.status', -1]);
+        $dataProvider->query->andWhere(['=',WarehouseStoneBillCkForm::tableName().'.bill_type', $this->billType]);
 
         //导出
         if(Yii::$app->request->get('action') === 'export'){
@@ -108,7 +108,7 @@ class StoneBillCkController extends BaseController
     {
         $id = \Yii::$app->request->get('id');
         $model = $this->findModel($id);
-        $model = $model ?? new WarehouseGoldBillOForm();
+        $model = $model ?? new WarehouseStoneBillCkForm();
 
         if($model->isNewRecord){
             $model->bill_type = $this->billType;
@@ -137,7 +137,7 @@ class StoneBillCkController extends BaseController
                     'log_module' => '其它出库单',
                     'log_msg' => $log_msg
                 ];
-                \Yii::$app->warehouseService->goldBillLog->createGoldBillLog($log);
+                \Yii::$app->warehouseService->stoneBillLog->createStoneBillLog($log);
 
                 $trans->commit();
 
@@ -166,11 +166,11 @@ class StoneBillCkController extends BaseController
         $id = Yii::$app->request->get('id');
         $tab = Yii::$app->request->get('tab',1);
         $returnUrl = Yii::$app->request->get('returnUrl',Url::to(['bill-c/index', 'id'=>$id]));
-        $model = $this->findModel($id) ?? new WarehouseGoldBillOForm();
+        $model = $this->findModel($id) ?? new WarehouseStoneBillCkForm();
         return $this->render($this->action->id, [
             'model' => $model,
             'tab'=>$tab,
-            'tabList'=>\Yii::$app->warehouseService->goldBill->menuTabList($id,$this->billType,$returnUrl),
+            'tabList'=>\Yii::$app->warehouseService->stoneBill->menuTabList($id,$this->billType,$returnUrl),
             'returnUrl'=>$returnUrl,
         ]);
     }
@@ -184,7 +184,7 @@ class StoneBillCkController extends BaseController
     public function actionAjaxApply($id){
         
         $id = \Yii::$app->request->get('id');        
-        $model = $this->findModel($id) ?? new WarehouseGoldBillOForm();
+        $model = $this->findModel($id) ?? new WarehouseStoneBillCkForm();
         if($model->bill_status != BillStatusEnum::SAVE){
             return $this->message('单据不是保存状态', $this->redirect(\Yii::$app->request->referrer), 'error');
         }
@@ -207,7 +207,7 @@ class StoneBillCkController extends BaseController
                 'log_module' => '提交审核',
                 'log_msg' => "其它出库单申请审核"
             ];
-            \Yii::$app->warehouseService->goldBillLog->createGoldBillLog($log);
+            \Yii::$app->warehouseService->stoneBillLog->createStoneBillLog($log);
             $trans->commit();
             return $this->message('操作成功', $this->redirect(\Yii::$app->request->referrer), 'success');
 
@@ -260,7 +260,7 @@ class StoneBillCkController extends BaseController
                     'log_module' => '其它出库单',
                     'log_msg' => "其它出库单审核, 审核状态：".AuditStatusEnum::getValue($model->audit_status).",审核备注：".$model->audit_remark
                 ];
-                \Yii::$app->warehouseService->goldBillLog->createGoldBillLog($log);
+                \Yii::$app->warehouseService->stoneBillLog->createStoneBillLog($log);
 
                 $trans->commit();
                 $this->message('操作成功', $this->redirect(Yii::$app->request->referrer), 'success');
@@ -289,7 +289,7 @@ class StoneBillCkController extends BaseController
         try{
             $trans = \Yii::$app->trans->beginTransaction();
 
-            \Yii::$app->warehouseService->goldO->cancelBillO($model);
+            \Yii::$app->warehouseService->stoneCk->cancelBillCk($model);
 
             $trans->commit();
             $this->message('操作成功', $this->redirect(Yii::$app->request->referrer), 'success');
@@ -312,7 +312,7 @@ class StoneBillCkController extends BaseController
         }
         try{
             $trans = \Yii::$app->trans->beginTransaction();
-            \Yii::$app->warehouseService->goldO->deleteBillO($model);
+            \Yii::$app->warehouseService->stoneCk->deleteBillCk($model);
             $trans->commit();
             $this->message('操作成功', $this->redirect(Yii::$app->request->referrer), 'success');
         }catch (\Exception $e){
