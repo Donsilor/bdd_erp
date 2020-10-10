@@ -194,7 +194,8 @@ class WarehouseStoneImportRkForm extends ImportForm
             $form->stone_weight = $this->stone_weight;
             $form->stone_price = $this->stone_price;
             $form->incl_tax_price = empty($this->incl_tax_price) && $this->incl_tax_price <= 0? round($this->stone_weight * $this->stone_price,3) : $this->incl_tax_price;
-
+            $form->cost_price = round($this->stone_weight * $this->stone_price,3);
+            $form->carat = round($form->stone_weight / $form->stone_num,3);
             //下拉属性值
             foreach ($this->attrSelectColumns as $arrt_id => $attr_name){
                 if(isset($this->$attr_name)){
