@@ -32,7 +32,7 @@ $form = ActiveForm::begin([
                         'options' => ['placeholder' => '请选择'],
                         'pluginOptions' => [
                             'allowClear' => false,
-                            'disabled' => $model->isNewRecord ? null : 'disabled'
+                            //'disabled' => $model->isNewRecord ? null : 'disabled'
                         ],
                     ]); ?>
                 </div>
@@ -42,7 +42,7 @@ $form = ActiveForm::begin([
                         'options' => ['placeholder' => '请选择'],
                         'pluginOptions' => [
                             'allowClear' => false,
-                            'disabled' => $model->isNewRecord || empty($model->product_type_id) ? null : 'disabled'
+                            //'disabled' => $model->isNewRecord || empty($model->product_type_id) ? null : 'disabled'
                         ],
                     ]); ?>
                 </div>

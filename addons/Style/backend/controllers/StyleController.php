@@ -121,9 +121,9 @@ class StyleController extends BaseController
                     }                    
                 }else if($model->audit_status != AuditStatusEnum::PASS){
                     if($model->is_autosn == 1) {
-                        if($oldinfo['style_channel_id'] != $model->style_channel_id || $oldinfo['style_sex'] != $model->style_sex || $oldinfo['style_cate_id'] != $model->style_cate_id || $oldinfo['style_material'] != $model->style_material) {
+                        /* if($oldinfo['style_channel_id'] != $model->style_channel_id || $oldinfo['style_sex'] != $model->style_sex || $oldinfo['style_cate_id'] != $model->style_cate_id || $oldinfo['style_material'] != $model->style_material) {
                             Yii::$app->styleService->style->createStyleSn($model);
-                        }
+                        } */
                     }else {
                        Yii::$app->styleService->style->createStyleSort($model);
                     }
