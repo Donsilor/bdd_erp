@@ -51,7 +51,6 @@ class WarehouseStoneImportRkForm extends ImportForm
     public $stone_colour;
     public $stone_size;
     public $cert_type;
-    public $cert_id;
     public $remark;
     public $columns = [
             1=>'stone_sn',
@@ -72,8 +71,7 @@ class WarehouseStoneImportRkForm extends ImportForm
             16=>'stone_colour',
             17=>'stone_size',
             18=>'cert_type',
-            19=>'cert_id',
-            20=>'remark',
+            19=>'remark',
     ];
     //唯一行的字段
     public $uniqueKey = '';
@@ -98,7 +96,7 @@ class WarehouseStoneImportRkForm extends ImportForm
     ];
     //文本属性
     public $attrInputColumns = [
-        AttrIdEnum::DIA_CERT_NO =>'cert_id',
+
     ];
     //单选下拉属性
     public $attrSelectColumns = [
@@ -196,17 +194,22 @@ class WarehouseStoneImportRkForm extends ImportForm
             $form->stone_weight = $this->stone_weight;
             $form->stone_price = $this->stone_price;
             $form->incl_tax_price = empty($this->incl_tax_price) && $this->incl_tax_price <= 0? round($this->stone_weight * $this->stone_price,3) : $this->incl_tax_price;
-            $form->shape = empty($this->shape)? $this->_style->stone_shape : $this->shape;
-            $form->color = $this->color;
-            $form->clarity = $this->clarity;
-            $form->cut = $this->cut;
-            $form->polish = $this->polish;
-            $form->symmetry = $this->symmetry;
-            $form->fluorescence = $this->fluorescence;
-            $form->stone_colour = $this->stone_colour;
+
+            //下拉属性值
+            foreach ($this->attrSelectColumns as $arrt_id => $attr_name){
+                if(isset($this->$attr_name)){
+                    $form->$attr_name = $this->$attr_name['attr_value_id'];
+                }
+            }
+            //文本属性
+            foreach ($this->attrInputColumns as $arrt_id => $attr_name){
+                if(isset($this->$attr_name)){
+                    $form->$attr_name = $this->$attr_name['attr_value'];
+                }
+            }
+            $form->shape = $form->shape ?? $this->_style->stone_shape;
+            $form->cert_type = $form->cert_type ?? $this->_style->cert_type;
             $form->stone_size = $this->stone_size;
-            $form->cert_type = empty($this->cert_type)? $this->_style->cert_type : $this->cert_type;
-            $form->cert_id = $this->cert_id;
             $form->remark = $this->remark;
 
         }else{
