@@ -21,6 +21,9 @@ use addons\Warehouse\common\enums\PandianAdjustEnum;
 use addons\Warehouse\common\models\WarehouseBillGoodsW;
 use common\enums\ConfirmEnum;
 use common\enums\LogTypeEnum;
+use addons\Warehouse\common\forms\ImportBillWForm;
+use common\helpers\UploadHelper;
+use common\helpers\ExcelHelper;
 
 /**
  * 盘点单
@@ -143,12 +146,55 @@ class WarehouseBillWService extends WarehouseBillService
         return true;
     }
     /**
+     * 批量导入盘点货品
+     * @param ImportBillWForm $form
+     */
+    public function importGoods($form)
+    {        
+        if (!($form->file->tempName ?? true)) {
+            throw new \Exception("请上传文件");
+        }
+        if (UploadHelper::getExt($form->file->name) != 'xlsx') {
+            throw new \Exception("请上传xlsx格式文件");
+        } 
+        if ($form->bill_id == '') {
+            throw new \Exception("bill_id不能为空");
+        }
+        
+        $startRow = 1;
+        $endColumn = count($form->columns);
+        $rows = ExcelHelper::import($form->file->tempName, $startRow, $endColumn, $form->columns);//从第1行开始,第4列结束取值
+        if(!isset($rows[$startRow+1])) {
+            throw new \Exception("导入数据不能为空");
+        }
+        //1.数据校验及格式化
+        foreach ($rows as $rowIndex=> & $row) {
+            if($rowIndex == $startRow) {
+                $form->titles = $row;
+                continue;
+            }
+            if(($form->titles['goods_num'] ?? '') != '盘点数量') {
+                throw new \Exception("数据模板有变动，请下载最新模板");
+            }
+            //加载表格行数据 并且数据校验
+            if(empty(array_filter($row)) || false === $form->loadRow($row,$rowIndex)){
+                continue;
+            }
+            try {
+                $this->pandianGoods($form->bill_id, [$form->goods_id=>$form->goods_num]);
+            }catch (\Exception $e) {
+                $form->addRowError($rowIndex, 'error', $e->getMessage());
+            }
+        }
+        $form->showImportMessage();
+    }
+    /**
      * 盘点商品操作
      * @param int $bill_id
-     * @param array $goods_ids
+     * @param array $goods_ids_nums  [货号=>12]
      * @throws \Exception
      */
-    public function pandianGoods($bill_id, $goods_ids)
+    public function pandianGoods($bill_id, $goods_ids_nums)
     {   
         //校验单据状态
         $bill = WarehouseBill::find()->where(['id'=>$bill_id])->one();
@@ -156,12 +202,12 @@ class WarehouseBillWService extends WarehouseBillService
             throw new \Exception("盘点单已结束");
         }
        // $bill_detail_ids = [];
-        foreach ($goods_ids as $goods_id) {            
+        foreach ($goods_ids_nums as $goods_id=>$num) {            
             $isNewRecord = false;
             $billGoods = WarehouseBillGoods::find()->where(['goods_id'=>$goods_id,'bill_id'=>$bill->id])->one();
             if($billGoods && $billGoods->status == PandianStatusEnum::NORMAL) {
-                //已盘点且正常的忽略
-                continue;
+                //已盘点且正常=>忽略
+                //continue;
             }
             $goods = WarehouseGoods::find()->where(['goods_id'=>$goods_id])->one();
             if(empty($goods)) {
@@ -178,13 +224,21 @@ class WarehouseBillWService extends WarehouseBillService
                 $billGoods->status = PandianStatusEnum::PROFIT;//盘盈
                 //商品属性
                 $billGoods->goods_id = $goods->goods_id;
-                $billGoods->goods_num = 0;
+                $billGoods->goods_num = 0;//应盘数量
             }else {
                 if($billGoods->goods_num >1) {
                     $billGoods->status = PandianStatusEnum::DOING;//盘点中
-                }else if($billGoods->to_warehouse_id == $goods->warehouse_id) {
+                }
+                
+                if($billGoods->goods_num < $num){
+                    $billGoods->status = PandianStatusEnum::PROFIT;//盘盈
+                }else if($billGoods->goods_num > $num) {
+                    $billGoods->status = PandianStatusEnum::LOSS;//盘亏
+                }else if($billGoods->goods_num == $num) {
                     $billGoods->status = PandianStatusEnum::NORMAL;//正常
-                }else if($billGoods->to_warehouse_id != $goods->warehouse_id){
+                }
+                
+                if($billGoods->to_warehouse_id != $goods->warehouse_id){
                     $billGoods->status = PandianStatusEnum::LOSS;//盘亏
                 }
             }
@@ -201,11 +255,7 @@ class WarehouseBillWService extends WarehouseBillService
                 $sql = "insert into ".WarehouseBillGoodsW::tableName().'(id,should_num) select id,goods_num from '.WarehouseBillGoods::tableName()." where id=".$billGoods->id;
                 Yii::$app->db->createCommand($sql)->execute();
             }
-            if($billGoods->goods_num > 1) {
-                WarehouseBillGoodsW::updateAll(['actual_num'=>0,'status'=>ConfirmEnum::YES],['id'=>$billGoods->id]);
-            }else{
-                WarehouseBillGoodsW::updateAll(['actual_num'=>1,'status'=>ConfirmEnum::YES],['id'=>$billGoods->id]);
-            }            
+            WarehouseBillGoodsW::updateAll(['actual_num'=>$num,'status'=>ConfirmEnum::YES],['id'=>$billGoods->id]);
             //$bill_detail_ids[] = $billGoods->id;            
         }        
         $this->billWSummary($bill->id);

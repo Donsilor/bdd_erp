@@ -13,6 +13,8 @@ use addons\Warehouse\common\models\WarehouseBillGoods;
 use addons\Warehouse\common\forms\WarehouseBillWForm;
 use addons\Warehouse\common\enums\PandianStatusEnum;
 use addons\Warehouse\common\models\WarehouseBillGoodsW;
+use addons\Warehouse\common\forms\ImportBillWForm;
+use yii\web\UploadedFile;
 
 
 /**
@@ -98,6 +100,46 @@ class BillWGoodsController extends BaseController
         ]);
         
     } 
+    /**
+     * 其它出库单批量导入
+     */
+    public function actionAjaxImport()
+    {
+        if (Yii::$app->request->get('download')) {
+            $file = dirname(dirname(__FILE__)) . '/resources/excel/货品盘点单数据模板导入.xlsx';
+            $content = file_get_contents($file);
+            if (!empty($content)) {
+                header("Content-type:application/vnd.ms-excel");
+                header("Content-Disposition: attachment;filename=货品盘点单数据模板导入" . date("Ymd") . ".xlsx");
+                header("Content-Transfer-Encoding: binary");
+                exit($content);
+            }
+        }
+        $bill_id = Yii::$app->request->get('bill_id');
+        $model = new ImportBillWForm();
+        $model->bill_id = $bill_id;
+        
+        // ajax 校验
+        $this->activeFormValidate($model);
+        
+        if ($model->load(\Yii::$app->request->post())) {            
+            try {
+                $trans = \Yii::$app->trans->beginTransaction();
+                
+                $model->file = UploadedFile::getInstance($model, 'file');
+                
+                \Yii::$app->warehouseService->billW->importGoods($model);
+                $trans->commit();
+                return $this->message('导入成功', $this->redirect(Yii::$app->request->referrer), 'success');
+            } catch (\Exception $e) {
+                $trans->rollBack();
+                return $this->message($e->getMessage(), $this->redirect(\Yii::$app->request->referrer), 'error');
+            }
+        }
+        return $this->renderAjax($this->action->id, [
+                'model' => $model,
+        ]);
+    }
     
     /**
      * 盘点货品添加
@@ -112,7 +154,7 @@ class BillWGoodsController extends BaseController
         }
         try{
             $trans = \Yii::$app->db->beginTransaction();
-            \Yii::$app->warehouseService->billW->pandianGoods($bill_id,[$goods_id]);
+            \Yii::$app->warehouseService->billW->pandianGoods($bill_id,[$goods_id=>1]);
             $trans->commit();            
             return $this->message("操作成功", $this->redirect(\Yii::$app->request->referrer), 'success');
         }catch (\Exception $e){

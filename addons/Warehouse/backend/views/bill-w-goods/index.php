@@ -16,7 +16,12 @@ $this->params['breadcrumbs'][] = $this->title;
                 <?= Html::create(['bill-w-goods/edit-all', 'bill_id' => $bill->id,'returnUrl'=>Url::getReturnUrl()], '盘点', [
                         'class'=>'btn btn-success btn-xs',
                         
-                ]); ?>               
+                ]); ?>
+                <?= Html::create(['bill-w-goods/ajax-import', 'bill_id' => $bill->id], '批量导入', [
+                        'class'=>'btn btn-success btn-xs',
+                        'data-toggle' => 'modal',
+                        'data-target' => '#ajaxModal',                        
+                ]); ?>                
            		<?= Html::create(['bill-w/ajax-adjust', 'id' => $bill->id], '刷新盘点', [
            		        'onclick' => 'rfTwiceAffirm(this,"刷新盘点","确定刷新盘点单吗？");return false;']
            		);?>
