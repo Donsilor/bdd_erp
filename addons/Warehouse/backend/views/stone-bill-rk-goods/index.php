@@ -32,7 +32,7 @@ $params = $params ? "&".http_build_query($params) : '';
         <?php
 
         if ($bill->bill_status == \addons\Warehouse\common\enums\BillStatusEnum::SAVE) {
-            echo Html::create(['ajax-edit', 'bill_id' => $bill->id], '新增金料', [
+            echo Html::create(['ajax-edit', 'bill_id' => $bill->id], '新增石料', [
                 'class' => 'btn btn-primary btn-xs',
                 'data-toggle' => 'modal',
                 'data-target' => '#ajaxModalLg',
