@@ -40,6 +40,9 @@ class SupplierForm extends Supplier
 
     public function getTargetType(){
         switch ($this->goods_type){
+            case GoodsTypeEnum::COMMODITY.','.GoodsTypeEnum::RAW_MATERIAL:
+                $this->targetType = TargetTypeEnum::SUPPLIER_MATERIAL_MENT;
+                break;
             case GoodsTypeEnum::COMMODITY:
                 $this->targetType = TargetTypeEnum::SUPPLIER_GOODS_MENT;
                 break;
