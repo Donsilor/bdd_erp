@@ -189,6 +189,48 @@ return [
                 ],
             ],
         ],
+        [
+                'title' => '原料管理',
+                'name' => 'style',
+                'child' => [
+                        [
+                                'title' =>'金料款式',
+                                'name'  => 'goldStyleIndex',
+                                'child' =>[
+                                        ['title' => '首页','name'  => 'gold-style/index'],
+                                        ['title' => '新增/编辑','name'  => 'gold-style/edit'],
+                                        ['title' => '启用/禁用','name'  => 'gold-style/ajax-update'],
+                                        ['title' => '提交审核','name'  => 'gold-style/ajax-apply'],
+                                        ['title' => '审核','name'  => 'gold-style/ajax-audit'],
+                                        ['title' => '详情','name'  => 'gold-style/view'],
+                                ],
+                        ],
+                        [
+                                'title' =>'石料款式',
+                                'name'  => 'stoneStyleIndex',
+                                'child' =>[
+                                        ['title' => '首页','name'  => 'stone-style/index'],
+                                        ['title' => '新增/编辑','name'  => 'stone-style/edit'],
+                                        ['title' => '启用/禁用','name'  => 'stone-style/ajax-update'],
+                                        ['title' => '提交审核','name'  => 'stone-style/ajax-apply'],
+                                        ['title' => '审核','name'  => 'stone-style/ajax-audit'],
+                                        ['title' => '详情','name'  => 'stone-style/view'],
+                                ],
+                        ],
+                        [
+                                'title' =>'配件款式',
+                                'name'  => 'partsStyleIndex',
+                                'child' =>[
+                                        ['title' => '首页','name'  => 'parts-style/index'],
+                                        ['title' => '新增/编辑','name'  => 'parts-style/edit'],
+                                        ['title' => '启用/禁用','name'  => 'parts-style/ajax-update'],
+                                        ['title' => '提交审核','name'  => 'parts-style/ajax-apply'],
+                                        ['title' => '审核','name'  => 'parts-style/ajax-audit'],
+                                        ['title' => '详情','name'  => 'parts-style/view'],
+                                ],
+                        ],
+                ],
+        ],
         [    
             'title' => '功能配置',
             'name' => 'function',
