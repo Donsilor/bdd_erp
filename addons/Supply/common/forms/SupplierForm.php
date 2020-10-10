@@ -47,7 +47,7 @@ class SupplierForm extends Supplier
                 $this->targetType = TargetTypeEnum::SUPPLIER_MATERIAL_MENT;
                 break;
             default:
-                $this->targetType = false;
+                $this->targetType = TargetTypeEnum::SUPPLIER_MATERIAL_MENT;
         }
     }
 
