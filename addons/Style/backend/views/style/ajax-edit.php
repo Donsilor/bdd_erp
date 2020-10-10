@@ -79,8 +79,11 @@ $form = ActiveForm::begin([
             <div class="row">
                 <div class="col-lg-12"><?= $form->field($model, 'remark')->textArea(['options' => ['maxlength' => true]]) ?></div>
             </div>
+            <div class="row">
+                <div class="col-lg-12"><font color="red">修改产品线和产品分类会影响变更：产品属性值，导致属性值重新填写，请谨慎修改! </font> </div>
+            </div>
         </div>
-
+        
     </div>
     <div class="modal-footer">
         <button type="button" class="btn btn-white" data-dismiss="modal">关闭</button>
