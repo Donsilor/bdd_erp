@@ -51,6 +51,7 @@ class WarehouseStoneImportRkForm extends ImportForm
     public $stone_colour;
     public $stone_size;
     public $cert_type;
+    public $cert_id;
     public $remark;
     public $columns = [
             1=>'stone_sn',
@@ -71,7 +72,8 @@ class WarehouseStoneImportRkForm extends ImportForm
             16=>'stone_colour',
             17=>'stone_size',
             18=>'cert_type',
-            19=>'remark',
+            19=>'cert_id',
+            20=>'remark',
     ];
     //唯一行的字段
     public $uniqueKey = '';
@@ -96,7 +98,7 @@ class WarehouseStoneImportRkForm extends ImportForm
     ];
     //文本属性
     public $attrInputColumns = [
-
+        AttrIdEnum::DIA_CERT_NO =>'cert_id',
     ];
     //单选下拉属性
     public $attrSelectColumns = [
@@ -196,15 +198,16 @@ class WarehouseStoneImportRkForm extends ImportForm
             $form->incl_tax_price = empty($this->incl_tax_price) && $this->incl_tax_price <= 0? round($this->stone_weight * $this->stone_price,3) : $this->incl_tax_price;
             $form->cost_price = round($this->stone_weight * $this->stone_price,3);
             $form->carat = round($form->stone_weight / $form->stone_num,3);
-            //下拉属性值
+
+            //下拉属性
             foreach ($this->attrSelectColumns as $arrt_id => $attr_name){
-                if(isset($this->$attr_name)){
+                if(isset($this->$attr_name['attr_value_id'])){
                     $form->$attr_name = $this->$attr_name['attr_value_id'];
                 }
             }
             //文本属性
             foreach ($this->attrInputColumns as $arrt_id => $attr_name){
-                if(isset($this->$attr_name)){
+                if(isset($this->$attr_name['attr_value'])){
                     $form->$attr_name = $this->$attr_name['attr_value'];
                 }
             }

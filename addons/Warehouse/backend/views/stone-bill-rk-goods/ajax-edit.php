@@ -46,59 +46,66 @@ $form = ActiveForm::begin([
                 <?= $form->field($model, 'cert_type')->dropDownList(Yii::$app->attr->valueMap(\addons\Style\common\enums\AttrIdEnum::DIA_CERT_TYPE),['prompt'=>'请选择']) ?>
             </div>
             <div class="col-lg-4">
-                <?= $form->field($model, 'shape')->dropDownList(Yii::$app->attr->valueMap(\addons\Style\common\enums\AttrIdEnum::MAIN_STONE_SHAPE),['prompt'=>'请选择']) ?>
+                <?= $form->field($model, 'cert_id')->textInput() ?>
             </div>
+
         </div>
         <div class="row">
+            <div class="col-lg-4">
+                <?= $form->field($model, 'shape')->dropDownList(Yii::$app->attr->valueMap(\addons\Style\common\enums\AttrIdEnum::MAIN_STONE_SHAPE),['prompt'=>'请选择']) ?>
+            </div>
             <div class="col-lg-4">
                 <?= $form->field($model, 'color')->dropDownList(Yii::$app->attr->valueMap(\addons\Style\common\enums\AttrIdEnum::DIA_COLOR),['prompt'=>'请选择']) ?>
             </div>
             <div class="col-lg-4">
                 <?= $form->field($model, 'clarity')->dropDownList(Yii::$app->attr->valueMap(\addons\Style\common\enums\AttrIdEnum::DIA_CLARITY),['prompt'=>'请选择']) ?>
             </div>
-            <div class="col-lg-4">
-                <?= $form->field($model, 'cut')->dropDownList(Yii::$app->attr->valueMap(\addons\Style\common\enums\AttrIdEnum::DIA_CUT),['prompt'=>'请选择']) ?>
-            </div>
+
 
         </div>
         <div class="row">
+            <div class="col-lg-4">
+                <?= $form->field($model, 'cut')->dropDownList(Yii::$app->attr->valueMap(\addons\Style\common\enums\AttrIdEnum::DIA_CUT),['prompt'=>'请选择']) ?>
+            </div>
             <div class="col-lg-4">
                 <?= $form->field($model, 'symmetry')->dropDownList(Yii::$app->attr->valueMap(\addons\Style\common\enums\AttrIdEnum::DIA_SYMMETRY),['prompt'=>'请选择']) ?>
             </div>
             <div class="col-lg-4">
                 <?= $form->field($model, 'polish')->dropDownList(Yii::$app->attr->valueMap(\addons\Style\common\enums\AttrIdEnum::DIA_POLISH),['prompt'=>'请选择']) ?>
             </div>
-            <div class="col-lg-4">
-                <?= $form->field($model, 'fluorescence')->dropDownList(Yii::$app->attr->valueMap(\addons\Style\common\enums\AttrIdEnum::DIA_FLUORESCENCE),['prompt'=>'请选择']) ?>
-            </div>
 
         </div>
         <div class="row">
+            <div class="col-lg-4">
+                <?= $form->field($model, 'fluorescence')->dropDownList(Yii::$app->attr->valueMap(\addons\Style\common\enums\AttrIdEnum::DIA_FLUORESCENCE),['prompt'=>'请选择']) ?>
+            </div>
             <div class="col-lg-4">
                 <?= $form->field($model, 'stone_colour')->dropDownList(Yii::$app->attr->valueMap(\addons\Style\common\enums\AttrIdEnum::DIA_COLOUR),['prompt'=>'请选择']) ?>
             </div>
             <div class="col-lg-4">
                 <?= $form->field($model, 'stone_norms')->textInput() ?>
             </div>
-            <div class="col-lg-4">
-                <?= $form->field($model, 'stone_size')->textInput() ?>
-            </div>
+
 
         </div>
         <div class="row">
+            <div class="col-lg-4">
+                <?= $form->field($model, 'stone_size')->textInput() ?>
+            </div>
             <div class="col-lg-4">
                 <?= $form->field($model, 'stone_num')->textInput() ?>
             </div>
             <div class="col-lg-4">
                 <?= $form->field($model, 'stone_weight')->textInput() ?>
             </div>
-            <div class="col-lg-4">
-                <?= $form->field($model, 'stone_price')->textInput() ?>
-            </div>
+
 
         </div>
         <div class="row">
-            <div class="col-lg-12">
+            <div class="col-lg-4">
+                <?= $form->field($model, 'stone_price')->textInput() ?>
+            </div>
+            <div class="col-lg-4">
                 <?= $form->field($model, 'incl_tax_price')->textInput(["placeholder" => "不填：将自动计算：（金料总重*金料单价）"])->hint('<font color="red">（自动计算：“金料总重*金料单价”，可编辑）</font>') ?>
             </div>
         </div>
