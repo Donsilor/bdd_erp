@@ -37,7 +37,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                  </tr>
                                  <tr>
                                      <td class="col-xs-3 text-right"><?= $model->getAttributeLabel('goods_type') ?>：</td>
-                                     <td><?= \addons\Supply\common\enums\GoodsTypeEnum::getValue($model->goods_type) ?></td>
+                                     <td><?= $model->goods_type ?></td>
                                  </tr>
                                  <tr>
                                      <td class="col-xs-3 text-right"><?= $model->getAttributeLabel('supplier_status') ?>：</td>
