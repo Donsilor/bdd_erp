@@ -154,6 +154,15 @@ class SupplierController extends BaseController
             }
             $model->pay_type = trim( $pay_type_str,',' );
         }
+        if($model->goods_type){
+            $goods_type_arr = explode(',', $model->goods_type);
+            $goods_type_arr = array_filter($goods_type_arr);
+            $goods_type_str = '';
+            foreach ($goods_type_arr as $goods_type){
+                $goods_type_str .= ','. \addons\Supply\common\enums\GoodsTypeEnum::getValue($goods_type);
+            }
+            $model->goods_type = trim( $goods_type_str,',' );
+        }
         return $this->render($this->action->id, [
             'model' => $model,
             'tab'=>$tab,

@@ -135,7 +135,7 @@ class Supplier extends BaseModel
     public function parseBusinessScope()
     {
         if(is_array($this->business_scope)){
-            $this->business_scope = ','.implode(',',$this->business_scope).',';
+            $this->business_scope = implode(',',$this->business_scope);
         }
         return $this->business_scope;
     }
@@ -146,7 +146,7 @@ class Supplier extends BaseModel
     public function parsePayTypeScope()
     {
         if(is_array($this->pay_type)){
-            $this->pay_type = ','.implode(',',$this->pay_type).',';
+            $this->pay_type = implode(',',$this->pay_type);
         }
         return $this->pay_type;
     }
@@ -156,7 +156,7 @@ class Supplier extends BaseModel
     public function parseGoodsTypeScope()
     {
         if(is_array($this->goods_type)){
-            $this->goods_type = ','.implode(',',$this->goods_type).',';
+            $this->goods_type = implode(',',$this->goods_type);
         }
         return $this->goods_type;
     }
