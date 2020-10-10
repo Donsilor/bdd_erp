@@ -131,7 +131,7 @@ return [
             'name' => 'style',
             'child' => [
                    [
-                       'title' =>'款式管理',
+                       'title' =>'款式列表',
                        'name'  => 'styleIndex',
                        'child' =>[
                                ['title' => '首页','name'  => 'style/index'],
