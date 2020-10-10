@@ -57,7 +57,7 @@ return [
             ],
             [
                     'title' => '原料管理',
-                    'route' => 'material_style',
+                    'route' => 'materialStyle',
                     'icon' => 'fa fa-superpowers',
                     'child' => [
                             [
@@ -131,9 +131,10 @@ return [
             'name' => 'style',
             'child' => [
                    [
-                       'title' =>'款式列表',
-                       'name'  => 'style/index',
+                       'title' =>'款式管理',
+                       'name'  => 'styleIndex',
                        'child' =>[
+                               ['title' => '首页','name'  => 'style/index'],
                                ['title' => '新增/编辑','name'  => 'style/ajax-edit'],
                                ['title' => '删除','name'  => 'style/delete'],
                                ['title' => '作废','name'  => 'style/destory'],
@@ -191,7 +192,7 @@ return [
         ],
         [
                 'title' => '原料管理',
-                'name' => 'style',
+                'name' => 'materialStyle',
                 'child' => [
                         [
                                 'title' =>'金料款式',
