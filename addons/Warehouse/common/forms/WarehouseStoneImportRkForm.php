@@ -38,7 +38,6 @@ class WarehouseStoneImportRkForm extends ImportForm
     public $stone_name;
     public $stone_norms;
     public $stone_num;
-    public $stone_type;
     public $stone_weight;
     public $stone_price;
     public $incl_tax_price;
@@ -57,25 +56,24 @@ class WarehouseStoneImportRkForm extends ImportForm
     public $columns = [
             1=>'stone_sn',
             2=>'style_sn',
-            3=>'stone_type',
-            4=>'stone_name',
-            5=>'stone_norms',
-            6=>'stone_num',
-            7=>'stone_weight',
-            8=>'stone_price',
-            9=>'incl_tax_price',
-            10=>'shape',
-            11=>'color',
-            12=>'clarity',
-            13=>'cut',
-            14=>'polish',
-            15=>'symmetry',
-            16=>'fluorescence',
-            17=>'stone_colour',
-            18=>'stone_size',
-            19=>'cert_type',
-            20=>'cert_id',
-            21=>'remark',
+            3=>'stone_name',
+            4=>'stone_norms',
+            5=>'stone_num',
+            6=>'stone_weight',
+            7=>'stone_price',
+            8=>'incl_tax_price',
+            9=>'shape',
+            10=>'color',
+            11=>'clarity',
+            12=>'cut',
+            13=>'polish',
+            14=>'symmetry',
+            15=>'fluorescence',
+            16=>'stone_colour',
+            17=>'stone_size',
+            18=>'cert_type',
+            19=>'cert_id',
+            20=>'remark',
     ];
     //唯一行的字段
     public $uniqueKey = '';
@@ -84,9 +82,8 @@ class WarehouseStoneImportRkForm extends ImportForm
     ];
     public $requredColumns = [
             'style_sn',
-            'stone_type',
             'stone_name',
-            'shape',
+//            'shape',
             'stone_num',
             'stone_weight',
             'stone_price',
@@ -105,7 +102,6 @@ class WarehouseStoneImportRkForm extends ImportForm
     ];
     //单选下拉属性
     public $attrSelectColumns = [
-            AttrIdEnum::MAT_STONE_TYPE =>'stone_type',
             AttrIdEnum::MAIN_STONE_SHAPE =>'shape',
             AttrIdEnum::MAIN_STONE_COLOR =>'color',
             AttrIdEnum::MAIN_STONE_CLARITY =>'clarity',
@@ -115,9 +111,9 @@ class WarehouseStoneImportRkForm extends ImportForm
             AttrIdEnum::MAIN_STONE_FLUORESCENCE=>'fluorescence',
             AttrIdEnum::MAIN_STONE_COLOUR =>'stone_colour',
             AttrIdEnum::DIA_CERT_TYPE =>'cert_type',
-    ];  
+    ];
 
-    
+    private $_style;
     
     public $goods_list;
     /**
@@ -163,10 +159,7 @@ class WarehouseStoneImportRkForm extends ImportForm
         if($this->stone_weight <=0) {
             $this->addRowError($rowIndex, 'stone_weight', "[{$this->stone_weight}]填写错误，不能小于0");
         }
-        //石料重量
-        if($this->incl_tax_price <=0) {
-            $this->addRowError($rowIndex, 'incl_tax_price', "[{$this->incl_tax_price}]填写错误，不能小于0");
-        }
+
         //款号信息
         if($this->style_sn) {
             $style = StoneStyle::find()->where(['style_sn'=>$this->style_sn])->one();
@@ -194,16 +187,16 @@ class WarehouseStoneImportRkForm extends ImportForm
             $form->bill_id = $this->bill_id;
             $form->bill_no = $this->bill_no;
             $form->bill_type = $this->bill_type;
-            $form->stone_type = $this->stone_type;
+            $form->stone_type = $this->_style->stone_type;
             $form->stone_sn = $this->stone_sn;
             $form->style_sn = $this->style_sn;
-            $form->stone_name = $this->stone_name;
+            $form->stone_name = empty($this->stone_name)? $this->_style->stone_name : $this->stone_name;
             $form->stone_norms = $this->stone_norms;
             $form->stone_num = $this->stone_num;
             $form->stone_weight = $this->stone_weight;
             $form->stone_price = $this->stone_price;
-            $form->incl_tax_price = empty($this->incl_tax_price)? round($this->stone_weight * $this->stone_price,3) : $this->incl_tax_price;
-            $form->shape = $this->shape;
+            $form->incl_tax_price = empty($this->incl_tax_price) && $this->incl_tax_price <= 0? round($this->stone_weight * $this->stone_price,3) : $this->incl_tax_price;
+            $form->shape = empty($this->shape)? $this->_style->stone_shape : $this->shape;
             $form->color = $this->color;
             $form->clarity = $this->clarity;
             $form->cut = $this->cut;
@@ -212,7 +205,7 @@ class WarehouseStoneImportRkForm extends ImportForm
             $form->fluorescence = $this->fluorescence;
             $form->stone_colour = $this->stone_colour;
             $form->stone_size = $this->stone_size;
-            $form->cert_type = $this->cert_type;
+            $form->cert_type = empty($this->cert_type)? $this->_style->cert_type : $this->cert_type;
             $form->cert_id = $this->cert_id;
             $form->remark = $this->remark;
 

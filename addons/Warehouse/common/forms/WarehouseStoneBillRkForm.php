@@ -21,7 +21,7 @@ class WarehouseStoneBillRkForm extends WarehouseStoneBill
     {
          $rules = [
              [['supplier_id'], 'required'],
-             [['file'], 'file', 'extensions' => ['csv']],//'skipOnEmpty' => false,
+             [['file'], 'file', 'extensions' => ['xlsx']],//'skipOnEmpty' => false,
          ];
          return ArrayHelper::merge(parent::rules() , $rules);
     }
