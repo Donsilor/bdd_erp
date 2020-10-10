@@ -97,12 +97,12 @@ class WarehouseStone extends BaseModel
     {
         return [
             'id' => 'ID',
-            'stone_sn' => '石料编号',
+            'stone_sn' => '石料编号/批次号',
             'stone_name' => '石料名称',
             'stone_type' => '石料类型',
             'style_sn' => '石料款号',
-            'stock_cnt' => '库存数量',
-            'stock_weight' => '库存重量(ct)',
+            'stock_cnt' => '总粒数',
+            'stock_weight' => '总石重(ct)',
             'stone_shape' => '石料形状',
             'stone_color' => '颜色',
             'stone_clarity' => '净度',

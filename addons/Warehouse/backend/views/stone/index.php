@@ -67,14 +67,7 @@ $params = $params ? "&".http_build_query($params) : '';
                             ]),
                             'headerOptions' => [],
                         ],
-                        [
-                            'attribute'=>'style_sn',
-                            'filter' => Html::activeTextInput($searchModel, 'style_sn', [
-                                'class' => 'form-control',
-                                'style' => 'width:100px',
-                            ]),
-                            'headerOptions' => [],
-                        ],
+
                         [
                             'attribute' => 'stone_type',
                             'value' => function ($model){
@@ -88,18 +81,20 @@ $params = $params ? "&".http_build_query($params) : '';
                             'headerOptions' => ['width'=>'100'],
                         ],
                         [
-                            'attribute' => 'stone_status',
-                            'value' => function ($model){
-                                return \addons\Warehouse\common\enums\StoneStatusEnum::getValue($model->stone_status);
-                            },
-                            'filter' => Html::activeDropDownList($searchModel, 'stone_status',\addons\Warehouse\common\enums\StoneStatusEnum::getMap(), [
-                                'prompt' => '全部',
+                            'attribute'=>'style_sn',
+                            'filter' => Html::activeTextInput($searchModel, 'style_sn', [
                                 'class' => 'form-control',
-                                'style' => 'width:100px;'
-
+                                'style' => 'width:100px',
                             ]),
-                            'format' => 'raw',
-                            'headerOptions' => ['width' => '100'],
+                            'headerOptions' => [],
+                        ],
+                        [
+                            'attribute'=>'stone_price',
+                            'filter' => Html::activeTextInput($searchModel, 'stone_price', [
+                                'class' => 'form-control',
+                                'style'=> 'width:100px;'
+                            ]),
+                            'headerOptions' => [],
                         ],
                         [
                             'attribute'=>'stock_cnt',
@@ -117,14 +112,6 @@ $params = $params ? "&".http_build_query($params) : '';
                             ]),
                             'headerOptions' => [],
                         ],
-                        /*[
-                            'attribute'=>'stone_price',
-                            'filter' => Html::activeTextInput($searchModel, 'stone_price', [
-                                'class' => 'form-control',
-                                'style'=> 'width:100px;'
-                            ]),
-                            'headerOptions' => [],
-                        ],*/
                         [
                             'attribute'=>'cost_price',
                             'filter' => Html::activeTextInput($searchModel, 'cost_price', [
@@ -132,6 +119,20 @@ $params = $params ? "&".http_build_query($params) : '';
                                 'style'=> 'width:100px;'
                             ]),
                             'headerOptions' => [],
+                        ],
+                        [
+                            'attribute' => 'stone_status',
+                            'value' => function ($model){
+                                return \addons\Warehouse\common\enums\StoneStatusEnum::getValue($model->stone_status);
+                            },
+                            'filter' => Html::activeDropDownList($searchModel, 'stone_status',\addons\Warehouse\common\enums\StoneStatusEnum::getMap(), [
+                                'prompt' => '全部',
+                                'class' => 'form-control',
+                                'style' => 'width:100px;'
+
+                            ]),
+                            'format' => 'raw',
+                            'headerOptions' => ['width' => '100'],
                         ],
                         [
                             'attribute' => 'stone_shape',
@@ -146,65 +147,92 @@ $params = $params ? "&".http_build_query($params) : '';
                             'headerOptions' => ['width'=>'100'],
                         ],
                         [
-                            'attribute' => 'stone_color',
-                            'value' => function($model){
-                                return Yii::$app->attr->valueName($model->stone_color)??"";
+                            'label' => '颜色/净度/切工/抛光/对称/荧光',
+                            'value' => function ($model) {
+                                $stone_color = Yii::$app->attr->valueName($model->stone_color)??"";
+                                $stone_clarity = Yii::$app->attr->valueName($model->stone_clarity)??"";
+                                $stone_cut = Yii::$app->attr->valueName($model->stone_cut)??"";
+                                $stone_polish = Yii::$app->attr->valueName($model->stone_polish)??"";
+                                $stone_symmetry = Yii::$app->attr->valueName($model->stone_symmetry)??"";
+                                $stone_fluorescence = Yii::$app->attr->valueName($model->stone_fluorescence)??"";
+                                return $stone_color.' / '.$stone_clarity.' / '.$stone_cut.' / '.$stone_polish.' / '.$stone_symmetry.' / '.$stone_fluorescence;
                             },
-                            'filter' => Html::activeDropDownList($searchModel, 'stone_color',Yii::$app->attr->valueMap(AttrIdEnum::DIA_COLOR), [
-                                'prompt' => '全部',
-                                'class' => 'form-control',
-                                'style'=> 'width:60px;'
-                            ]),
-                            'headerOptions' => ['width'=>'60'],
+                            'filter' => false,
+                            'headerOptions' => ['width'=>'100'],
                         ],
-                        [
-                            'attribute' => 'stone_clarity',
-                            'value' => function($model){
-                                return Yii::$app->attr->valueName($model->stone_clarity)??"";
-                            },
-                            'filter' => Html::activeDropDownList($searchModel, 'stone_clarity',Yii::$app->attr->valueMap(AttrIdEnum::DIA_CLARITY), [
-                                'prompt' => '全部',
-                                'class' => 'form-control',
-                                'style'=> 'width:60px;'
-                            ]),
-                            'headerOptions' => ['width'=>'60'],
-                        ],
-                        [
-                            'attribute' => 'stone_symmetry',
-                            'value' => function($model){
-                                return Yii::$app->attr->valueName($model->stone_symmetry)??"";
-                            },
-                            'filter' => Html::activeDropDownList($searchModel, 'stone_symmetry',Yii::$app->attr->valueMap(AttrIdEnum::DIA_SYMMETRY), [
-                                'prompt' => '全部',
-                                'class' => 'form-control',
-                                'style'=> 'width:60px;'
-                            ]),
-                            'headerOptions' => ['width'=>'60'],
-                        ],
-                        [
-                            'attribute' => 'stone_polish',
-                            'value' => function($model){
-                                return Yii::$app->attr->valueName($model->stone_polish)??"";
-                            },
-                            'filter' => Html::activeDropDownList($searchModel, 'stone_polish',Yii::$app->attr->valueMap(AttrIdEnum::DIA_POLISH), [
-                                'prompt' => '全部',
-                                'class' => 'form-control',
-                                'style'=> 'width:60px;'
-                            ]),
-                            'headerOptions' => ['width'=>'60'],
-                        ],
-                        [
-                            'attribute' => 'stone_fluorescence',
-                            'value' => function($model){
-                                return Yii::$app->attr->valueName($model->stone_fluorescence)??"";
-                            },
-                            'filter' => Html::activeDropDownList($searchModel, 'stone_fluorescence',Yii::$app->attr->valueMap(AttrIdEnum::DIA_FLUORESCENCE), [
-                                'prompt' => '全部',
-                                'class' => 'form-control',
-                                'style'=> 'width:60px;'
-                            ]),
-                            'headerOptions' => ['width'=>'60'],
-                        ],
+
+//                        [
+//                            'attribute' => 'stone_shape',
+//                            'value' => function ($model) {
+//                                return Yii::$app->attr->valueName($model->stone_shape)??"";
+//                            },
+//                            'filter' => Html::activeDropDownList($searchModel, 'stone_shape',Yii::$app->attr->valueMap(AttrIdEnum::DIA_SHAPE), [
+//                                'prompt' => '全部',
+//                                'class' => 'form-control',
+//                                'style'=> 'width:60px;'
+//                            ]),
+//                            'headerOptions' => ['width'=>'100'],
+//                        ],
+//                        [
+//                            'attribute' => 'stone_color',
+//                            'value' => function($model){
+//                                return Yii::$app->attr->valueName($model->stone_color)??"";
+//                            },
+//                            'filter' => Html::activeDropDownList($searchModel, 'stone_color',Yii::$app->attr->valueMap(AttrIdEnum::DIA_COLOR), [
+//                                'prompt' => '全部',
+//                                'class' => 'form-control',
+//                                'style'=> 'width:60px;'
+//                            ]),
+//                            'headerOptions' => ['width'=>'60'],
+//                        ],
+//                        [
+//                            'attribute' => 'stone_clarity',
+//                            'value' => function($model){
+//                                return Yii::$app->attr->valueName($model->stone_clarity)??"";
+//                            },
+//                            'filter' => Html::activeDropDownList($searchModel, 'stone_clarity',Yii::$app->attr->valueMap(AttrIdEnum::DIA_CLARITY), [
+//                                'prompt' => '全部',
+//                                'class' => 'form-control',
+//                                'style'=> 'width:60px;'
+//                            ]),
+//                            'headerOptions' => ['width'=>'60'],
+//                        ],
+//                        [
+//                            'attribute' => 'stone_symmetry',
+//                            'value' => function($model){
+//                                return Yii::$app->attr->valueName($model->stone_symmetry)??"";
+//                            },
+//                            'filter' => Html::activeDropDownList($searchModel, 'stone_symmetry',Yii::$app->attr->valueMap(AttrIdEnum::DIA_SYMMETRY), [
+//                                'prompt' => '全部',
+//                                'class' => 'form-control',
+//                                'style'=> 'width:60px;'
+//                            ]),
+//                            'headerOptions' => ['width'=>'60'],
+//                        ],
+//                        [
+//                            'attribute' => 'stone_polish',
+//                            'value' => function($model){
+//                                return Yii::$app->attr->valueName($model->stone_polish)??"";
+//                            },
+//                            'filter' => Html::activeDropDownList($searchModel, 'stone_polish',Yii::$app->attr->valueMap(AttrIdEnum::DIA_POLISH), [
+//                                'prompt' => '全部',
+//                                'class' => 'form-control',
+//                                'style'=> 'width:60px;'
+//                            ]),
+//                            'headerOptions' => ['width'=>'60'],
+//                        ],
+//                        [
+//                            'attribute' => 'stone_fluorescence',
+//                            'value' => function($model){
+//                                return Yii::$app->attr->valueName($model->stone_fluorescence)??"";
+//                            },
+//                            'filter' => Html::activeDropDownList($searchModel, 'stone_fluorescence',Yii::$app->attr->valueMap(AttrIdEnum::DIA_FLUORESCENCE), [
+//                                'prompt' => '全部',
+//                                'class' => 'form-control',
+//                                'style'=> 'width:60px;'
+//                            ]),
+//                            'headerOptions' => ['width'=>'60'],
+//                        ],
                         [
                             'attribute' => 'stone_colour',
                             'value' => function($model){
@@ -216,6 +244,18 @@ $params = $params ? "&".http_build_query($params) : '';
                                 'style'=> 'width:60px;'
                             ]),
                             'headerOptions' => ['width'=>'60'],
+                        ],
+
+                        [
+                            'attribute' => 'cert_type',
+                            'value' => function($model){
+                                return Yii::$app->attr->valueName($model->cert_type)??"";
+                            },
+                            'filter' => Html::activeDropDownList($searchModel, 'cert_type',Yii::$app->attr->valueMap(AttrIdEnum::DIA_CERT_TYPE), [
+                                'prompt' => '全部',
+                                'class' => 'form-control',
+                            ]),
+                            'headerOptions' => ['width'=>'80'],
                         ],
                         [
                             'attribute' => 'cert_id',
@@ -229,17 +269,6 @@ $params = $params ? "&".http_build_query($params) : '';
                             'headerOptions' => ['width'=>'100'],
                         ],
                         [
-                            'attribute' => 'cert_type',
-                            'value' => function($model){
-                                return Yii::$app->attr->valueName($model->cert_type)??"";
-                            },
-                            'filter' => Html::activeDropDownList($searchModel, 'cert_type',Yii::$app->attr->valueMap(AttrIdEnum::DIA_CERT_TYPE), [
-                                'prompt' => '全部',
-                                'class' => 'form-control',
-                            ]),
-                            'headerOptions' => ['width'=>'80'],
-                        ],
-                        [
                             'attribute' => 'stone_norms',
                             //'filter' => Html::activeTextInput($searchModel, 'stone_size', [
                             //    'class' => 'form-control',
@@ -250,17 +279,7 @@ $params = $params ? "&".http_build_query($params) : '';
                             'filter' => false,
                             'headerOptions' => ['width'=>'100'],
                         ],
-                        [
-                            'attribute' => 'stone_size',
-                            //'filter' => Html::activeTextInput($searchModel, 'stone_size', [
-                            //    'class' => 'form-control',
-                            //]),
-                            'value' => function ($model) {
-                                return $model->stone_size??"";
-                            },
-                            'filter' => false,
-                            'headerOptions' => ['width'=>'100'],
-                        ],
+
                         /*[
                             'attribute' => 'remark',
                             //'filter' => Html::activeTextInput($searchModel, 'stone_size', [
@@ -402,16 +421,16 @@ $params = $params ? "&".http_build_query($params) : '';
                                 },
                             ],
                         ],*/
-                        [
-                            'class' => 'yii\grid\ActionColumn',
-                            'header' => '操作',
-                            'template' => '{view}',
-                            'buttons' => [
-                                'view' => function($url, $model, $key){
-                                    return Html::a('查看', ['view', 'id' => $model->id,'returnUrl'=>Url::getReturnUrl()], ['class' => 'btn btn-warning btn-sm']);
-                                },
-                            ],
-                        ],
+//                        [
+//                            'class' => 'yii\grid\ActionColumn',
+//                            'header' => '操作',
+//                            'template' => '{view}',
+//                            'buttons' => [
+//                                'view' => function($url, $model, $key){
+//                                    return Html::a('查看', ['view', 'id' => $model->id,'returnUrl'=>Url::getReturnUrl()], ['class' => 'btn btn-warning btn-sm']);
+//                                },
+//                            ],
+//                        ],
                     ]
                 ]); ?>
             </div>
