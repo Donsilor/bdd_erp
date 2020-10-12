@@ -40,7 +40,7 @@ $params = $params ? "&" . http_build_query($params) : '';
                 'data-target' => '#ajaxModal',
             ]);
             echo '&nbsp;';
-            echo Html::edit(['edit-all', 'bill_id' => $bill->id], '编辑货品', ['class' => 'btn btn-info btn-xs']);
+            echo Html::edit(['edit-all', 'bill_id' => $bill->id], '货品编辑', ['class' => 'btn btn-info btn-xs']);
             echo '&nbsp;';
         }
         if ($bill->bill_status == \addons\Warehouse\common\enums\BillStatusEnum::CONFIRM) {
@@ -65,7 +65,7 @@ $params = $params ? "&" . http_build_query($params) : '';
         }
         echo Html::button('明细导出', ['class' => 'btn btn-success btn-xs', 'onclick' => 'batchExport()',]);
         echo '&nbsp;';
-        echo Html::tag('span', '刷新价格', ["class" => "btn btn-warning btn-xs jsBatchStatus", "data-grid" => "grid", "data-url" => Url::to(['update-price']),]);
+        echo Html::tag('span', '价格刷新', ["class" => "btn btn-warning btn-xs jsBatchStatus", "data-grid" => "grid", "data-url" => Url::to(['update-price']),]);
         echo '&nbsp;';
         if ($bill->bill_status == \addons\Warehouse\common\enums\BillStatusEnum::SAVE) {
             echo Html::tag('span', '批量删除', ["class" => "btn btn-danger btn-xs jsBatchStatus", "data-grid" => "grid", "data-url" => Url::to(['batch-delete']),]);
