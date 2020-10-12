@@ -7,6 +7,7 @@ use addons\Style\common\models\StoneStyle;
 use addons\Warehouse\common\enums\GoldBillTypeEnum;
 use addons\Warehouse\common\enums\StoneBillTypeEnum;
 use addons\Warehouse\common\forms\WarehouseStoneBillRkGoodsForm;
+use addons\Warehouse\common\forms\WarehouseStoneImportRkForm;
 use addons\Warehouse\common\models\WarehouseGoldBill;
 use addons\Warehouse\common\models\WarehouseStoneBill;
 use Yii;
@@ -131,20 +132,7 @@ class StoneBillRkGoodsController extends BaseController
     {
         $id = \Yii::$app->request->get('id');
         $bill_id = \Yii::$app->request->get('bill_id');
-        $download = \Yii::$app->request->get('download', 0);
-        $bill = WarehouseBill::findOne($bill_id);
-        if ($download) {
-            $model = new WarehouseStoneBillRkGoodsForm();
-            list($values, $fields) = $model->getTitleList();
-            if (empty($bill_id)) {
-                header("Content-Disposition: attachment;filename=【" . rand(100, 999) . "】入库单明细导入(" . date('Ymd') . ").csv");
-            } else {
-                header("Content-Disposition: attachment;filename=【{$bill_id}】入库单明细导入($bill->bill_no).csv");
-            }
-            $content = implode($values, ",") . "\n" . implode($fields, ",") . "\n";
-            echo iconv("utf-8", "gbk", $content);
-            exit();
-        }
+        $bill = WarehouseStoneBill::findOne($bill_id);
         $model = $this->findModel($id);
         $model = $model ?? new WarehouseStoneBillRkGoodsForm();
         // ajax 校验
@@ -152,9 +140,14 @@ class StoneBillRkGoodsController extends BaseController
         if (Yii::$app->request->isPost) {
             try {
                 $trans = \Yii::$app->db->beginTransaction();
-                $model->bill_id = $bill_id;
-                $model->file = UploadedFile::getInstance($model, 'file');
-                \Yii::$app->warehouseService->billT->uploadGoods($model);
+                $gModel = new WarehouseStoneImportRkForm();
+                $gModel->bill_id = $bill->id;
+                $gModel->bill_no = $bill->bill_no;
+                $gModel->bill_type = $bill->bill_type;
+                $gModel->file = UploadedFile::getInstance($model, 'file');
+                if (!empty($gModel->file) && isset($gModel->file)) {
+                    \Yii::$app->warehouseService->stoneRk->importStoneRk($gModel);
+                }
                 $trans->commit();
                 \Yii::$app->getSession()->setFlash('success', '保存成功');
                 return $this->redirect(['index', 'bill_id' => $bill_id]);

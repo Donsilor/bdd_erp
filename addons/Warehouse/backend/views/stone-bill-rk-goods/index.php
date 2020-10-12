@@ -32,22 +32,22 @@ $params = $params ? "&".http_build_query($params) : '';
         <?php
 
         if ($bill->bill_status == \addons\Warehouse\common\enums\BillStatusEnum::SAVE) {
-            echo Html::create(['ajax-edit', 'bill_id' => $bill->id], '新增金料', [
+            echo Html::create(['ajax-edit', 'bill_id' => $bill->id], '新增石料', [
                 'class' => 'btn btn-primary btn-xs',
                 'data-toggle' => 'modal',
                 'data-target' => '#ajaxModalLg',
             ]);
         }
 //        echo Html::a('单据打印', ['bill-t/print', 'id' => $bill->id], ['target' => '_blank', 'class' => 'btn btn-info btn-xs',]);
-//        echo '&nbsp;';
-//        if ($bill->bill_status == \addons\Warehouse\common\enums\BillStatusEnum::SAVE) {
-//            echo Html::edit(['ajax-upload', 'bill_id' => $bill->id], '批量导入', [
-//                'class' => 'btn btn-success btn-xs',
-//                'data-toggle' => 'modal',
-//                'data-target' => '#ajaxModal',
-//            ]);
-//            echo '&nbsp;';
-//        }
+        echo '&nbsp;';
+        if ($bill->bill_status == \addons\Warehouse\common\enums\BillStatusEnum::SAVE) {
+            echo Html::edit(['ajax-upload', 'bill_id' => $bill->id], '批量导入', [
+                'class' => 'btn btn-success btn-xs',
+                'data-toggle' => 'modal',
+                'data-target' => '#ajaxModal',
+            ]);
+            echo '&nbsp;';
+        }
 //        echo Html::button('明细导出', ['class' => 'btn btn-inverse btn-xs', 'onclick' => 'batchExport()',]);
 //        echo '&nbsp;';
 //        if ($bill->bill_status == \addons\Warehouse\common\enums\BillStatusEnum::SAVE) {
