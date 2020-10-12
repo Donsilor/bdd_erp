@@ -5,6 +5,7 @@ namespace addons\Warehouse\backend\controllers;
 use addons\Warehouse\common\enums\StoneBillTypeEnum;
 use addons\Warehouse\common\forms\WarehouseStoneBillGoodsForm;
 use addons\Warehouse\common\forms\WarehouseStoneBillMsForm;
+use addons\Warehouse\common\forms\WarehouseStoneBillRkGoodsForm;
 use addons\Warehouse\common\models\WarehouseStoneBillGoods;
 use common\helpers\PageHelper;
 use common\helpers\Url;
@@ -130,6 +131,51 @@ class StoneController extends BaseController
             'tabList'=>\Yii::$app->warehouseService->stone->menuTabList($id, $returnUrl),
             'returnUrl'=>$returnUrl,
             'bill'=>$bill,
+        ]);
+    }
+
+
+
+    /**
+     * 领料信息
+     * @return mixed
+     */
+    public function actionWarehouse()
+    {
+        $this->modelClass = new WarehouseStoneBillGoodsForm();
+        $tab = \Yii::$app->request->get('tab', 4);
+        $returnUrl = \Yii::$app->request->get('returnUrl', Url::to(['gold/index']));
+        $searchModel = new SearchModel([
+            'model' => $this->modelClass,
+            'scenario' => 'default',
+            'partialMatchAttributes' => [], // 模糊查询
+            'defaultOrder' => [
+                'id' => SORT_DESC
+            ],
+            'pageSize' => $this->pageSize,
+            'relations' => [
+                'bill' => ['audit_time'],
+            ]
+        ]);
+        $dataProvider = $searchModel
+            ->search(Yii::$app->request->queryParams, ['created_at']);
+        $created_at = $searchModel->created_at;
+        if (!empty($created_at)) {
+            $dataProvider->query->andFilterWhere(['>=', WarehouseStoneBillGoodsForm::tableName() . '.created_at', strtotime(explode('/', $created_at)[0])]);//起始时间
+            $dataProvider->query->andFilterWhere(['<', WarehouseStoneBillGoodsForm::tableName() . '.created_at', (strtotime(explode('/', $created_at)[1]) + 86400)]);//结束时间
+        }
+        $id = \Yii::$app->request->get('id');
+        $stone = WarehouseStone::findOne(['id' => $id]);
+        $dataProvider->query->andWhere(['=', 'stone_sn', $stone->stone_sn]);
+        $dataProvider->query->andWhere(['>', WarehouseStoneBillGoodsForm::tableName() . '.status', -1]);
+
+
+        return $this->render($this->action->id, [
+            'dataProvider' => $dataProvider,
+            'searchModel' => $searchModel,
+            'stone' => $stone,
+            'tab' => $tab,
+            'tabList' => \Yii::$app->warehouseService->stone->menuTabList($id, $returnUrl),
         ]);
     }
 
