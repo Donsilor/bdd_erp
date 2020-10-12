@@ -376,7 +376,7 @@ class WarehouseBillWService extends WarehouseBillService
                     'sum(if(g.status='.PandianStatusEnum::PROFIT.',abs(gw.actual_num-gw.should_num),0)) as profit_num',
                     'sum(if(g.status='.PandianStatusEnum::LOSS.',abs(gw.actual_num-gw.should_num),0)) as loss_num',
                     'sum(if(g.status='.PandianStatusEnum::SAVE.',gw.should_num,0)) as save_num',
-                    'sum(if(g.status='.PandianStatusEnum::NORMAL.',abs(gw.actual_num-gw.should_num),0)) as normal_num',
+                    'sum(if(g.status='.PandianStatusEnum::NORMAL.',gw.actual_num,0)) as normal_num',
                     'sum(if(gw.adjust_status>'.PandianAdjustEnum::SAVE.',abs(gw.actual_num-gw.should_num),0)) as adjust_num',
                     'sum(1) as goods_num',//明细总数量
                     'sum(IFNULL(g.cost_price,0)*gw.should_num) as total_cost',
