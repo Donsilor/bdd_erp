@@ -199,7 +199,7 @@ return [
                                 'name'  => 'goldStyleIndex',
                                 'child' =>[
                                         ['title' => '首页','name'  => 'gold-style/index'],
-                                        ['title' => '新增/编辑','name'  => 'gold-style/edit'],
+                                        ['title' => '新增/编辑','name'  => 'gold-style/ajax-edit'],
                                         ['title' => '启用/禁用','name'  => 'gold-style/ajax-update'],
                                         ['title' => '提交审核','name'  => 'gold-style/ajax-apply'],
                                         ['title' => '审核','name'  => 'gold-style/ajax-audit'],
@@ -211,7 +211,7 @@ return [
                                 'name'  => 'stoneStyleIndex',
                                 'child' =>[
                                         ['title' => '首页','name'  => 'stone-style/index'],
-                                        ['title' => '新增/编辑','name'  => 'stone-style/edit'],
+                                        ['title' => '新增/编辑','name'  => 'stone-style/ajax-edit'],
                                         ['title' => '启用/禁用','name'  => 'stone-style/ajax-update'],
                                         ['title' => '提交审核','name'  => 'stone-style/ajax-apply'],
                                         ['title' => '审核','name'  => 'stone-style/ajax-audit'],
@@ -223,7 +223,7 @@ return [
                                 'name'  => 'partsStyleIndex',
                                 'child' =>[
                                         ['title' => '首页','name'  => 'parts-style/index'],
-                                        ['title' => '新增/编辑','name'  => 'parts-style/edit'],
+                                        ['title' => '新增/编辑','name'  => 'parts-style/ajax-edit'],
                                         ['title' => '启用/禁用','name'  => 'parts-style/ajax-update'],
                                         ['title' => '提交审核','name'  => 'parts-style/ajax-apply'],
                                         ['title' => '审核','name'  => 'parts-style/ajax-audit'],
