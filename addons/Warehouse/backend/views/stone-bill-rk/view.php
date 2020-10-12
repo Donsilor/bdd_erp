@@ -7,7 +7,7 @@ use common\enums\AuditStatusEnum;
 /* @var $model common\models\WarehouseBill */
 /* @var $form yii\widgets\ActiveForm */
 
-$this->title = '(金料)其它入库单详情';
+$this->title = '(石料)其它入库单详情';
 $this->params['breadcrumbs'][] = ['label' => $this->title, 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>

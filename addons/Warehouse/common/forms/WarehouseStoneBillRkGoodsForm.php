@@ -14,6 +14,7 @@ use common\helpers\ArrayHelper;
 class WarehouseStoneBillRkGoodsForm extends WarehouseStoneBillGoods
 {
 
+    public $file;
     /**
      * {@inheritdoc}
      */
@@ -23,8 +24,8 @@ class WarehouseStoneBillRkGoodsForm extends WarehouseStoneBillGoods
             ['stone_weight','compare','compareValue' => 0, 'operator' => '>'],
             ['stone_price','compare','compareValue' => 0, 'operator' => '>'],
             ['stone_num','compare','compareValue' => 0, 'operator' => '>'],
-            //[['gold_sn','bill_type'],'unique','targetAttribute' => ['gold_sn', 'bill_type'],'comboNotUnique'=>'已被存在'],
-            //[['gold_sn'],'unique', 'targetClass' => 'addons\Warehouse\common\models\WarehouseGold', 'message' => '库存已经存在.']
+//            [['stone_sn','bill_type'],'unique','targetAttribute' => ['stone_sn', 'bill_type'],'comboNotUnique'=>'石料编号不能重复'],
+//            [['stone_sn'],'unique', 'targetClass' => 'addons\Warehouse\common\models\WarehouseGold', 'message' => '库存中石料编号已经存在.']
         ];
         return ArrayHelper::merge(parent::rules() , $rules);
     }

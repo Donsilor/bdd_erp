@@ -82,8 +82,8 @@ class WarehouseStone extends BaseModel
         return [
             [['stone_sn', 'stone_name', 'stone_type'], 'required'],
             [['stock_cnt','first_stock_cnt', 'fenbaoru_cnt', 'fenbaochu_cnt', 'ms_cnt', 'ss_cnt', 'hs_cnt', 'ts_cnt', 'ys_cnt', 'sy_cnt', 'th_cnt', 'rk_cnt', 'ck_cnt', 'stone_status', 'channel_id', 'supplier_id', 'put_in_type', 'warehouse_id', 'status', 'creator_id', 'created_at', 'updated_at'], 'integer'],
-            [['stock_weight','first_stock_weight','vg_weight', 'stone_size', 'fenbaoru_weight', 'fenbaochu_weight', 'ms_weight', 'ss_weight', 'hs_weight', 'ts_weight', 'ys_weight', 'sy_weight', 'th_weight', 'rk_weight', 'ck_weight', 'stone_price', 'first_stone_price','cost_price', 'sale_price'], 'number'],
-            [['stone_sn', 'stone_name', 'style_sn', 'cert_id'], 'string', 'max' => 30],
+            [['stock_weight','first_stock_weight','vg_weight', 'fenbaoru_weight', 'fenbaochu_weight', 'ms_weight', 'ss_weight', 'hs_weight', 'ts_weight', 'ys_weight', 'sy_weight', 'th_weight', 'rk_weight', 'ck_weight', 'stone_price', 'first_cost_price','cost_price', 'sale_price'], 'number'],
+            [['stone_sn', 'stone_name', 'style_sn','stone_size', 'cert_id'], 'string', 'max' => 30],
             [['stone_type', 'stone_shape', 'stone_color', 'stone_clarity', 'stone_cut', 'stone_symmetry', 'stone_polish', 'stone_fluorescence', 'stone_colour', 'cert_type'], 'string', 'max' => 10],
             [['stone_norms'], 'string', 'max' => 100],
             [['remark'], 'string', 'max' => 255],

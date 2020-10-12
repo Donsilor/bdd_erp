@@ -211,10 +211,15 @@ $params = $params ? "&" . http_build_query($params) : '';
                                 'format' => 'raw',
                                 'headerOptions' => ['id'=>'batch_copy_goods_id', 'class' => 'col-md-1', 'style' => 'background-color:#feeeed;'],
                                 'footerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#feeeed;'],
-                                'value' => function ($model, $key, $index, $widget) {
+                                'value' => function ($model, $key, $index, $widget) use($bill) {
                                     $widget->footer = $model->getAttributeLabel('goods_id');
                                     if ($model->goods_id) {
-                                        $model->goods_id = '<span id="goods_' . $model->goods_id . '">' . $model->goods_id . '</span> <i class="fa fa-copy" onclick="copy(\'goods_' . $model->goods_id . '\')"></i>';
+                                        //if($bill->bill_status == BillStatusEnum::CONFIRM){
+                                        //    $model->goods_id = Html::a($model->goods_id, ['view', 'goods_id' => $model->goods_id, 'returnUrl' => Url::getReturnUrl()], ['class' => 'openContab', 'style' => "text-decoration:underline;color:#3c8dbc", 'id' => $model->goods_id]) . ' <i class="fa fa-copy" onclick="copy(\'' . $model->goods_id . '\')"></i>';
+                                        //}else{
+                                            $model->goods_id = '<span id="goods_' . $model->goods_id . '">' . $model->goods_id . '</span> <i class="fa fa-copy" onclick="copy(\'goods_' . $model->goods_id . '\')"></i>';
+                                        //}
+
                                     }
                                     return $model->goods_id ?? "";
                                 },

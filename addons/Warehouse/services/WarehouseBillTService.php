@@ -47,7 +47,7 @@ class WarehouseBillTService extends Service
     {
         $result = false;
         $sum = WarehouseBillGoodsL::find()
-            ->select(['sum(goods_num) as goods_num', 'sum(cost_price) as total_cost', 'sum(market_price) as total_market'])
+            ->select(['sum(goods_num) as goods_num', 'sum(cost_amount) as total_cost', 'sum(market_price) as total_market'])
             ->where(['bill_id' => $bill_id])
             ->asArray()->one();
         if ($sum) {
