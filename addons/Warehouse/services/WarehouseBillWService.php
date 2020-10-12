@@ -375,16 +375,16 @@ class WarehouseBillWService extends WarehouseBillService
     public function billWSummary($bill_id)
     {
         $sum = WarehouseBillGoods::find()->alias("g")->innerJoin(WarehouseBillGoodsW::tableName().' gw','g.id=gw.id')
-            ->select(['sum(if(gw.status='.ConfirmEnum::YES.',1,0)) as actual_num',
-                    'sum(if(g.status='.PandianStatusEnum::PROFIT.',1,0)) as profit_num',
-                    'sum(if(g.status='.PandianStatusEnum::LOSS.',1,0)) as loss_num',
-                    'sum(if(g.status='.PandianStatusEnum::SAVE.',1,0)) as save_num',
-                    'sum(if(g.status='.PandianStatusEnum::NORMAL.',1,0)) as normal_num',
-                    'sum(if(gw.adjust_status>'.PandianAdjustEnum::SAVE.',1,0)) as adjust_num',
+            ->select(['sum(if(gw.status='.ConfirmEnum::YES.',gw.actual_num,0)) as actual_num',
+                    'sum(if(g.status='.PandianStatusEnum::PROFIT.',abs(gw.actual_num-gw.should_num),0) as profit_num',
+                    'sum(if(g.status='.PandianStatusEnum::LOSS.',abs(gw.actual_num-gw.should_num),0)) as loss_num',
+                    'sum(if(g.status='.PandianStatusEnum::SAVE.',abs(gw.actual_num-gw.should_num),0)) as save_num',
+                    'sum(if(g.status='.PandianStatusEnum::NORMAL.',abs(gw.actual_num-gw.should_num),0)) as normal_num',
+                    'sum(if(gw.adjust_status>'.PandianAdjustEnum::SAVE.',abs(gw.actual_num-gw.should_num),0)) as adjust_num',
                     'sum(1) as goods_num',//明细总数量
-                    'sum(IFNULL(g.cost_price,0)) as total_cost',
-                    'sum(IFNULL(g.sale_price,0)) as total_sale',
-                    'sum(IFNULL(g.market_price,0)) as total_market'
+                    'sum(IFNULL(g.cost_price,0)*gw.should_num) as total_cost',
+                    'sum(IFNULL(g.sale_price,0)*gw.should_num) as total_sale',
+                    'sum(IFNULL(g.market_price,0)*gw.should_num) as total_market'
             ])->where(['g.bill_id'=>$bill_id])->asArray()->one();
 
         if($sum) {

@@ -17,6 +17,7 @@ class ImportBillWForm extends ImportForm
     public $columns = [1=>'goods_id',2=>'goods_num'];
     public $requredColumns = ['goods_id','goods_num'];
     public $numberColumns = ['goods_num'];
+    private $goodsIdsCache;
     /**
      * {@inheritdoc}
      */
@@ -51,5 +52,11 @@ class ImportBillWForm extends ImportForm
     public function loadRow($row,$rowIndex)
     {
         parent::loadRow($row, $rowIndex); 
+        //验证重复货号
+        if(!isset($this->goodsIdsCache[$this->goods_id])) {
+            $this->goodsIdsCache[$this->goods_id] = true;
+        }else {
+            $this->addRowError($rowIndex, 'goods_id', "不可导入重复货号");
+        }        
     }
 }
