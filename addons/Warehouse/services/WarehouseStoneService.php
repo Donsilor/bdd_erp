@@ -29,6 +29,7 @@ class WarehouseStoneService extends Service
     {
         $tabList = [
             1=>['name'=>'石料详情','url'=>Url::to(['stone/view','id'=>$id,'tab'=>1,'returnUrl'=>$returnUrl])],
+            4=>['name'=>'出入库列表','url'=>Url::to(['stone/warehouse','id'=>$id,'tab'=>4,'returnUrl'=>$returnUrl])],
             2=>['name'=>'领石信息','url'=>Url::to(['stone/lingshi','id'=>$id,'tab'=>2,'returnUrl'=>$returnUrl])],
             3=>['name'=>'石料日志','url'=>Url::to(['stone-log/index','id'=>$id,'tab'=>3,'returnUrl'=>$returnUrl])],
         ];
