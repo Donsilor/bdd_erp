@@ -205,7 +205,8 @@ class WarehouseBillWService extends WarehouseBillService
         foreach ($goods_ids_nums as $goods_id=>$num) {            
             $isNewRecord = false;
             $billGoods = WarehouseBillGoods::find()->where(['goods_id'=>$goods_id,'bill_id'=>$bill->id])->one();
-            if($billGoods && $billGoods->status == PandianStatusEnum::NORMAL) {
+            if($billGoods && $billGoods->status != PandianStatusEnum::SAVE) {
+                throw new \Exception("[{$goods_id}]货号已盘点,请勿重复盘点");
                 //已盘点且正常=>忽略
                 //continue;
             }
@@ -236,10 +237,6 @@ class WarehouseBillWService extends WarehouseBillService
                     $billGoods->status = PandianStatusEnum::LOSS;//盘亏
                 }else if($billGoods->goods_num == $num) {
                     $billGoods->status = PandianStatusEnum::NORMAL;//正常
-                }
-                
-                if($billGoods->to_warehouse_id != $goods->warehouse_id){
-                    $billGoods->status = PandianStatusEnum::LOSS;//盘亏
                 }
             }
             $billGoods->goods_name = $goods->goods_name;            
@@ -376,9 +373,9 @@ class WarehouseBillWService extends WarehouseBillService
     {
         $sum = WarehouseBillGoods::find()->alias("g")->innerJoin(WarehouseBillGoodsW::tableName().' gw','g.id=gw.id')
             ->select(['sum(if(gw.status='.ConfirmEnum::YES.',gw.actual_num,0)) as actual_num',
-                    'sum(if(g.status='.PandianStatusEnum::PROFIT.',abs(gw.actual_num-gw.should_num),0) as profit_num',
+                    'sum(if(g.status='.PandianStatusEnum::PROFIT.',abs(gw.actual_num-gw.should_num),0)) as profit_num',
                     'sum(if(g.status='.PandianStatusEnum::LOSS.',abs(gw.actual_num-gw.should_num),0)) as loss_num',
-                    'sum(if(g.status='.PandianStatusEnum::SAVE.',abs(gw.actual_num-gw.should_num),0)) as save_num',
+                    'sum(if(g.status='.PandianStatusEnum::SAVE.',gw.should_num,0)) as save_num',
                     'sum(if(g.status='.PandianStatusEnum::NORMAL.',abs(gw.actual_num-gw.should_num),0)) as normal_num',
                     'sum(if(gw.adjust_status>'.PandianAdjustEnum::SAVE.',abs(gw.actual_num-gw.should_num),0)) as adjust_num',
                     'sum(1) as goods_num',//明细总数量
@@ -388,9 +385,8 @@ class WarehouseBillWService extends WarehouseBillService
             ])->where(['g.bill_id'=>$bill_id])->asArray()->one();
 
         if($sum) {
-            
-            $billUpdate = ['goods_num'=>$sum['goods_num'], 'total_cost'=>$sum['total_cost'], 'total_sale'=>$sum['total_sale'], 'total_market'=>$sum['total_market']];
-            $billWUpdate = ['save_num'=>$sum['save_num'],'actual_num'=>$sum['actual_num'], 'loss_num'=>$sum['loss_num'], 'normal_num'=>$sum['normal_num'], 'adjust_num'=>$sum['adjust_num']];
+            $billUpdate  = ['goods_num'=>$sum['goods_num'], 'total_cost'=>$sum['total_cost'], 'total_sale'=>$sum['total_sale'], 'total_market'=>$sum['total_market']];
+            $billWUpdate = ['save_num'=>$sum['save_num'],'profit_num'=>$sum['profit_num'],'actual_num'=>$sum['actual_num'], 'loss_num'=>$sum['loss_num'], 'normal_num'=>$sum['normal_num'], 'adjust_num'=>$sum['adjust_num']];
 
             $res1 = WarehouseBill::updateAll($billUpdate,['id'=>$bill_id]);
             $res2 = WarehouseBillW::updateAll($billWUpdate,['id'=>$bill_id]);
