@@ -47,11 +47,11 @@ class StoneStyle extends BaseModel
     public function rules()
     {
         return [
-            [['stone_type', 'style_sn'], 'required'],
+            [['stone_type', 'style_sn','stone_name'], 'required'],
             [['stone_weight_min', 'stone_weight_max', 'stone_carat'], 'number'],
             [['cert_type', 'auditor_id', 'audit_status', 'audit_time', 'sort', 'status', 'creator_id', 'created_at', 'updated_at'], 'integer'],
             [['stone_type', 'stone_shape'], 'string', 'max' => 10],
-            [['style_sn', 'color_scope', 'clarity_scope'], 'string', 'max' => 30],
+            [['style_sn', 'stone_name','color_scope', 'clarity_scope'], 'string', 'max' => 30],
             [['product_size_min', 'product_size_max'], 'string', 'max' => 100],
             [['remark', 'audit_remark'], 'string', 'max' => 255],
             [['style_sn'], 'unique'],
@@ -67,6 +67,7 @@ class StoneStyle extends BaseModel
             'id' => 'ID',
             'stone_type' => '石料类型',
             'style_sn' => '款号',
+            'stone_name' => '石料名称',
             'stone_weight_min' => '石重范围小(ct)',
             'stone_weight_max' => '石重范围大(ct)',
             'cert_type' => '证书类型',

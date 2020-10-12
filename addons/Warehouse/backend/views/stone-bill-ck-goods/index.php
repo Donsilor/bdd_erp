@@ -11,7 +11,7 @@ use yii\web\View;
 /* @var $this yii\web\View */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = Yii::t('bill_b_goods', '(金料)其他出库单明细');
+$this->title = Yii::t('bill_b_goods', '(石料)其他出库单明细');
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 
@@ -28,7 +28,7 @@ $this->params['breadcrumbs'][] = $this->title;
 //                'data-offset'=>'20px',
 //            ]);
 //            echo '&nbsp;';
-            echo Html::edit(['edit-all', 'bill_id' => $bill->id, 'scan' => 1], '添加/编辑金料', ['class' => 'btn btn-success btn-xs']);
+            echo Html::edit(['edit-all', 'bill_id' => $bill->id, 'scan' => 1], '添加/编辑石料', ['class' => 'btn btn-success btn-xs']);
             echo '&nbsp;';
 //            echo Html::edit(['edit-all', 'bill_id' => $bill->id], '编辑货品', ['class'=>'btn btn-info btn-xs']);
         }
@@ -68,16 +68,16 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'format' => 'raw',
                             ],
                             [
-                                'attribute'=>'gold_sn',
+                                'attribute'=>'stone_sn',
                                 'filter' => true,
                                 'headerOptions' => ['class' => 'col-md-1'],
                             ],
                             [
-                                'attribute' => 'gold_type',
+                                'attribute' => 'stone_type',
                                 'value' => function($model){
-                                    return Yii::$app->attr->valueName($model->gold_type) ?? "";
+                                    return Yii::$app->attr->valueName($model->stone_type) ?? "";
                                 },
-                                'filter' => Html::activeDropDownList($searchModel, 'gold_type',Yii::$app->attr->valueMap(\addons\Style\common\enums\AttrIdEnum::MAT_GOLD_TYPE), [
+                                'filter' => Html::activeDropDownList($searchModel, 'stone_type',Yii::$app->attr->valueMap(\addons\Style\common\enums\AttrIdEnum::MAT_STONE_TYPE), [
                                     'prompt' => '全部',
                                     'class' => 'form-control',
                                 ]),
@@ -89,21 +89,26 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'filter' => true,
                             ],
                             [
-                                'attribute' => 'gold_name',
+                                'attribute' => 'stone_name',
                                 'filter' => true,
                                 'headerOptions' => ['class' => 'col-md-2'],
                             ],
                             [
-                                'attribute' => 'warehouseGold.gold_weight',
+                                'attribute' => 'warehouseStone.stock_weight',
                                 'filter' => false,
                                 'headerOptions' => ['class' => 'col-md-2'],
                             ],
                             [
-                                'attribute' => 'gold_weight',
+                                'attribute' => 'warehouseStone.stock_cnt',
+                                'filter' => false,
+                                'headerOptions' => ['class' => 'col-md-2'],
+                            ],
+                            [
+                                'attribute' => 'stone_weight',
                                 'filter' => false,
                             ],
                             [
-                                'attribute' => 'gold_price',
+                                'attribute' => 'stone_price',
                                 'visible' => \common\helpers\Auth::verify(\common\enums\SpecialAuthEnum::VIEW_CAIGOU_PRICE),
                                 'filter' => false,
                             ],

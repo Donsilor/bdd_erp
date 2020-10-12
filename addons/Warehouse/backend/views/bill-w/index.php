@@ -38,7 +38,7 @@ $params = $params ? "&".http_build_query($params) : '';
                     'dataProvider' => $dataProvider,
                     'filterModel' => $searchModel,
                     'tableOptions' => ['class' => 'table table-hover'],
-                    'options' => ['style'=>'width:125%;'],
+                    'options' => ['style'=>'width:100%;'],
                     'showFooter' => false,//显示footer行
                     'id'=>'grid',
                     'columns' => [
@@ -69,15 +69,6 @@ $params = $params ? "&".http_build_query($params) : '';
                                 'headerOptions' => ['width'=>'180'],
                         ],
                         [
-                                'attribute' => 'bill_type',
-                                'format' => 'raw',
-                                'headerOptions' => ['width'=>'100'],
-                                'value' => function ($model){
-                                     return \addons\Warehouse\common\enums\BillTypeEnum::getValue($model->bill_type);
-                                },
-                                'filter' => false,
-                        ],
-                        [
                                 'label' => '盘点仓库',
                                 'attribute' => 'to_warehouse_id',
                                 'value' =>"toWarehouse.name",
@@ -94,59 +85,59 @@ $params = $params ? "&".http_build_query($params) : '';
                                 'headerOptions' => ['width'=>'200'],
                         ],      
                         [
-                                'label' => '应盘数量',
+                                'label' => '应盘',
                                 'value' => function($model){
                                     return $model->billW->should_num ?? 0;
                                 },
                                 'filter' => false,
                                 'format' => 'raw',
-                                'headerOptions' => ['width' => '100'],
+                                'headerOptions' => ['width' => '80'],
                         ],
                         [
-                                'label' => '实盘数量',
+                                'label' => '实盘',
                                 'value' => function($model){
                                     return $model->billW->actual_num ?? 0;
                                 },
                                 'filter' => false,                                
                                 'format' => 'raw',
-                                'headerOptions' => ['width' => '100'],
+                                'headerOptions' => ['width' => '80'],
                         ], 
                         [
-                                'label' => '正常数量',
+                                'label' => '正常',
                                 'value' => function($model){
                                     return $model->billW->normal_num ?? 0;
                                  },
                                 'filter' => false,
                                 'format' => 'raw',
-                                'headerOptions' => ['width' => '100'],
+                                'headerOptions' => ['width' => '80'],
                         ],
                         [
-                                'label' => '盘盈数量',
+                                'label' => '盘盈',
                                  'value' => function($model){
                                     return $model->billW->profit_num ?? 0;
                                  },
                                 'filter' => false,
                                 'format' => 'raw',
-                                'headerOptions' => ['width' => '100'],
+                                'headerOptions' => ['width' => '80'],
                         ],
                         [
-                                'label' => '盘亏数量',
+                                'label' => '盘亏',
                                 'value' => function($model){
                                       return $model->billW->loss_num ?? 0;
                                  },
                                 'filter' => false,
                                 'format' => 'raw',
-                                'headerOptions' => ['width' => '100'],
+                                'headerOptions' => ['width' => '80'],
                         ],                        
-                        [
+                        /* [
                                 'label' => '调整数量',
                                 'value' => function($model){
                                     return $model->billW->adjust_num ?? 0;
                                 },
                                 'filter' => false,
                                 'format' => 'raw',
-                                'headerOptions' => ['width' => '100'],
-                        ],
+                                'headerOptions' => ['width' => '80'],
+                        ], */
                         [
                                 'label' => '总金额',                                
                                 'attribute'=>'total_cost',
@@ -183,10 +174,10 @@ $params = $params ? "&".http_build_query($params) : '';
                                     ],
                                 ]),
                                 'value' => function ($model) {
-                                    return Yii::$app->formatter->asDatetime($model->created_at);
+                                    return Yii::$app->formatter->asDate($model->created_at);
                                 },
                                 'format' => 'raw',
-                                'headerOptions' => ['width'=>'160'],
+                                'headerOptions' => ['width'=>'150'],
                         ],
                         [
                                 'attribute' => 'audit_status',

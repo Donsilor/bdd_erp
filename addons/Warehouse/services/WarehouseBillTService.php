@@ -47,7 +47,7 @@ class WarehouseBillTService extends Service
     {
         $result = false;
         $sum = WarehouseBillGoodsL::find()
-            ->select(['sum(goods_num) as goods_num', 'sum(cost_price) as total_cost', 'sum(market_price) as total_market'])
+            ->select(['sum(goods_num) as goods_num', 'sum(cost_amount) as total_cost', 'sum(market_price) as total_market'])
             ->where(['bill_id' => $bill_id])
             ->asArray()->one();
         if ($sum) {
@@ -481,6 +481,12 @@ class WarehouseBillTService extends Service
 //            }
             if (empty($peiliao_way) && $pure_gold_rate > 0) {
                 $peiliao_way = PeiLiaoWayEnum::LAILIAO;
+            }elseif(empty($peiliao_way) && !$pure_gold_rate && $suttle_weight){
+                $peiliao_way = PeiLiaoWayEnum::FACTORY;
+            }elseif(!$pure_gold_rate && !$suttle_weight){
+                $peiliao_way = PeiLiaoWayEnum::NO_PEI;
+            }else{
+
             }
             $main_pei_type = $form->formatValue($goods['main_pei_type'], 0) ?? 0;//主石配石方式
             $main_stone_sn = $goods['main_stone_sn'] ?? "";//主石编号
@@ -993,10 +999,10 @@ class WarehouseBillTService extends Service
             }
             $gong_fee = $form->formatValue($goods['gong_fee'], 0) ?? 0;//克工费
             $piece_fee = $form->formatValue($goods['piece_fee'], 0) ?? 0;//件工费
-            if (!empty($gong_fee) && !empty($piece_fee)) {
-                $flag = false;
-                $error[$i][] = "[克/工费]和[件/工费]只能填其一";
-            }
+//            if (!empty($gong_fee) && !empty($piece_fee)) {
+//                $flag = false;
+//                $error[$i][] = "[克/工费]和[件/工费]只能填其一";
+//            }
             $xiangqian_craft = $goods['xiangqian_craft'] ?? "";//镶嵌工艺
             if (!empty($xiangqian_craft)) {
                 $attr_id = $form->getAttrIdByAttrValue($style_sn, $xiangqian_craft, AttrIdEnum::XIANGQIAN_CRAFT);
@@ -1242,11 +1248,11 @@ class WarehouseBillTService extends Service
                 $flag = false;
                 $error[$i][] = $this->getError($goodsM);
             }
-//            $result = $form->updateFromValidate($goodsM);
-//            if ($result['error'] == false) {
-//                $flag = false;
-//                $error[$i][] = $result['msg'];
-//            }
+            $result = $form->updateFromValidate($goodsM);
+            if ($result['error'] == false) {
+                $flag = false;
+                $error[$i][] = $result['msg'];
+            }
             if (!$flag && !empty($style_sn)) {
                 //$error[$i] = array_unshift($error[$i], "[" . $style_sn . "]");
             }

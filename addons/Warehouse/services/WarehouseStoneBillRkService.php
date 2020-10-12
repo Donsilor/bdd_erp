@@ -2,65 +2,27 @@
 
 namespace addons\Warehouse\services;
 
-use addons\Warehouse\common\forms\WarehouseStoneBillMsForm;
-use Yii;
-use common\components\Service;
-use common\helpers\SnHelper;
+use addons\Warehouse\common\enums\BillStatusEnum;
+use addons\Warehouse\common\enums\StoneStatusEnum;
 use addons\Warehouse\common\models\WarehouseStone;
 use addons\Warehouse\common\models\WarehouseStoneBill;
 use addons\Warehouse\common\models\WarehouseStoneBillGoods;
-use addons\Purchase\common\models\PurchaseStoneReceiptGoods;
-use addons\Warehouse\common\enums\BillStatusEnum;
-use addons\Warehouse\common\enums\StoneStatusEnum;
-use addons\Purchase\common\enums\ReceiptGoodsStatusEnum;
 use common\enums\AuditStatusEnum;
-use common\helpers\ArrayHelper;
-use common\helpers\Url;
+use common\enums\LogTypeEnum;
+use common\helpers\ExcelHelper;
+use common\helpers\UploadHelper;
+use Yii;
+use common\components\Service;
+
 
 /**
- * 石料入库单（买石单）
+ * 领料单
  * @package services\common
  * @author jianyan74 <751393839@qq.com>
  */
-class WarehouseStoneBillMsService extends Service
+class WarehouseStoneBillRkService extends Service
 {
 
-    /**
-     * 创建石料入库单（买石单）
-     * @param array $bill
-     * @param array $details
-     * @throws
-     */
-    public function createBillMs($bill, $details){
-        $billM = new WarehouseStoneBill();
-        $billM->attributes = $bill;
-        $billM->bill_no = SnHelper::createBillSn($billM->bill_type);
-        if(false === $billM->save()){
-            throw new \Exception($this->getError($billM));
-        }
-        $goodsM = new WarehouseStoneBillGoods();
-        foreach ($details as &$good){
-            $good['bill_id'] = $billM->id;
-            $good['bill_type'] = $billM->bill_type;
-            $good['bill_no'] = $billM->bill_no;
-            $goodsM->setAttributes($good);
-            if(!$goodsM->validate()){
-                throw new \Exception($this->getError($goodsM));
-            }
-        }
-        $details = ArrayHelper::toArray($details);
-        $value = [];
-        $key = array_keys($details[0]);
-        foreach ($details as $detail) {
-            $value[] = array_values($detail);
-        }
-        $res = \Yii::$app->db->createCommand()->batchInsert(WarehouseStoneBillGoods::tableName(), $key, $value)->execute();
-        if(false === $res){
-            throw new \Exception("创建买石单明细失败");
-        }
-        \Yii::$app->warehouseService->stoneBill->stoneBillSummary($billM->id);
-        return $billM;
-    }
     /**
      * 买石单-审核
      * @param WarehouseStoneBillMsForm $form
@@ -106,12 +68,16 @@ class WarehouseStoneBillMsService extends Service
                     'stone_size' => $billGoods->stone_size,
                     'stone_colour' => $billGoods->stone_colour,
                     'stock_cnt' => $billGoods->stone_num,
+                    'first_stock_cnt' => $billGoods->stone_num,
                     'ms_cnt' => $billGoods->stone_num,
                     'stock_weight' => $billGoods->stone_weight,
+                    'first_stock_weight' => $billGoods->stone_weight,
                     'ms_weight' => $billGoods->stone_weight,
                     'stone_price' => $billGoods->stone_price,
                     'cost_price' => $billGoods->cost_price,
+                    'first_cost_price' => $billGoods->cost_price,
                     'sale_price' => $billGoods->sale_price,
+                    'vg_weight' => $billGoods->carat,
                     'remark' => $billGoods->remark,
                     'creator_id'=>\Yii::$app->user->identity->getId(),
                 ];
@@ -130,12 +96,6 @@ class WarehouseStoneBillMsService extends Service
                     throw new \Exception($this->getError($billGoods));
                 }
             }
-            //同步石料采购收货单货品状态
-            $queryId = WarehouseStoneBillGoods::find()->select(['source_detail_id']);
-            $res = PurchaseStoneReceiptGoods::updateAll(['goods_status'=>ReceiptGoodsStatusEnum::WAREHOUSE], ['id'=>$queryId]);
-            if(false === $res) {
-                throw new \Exception("同步石料采购收货单货品状态失败");
-            }
 
         }else{
             $form->bill_status = BillStatusEnum::SAVE;
@@ -145,4 +105,63 @@ class WarehouseStoneBillMsService extends Service
         }
     }
 
+
+
+    /**
+     *  导入
+     * @param OrderImportKForm $form
+     */
+    public function importStoneRk($form)
+    {
+        if (!($form->file->tempName ?? true)) {
+            throw new \Exception("请上传文件");
+        }
+        if (UploadHelper::getExt($form->file->name) != 'xlsx') {
+            throw new \Exception("请上传xlsx格式文件");
+        }
+
+        $startRow = 2;
+        $endColumn = count($form->columns);
+        $rows = ExcelHelper::import($form->file->tempName, $startRow, $endColumn, $form->columns);//从第1行开始,第4列结束取值
+        if(!isset($rows[$startRow+1])) {
+            throw new \Exception("导入数据不能为空");
+        }
+        //1.数据校验及格式化
+        foreach ($rows as $rowIndex=> & $row) {
+            if($rowIndex == $startRow) {
+                $form->titles = $row;
+                continue;
+            }
+            if(($form->titles['remark'] ?? '') != '备注') {
+                throw new \Exception("数据模板有变动，请下载最新模板");
+            }
+            //加载表格行数据 并且数据校验
+            if(empty(array_filter($row)) || false === $form->loadRow($row,$rowIndex)){
+                continue;
+            }
+        }
+
+        if($form->hasError() === false) {
+            foreach ($form->goods_list as $k=>$stoneBillGoods) {
+                try{
+                    if(false === $stoneBillGoods->save()) {
+                        throw new \Exception($this->getError($stoneBillGoods));
+                    }
+
+                    $log = [
+                        'bill_id' => $stoneBillGoods->bill_id,
+                        'bill_status' => BillStatusEnum::SAVE,
+                        'log_type' => LogTypeEnum::ARTIFICIAL,
+                        'log_module' => '创建其他入库单',
+                        'log_msg' => '其他入库单'.$stoneBillGoods->bill_no.'批量导入明细'
+                    ];
+                    \Yii::$app->warehouseService->stoneBillLog->createStoneBillLog($log);
+
+                }catch (\Exception $e) {
+                    $form->addRowError($rowIndex, 'error', "创建失败：".$e->getMessage());
+                }
+            }
+        }
+        $form->showImportMessage();
+    }
 }

@@ -4,7 +4,6 @@ namespace addons\Warehouse\common\models;
 
 use addons\Sales\common\models\SaleChannel;
 use Yii;
-use addons\Supply\common\models\ProduceStone;
 
 /**
  * This is the model class for table "warehouse_stone_bill_goods".
@@ -33,6 +32,7 @@ use addons\Supply\common\models\ProduceStone;
  * @property string $stone_norms 规格
  * @property string $stone_size 石料尺寸(mm)
  * @property string $cost_price 成本价
+ * @property string $incl_tax_price 成本价
  * @property string $stone_price 石料单价/ct
  * @property string $sale_price 销售价格
  * @property int $channel_id 渠道
@@ -58,15 +58,17 @@ class WarehouseStoneBillGoods extends BaseModel
     public function rules()
     {
         return [
-            [['bill_id', 'bill_no', 'bill_type', 'stone_name'], 'required'],
+            [['stone_name','style_sn','shape','stone_type','stone_weight','stone_price','stone_num','incl_tax_price'], 'required'],
             [['bill_id', 'stone_num', 'channel_id', 'source_detail_id', 'status', 'created_at', 'updated_at'], 'integer'],
-            [['carat', 'stone_weight', 'cost_price', 'stone_price', 'sale_price'], 'number'],
+            [[ 'stone_weight', 'stone_price','carat','cost_price', 'sale_price','incl_tax_price'], 'number'],
             [['bill_no', 'stone_name', 'stone_sn', 'style_sn', 'stone_size'], 'string', 'max' => 30],
             [['bill_type', 'stone_type', 'cert_type', 'stone_colour'], 'string', 'max' => 10],
             [['cert_id', 'shape', 'color', 'clarity', 'cut', 'polish', 'fluorescence', 'symmetry'], 'string', 'max' => 20],
             [['stone_norms'], 'string', 'max' => 100],
             [['remark'], 'string', 'max' => 255],
             [['supplier_id','creator_id','auditor_id'], 'safe'],
+            [['cost_price'], 'parseCostPriceScope'],
+            [['carat'], 'parseCaratScope'],
         ];
     }
 
@@ -81,12 +83,12 @@ class WarehouseStoneBillGoods extends BaseModel
             'bill_no' => '单据编号',
             'bill_type' => '单据类型',
             'stone_name' => '石料名称',
-            'stone_sn' => '石料编号',
-            'stone_type' => '商品类型',
+            'stone_sn' => '石料编号/批次号',
+            'stone_type' => '石料类型',
             'style_sn' => '石料款号',
             'cert_type' => '证书类型',
             'cert_id' => '证书号',
-            'carat' => '石重',
+            'carat' => '石头平均分数(ct)',
             'shape' => '形状',
             'color' => '颜色',
             'clarity' => '净度',
@@ -95,11 +97,12 @@ class WarehouseStoneBillGoods extends BaseModel
             'fluorescence' => '荧光',
             'symmetry' => '对称',
             'stone_num' => '石包总粒数',
-            'stone_weight' => '石包总重量',
+            'stone_weight' => '石包总重（ct)',
             'stone_colour' => '石料色彩',
             'stone_norms' => '规格',
             'stone_size' => '石料尺寸(mm)',
-            'cost_price' => '成本价',
+            'cost_price' => '石料总额',
+            'incl_tax_price' => '含税总额',
             'stone_price' => '石料单价/ct',
             'sale_price' => '销售价格',
             'channel_id' => '渠道',
@@ -110,6 +113,22 @@ class WarehouseStoneBillGoods extends BaseModel
             'updated_at' => '更新时间',
         ];
     }
+
+    public function parseCostPriceScope(){
+        $stone_price = $this->stone_price ?? 0;
+        $stone_weight = $this->stone_weight ?? 0;
+        $this->cost_price = $stone_price * $stone_weight;
+        return $this->cost_price;
+    }
+
+    public function parseCaratScope(){
+        $stone_weight = $this->stone_weight ?? 0;
+        $stone_num = $this->stone_num ?? 1;
+        $this->carat = round($stone_weight / $stone_num,3);
+        return $this->carat;
+    }
+
+
     /**
      * 盘点单明细附属表
      * @return \yii\db\ActiveQuery
@@ -118,14 +137,7 @@ class WarehouseStoneBillGoods extends BaseModel
     {
         return $this->hasOne(WarehouseStoneBillGoodsW::class, ['id'=>'id'])->alias('goodsW');
     }
-    /**
-     * 配石记录
-     * @return \yii\db\ActiveQuery
-     */
-    public function getProduceStone()
-    {
-        return $this->hasOne(ProduceStone::class, ['id'=>'source_detail_id'])->alias('produceStone');
-    }
+
 	/**
      * 单据
      * @return \yii\db\ActiveQuery
@@ -141,5 +153,14 @@ class WarehouseStoneBillGoods extends BaseModel
     public function getSaleChannel()
     {
         return $this->hasOne(SaleChannel::class, ['id'=>'channel_id']);
+    }
+
+    /**
+     * 金料库存
+     * @return \yii\db\ActiveQuery
+     */
+    public function getWarehouseStone()
+    {
+        return $this->hasOne(WarehouseStone::class, ['stone_sn'=>'stone_sn'])->alias('warehouseStone');
     }
 }

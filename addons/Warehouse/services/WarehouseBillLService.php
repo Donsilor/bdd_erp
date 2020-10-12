@@ -10,7 +10,6 @@ use addons\Warehouse\common\models\WarehouseGoods;
 use addons\Warehouse\common\models\WarehouseBillGoods;
 use addons\Warehouse\common\models\WarehouseBillGoodsL;
 use addons\Purchase\common\models\PurchaseReceiptGoods;
-use addons\Warehouse\common\forms\WarehouseBillTGoodsForm;
 use addons\Purchase\common\enums\ReceiptGoodsStatusEnum;
 use addons\Warehouse\common\enums\BillFixEnum;
 use addons\Warehouse\common\enums\GoodSourceEnum;
@@ -31,6 +30,7 @@ use common\helpers\ArrayHelper;
 class WarehouseBillLService extends Service
 {
     public $billFix = BillFixEnum::BILL_RK;
+
     /**
      * 收货单据汇总
      * @param integer $bill_id
@@ -40,7 +40,7 @@ class WarehouseBillLService extends Service
     {
         $result = false;
         $sum = WarehouseBillGoodsL::find()
-            ->select(['sum(1) as goods_num', 'sum(cost_price) as total_cost', 'sum(market_price) as total_market'])
+            ->select(['sum(1) as goods_num', 'sum(cost_amount) as total_cost', 'sum(market_price) as total_market'])
             ->where(['bill_id' => $bill_id])
             ->asArray()->one();
         if ($sum) {

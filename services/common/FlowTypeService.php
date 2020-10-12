@@ -122,7 +122,7 @@ class FlowTypeService extends Service
 
         $flow = Flow::find()->where(['flow_type'=>$flow_type_id,'target_id' => $target_id])->orderBy('id desc')->one();
         if(empty($flow)){
-            throw new \Exception('参数错误');
+            throw new \Exception('审批流程异常');
         }
 
         //同步流程明细

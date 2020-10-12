@@ -23,6 +23,10 @@ $this->params['breadcrumbs'][] = $this->title;
                             <td><?= $model->qiban_sn ?></td>
                         </tr>
                         <tr>
+                            <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('apply_sn') ?>：</td>
+                            <td><?= $model->apply_sn ?></td>
+                        </tr>
+                        <tr>
                             <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('style_sn') ?>：</td>
                             <td><?= $model->style_sn ?></td>
                         </tr>
@@ -39,14 +43,8 @@ $this->params['breadcrumbs'][] = $this->title;
                         <?php } ?>
                         <tr>
                             <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('style_channel_id') ?>：</td>
-                            <td><?= $model->channel ? $model->channel->name : '' ?></td>
-                        </tr>
-                        <?php if($model->qiban_type == \addons\Style\common\enums\QibanTypeEnum::HAVE_STYLE){ ?>
-                        <tr>
-                            <td class="col-xs-2 text-right">款式渠道：</td>
                             <td><?= $model->style->channel->name ?? '' ?></td>
                         </tr>
-                        <?php } ?>
                         <tr>
                             <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('style_sex') ?>：</td>
                             <td><?= \addons\Style\common\enums\StyleSexEnum::getValue($model->style_sex) ?></td>
@@ -123,9 +121,9 @@ $this->params['breadcrumbs'][] = $this->title;
                         <?php
                         $style_image_list = !empty($model->style_image)?explode(',', $model->style_image):[];
                         foreach ($style_image_list as $img){
+                            echo  \common\helpers\ImageHelper::fancyBox($img) ;
+                         }
                         ?>
-                        <?= \common\helpers\ImageHelper::fancyBox($img) ?>
-                        <?php } ?>
                     </div>
 
                 </div>
@@ -253,15 +251,14 @@ $this->params['breadcrumbs'][] = $this->title;
                             $format_info = json_decode($model->format_info)?? [];
                             if($format_info){
                                 ?>
-                                <table class="table">
+                                <table class="table">  
                                     <tr>
                                         <th>特殊工艺</th>
                                         <th>工艺描述</th>
                                         <th>工艺图片</th>
-                                    </tr>
+                                    </tr>                                  
                                     <?php
-
-                                    foreach ($format_info as $item){
+                                    foreach ($format_info as $i=>$item){
                                         ?>
                                         <tr>
                                             <td><?= \addons\Purchase\common\enums\SpecialCraftEnum::getValue($item->format_craft_type)?></td>

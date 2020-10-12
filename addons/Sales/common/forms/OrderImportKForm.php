@@ -100,9 +100,9 @@ class OrderImportKForm extends ImportForm
             33=>'remark',
     ];
     //唯一行的字段
-    public $uniqueKey = 'order_sn';
+    public $combineKey = 'order_sn';
     //只需要填写第一行的字段
-    public $uniqueColumn = [
+    public $combineColumns = [
             'channel_id',
             'follower_id',
             'order_time',

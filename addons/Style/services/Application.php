@@ -24,6 +24,7 @@ use common\components\Service;
  * @property \addons\Style\services\StoneService $stone 石料款式
  * @property \addons\Style\services\PartsService $parts 配件款式
  * @property \addons\Style\services\GiftService $gift 配件款式
+ * @property \addons\Style\services\StyleLogService $styleLog 款式日志
  */
 class Application extends Service
 {
@@ -48,5 +49,6 @@ class Application extends Service
         'stone' => 'addons\Style\services\StoneService',
         'parts' => 'addons\Style\services\PartsService',
         'gift' => 'addons\Style\services\GiftService',
+        'styleLog' => 'addons\Style\services\StyleLogService',
     ];
 }

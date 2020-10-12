@@ -54,7 +54,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             'attribute' => 'style_sn',
                             'format' => 'raw',
                             'value'=>function($model) {
-                                return Html::a($model->style_sn, ['view', 'id' => $model->id,'returnUrl'=>Url::getReturnUrl()], ['class'=>'openContab','style'=>"text-decoration:underline;color:#3c8dbc"]);
+                                return Html::a($model->style_sn, ['view', 'id' => $model->id,'returnUrl'=>Url::getReturnUrl()], ['class'=>'openContab','style'=>"text-decoration:underline;color:#3c8dbc",'id'=>$model->style_sn]).' <i class="fa fa-copy" onclick="copy(\''. $model->style_sn .'\')"></i>';
                             },
                             'filter' => Html::activeTextInput($searchModel, 'style_sn', [
                                 'class' => 'form-control',
@@ -73,6 +73,14 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'style'=> 'width:100px;'
                             ]),
                             'headerOptions' => ['class' => 'col-md-1'],
+                        ],
+                        [
+                            'attribute' => 'stone_name',
+                            'value' => 'stone_name',
+                            'headerOptions' => ['class' => 'col-md-1'],
+                            'filter' => Html::activeTextInput($searchModel, 'stone_name', [
+                                'class' => 'form-control',
+                            ]),
                         ],
                         [
                             'label' => '石重范围(ct)',

@@ -13,19 +13,7 @@ $this->params['breadcrumbs'][] = $this->title;
 <div class="box-body nav-tabs-custom">
     <h2 class="page-header">盘点单详情 - <?php echo $bill->bill_no?> - <?php echo BillStatusEnum::getValue($bill->bill_status)?></h2>
     <?php echo Html::menuTab($tabList,$tab)?>
-    <div class="box-tools" style="float:right;margin-top:-40px; margin-right: 20px;">
-           <?php if($bill->bill_status < BillStatusEnum::CONFIRM) {?>
-           		<?= Html::create(['bill-w/ajax-adjust', 'id' => $bill->id], '刷新盘点', [
-           		        'class'=>'btn btn-success btn-xs',
-           		        'onclick' => 'rfTwiceAffirm(this,"刷新盘点","确定刷新盘点单吗？");return false;']
-           		);?>
-           <?php }?>
-           <?php if($bill->status == BillWStatusEnum::SAVE) {?>
-                <?= Html::create(['bill-w/ajax-finish','id'=>$bill->id], '盘点结束', [
-                        'class'=>'btn btn-warning btn-xs',
-                        'onclick' => 'rfTwiceAffirm(this,"盘点结束","确定结束盘点单吗？");return false;',
-                ]);?>
-           <?php }?>           
+    <div class="box-tools" style="float:right;margin-top:-40px; margin-right: 20px;">          
           <?= Html::create(['bill-w-goods/index', 'bill_id' => $bill->id,'returnUrl'=>Url::getReturnUrl()], '返回列表', []); ?>
     </div>
     <div class="tab-content">

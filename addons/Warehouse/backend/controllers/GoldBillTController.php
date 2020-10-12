@@ -330,11 +330,12 @@ class GoldBillTController extends BaseController
             //日志
             $log = [
                 'bill_id' => $model->id,
+                'bill_status' => $model->bill_status,
                 'log_type' => LogTypeEnum::ARTIFICIAL,
                 'log_module' => '单据取消',
                 'log_msg' => '取消其它收货单'
             ];
-            \Yii::$app->warehouseService->billLog->createBillLog($log);
+            \Yii::$app->warehouseService->goldBillLog->createGoldBillLog($log);
             \Yii::$app->getSession()->setFlash('success', '操作成功');
             $trans->commit();
             return $this->redirect(\Yii::$app->request->referrer);

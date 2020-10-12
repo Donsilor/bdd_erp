@@ -20,6 +20,7 @@ use common\enums\AuditStatusEnum;
 use common\enums\StatusEnum;
 use common\helpers\SnHelper;
 use addons\Style\common\enums\QibanTypeEnum;
+use addons\Style\common\models\QibanAttribute;
 
 
 /**
@@ -185,7 +186,13 @@ class QibanController extends BaseController
         }
         if ($model->load(Yii::$app->request->post())) {
             //重新编辑后，审核状态改为未审核
-            $model->audit_status = AuditStatusEnum::SAVE;
+            if($isNewRecord){
+                $model->status = StatusEnum::DISABLED;
+                $model->audit_status = AuditStatusEnum::SAVE;
+                $model->creator_id = \Yii::$app->user->id;
+            }else{
+                $model->audit_status = AuditStatusEnum::PENDING;
+            }
             try{
                 $trans = Yii::$app->trans->beginTransaction();
                 if(false === $model->save()){
@@ -244,12 +251,17 @@ class QibanController extends BaseController
             $model->qiban_type = QibanTypeEnum::NO_STYLE;   
             $model->style_sn = 'QIBAN';
             $model->is_inlay = $model->type->is_inlay ?? 0;
-        }         
-       
+        }
         
         if ($model->load(Yii::$app->request->post())) {
-            //重新编辑后，审核状态改为未审核
-            $model->audit_status = AuditStatusEnum::SAVE;            
+            //重新编辑后，审核状态改为未审核 
+            if($isNewRecord){
+                $model->status = StatusEnum::DISABLED;
+                $model->audit_status = AuditStatusEnum::SAVE;
+                $model->creator_id = \Yii::$app->user->id;
+            }else{
+                $model->audit_status = AuditStatusEnum::PENDING;
+            }
             try{
                 $trans = Yii::$app->trans->beginTransaction();
                 if(false === $model->save()){
@@ -260,7 +272,7 @@ class QibanController extends BaseController
                 }                
                 //创建属性关系表数据
                 $model->createAttrs();
-
+              
                 $trans->commit();
                 if($isNewRecord) {
                     return $this->message("保存成功", $this->redirect(['view', 'id' => $model->id]), 'success');
@@ -346,34 +358,37 @@ class QibanController extends BaseController
             try{
                 $trans = Yii::$app->trans->beginTransaction();
 
-                $audit = [
+                /* $audit = [
                     'audit_status' =>  $model->audit_status ,
                     'audit_time' => time(),
                     'audit_remark' => $model->audit_remark
-                ];
-                $res = \Yii::$app->services->flowType->flowAudit($this->targetType,$id,$audit);
+                ]; */
+                //$flow = \Yii::$app->services->flowType->flowAudit($this->targetType,$id,$audit);
                 //审批完结或者审批不通过才会走下面
-                if($res->flow_status == FlowStatusEnum::COMPLETE || $res->flow_status == FlowStatusEnum::CANCEL){
-                    $model->auditor_id = \Yii::$app->user->id;
+                //if($flow->flow_status == FlowStatusEnum::COMPLETE || $flow->flow_status == FlowStatusEnum::CANCEL){
+                    
+                    $model->auditor_id = \Yii::$app->user->identity->getId();
                     $model->audit_time = time();
                     if ($model->audit_status == AuditStatusEnum::PASS) {
                         if ($model->is_apply == IsApply::Wait) {
                             $model->is_apply = IsApply::Yes;
                         }
                         $model->status = StatusEnum::ENABLED;
+                        //创建款号
+                        Yii::$app->styleService->qiban->createStyleSn($model);
                     } else {
                         $model->status = StatusEnum::DISABLED;
                     }
                     if (false === $model->save()) {
                         throw new \Exception($this->getError($model));
                     }
-                }
+                //}
                 $trans->commit();
             }catch (\Exception $e){
                 $trans->rollBack();
-                return $this->message("审核失败:". $e->getMessage(),  $this->redirect(Yii::$app->request->referrer), 'error');
+                return $this->message($e->getMessage(),  $this->redirect(Yii::$app->request->referrer), 'error');
             }
-            return $this->message("保存成功", $this->redirect(Yii::$app->request->referrer), 'success');
+            return $this->message("审核成功", $this->redirect(Yii::$app->request->referrer), 'success');
         }
         if($model->audit_status == 0){
             $model->audit_status = 1;
@@ -382,6 +397,56 @@ class QibanController extends BaseController
         return $this->renderAjax($this->action->id, [
                 'model' => $model,
         ]);
+    }
+    
+    /**
+     * 删除
+     *
+     * @param $id
+     * @return mixed
+     * @throws \Throwable
+     * @throws \yii\db\StaleObjectException
+     */
+    public function actionDelete($id)
+    {
+        try{
+            $trans = Yii::$app->trans->beginTransaction();
+            if ($this->findModel($id)->delete()) {
+                //属性删除
+                QibanAttribute::deleteAll(['qiban_id' => $id]);                
+            }
+            
+            $trans->commit();
+            return $this->message("操作成功",  $this->redirect(Yii::$app->request->referrer), 'success');
+        }catch (\Exception $e){
+            $trans->rollBack();
+            return $this->message($e->getMessage(),  $this->redirect(Yii::$app->request->referrer), 'error');
+        }
+    }
+    /**
+     * 作废
+     * @param $id
+     * @return mixed
+     * @throws \Throwable
+     */
+    public function actionDestroy($id)
+    {
+        $model = $this->findModel($id);
+        try{
+            $trans = Yii::$app->trans->beginTransaction();
+            $model->status = StatusEnum::DELETE;
+            $model->audit_status = AuditStatusEnum::DESTORY;
+            $model->audit_time = time();
+            $model->auditor_id = \Yii::$app->user->identity->getId();
+            if(false === $model->save(true,['status','audit_status','audit_time','updated_at'])){
+                throw new \Exception($this->getError($model));
+            }
+            $trans->commit();
+            return $this->message("操作成功",  $this->redirect(Yii::$app->request->referrer), 'success');
+        }catch (\Exception $e){
+            $trans->rollBack();
+            return $this->message($e->getMessage(),  $this->redirect(Yii::$app->request->referrer), 'error');
+        }
     }
     
 }

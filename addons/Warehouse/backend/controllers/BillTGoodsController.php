@@ -2,7 +2,6 @@
 
 namespace addons\Warehouse\backend\controllers;
 
-use addons\Warehouse\common\enums\PayContentEnum;
 use Yii;
 use common\traits\Curd;
 use common\helpers\Url;
@@ -56,6 +55,8 @@ class BillTGoodsController extends BaseController
         $dataProvider->query->andWhere(['>', WarehouseBillGoodsL::tableName() . '.status', -1]);
         $bill = WarehouseBill::find()->where(['id' => $bill_id])->one();
         $model = new WarehouseBillTGoodsForm();
+        $goods = $model::find()->select(['goods_id'])->where(['bill_id'=>$bill_id])->all();
+        $goods_ids = $model->getCopyGoodsIds($goods);
         $total = $model->goodsSummary($bill_id, Yii::$app->request->queryParams);
         return $this->render($this->action->id, [
             'model' => $model,
@@ -63,6 +64,7 @@ class BillTGoodsController extends BaseController
             'searchModel' => $searchModel,
             'bill' => $bill,
             'total' => $total,
+            'goods_ids' => $goods_ids ?? "",
             'tabList' => \Yii::$app->warehouseService->bill->menuTabList($bill_id, $this->billType, $returnUrl),
             'tab' => $tab,
         ]);

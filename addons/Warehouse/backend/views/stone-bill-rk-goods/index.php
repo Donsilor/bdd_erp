@@ -13,7 +13,7 @@ use kartik\daterange\DateRangePicker;
 /* @var $this yii\web\View */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = Yii::t('bill_t_goods', '(金料)其它入库单详情');
+$this->title = Yii::t('bill_t_goods', '其它入库单详情(石料)');
 $this->params['breadcrumbs'][] = ['label' => $this->title, 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 $params = Yii::$app->request->queryParams;
@@ -32,22 +32,22 @@ $params = $params ? "&".http_build_query($params) : '';
         <?php
 
         if ($bill->bill_status == \addons\Warehouse\common\enums\BillStatusEnum::SAVE) {
-            echo Html::create(['ajax-edit', 'bill_id' => $bill->id], '新增金料', [
+            echo Html::create(['ajax-edit', 'bill_id' => $bill->id], '新增石料', [
                 'class' => 'btn btn-primary btn-xs',
                 'data-toggle' => 'modal',
                 'data-target' => '#ajaxModalLg',
             ]);
         }
 //        echo Html::a('单据打印', ['bill-t/print', 'id' => $bill->id], ['target' => '_blank', 'class' => 'btn btn-info btn-xs',]);
-//        echo '&nbsp;';
-//        if ($bill->bill_status == \addons\Warehouse\common\enums\BillStatusEnum::SAVE) {
-//            echo Html::edit(['ajax-upload', 'bill_id' => $bill->id], '批量导入', [
-//                'class' => 'btn btn-success btn-xs',
-//                'data-toggle' => 'modal',
-//                'data-target' => '#ajaxModal',
-//            ]);
-//            echo '&nbsp;';
-//        }
+        echo '&nbsp;';
+        if ($bill->bill_status == \addons\Warehouse\common\enums\BillStatusEnum::SAVE) {
+            echo Html::edit(['ajax-upload', 'bill_id' => $bill->id], '批量导入', [
+                'class' => 'btn btn-success btn-xs',
+                'data-toggle' => 'modal',
+                'data-target' => '#ajaxModal',
+            ]);
+            echo '&nbsp;';
+        }
 //        echo Html::button('明细导出', ['class' => 'btn btn-inverse btn-xs', 'onclick' => 'batchExport()',]);
 //        echo '&nbsp;';
 //        if ($bill->bill_status == \addons\Warehouse\common\enums\BillStatusEnum::SAVE) {
@@ -91,12 +91,12 @@ $params = $params ? "&".http_build_query($params) : '';
                                 'filter' => false,
                             ],
                             [
-                                'attribute' => 'gold_sn',
+                                'attribute' => 'stone_sn',
                                 'headerOptions' => ['class' => 'col-md-2'],
                                 'value' => function ($model, $key, $index) {
-                                    return $model->gold_sn ?? "";
+                                    return $model->stone_sn ?? "";
                                 },
-                                'filter' => Html::activeTextInput($searchModel, 'gold_sn', [
+                                'filter' => Html::activeTextInput($searchModel, 'stone_sn', [
                                     'class' => 'form-control',
                                 ]),
                             ],
@@ -112,13 +112,13 @@ $params = $params ? "&".http_build_query($params) : '';
                                 ]),
                             ],
                             [
-                                'attribute' => 'gold_type',
+                                'attribute' => 'stone_type',
                                 'format' => 'raw',
                                 'headerOptions' => ['width' => 60],
                                 'value' => function ($model, $key, $index) {
-                                    return Yii::$app->attr->valueName($model->gold_type)??"";
+                                    return Yii::$app->attr->valueName($model->stone_type)??"";
                                 },
-                                'filter' => Html::activeDropDownList($searchModel, 'gold_type',Yii::$app->attr->valueMap(\addons\Style\common\enums\AttrIdEnum::MAT_GOLD_TYPE), [
+                                'filter' => Html::activeDropDownList($searchModel, 'stone_type',Yii::$app->attr->valueMap(\addons\Style\common\enums\AttrIdEnum::MAT_STONE_TYPE), [
                                     'prompt' => '全部',
                                     'class' => 'form-control',
                                     'style' => 'width:60px;'
@@ -126,29 +126,45 @@ $params = $params ? "&".http_build_query($params) : '';
                             ],
 
                             [
-                                'attribute' => 'gold_name',
+                                'attribute' => 'stone_name',
                                 'headerOptions' => ['class' => 'col-md-2'],
                                 'value' => function ($model, $key, $index) {
-                                    return $model->gold_name ?? "";
+                                    return $model->stone_name ?? "";
                                 },
-                                'filter' => Html::activeTextInput($searchModel, 'gold_name', [
+                                'filter' => Html::activeTextInput($searchModel, 'stone_name', [
                                     'class' => 'form-control',
                                 ]),
                             ],
+
                             [
-                                'attribute' => 'gold_weight',
+                                'attribute' => 'stone_num',
                                 'headerOptions' => ['width'=>60],
                                 'value' => function ($model, $key, $index){
-                                    return $model->gold_weight ?? 0;
+                                    return $model->stone_num ?? 0;
                                 },
                                 'filter' => false,
                             ],
-
                             [
-                                'attribute' => 'gold_price',
+                                'attribute' => 'stone_weight',
+                                'headerOptions' => ['width'=>60],
+                                'value' => function ($model, $key, $index){
+                                    return $model->stone_weight ?? 0;
+                                },
+                                'filter' => false,
+                            ],
+                            [
+                                'attribute' => 'carat',
+                                'headerOptions' => ['width'=>60],
+                                'value' => function ($model, $key, $index){
+                                    return $model->carat;
+                                },
+                                'filter' => false,
+                            ],
+                            [
+                                'attribute' => 'stone_price',
                                 'headerOptions' => ['width'=>60],
                                 'value' => function ($model, $key, $index) {
-                                    return $model->gold_price ?? 0;
+                                    return $model->stone_price ?? 0;
                                 },
                                 'filter' => false,
                             ],
@@ -168,7 +184,141 @@ $params = $params ? "&".http_build_query($params) : '';
                                 },
                                 'filter' => false,
                             ],
-
+                            [
+                                'attribute' => 'cert_type',
+                                'format' => 'raw',
+                                'headerOptions' => ['width' => 60],
+                                'value' => function ($model, $key, $index) {
+                                    return Yii::$app->attr->valueName($model->cert_type)??"";
+                                },
+                                'filter' => Html::activeDropDownList($searchModel, 'cert_type',Yii::$app->attr->valueMap(\addons\Style\common\enums\AttrIdEnum::DIA_CERT_TYPE), [
+                                    'prompt' => '全部',
+                                    'class' => 'form-control',
+                                    'style' => 'width:60px;'
+                                ]),
+                            ],
+                            [
+                                'attribute' => 'shape',
+                                'format' => 'raw',
+                                'headerOptions' => ['width' => 60],
+                                'value' => function ($model, $key, $index) {
+                                    return Yii::$app->attr->valueName($model->shape)??"";
+                                },
+                                'filter' => Html::activeDropDownList($searchModel, 'shape',Yii::$app->attr->valueMap(\addons\Style\common\enums\AttrIdEnum::DIA_SHAPE), [
+                                    'prompt' => '全部',
+                                    'class' => 'form-control',
+                                    'style' => 'width:60px;'
+                                ]),
+                            ],
+                            [
+                                'attribute' => 'color',
+                                'format' => 'raw',
+                                'headerOptions' => ['width' => 60],
+                                'value' => function ($model, $key, $index) {
+                                    return Yii::$app->attr->valueName($model->color)??"";
+                                },
+                                'filter' => Html::activeDropDownList($searchModel, 'color',Yii::$app->attr->valueMap(\addons\Style\common\enums\AttrIdEnum::DIA_COLOR), [
+                                    'prompt' => '全部',
+                                    'class' => 'form-control',
+                                    'style' => 'width:60px;'
+                                ]),
+                            ],
+                            [
+                                'attribute' => 'clarity',
+                                'format' => 'raw',
+                                'headerOptions' => ['width' => 60],
+                                'value' => function ($model, $key, $index) {
+                                    return Yii::$app->attr->valueName($model->clarity)??"";
+                                },
+                                'filter' => Html::activeDropDownList($searchModel, 'clarity',Yii::$app->attr->valueMap(\addons\Style\common\enums\AttrIdEnum::DIA_CLARITY), [
+                                    'prompt' => '全部',
+                                    'class' => 'form-control',
+                                    'style' => 'width:60px;'
+                                ]),
+                            ],
+                            [
+                                'attribute' => 'cut',
+                                'format' => 'raw',
+                                'headerOptions' => ['width' => 60],
+                                'value' => function ($model, $key, $index) {
+                                    return Yii::$app->attr->valueName($model->cut)??"";
+                                },
+                                'filter' => Html::activeDropDownList($searchModel, 'cut',Yii::$app->attr->valueMap(\addons\Style\common\enums\AttrIdEnum::DIA_CUT), [
+                                    'prompt' => '全部',
+                                    'class' => 'form-control',
+                                    'style' => 'width:60px;'
+                                ]),
+                            ],
+                            [
+                                'attribute' => 'symmetry',
+                                'format' => 'raw',
+                                'headerOptions' => ['width' => 60],
+                                'value' => function ($model, $key, $index) {
+                                    return Yii::$app->attr->valueName($model->symmetry)??"";
+                                },
+                                'filter' => Html::activeDropDownList($searchModel, 'symmetry',Yii::$app->attr->valueMap(\addons\Style\common\enums\AttrIdEnum::DIA_SYMMETRY), [
+                                    'prompt' => '全部',
+                                    'class' => 'form-control',
+                                    'style' => 'width:60px;'
+                                ]),
+                            ],
+                            [
+                                'attribute' => 'polish',
+                                'format' => 'raw',
+                                'headerOptions' => ['width' => 60],
+                                'value' => function ($model, $key, $index) {
+                                    return Yii::$app->attr->valueName($model->polish)??"";
+                                },
+                                'filter' => Html::activeDropDownList($searchModel, 'polish',Yii::$app->attr->valueMap(\addons\Style\common\enums\AttrIdEnum::DIA_POLISH), [
+                                    'prompt' => '全部',
+                                    'class' => 'form-control',
+                                    'style' => 'width:60px;'
+                                ]),
+                            ],
+                            [
+                                'attribute' => 'fluorescence',
+                                'format' => 'raw',
+                                'headerOptions' => ['width' => 60],
+                                'value' => function ($model, $key, $index) {
+                                    return Yii::$app->attr->valueName($model->fluorescence)??"";
+                                },
+                                'filter' => Html::activeDropDownList($searchModel, 'fluorescence',Yii::$app->attr->valueMap(\addons\Style\common\enums\AttrIdEnum::DIA_FLUORESCENCE), [
+                                    'prompt' => '全部',
+                                    'class' => 'form-control',
+                                    'style' => 'width:60px;'
+                                ]),
+                            ],
+                            [
+                                'attribute' => 'stone_colour',
+                                'format' => 'raw',
+                                'headerOptions' => ['width' => 60],
+                                'value' => function ($model, $key, $index) {
+                                    return Yii::$app->attr->valueName($model->stone_colour)??"";
+                                },
+                                'filter' => Html::activeDropDownList($searchModel, 'stone_colour',Yii::$app->attr->valueMap(\addons\Style\common\enums\AttrIdEnum::DIA_COLOUR), [
+                                    'prompt' => '全部',
+                                    'class' => 'form-control',
+                                    'style' => 'width:60px;'
+                                ]),
+                            ],
+                            [
+                                'attribute' => 'stone_norms',
+                                //'format' => 'raw',
+                                'headerOptions' => ['class' => 'col-md-1'],
+                                'value' => function ($model, $key, $index) {
+                                    return $model->stone_norms ?? "";
+                                },
+                                'filter' => false,
+                            ],
+                            [
+                                'attribute' => 'stone_size',
+                                //'format' => 'raw',
+                                'headerOptions' => ['class' => 'col-md-1'],
+                                'value' => function ($model, $key, $index) {
+                                    return $model->stone_size ?? "";
+                                },
+                                'filter' => false,
+                            ],
                             [
                                 'attribute' => 'remark',
                                 //'format' => 'raw',

@@ -7,7 +7,7 @@ use common\enums\AuditStatusEnum;
 /* @var $model common\models\WarehouseBill */
 /* @var $form yii\widgets\ActiveForm */
 
-$this->title = '(金料)其它入库单详情';
+$this->title = '(石料)其它入库单详情';
 $this->params['breadcrumbs'][] = ['label' => $this->title, 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
@@ -25,7 +25,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         </tr>
                         <tr>
                             <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('bill_type') ?>：</td>
-                            <td><?= \addons\Warehouse\common\enums\GoldBillTypeEnum::getValue($model->bill_type)?></td>
+                            <td><?= \addons\Warehouse\common\enums\StoneBillTypeEnum::getValue($model->bill_type)?></td>
                         </tr>
                         <tr>
                             <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('supplier_id') ?>：</td>
@@ -47,10 +47,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('total_cost') ?>：</td>
                             <td><?= $model->total_cost ?></td>
                         </tr>
-                        <tr>
-                            <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('total_tax_price') ?>：</td>
-                            <td><?= $model->total_tax_price ?></td>
-                        </tr>
+
                         <tr>
                             <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('delivery_no') ?>：</td>
                             <td><?= $model->delivery_no ?></td>

@@ -17,7 +17,7 @@ $form = ActiveForm::begin([
 </div>
 <div class="modal-body">
     <div class="col-sm-12">
-        <?= $form->field($model, 'gold_sn')->textInput([ "placeholder" => "单据审核自动生成"]) ?>
+        <?= $form->field($model, 'gold_sn')->textInput([ "placeholder" => "自动生成"]) ?>
         <div class="row">
 
             <div class="col-lg-6">

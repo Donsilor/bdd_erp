@@ -15,7 +15,7 @@ use common\helpers\Url;
 /* @var $tab yii\data\ActiveDataProvider */
 /* @var $bill yii\data\ActiveDataProvider */
 
-$this->title = Yii::t('bill_b_goods', '(金料)其它出库单明细');
+$this->title = Yii::t('bill_b_goods', '(石料)其它出库单明细');
 $this->params['breadcrumbs'][] = ['label' => $this->title, 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
@@ -27,7 +27,7 @@ $this->params['breadcrumbs'][] = $this->title;
         if($bill->bill_status == \addons\Warehouse\common\enums\BillStatusEnum::SAVE) {
             echo Html::edit(['edit-all', 'bill_id' => $bill->id,'scan'=>1], '添加/编辑金料', ['class'=>'btn btn-success btn-xs']);
             echo '&nbsp;';
-            echo Html::a('返回列表', ['gold-bill-o-goods/index', 'bill_id' => $bill->id], ['class' => 'btn btn-info btn-xs']);
+            echo Html::a('返回列表', ['stone-bill-ck-goods/index', 'bill_id' => $bill->id], ['class' => 'btn btn-info btn-xs']);
         }
         ?>
     </div>
@@ -40,7 +40,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             <div class="col-lg-8">
                                 <div class="form-group field-cate-sort">
                                     <div class="col-sm-9">
-                                        <?= Html::textInput('scan_gold_sn', '', ['id'=>'scan_gold_sn','on','class' => 'form-control','placeholder'=>'请输入货号或扫码（多个货号用：“, ”“空格“)']).'<br/>' ?>
+                                        <?= Html::textInput('scan_stone_sn', '', ['id'=>'scan_stone_sn','on','class' => 'form-control','placeholder'=>'请输入货号或扫码（多个货号用：“, ”“空格“)']).'<br/>' ?>
                                     </div>
                                     <div class="col-sm-2 text-left">
                                         <button id="scan_submit" type="button" class="btn btn-primary" >保存</button>
@@ -49,8 +49,8 @@ $this->params['breadcrumbs'][] = $this->title;
                             </div>
                         </div>
                         <script type="text/javascript">
-                            $('#scan_gold_sn').focus();
-                            $('#scan_gold_sn').keydown(function(e){
+                            $('#scan_stone_sn').focus();
+                            $('#scan_stone_sn').keydown(function(e){
                                 if(e.keyCode == 13){
                                     scanGoods();
                                 }
@@ -59,14 +59,14 @@ $this->params['breadcrumbs'][] = $this->title;
                                 scanGoods();
                             });
                             function scanGoods(){
-                                var gold_sn = $("#scan_gold_sn").val();
+                                var stone_sn = $("#scan_stone_sn").val();
                                 $.ajax({
                                     type: "post",
                                     url: '<?php echo Url::to(['ajax-scan'])?>',
                                     dataType: "json",
                                     data: {
                                         bill_id: '<?php echo $bill->id?>',
-                                        gold_sn:gold_sn,
+                                        stone_sn:stone_sn,
                                     },
                                     success: function (data) {
                                         window.location.href='<?= \Yii::$app->request->getUrl(); ?>';
@@ -100,21 +100,21 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'format' => 'raw',
                             ],
                             [
-                                'attribute' => 'gold_sn',
+                                'attribute' => 'stone_sn',
                                 'filter' => true,
                                 'headerOptions' => ['class' => 'col-md-1'],
                             ],
                             [
-                                'attribute' => 'gold_type',
+                                'attribute' => 'stone_type',
                                 'value' => function($model){
-                                    return Yii::$app->attr->valueName($model->gold_type) ?? "";
+                                    return Yii::$app->attr->valueName($model->stone_type) ?? "";
                                 },
-                                'filter' => Html::activeDropDownList($searchModel, 'gold_type',Yii::$app->attr->valueMap(\addons\Style\common\enums\AttrIdEnum::MAT_GOLD_TYPE), [
+                                'filter' => Html::activeDropDownList($searchModel, 'stone_type',Yii::$app->attr->valueMap(\addons\Style\common\enums\AttrIdEnum::MAT_GOLD_TYPE), [
                                     'prompt' => '全部',
                                     'class' => 'form-control',
                                     'style'=> 'width:80px'
                                 ]),
-                                'headerOptions' => ['class' => 'col-md-2'],
+                                'headerOptions' => ['class' => 'col-md-1'],
                             ],
                             [
                                 'attribute' => 'style_sn',
@@ -122,29 +122,47 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'filter' => true,
                             ],
                             [
-                                'attribute' => 'gold_name',
+                                'attribute' => 'stone_name',
                                 'filter' => false,
-                                'headerOptions' => ['class' => 'col-md-2'],
+                                'headerOptions' => ['class' => 'col-md-1'],
                             ],
                             [
-                                'attribute' => 'warehouseGold.gold_weight',
+                                'attribute' => 'warehouseStone.stock_weight',
                                 'filter' => false,
-                                'headerOptions' => ['class' => 'col-md-2'],
+                                'headerOptions' => ['class' => 'col-md-1'],
                             ],
+
                             [
-                                'attribute' => 'gold_weight',
-                                'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#84bf96;'],
+                                'attribute' => 'stone_weight',
+                                'headerOptions' => ['class' => 'col-md-1', 'style' => 'text-align:center;background-color:#84bf96;'],
                                 'footerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#84bf96;'],
                                 'filter' => false,
                                 'value' =>function($model){
-                                    return Html::ajaxInput('gold_weight', $model->gold_weight);
+                                    return Html::ajaxInput('stone_weight', $model->stone_weight);
                                 },
                                 'format' => 'raw',
                             ],
                             [
-                                'attribute' => 'gold_price',
+                                'attribute' => 'warehouseStone.stock_cnt',
                                 'filter' => false,
-                                'headerOptions' => ['width' => '100'],
+                                'headerOptions' => ['class' => 'col-md-2','style'=>'text-align:center;'],
+                                'contentOptions'=>['style'=>'text-align:center;']
+                            ],
+                            [
+                                'attribute' => 'stone_num',
+                                'headerOptions' => ['class' => 'col-md-1', 'style' => 'text-align:center;background-color:#84bf96;'],
+                                'footerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#84bf96;'],
+                                'filter' => false,
+                                'value' =>function($model){
+                                    return Html::ajaxInput('stone_num', $model->stone_num);
+                                },
+                                'format' => 'raw',
+                            ],
+                            [
+                                'attribute' => 'stone_price',
+                                'filter' => false,
+                                'headerOptions' => ['width' => '100','style'=>'text-align:center;'],
+                                'contentOptions'=>['style'=>'text-align:center;']
                             ],
                             [
                                 'attribute' => 'cost_price',
@@ -153,7 +171,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             ],
                             [
                                 'attribute' => 'remark',
-                                'headerOptions' => ['class' => 'col-md-2', 'style' => 'background-color:#84bf96;'],
+                                'headerOptions' => ['class' => 'col-md-2', 'style' => 'text-align:center;background-color:#84bf96;'],
                                 'footerOptions' => ['class' => 'col-md-2', 'style' => 'background-color:#84bf96;'],
                                 'filter' => false,
                                 'value' =>function($model){
