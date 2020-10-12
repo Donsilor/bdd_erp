@@ -420,7 +420,7 @@ class PurchaseApplyController extends BaseController
         try {
             $trans = Yii::$app->db->beginTransaction();
 
-            Yii::$app->purchaseService->applyGoods->syncApplyToQiban($model->id);
+            Yii::$app->purchaseService->applyGoods->syncApplyToQiban($model);
 
             $model->apply_status = ApplyStatusEnum::FINISHED;
             if (false === $model->save()) {

@@ -48,7 +48,7 @@ class BillTController extends BaseController
         $searchModel = new SearchModel([
             'model' => $this->modelClass,
             'scenario' => 'default',
-            'partialMatchAttributes' => ['name'], // 模糊查询
+            'partialMatchAttributes' => ['name', 'remark'], // 模糊查询
             'defaultOrder' => [
                 'id' => SORT_DESC
             ],

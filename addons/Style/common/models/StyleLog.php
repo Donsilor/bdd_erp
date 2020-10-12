@@ -37,7 +37,7 @@ class StyleLog extends BaseModel
     public function rules()
     {
         return [
-            [['style_id','creator_id'], 'required'],
+            [['style_id'], 'required'],
             [[ 'style_id','log_type','creator_id', 'log_time'], 'integer'],
             [['log_msg'], 'string', 'max' => 500],
             [['style_sn','creator','log_module'], 'string', 'max' => 30],

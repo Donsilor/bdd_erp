@@ -2,6 +2,7 @@
 
 namespace addons\Style\backend\controllers;
 
+use addons\Style\common\enums\LogTypeEnum;
 use addons\Style\common\enums\StonePositionEnum;
 use addons\Style\common\models\StoneStyle;
 use addons\Style\common\models\StyleAttribute;
@@ -77,7 +78,7 @@ class StyleController extends BaseController
 
         $dataProvider->query->andFilterWhere(['like',Style::tableName().'.style_sn', trim($searchModel->style_sn)]);
         $dataProvider->query->andFilterWhere(['like',Style::tableName().'.style_name', trim($searchModel->style_name)]);
-
+        $dataProvider->query->andFilterWhere(['>',Style::tableName().'.status',-2]);
         return $this->render('index', [
             'dataProvider' => $dataProvider,
             'searchModel' => $searchModel, 
@@ -121,9 +122,9 @@ class StyleController extends BaseController
                     }                    
                 }else if($model->audit_status != AuditStatusEnum::PASS){
                     if($model->is_autosn == 1) {
-                        if($oldinfo['style_channel_id'] != $model->style_channel_id || $oldinfo['style_sex'] != $model->style_sex || $oldinfo['style_cate_id'] != $model->style_cate_id || $oldinfo['style_material'] != $model->style_material) {
+                        /* if($oldinfo['style_channel_id'] != $model->style_channel_id || $oldinfo['style_sex'] != $model->style_sex || $oldinfo['style_cate_id'] != $model->style_cate_id || $oldinfo['style_material'] != $model->style_material) {
                             Yii::$app->styleService->style->createStyleSn($model);
-                        }
+                        } */
                     }else {
                        Yii::$app->styleService->style->createStyleSort($model);
                     }
@@ -147,7 +148,19 @@ class StyleController extends BaseController
                             throw new \Exception($this->getError($stoneM));
                         }
                     }
+                    $log_msg = "创建款式";
+                }else{
+                    $log_msg = "编辑款式";
                 }
+                $log = [
+                    'style_id' => $model->id,
+                    'style_sn' => $model->style_sn,
+                    'log_type' => LogTypeEnum::ARTIFICIAL,
+                    'log_time' => time(),
+                    'log_module' => '款式列表',
+                    'log_msg' => $log_msg,
+                ];
+                \Yii::$app->styleService->styleLog->createStyleLog($log);
                 $trans->commit();
                 if($isNewRecord) {
                     return $this->message("保存成功", $this->redirect(['view', 'id' => $model->id]), 'success');
@@ -236,16 +249,31 @@ class StyleController extends BaseController
         if($model->audit_status != AuditStatusEnum::SAVE && $model->audit_status != AuditStatusEnum::UNPASS ){
             return $this->message('单据不是保存状态', $this->redirect(\Yii::$app->request->referrer), 'error');
         }
-        //审批流程
-        Yii::$app->services->flowType->createFlow($this->targetType,$id,$model->style_sn);
-
-        $model->audit_status = AuditStatusEnum::PENDING;
-        if(false === $model->save()){
-            return $this->message($this->getError($model), $this->redirect(\Yii::$app->request->referrer), 'error');
+        try{
+            $trans = \Yii::$app->trans->beginTransaction();
+            //审批流程
+            \Yii::$app->services->flowType->createFlow($this->targetType,$id,$model->style_sn);
+            $model->audit_status = AuditStatusEnum::PENDING;
+            if(false === $model->save()){
+                throw new \Exception($this->getError($model));
+            }
+            $log = [
+                'style_id' => $model->id,
+                'style_sn' => $model->style_sn,
+                'log_type' => LogTypeEnum::ARTIFICIAL,
+                'log_time' => time(),
+                'log_module' => '款式列表',
+                'log_msg' => "提交审核",
+            ];
+            \Yii::$app->styleService->styleLog->createStyleLog($log);
+            $trans->commit();
+            return $this->message('操作成功', $this->redirect(\Yii::$app->request->referrer), 'success');
+        }catch (\Exception $e){
+            $trans->rollBack();
+            return $this->message($e->getMessage(), $this->redirect(\Yii::$app->request->referrer), 'error');
         }
-        return $this->message('操作成功', $this->redirect(\Yii::$app->request->referrer), 'success');
-
     }
+
     /**
      * 审核-款号
      *
@@ -286,6 +314,15 @@ class StyleController extends BaseController
                         throw new \Exception($this->getError($model));
                     }
                 }
+                $log = [
+                    'style_id' => $model->id,
+                    'style_sn' => $model->style_sn,
+                    'log_type' => LogTypeEnum::ARTIFICIAL,
+                    'log_time' => time(),
+                    'log_module' => '款式列表',
+                    'log_msg' => "款式审核",
+                ];
+                \Yii::$app->styleService->styleLog->createStyleLog($log);
                 $trans->commit();
             }catch (\Exception $e){
                 $trans->rollBack();
@@ -358,16 +395,27 @@ class StyleController extends BaseController
     {
         $model = $this->findModel($id);
         try{            
-            //$trans = Yii::$app->trans->beginTransaction();
-            $model->status = StatusEnum::DELETE;     
+            $trans = Yii::$app->trans->beginTransaction();
+            $model->status = StatusEnum::DELETE;
             $model->audit_status = AuditStatusEnum::DESTORY;
-            if(false === $model->save()){
+            $model->audit_time = time();
+            $model->auditor_id = \Yii::$app->user->identity->getId();
+            if(false === $model->save(true,['status','audit_status','audit_time','updated_at'])){
                 throw new \Exception($this->getError($model));
             }
-            //$trans->commit();
+            $log = [
+                'style_id' => $model->id,
+                'style_sn' => $model->style_sn,
+                'log_type' => LogTypeEnum::ARTIFICIAL,
+                'log_time' => time(),
+                'log_module' => '款式列表',
+                'log_msg' => "款式作废",
+            ];
+            \Yii::$app->styleService->styleLog->createStyleLog($log);
+            $trans->commit();
             return $this->message("操作成功",  $this->redirect(Yii::$app->request->referrer), 'success');
         }catch (\Exception $e){
-           // $trans->rollBack();
+            $trans->rollBack();
             return $this->message($e->getMessage(),  $this->redirect(Yii::$app->request->referrer), 'error');
         }        
     }

@@ -146,9 +146,9 @@ $params = $params ? "&" . http_build_query($params) : '';
                         [
                             'attribute' => 'send_goods_sn',
                             'value' => function ($model) {
-                                if($model->send_goods_sn){
-                                    $model->send_goods_sn = "<span id='send_goods_sn_".$model->send_goods_sn."'>$model->send_goods_sn</span>&nbsp;<i class='fa fa-copy' onclick='copy(send_goods_sn_" . $model->send_goods_sn . ")'></i>";
-                                }
+//                                if($model->send_goods_sn){
+//                                    $model->send_goods_sn = "<span id='send_goods_sn_".$model->send_goods_sn."'>$model->send_goods_sn</span>&nbsp;<i class='fa fa-copy' onclick='copy(send_goods_sn_" . $model->send_goods_sn . ")'></i>";
+//                                }
                                 return $model->send_goods_sn ?? "";
                             },
                             'filter' => Html::activeTextInput($searchModel, 'send_goods_sn', [
@@ -187,6 +187,17 @@ $params = $params ? "&" . http_build_query($params) : '';
                             'value' => function ($model) {
                                 return Yii::$app->formatter->asDate($model->created_at);
                             },
+                        ],
+                        [
+                            'attribute' => 'remark',
+                            'headerOptions' => ['class' => 'col-md-1'],
+                            'value' => function ($model) {
+                                if($model->remark){
+                                    $model->remark = mb_substr($model->remark, 0, 7)."..." ?? "";
+                                }
+                                return $model->remark;
+                            },
+                            'filter' => true,
                         ],
                         /*[
                             'attribute' => 'auditor_id',
