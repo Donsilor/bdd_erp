@@ -21,7 +21,7 @@ $form = ActiveForm::begin([
 <div class="modal-body">
     <div class="col-sm-12">
         <?= $form->field($model, 'file')->fileInput()->label("<span style='color: red'>*</span> 文件上传") ?>
-        <?= Html::a("下载数据导入格式", ['ajax-upload', 'bill_id' => $bill->id, 'download' => 1], ['style' => "text-decoration:underline;color:#3c8dbc"]) ?>
+        <?= Html::a("下载数据导入格式", ['stone-bill-rk/ajax-import-rk', 'bill_id' => $bill->id, 'download' => 1], ['style' => "text-decoration:underline;color:#3c8dbc"]) ?>
     </div>
 </div>
 <div class="modal-footer">

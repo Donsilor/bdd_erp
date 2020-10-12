@@ -39,15 +39,15 @@ $params = $params ? "&".http_build_query($params) : '';
             ]);
         }
 //        echo Html::a('单据打印', ['bill-t/print', 'id' => $bill->id], ['target' => '_blank', 'class' => 'btn btn-info btn-xs',]);
-//        echo '&nbsp;';
-//        if ($bill->bill_status == \addons\Warehouse\common\enums\BillStatusEnum::SAVE) {
-//            echo Html::edit(['ajax-upload', 'bill_id' => $bill->id], '批量导入', [
-//                'class' => 'btn btn-success btn-xs',
-//                'data-toggle' => 'modal',
-//                'data-target' => '#ajaxModal',
-//            ]);
-//            echo '&nbsp;';
-//        }
+        echo '&nbsp;';
+        if ($bill->bill_status == \addons\Warehouse\common\enums\BillStatusEnum::SAVE) {
+            echo Html::edit(['ajax-upload', 'bill_id' => $bill->id], '批量导入', [
+                'class' => 'btn btn-success btn-xs',
+                'data-toggle' => 'modal',
+                'data-target' => '#ajaxModal',
+            ]);
+            echo '&nbsp;';
+        }
 //        echo Html::button('明细导出', ['class' => 'btn btn-inverse btn-xs', 'onclick' => 'batchExport()',]);
 //        echo '&nbsp;';
 //        if ($bill->bill_status == \addons\Warehouse\common\enums\BillStatusEnum::SAVE) {

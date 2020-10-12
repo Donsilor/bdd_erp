@@ -3,24 +3,10 @@
 namespace addons\Warehouse\common\forms;
 
 use addons\Style\common\models\StoneStyle;
-use addons\Warehouse\common\models\WarehouseStoneBillGoods;
 use Yii;
 use common\models\forms\ImportForm;
-use common\enums\LanguageEnum;
-use addons\Sales\common\models\Currency;
-use common\enums\CurrencyEnum;
-use addons\Style\common\models\Style;
-use addons\Sales\common\models\SaleChannel;
-use addons\Sales\common\models\Customer;
-use common\models\member\Account;
-use addons\Sales\common\models\Order;
-use addons\Sales\common\models\OrderAccount;
-use addons\Sales\common\models\OrderAddress;
 use addons\Style\common\enums\AttrIdEnum;
-use common\helpers\ArrayHelper;
-use common\models\backend\Member;
-use common\helpers\AmountHelper;
-use addons\Sales\common\models\OrderInvoice;
+
 
 /**
  * 国际批发订单导入  Form
@@ -57,7 +43,7 @@ class WarehouseStoneImportRkForm extends ImportForm
             1=>'stone_sn',
             2=>'style_sn',
             3=>'stone_name',
-            4=>'stone_norms',
+            4=>'stone_size',
             5=>'stone_num',
             6=>'stone_weight',
             7=>'stone_price',
@@ -70,15 +56,16 @@ class WarehouseStoneImportRkForm extends ImportForm
             14=>'symmetry',
             15=>'fluorescence',
             16=>'stone_colour',
-            17=>'stone_size',
+            17=>'stone_norms',
             18=>'cert_type',
             19=>'cert_id',
             20=>'remark',
     ];
     //唯一行的字段
-    public $uniqueKey = '';
+    public $uniqueKey = 'stone_sn';
     //只需要填写第一行的字段
     public $uniqueColumn = [
+
     ];
     public $requredColumns = [
             'style_sn',
@@ -91,9 +78,11 @@ class WarehouseStoneImportRkForm extends ImportForm
 
     ];
     public $numberColumns = [
+            'cert_id',
             'stone_num',
             'stone_weight',
             'stone_price',
+            'incl_tax_price',
 
     ];
     //文本属性
@@ -183,7 +172,7 @@ class WarehouseStoneImportRkForm extends ImportForm
     private function loadWarehouseStoneGoods($rowIndex)
     {
         if(!isset($this->goods_list[$rowIndex])){
-            $form = new WarehouseStoneBillGoods();
+            $form = new WarehouseStoneBillRkGoodsForm();
             $form->bill_id = $this->bill_id;
             $form->bill_no = $this->bill_no;
             $form->bill_type = $this->bill_type;
