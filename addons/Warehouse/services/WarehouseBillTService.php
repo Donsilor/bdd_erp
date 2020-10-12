@@ -481,6 +481,12 @@ class WarehouseBillTService extends Service
 //            }
             if (empty($peiliao_way) && $pure_gold_rate > 0) {
                 $peiliao_way = PeiLiaoWayEnum::LAILIAO;
+            }elseif(empty($peiliao_way) && !$pure_gold_rate && $suttle_weight){
+                $peiliao_way = PeiLiaoWayEnum::FACTORY;
+            }elseif(!$pure_gold_rate && !$suttle_weight){
+                $peiliao_way = PeiLiaoWayEnum::NO_PEI;
+            }else{
+
             }
             $main_pei_type = $form->formatValue($goods['main_pei_type'], 0) ?? 0;//主石配石方式
             $main_stone_sn = $goods['main_stone_sn'] ?? "";//主石编号

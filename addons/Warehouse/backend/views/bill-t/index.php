@@ -188,6 +188,17 @@ $params = $params ? "&" . http_build_query($params) : '';
                                 return Yii::$app->formatter->asDate($model->created_at);
                             },
                         ],
+                        [
+                            'attribute' => 'remark',
+                            'headerOptions' => ['class' => 'col-md-1'],
+                            'value' => function ($model) {
+                                if($model->remark){
+                                    $model->remark = mb_substr($model->remark, 0, 7)."..." ?? "";
+                                }
+                                return $model->remark;
+                            },
+                            'filter' => true,
+                        ],
                         /*[
                             'attribute' => 'auditor_id',
                             'value' => 'auditor.username',
