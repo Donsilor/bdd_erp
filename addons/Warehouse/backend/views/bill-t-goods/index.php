@@ -63,7 +63,7 @@ $params = $params ? "&" . http_build_query($params) : '';
             ]);
             echo '&nbsp;';
         }
-        echo Html::button('明细导出', ['class' => 'btn btn-inverse btn-xs', 'onclick' => 'batchExport()',]);
+        echo Html::button('明细导出', ['class' => 'btn btn-success btn-xs', 'onclick' => 'batchExport()',]);
         echo '&nbsp;';
         echo Html::tag('span', '刷新价格', ["class" => "btn btn-warning btn-xs jsBatchStatus", "data-grid" => "grid", "data-url" => Url::to(['update-price']),]);
         echo '&nbsp;';
