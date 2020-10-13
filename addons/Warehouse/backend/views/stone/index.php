@@ -34,7 +34,7 @@ $params = $params ? "&".http_build_query($params) : '';
                     'dataProvider' => $dataProvider,
                     'filterModel' => $searchModel,
                     'tableOptions' => ['class' => 'table table-hover'],
-                    'options' => ['style'=>'white-space:nowrap;' ],
+                    'options' => ['style'=>'white-space:nowrap;width:120%' ],
                     'showFooter' => false,//显示footer行
                     'id'=>'grid',
                     'columns' => [
@@ -82,27 +82,30 @@ $params = $params ? "&".http_build_query($params) : '';
                         ],
                         [
                             'attribute'=>'style_sn',
-                            'filter' => Html::activeTextInput($searchModel, 'style_sn', [
-                                'class' => 'form-control',
-                                'style' => 'width:100px',
+                            'filter' => \kartik\select2\Select2::widget([
+                                'name'=>'SearchModel[style_sn]',
+                                'value'=>$searchModel->style_sn,
+                                'data'=>Yii::$app->styleService->stone::getDropDown(),
+                                'options' => ['placeholder' =>"请选择",'multiple'=>false],
+                                'pluginOptions' => [
+                                    'allowClear' => true,
+                                ],
                             ]),
-                            'headerOptions' => [],
+                            'headerOptions' => ['width'=>'150'],
                         ],
                         [
                             'attribute'=>'stone_price',
                             'filter' => Html::activeTextInput($searchModel, 'stone_price', [
                                 'class' => 'form-control',
-                                'style'=> 'width:100px;'
                             ]),
-                            'headerOptions' => [],
+                            'headerOptions' => ['width'=>'60'],
                         ],
                         [
                             'attribute'=>'stock_cnt',
                             'filter' => Html::activeTextInput($searchModel, 'stock_cnt', [
                                 'class' => 'form-control',
-                                'style'=> 'width:100px;'
                             ]),
-                            'headerOptions' => [],
+                            'headerOptions' => ['width'=>'60'],
                         ],
                         [
                             'attribute'=>'stock_weight',
@@ -116,7 +119,7 @@ $params = $params ? "&".http_build_query($params) : '';
                             'attribute'=>'cost_price',
                             'filter' => Html::activeTextInput($searchModel, 'cost_price', [
                                 'class' => 'form-control',
-                                'style'=> 'width:100px;'
+                                'style'=> 'width:80px;'
                             ]),
                             'headerOptions' => [],
                         ],
@@ -319,7 +322,7 @@ $params = $params ? "&".http_build_query($params) : '';
                                 ],
                             ]),
                             'value'=>function($model){
-                                return Yii::$app->formatter->asDatetime($model->created_at);
+                                return Yii::$app->formatter->asDate($model->created_at);
                             }
                         ],
                         /*[

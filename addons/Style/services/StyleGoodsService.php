@@ -66,8 +66,8 @@ class StyleGoodsService extends Service
         if(!$style->save(false)) {
             throw new \Exception($this->getError($style));
         }
-    } 
-    
-    
+    }
+
+
 
 }
