@@ -3,8 +3,10 @@
 namespace addons\Style\backend\controllers;
 
 use Yii;
-use common\helpers\Url;
 use common\traits\Curd;
+use common\helpers\Url;
+use common\helpers\ArrayHelper;
+use common\helpers\ResultHelper;
 use common\models\base\SearchModel;
 use addons\Style\common\models\Style;
 use addons\Style\common\models\StyleGoods;
@@ -214,6 +216,15 @@ class StyleController extends BaseController
                 $trans = \Yii::$app->db->beginTransaction();
                 $model->file = UploadedFile::getInstance($model, 'file');
                 \Yii::$app->styleService->style->uploadStyles($model);
+                $log = [
+                    'style_id' => $model->id,
+                    'style_sn' => $model->style_sn,
+                    'log_type' => LogTypeEnum::ARTIFICIAL,
+                    'log_time' => time(),
+                    'log_module' => '款式列表',
+                    'log_msg' => "批量导入",
+                ];
+                \Yii::$app->styleService->styleLog->createStyleLog($log);
                 $trans->commit();
                 return $this->message("保存成功", $this->redirect(\Yii::$app->request->referrer), 'success');
             } catch (\Exception $e) {
@@ -476,5 +487,41 @@ class StyleController extends BaseController
             'tabList' => \Yii::$app->styleService->style->menuTabList($style_id, $returnUrl),
             'style' => $style,
         ]);
+    }
+
+    /**
+     *
+     * ajax更新排序/状态
+     * @param $id
+     * @throws
+     * @return array
+     */
+    public function actionAjaxUpdate($id)
+    {
+        if (!($model = $this->modelClass::findOne($id))) {
+            return ResultHelper::json(404, '找不到数据');
+        }
+        $keys_arr = array_keys(Yii::$app->request->get());  //$model->attributes();
+        $model->attributes = ArrayHelper::filter(Yii::$app->request->get(), $keys_arr);
+        try {
+            $trans = Yii::$app->trans->beginTransaction();
+            if (!$model->save()) {
+                throw new \Exception($this->getError($model));
+            }
+            $log = [
+                'style_id' => $model->id,
+                'style_sn' => $model->style_sn,
+                'log_type' => LogTypeEnum::ARTIFICIAL,
+                'log_time' => time(),
+                'log_module' => '款式列表',
+                'log_msg' => '启用/禁用',
+            ];
+            \Yii::$app->styleService->styleLog->createStyleLog($log);
+            $trans->commit();
+            return ResultHelper::json(200, '修改成功');
+        } catch (\Exception $e) {
+            $trans->rollBack();
+            return ResultHelper::json(422, $e->getMessage());
+        }
     }
 }
