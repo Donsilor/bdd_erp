@@ -2,27 +2,27 @@
 
 namespace addons\Style\backend\controllers;
 
-use addons\Style\common\enums\LogTypeEnum;
-use addons\Style\common\enums\StonePositionEnum;
-use addons\Style\common\forms\StyleSearchForm;
-use addons\Style\common\models\StoneStyle;
+use Yii;
+use common\traits\Curd;
+use common\helpers\Url;
+use common\helpers\ArrayHelper;
+use common\helpers\ResultHelper;
+use common\models\base\SearchModel;
+use addons\Style\common\models\Style;
+use addons\Style\common\models\StyleGoods;
 use addons\Style\common\models\StyleAttribute;
 use addons\Style\common\models\StyleFactory;
 use addons\Style\common\models\StyleFactoryFee;
-use addons\Style\common\models\StyleGoods;
 use addons\Style\common\models\StyleGoodsAttribute;
 use addons\Style\common\models\StyleImages;
 use addons\Style\common\models\StyleLog;
 use addons\Style\common\models\StyleStone;
-use common\helpers\ArrayHelper;
-use common\helpers\StringHelper;
-use Yii;
-use common\helpers\Url;
-use common\traits\Curd;
-use common\models\base\SearchModel;
-use addons\Style\common\models\Style;
+use addons\Warehouse\common\models\WarehouseGoods;
 use addons\Style\common\forms\StyleForm;
 use addons\Style\common\forms\StyleAuditForm;
+use addons\Style\common\forms\StyleSearchForm;
+use addons\Style\common\enums\StonePositionEnum;
+use addons\Style\common\enums\LogTypeEnum;
 use common\enums\AuditStatusEnum;
 use common\enums\FlowStatusEnum;
 use common\enums\TargetTypeEnum;
@@ -48,14 +48,14 @@ class StyleController extends BaseController
 
 
     /**
-    * 首页
-    *
-    * @return string
-    * @throws \yii\web\NotFoundHttpException
-    */
+     * 首页
+     *
+     * @return string
+     * @throws \yii\web\NotFoundHttpException
+     */
     public function actionIndex()
     {
-       // $cate_id = Yii::$app->request->get('cate_id');
+        // $cate_id = Yii::$app->request->get('cate_id');
         $searchModel = new SearchModel([
             'model' => $this->modelClass,
             'scenario' => 'default',
@@ -65,7 +65,7 @@ class StyleController extends BaseController
             ],
             'pageSize' => $this->pageSize,
             'relations' => [
-                'type' => ['name','is_inlay'],
+                'type' => ['name', 'is_inlay'],
                 'cate' => ['name'],
                 'creator' => ['username'],
             ]
@@ -73,24 +73,24 @@ class StyleController extends BaseController
 
         $search = new StyleSearchForm();
         $search->attributes = \Yii::$app->request->get();
-        $dataProvider = $searchModel->search(Yii::$app->request->queryParams,['created_at']);
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams, ['created_at']);
         $dataProvider->query
             ->andFilterWhere(['in', 'style_sn', $search->style_sns()])
             ->andFilterWhere(['like', 'style_name', $search->style_name()])
-            ->andFilterWhere(['style_sex'=>$search->style_sex])
-            ->andFilterWhere(['style_material'=>$search->style_material])
+            ->andFilterWhere(['style_sex' => $search->style_sex])
+            ->andFilterWhere(['style_material' => $search->style_material])
             ->andFilterWhere(['in', 'style_cate_id', $search->styleCateIds()])
             ->andFilterWhere(['in', 'product_type_id', $search->proTypeIds()])
             ->andFilterWhere(['in', 'style_source_id', $search->style_source_id])
             ->andFilterWhere(['in', 'style_channel_id', $search->style_channel_id])
-            ->andFilterWhere([Style::tableName().'.is_inlay'=>$search->is_inlay])
-            ->andFilterWhere(['is_made'=>$search->is_made])
-            ->andFilterWhere(['is_gift'=>$search->is_gift])
-            ->andFilterWhere(['like', Style::tableName().'.remark', $search->style_remark()])
-            ->andFilterWhere([Style::tableName().'.audit_status'=>$search->audit_status])
-            ->andFilterWhere([Style::tableName().'.creator_id'=>$search->creator_id])
+            ->andFilterWhere([Style::tableName() . '.is_inlay' => $search->is_inlay])
+            ->andFilterWhere(['is_made' => $search->is_made])
+            ->andFilterWhere(['is_gift' => $search->is_gift])
+            ->andFilterWhere(['like', Style::tableName() . '.remark', $search->style_remark()])
+            ->andFilterWhere([Style::tableName() . '.audit_status' => $search->audit_status])
+            ->andFilterWhere([Style::tableName() . '.creator_id' => $search->creator_id])
             ->andFilterWhere($search->betweenCreatedAt())
-            ->andFilterWhere([Style::tableName().'.status'=>$search->status]);
+            ->andFilterWhere([Style::tableName() . '.status' => $search->status]);
 
         return $this->render('index', [
             'dataProvider' => $dataProvider,
@@ -216,6 +216,15 @@ class StyleController extends BaseController
                 $trans = \Yii::$app->db->beginTransaction();
                 $model->file = UploadedFile::getInstance($model, 'file');
                 \Yii::$app->styleService->style->uploadStyles($model);
+                $log = [
+                    'style_id' => $model->id,
+                    'style_sn' => $model->style_sn,
+                    'log_type' => LogTypeEnum::ARTIFICIAL,
+                    'log_time' => time(),
+                    'log_module' => '款式列表',
+                    'log_msg' => "批量导入",
+                ];
+                \Yii::$app->styleService->styleLog->createStyleLog($log);
                 $trans->commit();
                 return $this->message("保存成功", $this->redirect(\Yii::$app->request->referrer), 'success');
             } catch (\Exception $e) {
@@ -432,5 +441,87 @@ class StyleController extends BaseController
             $trans->rollBack();
             return $this->message($e->getMessage(),  $this->redirect(Yii::$app->request->referrer), 'error');
         }        
+    }
+
+    /**
+     *
+     * 款式商品库存
+     */
+    public function actionGoods()
+    {
+        $this->modelClass = WarehouseGoods::class;
+
+        $tab = Yii::$app->request->get('tab');
+        $returnUrl = Yii::$app->request->get('returnUrl', Url::to(['style/index']));
+
+        $style_id = \Yii::$app->request->get('style_id');
+        $style = Style::findOne($style_id);
+        $searchModel = new SearchModel([
+            'model' => $this->modelClass,
+            'scenario' => 'default',
+            'partialMatchAttributes' => ['goods_name'], // 模糊查询
+            'defaultOrder' => [
+                'id' => SORT_DESC,
+            ],
+            'pageSize' => $this->getPageSize(),
+            'relations' => [
+                'productType' => ['name'],
+                'styleCate' => ['name'],
+            ]
+        ]);
+
+        $dataProvider = $searchModel->search(\Yii::$app->request->queryParams, ['created_at']);
+
+        $dataProvider->query->andWhere(['=', WarehouseGoods::tableName() . '.style_sn', $style->style_sn]);
+
+        $created_at = $searchModel->created_at;
+        if (!empty($created_at)) {
+            $dataProvider->query->andFilterWhere(['>=', WarehouseGoods::tableName() . '.created_at', strtotime(explode('/', $created_at)[0])]);//起始时间
+            $dataProvider->query->andFilterWhere(['<', WarehouseGoods::tableName() . '.created_at', (strtotime(explode('/', $created_at)[1]) + 86400)]);//结束时间
+        }
+
+        return $this->render($this->action->id, [
+            'dataProvider' => $dataProvider,
+            'searchModel' => $searchModel,
+            'tab' => $tab,
+            'tabList' => \Yii::$app->styleService->style->menuTabList($style_id, $returnUrl),
+            'style' => $style,
+        ]);
+    }
+
+    /**
+     *
+     * ajax更新排序/状态
+     * @param $id
+     * @throws
+     * @return array
+     */
+    public function actionAjaxUpdate($id)
+    {
+        if (!($model = $this->modelClass::findOne($id))) {
+            return ResultHelper::json(404, '找不到数据');
+        }
+        $keys_arr = array_keys(Yii::$app->request->get());  //$model->attributes();
+        $model->attributes = ArrayHelper::filter(Yii::$app->request->get(), $keys_arr);
+        try {
+            $trans = Yii::$app->trans->beginTransaction();
+            if (!$model->save()) {
+                throw new \Exception($this->getError($model));
+            }
+            $log = [
+                'style_id' => $model->id,
+                'style_sn' => $model->style_sn,
+                'log_type' => LogTypeEnum::ARTIFICIAL,
+                'log_time' => time(),
+                'log_module' => '款式列表',
+                'log_msg' => '启用/禁用',
+            ];
+            \Yii::$app->styleService->styleLog->createStyleLog($log);
+            $trans->commit();
+            return ResultHelper::json(200, '修改成功');
+        } catch (\Exception $e) {
+            $trans->rollBack();
+            return ResultHelper::json(422, $e->getMessage());
+        }
     }
 }

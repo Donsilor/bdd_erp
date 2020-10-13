@@ -13,16 +13,14 @@ $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="box-body nav-tabs-custom">
     <h2 class="page-header">供应商详情 - <?php echo $supplier->supplier_name?></h2>
-    <ul class="nav nav-tabs">
-        <li class=""><a href="<?= \common\helpers\Url::to(['supplier/view','id'=>$supplier->id]) ?>" >供应商</a></li>
-        <li class="active"><a href="<?= \common\helpers\Url::to(['follower/index','supplier_id'=>$supplier->id]) ?>" >跟单人</a></li>
-        <div style="float: right"><?= Html::create(['ajax-edit','supplier_id'=>$supplier->id], '创建', [
-                'data-toggle' => 'modal',
-                'data-target' => '#ajaxModal',
-                'class'=>'btn btn-primary btn-xs',
-            ]); ?></div>
-    </ul>
-
+    <?php echo Html::menuTab($tabList,$tab)?>
+    <div class="box-tools" style="float:right;margin-top:-40px; margin-right: 20px;">
+        <?= Html::create(['ajax-edit','supplier_id'=>$supplier->id], '创建', [
+            'data-toggle' => 'modal',
+            'data-target' => '#ajaxModal',
+            'class'=>'btn btn-primary btn-xs',
+        ]); ?>
+    </div>
 
     <div class="row">
         <div class="col-xs-12">

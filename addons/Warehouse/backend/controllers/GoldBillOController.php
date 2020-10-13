@@ -10,11 +10,13 @@ use addons\Supply\common\models\Supplier;
 use addons\Warehouse\common\enums\DeliveryTypeEnum;
 use addons\Warehouse\common\enums\GoldBillTypeEnum;
 use addons\Warehouse\common\enums\OutTypeEnum;
+use addons\Warehouse\common\enums\StoneBillTypeEnum;
 use addons\Warehouse\common\forms\WarehouseBillCForm;
 use addons\Warehouse\common\forms\WarehouseGoldBillOForm;
 use addons\Warehouse\common\models\Warehouse;
 use addons\Warehouse\common\models\WarehouseBillGoods;
 use addons\Warehouse\common\models\WarehouseGoldBill;
+use addons\Warehouse\common\models\WarehouseGoldBillGoods;
 use addons\Warehouse\common\models\WarehouseGoods;
 use common\helpers\ArrayHelper;
 use common\helpers\PageHelper;
@@ -398,75 +400,6 @@ class GoldBillOController extends BaseController
                 'model' => $form,
         ]);
     }
-    /***
-     * 导出Excel
-     */
-    public function actionExport($ids=null){
-        if(!is_array($ids)){
-            $ids = StringHelper::explodeIds($ids);
-        }
-        if(!$ids){
-            return $this->message('单据ID不为空', $this->redirect(['index']), 'warning');
-        }
-        list($list,) = $this->getData($ids);
-        // [名称, 字段名, 类型, 类型规则]
-        $header = [
-            ['出库单号', 'bill_no', 'text'],
-            ['销售渠道', 'channel_name', 'text'],
-            ['制单日期', 'created_at', 'date','Y-m-d'],
-            ['出库日期', 'audit_time', 'date','Y-m-d'],
-            ['制单人', 'creator_name', 'text'],
-            ['接收人', 'salesman_name', 'text'],
-            ['货号', 'goods_id', 'text'],
-            ['款号', 'style_sn', 'text'],
-            ['商品名称', 'goods_name', 'text'],
-            ['商品数量', 'goods_num', 'text'],
-            ['商品状态', 'goods_status', 'function',function($model){
-                return GoodsStatusEnum::getValue($model['goods_status']);
-            }],
-            ['款式分类', 'product_type_name' , 'text'],
-            ['产品线', 'style_cate_name' , 'text'],
-            ['仓库', 'warehouse_name' , 'text'],
-            ['材质', 'material_type', 'function', function ($model) {
-                return \Yii::$app->attr->valueName($model['material_type']);
-            }],
-            ['材质颜色', 'material_color', 'function', function ($model) {
-                return \Yii::$app->attr->valueName($model['material_color']);
-            }],
-            ['连石重', 'suttle_weight' , 'text'],
-            ['主石类型', 'main_stone_type', 'function', function ($model) {
-                return \Yii::$app->attr->valueName($model['main_stone_type']);
-            }],
-            ['主石大小（ct)', 'diamond_carat' , 'text'],
-            ['主石粒数', 'main_stone_num' , 'text'],
-            ['副石1重（ct）', 'second_stone_weight1' , 'text'],
-            ['副石1粒数', 'second_stone_num1' , 'text'],
-            ['手寸', 'finger', 'function', function ($model) {
-                $finger = '';
-                if($model['finger']){
-                    $finger .= Yii::$app->attr->valueName($model['finger']).'(u)';
-                }
-                if($model['finger_hk']){
-                    $finger .= ' '.Yii::$app->attr->valueName($model['finger_hk']).'(u)';
-                }
-                return $finger;
-            }],
-            ['证书号	', 'cert_id' , 'text'],
-            ['采购成本/单件	', 'cost_price' , 'text'],
-            ['采购总成本	', 'cost_price' , 'function', function($model){
-                $cost_price = $model['cost_price'];
-                $goods_num = $model['goods_num'];
-                return $cost_price * $goods_num;
-            }],
-            ['出库成本价		', 'chuku_price' , 'text'],
-
-        ];
-
-        return ExcelHelper::exportData($list, $header, '其他出库单_' . date('YmdHis',time()));
-
-    }
-
-
     /**
      * 单据打印
      * @return string
@@ -475,14 +408,8 @@ class GoldBillOController extends BaseController
     public function actionPrint()
     {
         $this->layout = '@backend/views/layouts/print';
-        $id = \Yii::$app->request->get('id');
-        if(empty($id)){
-            exit("ID不能为空");
-        }
+        $id = Yii::$app->request->get('id');
         $model = $this->findModel($id);
-        if(!$model){
-            exit("单据不存在");
-        }
         list($lists, $total) = $this->getData($id);
         return $this->render($this->action->id, [
             'model' => $model,
@@ -492,62 +419,71 @@ class GoldBillOController extends BaseController
     }
 
     /**
-     * @param array $ids
-     * @return array
+     * 单据导出
+     * @param null $ids
+     * @return bool|mixed
+     * @throws
      */
-    public function getData($ids)
+    public function actionExport($ids = null)
     {
-        $select = [
-            'g.*',
-            'w.bill_no', 'w.bill_status','w.created_at','w.audit_time',
-            'channel.name as channel_name','salesman.username as salesman_name',
-            'creator.username as creator_name',
-            'type.name as product_type_name',
-            'cate.name as style_cate_name',
-            'warehouse.name as warehouse_name',
-            'sup.supplier_name'
+        $name = '(金料)其他入库单明细';
+        if (!is_array($ids)) {
+            $ids = StringHelper::explodeIds($ids);
+        }
+        if (!$ids) {
+            return $this->message('单据ID不为空', $this->redirect(['index']), 'warning');
+        }
+        list($list,) = $this->getData($ids);
+
+        $header = [
+            ['出库单号', 'bill_no', 'text'],
+            ['工厂名称', 'supplier_name', 'text'],
+            ['创建人', 'creator_name', 'text'],
+            ['审核时间', 'audit_time', 'date','Y-m-d'],
+            ['原料名称', 'gold_name', 'text'],
+            ['编号', 'gold_sn', 'text'],
+            ['材质', 'gold_type', 'text'],
+            ['货品入库单号', 't_bill_no', 'text'],
+            ['货品入库用金重(g)', 't_gold_weight', 'text'],
+            ['出库金重(g)', 'gold_weight', 'text'],
+            ['金价', 'gold_price', 'text'],
+            ['总金额', 'cost_price', 'text'],
+            ['备注', 'remark', 'text'],
+
         ];
-        $query = WarehouseBill::find()->alias('w')
-            ->leftJoin(WarehouseBillGoods::tableName() . " wg", 'w.id=wg.bill_id')
-            ->leftJoin(WarehouseGoods::tableName() . ' g', 'g.goods_id=wg.goods_id')
-            ->leftJoin(ProductType::tableName() . ' type', 'type.id=g.product_type_id')
-            ->leftJoin(StyleCate::tableName() . ' cate', 'cate.id=g.style_cate_id')
-            ->leftJoin(Warehouse::tableName() . ' warehouse', 'warehouse.id=g.warehouse_id')
-            ->leftJoin(Supplier::tableName() . ' sup', 'sup.id=w.supplier_id')
-            ->leftJoin(SaleChannel::tableName() . ' channel', 'channel.id=w.channel_id')
-            ->leftJoin(Member::tableName() . ' creator', 'creator.id=w.creator_id')
-            ->leftJoin(Member::tableName() . ' salesman', 'salesman.id=w.salesman_id')
-            ->where(['w.id' => $ids])
-            ->select($select);
+        return ExcelHelper::exportData($list, $header, $name . '数据导出_' . date('YmdHis', time()));
+    }
+
+    private function getData($id)
+    {
+        $select = ['wg.*','wb.audit_time','sup.supplier_name as supplier_name','m.username as creator_name'];
+
+        $query = WarehouseGoldBill::find()->alias('wb')
+            ->leftJoin(WarehouseGoldBillGoods::tableName(). ' wg', 'wg.bill_id=wb.id')
+            ->leftJoin(Supplier::tableName(). ' sup', 'sup.id=wb.supplier_id')
+            ->leftJoin(Member::tableName(). ' m','m.id=wb.creator_id ' )
+            ->where(['wb.id' => $id])->select($select);
         $lists = PageHelper::findAll($query, 100);
-        //汇总
+//        echo '<pre>';
+//        print_r($bill);die;
         $total = [
-            'goods_num' => 0,
-            'cart' => 0,
-            'suttle_weight' => 0,
-            'market_price' => 0,
-            //'chuku_price' => 0,
+            'cost_price' => 0,
+            'gold_weight' => 0,
+            't_gold_weight' => 0,
         ];
         foreach ($lists as &$list) {
-            if(empty($list['goods_id'])){
-                exit("货号不能为空");
-            }
-            $main_stone_cart = $list['diamond_carat'] ?? 0;//主石重
-            $main_stone_cart = bcmul($main_stone_cart, $list['main_stone_num'], 3);//主石总重=(主石重*主石粒数)
-            $second_stone_cart1 = $list['second_stone_weight1'] ?? 0;//副石1重
-            $second_stone_cart2 = $list['second_stone_weight2'] ?? 0;//副石2重
-            $second_stone_cart3 = $list['second_stone_weight3'] ?? 0;//副石3重
-            $cart = $main_stone_cart + $second_stone_cart1 + $second_stone_cart2 + $second_stone_cart3;//石重
+            //金料类型
+            $gold_type = empty($list['gold_type']) ? 0 : $list['gold_type'];
+            $list['gold_type'] = Yii::$app->attr->valueName($gold_type);
 
-            $list['suttle_weight'] = bcmul($list['suttle_weight'], $list['goods_num'], 3);//连石重
-            $list['market_price'] = bcmul($list['market_price'], $list['goods_num'], 3);//标签价
-            $list['cart'] = bcmul($cart, $list['goods_num'], 3);//总石重=石重*数量
+            $t_gold = WarehouseGoldBillGoods::find()->where(['bill_type'=>GoldBillTypeEnum::GOLD_T, 'gold_sn'=>$list['gold_sn']])->one();
+            $list['t_bill_no'] = $t_gold['bill_no'];
+            $list['t_gold_weight'] = $t_gold['gold_weight'];
+
             //汇总
-            $total['goods_num'] = bcadd($total['goods_num'], $list['goods_num'], 3);//总货品数量
-            $total['cart'] = bcadd($total['cart'], $list['cart'], 3);//总石重
-            $total['suttle_weight'] = bcadd($total['suttle_weight'], $list['suttle_weight'], 3);//连石重
-            $total['market_price'] = bcadd($total['market_price'], $list['market_price'], 3);//标签价
-            //$total['chuku_price'] = bcadd($total['chuku_price'], $list['chuku_price'], 3);//销售价
+            $total['cost_price'] = bcadd($total['cost_price'], $list['cost_price'], 2);
+            $total['gold_weight'] = bcadd($total['gold_weight'], $list['gold_weight'], 3);
+            $total['t_gold_weight'] = bcadd($total['t_gold_weight'], $list['t_gold_weight'], 3);
         }
         return [$lists, $total];
     }

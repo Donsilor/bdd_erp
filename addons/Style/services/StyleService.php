@@ -46,7 +46,8 @@ class StyleService extends Service
         $menus = [
             1 => ['name' => '基础信息', 'url' => Url::to(['style/view', 'id' => $style_id, 'tab' => 1, 'returnUrl' => $returnUrl])],
             2 => ['name' => '款式属性', 'url' => Url::to(['style-attribute/index', 'style_id' => $style_id, 'tab' => 2, 'returnUrl' => $returnUrl])],
-            3 => ['name' => '商品列表', 'url' => Url::to(['style-goods/edit-all', 'style_id' => $style_id, 'tab' => 3, 'returnUrl' => $returnUrl])],
+            3 => ['name' => 'SKU列表', 'url' => Url::to(['style-goods/edit-all', 'style_id' => $style_id, 'tab' => 3, 'returnUrl' => $returnUrl])],
+            9 => ['name' => '库存列表', 'url' => Url::to(['style/goods', 'style_id' => $style_id, 'tab' => 9, 'returnUrl' => $returnUrl])],
             4 => ['name' => '石头信息', 'url' => Url::to(['style-stone/index', 'style_id' => $style_id, 'tab' => 4, 'returnUrl' => $returnUrl])],
             5 => ['name' => '工厂信息', 'url' => Url::to(['style-factory/index', 'style_id' => $style_id, 'tab' => 5, 'returnUrl' => $returnUrl])],
             6 => ['name' => '工费信息', 'url' => Url::to(['style-factory-fee/index', 'style_id' => $style_id, 'tab' => 6, 'returnUrl' => $returnUrl])],
@@ -54,7 +55,7 @@ class StyleService extends Service
             8 => ['name' => '日志信息', 'url' => Url::to(['style-log/index', 'style_id' => $style_id, 'tab' => 8, 'returnUrl' => $returnUrl])]
         ];
 
-        $model = Style::find()->select(['id', 'is_inlay'])->where(['id' => $style_id])->one();
+        $model = Style::find()->select(['id', 'style_sn', 'is_inlay'])->where(['id' => $style_id])->one();
         if ($model && $model->is_inlay == ConfirmEnum::NO) {
             unset($menus[4]);
         }
