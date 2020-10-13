@@ -5,11 +5,13 @@ namespace addons\Style\backend\controllers;
 use Yii;
 use common\traits\Curd;
 use common\models\base\SearchModel;
+use addons\Style\common\models\Style;
 use addons\Style\common\models\StyleGoods;
 use addons\Style\common\forms\StyleGoodsForm;
+use addons\Style\common\enums\LogTypeEnum;
 use addons\Style\common\enums\AttrTypeEnum;
 use common\helpers\Url;
-use addons\Style\common\models\Style;
+
 /**
 * Goods
 *
@@ -82,7 +84,17 @@ class StyleGoodsController extends BaseController
                 
                 $trans = Yii::$app->trans->beginTransaction();
                 //更新款式商品
-                $model->createGoods();               
+                $model->createGoods();
+
+                $log = [
+                    'style_id' => $model->style_id,
+                    'style_sn' => $model->style_sn,
+                    'log_type' => LogTypeEnum::ARTIFICIAL,
+                    'log_time' => time(),
+                    'log_module' => '款式列表',
+                    'log_msg' => "编辑SKU",
+                ];
+                \Yii::$app->styleService->styleLog->createStyleLog($log);
                 $trans->commit();
             }catch (\Exception $e){
                 $trans->rollBack();

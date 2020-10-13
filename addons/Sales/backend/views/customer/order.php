@@ -6,7 +6,7 @@ use yii\grid\GridView;
 
 /* @var $this yii\web\View */
 /* @var $dataProvider yii\data\ActiveDataProvider */
-$this->title = Yii::t('customer_order', '订单信息');
+$this->title = '客户信息';
 $this->params['breadcrumbs'][] = ['label' => $this->title, 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
@@ -34,13 +34,13 @@ $this->params['breadcrumbs'][] = $this->title;
                         [
                             'class'=>'yii\grid\CheckboxColumn',
                             'name'=>'id',  //设置每行数据的复选框属性
-                            'headerOptions' => ['width'=>'60'],
+                            'headerOptions' => ['width'=>'20'],
                         ],
                         [
                             'attribute' => 'id',
                             'filter' => true,
                             'format' => 'raw',
-                            'headerOptions' => ['width'=>'60'],
+                            'headerOptions' => ['width'=>'30'],
                         ],
                         [
                             'attribute' => 'order_sn',
