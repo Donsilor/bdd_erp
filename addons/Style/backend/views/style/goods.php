@@ -51,6 +51,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 ]),
                                 'format' => 'raw',
                             ],
+                            'style_sn',
                             [
                                 'attribute' => 'style_cate_id',
                                 'format' => 'raw',
