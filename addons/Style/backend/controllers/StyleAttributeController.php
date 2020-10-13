@@ -102,8 +102,8 @@ class StyleAttributeController extends BaseController
                 $trans = Yii::$app->trans->beginTransaction();
 
                 //重新编辑后，款式审核状态改为未审核
-                $style->audit_status = AuditStatusEnum::SAVE;
-                $style->status = StatusEnum::DISABLED;
+                //$style->audit_status = AuditStatusEnum::SAVE;
+                //$style->status = StatusEnum::DISABLED;
                 if(false === $style->save()) {
                     throw new \Exception($this->getError($style));
                 }
