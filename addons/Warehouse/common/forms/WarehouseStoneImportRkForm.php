@@ -65,7 +65,6 @@ class WarehouseStoneImportRkForm extends ImportForm
     public $uniqueKey = 'stone_sn';
     //只需要填写第一行的字段
     public $uniqueColumn = [
-
     ];
     public $requredColumns = [
             'style_sn',
@@ -103,6 +102,7 @@ class WarehouseStoneImportRkForm extends ImportForm
     ];
 
     private $_style;
+    private $_stoneCache = array();
     
     public $goods_list;
     /**
@@ -160,6 +160,16 @@ class WarehouseStoneImportRkForm extends ImportForm
                 $this->_style = $style;
             }            
         }
+
+        //石料编号
+        if($this->stone_sn){
+            if(in_array($this->stone_sn,$this->_stoneCache)){
+                $this->addRowError($rowIndex, 'stone_sn', "[{$this->stone_sn}]重复");
+            }
+            $this->_stoneCache[] = $this->stone_sn;
+        }
+
+
 
         if($this->hasError() === false) {
             $this->loadWarehouseStoneGoods($rowIndex);

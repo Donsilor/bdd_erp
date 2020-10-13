@@ -198,6 +198,14 @@ $params = $params ? "&".http_build_query($params) : '';
                                 ]),
                             ],
                             [
+                                'attribute' => 'cert_id',
+                                'headerOptions' => ['width'=>60],
+                                'value' => function ($model, $key, $index){
+                                    return $model->cert_id ?? '';
+                                },
+                                'filter' => false,
+                            ],
+                            [
                                 'attribute' => 'shape',
                                 'format' => 'raw',
                                 'headerOptions' => ['width' => 60],

@@ -11,8 +11,8 @@ use yii\base\Model;
 class ImportForm extends Model
 {
     public $file;  
-    public $uniqueKey ;
-    public $uniqueColumn = [];
+    public $combineKey ;//合并行Key
+    public $combineColumns = [];//合并行字段列表
     public $columns = [];
     public $titles  = [];
     public $requredColumns = [];
@@ -21,7 +21,7 @@ class ImportForm extends Model
     public $attrInputColumns = [];
     //单选下拉属性
     public $attrSelectColumns = [];  
-    private $_uniqueCache;
+    private $_combineCache;
     private $_attrCache;
     private $_rowErrors;
     private $_error = false;
@@ -54,7 +54,7 @@ class ImportForm extends Model
      */
     public function isNeedCheck($attribute)
     {
-        if($this->uniqueKey && in_array($attribute,$this->uniqueColumn) && !empty($this->_uniqueCache[$this->{$this->uniqueKey}])) {
+        if($this->combineKey && in_array($attribute,$this->combineColumns) && !empty($this->_combineCache[$this->{$this->combineKey}])) {
              return false;
         }
         return true;
@@ -84,8 +84,8 @@ class ImportForm extends Model
                         $this->addRowError($rowIndex, $attribute, "[{$colValue}]必须为数字");
                     }
                 }
-                if($this->uniqueKey) {
-                    $this->_uniqueCache[$this->{$this->uniqueKey}] = true;
+                if($this->combineKey) {
+                    $this->_combineCache[$this->{$this->combineKey}] = true;
                 }                
             }
         }
