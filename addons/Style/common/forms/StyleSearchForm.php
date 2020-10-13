@@ -16,11 +16,17 @@ class StyleSearchForm extends Model
 {
     public $style_sn;
     public $style_name;
+    public $style_sex;
+    public $style_material;
     public $audit_status;
     public $style_cate_id;
     public $product_type_id;
+    public $style_source_id;
     public $style_channel_id;
+    public $is_made;
     public $is_inlay;
+    public $is_gift;
+    public $remark;
     public $status;
     public $creator_id;
     public $created_at;
@@ -32,8 +38,8 @@ class StyleSearchForm extends Model
     public function rules()
     {
         return [
-            [['style_sn', 'style_name', 'created_at'], 'string'],
-            [['audit_status', 'style_cate_id', 'product_type_id', 'style_channel_id', 'is_inlay', 'status', 'creator_id'], 'integer'],
+            [['style_sn', 'style_name', 'remark', 'created_at'], 'string'],
+            [['style_sex', 'style_material', 'audit_status', 'style_cate_id', 'product_type_id', 'style_source_id', 'style_channel_id', 'is_made', 'is_inlay', 'is_gift', 'status', 'creator_id'], 'integer'],
         ];
     }
 
@@ -52,6 +58,14 @@ class StyleSearchForm extends Model
     public function style_name()
     {
         return trim($this->style_name);
+    }
+
+    /**
+     * @return array
+     */
+    public function style_remark()
+    {
+        return trim($this->remark);
     }
 
     /**
