@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>石料入库单</title>
+    <title>金料入库单</title>
 
     <style>
         body{
@@ -274,17 +274,17 @@
 <body>
 <div class="template">
     <div class="information">
-        <p class="font-bold font-18">2020年深圳市恒得利珠寶有限公司</p>
+        <p class="font-bold font-18"><?= date('Y')?>年深圳市恒得利珠寶有限公司</p>
         <p class="font-bold font-16">（金料）原料入库单</p>
         <div class="midd"></div>
         <div class="msg">
             <div class="top">
-                <div class="one"><span >供货商：</span><span contenteditable="true">粤鹏金</span></div>
-                <div class="one"><span >入库单号：</span><span contenteditable="true">YL20200907-001</span></div>
+                <div class="one"><span >供货商：</span><span contenteditable="true"><?= $model->supplier->supplier_name ?? '' ?></span></div>
+                <div class="one"><span >入库单号：</span><span contenteditable="true"><?= $model->bill_no ?></span></div>
             </div>
             <div class="bottom">
-                <div class="three"><span >付料单号：</span><span contenteditable="true">CU200904008</span></div>
-                <div class="three"><span >入库日期：</span><span contenteditable="true">2020年9月7日</span></div>
+                <div class="three"><span >付料单号：</span><span contenteditable="true"><?= $model->delivery_no?></span></div>
+                <div class="three"><span >入库日期：</span><span contenteditable="true"><?= Yii::$app->formatter->asDate($model->audit_time)?></span></div>
             </div>
         </div>
         <table class="table">
@@ -299,30 +299,53 @@
             <th class="width-65 algin-center font-bold" >备注</th>
             </thead>
             <tbody>
+            <?php
+            foreach ($lists as $key => $val){
+            $pagesize = 20;
+            ?>
             <tr class="algin-left">
-                <td class="algin-center padding-5 ">1</td>
-                <td class="algin-center padding-5 algin-left">黄金金条</td>
-                <td class="algin-center padding-5 algin-left">AU20200907</td>
-                <td class="algin-center padding-5 algin-left">AU9999</td>
-                <td class="algin-center padding-5 ">1000</td>
-                <td class="algin-center padding-5 ">420.4</td>
-                <td class="algin-center padding-5 ">420400</td>
-                <td class="algin-center padding-5 ">含税</td>
+                <td class="algin-center padding-5 "><?= $key+1 ?></td>
+                <td class="algin-center padding-5 "><?= $val['gold_name']?></td>
+                <td class="algin-center padding-5 "><?= $val['gold_sn']?></td>
+                <td class="algin-center padding-5 "><?= $val['gold_type']?></td>
+                <td class="algin-center padding-5 "><?= $val['gold_weight']?></td>
+                <td class="algin-center padding-5 "><?= $val['gold_price']?></td>
+                <td class="algin-center padding-5 "><?= $val['cost_price']?></td>
+                <td class="algin-center padding-5 "><?= $val['remark']?></td>
             </tr>
-
+            <?php if(($key + 1) % $pagesize == 0){?>
             </tbody>
+        </table>
+        <div class="PageNext"></div>
+        <table class="table">
+            <thead>
+            <th class="width-30 algin-center font-bold">序号</th>
+            <th class="width-80 algin-center font-bold" >原料名称</th>
+            <th class="width-80 algin-center font-bold" >编号</th>
+            <th class="width-80 algin-center font-bold" >材质</th>
+            <th class="width-80 algin-center font-bold" >重量(g)</th>
+            <th class="width-50 algin-center font-bold" >单价</th>
+            <th class="width-50 algin-center font-bold" >总金额</th>
+            <th class="width-65 algin-center font-bold" >备注</th>
+            </thead>
+            <tbody>
+            <?php
+                }
+            }
+            ?>
+
             <tfoot>
             <tr>
                 <td class="algin-center padding-5" colspan="4">合计</td>
+                <td class="algin-center padding-5"><?= $total['gold_weight']?></td>
                 <td class="algin-center padding-5"></td>
-                <td class="algin-center padding-5"></td>
-                <td class="algin-center padding-5">420400.00</td>
+                <td class="algin-center padding-5"><?= $total['cost_price']?></td>
                 <td class="algin-center padding-5"></td>
             </tr>
             </tfoot>
         </table>
         <div class="foot-info">
-            <div class="prepared-by font-bold"><span >制单人：</span><span contenteditable="true">邹竹英</span></div>
+            <div class="prepared-by font-bold"><span >制单人：</span><span contenteditable="true"><?= $model->creator->username ?? ''?></span></div>
             <div class="reviewer font-bold"><span >签收人：</span><span contenteditable="true"></span></div>
         </div>
     </div>
