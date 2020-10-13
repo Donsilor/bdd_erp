@@ -2,6 +2,7 @@
 
 namespace addons\Style\backend\controllers;
 
+use addons\Style\common\enums\LogTypeEnum;
 use common\enums\AuditStatusEnum;
 use Yii;
 use common\models\base\SearchModel;
@@ -108,6 +109,16 @@ class StyleAttributeController extends BaseController
                 }
 
                 $model->createAttrs();
+
+                $log = [
+                    'style_id' => $model->style_id,
+                    'style_sn' => $model->style_sn,
+                    'log_type' => LogTypeEnum::ARTIFICIAL,
+                    'log_time' => time(),
+                    'log_module' => '款式列表',
+                    'log_msg' => "编辑属性",
+                ];
+                \Yii::$app->styleService->styleLog->createStyleLog($log);
                 $trans->commit();
             }catch (\Exception $e){
                 $trans->rollBack();
