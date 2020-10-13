@@ -24,6 +24,7 @@ class WarehouseStoneBillRkGoodsForm extends WarehouseStoneBillGoods
             ['stone_weight','compare','compareValue' => 0, 'operator' => '>'],
             ['stone_price','compare','compareValue' => 0, 'operator' => '>'],
             ['stone_num','compare','compareValue' => 0, 'operator' => '>'],
+            [['stone_sn'],'default','value' => NULL],
 //            [['stone_sn','bill_type'],'unique','targetAttribute' => ['stone_sn', 'bill_type'],'comboNotUnique'=>'石料编号不能重复'],
 //            [['stone_sn'],'unique', 'targetClass' => 'addons\Warehouse\common\models\WarehouseGold', 'message' => '库存中石料编号已经存在.']
         ];

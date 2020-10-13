@@ -15,6 +15,7 @@ class BillTypeEnum extends \common\enums\BaseEnum
     const BILL_TYPE_S   = 'S';
     const BILL_TYPE_M   = 'M';
     const BILL_TYPE_W   = 'W';
+    const BILL_TYPE_WT   = 'WT';
     const BILL_TYPE_B   = 'B';
     const BILL_TYPE_T   = 'T';
     const BILL_TYPE_C   = 'C';
@@ -33,7 +34,8 @@ class BillTypeEnum extends \common\enums\BaseEnum
             self::BILL_TYPE_L   => '入库单',
             self::BILL_TYPE_S   => '销售单',
             self::BILL_TYPE_M   => '调拨单',
-            self::BILL_TYPE_W   => '盘点单',            
+            self::BILL_TYPE_W   => '盘点单', 
+            self::BILL_TYPE_WT   => '临时盘点单',
             self::BILL_TYPE_J   => '借货单',
             self::BILL_TYPE_A   => '货品调整单',
             self::BILL_TYPE_D   => '销售退货单',

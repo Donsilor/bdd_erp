@@ -83,7 +83,7 @@ class OrderAccount extends BaseModel
             'currency' => '货币代号',
             'coupon_amount' => '优惠券优惠金额',
             'card_amount' => '优惠券优惠金额',
-            'paid_amount' => '实际支付金额',
+            'paid_amount' => '已支付金额',
             'paid_currency' => '支付货币代号',
             'arrive_amount'=>'实际到账金额'    
         ];

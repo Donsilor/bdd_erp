@@ -62,13 +62,13 @@ $this->params['breadcrumbs'][] = $this->title;
             [
                     'attribute'=>'order_time',
                     'value'=>function($model){
-                        return Yii::$app->formatter->asDatetime($model->order_time);
+                        return Yii::$app->formatter->asDate($model->order_time);
                      },
                     'filter' => \kartik\daterange\DateRangePicker::widget([    // 日期组件
                             'model' => $searchModel,
                             'attribute' => 'order_time',
                             'value' => $searchModel->order_time,
-                            'options' => ['readonly' => false,'class'=>'form-control','style'=>'background-color:#fff;width:150px;'],
+                            'options' => ['readonly' => false,'class'=>'form-control','style'=>'background-color:#fff;width:100px;'],
                             'pluginOptions' => [
                                     'format' => 'yyyy-mm-dd',
                                     'locale' => [
@@ -267,7 +267,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     'value'=>"out_trade_no",
                     'filter' => Html::activeTextInput($searchModel, 'out_trade_no', [
                             'class' => 'form-control',
-                            'style'=> 'width:150px;'
+                            //'style'=> 'width:150px;'
                     ]),
                     'format' => 'raw',
                     'headerOptions' => ['class' => 'col-md-1'],
@@ -283,27 +283,27 @@ $this->params['breadcrumbs'][] = $this->title;
 
             ],
             [
-                'attribute'=>'created_at',
-                'filter' => \kartik\datetime\DateTimePicker::widget([    // 日期组件
-                    'model' => $searchModel,
-                    'attribute' => 'created_at',
-                    'value' => $searchModel->created_at,
-                    'options' => ['readonly' => false,'class'=>'form-control','style'=>'background-color:#fff;width:100px;'],
-                    'pluginOptions' => [
-                        'format' => 'yyyy-mm-dd',
-                        'locale' => [
-                            'separator' => '/',
-                        ],
-                        'endDate' => date('Y-m-d',time()),
-                        'todayHighlight' => true,
-                        'autoclose' => true,
-                        'todayBtn' => 'linked',
-                        'clearBtn' => true,
-                    ],
-                ]),
+                'attribute'=>'created_at',                   
                 'value'=>function($model){
-                    return Yii::$app->formatter->asDatetime($model->created_at);
-                }
+                    return Yii::$app->formatter->asDate($model->created_at);
+                },
+                'filter' => \kartik\daterange\DateRangePicker::widget([    // 日期组件
+                        'model' => $searchModel,
+                        'attribute' => 'created_at',
+                        'value' => $searchModel->created_at,
+                        'options' => ['readonly' => false,'class'=>'form-control','style'=>'background-color:#fff;width:100px;'],
+                        'pluginOptions' => [
+                                'format' => 'yyyy-mm-dd',
+                                'locale' => [
+                                        'separator' => '/',
+                                ],
+                                'endDate' => date('Y-m-d',time()),
+                                'todayHighlight' => true,
+                                'autoclose' => true,
+                                'todayBtn' => 'linked',
+                                'clearBtn' => true,
+                        ],
+                ]), 
 
             ],
             /* [

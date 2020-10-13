@@ -52,9 +52,9 @@ class QibanController extends BaseController
         $searchModel = new SearchModel([
             'model' => $this->modelClass,
             'scenario' => 'default',
-            'partialMatchAttributes' => ['style_name'], // 模糊查询
+            'partialMatchAttributes' => ['qiban_name'], // 模糊查询
             'defaultOrder' => [
-                'id' => SORT_DESC
+                'sort' => SORT_DESC
             ],
             'pageSize' => $this->pageSize,
             'relations' => [
@@ -64,26 +64,27 @@ class QibanController extends BaseController
 
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
         $dataProvider->query->andFilterWhere(['<','is_apply',IsApply::Wait]);
-        $created_at = $searchModel->created_at;
-        if (!empty($created_at)) {
-            $dataProvider->query->andFilterWhere(['>=',Qiban::tableName().'.created_at', strtotime(explode('/', $created_at)[0])]);//起始时间
-            $dataProvider->query->andFilterWhere(['<',Qiban::tableName().'.created_at', (strtotime(explode('/', $created_at)[1]) + 86400)] );//结束时间
+        if ($searchModel->created_at) {
+            $created_ats = explode('/', $searchModel->created_at);
+            $dataProvider->query->andFilterWhere(['>=',Qiban::tableName().'.created_at', strtotime($created_ats[0])]);//起始时间
+            $dataProvider->query->andFilterWhere(['<',Qiban::tableName().'.created_at', strtotime($created_ats[1]) + 86400]);//结束时间
         }
-
-
-        return $this->render('index', [
+        return $this->render($this->action->id, [
             'dataProvider' => $dataProvider,
             'searchModel' => $searchModel, 
         ]);
     }
 
-
+    /**
+     * 待起版列表
+     * @return string
+     */
     public function actionApply()
     {
         $searchModel = new SearchModel([
             'model' => $this->modelClass,
             'scenario' => 'default',
-            'partialMatchAttributes' => ['style_name'], // 模糊查询
+            'partialMatchAttributes' => ['qiban_name'], // 模糊查询
             'defaultOrder' => [
                 'id' => SORT_DESC
             ],
@@ -94,11 +95,12 @@ class QibanController extends BaseController
         ]);
 
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
-        $dataProvider->query->andFilterWhere(['=','is_apply',IsApply::Wait]);
-        $created_at = $searchModel->created_at;
-        if (!empty($created_at)) {
-            $dataProvider->query->andFilterWhere(['>=',Qiban::tableName().'.created_at', strtotime(explode('/', $created_at)[0])]);//起始时间
-            $dataProvider->query->andFilterWhere(['<',Qiban::tableName().'.created_at', (strtotime(explode('/', $created_at)[1]) + 86400)] );//结束时间
+        $dataProvider->query->andFilterWhere(['>','is_apply',IsApply::No]);
+        
+        if ($searchModel->created_at) {
+            $created_ats = explode('/', $searchModel->created_at);
+            $dataProvider->query->andFilterWhere(['>=',Qiban::tableName().'.created_at', strtotime($created_ats[0])]);//起始时间
+            $dataProvider->query->andFilterWhere(['<',Qiban::tableName().'.created_at', strtotime($created_ats[1]) + 86400] );//结束时间
         }
 
         return $this->render($this->action->id, [
@@ -190,6 +192,7 @@ class QibanController extends BaseController
                 $model->status = StatusEnum::DISABLED;
                 $model->audit_status = AuditStatusEnum::SAVE;
                 $model->creator_id = \Yii::$app->user->id;
+                $model->sort = time();
             }else{
                 $model->audit_status = AuditStatusEnum::PENDING;
             }
@@ -259,6 +262,7 @@ class QibanController extends BaseController
                 $model->status = StatusEnum::DISABLED;
                 $model->audit_status = AuditStatusEnum::SAVE;
                 $model->creator_id = \Yii::$app->user->id;
+                $model->sort = time();
             }else{
                 $model->audit_status = AuditStatusEnum::PENDING;
             }
@@ -312,8 +316,9 @@ class QibanController extends BaseController
 
 
     /**
-     * @return mixed
-     * 申请审核
+     *  申请审核
+     *  
+     * @return mixed  
      */
     public function actionAjaxApply(){
         $id = \Yii::$app->request->get('id');
@@ -323,12 +328,16 @@ class QibanController extends BaseController
         }
         try{
             $trans = Yii::$app->db->beginTransaction();
+            $model->audit_status = AuditStatusEnum::PENDING;                        
+            if(false === $model->save()){
+                throw new \Exception($this->getError($model));
+            }
+            
             //审批流程
             Yii::$app->services->flowType->createFlow($this->targetType,$id,$model->qiban_sn);
-            $model->audit_status = AuditStatusEnum::PENDING;
-            if(false === $model->save()){
-                return $this->message($this->getError($model), $this->redirect(\Yii::$app->request->referrer), 'error');
-            }
+            
+            //创建款号
+            Yii::$app->styleService->qiban->createStyleSn($model);
             $trans->commit();
             return $this->message('操作成功', $this->redirect(\Yii::$app->request->referrer), 'success');
         }catch (\Exception $e){
@@ -372,10 +381,10 @@ class QibanController extends BaseController
                     if ($model->audit_status == AuditStatusEnum::PASS) {
                         if ($model->is_apply == IsApply::Wait) {
                             $model->is_apply = IsApply::Yes;
+                            $model->sort = time();
                         }
                         $model->status = StatusEnum::ENABLED;
-                        //创建款号
-                        Yii::$app->styleService->qiban->createStyleSn($model);
+                        
                     } else {
                         $model->status = StatusEnum::DISABLED;
                     }

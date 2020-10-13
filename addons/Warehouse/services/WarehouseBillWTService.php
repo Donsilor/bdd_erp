@@ -9,8 +9,6 @@ use addons\Warehouse\common\models\WarehouseGoods;
 use addons\Warehouse\common\enums\GoodsStatusEnum;
 use addons\Warehouse\common\models\WarehouseBillGoods;
 use addons\Warehouse\common\enums\PandianStatusEnum;
-use common\enums\StatusEnum;
-use common\helpers\Url;
 use addons\Warehouse\common\forms\WarehouseBillWForm;
 use addons\Warehouse\common\models\WarehouseBillW;
 use addons\Warehouse\common\enums\BillStatusEnum;
@@ -26,11 +24,11 @@ use common\helpers\UploadHelper;
 use common\helpers\ExcelHelper;
 
 /**
- * 盘点单
+ * 临时盘点单
  * @package services\common
  * @author jianyan74 <751393839@qq.com>
  */
-class WarehouseBillWService extends WarehouseBillService
+class WarehouseBillWTService extends WarehouseBillService
 {
     
     /**
@@ -45,13 +43,13 @@ class WarehouseBillWService extends WarehouseBillService
         }
         //锁定仓库
         \Yii::$app->warehouseService->warehouse->lockWarehouse($form->to_warehouse_id);
-
+        
         $bill = new WarehouseBill();
-        $bill->attributes = $form->toArray(); 
-        $bill->bill_status = BillStatusEnum::SAVE;  
+        $bill->attributes = $form->toArray();
+        $bill->bill_status = BillStatusEnum::SAVE;
         if(false === $bill->save() ) {
             throw new \Exception($this->getError($bill));
-        } 
+        }
         
         //批量创建单据明细
         $page_size = 100;
@@ -82,7 +80,7 @@ class WarehouseBillWService extends WarehouseBillService
                 //更新仓库所有货品 盘点中
                 WarehouseGoods::updateAll(['goods_status'=>GoodsStatusEnum::IN_PANDIAN],['goods_id'=>$goods_ids,'goods_status'=>GoodsStatusEnum::IN_STOCK]);
                 //导入明细
-                $result = Yii::$app->db->createCommand()->batchInsert(WarehouseBillGoods::tableName(), $bill_goods_keys, $bill_goods_values)->execute(); 
+                $result = Yii::$app->db->createCommand()->batchInsert(WarehouseBillGoods::tableName(), $bill_goods_keys, $bill_goods_values)->execute();
                 if(!$result) {
                     throw new \Exception('导入单据明细失败');
                 }
@@ -91,7 +89,7 @@ class WarehouseBillWService extends WarehouseBillService
             
             if(count($goods_list) < $page_size) {
                 break;
-            } 
+            }
         }
         
         //同步盘点明细关系表
@@ -104,12 +102,12 @@ class WarehouseBillWService extends WarehouseBillService
         $billW = new WarehouseBillW();
         $billW->id = $bill->id;
         $billW->should_num = $should_num;
-
+        
         if(false === $billW->save()){
             throw new \Exception($this->getError($billW));
         }
         
-        //更新应盘数量和总金额   
+        //更新应盘数量和总金额
         $this->billWSummary($bill->id);
         return $bill;
     }
@@ -120,7 +118,7 @@ class WarehouseBillWService extends WarehouseBillService
     {
         if($actual_num < 0) {
             throw new \Exception("实盘数量不能小于0，且必须为数字");
-        }        
+        }
         $billGoods = WarehouseBillGoods::find()->where(['id'=>$id])->one();
         if($billGoods->goods_num > $actual_num) {
             $billGoods->status = PandianStatusEnum::LOSS;//盘亏
@@ -132,7 +130,7 @@ class WarehouseBillWService extends WarehouseBillService
         //如果仓库不对，为 盘盈
         if($billGoods->to_warehouse_id != $billGoods->from_warehouse_id) {
             $billGoods->status = PandianStatusEnum::PROFIT;//盘盈
-        } 
+        }
         
         if(false === $billGoods->save(true,['status'])) {
             throw new \Exception($this->getError($billGoods));
@@ -150,13 +148,13 @@ class WarehouseBillWService extends WarehouseBillService
      * @param ImportBillWForm $form
      */
     public function importGoods($form)
-    {        
+    {
         if (!($form->file->tempName ?? true)) {
             throw new \Exception("请上传文件");
         }
         if (UploadHelper::getExt($form->file->name) != 'xlsx') {
             throw new \Exception("请上传xlsx格式文件");
-        } 
+        }
         if ($form->bill_id == '') {
             throw new \Exception("bill_id不能为空");
         }
@@ -195,14 +193,14 @@ class WarehouseBillWService extends WarehouseBillService
      * @throws \Exception
      */
     public function pandianGoods($bill_id, $goods_ids_nums)
-    {   
+    {
         //校验单据状态
         $bill = WarehouseBill::find()->where(['id'=>$bill_id])->one();
         if ($bill->bill_status != BillStatusEnum::SAVE) {
             throw new \Exception("盘点单已结束");
         }
-       // $bill_detail_ids = [];
-        foreach ($goods_ids_nums as $goods_id=>$num) {            
+        // $bill_detail_ids = [];
+        foreach ($goods_ids_nums as $goods_id=>$num) {
             $isNewRecord = false;
             $billGoods = WarehouseBillGoods::find()->where(['goods_id'=>$goods_id,'bill_id'=>$bill->id])->one();
             if($billGoods && $billGoods->status != PandianStatusEnum::SAVE) {
@@ -221,7 +219,7 @@ class WarehouseBillWService extends WarehouseBillService
                 $billGoods->bill_type = $bill->bill_type;
                 $billGoods->style_sn = $goods->style_sn;
                 $billGoods->bill_no = $bill->bill_no;
-                $billGoods->to_warehouse_id = $bill->to_warehouse_id;//盘点仓库                
+                $billGoods->to_warehouse_id = $bill->to_warehouse_id;//盘点仓库
                 $billGoods->status = PandianStatusEnum::PROFIT;//盘盈
                 //商品属性
                 $billGoods->goods_id = $goods->goods_id;
@@ -239,10 +237,10 @@ class WarehouseBillWService extends WarehouseBillService
                     $billGoods->status = PandianStatusEnum::NORMAL;//正常
                 }
             }
-            $billGoods->goods_name = $goods->goods_name;            
+            $billGoods->goods_name = $goods->goods_name;
             $billGoods->from_warehouse_id = $goods->warehouse_id;//归属仓库
             //更多商品属性
-            //............            
+            //............
             if(false === $billGoods->save()) {
                 throw new \Exception($this->getError($billGoods));
             }
@@ -253,8 +251,8 @@ class WarehouseBillWService extends WarehouseBillService
                 Yii::$app->db->createCommand($sql)->execute();
             }
             WarehouseBillGoodsW::updateAll(['actual_num'=>$num,'status'=>ConfirmEnum::YES],['id'=>$billGoods->id]);
-            //$bill_detail_ids[] = $billGoods->id;            
-        }        
+            //$bill_detail_ids[] = $billGoods->id;
+        }
         $this->billWSummary($bill->id);
         
     }
@@ -266,7 +264,7 @@ class WarehouseBillWService extends WarehouseBillService
     {
         $bill = WarehouseBill::find()->where(['id'=>$bill_id])->one();
         if(!$bill || $bill->bill_status == BillWStatusEnum::FINISHED) {
-             throw new \Exception("盘点已结束");
+            throw new \Exception("盘点已结束");
         }
         $bill->status = BillWStatusEnum::FINISHED;
         $bill->bill_status = BillStatusEnum::PENDING; //待审核
@@ -293,7 +291,7 @@ class WarehouseBillWService extends WarehouseBillService
      * 盘点商品矫正
      * @param unknown $bill_id
      */
-    public function adjustBillW($bill_id){        
+    public function adjustBillW($bill_id){
         
         $pandianStatusArray = [PandianStatusEnum::LOSS,PandianStatusEnum::PROFIT];
         $goodsStatusArray1  = [GoodsStatusEnum::HAS_SOLD];
@@ -302,16 +300,16 @@ class WarehouseBillWService extends WarehouseBillService
         $bill_goods_list = WarehouseBillGoods::find()->select(['id','goods_id','status'])->where(['bill_id'=>$bill_id,'bill_type'=>BillTypeEnum::BILL_TYPE_W,'status'=>$pandianStatusArray])->limit(99999)->all();
         if(empty($bill_goods_list)) {
             return true;
-        }        
-        foreach ($bill_goods_list as $billGoods){                
-
+        }
+        foreach ($bill_goods_list as $billGoods){
+            
             $goods = WarehouseGoods::find()->select(['id','goods_id','goods_status','warehouse_id'])->where(['goods_id'=>$billGoods->goods_id])->one();
             if(empty($goods)){
                 continue;
-            } 
+            }
             $billGoods->from_warehouse_id = $goods->warehouse_id;
             if($billGoods->status == PandianStatusEnum::LOSS && in_array($goods->goods_status,$goodsStatusArray1)){
-                //如果盘亏-货品状态【已销售】 调整状态：【已销售】                
+                //如果盘亏-货品状态【已销售】 调整状态：【已销售】
                 $billGoods->goodsW->ajust_status = PandianAdjustEnum::HAS_SOLD;
             }else if($billGoods->status == PandianStatusEnum::PROFIT && in_array($goods->goods_status,$goodsStatusArray2)){
                 //如果盘盈-货品状态【收货中、调拨中、报损中,返厂中、销售中、退货中】  调整状态：【在途】
@@ -325,8 +323,8 @@ class WarehouseBillWService extends WarehouseBillService
             }
             if($billGoods->goodsW->save(true,['id','adjust_status'])) {
                 throw new \Exception($this->getError($billGoods->billW));
-            } 
-
+            }
+            
         }
         $this->billWSummary($bill_id);
         
@@ -339,7 +337,7 @@ class WarehouseBillWService extends WarehouseBillService
         ];
         \Yii::$app->warehouseService->billLog->createBillLog($log);
         return true;
-
+        
     }
     /**
      * 盘点审核
@@ -352,7 +350,7 @@ class WarehouseBillWService extends WarehouseBillService
         }
         $subQuery = WarehouseBillGoods::find()->select(['goods_id'])->where(['bill_id'=>$form->id]);
         if($form->audit_status == AuditStatusEnum::PASS) {
-            $form->bill_status = BillStatusEnum::CONFIRM;            
+            $form->bill_status = BillStatusEnum::CONFIRM;
             WarehouseGoods::updateAll(['goods_status'=>GoodsStatusEnum::IN_STOCK],['goods_id'=>$subQuery,'goods_status'=>GoodsStatusEnum::IN_PANDIAN]);
             //解锁仓库
             \Yii::$app->warehouseService->warehouse->unlockWarehouse($form->to_warehouse_id);
@@ -372,22 +370,22 @@ class WarehouseBillWService extends WarehouseBillService
     public function billWSummary($bill_id)
     {
         $sum = WarehouseBillGoods::find()->alias("g")->innerJoin(WarehouseBillGoodsW::tableName().' gw','g.id=gw.id')
-            ->select(['sum(if(gw.status='.ConfirmEnum::YES.',gw.actual_num,0)) as actual_num',
-                    'sum(if(g.status='.PandianStatusEnum::PROFIT.',abs(gw.actual_num-gw.should_num),0)) as profit_num',
-                    'sum(if(g.status='.PandianStatusEnum::LOSS.',abs(gw.actual_num-gw.should_num),0)) as loss_num',
-                    'sum(if(g.status='.PandianStatusEnum::SAVE.',gw.should_num,0)) as save_num',
-                    'sum(if(g.status='.PandianStatusEnum::NORMAL.',gw.actual_num,0)) as normal_num',
-                    'sum(if(gw.adjust_status>'.PandianAdjustEnum::SAVE.',abs(gw.actual_num-gw.should_num),0)) as adjust_num',
-                    'sum(1) as goods_num',//明细总数量
-                    'sum(IFNULL(g.cost_price,0)*gw.should_num) as total_cost',
-                    'sum(IFNULL(g.sale_price,0)*gw.should_num) as total_sale',
-                    'sum(IFNULL(g.market_price,0)*gw.should_num) as total_market'
-            ])->where(['g.bill_id'=>$bill_id])->asArray()->one();
-
+        ->select(['sum(if(gw.status='.ConfirmEnum::YES.',gw.actual_num,0)) as actual_num',
+                'sum(if(g.status='.PandianStatusEnum::PROFIT.',abs(gw.actual_num-gw.should_num),0)) as profit_num',
+                'sum(if(g.status='.PandianStatusEnum::LOSS.',abs(gw.actual_num-gw.should_num),0)) as loss_num',
+                'sum(if(g.status='.PandianStatusEnum::SAVE.',gw.should_num,0)) as save_num',
+                'sum(if(g.status='.PandianStatusEnum::NORMAL.',gw.actual_num,0)) as normal_num',
+                'sum(if(gw.adjust_status>'.PandianAdjustEnum::SAVE.',abs(gw.actual_num-gw.should_num),0)) as adjust_num',
+                'sum(1) as goods_num',//明细总数量
+                'sum(IFNULL(g.cost_price,0)*gw.should_num) as total_cost',
+                'sum(IFNULL(g.sale_price,0)*gw.should_num) as total_sale',
+                'sum(IFNULL(g.market_price,0)*gw.should_num) as total_market'
+        ])->where(['g.bill_id'=>$bill_id])->asArray()->one();
+        
         if($sum) {
             $billUpdate  = ['goods_num'=>$sum['goods_num'], 'total_cost'=>$sum['total_cost'], 'total_sale'=>$sum['total_sale'], 'total_market'=>$sum['total_market']];
             $billWUpdate = ['save_num'=>$sum['save_num'],'profit_num'=>$sum['profit_num'],'actual_num'=>$sum['actual_num'], 'loss_num'=>$sum['loss_num'], 'normal_num'=>$sum['normal_num'], 'adjust_num'=>$sum['adjust_num']];
-
+            
             $res1 = WarehouseBill::updateAll($billUpdate,['id'=>$bill_id]);
             $res2 = WarehouseBillW::updateAll($billWUpdate,['id'=>$bill_id]);
             return $res1 && $res2;

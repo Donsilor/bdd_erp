@@ -12,8 +12,9 @@ use common\components\Service;
  * @property \addons\Warehouse\services\WarehouseGoodsService $warehouseGoods 库存
  * @property \addons\Warehouse\services\WarehouseBillService $bill   基础单据
  * @property \addons\Warehouse\services\WarehouseBillLService $billL 收货单据
- * @property \addons\Warehouse\services\WarehouseBillMService $billM 盘点单据
- * @property \addons\Warehouse\services\WarehouseBillWService $billW 调拨单据
+ * @property \addons\Warehouse\services\WarehouseBillMService $billM 调拨单据
+ * @property \addons\Warehouse\services\WarehouseBillWService $billW 盘点单据
+ * @property \addons\Warehouse\services\WarehouseBillWService $billWT 临时盘点单
  * @property \addons\Warehouse\services\WarehouseBillAService $billA 调整单据
  * @property \addons\Warehouse\services\WarehouseBillJService $billJ 借货单据
  * @property \addons\Warehouse\services\WarehouseBillSService $billS 销售单据
@@ -72,6 +73,7 @@ class Application extends Service
         'bill' => 'addons\Warehouse\services\WarehouseBillService',
         'billL' => 'addons\Warehouse\services\WarehouseBillLService',
         'billW' => 'addons\Warehouse\services\WarehouseBillWService',
+        'billWT' => 'addons\Warehouse\services\WarehouseBillWTService',
         'billM' => 'addons\Warehouse\services\WarehouseBillMService',
         'billA' => 'addons\Warehouse\services\WarehouseBillAService',
         'billB' => 'addons\Warehouse\services\WarehouseBillBService',

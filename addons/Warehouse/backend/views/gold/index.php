@@ -84,10 +84,16 @@ $params = $params ? "&".http_build_query($params) : '';
                         ],
                         [
                             'attribute'=>'style_sn',
-                            'filter' => Html::activeTextInput($searchModel, 'style_sn', [
-                                'class' => 'form-control',
+                            'filter' => \kartik\select2\Select2::widget([
+                                'name'=>'SearchModel[style_sn]',
+                                'value'=>$searchModel->style_sn,
+                                'data'=>Yii::$app->styleService->gold::getDropDown(),
+                                'options' => ['placeholder' =>"请选择",'multiple'=>false,'style'=>"width:180px"],
+                                'pluginOptions' => [
+                                    'allowClear' => true,
+                                ],
                             ]),
-                            'headerOptions' => ['width'=>'100'],
+                            'headerOptions' => ['width'=>'150'],
                         ],
                         /*[
                             'attribute'=>'gold_num',

@@ -89,17 +89,18 @@ class OrderImportKForm extends ImportForm
             22=>'main_stone_type',
             23=>'main_stone_weight',
             24=>'main_stone_num',
-            25=>'main_stone_color',
-            26=>'main_stone_clarity',
-            27=>'main_stone_price',
-            28=>'second_stone_type1',
-            29=>'second_stone_weight1',
-            30=>'second_stone_num1',
-            31=>'second_stone_price1',
-            32=>'stone_spec',
-            33=>'remark',
+            25=>'main_stone_secai',
+            26=>'main_stone_color',
+            27=>'main_stone_clarity',
+            28=>'main_stone_price',
+            29=>'second_stone_type1',
+            30=>'second_stone_weight1',
+            31=>'second_stone_num1',
+            32=>'second_stone_price1',
+            33=>'stone_spec',
+            34=>'remark',
     ];
-    //唯一行的字段
+    //多行合并一行的依赖字段
     public $combineKey = 'order_sn';
     //只需要填写第一行的字段
     public $combineColumns = [
@@ -154,6 +155,7 @@ class OrderImportKForm extends ImportForm
             AttrIdEnum::FINGER =>'finger',
             AttrIdEnum::FINGER_HK =>'finger_hk',
             AttrIdEnum::MAIN_STONE_TYPE =>'main_stone_type',
+            AttrIdEnum::MAIN_STONE_SECAI =>'main_stone_secai',
             AttrIdEnum::MAIN_STONE_COLOR=>'main_stone_color',
             AttrIdEnum::MAIN_STONE_CLARITY =>'main_stone_clarity',
             AttrIdEnum::SIDE_STONE1_TYPE =>'second_stone_type1',            
