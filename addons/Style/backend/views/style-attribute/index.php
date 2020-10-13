@@ -109,11 +109,19 @@ $this->params['breadcrumbs'][] = $this->title;
                                 [
                                     'label' => '属性',
                                     'attribute'=>'attr_id',
-                                    'filter' => false,
+                                    'headerOptions' => ['class' => 'col-md-1'],
                                     'value' => function($model){
                                         return $model->attr->attr_name ?? '';
                                     },
-                                    'headerOptions' => ['class' => 'col-md-1'],
+                                    'filter' => \kartik\select2\Select2::widget([
+                                        'name' => 'SearchModel[attr_id]',
+                                        'value' => $searchModel->attr_id,
+                                        'data' => \Yii::$app->styleService->attribute->getDropDown(),
+                                        'options' => ['placeholder' => "请选择"],
+                                        'pluginOptions' => [
+                                            'allowClear' => true,
+                                        ],
+                                    ]),
                                ],
                                [
                                    'label' => '属性值',
