@@ -29,9 +29,11 @@ $this->params['breadcrumbs'][] = $this->title;
                 <?= Html::beginForm(Url::to($url), 'get') ?>
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h4 class="modal-title">筛选查询</h4>
+                        <h4 class="modal-title">筛选查询<a
+                                    class="btn-xs btn-primary glyphicon glyphicon-chevron-down searchBox"
+                                    style="float:right;" href="#" role="button">隐藏</a></h4>
                     </div>
-                    <div class="modal-body" id="select">
+                    <div class="modal-body" id="search-content">
                         <div class="row">
                             <div class="col-lg-3">
                                 <div class="form-group field-cate-sort">
@@ -203,7 +205,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                             //'attribute' => 'created_at',
                                             'name' => 'created_at',
                                             'value' => $search->created_at,
-                                            'options' => ['readonly' => false, 'class' => 'form-control', 'style' => 'background-color:#fff;width:220px;'],
+                                            'options' => ['placeholder' => "请选择", 'readonly' => false, 'class' => 'form-control', 'style' => 'background-color:#fff;width:220px;'],
                                             'pluginOptions' => [
                                                 'format' => 'yyyy-mm-dd',
                                                 'locale' => [
@@ -331,10 +333,10 @@ $this->params['breadcrumbs'][] = $this->title;
                                 </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="box-footer text-center">
-                        <button type="reset" class="btn btn-white btn-sm" onclick="clearSearch1()">重置</button>
-                        <button class="btn btn-primary btn-sm">确定</button>
+                        <div class="box-footer text-center">
+                            <button type="reset" class="btn btn-white btn-sm" onclick="clearSearch1()">重置</button>
+                            <button class="btn btn-primary btn-sm">确定</button>
+                        </div>
                     </div>
                 </div>
                 <?= Html::endForm() ?>
@@ -603,6 +605,17 @@ $this->params['breadcrumbs'][] = $this->title;
 </div>
 <script type="text/javascript">
     function clearSearch1() {
-        $('#select select').prop('selectedIndex', 0);
+        $('#search-content select').prop('selectedIndex', 0);
     }
+
+    $(document).delegate('.searchBox', 'click', function () {
+        if ($("#search-content").css("display") == "block") {
+            $(".searchBox").html("展开");
+            $(".searchBox").removeClass("glyphicon glyphicon-chevron-down").addClass("glyphicon glyphicon-chevron-up");
+        } else {
+            $(".searchBox").html("隐藏");
+            $(".searchBox").removeClass("glyphicon glyphicon-chevron-up").addClass("glyphicon glyphicon-chevron-down");
+        }
+        $("#search-content").slideToggle();
+    });
 </script>
