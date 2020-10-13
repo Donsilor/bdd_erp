@@ -5,6 +5,7 @@ namespace addons\Style\backend\controllers;
 use addons\Style\common\enums\FaceWorkEnum;
 use addons\Style\common\enums\ImagePositionEnum;
 use addons\Style\common\enums\ImageTypeEnum;
+use addons\Style\common\enums\LogTypeEnum;
 use addons\Style\common\models\Style;
 use addons\Style\common\models\StyleImages;
 use common\enums\ConfirmEnum;
@@ -79,6 +80,16 @@ class StyleImageController extends BaseController
 
             $style = Style::find()->where(['id'=>$model->style_id])->one();
             Yii::$app->styleService->style->updateStyleImage($style);
+            //记录日志
+            $log = [
+                'style_id' => $model->style_id,
+                'style_sn' => $style->style_sn,
+                'log_type' => LogTypeEnum::ARTIFICIAL,
+                'log_time' => time(),
+                'log_module' => '图片信息',
+                'log_msg' => "删除图片信息",
+            ];
+            \Yii::$app->styleService->styleLog->createStyleLog($log);
             return $this->message("删除成功", $this->redirect(['index','style_id'=>$model->style_id]));
         }
 
@@ -103,21 +114,37 @@ class StyleImageController extends BaseController
             if(!$model->validate()) {
                 return $this->message($this->getError($model), $this->redirect(\Yii::$app->request->referrer), 'error');
             }
-            $images_list = $model->image;
-            foreach ($images_list as $image){
-                $new_model = new StyleImages();
-                $new_model->attributes = $model->attributes;
-                $new_model->image = $image;
-                $new_model->type = ImageTypeEnum::ORIGINAL;
-                $new_model->position = ImagePositionEnum::POSITIVE;
-                if(false === $new_model->save()){
-                    throw new \Exception($this->getError($new_model));
+            try {
+                $trans = Yii::$app->trans->beginTransaction();
+                $images_list = $model->image;
+                foreach ($images_list as $image){
+                    $new_model = new StyleImages();
+                    $new_model->attributes = $model->attributes;
+                    $new_model->image = $image;
+                    $new_model->type = ImageTypeEnum::ORIGINAL;
+                    $new_model->position = ImagePositionEnum::POSITIVE;
+                    if(false === $new_model->save()){
+                        throw new \Exception($this->getError($new_model));
+                    }
                 }
+                $style = Style::find()->select(['style_sn'])->where(['id' => $model->style_id])->one();
+                //记录日志
+                $log = [
+                    'style_id' => $model->style_id,
+                    'style_sn' => $style->style_sn,
+                    'log_type' => LogTypeEnum::ARTIFICIAL,
+                    'log_time' => time(),
+                    'log_module' => '图片信息',
+                    'log_msg' => $model->isNewRecord ? "创建图片信息" : "编辑图片信息",
+                ];
+                \Yii::$app->styleService->styleLog->createStyleLog($log);
+                $trans->commit();
+                return $this->message("保存成功", $this->redirect(Yii::$app->request->referrer), 'success');
+            } catch (\Exception $e) {
+                $trans->rollBack();
+                return $this->message("保存失败=>" . $e->getMessage(), $this->redirect(Yii::$app->request->referrer), 'error');
             }
-            $this->redirect(Yii::$app->request->referrer);
-
         }
-
         return $this->renderAjax($this->action->id, [
             'model' => $model,
         ]);

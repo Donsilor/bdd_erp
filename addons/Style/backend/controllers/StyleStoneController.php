@@ -2,6 +2,7 @@
 
 namespace addons\Style\backend\controllers;
 
+use addons\Style\common\enums\LogTypeEnum;
 use addons\Style\common\models\Style;
 use addons\Style\common\models\StyleStone;
 use common\helpers\Url;
@@ -88,12 +89,24 @@ class StyleStoneController extends BaseController
                             throw new \Exception($this->getError($new_model));
                         }
                     }
-
+                    $log_msg = "创建石头信息";
                 }else{
                     if(false === $model->save()){
                         throw new \Exception($this->getError($model));
                     }
+                    $log_msg = "编辑石头信息";
                 }
+                $style = Style::find()->select(['style_sn'])->where(['id'=>$model->style_id])->one();
+                //记录日志
+                $log = [
+                    'style_id' => $model->style_id,
+                    'style_sn' => $style->style_sn,
+                    'log_type' => LogTypeEnum::ARTIFICIAL,
+                    'log_time' => time(),
+                    'log_module' => '石头信息',
+                    'log_msg' => $log_msg,
+                ];
+                \Yii::$app->styleService->styleLog->createStyleLog($log);
                 $trans->commit();
                 return $this->message("保存成功", $this->redirect(Yii::$app->request->referrer), 'success');
             }catch (\Exception $e){
