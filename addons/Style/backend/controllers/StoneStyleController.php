@@ -27,7 +27,7 @@ class StoneStyleController extends BaseController
         $searchModel = new SearchModel([
             'model' => $this->modelClass,
             'scenario' => 'default',
-            'partialMatchAttributes' => [], // 模糊查询
+            'partialMatchAttributes' => ['style_sn'], // 模糊查询
             'defaultOrder' => [
                 'id' => SORT_DESC
             ],
