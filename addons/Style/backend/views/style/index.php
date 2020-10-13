@@ -58,47 +58,6 @@ $this->params['breadcrumbs'][] = $this->title;
                             <div class="col-lg-3">
                                 <div class="form-group field-cate-sort">
                                     <div class="col-sm-4 text-right">
-                                        <label class="control-label" for="cate-sort">款式分类：</label>
-                                    </div>
-                                    <div class="col-sm-8">
-                                        <?= \kartik\select2\Select2::widget([
-                                            'name' => 'style_cate_id',
-                                            'value' => $search->style_cate_id,
-                                            'data' => \Yii::$app->styleService->styleCate::getDropDown(),
-                                            'options' => ['placeholder' => "请选择（可多选）", 'multiple' => true, 'style' => "width:180px"],
-                                            'pluginOptions' => [
-                                                'allowClear' => true,
-                                            ],])
-                                        ?>
-                                        <div class="help-block"></div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-lg-3">
-                                <div class="form-group field-cate-sort">
-                                    <div class="col-sm-4 text-right">
-                                        <label class="control-label" for="cate-sort">产品线：</label>
-                                    </div>
-                                    <div class="col-sm-8">
-                                        <?= \kartik\select2\Select2::widget([
-                                            'name' => 'product_type_id',
-                                            'value' => $search->product_type_id,
-                                            'data' => \Yii::$app->styleService->productType::getDropDown(),
-                                            'options' => ['placeholder' => "请选择（可多选）", 'multiple' => true, 'style' => "width:180px"],
-                                            'pluginOptions' => [
-                                                'allowClear' => true,
-                                            ],
-                                        ])
-                                        ?>
-                                        <div class="help-block"></div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-lg-3">
-                                <div class="form-group field-cate-sort">
-                                    <div class="col-sm-4 text-right">
                                         <label class="control-label" for="cate-sort">款式性别：</label>
                                     </div>
                                     <div class="col-sm-8">
@@ -126,44 +85,6 @@ $this->params['breadcrumbs'][] = $this->title;
                                             'value' => $search->style_material,
                                             'data' => \addons\Style\common\enums\StyleMaterialEnum::getMap(),
                                             'options' => ['placeholder' => "请选择", 'multiple' => false, 'style' => "width:180px"],
-                                            'pluginOptions' => [
-                                                'allowClear' => true,
-                                            ],])
-                                        ?>
-                                        <div class="help-block"></div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-lg-3">
-                                <div class="form-group field-cate-sort">
-                                    <div class="col-sm-4 text-right">
-                                        <label class="control-label" for="cate-sort">归属渠道：</label>
-                                    </div>
-                                    <div class="col-sm-8">
-                                        <?= \kartik\select2\Select2::widget([
-                                            'name' => 'style_channel_id',
-                                            'value' => $search->style_channel_id,
-                                            'data' => \Yii::$app->salesService->saleChannel->getDropDown(),
-                                            'options' => ['placeholder' => "请选择（可多选）", 'multiple' => true, 'style' => "width:180px"],
-                                            'pluginOptions' => [
-                                                'allowClear' => true,
-                                            ],])
-                                        ?>
-                                        <div class="help-block"></div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-lg-3">
-                                <div class="form-group field-cate-sort">
-                                    <div class="col-sm-4 text-right">
-                                        <label class="control-label" for="cate-sort">款式来源：</label>
-                                    </div>
-                                    <div class="col-sm-8">
-                                        <?= \kartik\select2\Select2::widget([
-                                            'name' => 'style_source_id',
-                                            'value' => $search->style_source_id,
-                                            'data' => \Yii::$app->styleService->styleSource->getDropDown(),
-                                            'options' => ['placeholder' => "请选择（可多选）", 'multiple' => true, 'style' => "width:180px"],
                                             'pluginOptions' => [
                                                 'allowClear' => true,
                                             ],])
@@ -326,6 +247,85 @@ $this->params['breadcrumbs'][] = $this->title;
                                     </div>
                                     <div class="col-sm-8">
                                         <?= Html::textInput('remark', $search->remark, ['class' => 'form-control', 'placeholder' => '模糊搜索']) ?>
+                                        <div class="help-block"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-3">
+                                <div class="form-group field-cate-sort">
+                                    <div class="col-sm-4 text-right">
+                                        <label class="control-label" for="cate-sort">款式分类：</label>
+                                    </div>
+                                    <div class="col-sm-8">
+                                        <?= \kartik\select2\Select2::widget([
+                                            'name' => 'style_cate_id',
+                                            'value' => $search->style_cate_id,
+                                            'data' => \Yii::$app->styleService->styleCate::getDropDown(),
+                                            'options' => ['placeholder' => "请选择（可多选）", 'multiple' => true, 'style' => "width:180px"],
+                                            'pluginOptions' => [
+                                                'allowClear' => true,
+                                            ],])
+                                        ?>
+                                        <div class="help-block"></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-3">
+                                <div class="form-group field-cate-sort">
+                                    <div class="col-sm-4 text-right">
+                                        <label class="control-label" for="cate-sort">产品线：</label>
+                                    </div>
+                                    <div class="col-sm-8">
+                                        <?= \kartik\select2\Select2::widget([
+                                            'name' => 'product_type_id',
+                                            'value' => $search->product_type_id,
+                                            'data' => \Yii::$app->styleService->productType::getDropDown(),
+                                            'options' => ['placeholder' => "请选择（可多选）", 'multiple' => true, 'style' => "width:180px"],
+                                            'pluginOptions' => [
+                                                'allowClear' => true,
+                                            ],
+                                        ])
+                                        ?>
+                                        <div class="help-block"></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-3">
+                                <div class="form-group field-cate-sort">
+                                    <div class="col-sm-4 text-right">
+                                        <label class="control-label" for="cate-sort">归属渠道：</label>
+                                    </div>
+                                    <div class="col-sm-8">
+                                        <?= \kartik\select2\Select2::widget([
+                                            'name' => 'style_channel_id',
+                                            'value' => $search->style_channel_id,
+                                            'data' => \Yii::$app->salesService->saleChannel->getDropDown(),
+                                            'options' => ['placeholder' => "请选择（可多选）", 'multiple' => true, 'style' => "width:180px"],
+                                            'pluginOptions' => [
+                                                'allowClear' => true,
+                                            ],])
+                                        ?>
+                                        <div class="help-block"></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-3">
+                                <div class="form-group field-cate-sort">
+                                    <div class="col-sm-4 text-right">
+                                        <label class="control-label" for="cate-sort">款式来源：</label>
+                                    </div>
+                                    <div class="col-sm-8">
+                                        <?= \kartik\select2\Select2::widget([
+                                            'name' => 'style_source_id',
+                                            'value' => $search->style_source_id,
+                                            'data' => \Yii::$app->styleService->styleSource->getDropDown(),
+                                            'options' => ['placeholder' => "请选择（可多选）", 'multiple' => true, 'style' => "width:180px"],
+                                            'pluginOptions' => [
+                                                'allowClear' => true,
+                                            ],])
+                                        ?>
                                         <div class="help-block"></div>
                                     </div>
                                 </div>
