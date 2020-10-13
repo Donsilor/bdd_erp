@@ -53,7 +53,7 @@ class StyleAttributeService extends Service
      * @param unknown $attr_id
      * @return array|array
      */
-    public function getDropdowns($style_id,$attr_id)
+    public function getDropdowns($style_id,$attr_id) 
     {
         $model = StyleAttribute::find()->select(['attr_values'])->where(['style_id'=>$style_id,'attr_id'=>$attr_id])->one();
         if(empty($model) || !$model->attr_values){
@@ -98,10 +98,5 @@ class StyleAttributeService extends Service
         }
 
     }
-
-    public function getAttrList()
-    {
-        return StyleAttribute::find()->asArray()->all();
-    }
-
+    
 }
