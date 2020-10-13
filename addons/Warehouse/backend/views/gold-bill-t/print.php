@@ -274,7 +274,7 @@
 <body>
 <div class="template">
     <div class="information">
-        <p class="font-bold font-18"><?= date('Y')?>年深圳市恒得利珠寶有限公司</p>
+        <p class="font-bold font-18"><?= date('Y')?>年深圳市恒得利珠宝有限公司</p>
         <p class="font-bold font-16">（金料）原料入库单</p>
         <div class="midd"></div>
         <div class="msg">

@@ -274,8 +274,8 @@
 <body>
 <div class="template">
     <div class="information">
-        <p class="font-bold font-18"><?= date('Y')?>年深圳市恒得利珠寶有限公司</p>
-        <p class="font-bold font-16">（金料）原料入库单</p>
+        <p class="font-bold font-18"><?= date('Y')?>年深圳市恒得利珠宝有限公司</p>
+        <p class="font-bold font-16">（金料）原料出库单</p>
         <div class="midd"></div>
         <div class="msg">
             <div class="top">
@@ -283,7 +283,7 @@
                 <div class="one"><span >单号：</span><span contenteditable="true"><?= $model->bill_no ?></span></div>
             </div>
             <div class="bottom">
-                <div class="three"></div>
+                <div class="three">&nbsp;</div>
                 <div class="three"><span >出库日期：</span><span contenteditable="true"><?= Yii::$app->formatter->asDate($model->audit_time)?></span></div>
             </div>
         </div>
