@@ -14,6 +14,7 @@ use addons\Sales\common\models\Customer;
 use addons\Sales\common\forms\CustomerForm;
 use common\traits\Curd;
 use yii\db\Exception;
+use addons\Sales\common\models\CustomerAddress;
 
 /**
  * 客户管理
@@ -97,7 +98,6 @@ class CustomerController extends BaseController
                 }
                 \Yii::$app->salesService->customer->createCustomerNo($model);
                 $trans->commit();
-                \Yii::$app->getSession()->setFlash('success','保存成功');
                 return $isNewRecord
                     ? $this->message("保存成功", $this->redirect(['edit', 'id' => $model->id]), 'success')
                     : $this->message("保存成功", $this->redirect(\Yii::$app->request->referrer), 'success');
@@ -133,16 +133,16 @@ class CustomerController extends BaseController
             try{
                 $trans = Yii::$app->db->beginTransaction();
                 if($model->channel_id == ChannelIdEnum::GP && !$model->email){
-                    throw new Exception("渠道为国际批发，客户邮箱为必填");
+                    throw new \Exception("渠道为国际批发，客户邮箱为必填");
                 }
                 if($model->channel_id != ChannelIdEnum::GP && !$model->mobile){
-                    throw new Exception("非国际批发客户手机号必填");
+                    throw new \Exception("非国际批发客户手机号必填");
                 }
                 if($model->birthday){
                     $model->age = DateHelper::getYearByDate($model->birthday);
                 }
                 if(false === $model->save()){
-                    throw new Exception($this->getError($model));
+                    throw new \Exception($this->getError($model));
                 }
                 if(!$model->customer_no){
                     \Yii::$app->salesService->customer->createCustomerNo($model);
@@ -187,9 +187,7 @@ class CustomerController extends BaseController
     public function actionOrder()
     {
         $this->modelClass = OrderForm::class;
-        $tab = Yii::$app->request->get('tab',1);
-        $returnUrl = Yii::$app->request->get('returnUrl', Url::to(['index']));
-        $customer_id = \Yii::$app->request->get('customer_id', null);
+        $customer_id = \Yii::$app->request->get('customer_id');
         $searchModel = new SearchModel([
             'model' => $this->modelClass,
             'scenario' => 'default',
@@ -213,9 +211,97 @@ class CustomerController extends BaseController
         return $this->render($this->action->id, [
             'dataProvider' => $dataProvider,
             'searchModel' => $searchModel,
-            'tab'=>$tab,
-            'tabList'=>\Yii::$app->salesService->customer->menuTabList($customer_id, $returnUrl),
-            'returnUrl'=>$returnUrl,
+            'tab'=>Yii::$app->request->get('tab',3),
+            'tabList'=>\Yii::$app->salesService->customer->menuTabList($customer_id, $this->returnUrl),
+            'returnUrl'=>$this->returnUrl,
         ]);
+    }
+    
+    /**
+     * 客户收货地址列表
+     * @return string
+     * @throws
+     */
+    public function actionAddress()
+    {
+        $customer_id = \Yii::$app->request->get('customer_id');
+        
+        $this->modelClass = CustomerAddress::class;        
+        $searchModel = new SearchModel([
+                'model' => $this->modelClass,
+                'scenario' => 'default',
+                'partialMatchAttributes' => [], // 模糊查询
+                'defaultOrder' => [
+                        'id' => SORT_DESC,
+                ],
+                'pageSize' => $this->pageSize,
+                'relations' => [
+                        
+                ]
+        ]);
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+        $searchParams = \Yii::$app->request->queryParams['SearchModel'] ?? [];
+        $dataProvider->query->andWhere(['=', CustomerAddress::tableName().'.customer_id', $customer_id]);
+        return $this->render($this->action->id, [
+                'dataProvider' => $dataProvider,
+                'searchModel' => $searchModel,
+                'tab'=>Yii::$app->request->get('tab',2),
+                'tabList'=>\Yii::$app->salesService->customer->menuTabList($customer_id, $this->returnUrl),
+                'returnUrl'=>$this->returnUrl,
+        ]);
+    }
+    
+    /**
+     * 编辑客户地址
+     *
+     * @return mixed
+     * @throws
+     */
+    public function actionAjaxEditAddress()
+    {        
+        $id = Yii::$app->request->get('id');
+        $customer_id = Yii::$app->request->get('customer_id');
+        
+        $this->modelClass = CustomerAddress::class;
+        $model = $this->findModel($id);        
+        if($model->isNewRecord) { 
+            if($customer_id == '') {
+                return $this->message("customer_id 不能为空", $this->redirect(\Yii::$app->request->referrer), 'error');
+            }
+            $model->customer_id = $customer_id;
+        }
+        $this->activeFormValidate($model);
+        if ($model->load(Yii::$app->request->post())) {
+            try{
+                $trans = Yii::$app->db->beginTransaction();
+                if(false === $model->save()) {
+                    throw new \Exception($this->getError($model));
+                }
+                $trans->commit();
+                return $this->message("保存成功", $this->redirect(\Yii::$app->request->referrer), 'success');
+            }catch (Exception $e){
+                $trans->rollBack();
+                return $this->message("保存失败:".$e->getMessage(), $this->redirect(\Yii::$app->request->referrer), 'error');
+            }
+            
+        }
+        return $this->renderAjax($this->action->id, [
+                'model' => $model,
+        ]);
+    }
+    /**
+     * 删除收货地址
+     * @return mixed|string
+     */
+    public function actionDeleteAddress()
+    {
+        $id = Yii::$app->request->get('id');
+        
+        $this->modelClass = CustomerAddress::class;
+        if ($this->findModel($id)->delete()) {
+            return $this->message("删除成功", $this->redirect(\Yii::$app->request->referrer));
+        }
+        
+        return $this->message("删除失败", $this->redirect(\Yii::$app->request->referrer), 'error');
     }
 }
