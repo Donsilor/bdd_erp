@@ -216,15 +216,6 @@ class StyleController extends BaseController
                 $trans = \Yii::$app->db->beginTransaction();
                 $model->file = UploadedFile::getInstance($model, 'file');
                 \Yii::$app->styleService->style->uploadStyles($model);
-                $log = [
-                    'style_id' => $model->id,
-                    'style_sn' => $model->style_sn,
-                    'log_type' => LogTypeEnum::ARTIFICIAL,
-                    'log_time' => time(),
-                    'log_module' => '款式列表',
-                    'log_msg' => "批量导入",
-                ];
-                \Yii::$app->styleService->styleLog->createStyleLog($log);
                 $trans->commit();
                 return $this->message("保存成功", $this->redirect(\Yii::$app->request->referrer), 'success');
             } catch (\Exception $e) {

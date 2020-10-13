@@ -2,23 +2,25 @@
 
 namespace addons\Style\services;
 
-use addons\Style\common\enums\FactoryFeeEnum;
-use addons\Style\common\enums\StonePositionEnum;
-use addons\Style\common\models\StyleStone;
 use Yii;
 use common\helpers\Url;
 use common\components\Service;
 use addons\Style\common\models\Style;
+use addons\Style\common\models\StyleStone;
 use addons\Style\common\models\StyleFactory;
 use addons\Style\common\models\StyleFactoryFee;
 use addons\Style\common\models\StyleAttribute;
 use addons\Style\common\models\StyleImages;
+use addons\Style\common\models\StyleLog;
 use addons\Style\common\models\StyleGift;
 use addons\Style\common\forms\StyleForm;
 use addons\Style\common\enums\StyleMaterialEnum;
 use addons\Style\common\enums\AttrValueIdEnum;
 use addons\Style\common\enums\StyleSexEnum;
 use addons\Style\common\enums\AttrIdEnum;
+use addons\Style\common\enums\FactoryFeeEnum;
+use addons\Style\common\enums\LogTypeEnum;
+use addons\Style\common\enums\StonePositionEnum;
 use common\enums\AuditStatusEnum;
 use common\enums\TargetTypeEnum;
 use common\enums\ConfirmEnum;
@@ -645,6 +647,16 @@ class StyleService extends Service
                     $saveFee[] = $feeData;
                 }
             }
+            //创建日志信息
+            $saveLog[$k] = [
+                'style_id' => $styleM->id,
+                'style_sn' => $styleM->style_sn,
+                'log_type' => LogTypeEnum::ARTIFICIAL,
+                'log_time' => time(),
+                'creator_id' => $creator_id,
+                'log_module' => '款式列表',
+                'log_msg' => "批量导入",
+            ];
 //            $command = \Yii::$app->db->createCommand("call sp_create_style_attributes(" . $styleM->id . ");");
 //            $command->execute();
         }
@@ -769,6 +781,32 @@ class StyleService extends Service
                     } else {
                         continue;
                     }
+                }
+            }
+        }
+        //创建日志信息
+        if (!empty($saveLog)) {
+            $value = [];
+            $key = array_keys($saveLog[0]);
+            foreach ($saveLog as $item) {
+                $logM = new StyleLog();
+                $logM->setAttributes($item);
+                if (!$logM->validate()) {
+                    throw new \Exception($this->getError($logM));
+                }
+                $value[] = array_values($item);
+                if (count($value) >= 10) {
+                    $res = \Yii::$app->db->createCommand()->batchInsert(StyleLog::tableName(), $key, $value)->execute();
+                    if (false === $res) {
+                        throw new \Exception("创建日志信息失败1");
+                    }
+                    $value = [];
+                }
+            }
+            if (!empty($value)) {
+                $res = \Yii::$app->db->createCommand()->batchInsert(StyleLog::tableName(), $key, $value)->execute();
+                if (false === $res) {
+                    throw new \Exception("创建日志信息失败2");
                 }
             }
         }
