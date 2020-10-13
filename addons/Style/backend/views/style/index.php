@@ -17,6 +17,328 @@ $this->params['breadcrumbs'][] = $this->title;
 <div class="row">
     <div class="col-sm-12">
         <div class="box">
+            <div>
+                <?php
+                $get = Yii::$app->request->get();
+                if (isset($get['SearchModel'])) {
+                    $url = \common\helpers\ArrayHelper::merge([0 => 'index'], ['SearchModel' => $get['SearchModel']]);
+                } else {
+                    $url = ['index'];
+                }
+                ?>
+                <?= Html::beginForm(Url::to($url), 'get') ?>
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title">筛选查询</h4>
+                    </div>
+                    <div class="modal-body" id="select">
+                        <div class="row">
+                            <div class="col-lg-3">
+                                <div class="form-group field-cate-sort">
+                                    <div class="col-sm-4 text-right">
+                                        <label class="control-label" for="cate-sort">款号：</label>
+                                    </div>
+                                    <div class="col-sm-8">
+                                        <?= Html::textInput('style_sn', $search->style_sn, ['class' => 'form-control', 'placeholder' => '多个以空格或者英文逗号隔开']) ?>
+                                        <div class="help-block"></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-3">
+                                <div class="form-group field-cate-sort">
+                                    <div class="col-sm-4 text-right">
+                                        <label class="control-label" for="cate-sort">款式名称：</label>
+                                    </div>
+                                    <div class="col-sm-8">
+                                        <?= Html::textInput('style_name', $search->style_name, ['class' => 'form-control', 'placeholder' => '模糊搜索']) ?>
+                                        <div class="help-block"></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-3">
+                                <div class="form-group field-cate-sort">
+                                    <div class="col-sm-4 text-right">
+                                        <label class="control-label" for="cate-sort">款式分类：</label>
+                                    </div>
+                                    <div class="col-sm-8">
+                                        <?= \kartik\select2\Select2::widget([
+                                            'name' => 'style_cate_id',
+                                            'value' => $search->style_cate_id,
+                                            'data' => \Yii::$app->styleService->styleCate::getDropDown(),
+                                            'options' => ['placeholder' => "请选择（可多选）", 'multiple' => true, 'style' => "width:180px"],
+                                            'pluginOptions' => [
+                                                'allowClear' => true,
+                                            ],])
+                                        ?>
+                                        <div class="help-block"></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-3">
+                                <div class="form-group field-cate-sort">
+                                    <div class="col-sm-4 text-right">
+                                        <label class="control-label" for="cate-sort">产品线：</label>
+                                    </div>
+                                    <div class="col-sm-8">
+                                        <?= \kartik\select2\Select2::widget([
+                                            'name' => 'product_type_id',
+                                            'value' => $search->product_type_id,
+                                            'data' => \Yii::$app->styleService->productType::getDropDown(),
+                                            'options' => ['placeholder' => "请选择（可多选）", 'multiple' => true, 'style' => "width:180px"],
+                                            'pluginOptions' => [
+                                                'allowClear' => true,
+                                            ],
+                                        ])
+                                        ?>
+                                        <div class="help-block"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-3">
+                                <div class="form-group field-cate-sort">
+                                    <div class="col-sm-4 text-right">
+                                        <label class="control-label" for="cate-sort">款式性别：</label>
+                                    </div>
+                                    <div class="col-sm-8">
+                                        <?= \kartik\select2\Select2::widget([
+                                            'name' => 'style_sex',
+                                            'value' => $search->style_sex,
+                                            'data' => \addons\Style\common\enums\StyleSexEnum::getMap(),
+                                            'options' => ['placeholder' => "请选择", 'multiple' => false, 'style' => "width:180px"],
+                                            'pluginOptions' => [
+                                                'allowClear' => true,
+                                            ],])
+                                        ?>
+                                        <div class="help-block"></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-3">
+                                <div class="form-group field-cate-sort">
+                                    <div class="col-sm-4 text-right">
+                                        <label class="control-label" for="cate-sort">款式材质：</label>
+                                    </div>
+                                    <div class="col-sm-8">
+                                        <?= \kartik\select2\Select2::widget([
+                                            'name' => 'style_material',
+                                            'value' => $search->style_material,
+                                            'data' => \addons\Style\common\enums\StyleMaterialEnum::getMap(),
+                                            'options' => ['placeholder' => "请选择", 'multiple' => false, 'style' => "width:180px"],
+                                            'pluginOptions' => [
+                                                'allowClear' => true,
+                                            ],])
+                                        ?>
+                                        <div class="help-block"></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-3">
+                                <div class="form-group field-cate-sort">
+                                    <div class="col-sm-4 text-right">
+                                        <label class="control-label" for="cate-sort">归属渠道：</label>
+                                    </div>
+                                    <div class="col-sm-8">
+                                        <?= \kartik\select2\Select2::widget([
+                                            'name' => 'style_channel_id',
+                                            'value' => $search->style_channel_id,
+                                            'data' => \Yii::$app->salesService->saleChannel->getDropDown(),
+                                            'options' => ['placeholder' => "请选择（可多选）", 'multiple' => true, 'style' => "width:180px"],
+                                            'pluginOptions' => [
+                                                'allowClear' => true,
+                                            ],])
+                                        ?>
+                                        <div class="help-block"></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-3">
+                                <div class="form-group field-cate-sort">
+                                    <div class="col-sm-4 text-right">
+                                        <label class="control-label" for="cate-sort">款式来源：</label>
+                                    </div>
+                                    <div class="col-sm-8">
+                                        <?= \kartik\select2\Select2::widget([
+                                            'name' => 'style_source_id',
+                                            'value' => $search->style_source_id,
+                                            'data' => \Yii::$app->styleService->styleSource->getDropDown(),
+                                            'options' => ['placeholder' => "请选择（可多选）", 'multiple' => true, 'style' => "width:180px"],
+                                            'pluginOptions' => [
+                                                'allowClear' => true,
+                                            ],])
+                                        ?>
+                                        <div class="help-block"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-3">
+                                <div class="form-group field-cate-sort">
+                                    <div class="col-sm-4 text-right">
+                                        <label class="control-label" for="cate-sort">是否镶嵌：</label>
+                                    </div>
+                                    <div class="col-sm-8">
+                                        <?= \kartik\select2\Select2::widget([
+                                            'name' => 'is_inlay',
+                                            'value' => $search->is_inlay,
+                                            'data' => \addons\Style\common\enums\InlayEnum::getMap(),
+                                            'options' => ['placeholder' => "请选择", 'multiple' => false, 'style' => "width:180px"],
+                                            'pluginOptions' => [
+                                                'allowClear' => true,
+                                            ],])
+                                        ?>
+                                        <div class="help-block"></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-3">
+                                <div class="form-group field-cate-sort">
+                                    <div class="col-sm-4 text-right">
+                                        <label class="control-label" for="cate-sort">是否定制：</label>
+                                    </div>
+                                    <div class="col-sm-8">
+                                        <?= \kartik\select2\Select2::widget([
+                                            'name' => 'is_made',
+                                            'value' => $search->is_made,
+                                            'data' => \common\enums\ConfirmEnum::getMap(),
+                                            'options' => ['placeholder' => "请选择", 'multiple' => false, 'style' => "width:180px"],
+                                            'pluginOptions' => [
+                                                'allowClear' => true,
+                                            ],])
+                                        ?>
+                                        <div class="help-block"></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-3">
+                                <div class="form-group field-cate-sort">
+                                    <div class="col-sm-4 text-right">
+                                        <label class="control-label" for="cate-sort">是否赠品：</label>
+                                    </div>
+                                    <div class="col-sm-8">
+                                        <?= \kartik\select2\Select2::widget([
+                                            'name' => 'is_gift',
+                                            'value' => $search->is_gift,
+                                            'data' => \common\enums\ConfirmEnum::getMap(),
+                                            'options' => ['placeholder' => "请选择", 'multiple' => false, 'style' => "width:180px"],
+                                            'pluginOptions' => [
+                                                'allowClear' => true,
+                                            ],])
+                                        ?>
+                                        <div class="help-block"></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-3">
+                                <div class="form-group field-cate-sort">
+                                    <div class="col-sm-4 text-right">
+                                        <label class="control-label" for="cate-sort">审核状态：</label>
+                                    </div>
+                                    <div class="col-sm-8">
+                                        <?= \kartik\select2\Select2::widget([
+                                            'name' => 'audit_status',
+                                            'value' => $search->audit_status,
+                                            'data' => AuditStatusEnum::getMap(),
+                                            'options' => ['placeholder' => "请选择", 'multiple' => false, 'style' => "width:180px"],
+                                            'pluginOptions' => [
+                                                'allowClear' => true,
+                                            ],])
+                                        ?>
+                                        <div class="help-block"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-3">
+                                <div class="form-group field-cate-sort">
+                                    <div class="col-sm-4 text-right">
+                                        <label class="control-label" for="cate-sort">创建人：</label>
+                                    </div>
+                                    <div class="col-sm-8">
+                                        <?= \kartik\select2\Select2::widget([
+                                            'name' => 'creator_id',
+                                            'value' => $search->creator_id,
+                                            'data' => \Yii::$app->services->backendMember->getDropDown(),
+                                            'options' => ['placeholder' => "请选择"],
+                                            'pluginOptions' => [
+                                                'allowClear' => true,
+                                            ],])
+                                        ?>
+                                        <div class="help-block"></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-3">
+                                <div class="form-group field-cate-sort">
+                                    <div class="col-sm-4 text-right">
+                                        <label class="control-label" for="cate-sort">创建时间：</label>
+                                    </div>
+                                    <div class="col-sm-8">
+                                        <?= DateRangePicker::widget([    // 日期组件
+                                            'model' => $search,
+                                            //'attribute' => 'created_at',
+                                            'name' => 'created_at',
+                                            'value' => $search->created_at,
+                                            'options' => ['readonly' => false, 'class' => 'form-control', 'style' => 'background-color:#fff;width:220px;'],
+                                            'pluginOptions' => [
+                                                'format' => 'yyyy-mm-dd',
+                                                'locale' => [
+                                                    'separator' => '/',
+                                                ],
+                                                'endDate' => date('Y-m-d', time()),
+                                                'todayHighlight' => true,
+                                                'autoclose' => true,
+                                                'todayBtn' => 'linked',
+                                                'clearBtn' => true,
+                                            ],
+                                        ])
+                                        ?>
+                                        <div class="help-block"></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-3">
+                                <div class="form-group field-cate-sort">
+                                    <div class="col-sm-4 text-right">
+                                        <label class="control-label" for="cate-sort">状态：</label>
+                                    </div>
+                                    <div class="col-sm-8">
+                                        <?= \kartik\select2\Select2::widget([
+                                            'name' => 'status',
+                                            'value' => $search->status,
+                                            'data' => StatusEnum::getDestroyMap(),
+                                            'options' => ['placeholder' => "请选择", 'multiple' => false, 'style' => "width:180px"],
+                                            'pluginOptions' => [
+                                                'allowClear' => true,
+                                            ],])
+                                        ?>
+                                        <div class="help-block"></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-3">
+                                <div class="form-group field-cate-sort">
+                                    <div class="col-sm-4 text-right">
+                                        <label class="control-label" for="cate-sort">备注：</label>
+                                    </div>
+                                    <div class="col-sm-8">
+                                        <?= Html::textInput('remark', $search->remark, ['class' => 'form-control', 'placeholder' => '模糊搜索']) ?>
+                                        <div class="help-block"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="box-footer text-center">
+                        <button type="reset" class="btn btn-white btn-sm" onclick="clearSearch1()">重置</button>
+                        <button class="btn btn-primary btn-sm">确定</button>
+                    </div>
+                </div>
+                <?= Html::endForm() ?>
+            </div>
             <div class="box-header">
                 <h3 class="box-title"><?= Html::encode($this->title) ?></h3>
                 <div class="box-tools">
@@ -35,9 +357,9 @@ $this->params['breadcrumbs'][] = $this->title;
                 <?php //echo Html::batchButtons()?>
                 <?= GridView::widget([
                     'dataProvider' => $dataProvider,
-                    'filterModel' => $searchModel,
+                    //'filterModel' => $searchModel,
                     'tableOptions' => ['class' => 'table table-hover'],
-                    'options' => ['style'=>'width:100%;white-space:nowrap;' ],
+                    'options' => ['style' => 'width:100%;white-space:nowrap;'],
                     'showFooter' => false,//显示footer行
                     'id' => 'grid',
                     'columns' => [
@@ -68,7 +390,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         [
                             'attribute' => 'style_sn',
                             'value' => function ($model) {
-                                return Html::a($model->style_sn, ['view', 'id' => $model->id], ['class'=>'openContab','style' => "text-decoration:underline;color:#3c8dbc",'id'=>$model->style_sn]).' <i class="fa fa-copy" onclick="copy(\''. $model->style_sn .'\')"></i>';
+                                return Html::a($model->style_sn, ['view', 'id' => $model->id], ['class' => 'openContab', 'style' => "text-decoration:underline;color:#3c8dbc", 'id' => $model->style_sn]) . ' <i class="fa fa-copy" onclick="copy(\'' . $model->style_sn . '\')"></i>';
                             },
                             'filter' => Html::activeTextInput($searchModel, 'style_sn', [
                                 'class' => 'form-control',
@@ -198,11 +520,11 @@ $this->params['breadcrumbs'][] = $this->title;
                         [
                             'attribute' => 'status',
                             'value' => function ($model) {
-                                 $str = \common\enums\StatusEnum::getValue($model->status,'getDestroyMap');
-                                 if($model->status == StatusEnum::DELETE) {
-                                     $str = "<font color='red'>".$str."</font>";
-                                 }
-                                 return $str;
+                                $str = \common\enums\StatusEnum::getValue($model->status, 'getDestroyMap');
+                                if ($model->status == StatusEnum::DELETE) {
+                                    $str = "<font color='red'>" . $str . "</font>";
+                                }
+                                return $str;
                             },
                             'filter' => Html::activeDropDownList($searchModel, 'status', \common\enums\StatusEnum::getDestroyMap(), [
                                 'prompt' => '全部',
@@ -217,8 +539,8 @@ $this->params['breadcrumbs'][] = $this->title;
                             'header' => '操作',
                             'template' => '{attribute} {image} {apply} {audit} {status} {delete} {destroy}',
                             'buttons' => [
-                               'attribute' => function ($url, $model, $key) {
-                                    if($model->status != \common\enums\StatusEnum::DELETE) {
+                                'attribute' => function ($url, $model, $key) {
+                                    if ($model->status != \common\enums\StatusEnum::DELETE) {
                                         return Html::edit(['style-attribute/edit', 'style_id' => $model->id, 'returnUrl' => Url::getReturnUrl()], '属性', [
                                             'class' => 'btn btn-primary btn-sm openIframe',
                                             'data-width' => '90%',
@@ -227,10 +549,10 @@ $this->params['breadcrumbs'][] = $this->title;
                                         ]);
                                     }
 
-                               },
-                               'image' => function($url, $model, $key){
-                                    if($model->status != \common\enums\StatusEnum::DELETE) {
-                                        return Html::edit(['style-image/ajax-edit-multe','style_id' => $model->id,'returnUrl' => Url::getReturnUrl(),'returnUrl' => Url::getReturnUrl()], '传图', [
+                                },
+                                'image' => function ($url, $model, $key) {
+                                    if ($model->status != \common\enums\StatusEnum::DELETE) {
+                                        return Html::edit(['style-image/ajax-edit-multe', 'style_id' => $model->id, 'returnUrl' => Url::getReturnUrl(), 'returnUrl' => Url::getReturnUrl()], '传图', [
                                             'data-toggle' => 'modal',
                                             'data-target' => '#ajaxModalLg',
                                         ]);
@@ -261,12 +583,12 @@ $this->params['breadcrumbs'][] = $this->title;
                                     }
                                 },
                                 'delete' => function ($url, $model, $key) {
-                                    if($model->audit_status == AuditStatusEnum::SAVE && $model->status == StatusEnum::DISABLED) {
+                                    if ($model->audit_status == AuditStatusEnum::SAVE && $model->status == StatusEnum::DISABLED) {
                                         return Html::delete(['delete', 'id' => $model->id]);
                                     }
                                 },
                                 'destroy' => function ($url, $model, $key) {
-                                    if($model->audit_status == AuditStatusEnum::PASS) {
+                                    if ($model->audit_status == AuditStatusEnum::PASS) {
                                         return Html::destory(['destroy', 'id' => $model->id]);
                                     }
                                 },
@@ -279,3 +601,8 @@ $this->params['breadcrumbs'][] = $this->title;
         </div>
     </div>
 </div>
+<script type="text/javascript">
+    function clearSearch1() {
+        $('#select select').prop('selectedIndex', 0);
+    }
+</script>

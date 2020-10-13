@@ -1739,7 +1739,7 @@ class WarehouseBillTGoodsForm extends WarehouseBillGoodsL
             $msg[] = "克工费与件工费只能填写一个";
         }
         if (!empty($msg)) {
-            $result['msg'] = implode('】,【', $msg);
+            $result['msg'] = implode('】,【', $msg)."[条码号=".$form->goods_id."]";
         }
         return $result;
     }

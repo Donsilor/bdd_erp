@@ -4,6 +4,7 @@ namespace addons\Style\backend\controllers;
 
 use addons\Style\common\enums\LogTypeEnum;
 use addons\Style\common\enums\StonePositionEnum;
+use addons\Style\common\forms\StyleSearchForm;
 use addons\Style\common\models\StoneStyle;
 use addons\Style\common\models\StyleAttribute;
 use addons\Style\common\models\StyleFactory;
@@ -64,24 +65,37 @@ class StyleController extends BaseController
             ],
             'pageSize' => $this->pageSize,
             'relations' => [
-                 'creator' => 'username',
+                'type' => ['name','is_inlay'],
+                'cate' => ['name'],
+                'creator' => ['username'],
             ]
         ]);
-        $dataProvider = $searchModel->search(Yii::$app->request->queryParams,['created_at','updated_at','style_sn','style_name']);
 
+        $search = new StyleSearchForm();
+        $search->attributes = \Yii::$app->request->get();
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams,['created_at']);
+        $dataProvider->query
+            ->andFilterWhere(['in', 'style_sn', $search->style_sns()])
+            ->andFilterWhere(['like', 'style_name', $search->style_name()])
+            ->andFilterWhere(['style_sex'=>$search->style_sex])
+            ->andFilterWhere(['style_material'=>$search->style_material])
+            ->andFilterWhere(['in', 'style_cate_id', $search->styleCateIds()])
+            ->andFilterWhere(['in', 'product_type_id', $search->proTypeIds()])
+            ->andFilterWhere(['in', 'style_source_id', $search->style_source_id])
+            ->andFilterWhere(['in', 'style_channel_id', $search->style_channel_id])
+            ->andFilterWhere([Style::tableName().'.is_inlay'=>$search->is_inlay])
+            ->andFilterWhere(['is_made'=>$search->is_made])
+            ->andFilterWhere(['is_gift'=>$search->is_gift])
+            ->andFilterWhere(['like', Style::tableName().'.remark', $search->style_remark()])
+            ->andFilterWhere([Style::tableName().'.audit_status'=>$search->audit_status])
+            ->andFilterWhere([Style::tableName().'.creator_id'=>$search->creator_id])
+            ->andFilterWhere($search->betweenCreatedAt())
+            ->andFilterWhere([Style::tableName().'.status'=>$search->status]);
 
-        $created_at = $searchModel->created_at;
-        if (count($created_ats = explode('/', $created_at)) == 2) {
-            $dataProvider->query->andFilterWhere(['>=',Style::tableName().'.created_at', strtotime($created_ats[0])]);//起始时间
-            $dataProvider->query->andFilterWhere(['<',Style::tableName().'.created_at', (strtotime($created_ats[1]) + 86400)] );//结束时间
-        }
-
-        $dataProvider->query->andFilterWhere(['like',Style::tableName().'.style_sn', trim($searchModel->style_sn)]);
-        $dataProvider->query->andFilterWhere(['like',Style::tableName().'.style_name', trim($searchModel->style_name)]);
-        $dataProvider->query->andFilterWhere(['>',Style::tableName().'.status',-2]);
         return $this->render('index', [
             'dataProvider' => $dataProvider,
-            'searchModel' => $searchModel, 
+            'searchModel' => $searchModel,
+            'search' => $search,
         ]);
     }
     /**
