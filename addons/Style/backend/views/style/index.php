@@ -30,7 +30,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 <div class="modal-content">
                     <div class="modal-header">
                         <h4 class="modal-title">筛选查询<a
-                                    class="btn-xs btn-primary glyphicon glyphicon-chevron-down searchBox"
+                                    class="btn-xs btn-default glyphicon glyphicon-chevron-down searchBox"
                                     style="float:right;" href="#" role="button">隐藏</a></h4>
                     </div>
                     <div class="modal-body" id="search-content">
