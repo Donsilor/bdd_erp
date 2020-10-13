@@ -67,7 +67,7 @@ class QibanController extends BaseController
         if ($searchModel->created_at) {
             $created_ats = explode('/', $searchModel->created_at);
             $dataProvider->query->andFilterWhere(['>=',Qiban::tableName().'.created_at', strtotime($created_ats[0])]);//起始时间
-            $dataProvider->query->andFilterWhere(['<',Qiban::tableName().'.created_at', strtotime($created_ats[1]) + 86400] );//结束时间
+            $dataProvider->query->andFilterWhere(['<',Qiban::tableName().'.created_at', strtotime($created_ats[1]) + 86400]);//结束时间
         }
         return $this->render($this->action->id, [
             'dataProvider' => $dataProvider,

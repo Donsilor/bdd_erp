@@ -44,7 +44,7 @@ class OrderAddress extends \addons\Sales\common\models\BaseModel
     public function rules()
     {
         return [
-            [['order_id','realname','mobile','country_id','province_id','address_details'], 'required'],
+            [['order_id','realname','mobile','country_id','address_details'], 'required'],
             [['order_id', 'customer_id', 'country_id', 'province_id', 'city_id', 'created_at', 'updated_at'], 'integer'],
             [['firstname', 'lastname', 'city_name'], 'string', 'max' => 100],
             [['realname'], 'string', 'max' => 200],

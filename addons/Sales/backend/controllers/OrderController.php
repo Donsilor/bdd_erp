@@ -43,14 +43,7 @@ class OrderController extends BaseController
      */
     public $modelClass = OrderForm::class;
 
-    public function actionTest()
-    {   
-        $res = Auth::verify('special:1001');
-        var_dump($res);exit;
-        $order_no = '130311942049';
-        Yii::$app->jdSdk->getOrderInfo($order_no);
-        exit;
-    }    
+  
     /**
      * Renders the index view for the module
      * @return string
@@ -64,7 +57,7 @@ class OrderController extends BaseController
                 'scenario' => 'default',
                 'partialMatchAttributes' => [], // 模糊查询
                 'defaultOrder' => [
-                        'order_sn' => SORT_DESC,
+                        'created_at' => SORT_DESC,
                 ],
                 'pageSize' => $this->pageSize,
                 'relations' => [
@@ -74,10 +67,18 @@ class OrderController extends BaseController
                 ]
         ]);
         
-        $dataProvider = $searchModel->search(Yii::$app->request->queryParams, ['created_at', 'customer_mobile', 'customer_email']);
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams, ['created_at', 'customer_mobile', 'customer_email','order_sn']);
         $searchParams = Yii::$app->request->queryParams['SearchModel'] ?? [];
         if($order_status != -1) {
             $dataProvider->query->andWhere(['=', 'order_status', $order_status]);
+        }
+        //订单号搜索
+        if(!empty($searchParams['order_sn'])) {
+            $where = [ 'or',
+                    ['like', Order::tableName().'.order_sn', $searchParams['order_sn']],
+                    ['like', Order::tableName().'.out_trade_no', $searchParams['order_sn']]
+            ];
+            $dataProvider->query->andWhere($where);
         }
         // 联系人搜索
         if(!empty($searchParams['customer_mobile'])) {

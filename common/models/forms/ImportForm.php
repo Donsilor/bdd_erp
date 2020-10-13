@@ -105,8 +105,9 @@ class ImportForm extends Model
             }
         }        
         foreach ($this->attrSelectColumns ?? [] as $attr_id =>$attr_code) {
-            $attr_value =  $this->{$attr_code};
+            $attr_value =  $this->{$attr_code};            
             if($attr_value) {
+                $attr_value = preg_replace("/\[.*\]/is","", $attr_value);//去除[]内容
                 if(!empty($this->_attrCache[$attr_id])) {
                     $map = $this->_attrCache[$attr_id];
                 }else {
