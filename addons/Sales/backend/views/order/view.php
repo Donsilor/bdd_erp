@@ -774,7 +774,7 @@ $this->params['breadcrumbs'][] = $this->title;
             <div class="box" style="margin:0px">
                 <div class="box-header" style="margin:0">
                     <h3 class="box-title"><i class="fa fa-info"></i> 附件信息</h3>
-                    <div class="box-tools" style="right:5%">
+                    <div class="box-tools" style="left:100px">
                         <?= Html::create(['order-attachment/ajax-upload','order_id'=>$order->id], '上传附件', [
                             'data-toggle' => 'modal',
                             'data-target' => '#ajaxModal',
