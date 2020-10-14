@@ -118,8 +118,6 @@ class StyleController extends BaseController
             if($isNewRecord){ 
                 $model->audit_status = AuditStatusEnum::SAVE;
                 $model->creator_id = \Yii::$app->user->id;
-            }else{
-                $model->audit_status = AuditStatusEnum::PENDING;
             }
             $model->is_inlay = $model->type->is_inlay ?? 0;         
             try{                
