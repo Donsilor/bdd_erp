@@ -189,7 +189,7 @@ $(function () {
                     });
 
                     // 重新加载
-                    $(this).trigger('dblclick');
+                    //$(this).trigger('dblclick');
                 }
                 flag = false;
                 return false;

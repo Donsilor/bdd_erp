@@ -91,7 +91,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         if($model->order_from == OrderFromEnum::FROM_EXTERNAL) {
                             $action = 'external-order/view';
                         }
-                        return Html::a($model->order_sn, [$action, 'id' => $model->id,'cronTab'=>Url::to(['index'])], ['class'=>'openContab','style'=>"text-decoration:underline;color:#3c8dbc"]);
+                        return Html::a($model->order_sn, [$action, 'id' => $model->id,'returnUrl'=>Url::to(['index'])], ['class'=>'openContab','style'=>"text-decoration:underline;color:#3c8dbc"]);
                     },
                     'filter' => Html::activeTextInput($searchModel, 'order_sn', [
                         'class' => 'form-control',
