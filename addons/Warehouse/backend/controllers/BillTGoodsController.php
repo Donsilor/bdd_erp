@@ -211,6 +211,24 @@ class BillTGoodsController extends BaseController
     }
 
     /**
+     *
+     * 查看
+     * @return mixed|string|\yii\web\Response
+     * @throws
+     */
+    public function actionShow()
+    {
+        $this->layout = '@backend/views/layouts/iframe';
+        $id = \Yii::$app->request->get('id');
+        $model = $this->findModel($id);
+        $model = $model ?? new WarehouseBillTGoodsForm();
+        $model->biaomiangongyi = explode(',', $model->biaomiangongyi);
+        return $this->render($this->action->id, [
+            'model' => $model,
+        ]);
+    }
+
+    /**
      * ajax更新排序/状态
      *
      * @param $id
