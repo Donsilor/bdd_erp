@@ -26,14 +26,6 @@ $this->params['breadcrumbs'][] = $this->title;
                          <div class="box-body table-responsive">
                              <table class="table table-hover">
                                  <tr>
-                                     <td class="col-xs-3 text-right"><?= $model->getAttributeLabel('lastname') ?>：</td>
-                                     <td><?= $model->lastname ?></td>
-                                 </tr>
-                                 <tr>
-                                     <td class="col-xs-3 text-right"><?= $model->getAttributeLabel('firstname') ?>：</td>
-                                     <td><?= $model->firstname ?></td>
-                                 </tr>
-                                 <tr>
                                      <td class="col-xs-3 text-right"><?= $model->getAttributeLabel('realname') ?>：</td>
                                      <td><?= $model->realname ?></td>
                                  </tr>
@@ -97,14 +89,6 @@ $this->params['breadcrumbs'][] = $this->title;
                      <div class="box" style="margin-bottom: 0px;">
                          <div class="box-body table-responsive" >
                              <table class="table table-hover">
-                                 <tr>
-                                     <td class="col-xs-3 text-right"><?= $model->getAttributeLabel('language') ?>：</td>
-                                     <td><?= \common\enums\LanguageEnum::getValue($model->language) ?></td>
-                                 </tr>
-                                 <tr>
-                                     <td class="col-xs-3 text-right"><?= $model->getAttributeLabel('currency') ?>：</td>
-                                     <td><?= \common\enums\CurrencyEnum::getValue($model->currency) ?></td>
-                                 </tr>
                                  <tr>
                                      <td class="col-xs-3 text-right"><?= $model->getAttributeLabel('google_account') ?>：</td>
                                      <td><?= $model->google_account ?></td>

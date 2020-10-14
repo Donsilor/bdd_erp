@@ -4,6 +4,7 @@ namespace addons\Sales\common\models;
 
 use common\models\backend\Member;
 use Yii;
+use common\enums\ConfirmEnum;
 
 /**
  * This is the model class for table "sales_customer_address".
@@ -22,7 +23,6 @@ use Yii;
  * @property string $address_details 详细地址
  * @property string $zip_code 邮编
  * @property string $mobile 手机号码
- * @property string $mobile_code 手机区号
  * @property string $email 邮箱地址
  * @property int $created_at 创建时间
  * @property int $updated_at 修改时间
@@ -44,13 +44,12 @@ class CustomerAddress extends BaseModel
     {
         return [
                 [['realname','country_id','address_details'], 'required'],
-                [['customer_id', 'country_id', 'province_id', 'city_id', 'created_at', 'updated_at'], 'integer'],
+                [['is_default','customer_id', 'country_id', 'province_id', 'city_id', 'created_at', 'updated_at'], 'integer'],
                 [['firstname', 'lastname', 'city_name'], 'string', 'max' => 100],
                 [['realname'], 'string', 'max' => 200],
                 [['country_name', 'province_name'], 'string', 'max' => 60],
                 [['address_details'], 'string', 'max' => 300],
                 [['zip_code', 'mobile'], 'string', 'max' => 20],
-                [['mobile_code'], 'string', 'max' => 10],
                 [['email'], 'string', 'max' => 150],
         ];
     }
@@ -74,9 +73,9 @@ class CustomerAddress extends BaseModel
                 'city_name' => '城市',
                 'address_details' => '详细地址',
                 'zip_code' => '邮编',
-                'mobile' => '手机号码',
-                'mobile_code' => '手机区号',
-                'email' => '邮箱地址',
+                'mobile' => '手机',
+                'email' => '邮箱',
+                'is_default' => '是否默认',
                 'created_at' => '创建时间',
                 'updated_at' => '修改时间',
         ];
@@ -84,9 +83,18 @@ class CustomerAddress extends BaseModel
     /**
      * @param bool $insert
      * @return bool
-     */
+     */    
     public function beforeSave($insert)
     {
+
+        $count = self::find()->where(['customer_id'=>$this->customer_id,'is_default'=>1])->count();
+        if($count == 0) {
+            $this->is_default = ConfirmEnum::YES;
+        }
+        if($this->is_default == ConfirmEnum::YES){
+            self::updateAll(['is_default'=>ConfirmEnum::NO],['customer_id'=>$this->customer_id]);
+        }
+        
         //更新地区名称
         if($this->country_id > 0) {
             $this->country_name = Yii::$app->area->name($this->country_id);
@@ -97,6 +105,7 @@ class CustomerAddress extends BaseModel
         if($this->city_id > 0) {
             $this->city_name = Yii::$app->area->name($this->city_id);
         }
+        
         return parent::beforeSave($insert);
     }
     /**

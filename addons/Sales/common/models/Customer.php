@@ -43,6 +43,7 @@ use Yii;
  * @property string $invoice_email 接收发票邮箱
  * @property string $remark 备注
  * @property int $status 状态[-1:删除;0:禁用;1启用]
+ * @property int $address_id 默认收货地址id
  * @property int $creator_id 创建人
  * @property int $created_at 创建时间
  * @property int $updated_at 修改时间
@@ -63,7 +64,7 @@ class Customer extends BaseModel
     public function rules()
     {
         return [
-            [['merchant_id', 'channel_id', 'source_id', 'gender', 'marriage', 'country_id', 'province_id', 'city_id', 'area_id', 'age', 'level', 'is_invoice', 'invoice_type', 'invoice_title_type', 'status', 'creator_id', 'created_at', 'updated_at'], 'integer'],
+            [['merchant_id','address_id', 'channel_id', 'source_id', 'gender', 'marriage', 'country_id', 'province_id', 'city_id', 'area_id', 'age', 'level', 'is_invoice', 'invoice_type', 'invoice_title_type', 'status', 'creator_id', 'created_at', 'updated_at'], 'integer'],
             [['firstname', 'lastname', 'invoice_title'], 'string', 'max' => 100],
             [['realname'], 'string', 'max' => 200],
             [['head_portrait', 'google_account', 'facebook_account', 'email', 'invoice_email'], 'string', 'max' => 150],
@@ -117,6 +118,7 @@ class Customer extends BaseModel
             'invoice_email' => '接收发票邮箱',
             'remark' => '备注',
             'status' => '状态',
+            'address_id' => '默认收货地址',    
             'creator_id' => '创建人',
             'created_at' => '创建时间',
             'updated_at' => '修改时间',
@@ -136,29 +138,20 @@ class Customer extends BaseModel
                 $this->creator_id = 0;
             }
         }
+        //生成一条 默认收货地址
+        if($this->address_id == 0 && $this->country_id && $this->address) {            
+            $address = new CustomerAddress();
+            $address->customer_id = $this->id;
+            $address->attributes = $this->toArray();
+            $address->address_details = $this->address;
+            $address->is_default = 1;
+            if(false === $address->save()) {
+                throw new \Exception($this->getErrors($address));
+            }
+            $this->address_id = $address->id;
+        }
         return parent::beforeSave($insert);
     }
-
-    /**
-     * @param bool $insert
-     * @return bool
-     * @throws \yii\base\Exception
-     */
-    /*public function beforeSave($insert)
-    {
-
-        if(RegularHelper::verify('chineseCharacters',$this->lastname.''.$this->firstname)){
-            $realname  = $this->lastname.''.$this->firstname;
-        }else {
-            $realname  = $this->firstname.' '.$this->lastname;
-        }
-        if(trim($realname) != '' && $realname != $this->realname){
-            $this->realname = $realname;
-        }
-
-        return parent::beforeSave($insert);
-    }*/
-
     /**
      * 销售渠道 一对一
      * @return \yii\db\ActiveQuery
