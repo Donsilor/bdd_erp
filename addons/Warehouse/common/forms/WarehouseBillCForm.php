@@ -2,10 +2,10 @@
 
 namespace addons\Warehouse\common\forms;
 
-use addons\Warehouse\common\enums\DeliveryTypeEnum;
-use addons\Warehouse\common\enums\GoodsStatusEnum;
 use addons\Warehouse\common\models\WarehouseBill;
 use addons\Warehouse\common\models\WarehouseGoods;
+use addons\Warehouse\common\enums\GoodsStatusEnum;
+use addons\Warehouse\common\enums\DeliveryTypeEnum;
 use common\helpers\ArrayHelper;
 use common\helpers\StringHelper;
 
@@ -29,8 +29,9 @@ class WarehouseBillCForm extends WarehouseBill
     {
         $rules = [
             [['delivery_type', 'channel_id'], 'required'],
-            [['goods', 'goods_ids'], 'string'],
+            [['goods_ids'], 'string'],
             [['bill_no'], 'match', 'pattern' => "/^[A-Z][A-Z0-9-]*$/", 'message' => '单据编号必须大写英文字母开头，只能包含大写字母，英文横杠，数字'],
+            [['goods'], 'safe']
         ];
         return array_merge(parent::rules(), $rules);
     }
@@ -123,6 +124,13 @@ class WarehouseBillCForm extends WarehouseBill
         if($goodsIds){
             $goodsList = WarehouseGoods::find()->where(['goods_id'=>$goodsIds])->all();
             foreach ($goodsList as $goods) {
+                $finger = "";
+                if($goods->finger){
+                    $finger.= \Yii::$app->attr->valueName($goods->finger)."(美)";
+                }
+                if($goods->finger_hk){
+                    $finger.= \Yii::$app->attr->valueName($goods->finger_hk)."(港)";
+                }
                 $searchGoods[] = [
                     'id' => null,
                     'goods_id' => $goods->goods_id,
@@ -132,21 +140,19 @@ class WarehouseBillCForm extends WarehouseBill
                     'style_sn' => $goods->style_sn,
                     'goods_name' => $goods->goods_name,
                     'stock_num' => $goods->goods_num,
-                    'goods_num' => $goods->goods_num > 1 ? "" : $goods->goods_num,
+                    'goods_num' => 1,
                     'put_in_type' => $goods->put_in_type,
                     'warehouse_id' => $goods->warehouse_id,
                     'from_warehouse_id' => $goods->warehouse_id,
-                    'material_type' => $goods->material_type,
-                    'material_color' => $goods->material_color,
-                    'gold_weight' => $goods->gold_weight,
-                    'gold_loss' => $goods->gold_loss,
+                    'material_type' => \Yii::$app->attr->valueName($goods->material_type) ?? "",
+                    'material_color' => \Yii::$app->attr->valueName($goods->material_color) ?? "",
+                    'finger' => $finger,
+                    'product_size' => $goods->product_size,
+                    'suttle_weight' => $goods->suttle_weight,
                     'diamond_carat' => $goods->diamond_carat,
-                    'diamond_color' => $goods->diamond_color,
-                    'diamond_clarity' => $goods->diamond_clarity,
-                    'diamond_cert_id' => $goods->diamond_cert_id,
+                    'main_stone_num' => $goods->main_stone_num,
                     'cost_price' => $goods->cost_price,
-                    'sale_price' => $goods->market_price,
-                    'market_price' => $goods->market_price,
+                    'cost_amount' => $goods->cost_amount,
                 ];
             }
         }
@@ -179,4 +185,5 @@ class WarehouseBillCForm extends WarehouseBill
         }
         return $message;
     }
+
 }

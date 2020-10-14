@@ -25,10 +25,11 @@ $this->params['breadcrumbs'][] = $this->title;
                     <div class="col-sm-6">
                         <div>
                             <label class="control-label" style="vertical-align:top">
-                                操作日志提示
+                                操作日志提示：
                             </label>
                         </div>
-                        <div id="search_logs" title="系统日志" style="width:100%; height:120px; padding:5px; color:red; border:1px solid #cecece;overflow:scroll">
+                        <div id="search_logs" title="系统日志"
+                             style="width:100%; height:100px; padding:5px; color:red; border:1px solid #cecece;overflow:scroll">
                             <?= $message ?>
                         </div>
                     </div>
@@ -47,7 +48,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                     'options' => [
                                         'class' => 'input-priority',
                                         'readonly' => 'true',
-                                        'style' => 'width:160px'
+                                        'style' => 'width:120px'
                                     ]
                                 ],
                                 [
@@ -57,7 +58,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                     'options' => [
                                         'class' => 'input-priority',
                                         'readonly' => 'true',
-                                        'style' => 'width:160px'
+                                        'style' => 'width:100px'
                                     ]
                                 ],
                                 [
@@ -67,8 +68,21 @@ $this->params['breadcrumbs'][] = $this->title;
                                     'options' => [
                                         'class' => 'input-priority',
                                         'readonly' => 'true',
-                                        'style' => 'width:120px'
+                                        'style' => 'width:140px'
                                     ]
+                                ],
+                                [
+                                    'name' => "warehouse_id",
+                                    'title' => "仓库",
+                                    'enableError' => false,
+                                    'type' => 'dropDownList',
+                                    'options' => [
+                                        'class' => 'input-priority',
+                                        'disabled' => 'true',
+                                        'style' => 'width:140px',
+                                        'prompt' => '请选择',
+                                    ],
+                                    'items' => $gModel->getWarehouseMap()
                                 ],
                                 [
                                     'name' => 'stock_num',
@@ -81,174 +95,81 @@ $this->params['breadcrumbs'][] = $this->title;
                                     ]
                                 ],
                                 [
-                                    'name' => 'goods_num',
-                                    'title' => "出库数量",
-                                    'enableError' => false,
-                                    'options' => [
-                                        'class' => 'input-priority',
-                                        'style' => 'width:60px'
-                                    ]
-                                ],
-                                [
-                                    'name' => "put_in_type",
-                                    'title' => "入库方式",
-                                    'enableError' => false,
-                                    'type' => 'dropDownList',
-                                    'options' => [
-                                        'class' => 'input-priority',
-                                        'disabled' => 'true',
-                                        'style' => 'width:120px',
-                                        'prompt' => '请选择',
-                                    ],
-                                    'items' => $gModel->getPutInTypeMap()
-                                ],
-                                [
-                                    'name' => "warehouse_id",
-                                    'title' => "仓库",
-                                    'enableError' => false,
-                                    'type' => 'dropDownList',
-                                    'options' => [
-                                        'class' => 'input-priority',
-                                        'disabled' => 'true',
-                                        'style' => 'width:120px',
-                                        'prompt' => '请选择',
-                                    ],
-                                    'items' => $gModel->getWarehouseMap()
-                                ],
-                                [
-                                    'name' => "material_type",
+                                    'name' => 'material_type',
                                     'title' => "材质",
                                     'enableError' => false,
-                                    'type' => 'dropDownList',
                                     'options' => [
                                         'class' => 'input-priority',
-                                        'disabled' => 'true',
-                                        'style' => 'width:120px',
-                                        'prompt' => '请选择',
-                                    ],
-                                    'defaultValue' => 0,
-                                    'items' => $gModel->getMaterialTypeMap()
-                                ],
-                                [
-                                    'name' => "material_color",
-                                    'title' => "材质颜色",
-                                    'enableError' => false,
-                                    'type' => 'dropDownList',
-                                    'options' => [
-                                        'class' => 'input-priority',
-                                        'disabled' => 'true',
-                                        'style' => 'width:120px',
-                                        'prompt' => '请选择',
-                                    ],
-                                    'defaultValue' => 0,
-                                    'items' => $gModel->getMaterialColorMap()
-                                ],
-                                [
-                                    'name' => "gold_weight",
-                                    'title' => "金重",
-                                    'enableError' => false,
-                                    'defaultValue' => 0,
-                                    'options' => [
-                                        'class' => 'input-priority',
-                                        'type' => 'number',
                                         'readonly' => 'true',
                                         'style' => 'width:80px'
                                     ]
                                 ],
                                 [
-                                    'name' => "gold_loss",
-                                    'title' => "金损",
+                                    'name' => 'finger',
+                                    'title' => "手寸",
+                                    'enableError' => false,
+                                    'options' => [
+                                        'class' => 'input-priority',
+                                        'readonly' => 'true',
+                                        'style' => 'width:80px'
+                                    ]
+                                ],
+                                [
+                                    'name' => "suttle_weight",
+                                    'title' => "连石重(g)",
                                     'enableError' => false,
                                     'defaultValue' => 0,
                                     'options' => [
                                         'class' => 'input-priority',
                                         'type' => 'number',
                                         'readonly' => 'true',
-                                        'style' => 'width:80px'
+                                        'style' => 'width:75px'
+                                    ]
+                                ],
+                                [
+                                    'name' => "main_stone_num",
+                                    'title' => "主石粒数",
+                                    'enableError' => false,
+                                    'defaultValue' => 0,
+                                    'options' => [
+                                        'class' => 'input-priority',
+                                        'readonly' => 'true',
+                                        'style' => 'width:75px'
                                     ]
                                 ],
                                 [
                                     'name' => "diamond_carat",
-                                    'title' => "钻石大小",
+                                    'title' => "主石重(ct)",
                                     'enableError' => false,
+                                    'defaultValue' => 0,
                                     'options' => [
                                         'class' => 'input-priority',
                                         'readonly' => 'true',
-                                        'style' => 'width:80px'
+                                        'style' => 'width:75px'
                                     ]
                                 ],
                                 [
-                                    'name' => "diamond_color",
-                                    'title' => "钻石颜色",
-                                    'enableError' => false,
-                                    'type' => 'dropDownList',
-                                    'options' => [
-                                        'class' => 'input-priority',
-                                        'disabled' => 'true',
-                                        'style' => 'width:100px',
-                                        'prompt' => '请选择',
-                                    ],
-                                    'items' => \Yii::$app->attr->valueMap(\addons\Purchase\common\enums\ReceiptGoodsAttrEnum::MAIN_STONE_COLOR)
-                                ],
-                                [
-                                    'name' => "diamond_clarity",
-                                    'title' => "钻石净度",
-                                    'enableError' => false,
-                                    'type' => 'dropDownList',
-                                    'options' => [
-                                        'class' => 'input-priority',
-                                        'disabled' => 'true',
-                                        'style' => 'width:100px',
-                                        'prompt' => '请选择',
-                                    ],
-                                    'items' => \Yii::$app->attr->valueMap(\addons\Purchase\common\enums\ReceiptGoodsAttrEnum::MAIN_STONE_CLARITY)
-                                ],
-                                [
-                                    'name' => "diamond_cert_id",
-                                    'title' => "证书号",
+                                    'name' => 'product_size',
+                                    'title' => "尺寸",
                                     'enableError' => false,
                                     'options' => [
                                         'class' => 'input-priority',
                                         'readonly' => 'true',
-                                        'style' => 'width:80px'
+                                        'style' => 'width:60px'
                                     ]
                                 ],
                                 [
                                     'name' => "cost_price",
-                                    'title' => "成本价",
+                                    'title' => "采购成本/单价",
                                     'enableError' => false,
                                     'defaultValue' => 0,
                                     'options' => [
                                         'class' => 'input-priority',
                                         'type' => 'number',
                                         'readonly' => 'true',
-                                        'style' => 'width:80px'
+                                        'style' => 'width:100px'
                                     ]
                                 ],
-                                [
-                                    'name' => "sale_price",
-                                    'title' => "销售价",
-                                    'enableError' => false,
-                                    'defaultValue' => 0,
-                                    'options' => [
-                                        'class' => 'input-priority',
-                                        'type' => 'number',
-                                        'readonly' => 'true',
-                                        'style' => 'width:80px'
-                                    ]
-                                ],
-                                [
-                                    'name' => "market_price",
-                                    'title' => "市场价",
-                                    'enableError' => false,
-                                    'defaultValue' => 0,
-                                    'options' => [
-                                        'class' => 'input-priority',
-                                        'type' => 'number',
-                                        'readonly' => 'true',
-                                        'style' => 'width:80px'
-                                    ]
-                                ]
                             ]
                         ])->label(false) ?>
                     </div>

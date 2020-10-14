@@ -266,9 +266,10 @@ class BillCController extends BaseController
     }
 
     /**
-     * 其它出库单-关闭
      *
+     * 取消单据
      * @param $id
+     * @throws
      * @return mixed
      */
     public function actionCancel($id)
