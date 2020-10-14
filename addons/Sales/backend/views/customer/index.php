@@ -68,14 +68,14 @@ $this->params['breadcrumbs'][] = ['label' => $this->title];
                             'attribute' => 'mobile',
                             'headerOptions' => ['class' => 'col-md-1'],
                         ],
-                        [
+                        /*[
                             'attribute' => 'home_phone',
                             'headerOptions' => ['class' => 'col-md-1'],
                         ],
                         [
                             'attribute' => 'qq',
                             'headerOptions' => ['class' => 'col-md-1'],
-                        ],
+                        ], */
                         [
                             'attribute' => 'email',
                             'headerOptions' => ['class' => 'col-md-1'],
