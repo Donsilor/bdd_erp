@@ -205,6 +205,15 @@ class Order extends BaseModel
     }
     
     /**
+     * 对应附件模型列表
+     * @return \yii\db\ActiveQuery
+     */
+    public function getAttachments()
+    {
+        return $this->hasMany(OrderAttachment::class,['order_id'=>'id'])->alias("attachments");
+    }
+    
+    /**
      * 对应买家模型
      * @return \yii\db\ActiveQuery
      */

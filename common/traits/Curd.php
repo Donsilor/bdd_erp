@@ -99,10 +99,10 @@ trait Curd
     public function actionDelete($id)
     {
         if ($this->findModel($id)->delete()) {
-            return $this->message("删除成功", $this->redirect(['index']));
+            return $this->message("删除成功", $this->redirect(Yii::$app->request->referrer));
         }
 
-        return $this->message("删除失败", $this->redirect(['index']), 'error');
+        return $this->message("删除失败", $this->redirect(Yii::$app->request->referrer), 'error');
     }
 
     /**
