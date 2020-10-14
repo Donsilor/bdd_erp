@@ -2,6 +2,7 @@
 
 namespace addons\Warehouse\backend\controllers;
 
+use addons\Warehouse\common\enums\AdjustTypeEnum;
 use Yii;
 use common\traits\Curd;
 use common\helpers\Url;
@@ -125,11 +126,13 @@ class BillCGoodsController extends BaseController
             return ResultHelper::json(422, $e->getMessage());
         }
     }
+
     /**
-     * ajax 更新商品明细
      *
+     * ajax 更新商品明细
      * @param $id
      * @return array
+     * @throws
      */
     public function actionAjaxUpdate($id)
     {
@@ -137,20 +140,22 @@ class BillCGoodsController extends BaseController
             return ResultHelper::json(404, '找不到数据');
         }
         $data = Yii::$app->request->get();
+        $former_num = $model->goods_num;
         $model->attributes = ArrayHelper::filter($data, array_keys($data));
-        try{
+        try {
             $trans = Yii::$app->trans->beginTransaction();
             if (!$model->save()) {
                 return ResultHelper::json(422, $this->getError($model));
             }
+            \Yii::$app->warehouseService->warehouseGoods->syncStockNum($model->goods_id, $model->goods_num, AdjustTypeEnum::MINUS, $former_num);
             \Yii::$app->warehouseService->billC->billCSummary($model->bill_id);
             $trans->commit();
             return ResultHelper::json(200, '修改成功');
-        }catch (\Exception $e) {
+        } catch (\Exception $e) {
             $trans->rollback();
-            return ResultHelper::json(404, '找不到数据');
+            return ResultHelper::json(404, $e->getMessage());
         }
-        
+
     }
     
     /**
@@ -166,6 +171,7 @@ class BillCGoodsController extends BaseController
         $bill_id = Yii::$app->request->get('bill_id');
         $goods_ids = Yii::$app->request->get('goods_ids');
         $message = Yii::$app->request->get('message');
+        $gModel = new WarehouseBillCGoodsForm();
         $billM = WarehouseBillCForm::findOne($bill_id);
         $billM = $billM ?? new WarehouseBillCForm();
         $billM->goods_ids = $goods_ids;
@@ -189,6 +195,7 @@ class BillCGoodsController extends BaseController
         }
         return $this->render($this->action->id, [
             'model' => $billM,
+            'gModel' => $gModel,
             'message' => $message,
             'searchGoods' => $searchGoods
         ]);
@@ -253,6 +260,9 @@ class BillCGoodsController extends BaseController
 
             //更新库存表商品状态为库存
             WarehouseGoods::updateAll(['goods_status'=>GoodsStatusEnum::IN_STOCK],['goods_id'=>$billGoods->goods_id]);
+
+            //还原库存
+            \Yii::$app->warehouseService->warehouseGoods->syncStockNum($billGoods->goods_id, $billGoods->goods_num, AdjustTypeEnum::ADD);
             $trans->commit();
             return $this->message("删除成功", $this->redirect(['bill-c-goods/index','bill_id'=>$bill_id]));
         }catch (\Exception $e){

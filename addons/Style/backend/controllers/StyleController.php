@@ -217,6 +217,7 @@ class StyleController extends BaseController
                 return $this->message("保存成功", $this->redirect(\Yii::$app->request->referrer), 'success');
             } catch (\Exception $e) {
                 $trans->rollBack();
+                //var_dump($e->getTraceAsString());die;
                 return $this->message($e->getMessage(), $this->redirect(\Yii::$app->request->referrer), 'error');
             }
         }

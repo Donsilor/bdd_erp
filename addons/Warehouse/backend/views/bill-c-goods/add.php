@@ -1,12 +1,9 @@
 <?php
 
-use unclead\multipleinput\MultipleInput;
-use yii\widgets\ActiveForm;
 use common\helpers\Html;
 use common\helpers\Url;
-use addons\Style\common\enums\AttrTypeEnum;
-use addons\Purchase\common\enums\PurchaseGoodsTypeEnum;
-use addons\Style\common\enums\StyleSexEnum;
+use unclead\multipleinput\MultipleInput;
+use yii\widgets\ActiveForm;
 
 $this->title = '新增货品';
 $this->params['breadcrumbs'][] = ['label' => 'Curd', 'url' => ['index']];
@@ -28,214 +25,153 @@ $this->params['breadcrumbs'][] = $this->title;
                     <div class="col-sm-6">
                         <div>
                             <label class="control-label" style="vertical-align:top">
-                                操作日志提示
+                                操作日志提示：
                             </label>
                         </div>
                         <div id="search_logs" title="系统日志"
-                             style="width:100%; height:120px; padding:5px; color:red; border:1px solid #cecece;overflow:scroll">
-                            <?= $message?>
+                             style="width:100%; height:100px; padding:5px; color:red; border:1px solid #cecece;overflow:scroll">
+                            <?= $message ?>
                         </div>
                     </div>
                 </div>
                 <div class="box-body table-responsive">
                     <div class="tab-content">
-                        <?php
-                        $warehouseColomns = [
-                            [
-                                'name' => 'goods_id',
-                                'title' => "货号",
-                                'enableError' => false,
-                                'options' => [
-                                    'class' => 'input-priority',
-                                    'readonly' => 'true',
-                                    'style' => 'width:160px'
-                                ]
-                            ],
-                            [
-                                'name' => 'style_sn',
-                                'title' => "款号",
-                                'enableError' => false,
-                                'options' => [
-                                    'class' => 'input-priority',
-                                    'readonly' => 'true',
-                                    'style' => 'width:160px'
-                                ]
-                            ],
-                            [
-                                'name' => 'goods_name',
-                                'title' => "商品名称",
-                                'enableError' => false,
-                                'options' => [
-                                    'class' => 'input-priority',
-                                    'readonly' => 'true',
-                                    'style' => 'width:120px'
-                                ]
-                            ],
-
-                            [
-                                'name' => 'goods_num',
-                                'title' => "商品数量",
-                                'enableError' => false,
-                                'options' => [
-                                    'class' => 'input-priority',
-                                    'readonly' => 'true',
-                                    'style' => 'width:60px'
-                                ]
-                            ],
-                            [
-                                'name' => "put_in_type",
-                                'title' => "入库方式",
-                                'enableError' => false,
-                                'type' => 'dropDownList',
-                                'options' => [
-                                    'class' => 'input-priority',
-                                    'disabled' => 'true',
-                                    'style' => 'width:120px',
-                                    'prompt' => '请选择',
-                                ],
-                                'items' => \addons\Warehouse\common\enums\PutInTypeEnum::getMap()
-                            ],
-                            [
-                                'name' => "warehouse_id",
-                                'title' => "仓库",
-                                'enableError' => false,
-                                'type' => 'dropDownList',
-                                'options' => [
-                                    'class' => 'input-priority',
-                                    'disabled' => 'true',
-                                    'style' => 'width:120px',
-                                    'prompt' => '请选择',
-                                ],
-                                'items' => Yii::$app->warehouseService->warehouse::getDropDown()
-                            ],
-                            [
-                                'name' => "material",
-                                'title' => "主成色",
-                                'enableError' => false,
-                                'type' => 'dropDownList',
-                                'options' => [
-                                    'class' => 'input-priority',
-                                    'disabled' => 'true',
-                                    'style' => 'width:120px',
-                                    'prompt' => '请选择',
-                                ],
-                                'defaultValue' => 0,
-                                'items' => \Yii::$app->attr->valueMap(\addons\Purchase\common\enums\ReceiptGoodsAttrEnum::MATERIAL)
-                            ],
-                            [
-                                'name' => "gold_weight",
-                                'title' => "金重",
-                                'enableError' => false,
-                                'defaultValue' => 0,
-                                'options' => [
-                                    'class' => 'input-priority',
-                                    'type' => 'number',
-                                    'readonly' => 'true',
-                                    'style' => 'width:80px'
-                                ]
-                            ],
-                            [
-                                'name' => "gold_loss",
-                                'title' => "金损",
-                                'enableError' => false,
-                                'defaultValue' => 0,
-                                'options' => [
-                                    'class' => 'input-priority',
-                                    'type' => 'number',
-                                    'readonly' => 'true',
-                                    'style' => 'width:80px'
-                                ]
-                            ],
-                            [
-                                'name' => "diamond_carat",
-                                'title' => "钻石大小",
-                                'enableError' => false,
-                                'options' => [
-                                    'class' => 'input-priority',
-                                    'readonly' => 'true',
-                                    'style' => 'width:80px'
-                                ]
-                            ],
-                            [
-                                'name' => "diamond_color",
-                                'title' => "钻石颜色",
-                                'enableError' => false,
-                                'type' => 'dropDownList',
-                                'options' => [
-                                    'class' => 'input-priority',
-                                    'disabled' => 'true',
-                                    'style' => 'width:100px',
-                                    'prompt' => '请选择',
-                                ],
-                                'items' => \Yii::$app->attr->valueMap(\addons\Purchase\common\enums\ReceiptGoodsAttrEnum::MAIN_STONE_COLOR)
-                            ],
-                            [
-                                'name' => "diamond_clarity",
-                                'title' => "钻石净度",
-                                'enableError' => false,
-                                'type' => 'dropDownList',
-                                'options' => [
-                                    'class' => 'input-priority',
-                                    'disabled' => 'true',
-                                    'style' => 'width:100px',
-                                    'prompt' => '请选择',
-                                ],
-                                'items' => \Yii::$app->attr->valueMap(\addons\Purchase\common\enums\ReceiptGoodsAttrEnum::MAIN_STONE_CLARITY)
-                            ],
-                            [
-                                'name' => "diamond_cert_id",
-                                'title' => "证书号",
-                                'enableError' => false,
-                                'options' => [
-                                    'class' => 'input-priority',
-                                    'readonly' => 'true',
-                                    'style' => 'width:80px'
-                                ]
-                            ],
-                            [
-                                'name' => "cost_price",
-                                'title' => "成本价",
-                                'enableError' => false,
-                                'defaultValue' => 0,
-                                'options' => [
-                                    'class' => 'input-priority',
-                                    'type' => 'number',
-                                    'readonly' => 'true',
-                                    'style' => 'width:80px'
-                                ]
-                            ],
-                            [
-                                'name' => "sale_price",
-                                'title' => "销售价",
-                                'enableError' => false,
-                                'defaultValue' => 0,
-                                'options' => [
-                                    'class' => 'input-priority',
-                                    'type' => 'number',
-                                    'readonly' => 'true',
-                                    'style' => 'width:80px'
-                                ]
-                            ],
-                            [
-                                'name' => "market_price",
-                                'title' => "市场价",
-                                'enableError' => false,
-                                'defaultValue' => 0,
-                                'options' => [
-                                    'class' => 'input-priority',
-                                    'type' => 'number',
-                                    'readonly' => 'true',
-                                    'style' => 'width:80px'
-                                ]
-                            ]
-                        ];
-                        ?>
-                        <?= unclead\multipleinput\MultipleInput::widget([
-                            'name' => "bill_goods",
+                        <?= $form->field($model, 'goods')->widget(MultipleInput::className(), [
+                            'max' => 99,
                             'addButtonOptions' => ['label' => '', 'class' => ''],
                             'value' => $searchGoods,
-                            'columns' => $warehouseColomns,
-                        ]) ?>
+                            'columns' => [
+                                [
+                                    'name' => 'goods_id',
+                                    'title' => "货号",
+                                    'enableError' => false,
+                                    'options' => [
+                                        'class' => 'input-priority',
+                                        'readonly' => 'true',
+                                        'style' => 'width:120px'
+                                    ]
+                                ],
+                                [
+                                    'name' => 'style_sn',
+                                    'title' => "款号",
+                                    'enableError' => false,
+                                    'options' => [
+                                        'class' => 'input-priority',
+                                        'readonly' => 'true',
+                                        'style' => 'width:100px'
+                                    ]
+                                ],
+                                [
+                                    'name' => 'goods_name',
+                                    'title' => "商品名称",
+                                    'enableError' => false,
+                                    'options' => [
+                                        'class' => 'input-priority',
+                                        'readonly' => 'true',
+                                        'style' => 'width:140px'
+                                    ]
+                                ],
+                                [
+                                    'name' => "warehouse_id",
+                                    'title' => "仓库",
+                                    'enableError' => false,
+                                    'type' => 'dropDownList',
+                                    'options' => [
+                                        'class' => 'input-priority',
+                                        'disabled' => 'true',
+                                        'style' => 'width:140px',
+                                        'prompt' => '请选择',
+                                    ],
+                                    'items' => $gModel->getWarehouseMap()
+                                ],
+                                [
+                                    'name' => 'stock_num',
+                                    'title' => "库存数量",
+                                    'enableError' => false,
+                                    'options' => [
+                                        'class' => 'input-priority',
+                                        'readonly' => 'true',
+                                        'style' => 'width:60px'
+                                    ]
+                                ],
+                                [
+                                    'name' => 'material_type',
+                                    'title' => "材质",
+                                    'enableError' => false,
+                                    'options' => [
+                                        'class' => 'input-priority',
+                                        'readonly' => 'true',
+                                        'style' => 'width:80px'
+                                    ]
+                                ],
+                                [
+                                    'name' => 'finger',
+                                    'title' => "手寸",
+                                    'enableError' => false,
+                                    'options' => [
+                                        'class' => 'input-priority',
+                                        'readonly' => 'true',
+                                        'style' => 'width:80px'
+                                    ]
+                                ],
+                                [
+                                    'name' => "suttle_weight",
+                                    'title' => "连石重(g)",
+                                    'enableError' => false,
+                                    'defaultValue' => 0,
+                                    'options' => [
+                                        'class' => 'input-priority',
+                                        'type' => 'number',
+                                        'readonly' => 'true',
+                                        'style' => 'width:75px'
+                                    ]
+                                ],
+                                [
+                                    'name' => "main_stone_num",
+                                    'title' => "主石粒数",
+                                    'enableError' => false,
+                                    'defaultValue' => 0,
+                                    'options' => [
+                                        'class' => 'input-priority',
+                                        'readonly' => 'true',
+                                        'style' => 'width:75px'
+                                    ]
+                                ],
+                                [
+                                    'name' => "diamond_carat",
+                                    'title' => "主石重(ct)",
+                                    'enableError' => false,
+                                    'defaultValue' => 0,
+                                    'options' => [
+                                        'class' => 'input-priority',
+                                        'readonly' => 'true',
+                                        'style' => 'width:75px'
+                                    ]
+                                ],
+                                [
+                                    'name' => 'product_size',
+                                    'title' => "尺寸",
+                                    'enableError' => false,
+                                    'options' => [
+                                        'class' => 'input-priority',
+                                        'readonly' => 'true',
+                                        'style' => 'width:60px'
+                                    ]
+                                ],
+                                [
+                                    'name' => "cost_price",
+                                    'title' => "采购成本/单价",
+                                    'enableError' => false,
+                                    'defaultValue' => 0,
+                                    'options' => [
+                                        'class' => 'input-priority',
+                                        'type' => 'number',
+                                        'readonly' => 'true',
+                                        'style' => 'width:100px'
+                                    ]
+                                ],
+                            ]
+                        ])->label(false) ?>
                     </div>
                 </div>
                 <!-- ./box-body -->
@@ -265,15 +201,8 @@ $this->params['breadcrumbs'][] = $this->title;
             success: function (data) {
                 if (parseInt(data.code) == 200) {
                     var url = "<?= Url::buildUrl(\Yii::$app->request->url, [], ['goods_ids', 'message'])?>&goods_ids=" + data.data.valid_goods_ids + "&message=" + data.data.message;
-                    console.log(url);
                     window.location.href = url;
                 }
-                //if (parseInt(data.code) == 200) {
-                //    //$('#search_logs').html(data.message);//日志显示
-                //    window.location.href = "<?//= Url::buildUrl(\Yii::$app->request->url,[],['goods_ids', 'message'])?>//&goods_ids="+data.goods_ids+"message="+data.message;
-                //}else{
-                //    $('#search_logs').html(data.message);//日志显示
-                //}
             }
         });
     }

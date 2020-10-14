@@ -2,10 +2,12 @@
 
 namespace addons\Warehouse\services;
 
+use addons\Warehouse\common\enums\GoodsStatusEnum;
 use common\helpers\Url;
 use common\components\Service;
 use addons\Warehouse\common\models\WarehouseGoods;
 use addons\Warehouse\common\models\WarehouseGoodsLog;
+use addons\Warehouse\common\enums\AdjustTypeEnum;
 use addons\Style\common\enums\StyleSexEnum;
 use common\enums\AuditStatusEnum;
 
@@ -140,12 +142,34 @@ class WarehouseGoodsService extends Service
 
     }
 
-
-
-
-
-
-
-
-
+    /**
+     *
+     * 同步库存数量
+     * @param string $goods_id
+     * @param int $modify_num
+     * @param int $adjust_type
+     * @param int $former_num
+     * @throws \Exception
+     */
+    public function syncStockNum($goods_id, $modify_num, $adjust_type, $former_num = 0)
+    {
+        $goodsM = WarehouseGoods::findOne(['goods_id' => $goods_id]);
+        if ($goodsM) {
+            if($modify_num<0){
+                throw new \Exception("调整数量不能为负数");
+            }
+            if ($adjust_type == AdjustTypeEnum::ADD) {
+                $goodsM->stock_num = $goodsM->stock_num + $modify_num;
+            } elseif ($adjust_type == AdjustTypeEnum::MINUS) {
+                $effectNum = $goodsM->stock_num + $former_num - $modify_num;
+                if ($effectNum < 0) {
+                    throw new \Exception("调整数量不能大于库存数量[NUM=" . ($goodsM->stock_num + $former_num) . "]");
+                }
+                $goodsM->stock_num = $goodsM->stock_num + $former_num - $modify_num;
+            }
+            if (false === $goodsM->save(['id', 'stock_num'])) {
+                throw new \Exception($this->getError($goodsM));
+            }
+        }
+    }
 }
