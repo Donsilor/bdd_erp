@@ -107,7 +107,23 @@ class Style extends BaseModel
             'created_at' => '创建时间',
             'updated_at' => '更新时间',
         ];
-    }    
+    }  
+    /**
+     * @param bool $insert
+     * @return bool
+     */
+    public function beforeSave($insert)
+    {
+        if ($this->isNewRecord) {
+            if(isset(Yii::$app->user)) {
+                $this->creator_id = Yii::$app->user->identity->getId();
+            }else{
+                $this->creator_id = 0;
+            }
+        }        
+        return parent::beforeSave($insert);
+    }
+    
     /**
      * 关联产品线分类一对一
      * @return \yii\db\ActiveQuery

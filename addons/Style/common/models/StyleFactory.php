@@ -84,8 +84,8 @@ class StyleFactory extends BaseModel
             $this->creator_id = Yii::$app->user->id;
 
             //如果第一次添加，则强制默认为第一张
-            $style_factory = self::find()->where(['style_id'=>$this->style_id])->all();
-            if(empty($style_factory)) $this->is_default = ConfirmEnum::YES;
+            $count = self::find()->where(['style_id'=>$this->style_id])->count();
+            if($count == 0) $this->is_default = ConfirmEnum::YES;
         }
 
         if($this->is_default == ConfirmEnum::YES){

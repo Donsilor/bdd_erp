@@ -148,11 +148,11 @@ class CustomerController extends BaseController
                     \Yii::$app->salesService->customer->createCustomerNo($model);
                 }
                 $trans->commit();
+                return $this->message("保存成功", $this->redirect(\Yii::$app->request->referrer), 'success');
             }catch (Exception $e){
                 $trans->rollBack();
                 return $this->message("保存失败:".$e->getMessage(), $this->redirect([$this->action->id,'id'=>$model->id]), 'error');
-            }
-            return $this->message("保存成功", $this->redirect(\Yii::$app->request->referrer), 'success');
+            }            
         }
         return $this->render($this->action->id, [
             'model' => $model,

@@ -115,9 +115,8 @@ class StyleController extends BaseController
         $oldinfo = $model->toArray();
         if ($model->load(Yii::$app->request->post())) {
             //重新编辑后，审核状态改为待审核
-            if($isNewRecord){ 
+            if($isNewRecord || $model->audit_status == AuditStatusEnum::UNPASS){ 
                 $model->audit_status = AuditStatusEnum::SAVE;
-                $model->creator_id = \Yii::$app->user->id;
             }
             $model->is_inlay = $model->type->is_inlay ?? 0;         
             try{                
@@ -233,20 +232,15 @@ class StyleController extends BaseController
      */
     public function actionView()
     {
-        $id = Yii::$app->request->get('id');
-        $tab = Yii::$app->request->get('tab',1);
-        $returnUrl = Yii::$app->request->get('returnUrl',Url::to(['style/index']));
-        
-        $model = $this->findModel($id);
-        
-        $dataProvider = null;      
-        
+        $id = Yii::$app->request->get('id');       
+        $model = $this->findModel($id);        
+        $dataProvider = null;
         return $this->render($this->action->id, [
                 'model' => $model,
                 'dataProvider' => $dataProvider,
-                'tab'=>$tab,
-                'tabList'=>\Yii::$app->styleService->style->menuTabList($id,$returnUrl),
-                'returnUrl'=>$returnUrl,
+                'tab'=>Yii::$app->request->get('tab',1),
+                'tabList'=>\Yii::$app->styleService->style->menuTabList($id,$this->returnUrl),
+                'returnUrl'=>$this->returnUrl,
         ]);
     }
 

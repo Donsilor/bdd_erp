@@ -41,7 +41,15 @@ $form = ActiveForm::begin([
                             'template' => 'short' //合并为一行显示
                         ]); ?>
         <?= $form->field($model, 'address_details')->textInput(['maxlength' => true]) ?>
-        <?= $form->field($model, 'zip_code')->textInput(['maxlength' => true]) ?>
+        <div class="row">
+            <div class="col-lg-4">
+                <?= $form->field($model, 'zip_code')->textInput(['maxlength' => true]) ?>
+            </div>
+            <div class="col-lg-4">
+                <?= $form->field($model, 'is_default')->radioList(\common\enums\ConfirmEnum::getMap()) ?>
+            </div>            
+        </div> 
+        
         
 </div>
 <div class="modal-footer">

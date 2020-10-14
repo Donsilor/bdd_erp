@@ -14,7 +14,7 @@ $this->params['breadcrumbs'][] = $this->title;
     <h2 class="page-header"><?= $this->title; ?></h2>
     <?php echo Html::menuTab($tabList,$tab)?>
     <div class="box-tools" style="float:right;margin-top:-40px; margin-right: 20px;">
-        <?= Html::create(['ajax-edit-address','customer_id'=>Yii::$app->request->get('customer_id')], '添加地址', [
+        <?= Html::create(['ajax-edit','customer_id'=>Yii::$app->request->get('customer_id')], '添加地址', [
                         'data-toggle' => 'modal',
                         'data-target' => '#ajaxModalLg',
         ]); ?>
@@ -47,17 +47,23 @@ $this->params['breadcrumbs'][] = $this->title;
                             //'headerOptions' => ['class' => 'col-md-1'],
                         ],
                         [
+                            'label' => '联系方式',
                             'attribute' => 'mobile',
+                            'value' => function($model){
+                                $str = '';
+                                $str .= $model->mobile ? $model->mobile."<br/>":'';
+                                $str .= $model->email ? $model->email."<br/>":'';
+                                return $str;
+                            },
                             'filter' => false,
                             'format' => 'raw',
-                            //'headerOptions' => ['class' => 'col-md-1'],
                         ],
-                        [
+                       /*  [
                             'attribute' => 'email',
                             'filter' => false,
                             'format' => 'raw',
                             //'headerOptions' => ['class' => 'col-md-1'],
-                        ],
+                        ], */
                         [
                             'attribute' => 'country_name',
                             'filter' => false,
@@ -87,7 +93,15 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'filter' => false,
                                 'format' => 'raw',
                                 //'headerOptions' => ['class' => 'col-md-1'],
-                        ],                        
+                        ], 
+                        [
+                                'attribute' => 'is_default',
+                                'value' =>function($model){
+                                     return \common\enums\ConfirmEnum::getValue($model->is_default);
+                                },
+                                'filter'=>false,
+                                'format' => 'raw',
+                        ],    
                         [
                             'attribute'=>'created_at',
                             'value'=>function($model){
@@ -102,13 +116,13 @@ $this->params['breadcrumbs'][] = $this->title;
                             'template' => '{edit} {delete}',
                             'buttons' => [
                                'edit' => function($url, $model, $key){
-                                    return Html::edit(['ajax-edit-address','id' => $model->id,'returnUrl' => Url::getReturnUrl()], '编辑', [
+                                    return Html::edit(['ajax-edit','id' => $model->id,'returnUrl' => Url::getReturnUrl()], '编辑', [
                                             'data-toggle' => 'modal',
                                             'data-target' => '#ajaxModalLg',
                                     ]);
                                 },                                        
                                 'delete' => function($url, $model, $key){
-                                    return Html::delete(['delete-address', 'id' => $model->id]);
+                                    return Html::delete(['delete', 'id' => $model->id]);
                                 },
                               ],
                         ],
