@@ -654,6 +654,7 @@ class StyleService extends Service
                 'log_type' => LogTypeEnum::ARTIFICIAL,
                 'log_time' => time(),
                 'creator_id' => $creator_id,
+                'created_at' => time(),
                 'log_module' => '款式列表',
                 'log_msg' => "批量导入",
             ];
