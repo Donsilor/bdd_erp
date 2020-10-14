@@ -193,9 +193,9 @@ class QibanController extends BaseController
                 $model->audit_status = AuditStatusEnum::SAVE;
                 $model->creator_id = \Yii::$app->user->id;
                 $model->sort = time();
-            }else{
+            }/* else{
                 $model->audit_status = AuditStatusEnum::PENDING;
-            }
+            } */
             try{
                 $trans = Yii::$app->trans->beginTransaction();
                 if(false === $model->save()){
@@ -263,9 +263,9 @@ class QibanController extends BaseController
                 $model->audit_status = AuditStatusEnum::SAVE;
                 $model->creator_id = \Yii::$app->user->id;
                 $model->sort = time();
-            }else{
+            }/* else{
                 $model->audit_status = AuditStatusEnum::PENDING;
-            }
+            } */
             try{
                 $trans = Yii::$app->trans->beginTransaction();
                 if(false === $model->save()){
