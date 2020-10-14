@@ -384,3 +384,22 @@ $params = $params ? "&".http_build_query($params) : '';
 
 
 </script>
+
+<script type="text/javascript">
+    $(function () {
+        //批量填充(文本)
+        $(".batch_full > a").after('&nbsp;<?= Html::batchFullButton(['batch-edit'], "批量填充"); ?>');
+        //批量填充(下拉)
+        $(".batch_select_full > a").after('&nbsp;<?= Html::batchFullButton(['batch-edit', 'check' => 1], "批量填充", ['input_type' => 'select']); ?>');
+        //默认全选
+        $("input[name='id[]']").trigger("click");
+    });
+
+    function rfClearVal(obj) {
+        var val = $(obj).val();
+        if (val <= 0) {
+            $(obj).val("");
+        }
+    }
+
+</script>

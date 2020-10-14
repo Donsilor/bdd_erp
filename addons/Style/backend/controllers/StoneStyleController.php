@@ -2,6 +2,7 @@
 
 namespace addons\Style\backend\controllers;
 
+use common\helpers\ResultHelper;
 use Yii;
 use common\traits\Curd;
 use common\models\base\SearchModel;
@@ -18,6 +19,7 @@ class StoneStyleController extends BaseController
 {
     use Curd;
     public $modelClass = StoneStyle::class;
+    public $noAuthOptional = ['test'];
     /**
      * Lists all StoneStyle models.
      * @return mixed
@@ -186,5 +188,15 @@ class StoneStyleController extends BaseController
             'tabList'=>\Yii::$app->styleService->stone->menuTabList($id, $returnUrl),
             'returnUrl'=>$returnUrl,
         ]);
+    }
+
+
+
+    public function actionTest(){
+        $data = [
+            'gold_type' => 1111,
+            'gold_name' => 'qqqq',
+        ];
+        return ResultHelper::json(200,'查询成功', $data);
     }
 }

@@ -25,7 +25,7 @@ $form = ActiveForm::begin([
             <div class="col-sm-6"><?= $form->field($model, 'out_type')->dropDownList(\addons\Warehouse\common\enums\OutTypeEnum::getMap(),['prompt'=>'请选择']) ?></div>
             <div class="col-sm-6">
                 <?= $form->field($model, 'supplier_id')->widget(\kartik\select2\Select2::class, [
-                    'data' => \Yii::$app->supplyService->supplier->getDropDown(),
+                    'data' => \Yii::$app->supplyService->supplier->getDropDown(['like','goods_type',\addons\Supply\common\enums\GoodsTypeEnum::RAW_MATERIAL]),
                     'options' => ['placeholder' => '请选择'],
                     'pluginOptions' => [
                         'allowClear' => true

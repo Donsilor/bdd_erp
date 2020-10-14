@@ -68,7 +68,7 @@ class WarehouseStoneImportRkForm extends ImportForm
     ];
     public $requredColumns = [
             'style_sn',
-            'stone_name',
+//            'stone_name',
 //            'shape',
             'stone_num',
             'stone_weight',
