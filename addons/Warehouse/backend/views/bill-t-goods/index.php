@@ -31,8 +31,8 @@ $params = $params ? "&" . http_build_query($params) : '';
     <?php echo Html::menuTab($tabList, $tab) ?>
     <div class="box-tools" style="float:right;margin-top:-40px; margin-right: 20px;">
         <?php
-        echo Html::a('返回列表', ['bill-t/index'], ['class' => 'btn btn-white btn-xs']);
-        echo '&nbsp;';
+//        echo Html::a('返回列表', ['bill-t/index'], ['class' => 'btn btn-white btn-xs']);
+//        echo '&nbsp;';
         if ($bill->bill_status == \addons\Warehouse\common\enums\BillStatusEnum::SAVE) {
             echo Html::create(['ajax-edit', 'bill_id' => $bill->id], '新增货品', [
                 'class' => 'btn btn-primary btn-xs',

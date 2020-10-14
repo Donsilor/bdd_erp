@@ -127,7 +127,10 @@ class WarehouseBillLService extends Service
                 if (empty($good->jintuo_type)) {
                     $good->jintuo_type = JintuoTypeEnum::Chengpin;
                 }
-                $good = $this->calcSingleGoods($good);
+                if($good->goods_num > 1){
+                    var_dump(1);die;
+                    $good = $this->calcSingleGoods($good);
+                }
                 $goods[] = [
                     //基本信息
                     'goods_id' => $good->goods_id,//条码号
