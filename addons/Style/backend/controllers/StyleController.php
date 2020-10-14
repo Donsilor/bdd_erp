@@ -45,7 +45,7 @@ class StyleController extends BaseController
     public $modelClass = Style::class;
 
     public $targetType = TargetTypeEnum::STYLE_STYLE;
-
+    public $noAuthOptional = ['goods'];
 
     /**
      * 首页
