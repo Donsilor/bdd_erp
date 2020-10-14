@@ -100,10 +100,10 @@ class StyleImageController extends BaseController
         // ajax 校验
         $this->activeFormValidate($model);
         if ($model->load(Yii::$app->request->post())) {
-            if(!$model->validate()) {
-                return $this->message($this->getError($model), $this->redirect(\Yii::$app->request->referrer), 'error');
-            }
             $images_list = $model->image;
+            if(empty($images_list)) {
+                return $this->message('图片不能为空', $this->redirect(\Yii::$app->request->referrer), 'error');
+            }
             foreach ($images_list as $image){
                 $new_model = new StyleImages();
                 $new_model->attributes = $model->attributes;
