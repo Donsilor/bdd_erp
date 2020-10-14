@@ -97,8 +97,8 @@ class OrderGoodsController extends BaseController
      * 选择现货
      */
     public function actionSelectStock(){
+        
         $order_id = Yii::$app->request->get('order_id');
-
         $id = Yii::$app->request->get('id');
         $model = $this->findModel($id);
         $model = $model ?? new OrderGoodsForm();
@@ -137,6 +137,7 @@ class OrderGoodsController extends BaseController
 
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
         $dataProvider->query->andWhere(['=', 'goods_status', GoodsStatusEnum::IN_STOCK]);
+        $this->layout = '@backend/views/layouts/iframe';
         return $this->render($this->action->id, [
             'dataProvider' => $dataProvider,
             'searchModel' => $searchModel,
@@ -290,12 +291,11 @@ class OrderGoodsController extends BaseController
 
     }
 
-
-
     /****
      * 选择裸钻
      */
     public function actionSelectDiamond(){
+        
         $order_id = Yii::$app->request->get('order_id');
 
         $id = Yii::$app->request->get('id');
@@ -353,10 +353,13 @@ class OrderGoodsController extends BaseController
             ],
             'pageSize' => 5
         ]);
-
+        
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
         $dataProvider->query->andWhere(['=', 'status', StatusEnum::ENABLED]);
         $dataProvider->query->andWhere(['=', 'audit_status', AuditStatusEnum::PASS]);
+        
+        $this->layout = '@backend/views/layouts/iframe';
+        
         return $this->render($this->action->id, [
             'dataProvider' => $dataProvider,
             'searchModel' => $searchModel,
@@ -521,6 +524,7 @@ class OrderGoodsController extends BaseController
      * 选择赠品
      */
     public function actionSelectGift(){
+        
         $order_id = Yii::$app->request->get('order_id');
 
         $id = Yii::$app->request->get('id');
@@ -563,6 +567,8 @@ class OrderGoodsController extends BaseController
 
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
         $dataProvider->query->andWhere(['>', 'gift_num', 0]);
+        
+        $this->layout = '@backend/views/layouts/iframe';
         return $this->render($this->action->id, [
             'dataProvider' => $dataProvider,
             'searchModel' => $searchModel,

@@ -30,6 +30,7 @@ use common\helpers\Auth;
 use addons\Finance\common\forms\OrderPayForm;
 use addons\Sales\common\forms\OrderImportKForm;
 use yii\web\UploadedFile;
+use addons\Sales\common\models\CustomerAddress;
 
 /**
  * Default controller for the `order` module
@@ -328,13 +329,14 @@ class OrderController extends BaseController
 
 
     /**
-     * @return mixed
      * 申请审核
+     * @return mixed 
      */
     public function actionAjaxApply(){
+        
         $id = \Yii::$app->request->get('id');
-        $order_goods_count = OrderGoods::find()->where(['order_id'=>$id])->count();
-        if($order_goods_count == 0){
+        $count = OrderGoods::find()->where(['order_id'=>$id])->count();
+        if($count == 0){
             return $this->message('订单没有明细', $this->redirect(\Yii::$app->request->referrer), 'error');
         }
         $model = $this->findModel($id);
@@ -488,7 +490,66 @@ class OrderController extends BaseController
             'model' => $model,
         ]);
     }
-
+    
+    /**
+     * 选择收货地址
+     * @throws \Exception
+     * @return array|mixed|string
+     */
+    public function actionSelectAddress(){
+        
+        $id = Yii::$app->request->get('id');
+        $order = $this->findModel($id);
+        
+        $this->modelClass = OrderAddress::class;
+        $model = $this->findModel($id);
+        if($model->isNewRecord) {
+            $model->order_id = $id;
+        } 
+        if (Yii::$app->request->post()) {
+            $address_id = Yii::$app->request->post('id');
+            if($address_id == ''){
+                return ResultHelper::json(422, '请选择地址');
+            } 
+            $address = CustomerAddress::find()->where(['id'=>$address_id])->one();
+            if(empty($address)) {
+                return ResultHelper::json(422, '收货地址不存在');
+            }
+            try{
+                $trans = Yii::$app->trans->beginTransaction();                
+                $model->attributes = $address->toArray();
+                               
+                if(false === $model->save()){
+                    throw new \Exception($this->getError($model));
+                }
+                $trans->commit();
+                return $this->message("保存成功", $this->redirect(Yii::$app->request->referrer), 'success');
+            }catch (\Exception $e){
+                $trans->rollBack();
+                return ResultHelper::json(422, $e->getMessage());
+            }
+        }
+        
+        $searchModel = new SearchModel([
+                'model' => CustomerAddress::class,
+                'scenario' => 'default',
+                'partialMatchAttributes' => [], // 模糊查询
+                'defaultOrder' => [
+                      'id' => SORT_DESC
+                ],
+                'pageSize' => 5
+        ]);
+        
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+        $dataProvider->query->andWhere(['=',CustomerAddress::tableName().".customer_id",$order->customer_id]);
+        $this->layout = '@backend/views/layouts/iframe';
+        
+        return $this->render($this->action->id, [
+                'dataProvider' => $dataProvider,
+                'searchModel' => $searchModel,
+                'model' =>$model                
+        ]);
+    }
     /**
      * 修改收货地址
      * @return \yii\web\Response|mixed|string|string
