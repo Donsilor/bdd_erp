@@ -16,6 +16,7 @@ use common\helpers\StringHelper;
 class WarehouseBillCForm extends WarehouseBill
 {
     public $ids;
+    public $goods;
     public $goods_ids;
     public $file;
 
@@ -28,7 +29,7 @@ class WarehouseBillCForm extends WarehouseBill
     {
         $rules = [
             [['delivery_type', 'channel_id'], 'required'],
-            [['goods_ids'], 'string'],
+            [['goods', 'goods_ids'], 'string'],
             [['bill_no'], 'match', 'pattern' => "/^[A-Z][A-Z0-9-]*$/", 'message' => '单据编号必须大写英文字母开头，只能包含大写字母，英文横杠，数字'],
         ];
         return array_merge(parent::rules(), $rules);
@@ -130,11 +131,13 @@ class WarehouseBillCForm extends WarehouseBill
                     'bill_type' => $this->bill_type,
                     'style_sn' => $goods->style_sn,
                     'goods_name' => $goods->goods_name,
-                    'goods_num' => $goods->goods_num,
+                    'stock_num' => $goods->goods_num,
+                    'goods_num' => $goods->goods_num > 1 ? "" : $goods->goods_num,
                     'put_in_type' => $goods->put_in_type,
                     'warehouse_id' => $goods->warehouse_id,
                     'from_warehouse_id' => $goods->warehouse_id,
-                    'material' => $goods->material,
+                    'material_type' => $goods->material_type,
+                    'material_color' => $goods->material_color,
                     'gold_weight' => $goods->gold_weight,
                     'gold_loss' => $goods->gold_loss,
                     'diamond_carat' => $goods->diamond_carat,

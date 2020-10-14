@@ -166,6 +166,7 @@ class BillCGoodsController extends BaseController
         $bill_id = Yii::$app->request->get('bill_id');
         $goods_ids = Yii::$app->request->get('goods_ids');
         $message = Yii::$app->request->get('message');
+        $gModel = new WarehouseBillCGoodsForm();
         $billM = WarehouseBillCForm::findOne($bill_id);
         $billM = $billM ?? new WarehouseBillCForm();
         $billM->goods_ids = $goods_ids;
@@ -189,6 +190,7 @@ class BillCGoodsController extends BaseController
         }
         return $this->render($this->action->id, [
             'model' => $billM,
+            'gModel' => $gModel,
             'message' => $message,
             'searchGoods' => $searchGoods
         ]);

@@ -138,14 +138,14 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'filter' => false,
                                 'headerOptions' => ['class' => 'col-md-1'],
                             ],
-                            [
-                                'attribute' => 'goods.goods_status',
-                                'value' => function ($model) {
-                                    return \addons\Warehouse\common\enums\GoodsStatusEnum::getValue($model->goods->goods_status);
-                                },
-                                'filter' => true,
-                                'headerOptions' => ['class' => 'col-md-1'],
-                            ],
+//                            [
+//                                'attribute' => 'goods.goods_status',
+//                                'value' => function ($model) {
+//                                    return \addons\Warehouse\common\enums\GoodsStatusEnum::getValue($model->goods->goods_status);
+//                                },
+//                                'filter' => true,
+//                                'headerOptions' => ['class' => 'col-md-1'],
+//                            ],
                             [
                                 'attribute' => 'goods.style_cate_id',
                                 'value' => 'goods.styleCate.name',

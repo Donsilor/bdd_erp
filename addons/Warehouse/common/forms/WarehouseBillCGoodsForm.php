@@ -2,6 +2,7 @@
 
 namespace addons\Warehouse\common\forms;
 
+use addons\Style\common\enums\AttrIdEnum;
 use common\helpers\ArrayHelper;
 use addons\Warehouse\common\models\WarehouseBillGoods;
 use common\helpers\StringHelper;
@@ -44,5 +45,40 @@ class WarehouseBillCGoodsForm extends WarehouseBillGoods
             return StringHelper::explode($this->ids);
         }
         return [];
+    }
+
+    /**
+     * 入库方式
+     * @return array
+     */
+    public function getPutInTypeMap()
+    {
+        return \addons\Warehouse\common\enums\PutInTypeEnum::getMap() ?? [];
+    }
+
+    /**
+     * 入库仓库
+     * @return array
+     */
+    public function getWarehouseMap()
+    {
+        return \Yii::$app->warehouseService->warehouse::getDropDown() ?? [];
+    }
+
+    /**
+     * 材质列表
+     * @return array
+     */
+    public function getMaterialTypeMap()
+    {
+        return \Yii::$app->attr->valueMap(AttrIdEnum::MATERIAL_TYPE) ?? [];
+    }
+    /**
+     * 材质颜色列表
+     * @return array
+     */
+    public function getMaterialColorMap()
+    {
+        return \Yii::$app->attr->valueMap(AttrIdEnum::MATERIAL_COLOR) ?? [];
     }
 }
