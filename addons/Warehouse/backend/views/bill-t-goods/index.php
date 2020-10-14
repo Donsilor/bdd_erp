@@ -120,7 +120,7 @@ $params = $params ? "&" . http_build_query($params) : '';
                                 'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#feeeed;'],
                                 'footerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#feeeed;'],
                                 'contentOptions' => ['style' => ['white-space' => 'nowrap']],
-                                'template' => '{delete} {edit}',
+                                'template' => '{delete} {edit} {show}',
                                 'buttons' => [
                                     'image' => function ($url, $model, $key) {
                                         return Html::edit(['ajax-image', 'id' => $model->id], '图片', [
@@ -145,6 +145,14 @@ $params = $params ? "&" . http_build_query($params) : '';
                                                 'class' => 'btn btn-danger btn-xs',
                                             ]);
                                         }
+                                    },
+                                    'show' => function ($url, $model, $key) use ($bill) {
+                                        return Html::edit(['show', 'id' => $model->id, 'bill_id' => $bill->id], '查看', [
+                                            'class' => 'btn btn-warning btn-xs openIframe',
+                                            'data-width' => '90%',
+                                            'data-height' => '90%',
+                                            'data-offset' => '20px',
+                                        ]);
                                     },
                                 ],
                             ],
@@ -2351,7 +2359,7 @@ $params = $params ? "&" . http_build_query($params) : '';
                                 'contentOptions' => ['style' => ['white-space' => 'nowrap']],
                                 'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#9b95c9;'],
                                 'footerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#9b95c9;'],
-                                'template' => '{edit} {delete}',
+                                'template' => '{edit} {delete} {show}',
                                 'buttons' => [
                                     'edit' => function ($url, $model, $key) use ($bill) {
                                         if ($bill->bill_status == BillStatusEnum::SAVE) {
@@ -2369,6 +2377,14 @@ $params = $params ? "&" . http_build_query($params) : '';
                                                 'class' => 'btn btn-danger btn-xs',
                                             ]);
                                         }
+                                    },
+                                    'show' => function ($url, $model, $key) use ($bill) {
+                                        return Html::edit(['show', 'id' => $model->id, 'bill_id' => $bill->id], '查看', [
+                                            'class' => 'btn btn-warning btn-xs openIframe',
+                                            'data-width' => '90%',
+                                            'data-height' => '90%',
+                                            'data-offset' => '20px',
+                                        ]);
                                     },
                                 ],
                             ]
