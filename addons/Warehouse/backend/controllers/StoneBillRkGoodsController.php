@@ -45,7 +45,7 @@ class StoneBillRkGoodsController extends BaseController
             'scenario' => 'default',
             'partialMatchAttributes' => ['gold_name', 'remark'], // 模糊查询
             'defaultOrder' => [
-                'id' => SORT_DESC
+                'id' => SORT_ASC
             ],
             'pageSize' => $this->pageSize,
             'relations' => [

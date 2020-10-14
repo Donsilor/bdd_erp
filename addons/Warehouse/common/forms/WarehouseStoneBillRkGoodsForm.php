@@ -25,8 +25,12 @@ class WarehouseStoneBillRkGoodsForm extends WarehouseStoneBillGoods
             ['stone_price','compare','compareValue' => 0, 'operator' => '>'],
             ['stone_num','compare','compareValue' => 0, 'operator' => '>'],
             [['stone_sn'],'default','value' => NULL],
-//            [['stone_sn','bill_type'],'unique','targetAttribute' => ['stone_sn', 'bill_type'],'comboNotUnique'=>'石料编号不能重复'],
-//            [['stone_sn'],'unique', 'targetClass' => 'addons\Warehouse\common\models\WarehouseGold', 'message' => '库存中石料编号已经存在.']
+            [['cost_price'], 'parseCostPriceScope'],
+            [['carat'], 'parseCaratScope'],
+            [['stone_sn','bill_type'],'unique','targetAttribute' => ['stone_sn', 'bill_type'],'message'=>'石料编号不能重复','when' => function ($model) {
+                return !empty($model->stone_sn);
+            }],
+            [['stone_sn'],'unique', 'targetClass' => 'addons\Warehouse\common\models\WarehouseStone', 'message' => '库存中石料编号已经存在.']
         ];
         return ArrayHelper::merge(parent::rules() , $rules);
     }
@@ -39,6 +43,20 @@ class WarehouseStoneBillRkGoodsForm extends WarehouseStoneBillGoods
         //合并
         return ArrayHelper::merge(parent::attributeLabels() , [
         ]);
+    }
+
+    public function parseCostPriceScope(){
+        $stone_price = $this->stone_price ?? 0;
+        $stone_weight = $this->stone_weight ?? 0;
+        $this->cost_price = $stone_price * $stone_weight;
+        return $this->cost_price;
+    }
+
+    public function parseCaratScope(){
+        $stone_weight = $this->stone_weight ?? 0;
+        $stone_num = $this->stone_num ?? 1;
+        $this->carat = round($stone_weight / $stone_num,3);
+        return $this->carat;
     }
 
 

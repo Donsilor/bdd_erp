@@ -87,6 +87,8 @@ class WarehouseStone extends BaseModel
             [['stone_type', 'stone_shape', 'stone_color', 'stone_clarity', 'stone_cut', 'stone_symmetry', 'stone_polish', 'stone_fluorescence', 'stone_colour', 'cert_type'], 'string', 'max' => 10],
             [['stone_norms'], 'string', 'max' => 100],
             [['remark'], 'string', 'max' => 255],
+            [['cost_price'], 'parseCostPriceScope'],
+            [['vg_weight'], 'parseVgWeightScope'],
         ];
     }
 
@@ -101,11 +103,11 @@ class WarehouseStone extends BaseModel
             'stone_name' => '石料名称',
             'stone_type' => '石料类型',
             'style_sn' => '石料款号',
-            'stock_cnt' => '总粒数',
-            'first_stock_cnt' => '入库总数量',
-            'stock_weight' => '总石重(ct)',
-            'first_stock_weight' => '入库总总量(ct)',
-            'vg_weight' => '平均分数(ct)',
+            'stock_cnt' => '库存总粒数',
+            'first_stock_cnt' => '入库总粒数',
+            'stock_weight' => '库存总石重(ct)',
+            'first_stock_weight' => '入库总石重(ct)',
+            'vg_weight' => '库存平均分数(ct)',
             'stone_shape' => '石料形状',
             'stone_color' => '颜色',
             'stone_clarity' => '净度',
@@ -138,8 +140,8 @@ class WarehouseStone extends BaseModel
             'ck_cnt' => '其它出库数量',
             'ck_weight' => '其它出库重量(ct)',
             'stone_price' => '石料单价/ct',
-            'cost_price' => '石料总额',
-            'first_cost_price' => '石料入库总额',
+            'cost_price' => '库存石料总额',
+            'first_cost_price' => '入库石料总额',
             'sale_price' => '销售价',
             'cert_type' => '证书类型',
             'cert_id' => '证书号',
@@ -179,5 +181,20 @@ class WarehouseStone extends BaseModel
     public function getWarehouse()
     {
         return $this->hasOne(Warehouse::class, ['id'=>'warehouse_id'])->alias('warehouse');
+    }
+
+
+    public function parseCostPriceScope(){
+        $stone_price = $this->stone_price ?? 0;
+        $stone_weight = $this->stock_weight ?? 0;
+        $this->cost_price = $stone_price * $stone_weight;
+        return $this->cost_price;
+    }
+
+    public function parseVgWeightScope(){
+        $stone_weight = $this->stock_weight ?? 0;
+        $stock_cnt = $this->stock_cnt ?? 1;
+        $this->vg_weight = $stone_weight / $stock_cnt;
+        return $this->vg_weight;
     }
 }
