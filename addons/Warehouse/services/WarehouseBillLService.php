@@ -128,7 +128,6 @@ class WarehouseBillLService extends Service
                     $good->jintuo_type = JintuoTypeEnum::Chengpin;
                 }
                 if($good->goods_num > 1){
-                    var_dump(1);die;
                     $good = $this->calcSingleGoods($good);
                 }
                 $goods[] = [
