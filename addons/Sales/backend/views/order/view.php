@@ -709,7 +709,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                     'class' => 'btn btn-primary btn-sm',
                                     'style' => "margin-left:5px",
                                     'data-toggle' => 'modal',
-                                    'data-target' => '#ajaxModal',
+                                    'data-target' => '#ajaxModalLg',
                                 ]); ?>
                                 <?= Html::edit(['select-address', 'id' => $model->id], '选择', [
                                     'class' => 'btn btn-success btn-sm openIframe',
@@ -769,9 +769,48 @@ $this->params['breadcrumbs'][] = $this->title;
         </div>
         <!-- box end -->
 
-        <div id="flow">
-
+        <!-- box begin -->
+        <div class="col-xs-12">
+            <div class="box" style="margin:0px">
+                <div class="box-header" style="margin:0">
+                    <h3 class="box-title"><i class="fa fa-info"></i> 附件信息</h3>
+                    <div class="box-tools" style="right:5%">
+                        <?= Html::create(['order-attachment/ajax-upload','order_id'=>$order->id], '上传附件', [
+                            'data-toggle' => 'modal',
+                            'data-target' => '#ajaxModal',
+                        ]); ?>
+                    </div>
+                </div>
+                <div class=" table-responsive">
+                    <table class="table table-hover">
+                        <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th style="width:40%">文件</th>
+                            <th>添加人</th>
+                            <th>添加时间</th>                           
+                            <th>操作</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <?php foreach ($order->attachments ?? [] as $attach) {?>
+                            <tr>
+                                <td><?= $attach->id ?></td>
+                                <td><?= Html::a($attach->file, $attach->file, ['style'=>"text-decoration:underline;color:#3c8dbc",'target'=>'_blank']);?></td> 
+                                <td><?= $attach->creator->username ?? '' ?></td>                           
+                                <td><?= Yii::$app->formatter->asDatetime($attach->created_at) ?></td>                            
+                                <td>
+                                    <?= Html::delete(['order-attachment/delete', 'id' => $attach->id]) ?>
+                                </td>
+                            </tr>
+                        <?php }?>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
         </div>
+        <!-- box end -->
+        
     </div>
     <!-- tab-content end -->
 </div>
