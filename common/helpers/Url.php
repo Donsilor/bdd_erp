@@ -214,6 +214,20 @@ class Url extends BaseUrl
     {
         return self::buildUrl(Yii::$app->request->url,[],['returnUrl']);        
     }
+    /**
+     * 获取当前页签
+     * @return string|mixed
+     */
+    public static function getReturnTab($url = null)
+    {
+        $crontab = '';
+        if($url == null) {
+            $crontab = preg_replace("/\?.*/is","", Yii::$app->request->url);
+        }else {
+            $crontab = self::to($url);
+        }
+        return $crontab;
+    }
     
     /**
      * 重新组装url
