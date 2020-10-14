@@ -143,9 +143,10 @@ return [
                                ['title' => '审核','name'  => 'style/ajax-audit'],                           
                                ['title' => '详情','name'  => 'style/view'],
                                ['title' => '批量导入','name'  => 'style/ajax-upload'],
+                               ['title' => '库存列表','name'  => 'style/goods'],
                                
                                ['title' => '款式属性(*)','name'  => 'style-attribute/*'],
-                               ['title' => '款式商品(*)','name'  => 'style-goods/*'],
+                               ['title' => 'SKU列表(*)','name'  => 'style-goods/*'],
                                ['title' => '石头信息(*)','name'  => 'style-stone/*'],
                                ['title' => '工厂信息(*)','name'  => 'style-factory/*'],
                                ['title' => '工费信息(*)','name'  => 'style-factory-fee/*'],
