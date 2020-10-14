@@ -146,16 +146,6 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'headerOptions' => [],
                             ],
                             [
-                                'attribute'=>'stock_num',
-                                'filter' => false,
-                                'headerOptions' => [],
-                            ],
-                            [
-                                'attribute'=>'goods_num',
-                                'filter' => false,
-                                'headerOptions' => [],
-                            ],
-                            [
                                 'label' => '手寸',
                                 'attribute' => 'finger',
                                 'headerOptions' => [],
@@ -170,6 +160,16 @@ $this->params['breadcrumbs'][] = $this->title;
                                     return $finger ?? "";
                                 },
                                 'filter' => false,
+                            ],
+                            [
+                                'attribute'=>'stock_num',
+                                'filter' => false,
+                                'headerOptions' => [],
+                            ],
+                            [
+                                'attribute'=>'goods_num',
+                                'filter' => false,
+                                'headerOptions' => [],
                             ],
                             [
                                 'label' => '入库时间',
