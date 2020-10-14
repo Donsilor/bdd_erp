@@ -105,7 +105,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#feeeed;'],
                                 'footerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#feeeed;'],
                                 'contentOptions' => ['style' => ['white-space' => 'nowrap']],
-                                'template' => '{delete} {edit}',
+                                'template' => '{delete} {edit} {show}',
                                 'buttons' => [
                                     'image' => function ($url, $model, $key) {
                                         return Html::edit(['ajax-image', 'id' => $model->id], '图片', [
@@ -130,6 +130,14 @@ $this->params['breadcrumbs'][] = $this->title;
                                                 'class' => 'btn btn-danger btn-xs',
                                             ]);
                                         }
+                                    },
+                                    'show' => function ($url, $model, $key) use ($bill) {
+                                        return Html::edit(['show', 'id' => $model->id, 'bill_id' => $bill->id], '查看', [
+                                            'class' => 'btn btn-warning btn-xs openIframe',
+                                            'data-width' => '90%',
+                                            'data-height' => '90%',
+                                            'data-offset' => '20px',
+                                        ]);
                                     },
                                 ],
                             ],
@@ -2568,7 +2576,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#b7ba6b;'],
                                 'footerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#b7ba6b;'],
                                 'contentOptions' => ['style' => ['white-space' => 'nowrap']],
-                                'template' => '{edit} {delete}',
+                                'template' => '{edit} {delete} {show}',
                                 'buttons' => [
                                     'edit' => function ($url, $model, $key) use ($bill) {
                                         if ($bill->bill_status == BillStatusEnum::SAVE) {
@@ -2586,6 +2594,14 @@ $this->params['breadcrumbs'][] = $this->title;
                                                 'class' => 'btn btn-danger btn-xs',
                                             ]);
                                         }
+                                    },
+                                    'show' => function ($url, $model, $key) use ($bill) {
+                                        return Html::edit(['show', 'id' => $model->id, 'bill_id' => $bill->id], '查看', [
+                                            'class' => 'btn btn-warning btn-xs openIframe',
+                                            'data-width' => '90%',
+                                            'data-height' => '90%',
+                                            'data-offset' => '20px',
+                                        ]);
                                     },
                                 ],
                             ],
