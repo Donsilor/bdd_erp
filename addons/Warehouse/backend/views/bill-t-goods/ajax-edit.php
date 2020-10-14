@@ -52,6 +52,16 @@ $form = ActiveForm::begin([
 </div>
 <div class="modal-footer">
     <button type="button" class="btn btn-white" data-dismiss="modal">关闭</button>
-    <button class="btn btn-primary" type="submit">保存</button>
+    <button id="save" class="btn btn-primary" type="submit" data-loading-text="保存中...">保存</button>
 </div>
 <?php ActiveForm::end(); ?>
+<script>
+    $(function () {
+        $("#save").click(function () {
+            $(this).button('loading').delay(2000).queue(function () {
+                 //$(this).button('reset');
+                 //$(this).dequeue();
+            });
+        });
+    });
+</script>
