@@ -15,7 +15,7 @@ use addons\Style\common\enums\AttrIdEnum;
 /* @var $form yii\widgets\ActiveForm */
 
 $this->title = '订单详情';
-$this->params['breadcrumbs'][] = ['label' => $this->title, 'url' => ['index']];
+$this->params['breadcrumbs'][] = ['label' => "订单列表", 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 //
 ?>
