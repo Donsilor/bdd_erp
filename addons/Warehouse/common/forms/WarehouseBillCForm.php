@@ -3,6 +3,7 @@
 namespace addons\Warehouse\common\forms;
 
 use addons\Warehouse\common\models\WarehouseBill;
+use addons\Warehouse\common\models\WarehouseBillGoods;
 use addons\Warehouse\common\models\WarehouseGoods;
 use addons\Warehouse\common\enums\GoodsStatusEnum;
 use addons\Warehouse\common\enums\DeliveryTypeEnum;
@@ -89,6 +90,11 @@ class WarehouseBillCForm extends WarehouseBill
                 $flag = false;
                 $this->addGoodsError($goods_id, 1,"不存在或者不是库存状态");
             }
+            $bGoods = WarehouseBillGoods::find()->where(['goods_id'=>$goods_id, 'bill_id'=>$this->id])->one();
+            if ($bGoods) {
+                $flag = false;
+                $this->addGoodsError($goods_id, 2,"货品已经添加，不能重复添加");
+            }
             $data = [
                 DeliveryTypeEnum::PROXY_PRODUCE,
                 DeliveryTypeEnum::PART_GOODS,
@@ -97,7 +103,7 @@ class WarehouseBillCForm extends WarehouseBill
             if (in_array($this->delivery_type, $data)) {
                 if ($goods->supplier_id != $this->supplier_id) {
                     $flag = false;
-                    $this->addGoodsError($goods_id, 2,"供应商与单据的供应商不一致");
+                    $this->addGoodsError($goods_id, 3,"供应商与单据的供应商不一致");
                 }
                 /*if($goods->put_in_type != $bill->put_in_type){
                     return $this->message("货号{$goods_id}的入库方式与单据的入库方式不一致", $this->redirect(Yii::$app->request->referrer), 'error');
