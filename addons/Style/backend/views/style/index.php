@@ -41,7 +41,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                         <label class="control-label" for="cate-sort">款号：</label>
                                     </div>
                                     <div class="col-sm-8">
-                                        <?= Html::textInput('style_sn', $search->style_sn, ['class' => 'form-control', 'placeholder' => '多个以空格/英文/逗号隔开/单个模糊搜索']) ?>
+                                        <?= Html::textInput('style_sn', $search->style_sn, ['class' => 'form-control', 'placeholder' => '多个以空格/英文/逗号隔开/单个模糊搜索', 'title'=>'多个以空格/英文/逗号隔开/单个模糊搜索']) ?>
                                         <div class="help-block"></div>
                                     </div>
                                 </div>

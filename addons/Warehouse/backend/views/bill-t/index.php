@@ -190,12 +190,14 @@ $params = $params ? "&" . http_build_query($params) : '';
                         ],
                         [
                             'attribute' => 'remark',
+                            'format' => 'raw',
                             'headerOptions' => ['class' => 'col-md-1'],
                             'value' => function ($model) {
+                                $remark = "";
                                 if($model->remark && strlen($model->remark) > 7){
-                                    $model->remark = mb_substr($model->remark, 0, 7)."..." ?? "";
+                                    $remark = mb_substr($model->remark, 0, 7)."..." ?? "";
                                 }
-                                return $model->remark;
+                                return "<span title='{$model->remark}'>".$remark."</span>";
                             },
                             'filter' => true,
                         ],
