@@ -13,7 +13,7 @@ $this->params['breadcrumbs'][] = $this->title;
     <?php echo Html::menuTab($tabList,$tab)?>
     <div class="box-tools" style="float:right;margin-top:-40px; margin-right: 20px;">
           <?php if($bill->bill_status < BillStatusEnum::CONFIRM) {?>
-                <?= Html::create(['bill-w-goods/edit-all', 'bill_id' => $bill->id,'returnUrl'=>Url::getReturnUrl()], '盘点', [
+                <?= Html::create(['bill-w-goods/edit-all', 'bill_id' => $bill->id,'returnUrl'=>Yii::$app->request->get("returnUrl")], '盘点', [
                         'class'=>'btn btn-success btn-xs',
                         
                 ]); ?>
