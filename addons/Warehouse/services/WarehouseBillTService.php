@@ -252,8 +252,9 @@ class WarehouseBillTService extends Service
                     $jintuo_type = "";
                 }
             } else {
-                $flag = false;
-                $error[$i][] = "金托类型不能为空";
+//                $flag = false;
+//                $error[$i][] = "金托类型不能为空";
+                $jintuo_type = JintuoTypeEnum::Chengpin;
             }
             $qiban_sn = $goods['qiban_sn'] ?? "";//起版号
             if (!empty($style_sn)) {
