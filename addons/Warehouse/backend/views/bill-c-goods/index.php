@@ -153,6 +153,11 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'filter' => false,
                             ],
                             [
+                                'attribute' => 'goods.cost_amount',
+                                'visible' => \common\helpers\Auth::verify(\common\enums\SpecialAuthEnum::VIEW_CAIGOU_PRICE),
+                                'filter' => false,
+                            ],
+                            [
                                 'attribute' => 'goods_remark',
                                 'filter' => true,
                             ],
