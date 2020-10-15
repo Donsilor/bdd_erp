@@ -123,7 +123,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'format' => 'raw',
                                 'value' => function ($model) {
                                     if ($model->goods->goods_num > 1) {
-                                        return Html::ajaxInput('goods_num', $model->goods_num, ['style' => "border:1px solid #BBD6FF"]);
+                                        return Html::ajaxInput('goods_num', $model->goods_num, ['onfocus' => 'rfClearVal(this)', 'style' => "border:1px solid #BBD6FF", 'data-type' => 'number']);
                                     }
                                     return $model->goods_num ?? 0;
                                 },
@@ -225,3 +225,12 @@ $this->params['breadcrumbs'][] = $this->title;
         </div>
     </div>
 </div>
+<script  type="text/javascript">
+    function rfClearVal(obj) {
+        var val = $(obj).val();
+        if (val <= 0) {
+            $(obj).val("");
+        }
+    }
+</script>
+
