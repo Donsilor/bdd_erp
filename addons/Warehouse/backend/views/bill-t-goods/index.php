@@ -2359,7 +2359,7 @@ $params = $params ? "&" . http_build_query($params) : '';
                                 'contentOptions' => ['style' => ['white-space' => 'nowrap']],
                                 'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#9b95c9;'],
                                 'footerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#9b95c9;'],
-                                'template' => '{edit} {delete} {show}',
+                                'template' => '{edit} {show} {delete}',
                                 'buttons' => [
                                     'edit' => function ($url, $model, $key) use ($bill) {
                                         if ($bill->bill_status == BillStatusEnum::SAVE) {
