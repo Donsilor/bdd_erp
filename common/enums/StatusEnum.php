@@ -11,8 +11,8 @@ namespace common\enums;
  */
 class StatusEnum extends BaseEnum
 {
-    const ENABLED = 1;
-    const DISABLED = 0;    
+    const DISABLED = 0;
+    const ENABLED = 1;        
     const LOCKED = 2;
     const DELETE = -1;
     /**
@@ -32,8 +32,9 @@ class StatusEnum extends BaseEnum
     public static function getDestroyMap(): array
     {
         return [
-                self::ENABLED => '启用',
-                self::DISABLED => '禁用',
+                self::DISABLED => '保存',
+                self::ENABLED => '启用',                
+                self::LOCKED => '锁定',
                 self::DELETE => '作废',
         ];
     }

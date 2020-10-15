@@ -133,6 +133,42 @@ class Html extends BaseHtml
 
         return $listBut[$status] ?? '';
     }
+    
+    /**
+     * 状态标签
+     *
+     * @param int $status
+     * @return mixed
+     */
+    public static function lockStatus($status = 1, $options = [])
+    {
+        if (!self::beforVerify('ajax-update')) {
+            return '';
+        }
+        
+        $listBut = [
+                StatusEnum::LOCKED => self::tag('span', '启用', array_merge(
+                        [
+                                'class' => "btn btn-success btn-sm",
+                                'data-toggle' => 'tooltip',
+                                'data-original-title' => '点击启用',
+                                'onclick' => "rfLockStatus(this)"
+                        ],
+                        $options
+                        )),
+                StatusEnum::ENABLED => self::tag('span', '锁定', array_merge(
+                        [
+                                'class' => "btn btn-default btn-sm",
+                                'data-toggle' => 'tooltip',
+                                'data-original-title' => '点击锁定',
+                                'onclick' => "rfLockStatus(this)"
+                        ],
+                        $options
+                        )),
+        ];
+        
+        return $listBut[$status] ?? '';
+    }
 
     /**
      * @param string $text
