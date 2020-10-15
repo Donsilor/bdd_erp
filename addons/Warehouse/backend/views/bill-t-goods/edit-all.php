@@ -51,9 +51,9 @@ $this->params['breadcrumbs'][] = $this->title;
                 'data-target' => '#ajaxModal',
             ]);
             echo '&nbsp;';
-            echo Html::tag('span', '价格刷新', ["class" => "btn btn-warning btn-xs jsBatchStatus", "data-grid" => "grid", "data-url" => Url::to(['update-price']),]);
+            echo Html::tag('span', '价格刷新', ["class" => "btn btn-warning btn-xs jsBatchUpdate", "data-grid" => "grid", "data-url" => Url::to(['update-price']),]);
             echo '&nbsp;';
-            echo Html::tag('span', '批量删除', ["class" => "btn btn-danger btn-xs jsBatchStatus", "data-grid" => "grid", "data-url" => Url::to(['batch-delete']),]);
+            echo Html::tag('span', '批量删除', ["class" => "btn btn-danger btn-xs jsBatchUpdate", "data-grid" => "grid", "data-url" => Url::to(['batch-delete']),]);
         }
         ?>
     </div>
@@ -2648,4 +2648,42 @@ $this->params['breadcrumbs'][] = $this->title;
         }
     }
 
+    $(".jsBatchUpdate").click(function () {
+        let grid = $(this).attr('data-grid');
+        let url = $(this).attr('data-url');
+        let status = $(this).attr('data-value');
+        let text = $(this).text();
+        let ids = $("#" + grid).yiiGridView("getSelectedRows");
+        if (!url) {
+            url = "<?= Url::to(['ajax-batch-update'])?>";
+        }
+        if (ids == "" || !ids) {
+            rfInfo('未选中数据！', '');
+            return false;
+        }
+        appConfirm("确定要" + text + "吗?", '', function (code) {
+            switch (code) {
+                case "defeat":
+                    $.ajax({
+                        type: "post",
+                        url: url,
+                        dataType: "json",
+                        data: {
+                            ids: ids,
+                            status: status
+                        },
+                        success: function (data) {
+                            if (parseInt(data.code) !== 200) {
+                                rfAffirm(data.message);
+                            } else {
+                                //rfAffirm(data.message);
+                                window.location.reload();
+                            }
+                        }
+                    });
+                    break;
+                default:
+            }
+        })
+    });
 </script>
