@@ -138,7 +138,7 @@ $params = $params ? "&".http_build_query($params) : '';
 
                             [
                                 'attribute' => 'stone_num',
-                                'headerOptions' => ['width'=>60],
+                                'headerOptions' => ['width'=>60,'class'=>'batch_full', 'attr-name' => 'stone_num'],
                                 'value' => function ($model, $key, $index){
                                     return $model->stone_num ?? 0;
                                 },
@@ -387,12 +387,16 @@ $params = $params ? "&".http_build_query($params) : '';
 
 <script type="text/javascript">
     $(function () {
+        <?php
+        if($bill->bill_status == BillStatusEnum::SAVE){
+        ?>
         //批量填充(文本)
         $(".batch_full > a").after('&nbsp;<?= Html::batchFullButton(['batch-edit'], "批量填充"); ?>');
         //批量填充(下拉)
         $(".batch_select_full > a").after('&nbsp;<?= Html::batchFullButton(['batch-edit', 'check' => 1], "批量填充", ['input_type' => 'select']); ?>');
         //默认全选
         $("input[name='id[]']").trigger("click");
+        <?php } ?>
     });
 
     function rfClearVal(obj) {

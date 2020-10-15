@@ -194,7 +194,7 @@ class StoneBillCkController extends BaseController
         //判断明细是否存在金重或者数量为空的
         $count = WarehouseStoneBillGoods::find()->where(['bill_id'=>$id])->andWhere(['or',['<=','stone_num',0],['<=','stone_weight',0]])->count();
         if($count){
-            return $this->message('明细有数量或者金重为0', $this->redirect(\Yii::$app->request->referrer), 'error');
+            return $this->message('明细有数量或者石重为0', $this->redirect(\Yii::$app->request->referrer), 'error');
         }
 
         if($model->total_weight<=0){
