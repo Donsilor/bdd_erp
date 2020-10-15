@@ -14,7 +14,7 @@ $this->params['breadcrumbs'][] = $this->title;
     <h2 class="page-header">盘点单详情 - <?php echo $bill->bill_no?> - <?php echo BillStatusEnum::getValue($bill->bill_status)?></h2>
     <?php echo Html::menuTab($tabList,$tab)?>
     <div class="box-tools" style="float:right;margin-top:-40px; margin-right: 20px;">          
-          <?= Html::create(['bill-w-goods/index', 'bill_id' => $bill->id,'returnUrl'=>Url::getReturnUrl()], '返回列表', []); ?>
+          <?= Html::create(['bill-w-goods/index', 'bill_id' => $bill->id,'returnUrl'=>Yii::$app->request->get("returnUrl")], '返回列表', []); ?>
     </div>
     <div class="tab-content">
         <div class="row col-xs-15">
