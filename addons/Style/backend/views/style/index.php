@@ -604,6 +604,13 @@ $this->params['breadcrumbs'][] = $this->title;
     </div>
 </div>
 <script type="text/javascript">
+    $(function () {
+        var search = sessionStorageGet('styleSearch');
+        if (search === false || search == '0') {
+            $("#search-content").attr("style", "display:none;");
+        }
+    });
+
     function clearSearch1() {
         $('#search-content select').prop('selectedIndex', 0);
     }
@@ -612,9 +619,11 @@ $this->params['breadcrumbs'][] = $this->title;
         if ($("#search-content").css("display") == "block") {
             $(".searchBox").html("展开");
             $(".searchBox").removeClass("glyphicon glyphicon-chevron-down").addClass("glyphicon glyphicon-chevron-up");
+            sessionStorageAdd('styleSearch', 0, true);
         } else {
             $(".searchBox").html("隐藏");
             $(".searchBox").removeClass("glyphicon glyphicon-chevron-up").addClass("glyphicon glyphicon-chevron-down");
+            sessionStorageAdd('styleSearch', 1, true);
         }
         $("#search-content").slideToggle();
     });
