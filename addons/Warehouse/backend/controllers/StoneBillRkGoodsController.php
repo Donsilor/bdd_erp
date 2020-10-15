@@ -235,15 +235,10 @@ class StoneBillRkGoodsController extends BaseController
                     if (false === $goods->validate()) {
                         throw new \Exception($this->getError($goods));
                     }
-                    $result = $model->updateFromValidate($goods);
-                    if($result['error'] == false){
-                        throw new \Exception($result['msg']);
-                    }
+
                     if (false === $goods->save(true, [$name])) {
                         throw new \Exception($this->getError($goods));
                     }
-                    $model->bill_id = $goods->bill_id;
-                    \Yii::$app->warehouseService->billT->syncUpdatePrice($goods);
                 }
                 \Yii::$app->warehouseService->billT->WarehouseBillTSummary($model->bill_id);
                 $trans->commit();

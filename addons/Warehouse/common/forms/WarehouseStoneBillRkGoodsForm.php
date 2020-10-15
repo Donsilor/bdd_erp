@@ -2,6 +2,7 @@
 
 namespace addons\Warehouse\common\forms;
 
+use common\helpers\StringHelper;
 use Yii;
 use addons\Warehouse\common\models\WarehouseStoneBillGoods;
 use addons\Style\common\enums\AttrIdEnum;
@@ -13,7 +14,7 @@ use common\helpers\ArrayHelper;
  */
 class WarehouseStoneBillRkGoodsForm extends WarehouseStoneBillGoods
 {
-
+    public $ids;
     public $file;
     /**
      * {@inheritdoc}
@@ -60,6 +61,16 @@ class WarehouseStoneBillRkGoodsForm extends WarehouseStoneBillGoods
     }
 
 
+    /**
+     * {@inheritdoc}
+     */
+    public function getIds()
+    {
+        if ($this->ids) {
+            return StringHelper::explode($this->ids);
+        }
+        return [];
+    }
 
 
 
