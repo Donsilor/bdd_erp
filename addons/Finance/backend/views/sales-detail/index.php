@@ -56,7 +56,7 @@ $params = $params ? "&".http_build_query($params) : '';
             [
                     'attribute' => 'orde_sn',
                     'value'=>function($model) {
-                        return Html::a($model->orde_sn, ['../sales/order/view', 'id' => $model->order_id,'returnUrl'=>Url::getReturnUrl()], ['class'=>'openContab','style'=>"text-decoration:underline;color:#3c8dbc"]);
+                        return Html::a($model->orde_sn, ['../sales/order/view', 'id' => $model->order_id,'returnUrl'=>Url::getReturnTab()], ['class'=>'openContab','style'=>"text-decoration:underline;color:#3c8dbc"]);
                     },
                     'filter' => Html::activeTextInput($searchModel, 'orde_sn', [
                             'class' => 'form-control',
