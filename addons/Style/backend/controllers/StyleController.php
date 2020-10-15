@@ -153,6 +153,11 @@ class StyleController extends BaseController
                     //创建自定义属性值
                     $command = \Yii::$app->db->createCommand("call sp_create_style_attributes(" . $model->id . ");");
                     $command->execute();
+                    //创建单独属性信息
+                    $saveAttr[$model->id]= [
+                        AttrIdEnum::MATERIAL_TYPE => \Yii::$app->styleService->style->getMaterialTypeValues($model->style_material),
+                    ];
+                    \Yii::$app->styleService->style->createStyleAttr($saveAttr);
                     //镶嵌类(创建一条主石信息)
                     if ($model->is_inlay) {
                         $stoneM = new StyleStone();
@@ -172,11 +177,6 @@ class StyleController extends BaseController
                 }else{
                     $log_msg = "编辑款式";
                 }
-                //创建属性信息
-                $saveAttr[$model->id]= [
-                    AttrIdEnum::MATERIAL_TYPE => \Yii::$app->styleService->style->getMaterialTypeValues($model->style_material),
-                ];
-                \Yii::$app->styleService->style->createStyleAttr($saveAttr);
                 $log = [
                     'style_id' => $model->id,
                     'style_sn' => $model->style_sn,
