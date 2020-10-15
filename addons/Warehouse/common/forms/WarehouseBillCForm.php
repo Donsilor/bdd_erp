@@ -90,7 +90,7 @@ class WarehouseBillCForm extends WarehouseBill
                 $flag = false;
                 $this->addGoodsError($goods_id, 1,"不存在或者不是库存状态");
             }
-            $bGoods = WarehouseBillGoods::find()->where(['goods_id'=>$goods_id, 'bill_id'=>$this->bill_id])->one();
+            $bGoods = WarehouseBillGoods::find()->where(['goods_id'=>$goods_id, 'bill_id'=>$this->id])->one();
             if ($bGoods) {
                 $flag = false;
                 $this->addGoodsError($goods_id, 2,"货品已经添加，不能重复添加");
