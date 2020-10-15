@@ -123,22 +123,11 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'format' => 'raw',
                                 'value' => function ($model) {
                                     if ($model->goods->goods_num > 1) {
-                                        return Html::ajaxInput('goods_num', $model->goods_num, ['style' => "border:1px solid #BBD6FF"]);
+                                        return Html::ajaxInput('goods_num', $model->goods_num, ['onfocus' => 'rfClearVal(this)', 'style' => "border:1px solid #BBD6FF", 'data-type' => 'number']);
                                     }
                                     return $model->goods_num ?? 0;
                                 },
                                 'filter' => false,
-                            ],
-                            [
-                                'attribute' => 'chuku_price',
-                                'headerOptions' => ['style' => 'background-color:#FFFF88;'],
-                                'footerOptions' => ['style' => 'background-color:#FFFF88;'],
-                                'visible' => \common\helpers\Auth::verify(\common\enums\SpecialAuthEnum::VIEW_CHUKU_PRICE),
-                                'filter' => false,
-                                'value' => function ($model) {
-                                    return Html::ajaxInput('chuku_price', $model->chuku_price, ['style' => "border:1px solid #BBD6FF"]);
-                                },
-                                'format' => 'raw',
                             ],
                             [
                                 'label' => '仓库',
@@ -202,6 +191,23 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'filter' => false,
                             ],
                             [
+                                'attribute' => 'chuku_price',
+                                'headerOptions' => ['style' => 'background-color:#FFFF88;'],
+                                'footerOptions' => ['style' => 'background-color:#FFFF88;'],
+                                'visible' => \common\helpers\Auth::verify(\common\enums\SpecialAuthEnum::VIEW_CHUKU_PRICE),
+                                'filter' => false,
+                                'value' => function ($model) {
+                                    return $model->chuku_price ?? 0;
+                                    //return Html::ajaxInput('chuku_price', $model->chuku_price, ['style' => "border:1px solid #BBD6FF"]);
+                                },
+                                'format' => 'raw',
+                            ],
+                            [
+                                'attribute' => 'goods.cost_amount',
+                                'visible' => \common\helpers\Auth::verify(\common\enums\SpecialAuthEnum::VIEW_CAIGOU_PRICE),
+                                'filter' => false,
+                            ],
+                            [
                                 'attribute' => 'goods_remark',
                                 'filter' => true,
                             ],
@@ -224,3 +230,12 @@ $this->params['breadcrumbs'][] = $this->title;
         </div>
     </div>
 </div>
+<script  type="text/javascript">
+    function rfClearVal(obj) {
+        var val = $(obj).val();
+        if (val <= 0) {
+            $(obj).val("");
+        }
+    }
+</script>
+
