@@ -175,10 +175,10 @@ class BillCController extends BaseController
     }
 
     /**
-     * ajax 其它出库单-申请审核
      *
-     * @return mixed|string|\yii\web\Response
-     * @throws \yii\base\ExitException
+     * ajax提交审核
+     * @return
+     * @throws
      */
     public function actionAjaxApply($id)
     {
@@ -191,8 +191,11 @@ class BillCController extends BaseController
         if ($model->goods_num <= 0) {
             return $this->message('单据明细不能为空', $this->redirect(\Yii::$app->request->referrer), 'error');
         }
+        $goods = WarehouseBillGoods::findOne(['bill_id'=>$model->id, 'goods_num'=>0]);
+        if($goods){
+            return $this->message('货品出库数量不能为0', $this->redirect(\Yii::$app->request->referrer), 'error');
+        }
         try {
-
             $trans = \Yii::$app->trans->beginTransaction();
             $model->bill_status = BillStatusEnum::PENDING;
             $model->audit_status = AuditStatusEnum::PENDING;
@@ -209,7 +212,6 @@ class BillCController extends BaseController
             \Yii::$app->warehouseService->billLog->createBillLog($log);
             $trans->commit();
             return $this->message('操作成功', $this->redirect(\Yii::$app->request->referrer), 'success');
-
         } catch (\Exception $e) {
             $trans->rollBack();
             return $this->message($e->getMessage(), $this->redirect(\Yii::$app->request->referrer), 'error');
@@ -266,9 +268,10 @@ class BillCController extends BaseController
     }
 
     /**
-     * 其它出库单-关闭
      *
+     * 取消单据
      * @param $id
+     * @throws
      * @return mixed
      */
     public function actionCancel($id)

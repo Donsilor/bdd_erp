@@ -147,6 +147,10 @@ $this->params['breadcrumbs'][] = $this->title;
                             <td><?= Yii::$app->formatter->asDatetime($model->created_at) ?></td>
                         </tr>
                         <tr>
+                            <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('chuku_time') ?>：</td>
+                            <td><?= Yii::$app->formatter->asDatetime($model->chuku_time) ?? "" ?></td>
+                        </tr>
+                        <tr>
                             <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('updated_at') ?>：</td>
                             <td><?= Yii::$app->formatter->asDatetime($model->updated_at) ?></td>
                         </tr>

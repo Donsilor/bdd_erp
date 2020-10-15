@@ -23,6 +23,7 @@ use addons\Style\common\forms\StyleAuditForm;
 use addons\Style\common\forms\StyleSearchForm;
 use addons\Style\common\enums\StonePositionEnum;
 use addons\Style\common\enums\LogTypeEnum;
+use addons\Style\common\enums\AttrIdEnum;
 use common\enums\AuditStatusEnum;
 use common\enums\FlowStatusEnum;
 use common\enums\TargetTypeEnum;
@@ -74,8 +75,13 @@ class StyleController extends BaseController
         $search = new StyleSearchForm();
         $search->attributes = \Yii::$app->request->get();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams, ['created_at']);
+        $styleArr = $search->style_sns();
+        if (count($styleArr) == 1) {
+            $dataProvider->query->andFilterWhere(['like', 'style_sn', $styleArr[0]]);
+        } else {
+            $dataProvider->query->andFilterWhere(['in', 'style_sn', $search->style_sns()]);
+        }
         $dataProvider->query
-            ->andFilterWhere(['in', 'style_sn', $search->style_sns()])
             ->andFilterWhere(['like', 'style_name', $search->style_name()])
             ->andFilterWhere(['style_sex' => $search->style_sex])
             ->andFilterWhere(['style_material' => $search->style_material])
@@ -159,10 +165,15 @@ class StyleController extends BaseController
                             throw new \Exception($this->getError($stoneM));
                         }
                     }
-                    $log_msg = "创建款式";
+                    $log_msg = "创建款式信息";
                 }else{
-                    $log_msg = "编辑款式";
+                    $log_msg = "编辑款式信息";
                 }
+                //创建单独属性信息
+                $saveAttr[$model->id]= [
+                    AttrIdEnum::MATERIAL_TYPE => \Yii::$app->styleService->style->getMaterialTypeValues($model->style_material),
+                ];
+                \Yii::$app->styleService->style->createStyleAttr($saveAttr);
                 $log = [
                     'style_id' => $model->id,
                     'style_sn' => $model->style_sn,
@@ -217,6 +228,7 @@ class StyleController extends BaseController
                 return $this->message("保存成功", $this->redirect(\Yii::$app->request->referrer), 'success');
             } catch (\Exception $e) {
                 $trans->rollBack();
+                //var_dump($e->getTraceAsString());die;
                 return $this->message($e->getMessage(), $this->redirect(\Yii::$app->request->referrer), 'error');
             }
         }

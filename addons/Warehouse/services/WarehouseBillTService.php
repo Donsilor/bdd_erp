@@ -252,8 +252,9 @@ class WarehouseBillTService extends Service
                     $jintuo_type = "";
                 }
             } else {
-                $flag = false;
-                $error[$i][] = "金托类型不能为空";
+//                $flag = false;
+//                $error[$i][] = "金托类型不能为空";
+                $jintuo_type = JintuoTypeEnum::Chengpin;
             }
             $qiban_sn = $goods['qiban_sn'] ?? "";//起版号
             if (!empty($style_sn)) {
@@ -1247,11 +1248,12 @@ class WarehouseBillTService extends Service
             if (!$goodsM->validate()) {
                 $flag = false;
                 $error[$i][] = $this->getError($goodsM);
-            }
-            $result = $form->updateFromValidate($goodsM);
-            if ($result['error'] == false) {
-                $flag = false;
-                $error[$i][] = $result['msg'];
+            }else{
+                $result = $form->updateFromValidate($goodsM);
+                if ($result['error'] == false) {
+                    $flag = false;
+                    $error[$i][] = $result['msg'];
+                }
             }
             if (!$flag && !empty($style_sn)) {
                 //$error[$i] = array_unshift($error[$i], "[" . $style_sn . "]");

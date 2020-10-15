@@ -217,7 +217,7 @@ class WarehouseGoods extends BaseModel
             'material' => '主成色',
             'material_type' => '材质',
             'material_color' => '材质颜色',
-            'diamond_carat' => '主石大小',
+            'diamond_carat' => '主石重',
             'diamond_clarity' => '主石净度',
             'diamond_cut' => '主石切工',
             'diamond_shape' => '主石形状',

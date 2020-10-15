@@ -31,8 +31,8 @@ $params = $params ? "&" . http_build_query($params) : '';
     <?php echo Html::menuTab($tabList, $tab) ?>
     <div class="box-tools" style="float:right;margin-top:-40px; margin-right: 20px;">
         <?php
-//        echo Html::a('返回列表', ['bill-t/index'], ['class' => 'btn btn-white btn-xs']);
-//        echo '&nbsp;';
+        //        echo Html::a('返回列表', ['bill-t/index'], ['class' => 'btn btn-white btn-xs']);
+        //        echo '&nbsp;';
         if ($bill->bill_status == \addons\Warehouse\common\enums\BillStatusEnum::SAVE) {
             echo Html::create(['ajax-edit', 'bill_id' => $bill->id], '新增货品', [
                 'class' => 'btn btn-primary btn-xs',
@@ -217,15 +217,15 @@ $params = $params ? "&" . http_build_query($params) : '';
                             [
                                 'attribute' => 'goods_id',
                                 'format' => 'raw',
-                                'headerOptions' => ['id'=>'batch_copy_goods_id', 'class' => 'col-md-1', 'style' => 'background-color:#feeeed;'],
+                                'headerOptions' => ['id' => 'batch_copy_goods_id', 'class' => 'col-md-1', 'style' => 'background-color:#feeeed;'],
                                 'footerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#feeeed;'],
-                                'value' => function ($model, $key, $index, $widget) use($bill) {
+                                'value' => function ($model, $key, $index, $widget) use ($bill) {
                                     $widget->footer = $model->getAttributeLabel('goods_id');
                                     if ($model->goods_id) {
                                         //if($bill->bill_status == BillStatusEnum::CONFIRM){
                                         //    $model->goods_id = Html::a($model->goods_id, ['view', 'goods_id' => $model->goods_id, 'returnUrl' => Url::getReturnUrl()], ['class' => 'openContab', 'style' => "text-decoration:underline;color:#3c8dbc", 'id' => $model->goods_id]) . ' <i class="fa fa-copy" onclick="copy(\'' . $model->goods_id . '\')"></i>';
                                         //}else{
-                                            $model->goods_id = '<span id="goods_' . $model->goods_id . '">' . $model->goods_id . '</span> <i class="fa fa-copy" onclick="copy(\'goods_' . $model->goods_id . '\')"></i>';
+                                        $model->goods_id = '<span id="goods_' . $model->goods_id . '">' . $model->goods_id . '</span> <i class="fa fa-copy" onclick="copy(\'goods_' . $model->goods_id . '\')"></i>';
                                         //}
 
                                     }
@@ -2359,7 +2359,7 @@ $params = $params ? "&" . http_build_query($params) : '';
                                 'contentOptions' => ['style' => ['white-space' => 'nowrap']],
                                 'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#9b95c9;'],
                                 'footerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#9b95c9;'],
-                                'template' => '{edit} {delete} {show}',
+                                'template' => '{edit} {show} {delete}',
                                 'buttons' => [
                                     'edit' => function ($url, $model, $key) use ($bill) {
                                         if ($bill->bill_status == BillStatusEnum::SAVE) {
@@ -2402,12 +2402,9 @@ $params = $params ? "&" . http_build_query($params) : '';
         //默认全选
         $("input[name='id[]']").trigger("click");
 
-        //批量复制货号(文本)
+        //批量复制货号
         var button = '<span id="goods_ids" style="position: absolute; left: -1000000000px;"><?= $goods_ids ?></span><div class="btn btn-primary btn-xs" onclick="copy(\'goods_ids\')">批量复制 <i class="fa fa-copy"></i></div>';
         $("#batch_copy_goods_id > a").after(button);
-
-        //var bill_id = <?//= $bill->id ?>//;
-        //batchCopyGoodsId(bill_id, 'bill_t_goods_copy');
     });
 
     function batchExport() {
@@ -2418,38 +2415,4 @@ $params = $params ? "&" . http_build_query($params) : '';
             window.location.href = "<?= \common\helpers\Url::buildUrl('../bill-t/export', [], ['ids'])?>?ids=<?php echo $bill->id ?>";
         });
     }
-
-    ////批量复制单据货号
-    //function batchCopyGoodsId(bill_id, btnId) {
-    //    var client = new ZeroClipboard(document.getElementById(btnId));
-    //    var itemsId = "items_copy_" + btnId;
-    //    var div = '<div style="opacity:0.0;cursor: default;width:1px;height:1px;" ><textarea id="' + itemsId + '" redayonly="true"></textarea></div>';
-    //    var bool = false;
-    //    var url = "<?//= Url::to(['bill/batch-copy-goods-id'])?>//";
-    //    $.post(url, {'bill_id': bill_id}, function (data) {
-    //        client.on("ready", function (readyEvent) {
-    //            client.on("beforecopy", function (event) {
-    //                $('body').modalmanager('loading');
-    //            }),
-    //                client.on("copy", function (event) {
-    //                    var copy_text = data;
-    //                    event.clipboardData.setData("text/plain", copy_text);
-    //                }),
-    //                client.on("aftercopy", function (event) {
-    //                    $('.modal-scrollable').trigger('click');
-    //                    rfMsg('复制成功');
-    //                });
-    //        }),
-    //            client.on("error", function () {
-    //                ZeroClipboard.destroy();
-    //                $("#" + btn_id).on('click', function () {
-    //                    $(this).append(div);
-    //                    $("#" + itemsId).text(data);
-    //                    $("#" + itemsId).select();
-    //                    document.execCommand("Copy");
-    //                    rfMsg('复制成功');
-    //                });
-    //            });
-    //    });
-    //}
 </script>
