@@ -18,8 +18,14 @@ $this->params['breadcrumbs'][] = $this->title;
 			     <?php if($model->style_id) {?>
 			         <div class="row">
     			         <?php if($model->isNewRecord) {?>      			    
-            			 <div class="col-lg-3">         
-                			<?= $form->field($model, 'style_sn')->textInput() ?>
+            			 <div class="col-lg-3">
+                             <?= $form->field($model, 'style_sn')->widget(kartik\select2\Select2::class, [
+                                 'data' => Yii::$app->styleService->style->getStyleList('style_sn'),
+                                 'options' => ['placeholder' => '请选择'],
+                                 'pluginOptions' => [
+                                     'allowClear' => true
+                                 ],
+                             ]);?>
             			 </div>
             			 <div class="col-lg-1">
                             <?= Html::button('查询',['class'=>'btn btn-info btn-sm','style'=>'margin-top:27px;','onclick'=>"searchGoods()"]) ?>
@@ -58,8 +64,17 @@ $this->params['breadcrumbs'][] = $this->title;
 
     			<?php }else{?>
         			<div class="row">
-            			 <div class="col-lg-4">         
-                			<?= $form->field($model, 'style_sn')->textInput() ?>
+            			 <div class="col-lg-4">
+
+                             <?= $form->field($model, 'style_sn')->widget(kartik\select2\Select2::class, [
+                                 'data' => Yii::$app->styleService->style->getStyleList('style_sn'),
+                                 'options' => ['placeholder' => '请选择'],
+                                 'pluginOptions' => [
+                                     'allowClear' => true
+                                 ],
+                             ]);?>
+
+
             			 </div>
             			 <div class="col-lg-1">
                             <?= Html::button('查询',['class'=>'btn btn-info btn-sm','style'=>'margin-top:27px;','onclick'=>"searchGoods()"]) ?>
@@ -82,11 +97,25 @@ $this->params['breadcrumbs'][] = $this->title;
                             break;
                         }
                         default:{
+                            /*
                             $attr_values = Yii::$app->styleService->styleAttribute->getDropdowns($model->style_id,$attr_id);
                             if(empty($attr_values)) {
                                 $attr_values = Yii::$app->styleService->attribute->getValuesByAttrId($attr_id);
                             }
-                            $input = $form->field($model,$field)->dropDownList($attr_values,['prompt'=>'请选择'])->label($attr_name);
+                            */
+                            $attr_values = Yii::$app->styleService->attribute->getValuesByAttrId($attr_id);
+                            if(in_array($attr_id,\addons\Style\common\enums\AttrIdEnum::getMulteAttr())){
+                                $input = $form->field($model, $field)->widget(kartik\select2\Select2::class, [
+                                    'data' => $attr_values,
+                                    'options' => ['placeholder' => '请选择','multiple'=>true],
+                                    'pluginOptions' => [
+                                        'allowClear' => true,
+                                        'multiple'=>true
+                                    ],
+                                ])->label($attr_name);
+                            }else{
+                                $input = $form->field($model,$field)->dropDownList($attr_values,['prompt'=>'请选择'])->label($attr_name);
+                            }
                             break;
                         }
                     }//end switch
@@ -106,9 +135,6 @@ $this->params['breadcrumbs'][] = $this->title;
                 <div class="row">
                     <div class="col-lg-4">
                         <?= $form->field($model, 'stone_info')->textarea() ?>
-                    </div>                   
-                    <div class="col-lg-4">
-                        <?= $form->field($model, 'parts_info')->textarea() ?>
                     </div>
                      <div class="col-lg-4">
                 		<?= $form->field($model, 'remark')->textarea() ?>

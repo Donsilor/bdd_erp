@@ -139,7 +139,7 @@ $params = $params ? "&".http_build_query($params) : '';
 
                 ]),
                 'value'=>function($model){
-                    return Yii::$app->formatter->asDatetime($model->created_at);
+                    return Yii::$app->formatter->asDate($model->created_at);
                 }
 
             ],
@@ -176,7 +176,7 @@ $params = $params ? "&".http_build_query($params) : '';
 
                 ]),
                 'value'=>function($model){
-                    return Yii::$app->formatter->asDatetime($model->audit_time);
+                    return Yii::$app->formatter->asDate($model->audit_time);
                 }
 
             ],
@@ -214,6 +214,9 @@ $params = $params ? "&".http_build_query($params) : '';
                     }elseif($model->apply_status == ApplyStatusEnum::CONFIRM){
                         $audit_name = Yii::$app->services->flowType->getCurrentUsersName(\common\enums\TargetTypeEnum::PURCHASE_APPLY_S_MENT,$model->id);
                         $audit_name_str = $audit_name ? "({$audit_name})" : "";
+                    }
+                    if($model->apply_status == ApplyStatusEnum::CANCEL) {
+                        return '<font color="red">'.ApplyStatusEnum::getValue($model->apply_status).'</font>';
                     }
                     return ApplyStatusEnum::getValue($model->apply_status) .$audit_name_str;
                 },

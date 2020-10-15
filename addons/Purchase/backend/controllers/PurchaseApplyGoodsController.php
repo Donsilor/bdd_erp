@@ -3,9 +3,11 @@
 namespace addons\Purchase\backend\controllers;
 
 use addons\Purchase\common\enums\ApplyConfirmEnum;
+use addons\Purchase\common\enums\ApplyStatusEnum;
 use addons\Purchase\common\forms\PurchaseApplyDiamondForm;
 use addons\Purchase\common\forms\PurchaseApplyFormatForm;
 use addons\Purchase\common\forms\PurchaseApplyGoodsConfimForm;
+use addons\Purchase\common\models\PurchaseApplyGoods;
 use addons\Shop\common\enums\AttrIdEnum;
 use addons\Style\common\enums\JintuoTypeEnum;
 use addons\Style\common\enums\StyleSexEnum;
@@ -595,15 +597,27 @@ class PurchaseApplyGoodsController extends BaseController
     public function actionDesignConfirm()
     {
         $id = Yii::$app->request->get('id');
-        $model = $this->findModel($id);
-        $model->confirm_status = ApplyConfirmEnum::CONFIRM;
-        $model->confirm_design_time = time();
-        $model->confirm_design_id = \Yii::$app->user->identity->id;
-        if(false === $model->save()){
-            return $this->message($this->getError($model), $this->redirect(\Yii::$app->request->referrer), 'error');
+        try{
+            $trans = Yii::$app->db->beginTransaction();
+
+            $model = $this->findModel($id);
+            $model->confirm_status = ApplyConfirmEnum::CONFIRM;
+            $model->confirm_design_time = time();
+            $model->confirm_design_id = \Yii::$app->user->identity->id;
+            if(false === $model->save()){
+                return $this->message($this->getError($model), $this->redirect(\Yii::$app->request->referrer), 'error');
+            }
+            Yii::$app->purchaseService->apply->confirmAfter($model->apply_id);
+
+            $trans->commit();
+            return $this->message('操作成功', $this->redirect(\Yii::$app->request->referrer), 'success');
+
+
+        }catch (\Exception $e){
+            $trans->rollBack();
+            return $this->message($e->getMessage(), $this->redirect(Yii::$app->request->referrer), 'error');
         }
 
-        return $this->message('操作成功', $this->redirect(\Yii::$app->request->referrer), 'success');
 
     }
 
@@ -633,9 +647,12 @@ class PurchaseApplyGoodsController extends BaseController
                 if(false === $model->save()){
                     throw new \Exception($this->getError($model));
                 }
+
+                Yii::$app->purchaseService->apply->confirmAfter($model->apply_id);
+                
                 $trans->commit();
-                Yii::$app->getSession()->setFlash('success','保存成功');
-                return $this->redirect(Yii::$app->request->referrer);
+                return $this->message('操作成功', $this->redirect(\Yii::$app->request->referrer), 'success');
+
             }catch (\Exception $e){
                 $trans->rollBack();
                 return $this->message($e->getMessage(), $this->redirect(Yii::$app->request->referrer), 'error');

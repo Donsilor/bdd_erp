@@ -62,3 +62,30 @@ $form = ActiveForm::begin([
         <button class="btn btn-primary" type="submit">保存</button>
     </div>
 <?php ActiveForm::end(); ?>
+
+<script>
+    var formId = 'purchaseapply';
+    function getWarehouse() {
+        var channel_id = $("#"+formId+"-channel_id").val();
+        var html = '<option>请选择</option>';
+        $.ajax({
+            url: '<?php echo Url::to(['../warehouse/warehouse/get-warehouses'])?>',
+            type: 'post',
+            dataType: 'json',
+            data: {channel_id: channel_id},
+            success: function (msg) {
+                console.log(msg.data)
+                $.each(msg.data, function (key, val) {
+                    html += '<option value="' + key + '">' + val + '</option>';
+                });
+                $("#"+formId+"-warehouse_id").html(html);
+            }
+        })
+    }
+
+    $("#"+formId+"-channel_id").change(function(){
+        getWarehouse();
+    });
+
+
+</script>
