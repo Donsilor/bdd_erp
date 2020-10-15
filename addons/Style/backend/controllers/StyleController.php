@@ -119,10 +119,8 @@ class StyleController extends BaseController
         $this->activeFormValidate($model);
         $oldinfo = $model->toArray();
         if ($model->load(Yii::$app->request->post())) {
-            //重新编辑后，审核状态改为待审核
-            if($isNewRecord || $model->audit_status == AuditStatusEnum::UNPASS){ 
-                $model->audit_status = AuditStatusEnum::SAVE;
-            }
+            //重新编辑后，审核状态改为未审核
+            $model->audit_status = AuditStatusEnum::SAVE;
             $model->is_inlay = $model->type->is_inlay ?? 0;         
             try{                
                 $trans = Yii::$app->trans->beginTransaction();
