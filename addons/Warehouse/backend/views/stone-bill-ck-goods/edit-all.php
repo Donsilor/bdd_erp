@@ -126,11 +126,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'filter' => false,
                                 'headerOptions' => ['class' => 'col-md-1'],
                             ],
-                            [
-                                'attribute' => 'warehouseStone.stock_weight',
-                                'filter' => false,
-                                'headerOptions' => ['class' => 'col-md-1'],
-                            ],
+
 
                             [
                                 'attribute' => 'stone_weight',
@@ -143,6 +139,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'format' => 'raw',
                             ],
                             [
+                                'label'=>'库存总粒数',
                                 'attribute' => 'warehouseStone.stock_cnt',
                                 'filter' => false,
                                 'headerOptions' => ['class' => 'col-md-2','style'=>'text-align:center;'],

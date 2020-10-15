@@ -93,10 +93,10 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'filter' => true,
                                 'headerOptions' => ['class' => 'col-md-2'],
                             ],
+
                             [
-                                'attribute' => 'warehouseStone.stock_weight',
+                                'attribute' => 'stone_weight',
                                 'filter' => false,
-                                'headerOptions' => ['class' => 'col-md-2'],
                             ],
                             [
                                 'attribute' => 'warehouseStone.stock_cnt',
@@ -104,7 +104,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'headerOptions' => ['class' => 'col-md-2'],
                             ],
                             [
-                                'attribute' => 'stone_weight',
+                                'attribute' => 'stone_num',
                                 'filter' => false,
                             ],
                             [

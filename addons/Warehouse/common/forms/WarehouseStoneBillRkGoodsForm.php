@@ -2,6 +2,7 @@
 
 namespace addons\Warehouse\common\forms;
 
+use common\helpers\StringHelper;
 use Yii;
 use addons\Warehouse\common\models\WarehouseStoneBillGoods;
 use addons\Style\common\enums\AttrIdEnum;
@@ -13,7 +14,7 @@ use common\helpers\ArrayHelper;
  */
 class WarehouseStoneBillRkGoodsForm extends WarehouseStoneBillGoods
 {
-
+    public $ids;
     public $file;
     /**
      * {@inheritdoc}
@@ -25,8 +26,12 @@ class WarehouseStoneBillRkGoodsForm extends WarehouseStoneBillGoods
             ['stone_price','compare','compareValue' => 0, 'operator' => '>'],
             ['stone_num','compare','compareValue' => 0, 'operator' => '>'],
             [['stone_sn'],'default','value' => NULL],
-//            [['stone_sn','bill_type'],'unique','targetAttribute' => ['stone_sn', 'bill_type'],'comboNotUnique'=>'石料编号不能重复'],
-//            [['stone_sn'],'unique', 'targetClass' => 'addons\Warehouse\common\models\WarehouseGold', 'message' => '库存中石料编号已经存在.']
+            [['cost_price'], 'parseCostPriceScope'],
+            [['carat'], 'parseCaratScope'],
+            [['stone_sn','bill_type'],'unique','targetAttribute' => ['stone_sn', 'bill_type'],'message'=>'石料编号不能重复','when' => function ($model) {
+                return !empty($model->stone_sn);
+            }],
+            [['stone_sn'],'unique', 'targetClass' => 'addons\Warehouse\common\models\WarehouseStone', 'message' => '库存中石料编号已经存在.']
         ];
         return ArrayHelper::merge(parent::rules() , $rules);
     }
@@ -41,10 +46,43 @@ class WarehouseStoneBillRkGoodsForm extends WarehouseStoneBillGoods
         ]);
     }
 
+    public function parseCostPriceScope(){
+        $stone_price = $this->stone_price ?? 0;
+        $stone_weight = $this->stone_weight ?? 0;
+        $this->cost_price = $stone_price * $stone_weight;
+        return $this->cost_price;
+    }
+
+    public function parseCaratScope(){
+        $stone_weight = $this->stone_weight ?? 0;
+        $stone_num = $this->stone_num ?? 1;
+        $this->carat = round($stone_weight / $stone_num,3);
+        return $this->carat;
+    }
 
 
+    /**
+     * {@inheritdoc}
+     */
+    public function getIds()
+    {
+        if ($this->ids) {
+            return StringHelper::explode($this->ids);
+        }
+        return [];
+    }
 
 
+    /**
+     * 根据款号获取属性值列表
+     * @param string $style_sn
+     * @param integer $attr_id
+     * @return array
+     */
+    public function getAttrValueListByStyle($style_sn, $attr_id)
+    {
+        return \Yii::$app->attr->valueMap($attr_id) ?? [];//暂时放开限制
+    }
 
    
 }

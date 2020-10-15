@@ -3,6 +3,8 @@
 namespace addons\Warehouse\common\forms;
 
 use addons\Style\common\models\StoneStyle;
+use addons\Warehouse\common\enums\StoneBillTypeEnum;
+use addons\Warehouse\common\models\WarehouseStoneBillGoods;
 use Yii;
 use common\models\forms\ImportForm;
 use addons\Style\common\enums\AttrIdEnum;
@@ -68,7 +70,7 @@ class WarehouseStoneImportRkForm extends ImportForm
     ];
     public $requredColumns = [
             'style_sn',
-            'stone_name',
+//            'stone_name',
 //            'shape',
             'stone_num',
             'stone_weight',
@@ -164,8 +166,14 @@ class WarehouseStoneImportRkForm extends ImportForm
         //石料编号
         if($this->stone_sn){
             if(in_array($this->stone_sn,$this->_stoneCache)){
-                $this->addRowError($rowIndex, 'stone_sn', "[{$this->stone_sn}]重复");
+                $this->addRowError($rowIndex, 'stone_sn', "[{$this->stone_sn}]不能重复");
             }
+
+            $count = WarehouseStoneBillGoods::find()->where(['bill_type'=>StoneBillTypeEnum::STONE_RK ,'stone_sn'=>$this->stone_sn])->count();
+            if($count){
+                $this->addRowError($rowIndex, 'stone_sn', "[{$this->stone_sn}]不能重复");
+            }
+
             $this->_stoneCache[] = $this->stone_sn;
         }
 
@@ -214,7 +222,6 @@ class WarehouseStoneImportRkForm extends ImportForm
             $form->cert_type = $form->cert_type ?? $this->_style->cert_type;
             $form->stone_size = $this->stone_size;
             $form->remark = $this->remark;
-
         }else{
             $form = $this->goods_list[$rowIndex];
         }

@@ -45,7 +45,7 @@ class StoneBillRkGoodsController extends BaseController
             'scenario' => 'default',
             'partialMatchAttributes' => ['gold_name', 'remark'], // 模糊查询
             'defaultOrder' => [
-                'id' => SORT_DESC
+                'id' => SORT_ASC
             ],
             'pageSize' => $this->pageSize,
             'relations' => [
@@ -235,17 +235,12 @@ class StoneBillRkGoodsController extends BaseController
                     if (false === $goods->validate()) {
                         throw new \Exception($this->getError($goods));
                     }
-                    $result = $model->updateFromValidate($goods);
-                    if($result['error'] == false){
-                        throw new \Exception($result['msg']);
-                    }
-                    if (false === $goods->save(true, [$name])) {
+
+                    if (false === $goods->save()) {
                         throw new \Exception($this->getError($goods));
                     }
-                    $model->bill_id = $goods->bill_id;
-                    \Yii::$app->warehouseService->billT->syncUpdatePrice($goods);
                 }
-                \Yii::$app->warehouseService->billT->WarehouseBillTSummary($model->bill_id);
+                \Yii::$app->warehouseService->stoneBill->stoneBillSummary($model->bill_id);
                 $trans->commit();
                 Yii::$app->getSession()->setFlash('success', '保存成功');
                 return ResultHelper::json(200, '保存成功');//['url'=>Url::to(['edit-all', 'bill_id' => $model->bill_id])."#suttle_weight"]
