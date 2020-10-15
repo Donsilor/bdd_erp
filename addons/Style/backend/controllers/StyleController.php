@@ -163,9 +163,9 @@ class StyleController extends BaseController
                             throw new \Exception($this->getError($stoneM));
                         }
                     }
-                    $log_msg = "创建款式";
+                    $log_msg = "创建款式信息";
                 }else{
-                    $log_msg = "编辑款式";
+                    $log_msg = "编辑款式信息";
                 }
                 //创建单独属性信息
                 $saveAttr[$model->id]= [

@@ -115,7 +115,7 @@ class StyleAttributeController extends BaseController
                     'log_type' => LogTypeEnum::ARTIFICIAL,
                     'log_time' => time(),
                     'log_module' => '款式列表',
-                    'log_msg' => "编辑属性",
+                    'log_msg' => "编辑属性信息",
                 ];
                 \Yii::$app->styleService->styleLog->createStyleLog($log);
                 $trans->commit();
