@@ -89,7 +89,9 @@ class WarehouseGoodsController extends BaseController
             ->andFilterWhere(['in', 'warehouse_id', $search->warehouse_id])
             ->andFilterWhere(['in', 'supplier_id', $search->supplier_id])
             ->andFilterWhere(['in', 'style_channel_id', $search->style_channel_id])
-            ->andFilterWhere(['in', 'goods_source', $search->goods_source]);
+            ->andFilterWhere(['in', 'goods_source', $search->goods_source])
+            ->andFilterWhere($search->betweenCreatedAt())
+            ->andFilterWhere($search->betweenChukuTime());
 
         $created_at = $searchModel->created_at;
         if (!empty($created_at)) {
