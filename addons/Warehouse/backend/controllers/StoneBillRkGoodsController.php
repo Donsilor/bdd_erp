@@ -236,11 +236,11 @@ class StoneBillRkGoodsController extends BaseController
                         throw new \Exception($this->getError($goods));
                     }
 
-                    if (false === $goods->save(true, [$name])) {
+                    if (false === $goods->save()) {
                         throw new \Exception($this->getError($goods));
                     }
                 }
-                \Yii::$app->warehouseService->billT->WarehouseBillTSummary($model->bill_id);
+                \Yii::$app->warehouseService->stoneBill->stoneBillSummary($model->bill_id);
                 $trans->commit();
                 Yii::$app->getSession()->setFlash('success', '保存成功');
                 return ResultHelper::json(200, '保存成功');//['url'=>Url::to(['edit-all', 'bill_id' => $model->bill_id])."#suttle_weight"]
