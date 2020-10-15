@@ -165,38 +165,6 @@ class StoneBillRkGoodsController extends BaseController
 
 
 
-    /**
-     * ajax更新排序/状态
-     *
-     * @param $id
-     * @return array
-     */
-    public function actionAjaxUpdate($id)
-    {
-        if (!($model = $this->modelClass::findOne($id))) {
-            return ResultHelper::json(404, '找不到数据');
-        }
-        $params = Yii::$app->request->get();
-        $keys = array_keys($params);  //$model->attributes();
-        try {
-            $trans = \Yii::$app->db->beginTransaction();
-            $model->attributes = ArrayHelper::filter($params, $keys);
-            $result = $model->updateFromValidate($model);
-            if($result['error'] == false){
-                throw new \Exception($result['msg']);
-            }
-            if (!$model->save()) {
-                throw new \Exception("保存失败");
-            }
-            \Yii::$app->warehouseService->billT->syncUpdatePrice($model);
-            \Yii::$app->warehouseService->billT->WarehouseBillTSummary($model->bill_id);
-            $trans->commit();
-            return ResultHelper::json(200, '修改成功');
-        } catch (\Exception $e) {
-            $trans->rollBack();
-            return ResultHelper::json(422, $e->getMessage());
-        }
-    }
 
     /**
      *

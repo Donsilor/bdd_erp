@@ -129,19 +129,19 @@ return [
                         'route' => 'gold-bill-d/index',
                     ],
                     [
-                        'title' => '盘点单（金料）',
+                        'title' => '盘点单(金料)',
                         'route' => 'gold-bill-w/index',
                     ],
                     [
-                        'title' => '出入库列表（金料）',
+                        'title' => '出入库列表(金料)',
                         'route' => 'gold-bill/index',
                     ],
                     [
-                        'title' => '其他入库单（金料）',
+                        'title' => '其它入库单(金料)',
                         'route' => 'gold-bill-t/index',
                     ],
                     [
-                        'title' => '其他出库单（金料）',
+                        'title' => '其它出库单(金料)',
                         'route' => 'gold-bill-o/index',
                     ],
                 ],
@@ -180,11 +180,11 @@ return [
                         'route' => 'stone-bill/index',
                     ],
                     [
-                        'title' => '其他入库单(石料)',
+                        'title' => '其它入库单(金料)',
                         'route' => 'stone-bill-rk/index',
                     ],
                     [
-                        'title' => '其他出库单(石料)',
+                        'title' => '其它出库单(石料)',
                         'route' => 'stone-bill-ck/index',
                     ],
                 ],
