@@ -428,7 +428,66 @@ $params = $params ? "&".http_build_query($params) : '';
                                     </div>
                                 </div>
                             </div>
-
+                            <div class="row">
+                                <div class="col-lg-3">
+                                    <div class="form-group field-cate-sort">
+                                        <div class="col-sm-4 text-right">
+                                            <label class="control-label" for="cate-sort">入库时间：</label>
+                                        </div>
+                                        <div class="col-sm-8">
+                                            <?= DateRangePicker::widget([    // 日期组件
+                                                'model' => $search,
+                                                //'attribute' => 'created_at',
+                                                'name' => 'created_at',
+                                                'value' => $search->created_at,
+                                                'options' => ['placeholder' => "请选择", 'readonly' => false, 'class' => 'form-control', 'style' => 'background-color:#fff;width:220px;'],
+                                                'pluginOptions' => [
+                                                    'format' => 'yyyy-mm-dd',
+                                                    'locale' => [
+                                                        'separator' => '/',
+                                                    ],
+                                                    'endDate' => date('Y-m-d', time()),
+                                                    'todayHighlight' => true,
+                                                    'autoclose' => true,
+                                                    'todayBtn' => 'linked',
+                                                    'clearBtn' => true,
+                                                ],
+                                            ])
+                                            ?>
+                                            <div class="help-block"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-3">
+                                    <div class="form-group field-cate-sort">
+                                        <div class="col-sm-4 text-right">
+                                            <label class="control-label" for="cate-sort">出库时间：</label>
+                                        </div>
+                                        <div class="col-sm-8">
+                                            <?= DateRangePicker::widget([    // 日期组件
+                                                'model' => $search,
+                                                //'attribute' => 'chuku_time',
+                                                'name' => 'chuku_time',
+                                                'value' => $search->chuku_time,
+                                                'options' => ['placeholder' => "请选择", 'readonly' => false, 'class' => 'form-control', 'style' => 'background-color:#fff;width:220px;'],
+                                                'pluginOptions' => [
+                                                    'format' => 'yyyy-mm-dd',
+                                                    'locale' => [
+                                                        'separator' => '/',
+                                                    ],
+                                                    'endDate' => date('Y-m-d', time()),
+                                                    'todayHighlight' => true,
+                                                    'autoclose' => true,
+                                                    'todayBtn' => 'linked',
+                                                    'clearBtn' => true,
+                                                ],
+                                            ])
+                                            ?>
+                                            <div class="help-block"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
 
 
 
