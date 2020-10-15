@@ -171,7 +171,7 @@ $params = $params ? "&" . http_build_query($params) : '';
                                 'model' => $searchModel,
                                 'attribute' => 'created_at',
                                 'value' => $searchModel->created_at,
-                                'options' => ['readonly' => false, 'class' => 'form-control', 'style' => 'background-color:#fff;width:150px;'],
+                                'options' => ['readonly' => false, 'class' => 'form-control', 'style' => 'background-color:#fff;width:100px;'],
                                 'pluginOptions' => [
                                     'format' => 'yyyy-mm-dd',
                                     'locale' => [
@@ -195,7 +195,7 @@ $params = $params ? "&" . http_build_query($params) : '';
                             'value' => function ($model) {
                                 $remark = "";
                                 if($model->remark && strlen($model->remark) > 7){
-                                    $remark = mb_substr($model->remark, 0, 7)."..." ?? "";
+                                    $remark = mb_substr($model->remark, 0, 15)."..." ?? "";
                                 }
                                 return "<span title='{$model->remark}'>".$remark."</span>";
                             },
