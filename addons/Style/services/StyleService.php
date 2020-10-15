@@ -757,6 +757,46 @@ class StyleService extends Service
         }
         //款式属性信息
         if(!empty($saveAttr)){
+            $this->createStyleAttr($saveAttr);
+        }
+        //创建日志信息
+        if (!empty($saveLog)) {
+            $value = [];
+            $key = array_keys($saveLog[0]);
+            foreach ($saveLog as $item) {
+                $logM = new StyleLog();
+                $logM->setAttributes($item);
+                if (!$logM->validate()) {
+                    throw new \Exception($this->getError($logM));
+                }
+                $value[] = array_values($item);
+                if (count($value) >= 10) {
+                    $res = \Yii::$app->db->createCommand()->batchInsert(StyleLog::tableName(), $key, $value)->execute();
+                    if (false === $res) {
+                        throw new \Exception("创建日志信息失败1");
+                    }
+                    $value = [];
+                }
+            }
+            if (!empty($value)) {
+                $res = \Yii::$app->db->createCommand()->batchInsert(StyleLog::tableName(), $key, $value)->execute();
+                if (false === $res) {
+                    throw new \Exception("创建日志信息失败2");
+                }
+            }
+        }
+    }
+
+    /**
+     * 创建属性信息
+     * @param array $saveAttr
+     * @return array
+     * @throws
+     */
+    public function createStyleAttr($saveAttr = [])
+    {
+        //款式属性信息
+        if (!empty($saveAttr)) {
             foreach ($saveAttr as $style_id => $attrInfo) {
                 $styleM = Style::find()->select(['style_cate_id'])->where(['id' => $style_id])->one();
                 foreach ($attrInfo as $attrId => $val) {
@@ -782,32 +822,6 @@ class StyleService extends Service
                     } else {
                         continue;
                     }
-                }
-            }
-        }
-        //创建日志信息
-        if (!empty($saveLog)) {
-            $value = [];
-            $key = array_keys($saveLog[0]);
-            foreach ($saveLog as $item) {
-                $logM = new StyleLog();
-                $logM->setAttributes($item);
-                if (!$logM->validate()) {
-                    throw new \Exception($this->getError($logM));
-                }
-                $value[] = array_values($item);
-                if (count($value) >= 10) {
-                    $res = \Yii::$app->db->createCommand()->batchInsert(StyleLog::tableName(), $key, $value)->execute();
-                    if (false === $res) {
-                        throw new \Exception("创建日志信息失败1");
-                    }
-                    $value = [];
-                }
-            }
-            if (!empty($value)) {
-                $res = \Yii::$app->db->createCommand()->batchInsert(StyleLog::tableName(), $key, $value)->execute();
-                if (false === $res) {
-                    throw new \Exception("创建日志信息失败2");
                 }
             }
         }

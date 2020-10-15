@@ -23,6 +23,7 @@ use addons\Style\common\forms\StyleAuditForm;
 use addons\Style\common\forms\StyleSearchForm;
 use addons\Style\common\enums\StonePositionEnum;
 use addons\Style\common\enums\LogTypeEnum;
+use addons\Style\common\enums\AttrIdEnum;
 use common\enums\AuditStatusEnum;
 use common\enums\FlowStatusEnum;
 use common\enums\TargetTypeEnum;
@@ -171,6 +172,11 @@ class StyleController extends BaseController
                 }else{
                     $log_msg = "编辑款式";
                 }
+                //创建属性信息
+                $saveAttr[$model->id]= [
+                    AttrIdEnum::MATERIAL_TYPE => \Yii::$app->styleService->style->getMaterialTypeValues($model->style_material),
+                ];
+                \Yii::$app->styleService->style->createStyleAttr($saveAttr);
                 $log = [
                     'style_id' => $model->id,
                     'style_sn' => $model->style_sn,
