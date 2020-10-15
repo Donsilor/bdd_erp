@@ -73,7 +73,16 @@ class WarehouseStoneBillRkGoodsForm extends WarehouseStoneBillGoods
     }
 
 
-
+    /**
+     * 根据款号获取属性值列表
+     * @param string $style_sn
+     * @param integer $attr_id
+     * @return array
+     */
+    public function getAttrValueListByStyle($style_sn, $attr_id)
+    {
+        return \Yii::$app->attr->valueMap($attr_id) ?? [];//暂时放开限制
+    }
 
    
 }
