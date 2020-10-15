@@ -41,6 +41,10 @@ class FlowTypeService extends Service
      */
     public function createFlow($flow_type_id,$target_id,$target_no=''){
 
+
+        //取消之前的流程
+        Flow::updateAll(['flow_status'=>FlowStatusEnum::CANCEL],['flow_type'=>$flow_type_id,'target_id'=>$target_id]);
+
         $flow_type = FlowType::find()->where(['id'=>$flow_type_id,'status' => StatusEnum::ENABLED])->one();
         if(empty($flow_type)){
             throw new \Exception('审批流程不存在');
@@ -101,6 +105,11 @@ class FlowTypeService extends Service
         if(false === $flow->save(true,['flow_detail_id'])){
             throw new \Exception($this->getError($flow));
         }
+
+
+
+
+
 
 
         return $flow ;
