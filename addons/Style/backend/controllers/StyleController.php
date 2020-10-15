@@ -74,8 +74,13 @@ class StyleController extends BaseController
         $search = new StyleSearchForm();
         $search->attributes = \Yii::$app->request->get();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams, ['created_at']);
+        $styleArr = $search->style_sns();
+        if (count($styleArr) == 1) {
+            $dataProvider->query->andFilterWhere(['like', 'style_sn', $styleArr[0]]);
+        } else {
+            $dataProvider->query->andFilterWhere(['in', 'style_sn', $search->style_sns()]);
+        }
         $dataProvider->query
-            ->andFilterWhere(['in', 'style_sn', $search->style_sns()])
             ->andFilterWhere(['like', 'style_name', $search->style_name()])
             ->andFilterWhere(['style_sex' => $search->style_sex])
             ->andFilterWhere(['style_material' => $search->style_material])
