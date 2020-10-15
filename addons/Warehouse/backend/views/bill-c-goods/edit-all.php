@@ -130,17 +130,6 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'filter' => false,
                             ],
                             [
-                                'attribute' => 'chuku_price',
-                                'headerOptions' => ['style' => 'background-color:#FFFF88;'],
-                                'footerOptions' => ['style' => 'background-color:#FFFF88;'],
-                                'visible' => \common\helpers\Auth::verify(\common\enums\SpecialAuthEnum::VIEW_CHUKU_PRICE),
-                                'filter' => false,
-                                'value' => function ($model) {
-                                    return Html::ajaxInput('chuku_price', $model->chuku_price, ['style' => "border:1px solid #BBD6FF"]);
-                                },
-                                'format' => 'raw',
-                            ],
-                            [
                                 'label' => '仓库',
                                 'attribute' => 'warehouse_id',
                                 'value' => "warehouse.name",
@@ -200,6 +189,18 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'attribute' => 'goods.cost_price',
                                 'visible' => \common\helpers\Auth::verify(\common\enums\SpecialAuthEnum::VIEW_CAIGOU_PRICE),
                                 'filter' => false,
+                            ],
+                            [
+                                'attribute' => 'chuku_price',
+                                'headerOptions' => ['style' => 'background-color:#FFFF88;'],
+                                'footerOptions' => ['style' => 'background-color:#FFFF88;'],
+                                'visible' => \common\helpers\Auth::verify(\common\enums\SpecialAuthEnum::VIEW_CHUKU_PRICE),
+                                'filter' => false,
+                                'value' => function ($model) {
+                                    return $model->chuku_price ?? 0;
+                                    //return Html::ajaxInput('chuku_price', $model->chuku_price, ['style' => "border:1px solid #BBD6FF"]);
+                                },
+                                'format' => 'raw',
                             ],
                             [
                                 'attribute' => 'goods_remark',

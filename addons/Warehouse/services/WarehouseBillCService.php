@@ -66,6 +66,7 @@ class WarehouseBillCService extends WarehouseBillService
                 'from_warehouse_id' => $goods->warehouse_id,
                 'put_in_type' => $goods->put_in_type,
                 'goods_num' => $goods_num,
+                'chuku_price' => $goods->chuku_price,
             ];
             $goods_val[] = array_values($goodInfo);
             $goods_key = array_keys($goodInfo);

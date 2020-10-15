@@ -158,6 +158,7 @@ class WarehouseBillCForm extends WarehouseBill
                     'diamond_carat' => $goods->diamond_carat,
                     'main_stone_num' => $goods->main_stone_num,
                     'cost_price' => $goods->cost_price,
+                    'chuku_price' => $goods->chuku_price,
                     'cost_amount' => $goods->cost_amount,
                 ];
             }
