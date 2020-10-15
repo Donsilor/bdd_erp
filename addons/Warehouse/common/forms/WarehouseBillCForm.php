@@ -132,10 +132,10 @@ class WarehouseBillCForm extends WarehouseBill
             foreach ($goodsList as $goods) {
                 $finger = "";
                 if($goods->finger){
-                    $finger.= \Yii::$app->attr->valueName($goods->finger)."(美)";
+                    $finger.= \Yii::$app->attr->valueName($goods->finger)."(US)";
                 }
                 if($goods->finger_hk){
-                    $finger.= \Yii::$app->attr->valueName($goods->finger_hk)."(港)";
+                    $finger.= \Yii::$app->attr->valueName($goods->finger_hk)."(HK)";
                 }
                 $searchGoods[] = [
                     'id' => null,
