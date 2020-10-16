@@ -418,6 +418,44 @@ class WarehouseBillTGoodsForm extends WarehouseBillGoodsL
     }
 
     /**
+     *
+     * 批量编辑下拉框取值
+     * @param string $style_sn
+     * @param integer $attr_id
+     * @param string $batch_name
+     * @return array
+     */
+    public function getBatchSelectMap($style_sn = null, $attr_id = null, $batch_name = '')
+    {
+        switch ($batch_name) {
+            case 'peiliao_way':
+                $list = $this->getPeiLiaoWayMap();
+                break;
+            case 'main_pei_type':
+                $list = $this->getPeiShiWayMap();
+                break;
+            case 'second_pei_type':
+                $list = $this->getPeiShiWayMap();
+                break;
+            case 'second_pei_type2':
+                $list = $this->getPeiShiWayMap();
+                break;
+            case 'second_pei_type3':
+                $list = $this->getPeiShiWayMap();
+                break;
+            case 'parts_way':
+                $list = $this->getPeiJianWayMap();
+                break;
+            case 'jintuo_type':
+                $list = $this->getJietuoTypeMap();
+                break;
+            default:
+                $list = $this->getAttrValueListByStyle($style_sn, $attr_id);
+        }
+        return $list ?? [];
+    }
+
+    /**
      * 款式性别
      * @return array
      */
@@ -1750,5 +1788,32 @@ class WarehouseBillTGoodsForm extends WarehouseBillGoodsL
             $result['msg'] = implode('】,【', $msg)."[条码号=".$form->goods_id."]";
         }
         return $result;
+    }
+
+    /**
+     *
+     * 调整数据
+     * @param bool $save
+     * @param WarehouseBillTGoodsForm $form
+     * @return array
+     * @throws
+     */
+    public function correctGoods($form, $save = false)
+    {
+        $saveData = [];
+        //配件金重，配件金价，配件总额，任意填写一个，配件类型：工厂配
+        if ($form->parts_gold_weight || $form->parts_price || $form->parts_amount) {
+            $form->parts_way = PeiJianWayEnum::FACTORY;
+            $saveData['parts_way'] = PeiJianWayEnum::FACTORY;
+        }elseif(!$form->parts_gold_weight && !$form->parts_price && !$form->parts_amount) {
+            $form->parts_way = PeiJianWayEnum::NO_PEI;
+            $saveData['parts_way'] = PeiJianWayEnum::NO_PEI;
+        }
+        if ($save) {
+            if (false === $form->save()) {
+                throw new \Exception("操作失败");
+            }
+        }
+        return [$form, $saveData];
     }
 }

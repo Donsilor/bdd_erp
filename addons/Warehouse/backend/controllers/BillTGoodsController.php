@@ -2,7 +2,6 @@
 
 namespace addons\Warehouse\backend\controllers;
 
-use addons\Warehouse\common\forms\WarehouseBillTForm;
 use Yii;
 use common\traits\Curd;
 use common\helpers\Url;
@@ -248,6 +247,7 @@ class BillTGoodsController extends BaseController
             if ($result['error'] == false) {
                 throw new \Exception($result['msg']);
             }
+            $model = $model->correctGoods($model);
             if (!$model->save()) {
                 throw new \Exception("保存失败");
             }
@@ -284,9 +284,6 @@ class BillTGoodsController extends BaseController
         }
         $model->attr_id = \Yii::$app->request->get('attr_id', null);
         $model->attr_id = $model->attr_id ?? \Yii::$app->request->post('attr_id', null);
-//        if (!$model->attr_id) {
-//            return ResultHelper::json(422, '属性ID不能为空');
-//        }
         $check = \Yii::$app->request->get('check', null);
         if ($check) {
             return ResultHelper::json(200, '', ['url' => Url::to([$this->action->id, 'ids' => $model->ids, 'name' => $model->batch_name, 'attr_id' => $model->attr_id])]);
@@ -308,7 +305,7 @@ class BillTGoodsController extends BaseController
                 return ResultHelper::json(422, $e->getMessage());
             }
         }
-        $model->attr_list = $model->getAttrValueListByStyle(null, $model->attr_id);
+        $model->attr_list = $model->getBatchSelectMap(null, $model->attr_id, $model->batch_name);
         return $this->render($this->action->id, [
             'model' => $model,
         ]);

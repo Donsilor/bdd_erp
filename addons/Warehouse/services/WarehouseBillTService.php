@@ -1245,6 +1245,7 @@ class WarehouseBillTService extends Service
             ];
             $goodsM = new WarehouseBillGoodsL();
             $goodsM->setAttributes($item);
+            list($goodsM,) = $form->correctGoods($goodsM);
             if (!$goodsM->validate()) {
                 $flag = false;
                 $error[$i][] = $this->getError($goodsM);
@@ -1328,11 +1329,13 @@ class WarehouseBillTService extends Service
     {
         $name = $form->batch_name;
         $value = $form->batch_value;
-        $updateIds = [];
+        $updateIds = $updateData = [];
         $idArr = array_unique($form->getIds());
         foreach ($idArr as $id) {
             $goods = WarehouseBillTGoodsForm::findOne(['id' => $id]);
             $goods->$name = $value;
+            list($goods, $saveData) = $goods->correctGoods($goods);
+            $updateData[$id] = $saveData;
             if (false === $goods->validate()) {
                 throw new \Exception($this->getError($goods));
             }
@@ -1358,6 +1361,15 @@ class WarehouseBillTService extends Service
             }
             $this->syncUpdatePriceAll(null, $updateIds);
             $this->WarehouseBillTSummary($form->bill_id);
+        }
+        if($updateData){
+            foreach ($updateData as $id => $data) {
+                $goods = WarehouseBillTGoodsForm::findOne(['id' => $id]);
+                $goods->attributes = $data;
+                if (false === $goods->save()) {
+                    throw new \Exception($this->getError($goods));
+                }
+            }
         }
         return $form;
     }
