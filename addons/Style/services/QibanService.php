@@ -121,7 +121,7 @@ class QibanService extends Service
         ];
         $number = Qiban::find()->where($where)->count();
         $number = $number ? $number : 1;
-        $qiban_sn = "QB".date("md",strtotime($date)).str_pad($number, 3,'0',STR_PAD_LEFT);
+        $qiban_sn = "QB".date("ymd",strtotime($date)).str_pad($number, 3,'0',STR_PAD_LEFT);
         if($save === true) {
             $model->qiban_sn = $qiban_sn;
             if(false == $model->save(true,['qiban_sn'])) {
