@@ -2,6 +2,7 @@
 
 namespace addons\Warehouse\backend\controllers;
 
+use addons\Warehouse\common\forms\WarehouseBillTForm;
 use Yii;
 use common\traits\Curd;
 use common\helpers\Url;
@@ -90,8 +91,7 @@ class BillTGoodsController extends BaseController
                 $model->bill_id = $bill_id;
                 Yii::$app->warehouseService->billT->addBillTGoods($model);
                 $trans->commit();
-                \Yii::$app->getSession()->setFlash('success', '保存成功');
-                return $this->redirect(['index', 'bill_id' => $bill_id]);
+                return $this->message("保存成功", $this->redirect(['index', 'bill_id' => $bill_id]), 'success');
             } catch (\Exception $e) {
                 $trans->rollBack();
                 return $this->message($e->getMessage(), $this->redirect(\Yii::$app->request->referrer), 'error');
@@ -272,21 +272,21 @@ class BillTGoodsController extends BaseController
         $this->layout = '@backend/views/layouts/iframe';
 
         $model = new WarehouseBillTGoodsForm();
-        $model->ids = \Yii::$app->request->post('ids', null);
-        $model->ids = $model->ids ?? \Yii::$app->request->get('ids', null);
+        $model->ids = \Yii::$app->request->get('ids', null);
+        $model->ids = $model->ids ?? \Yii::$app->request->post('ids', null);
         if (!$model->ids) {
             return ResultHelper::json(422, "ID不能为空");
         }
-        $model->batch_name = \Yii::$app->request->post('name', null);
-        $model->batch_name = $model->batch_name ?? \Yii::$app->request->get('name', null);
+        $model->batch_name = \Yii::$app->request->get('name', null);
+        $model->batch_name = $model->batch_name ?? \Yii::$app->request->post('name', null);
         if (!$model->batch_name) {
             return ResultHelper::json(422, "字段名称不能为空");
         }
-        $model->attr_id = \Yii::$app->request->post('attr_id', null);
-        $model->attr_id = $model->attr_id ?? \Yii::$app->request->get('attr_id', null);
-        if (!$model->attr_id) {
-            return ResultHelper::json(422, '属性ID不能为空');
-        }
+        $model->attr_id = \Yii::$app->request->get('attr_id', null);
+        $model->attr_id = $model->attr_id ?? \Yii::$app->request->post('attr_id', null);
+//        if (!$model->attr_id) {
+//            return ResultHelper::json(422, '属性ID不能为空');
+//        }
         $check = \Yii::$app->request->get('check', null);
         if ($check) {
             return ResultHelper::json(200, '', ['url' => Url::to([$this->action->id, 'ids' => $model->ids, 'name' => $model->batch_name, 'attr_id' => $model->attr_id])]);
@@ -294,7 +294,8 @@ class BillTGoodsController extends BaseController
         if (\Yii::$app->request->isPost) {
             try {
                 $trans = \Yii::$app->trans->beginTransaction();
-                $model->batch_value = \Yii::$app->request->post('value', null);
+                $post = \Yii::$app->request->post('WarehouseBillTGoodsForm', null);
+                $model->batch_value = $post['batch_value'] ?? \Yii::$app->request->post('value', null);
                 if (!$model->batch_value) {
                     throw new \Exception("输入值不能为空");
                 }

@@ -482,11 +482,11 @@ class WarehouseBillTService extends Service
 //            }
             if (empty($peiliao_way) && $pure_gold_rate > 0) {
                 $peiliao_way = PeiLiaoWayEnum::LAILIAO;
-            }elseif(empty($peiliao_way) && !$pure_gold_rate && $suttle_weight){
+            } elseif (empty($peiliao_way) && !$pure_gold_rate && $suttle_weight) {
                 $peiliao_way = PeiLiaoWayEnum::FACTORY;
-            }elseif(!$pure_gold_rate && !$suttle_weight){
+            } elseif (!$pure_gold_rate && !$suttle_weight) {
                 $peiliao_way = PeiLiaoWayEnum::NO_PEI;
-            }else{
+            } else {
 
             }
             $main_pei_type = $form->formatValue($goods['main_pei_type'], 0) ?? 0;//主石配石方式
@@ -644,12 +644,12 @@ class WarehouseBillTService extends Service
                 $main_stone_colour = $mainAttr['stone_colour'] ?? "";
             }
             //公司配或工厂配，且颜色，净度未填，且石头类型为：钻石，则默认：颜色：H，净度：SI，填写了以填写为准
-            if($main_pei_type != PeiShiWayEnum::NO_PEI
-                && $main_stone_type == 169){//主石类型=钻石
-                if(empty($main_stone_color)){
+            if ($main_pei_type != PeiShiWayEnum::NO_PEI
+                && $main_stone_type == 169) {//主石类型=钻石
+                if (empty($main_stone_color)) {
                     $main_stone_color = '51';//主石颜色=H
                 }
-                if(empty($main_stone_clarity)){
+                if (empty($main_stone_clarity)) {
                     $main_stone_clarity = '448';//主石净度=SI
                 }
             }
@@ -770,12 +770,12 @@ class WarehouseBillTService extends Service
                 $second_stone_colour1 = $second1Attr['stone_colour'] ?? "";
             }
             //公司配或工厂配，且颜色，净度未填，且石头类型为：钻石，则默认：颜色：H，净度：SI，填写了以填写为准
-            if($second_pei_type != PeiShiWayEnum::NO_PEI
-                && $second_stone_type1 == 211){//副石1类型=钻石
-                if(empty($second_stone_color1)){
+            if ($second_pei_type != PeiShiWayEnum::NO_PEI
+                && $second_stone_type1 == 211) {//副石1类型=钻石
+                if (empty($second_stone_color1)) {
                     $second_stone_color1 = '135';//副石1颜色=H
                 }
-                if(empty($second_stone_clarity1)){
+                if (empty($second_stone_clarity1)) {
                     $second_stone_clarity1 = '604';//副石1净度=SI
                 }
             }
@@ -852,12 +852,12 @@ class WarehouseBillTService extends Service
                 $second_stone_clarity2 = $second2Attr['stone_clarity'] ?? "";
             }
             //公司配或工厂配，且颜色，净度未填，且石头类型为：钻石，则默认：颜色：H，净度：SI，填写了以填写为准
-            if($second_pei_type2 != PeiShiWayEnum::NO_PEI
-                && $second_stone_type2 == 225){//副石2类型=钻石
-                if(empty($second_stone_color2)){
+            if ($second_pei_type2 != PeiShiWayEnum::NO_PEI
+                && $second_stone_type2 == 225) {//副石2类型=钻石
+                if (empty($second_stone_color2)) {
                     $second_stone_color2 = '636';//副石2颜色=H
                 }
-                if(empty($second_stone_clarity2)){
+                if (empty($second_stone_clarity2)) {
                     $second_stone_clarity2 = '613';//副石2净度=SI
                 }
             }
@@ -934,12 +934,12 @@ class WarehouseBillTService extends Service
                 $second_stone_clarity3 = $second3Attr['stone_clarity'] ?? "";
             }
             //公司配或工厂配，且颜色，净度未填，且石头类型为：钻石，则默认：颜色：H，净度：SI，填写了以填写为准
-            if($second_pei_type3 != PeiShiWayEnum::NO_PEI
-                && $second_stone_type3 == 480){//副石3类型=钻石
-                if(empty($second_stone_color3)){
+            if ($second_pei_type3 != PeiShiWayEnum::NO_PEI
+                && $second_stone_type3 == 480) {//副石3类型=钻石
+                if (empty($second_stone_color3)) {
                     $second_stone_color3 = '649';//副石3颜色=H
                 }
-                if(empty($second_stone_clarity3)){
+                if (empty($second_stone_clarity3)) {
                     $second_stone_clarity3 = '625';//副石3净度=SI
                 }
             }
@@ -1248,7 +1248,7 @@ class WarehouseBillTService extends Service
             if (!$goodsM->validate()) {
                 $flag = false;
                 $error[$i][] = $this->getError($goodsM);
-            }else{
+            } else {
                 $result = $form->updateFromValidate($goodsM);
                 if ($result['error'] == false) {
                     $flag = false;
@@ -1320,18 +1320,17 @@ class WarehouseBillTService extends Service
     /**
      *
      * 批量编辑
-     * @param $ids
      * @param WarehouseBillTGoodsForm $form
      * @return object
      * @throws
      */
     public function batchEdit($form)
     {
-        $id_arr = array_unique($form->getIds());
         $name = $form->batch_name;
         $value = $form->batch_value;
         $updateIds = [];
-        foreach ($id_arr as $id) {
+        $idArr = array_unique($form->getIds());
+        foreach ($idArr as $id) {
             $goods = WarehouseBillTGoodsForm::findOne(['id' => $id]);
             $goods->$name = $value;
             if (false === $goods->validate()) {
@@ -1341,16 +1340,19 @@ class WarehouseBillTService extends Service
             if ($result['error'] == false) {
                 throw new \Exception($result['msg']);
             }
-            if($goods->style_sn){
-                $form->getAttrValueListByStyle($goods->style_sn, 1);
-                $updateIds[] = $id;
-            }else{
+            if ($goods->style_sn && $form->attr_id) {
+                $valueList = $form->getAttrValueListByStyle($goods->style_sn, $form->attr_id);
+                if ($valueList
+                    && in_array($value, array_keys($valueList))) {
+                    $updateIds[] = $id;
+                }
+            } else {
                 $updateIds[] = $id;
             }
             $form->bill_id = $goods->bill_id;
         }
-        if($updateIds){
-            $res = WarehouseBillTGoodsForm::updateAll([$name => $value], $updateIds);
+        if ($updateIds) {
+            $res = WarehouseBillTGoodsForm::updateAll([$name => $value], ['bill_id' => $form->bill_id, 'id' => $updateIds]);
             if ($res == false) {
                 throw new \Exception("批量填充失败");
             }
@@ -1374,10 +1376,10 @@ class WarehouseBillTService extends Service
         if (!empty($ids)) {
             $where = array_merge($where, ['id' => $ids]);
         }
-        if($form){
+        if ($form) {
             $where = array_merge($where, ['bill_id' => $form->id]);
         }
-        if(!empty($where)){
+        if (!empty($where)) {
             $goods = WarehouseBillTGoodsForm::findAll($where);
             if (!empty($goods)) {
                 foreach ($goods as $good) {

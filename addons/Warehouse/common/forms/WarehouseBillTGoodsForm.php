@@ -31,7 +31,8 @@ class WarehouseBillTGoodsForm extends WarehouseBillGoodsL
         $rules = [
             [['goods_sn', 'to_warehouse_id', 'is_wholesale', 'auto_goods_id', 'goods_num'], 'required'],
             [['file'], 'file', 'extensions' => ['csv']],//'skipOnEmpty' => false,
-            [['ids', 'batch_name', 'batch_value', 'attr_id', 'attr_list'], 'safe'],
+            [['ids', 'batch_name', 'batch_value', 'attr_id'], 'string'],
+            [['attr_list'], 'safe'],
         ];
         return array_merge(parent::rules(), $rules);
     }
