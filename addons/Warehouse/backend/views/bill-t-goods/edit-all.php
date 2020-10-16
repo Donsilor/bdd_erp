@@ -1842,8 +1842,8 @@ $this->params['breadcrumbs'][] = $this->title;
                             [
                                 'attribute' => 'parts_way',
                                 'format' => 'raw',
-                                'headerOptions' => ['class' => 'col-md-1', 'id'=>'parts', 'style' => 'background-color:#cde6c7;'],
-                                'footerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#cde6c7;'],
+                                'headerOptions' => ['class' => 'col-md-1 batch_select_full', 'id'=>'parts', 'attr-name' => 'parts_way', 'style' => 'background-color:#cde6c7;'],
+                                'footerOptions' => ['class' => 'col-md-1 batch_select_full2', 'attr-name' => 'parts_way', 'style' => 'background-color:#cde6c7;'],
                                 'value' => function ($model, $key, $index, $widget) {
                                     $widget->footer = $model->getAttributeLabel('parts_way');
                                     return Html::ajaxSelect($model, 'parts_way', $model->getPeiJianWayMap(), ['data-id' => $model->id]);
@@ -2440,8 +2440,8 @@ $this->params['breadcrumbs'][] = $this->title;
                             [
                                 'attribute' => 'jintuo_type',
                                 'format' => 'raw',
-                                'headerOptions' => ['class' => 'col-md-1', 'id' => 'price', 'style' => 'background-color:#b7ba6b;'],
-                                'footerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#b7ba6b;'],
+                                'headerOptions' => ['class' => 'col-md-1 batch_select_full', 'id' => 'price', 'id'=>'parts', 'attr-name' => 'jintuo_type', 'style' => 'background-color:#b7ba6b;'],
+                                'footerOptions' => ['class' => 'col-md-1 batch_select_full2', 'attr-name' => 'jintuo_type', 'style' => 'background-color:#b7ba6b;'],
                                 'value' => function ($model, $key, $index, $widget) {
                                     $widget->footer = $model->getAttributeLabel('jintuo_type');
                                     return Html::ajaxSelect($model, 'jintuo_type', $model->getJietuoTypeMap(), ['data-id' => $model->id, 'prompt' => '请选择']);
