@@ -86,7 +86,7 @@ $this->params['breadcrumbs'][] = $this->title;
             [
                     'attribute' => 'out_trade_no',
                     'value'=>function($model) {
-                        return Html::a($model->out_trade_no, ['view', 'id' => $model->id], ['class'=>'openContab','style'=>"text-decoration:underline;color:#3c8dbc"]);
+                        return Html::a($model->out_trade_no, ['view', 'id' => $model->id,'returnUrl'=>Url::getReturnTab()], ['class'=>'openContab','style'=>"text-decoration:underline;color:#3c8dbc"]);
                     },
                     'filter' => Html::activeTextInput($searchModel, 'out_trade_no', [
                             'class' => 'form-control',
