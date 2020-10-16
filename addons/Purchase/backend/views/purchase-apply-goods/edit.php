@@ -77,6 +77,7 @@ $this->params['breadcrumbs'][] = $this->title;
                              //$_field = $is_require == 1 ? 'attr_require':'attr_custom';
                              $_field = in_array($attr_id,$model->getAttrType('require')) ? 'attr_require':'attr_custom';
                              $field = "{$_field}[{$attr_id}]";
+
                              switch ($attr['input_type']){
                                  case common\enums\InputTypeEnum::INPUT_TEXT :{
                                      $input = $form->field($model,$field)->textInput()->label($attr_name);

@@ -73,7 +73,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'class' => 'yii\grid\ActionColumn',
                                 'header' => '操作',
                                 //'headerOptions' => ['width' => '150'],
-                                'template' => '{edit} {apply-edit} {format-edit} {audit}   {delete}',
+                                'template' => '{edit} {apply-edit} {format-edit} {audit}  {copy} {delete}',
                                 'buttons' => [
                                     'edit' => function($url, $model, $key) use($apply){
                                          if($apply->apply_status <= ApplyStatusEnum::CONFIRM ) {
@@ -113,6 +113,12 @@ $this->params['breadcrumbs'][] = $this->title;
 
                                         }
                                     },
+                                    'copy' => function($url, $model, $key) use($apply){
+                                        if($apply->apply_status == ApplyStatusEnum::SAVE) {
+                                            return Html::edit(['copy','id' => $model->id,'apply_id'=>$apply->id,'returnUrl' => Url::getReturnUrl()],'复制',['class' => 'btn btn-danger btn-xs']);
+                                        }
+                                    },
+
                                     'delete' => function($url, $model, $key) use($apply){
                                         if($apply->apply_status == ApplyStatusEnum::SAVE) {
                                             return Html::delete(['delete','id' => $model->id,'apply_id'=>$apply->id,'returnUrl' => Url::getReturnUrl()],'删除',['class' => 'btn btn-danger btn-xs']);

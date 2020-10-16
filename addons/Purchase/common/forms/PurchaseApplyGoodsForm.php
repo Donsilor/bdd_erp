@@ -2,6 +2,7 @@
 
 namespace addons\Purchase\common\forms;
 
+use addons\Style\common\enums\AttrIdEnum;
 use Yii;
 use addons\Style\common\enums\QibanTypeEnum;
 use addons\Purchase\common\models\PurchaseApplyGoodsAttribute;
@@ -47,10 +48,29 @@ class PurchaseApplyGoodsForm extends PurchaseApplyGoods
                     }
                     return false;
                 }],
+                [['attr_custom'], 'attrCustomSpecial'],
                 [['attr_require','attr_custom'],'getPostAttrs'],
         ];
         return array_merge(parent::rules() , $rules);
     }
+
+
+    public function attrCustomSpecial($attribute, $params)
+    {
+        $attr_custom = $this->attr_custom;
+        if(!empty($attr_custom)) {
+
+            //美号和港号
+            if(isset($attr_custom[AttrIdEnum::FINGER]) && isset($attr_custom[AttrIdEnum::FINGER_HK])){
+                if((empty($attr_custom[AttrIdEnum::FINGER]) && empty($attr_custom[AttrIdEnum::FINGER_HK])) || ($attr_custom[AttrIdEnum::FINGER] && $attr_custom[AttrIdEnum::FINGER_HK])){
+                    $this->addError($attribute,"美号与港号有且只有1个");
+
+                }
+            }
+        }
+
+    }
+
     /**
      * {@inheritdoc}
      */
@@ -293,6 +313,12 @@ class PurchaseApplyGoodsForm extends PurchaseApplyGoods
             case 'require':
                 $attr = [
                     10,77
+                ];
+                break;
+            case 'no_value':
+                //港号、美号
+                return [
+                    38,78
                 ];
                 break;
             case 'remove':
