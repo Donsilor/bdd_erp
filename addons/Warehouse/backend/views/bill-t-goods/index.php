@@ -40,11 +40,11 @@ $params = $params ? "&" . http_build_query($params) : '';
                 'data-target' => '#ajaxModal',
             ]);
             echo '&nbsp;';
-            echo Html::edit(['edit-all', 'bill_id' => $bill->id], '货品编辑', ['class' => 'btn btn-info btn-xs']);
+            echo Html::edit(['edit-all', 'bill_id' => $bill->id], '批量编辑', ['class' => 'btn btn-info btn-xs']);
             echo '&nbsp;';
         }
         if ($bill->bill_status == \addons\Warehouse\common\enums\BillStatusEnum::CONFIRM) {
-            echo Html::batchPopButton(['create-pay', 'bill_id' => $bill->id, 'check' => 1], '单据结算', [
+            echo Html::batchPopButton(['create-pay', 'bill_id' => $bill->id, 'check' => 1], '分批结算', [
                 'class' => 'btn btn-primary btn-xs',
                 'data-width' => '60%',
                 'data-height' => '60%',
