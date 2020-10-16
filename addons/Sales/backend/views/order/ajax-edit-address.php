@@ -3,6 +3,7 @@
 use yii\widgets\ActiveForm;
 use common\helpers\Url;
 use yii\base\Widget;
+use addons\Sales\common\enums\ChannelIdEnum;
 
 $form = ActiveForm::begin([
         'id' => $model->formName(),
@@ -12,6 +13,7 @@ $form = ActiveForm::begin([
                 //'template' => "<div class='col-sm-2 text-right'>{label}</div><div class='col-sm-10'>{input}\n{hint}\n{error}</div>",
         ]
 ]);
+$order = $model->order;
 ?>
 
     <div class="modal-header">
@@ -19,10 +21,18 @@ $form = ActiveForm::begin([
         <h4 class="modal-title">基本信息</h4>
     </div>
     <div class="modal-body">
-            <?= $form->field($model, 'order_id')->hiddenInput()->label(false)?>              
-            <?= $form->field($model, 'realname')->textInput(['maxlength' => true])?>
-            <?= $form->field($model, 'mobile')->textInput(['maxlength' => true]) ?>
-            <?= $form->field($model, 'email')->textInput(['maxlength' => true]) ?>
+            <?= $form->field($model, 'order_id')->hiddenInput()->label(false)?>            
+           <div class="row">
+                <div class="col-lg-4">
+                    <?= $form->field($model, 'realname')->textInput(['maxlength' => true])?>
+                </div>
+                <div class="col-lg-4">
+                    <?= $form->field($model, 'mobile')->textInput(['maxlength' => true,'required' => $order->sale_channel_id == ChannelIdEnum::GP ?false:true])->label("手机[<span style=\"color:red;\">国际批发非必填</span>]") ?>
+                </div>
+                <div class="col-lg-4">
+                    <?= $form->field($model, 'email')->textInput(['maxlength' => true,'required' => $order->sale_channel_id == ChannelIdEnum::GP ?true:false])->label("邮箱[<span style=\"color:red;\">国际批发必填</span>]") ?>
+                </div>
+            </div>    
             <?= \common\widgets\country\Country::widget([
                                 'form' => $form,
                                 'model' => $model,

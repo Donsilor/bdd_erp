@@ -49,7 +49,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         [
                                 'attribute' => 'order_sn',
                                 'value'=>function($model) {
-                                    return Html::a($model->order_sn, ['view', 'id' => $model->id,'returnUrl'=>Url::getReturnUrl()], ['class'=>'openContab','style'=>"text-decoration:underline;color:#3c8dbc"]);
+                                    return Html::a($model->order_sn, ['view', 'id' => $model->id,'returnUrl'=>Url::getReturnTab()], ['class'=>'openContab','style'=>"text-decoration:underline;color:#3c8dbc"]);
                                 },
                                 'filter' => Html::activeTextInput($searchModel, 'order_sn', [
                                     'class' => 'form-control',

@@ -61,7 +61,7 @@ $materialDropdownList = array_column(Yii::$app->attr->valueList(AttrIdEnum::MATE
                     'attribute' => 'goods_sn',
                     'filter' => true,
                     'value' => function($model){
-                        return Html::a($model->goods_sn, ['view', 'id' => $model->id,'returnUrl'=>Url::getReturnUrl()], ['class'=>'openContab','style'=>"text-decoration:underline;color:#3c8dbc"]);
+                        return Html::a($model->goods_sn, ['view', 'id' => $model->id,'returnUrl'=>Url::getReturnTab()], ['class'=>'openContab','style'=>"text-decoration:underline;color:#3c8dbc"]);
                     },
                     'format' => 'raw',
                     'headerOptions' => ['width'=>'200'],

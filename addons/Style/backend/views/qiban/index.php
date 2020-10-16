@@ -87,7 +87,7 @@ $this->params['breadcrumbs'][] = $this->title;
             [
                 'attribute' => 'qiban_sn',
                 'value'=>function($model) {
-                    return Html::a($model->qiban_sn, ['view', 'id' => $model->id,'returnUrl'=>Url::getReturnUrl()], ['class'=>'openContab','style'=>"text-decoration:underline;color:#3c8dbc"]);
+                    return Html::a($model->qiban_sn, ['view', 'id' => $model->id,'returnUrl'=>Url::getReturnTab()], ['class'=>'openContab','style'=>"text-decoration:underline;color:#3c8dbc"]);
                 },
                 'filter' => true,
                 'format' => 'raw',

@@ -392,7 +392,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         [
                             'attribute' => 'style_sn',
                             'value' => function ($model) {
-                                return Html::a($model->style_sn, ['view', 'id' => $model->id], ['class' => 'openContab', 'style' => "text-decoration:underline;color:#3c8dbc", 'id' => $model->style_sn]) . ' <i class="fa fa-copy" onclick="copy(\'' . $model->style_sn . '\')"></i>';
+                                return Html::a($model->style_sn, ['view', 'id' => $model->id,'returnUrl'=>Url::getReturnTab()], ['class' => 'openContab', 'style' => "text-decoration:underline;color:#3c8dbc", 'id' => $model->style_sn]) . ' <i class="fa fa-copy" onclick="copy(\'' . $model->style_sn . '\')"></i>';
                             },
                             'filter' => Html::activeTextInput($searchModel, 'style_sn', [
                                 'class' => 'form-control',
@@ -581,11 +581,11 @@ $this->params['breadcrumbs'][] = $this->title;
                                 },
                                 'status' => function ($url, $model, $key) {
                                     if ($model->audit_status == AuditStatusEnum::PASS) {
-                                        return Html::status($model->status);
+                                        return Html::lockStatus($model->status);
                                     }
                                 },
                                 'delete' => function ($url, $model, $key) {
-                                    if ($model->audit_status == AuditStatusEnum::SAVE && $model->status == StatusEnum::DISABLED) {
+                                    if ($model->status == StatusEnum::DISABLED) {
                                         return Html::delete(['delete', 'id' => $model->id]);
                                     }
                                 },

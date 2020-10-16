@@ -47,7 +47,7 @@ $this->params['breadcrumbs'][] = ['label' => $this->title];
                             'attribute' => 'realname',
                             'format' => 'raw',
                             'value'=>function($model) {
-                                return Html::a($model->realname, ['view', 'id' => $model->id], ['class'=>'openContab','style'=>"text-decoration:underline;color:#3c8dbc"]);
+                                return Html::a($model->realname, ['view', 'id' => $model->id,'returnUrl'=>Url::getReturnTab()], ['class'=>'openContab','style'=>"text-decoration:underline;color:#3c8dbc"]);
                             },
                             'filter' => true,
                         ],
@@ -68,14 +68,14 @@ $this->params['breadcrumbs'][] = ['label' => $this->title];
                             'attribute' => 'mobile',
                             'headerOptions' => ['class' => 'col-md-1'],
                         ],
-                        [
+                        /*[
                             'attribute' => 'home_phone',
                             'headerOptions' => ['class' => 'col-md-1'],
                         ],
                         [
                             'attribute' => 'qq',
                             'headerOptions' => ['class' => 'col-md-1'],
-                        ],
+                        ], */
                         [
                             'attribute' => 'email',
                             'headerOptions' => ['class' => 'col-md-1'],

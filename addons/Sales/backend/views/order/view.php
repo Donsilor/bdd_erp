@@ -15,7 +15,7 @@ use addons\Style\common\enums\AttrIdEnum;
 /* @var $form yii\widgets\ActiveForm */
 
 $this->title = '订单详情';
-$this->params['breadcrumbs'][] = ['label' => $this->title, 'url' => ['index']];
+$this->params['breadcrumbs'][] = ['label' => "订单列表", 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 //
 ?>
@@ -329,17 +329,13 @@ $this->params['breadcrumbs'][] = $this->title;
                                     return $model->attr[AttrIdEnum::DIA_CERT_TYPE] ?? "";
                                 },
                             ],
-                            /* [
-                                'attribute'=>'qiban_sn',
-                                'value' => 'qiban_sn'
-                            ], */
                             [
                                 'attribute' => 'qiban_type',
                                 'value' => function ($model) {
                                     $qiban_sn = $model->qiban_sn;
                                     $is_exist = Yii::$app->styleService->qiban->isExist($qiban_sn);
                                     if (!$is_exist && $qiban_sn) {
-                                        $qiban_sn = "<font color='red'>{$qiban_sn}（erp无此起版号）</font>";
+                                        $qiban_sn = "<font color='red'>{$qiban_sn}(erp无此起版号)</font>";
                                     }
                                     return \addons\Style\common\enums\QibanTypeEnum::getValue($model->qiban_type) . '<br/>' . $qiban_sn;
                                 },
@@ -444,7 +440,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
                             ],
                             [
-                                'label' => '金重（g）',
+                                'label' => '金重(g)',
                                 'value' => function ($model) {
                                     return $model->attr[AttrIdEnum::JINZHONG] ?? "";
                                 },
@@ -462,7 +458,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 },
                             ],
                             [
-                                'label' => '链长（cm）',
+                                'label' => '链长(cm)',
                                 'value' => function ($model) {
                                     return $model->attr[AttrIdEnum::CHAIN_LENGTH] ?? "";
                                 },
@@ -486,7 +482,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 },
                             ],
                             [
-                                'label' => '主石石重和数量',
+                                'label' => '主石重/数量',
                                 'value' => function ($model) {
                                     $main_stone_weight = $model->attr[AttrIdEnum::MAIN_STONE_WEIGHT] ?? "无";
                                     $main_stone_num = $model->attr[AttrIdEnum::MAIN_STONE_NUM] ?? "无";
@@ -511,7 +507,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
                             ],
                             [
-                                'label' => '副石石重和数量',
+                                'label' => '副石重/数量',
                                 'value' => function ($model) {
                                     $side_stone_weight = $model->attr[AttrIdEnum::SIDE_STONE1_WEIGHT] ?? "无";
                                     $side_stone_num = $model->attr[AttrIdEnum::SIDE_STONE1_NUM] ?? "无";
@@ -533,7 +529,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
                             ],
                             [
-                                    'label' => '外部商品SKU/编号',
+                                    'label' => '外部SKU/编号',
                                     'value' => function ($model) {
                                         $str = '';
                                         if($model->out_sku_id) {
@@ -709,11 +705,18 @@ $this->params['breadcrumbs'][] = $this->title;
                             <td><?= $model->address->city_name ?? '' ?></td>
                             <td><?= $model->address->address_details ?? '' ?></td>
                             <td><?= $model->address->zip_code ?? '' ?></td>
-                            <td><?= Html::edit(['ajax-edit-address', 'id' => $model->id, 'returnUrl' => $returnUrl], '编辑', [
-                                    'class' => 'btn btn-primary btn-ms',
+                            <td><?= Html::edit(['ajax-edit-address', 'id' => $model->id], '编辑', [
+                                    'class' => 'btn btn-primary btn-sm',
                                     'style' => "margin-left:5px",
                                     'data-toggle' => 'modal',
-                                    'data-target' => '#ajaxModal',
+                                    'data-target' => '#ajaxModalLg',
+                                ]); ?>
+                                <?= Html::edit(['select-address', 'id' => $model->id], '选择', [
+                                    'class' => 'btn btn-success btn-sm openIframe',
+                                    'style' => "margin-left:5px",
+                                    'data-width' => '90%',
+                                    'data-height' => '90%',
+                                    'data-offset' => '20px',
                                 ]); ?>
                             </td>
 
@@ -751,14 +754,8 @@ $this->params['breadcrumbs'][] = $this->title;
                             <td><?= addons\Sales\common\enums\InvoiceTypeEnum::getValue($model->invoice->invoice_type ?? '') ?></td>
                             <td><?= $model->invoice->email ?? '' ?></td>
                             <td><?= $model->invoice->send_num ?? '' ?></td>
-                            <td><?= Html::edit(['ajax-edit-invoice', 'id' => $model->id, 'returnUrl' => $returnUrl], '编辑', [
-                                    'class' => 'btn btn-primary btn-ms',
-                                    'style' => "margin-left:5px",
-                                    'data-toggle' => 'modal',
-                                    'data-target' => '#ajaxModal',
-                                ]); ?>
-                                <?= Html::edit(['ajax-send-invoice', 'id' => $model->id, 'returnUrl' => $returnUrl], '发送', [
-                                    'class' => 'btn btn-success btn-ms',
+                            <td><?= Html::edit(['ajax-edit-invoice', 'id' => $model->id], '编辑', [
+                                    'class' => 'btn btn-primary btn-sm',
                                     'style' => "margin-left:5px",
                                     'data-toggle' => 'modal',
                                     'data-target' => '#ajaxModal',
@@ -772,9 +769,48 @@ $this->params['breadcrumbs'][] = $this->title;
         </div>
         <!-- box end -->
 
-        <div id="flow">
-
+        <!-- box begin -->
+        <div class="col-xs-12">
+            <div class="box" style="margin:0px">
+                <div class="box-header" style="margin:0">
+                    <h3 class="box-title"><i class="fa fa-info"></i> 附件信息</h3>
+                    <div class="box-tools" style="left:100px">
+                        <?= Html::create(['order-attachment/ajax-upload','order_id'=>$order->id], '上传附件', [
+                            'data-toggle' => 'modal',
+                            'data-target' => '#ajaxModal',
+                        ]); ?>
+                    </div>
+                </div>
+                <div class=" table-responsive">
+                    <table class="table table-hover">
+                        <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th style="width:40%">文件</th>
+                            <th>添加人</th>
+                            <th>添加时间</th>                           
+                            <th>操作</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <?php foreach ($order->attachments ?? [] as $attach) {?>
+                            <tr>
+                                <td><?= $attach->id ?></td>
+                                <td><?= Html::a($attach->file, $attach->file, ['style'=>"text-decoration:underline;color:#3c8dbc",'target'=>'_blank']);?></td> 
+                                <td><?= $attach->creator->username ?? '' ?></td>                           
+                                <td><?= Yii::$app->formatter->asDatetime($attach->created_at) ?></td>                            
+                                <td>
+                                    <?= Html::delete(['order-attachment/delete', 'id' => $attach->id]) ?>
+                                </td>
+                            </tr>
+                        <?php }?>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
         </div>
+        <!-- box end -->
+        
     </div>
     <!-- tab-content end -->
 </div>

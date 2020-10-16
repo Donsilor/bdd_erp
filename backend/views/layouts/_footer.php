@@ -257,8 +257,56 @@ $this->registerJs($script);
             }
         });
     }
+    // 锁定状态 status 1:启用;2锁定;
+    function rfLockStatus(obj) {
+        let id = $(obj).attr('data-id');
+        let url = $(obj).attr('data-url');
+        let status = 2;
+        self = $(obj);
+        if (self.hasClass("btn-success")) {
+            status = 1;
+        }
+
+        if (!id) {
+            id = $(obj).parent().parent().attr('id');
+        }
+
+        if (!id) {
+            id = $(obj).parent().parent().attr('data-key');
+        }
+        if(!url){
+             url = "<?= Url::to(['ajax-update'])?>";
+        }
+        $.ajax({
+            type: "get",
+            url: url,
+            dataType: "json",
+            data: {
+                id: id,
+                status: status
+            },
+            success: function (data) {
+                if (parseInt(data.code) === 200) {
+                    if (self.hasClass("btn-success")) {
+                        self.removeClass("btn-success").addClass("btn-default");
+                        self.attr("data-toggle", 'tooltip');
+                        self.attr("data-original-title", '点击锁定');
+                        self.text('锁定');
+                    } else {
+                        self.removeClass("btn-default").addClass("btn-success");
+                        self.attr("data-toggle", 'tooltip');
+                        self.attr("data-original-title", '点击启用');
+                        self.text('启用');
+                    }
+                    window.location.reload();
+                } else {
+                    rfAffirm(data.message);
+                }
+            }
+        });
+    }
     //批量启用1/禁用0/软删除-1
-    $(".jsBatchStatus").click(function(){
+    /*$(".jsBatchStatus").click(function(){
 
     	let grid = $(this).attr('data-grid');
     	let url = $(this).attr('data-url');
@@ -299,7 +347,7 @@ $this->registerJs($script);
 
         })
 
-    });
+    });*/
     // 排序
     function rfSort(obj) {
         let id = $(obj).attr('data-id');

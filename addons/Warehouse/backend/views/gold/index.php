@@ -57,7 +57,7 @@ $params = $params ? "&".http_build_query($params) : '';
                             'attribute'=>'gold_sn',
                             'format' => 'raw',
                             'value'=>function($model) {
-                                return Html::a($model->gold_sn, ['view', 'id' => $model->id,'returnUrl'=>Url::getReturnUrl()], ['class'=>'openContab','style'=>"text-decoration:underline;color:#3c8dbc",'id'=>"goods_".$model->gold_sn]).' <i class="fa fa-copy" onclick="copy(\''. "goods_".$model->gold_sn .'\')"></i>';
+                                return Html::a($model->gold_sn, ['view', 'id' => $model->id,'returnUrl'=>Url::getReturnTab()], ['class'=>'openContab','style'=>"text-decoration:underline;color:#3c8dbc",'id'=>"goods_".$model->gold_sn]).' <i class="fa fa-copy" onclick="copy(\''. "goods_".$model->gold_sn .'\')"></i>';
                             },
                             'filter' => Html::activeTextInput($searchModel, 'gold_sn', [
                                 'class' => 'form-control',

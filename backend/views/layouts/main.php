@@ -28,12 +28,13 @@ AppAsset::register($this);
             <a href="<?= Yii::$app->request->getUrl(); ?>" class="rfHeaderFont">
                 <i class="glyphicon glyphicon-refresh"></i> 刷新
             </a>            
-<!--            --><?php //if (Yii::$app->request->referrer != Yii::$app->request->hostInfo . Yii::$app->request->getBaseUrl() . '/') { ?>
-<!--            	--><?php //$returnUrl = \Yii::$app->request->get('returnUrl');?>
-<!--                <a href="--><?php //echo $returnUrl ? $returnUrl : 'javascript:history.go(-1)';?><!--" class="rfHeaderFont">-->
-<!--                    <i class="fa fa-mail-reply"></i> 返回-->
-<!--                </a>-->
-<!--            --><?php //} ?>
+        <?php 
+        //$returnUrl = \Yii::$app->request->get('returnUrl');
+        //if ($returnUrl || Yii::$app->request->referrer != Yii::$app->request->hostInfo . Yii::$app->request->getBaseUrl() . '/') { 
+         ?>
+           <?php if ($returnUrl = \Yii::$app->request->get('returnUrl')) {?>
+                <a href="<?php echo $returnUrl ?>" class="rfHeaderFont openContab"><i class="fa fa-mail-reply"></i> 返回</a>
+           <?php } ?>
             <?= Breadcrumbs::widget([
                 'tag' => 'ol',
                 'homeLink' => [

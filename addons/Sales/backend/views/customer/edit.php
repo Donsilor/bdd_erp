@@ -128,13 +128,13 @@ $this->params['breadcrumbs'][] = $this->title;
                 <div class="box-body col-lg-12" style="padding-left:30px">
                     <div class="row">
                         <div class="col-lg-3">
-                            <?= $form->field($model, 'mobile')->textInput()->label("手机号码[<sapn style=\"color:red;\">国际批发非必填</sapn>]")->hint("当客户归属渠道为[国际批发]时选填，其它属渠必填")?>
+                            <?= $form->field($model, 'mobile')->textInput()->label("手机号码[<span style=\"color:red;\">国际批发非必填</span>]")->hint("当客户归属渠道为[国际批发]时选填，其它属渠必填")?>
                         </div>
                         <div class="col-lg-3">
                             <?= $form->field($model, 'home_phone')->textInput(['maxlength' => true]) ?>
                         </div>
                         <div class="col-lg-3">
-                            <?= $form->field($model, 'email')->textInput()->label("邮箱[<sapn style=\"color:red;\">国际批发必填</sapn>]")->hint("当客户归属渠道为[国际批发]时必填，其它渠道选填")?>
+                            <?= $form->field($model, 'email')->textInput()->label("邮箱[<span style=\"color:red;\">国际批发必填</span>]")->hint("当客户归属渠道为[国际批发]时必填，其它渠道选填")?>
                         </div>
                         <div class="col-lg-3">
                             <?= $form->field($model, 'qq')->textInput(['maxlength' => true]) ?>

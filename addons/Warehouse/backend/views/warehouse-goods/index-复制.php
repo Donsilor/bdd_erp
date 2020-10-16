@@ -382,7 +382,7 @@ $params = $params ? "&".http_build_query($params) : '';
                                 if(preg_match("/^9/is", $model->goods_id)){
                                     $model->goods_id = Yii::$app->warehouseService->warehouseGoods->createGoodsId($model);
                                 }                                
-                                return Html::a($model->goods_id, ['view', 'id' => $model->id,'returnUrl'=>Url::getReturnUrl()], ['class'=>'openContab','style'=>"text-decoration:underline;color:#3c8dbc",'id'=>$model->goods_id]).' <i class="fa fa-copy" onclick="copy(\''. $model->goods_id .'\')"></i>';
+                                return Html::a($model->goods_id, ['view', 'id' => $model->id,'returnUrl'=>Url::getReturnTab()], ['class'=>'openContab','style'=>"text-decoration:underline;color:#3c8dbc",'id'=>$model->goods_id]).' <i class="fa fa-copy" onclick="copy(\''. $model->goods_id .'\')"></i>';
                             },
                             'filter' => Html::activeTextInput($searchModel, 'goods_id', [
                                 'class' => 'form-control',

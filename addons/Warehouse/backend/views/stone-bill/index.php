@@ -63,7 +63,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'label' => '单据编号',
                                 'attribute'=>'bill_no',
                                 'value'=>function($model) {
-                                    return Html::a($model->bill_no, ['view', 'id' => $model->id,'returnUrl'=>Url::getReturnUrl()], ['class'=>'openContab','style'=>"text-decoration:underline;color:#3c8dbc"]);
+                                    return Html::a($model->bill_no, ['view', 'id' => $model->id,'returnUrl'=>Url::getReturnTab()], ['class'=>'openContab','style'=>"text-decoration:underline;color:#3c8dbc"]);
                                 },
                                 'filter' => Html::activeTextInput($searchModel, 'bill_no', [
                                     'class' => 'form-control',
@@ -273,7 +273,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             [
                                 'attribute'=>'bill_no',
                                 'value'=>function($model) {
-                                    return Html::a($model->bill_no, ['view', 'id' => $model->bill->id,'returnUrl'=>Url::getReturnUrl()], ['class'=>'openContab','style'=>"text-decoration:underline;color:#3c8dbc"]);
+                                    return Html::a($model->bill_no, ['view', 'id' => $model->bill->id,'returnUrl'=>Url::getReturnTab()], ['class'=>'openContab','style'=>"text-decoration:underline;color:#3c8dbc"]);
                                 },
                                 'filter' => Html::activeTextInput($searchModel, 'bill_no', [
                                     'class' => 'form-control',

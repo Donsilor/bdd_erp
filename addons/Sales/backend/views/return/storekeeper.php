@@ -62,7 +62,7 @@ $params = $params ? "&".http_build_query($params) : '';
                             'attribute'=>'return_no',
                             'format' => 'raw',
                             'value'=>function($model) {
-                                return Html::a($model->return_no, ['view', 'id' => $model->id,'returnUrl'=>Url::getReturnUrl()], ['class'=>'openContab','style'=>"text-decoration:underline;color:#3c8dbc"]);
+                                return Html::a($model->return_no, ['view', 'id' => $model->id,'returnUrl'=>Url::getReturnTab()], ['class'=>'openContab','style'=>"text-decoration:underline;color:#3c8dbc"]);
                             },
                             'filter' => Html::activeTextInput($searchModel, 'return_no', [
                                 'class' => 'form-control',
@@ -73,7 +73,7 @@ $params = $params ? "&".http_build_query($params) : '';
                             'attribute'=>'order_sn',
                             'format' => 'raw',
                             'value'=>function($model) {
-                                return Html::a($model->order_sn, ['order/view', 'id' => $model->order_id,'returnUrl'=>Url::getReturnUrl()], ['class'=>'openContab','style'=>"text-decoration:underline;color:#3c8dbc"]);
+                                return Html::a($model->order_sn, ['order/view', 'id' => $model->order_id,'returnUrl'=>Url::getReturnTab()], ['class'=>'openContab','style'=>"text-decoration:underline;color:#3c8dbc"]);
                             },
                             'filter' => Html::activeTextInput($searchModel, 'order_sn', [
                                 'class' => 'form-control',
@@ -86,7 +86,7 @@ $params = $params ? "&".http_build_query($params) : '';
                             'value' => function ($model){
                                 $str = \addons\Sales\common\enums\ReturnTypeEnum::getValue($model->return_type);
                                 if($model->return_type == \addons\Sales\common\enums\ReturnTypeEnum::TRANSFER && !empty($model->new_order_sn) && !empty($model->new_order_id)){
-                                    $str.="(".Html::a($model->new_order_sn, ['order/view', 'id' => $model->new_order_id,'returnUrl'=>Url::getReturnUrl()], ['class'=>'openContab','style'=>"text-decoration:underline;color:#3c8dbc"]).")";
+                                    $str.="(".Html::a($model->new_order_sn, ['order/view', 'id' => $model->new_order_id,'returnUrl'=>Url::getReturnTab()], ['class'=>'openContab','style'=>"text-decoration:underline;color:#3c8dbc"]).")";
                                 }
                                 return $str??"";
                             },
