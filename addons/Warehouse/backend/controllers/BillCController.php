@@ -471,14 +471,29 @@ class BillCController extends BaseController
     {
         $this->layout = '@backend/views/layouts/print';
         $id = \Yii::$app->request->get('id');
-        if (empty($id)) {
-            exit("ID不能为空");
-        }
         $model = $this->findModel($id);
         if (!$model) {
             exit("单据不存在");
         }
         list($lists, $total) = $this->getData($id);
+       
+        if(Yii::$app->request->get("download")) {
+            header("Pragma: public");
+            header("Expires: 0");
+            header("Cache-Control:must-revalidate, post-check=0, pre-check=0");
+            header("Content-Type:application/force-download");
+            header("Content-Type:application/vnd.ms-execl");
+            header("Content-Type:application/octet-stream");
+            header("Content-Type:application/download");
+            header("Content-Disposition:attachment;filename=其它出库单打印导出({$model->bill_no}).xls");
+            header("Content-Transfer-Encoding:binary");
+            echo $this->render("export", [
+                    'model' => $model,
+                    'lists' => $lists,
+                    'total' => $total
+            ]);
+            exit;
+        }
         return $this->render($this->action->id, [
             'model' => $model,
             'lists' => $lists,
