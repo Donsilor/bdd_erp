@@ -1246,7 +1246,6 @@ class WarehouseBillTService extends Service
             ];
             $goodsM = new WarehouseBillGoodsL();
             $goodsM->setAttributes($item);
-            list($goodsM,) = $form->correctGoods($goodsM);
             if (!$goodsM->validate()) {
                 $flag = false;
                 $error[$i][] = $this->getError($goodsM);
@@ -1925,6 +1924,7 @@ class WarehouseBillTService extends Service
         }
         $form->cost_amount = $this->calculateCostAmount($form);//公司成本总额
         $form->market_price = $this->calculateMarketPrice($form);//标签价
+        list($form,) = $form->correctGoods($form);
         if (false === $form->save()) {
             throw new \Exception($this->getError($form));
         }
