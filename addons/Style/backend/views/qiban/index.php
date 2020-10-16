@@ -284,12 +284,12 @@ $this->params['breadcrumbs'][] = $this->title;
 
                     'status' => function($url, $model, $key){
                         if($model->audit_status == AuditStatusEnum::PASS){
-                            return Html::status($model->status);
+                            return Html::lockStatus($model->status);
                         }                        
                     },
                     'delete' => function ($url, $model, $key) {
                         //未审核 + 保存 才可以删除
-                        if($model->audit_status == AuditStatusEnum::SAVE && $model->status == StatusEnum::DISABLED) {
+                        if($model->status == StatusEnum::DISABLED) {
                             return Html::delete(['delete', 'id' => $model->id]);
                         }
                     },
