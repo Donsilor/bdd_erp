@@ -1319,25 +1319,73 @@ class WarehouseBillTService extends Service
 
     /**
      *
+     * 批量编辑
+     * @param $ids
+     * @param WarehouseBillTGoodsForm $form
+     * @return object
+     * @throws
+     */
+    public function batchEdit($form)
+    {
+        $id_arr = array_unique($form->getIds());
+        $name = $form->batch_name;
+        $value = $form->batch_value;
+        $updateIds = [];
+        foreach ($id_arr as $id) {
+            $goods = WarehouseBillTGoodsForm::findOne(['id' => $id]);
+            $goods->$name = $value;
+            if (false === $goods->validate()) {
+                throw new \Exception($this->getError($goods));
+            }
+            $result = $form->updateFromValidate($goods);
+            if ($result['error'] == false) {
+                throw new \Exception($result['msg']);
+            }
+            if($goods->style_sn){
+                $form->getAttrValueListByStyle($goods->style_sn, 1);
+                $updateIds[] = $id;
+            }else{
+                $updateIds[] = $id;
+            }
+            $form->bill_id = $goods->bill_id;
+        }
+        if($updateIds){
+            $res = WarehouseBillTGoodsForm::updateAll([$name => $value], $updateIds);
+            if ($res == false) {
+                throw new \Exception("批量填充失败");
+            }
+            $this->syncUpdatePriceAll(null, $updateIds);
+            $this->WarehouseBillTSummary($form->bill_id);
+        }
+        return $form;
+    }
+
+    /**
+     *
      * 同步更新单据商品价格
      * @param $ids
      * @param WarehouseBillTForm $form
      * @return object
      * @throws
      */
-    public function syncUpdatePriceAll($form, $ids = [])
+    public function syncUpdatePriceAll($form = null, $ids = [])
     {
-        $where = ['bill_id' => $form->id];
+        $where = [];
         if (!empty($ids)) {
             $where = array_merge($where, ['id' => $ids]);
         }
-        $goods = WarehouseBillTGoodsForm::findAll($where);
-        if (!empty($goods)) {
-            foreach ($goods as $good) {
-                $this->syncUpdatePrice($good);
+        if($form){
+            $where = array_merge($where, ['bill_id' => $form->id]);
+        }
+        if(!empty($where)){
+            $goods = WarehouseBillTGoodsForm::findAll($where);
+            if (!empty($goods)) {
+                foreach ($goods as $good) {
+                    $this->syncUpdatePrice($good);
+                }
             }
         }
-        return $goods;
+        return $goods ?? null;
     }
 
     /**

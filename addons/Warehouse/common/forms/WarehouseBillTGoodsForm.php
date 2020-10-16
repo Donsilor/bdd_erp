@@ -18,6 +18,10 @@ class WarehouseBillTGoodsForm extends WarehouseBillGoodsL
 {
     public $ids;
     public $file;
+    public $batch_name;
+    public $batch_value;
+    public $attr_id;
+    public $attr_list;
 
     /**
      * {@inheritdoc}
@@ -27,6 +31,7 @@ class WarehouseBillTGoodsForm extends WarehouseBillGoodsL
         $rules = [
             [['goods_sn', 'to_warehouse_id', 'is_wholesale', 'auto_goods_id', 'goods_num'], 'required'],
             [['file'], 'file', 'extensions' => ['csv']],//'skipOnEmpty' => false,
+            [['ids', 'batch_name', 'batch_value', 'attr_id', 'attr_list'], 'safe'],
         ];
         return array_merge(parent::rules(), $rules);
     }
@@ -405,8 +410,10 @@ class WarehouseBillTGoodsForm extends WarehouseBillGoodsL
      */
     public function getAttrValueListByStyle($style_sn, $attr_id)
     {
-        return \Yii::$app->attr->valueMap($attr_id) ?? [];//暂时放开限制
-        //return \Yii::$app->styleService->styleAttribute->getAttrValueListByStyle($style_sn, $attr_id) ?? [];
+        if($style_sn){
+            return \Yii::$app->styleService->styleAttribute->getAttrValueListByStyle($style_sn, $attr_id) ?? [];
+        }
+        return \Yii::$app->attr->valueMap($attr_id) ?? [];
     }
 
     /**
