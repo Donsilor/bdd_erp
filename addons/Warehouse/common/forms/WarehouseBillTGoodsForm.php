@@ -411,9 +411,9 @@ class WarehouseBillTGoodsForm extends WarehouseBillGoodsL
      */
     public function getAttrValueListByStyle($style_sn, $attr_id)
     {
-        if($style_sn){
-            return \Yii::$app->styleService->styleAttribute->getAttrValueListByStyle($style_sn, $attr_id) ?? [];
-        }
+        //if($style_sn){
+        //    return \Yii::$app->styleService->styleAttribute->getAttrValueListByStyle($style_sn, $attr_id) ?? [];
+        //}
         return \Yii::$app->attr->valueMap($attr_id) ?? [];
     }
 
