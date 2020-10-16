@@ -40,7 +40,7 @@ $this->params['breadcrumbs'][] = $this->title;
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
         'tableOptions' => ['class' => 'table table-hover'],
-        'options' => ['style'=>' width:120%;white-space:nowrap;' ],
+        'options' => ['style'=>' width:100%;white-space:nowrap;' ],
         'showFooter' => false,//显示footer行
         'id'=>'grid',            
         'columns' => [
@@ -208,7 +208,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     'model' => $searchModel,
                     'attribute' => 'created_at',
                     'value' => $searchModel->created_at,
-                    'options' => ['readonly' => false,'class'=>'form-control','style'=>'background-color:#fff;width:150px;'],
+                    'options' => ['readonly' => false,'class'=>'form-control','style'=>'background-color:#fff;width:100px;'],
                     'pluginOptions' => [
                         'format' => 'yyyy-mm-dd',
                         'locale' => [
