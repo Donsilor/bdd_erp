@@ -307,10 +307,10 @@ class WarehouseBillTService extends Service
                         continue;
                     }
                 }
-                if ($style->audit_status != AuditStatusEnum::PASS) {
-                    $flag = false;
-                    $error[$i][] = $qiban_error . "[款号]未审核";
-                }
+//                if ($style->audit_status != AuditStatusEnum::PASS) {
+//                    $flag = false;
+//                    $error[$i][] = $qiban_error . "[款号]未审核";
+//                }
                 if ($style->status != StatusEnum::ENABLED) {
                     $flag = false;
                     $error[$i][] = $qiban_error . "[款号]不是启用状态";
