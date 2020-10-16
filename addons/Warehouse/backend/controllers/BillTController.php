@@ -249,7 +249,7 @@ class BillTController extends BaseController
                 return $this->message("保存成功", $this->redirect(Yii::$app->request->referrer), 'success');
             } catch (\Exception $e) {
                 $trans->rollBack();
-                var_dump($e->getTraceAsString());die;
+                //var_dump($e->getTraceAsString());die;
                 return $this->message("审核失败:" . $e->getMessage(), $this->redirect(Yii::$app->request->referrer), 'error');
             }
         }

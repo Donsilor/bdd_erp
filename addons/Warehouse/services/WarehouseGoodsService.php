@@ -155,7 +155,7 @@ class WarehouseGoodsService extends Service
     {
         $goodsM = WarehouseGoods::findOne(['goods_id' => $goods_id]);
         if ($goodsM) {
-            if(!$modify_num){
+            if($modify_num === ""){
                 throw new \Exception("调整数量不能为空");
             }
             if($modify_num<0){

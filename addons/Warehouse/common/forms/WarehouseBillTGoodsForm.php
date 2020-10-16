@@ -18,6 +18,10 @@ class WarehouseBillTGoodsForm extends WarehouseBillGoodsL
 {
     public $ids;
     public $file;
+    public $batch_name;
+    public $batch_value;
+    public $attr_id;
+    public $attr_list;
 
     /**
      * {@inheritdoc}
@@ -27,6 +31,8 @@ class WarehouseBillTGoodsForm extends WarehouseBillGoodsL
         $rules = [
             [['goods_sn', 'to_warehouse_id', 'is_wholesale', 'auto_goods_id', 'goods_num'], 'required'],
             [['file'], 'file', 'extensions' => ['csv']],//'skipOnEmpty' => false,
+            [['ids', 'batch_name', 'batch_value', 'attr_id'], 'string'],
+            [['attr_list'], 'safe'],
         ];
         return array_merge(parent::rules(), $rules);
     }
@@ -405,8 +411,48 @@ class WarehouseBillTGoodsForm extends WarehouseBillGoodsL
      */
     public function getAttrValueListByStyle($style_sn, $attr_id)
     {
-        return \Yii::$app->attr->valueMap($attr_id) ?? [];//暂时放开限制
-        //return \Yii::$app->styleService->styleAttribute->getAttrValueListByStyle($style_sn, $attr_id) ?? [];
+        //if($style_sn){
+        //    return \Yii::$app->styleService->styleAttribute->getAttrValueListByStyle($style_sn, $attr_id) ?? [];
+        //}
+        return \Yii::$app->attr->valueMap($attr_id) ?? [];
+    }
+
+    /**
+     *
+     * 批量编辑下拉框取值
+     * @param string $style_sn
+     * @param integer $attr_id
+     * @param string $batch_name
+     * @return array
+     */
+    public function getBatchSelectMap($style_sn = null, $attr_id = null, $batch_name = '')
+    {
+        switch ($batch_name) {
+            case 'peiliao_way':
+                $list = $this->getPeiLiaoWayMap();
+                break;
+            case 'main_pei_type':
+                $list = $this->getPeiShiWayMap();
+                break;
+            case 'second_pei_type':
+                $list = $this->getPeiShiWayMap();
+                break;
+            case 'second_pei_type2':
+                $list = $this->getPeiShiWayMap();
+                break;
+            case 'second_pei_type3':
+                $list = $this->getPeiShiWayMap();
+                break;
+            case 'parts_way':
+                $list = $this->getPeiJianWayMap();
+                break;
+            case 'jintuo_type':
+                $list = $this->getJietuoTypeMap();
+                break;
+            default:
+                $list = $this->getAttrValueListByStyle($style_sn, $attr_id);
+        }
+        return $list ?? [];
     }
 
     /**
@@ -1734,13 +1780,63 @@ class WarehouseBillTGoodsForm extends WarehouseBillGoodsL
             $msg[] = "配件数量[$form->parts_num]/商品数量[$form->main_stone_num]=[$parts_num]，必须为整数";
         }
         //工费
-        if ($form->gong_fee > 0 && $form->piece_fee > 0) {
+//        if ($form->gong_fee > 0 && $form->piece_fee > 0) {
+//            $result['error'] = false;
+//            $msg[] = "克工费与件工费只能填写一个";
+//        }
+        //验证石料编号格式
+        $pattern = '/^[A-Za-z0-9\-]+$/';
+        if($form->main_stone_sn && !preg_match($pattern, $form->main_stone_sn)){
             $result['error'] = false;
-            $msg[] = "克工费与件工费只能填写一个";
+            $msg[] = "主石编号格式有误";
         }
+        if($form->second_stone_sn1 && !preg_match($pattern, $form->second_stone_sn1)){
+            $result['error'] = false;
+            $msg[] = "副石1编号格式有误";
+        }
+        if($form->second_stone_sn2 && !preg_match($pattern, $form->second_stone_sn2)){
+            $result['error'] = false;
+            $msg[] = "副石2编号格式有误";
+        }
+        if($form->second_stone_sn3 && !preg_match($pattern, $form->second_stone_sn3)){
+            $result['error'] = false;
+            $msg[] = "副石3编号格式有误";
+        }
+
         if (!empty($msg)) {
             $result['msg'] = implode('】,【', $msg)."[条码号=".$form->goods_id."]";
         }
         return $result;
+    }
+
+    /**
+     *
+     * 调整数据
+     * @param bool $save
+     * @param WarehouseBillTGoodsForm $form
+     * @return array
+     * @throws
+     */
+    public function correctGoods($form, $save = false)
+    {
+        $saveData = [];
+        //配件金重，配件金价，配件总额，任意填写一个，配件类型：工厂配
+        if (bccomp($form->parts_gold_weight, 0, 5) == 1
+            || bccomp($form->parts_price, 0, 5) == 1
+            || bccomp($form->parts_amount, 0, 5) == 1) {
+            $form->parts_way = PeiJianWayEnum::FACTORY;
+            $saveData['parts_way'] = PeiJianWayEnum::FACTORY;
+        }elseif(bccomp($form->parts_gold_weight, 0, 5) != 1
+            && bccomp($form->parts_price, 0, 5) != 1
+            && bccomp($form->parts_amount, 0, 5) != 1) {
+            $form->parts_way = PeiJianWayEnum::NO_PEI;
+            $saveData['parts_way'] = PeiJianWayEnum::NO_PEI;
+        }
+        if ($save) {
+            if (false === $form->save()) {
+                throw new \Exception("操作失败");
+            }
+        }
+        return [$form, $saveData];
     }
 }

@@ -143,13 +143,22 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'filter' => false,
                             ],
                             [
-                                'attribute' => 'goods.cost_price',
+                                'attribute' => 'cost_price',
                                 'visible' => \common\helpers\Auth::verify(\common\enums\SpecialAuthEnum::VIEW_CAIGOU_PRICE),
                                 'filter' => false,
                             ],
                             [
                                 'attribute' => 'chuku_price',
                                 'visible' => \common\helpers\Auth::verify(\common\enums\SpecialAuthEnum::VIEW_CHUKU_PRICE),
+                                'filter' => false,
+                            ],
+                            [
+                                'label' => '采购成本总额',
+                                'attribute' => 'cost_price',
+                                'visible' => \common\helpers\Auth::verify(\common\enums\SpecialAuthEnum::VIEW_CAIGOU_PRICE),
+                                'value' => function ($model) {
+                                    return bcmul($model->cost_price, $model->goods_num, 3) ?? 0;
+                                },
                                 'filter' => false,
                             ],
                             [

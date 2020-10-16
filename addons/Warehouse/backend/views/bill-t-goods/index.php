@@ -40,11 +40,11 @@ $params = $params ? "&" . http_build_query($params) : '';
                 'data-target' => '#ajaxModal',
             ]);
             echo '&nbsp;';
-            echo Html::edit(['edit-all', 'bill_id' => $bill->id], '货品编辑', ['class' => 'btn btn-info btn-xs']);
+            echo Html::edit(['edit-all', 'bill_id' => $bill->id], '批量编辑', ['class' => 'btn btn-info btn-xs']);
             echo '&nbsp;';
         }
         if ($bill->bill_status == \addons\Warehouse\common\enums\BillStatusEnum::CONFIRM) {
-            echo Html::batchPopButton(['create-pay', 'bill_id' => $bill->id, 'check' => 1], '单据结算', [
+            echo Html::batchPopButton(['create-pay', 'bill_id' => $bill->id, 'check' => 1], '分批结算', [
                 'class' => 'btn btn-primary btn-xs',
                 'data-width' => '60%',
                 'data-height' => '60%',
@@ -65,10 +65,10 @@ $params = $params ? "&" . http_build_query($params) : '';
         }
         echo Html::button('明细导出', ['class' => 'btn btn-success btn-xs', 'onclick' => 'batchExport()',]);
         echo '&nbsp;';
-        echo Html::tag('span', '价格刷新', ["class" => "btn btn-warning btn-xs jsBatchStatus", "data-grid" => "grid", "data-url" => Url::to(['update-price']),]);
+        echo Html::tag('span', '价格刷新', ["class" => "btn btn-warning btn-xs jsBatchUpdate", "data-grid" => "grid", "data-url" => Url::to(['update-price']),]);
         echo '&nbsp;';
         if ($bill->bill_status == \addons\Warehouse\common\enums\BillStatusEnum::SAVE) {
-            echo Html::tag('span', '批量删除', ["class" => "btn btn-danger btn-xs jsBatchStatus", "data-grid" => "grid", "data-url" => Url::to(['batch-delete']),]);
+            echo Html::tag('span', '批量删除', ["class" => "btn btn-danger btn-xs jsBatchUpdate", "data-grid" => "grid", "data-url" => Url::to(['batch-delete']),]);
         }
         ?>
     </div>
@@ -2415,4 +2415,43 @@ $params = $params ? "&" . http_build_query($params) : '';
             window.location.href = "<?= \common\helpers\Url::buildUrl('../bill-t/export', [], ['ids'])?>?ids=<?php echo $bill->id ?>";
         });
     }
+
+    $(".jsBatchUpdate").click(function () {
+        let grid = $(this).attr('data-grid');
+        let url = $(this).attr('data-url');
+        let status = $(this).attr('data-value');
+        let text = $(this).text();
+        let ids = $("#" + grid).yiiGridView("getSelectedRows");
+        if (!url) {
+            url = "<?= Url::to(['ajax-batch-update'])?>";
+        }
+        if (ids == "" || !ids) {
+            rfInfo('未选中数据！', '');
+            return false;
+        }
+        appConfirm("确定要" + text + "吗?", '', function (code) {
+            switch (code) {
+                case "defeat":
+                    $.ajax({
+                        type: "post",
+                        url: url,
+                        dataType: "json",
+                        data: {
+                            ids: ids,
+                            status: status
+                        },
+                        success: function (data) {
+                            if (parseInt(data.code) !== 200) {
+                                rfAffirm(data.message);
+                            } else {
+                                //rfAffirm(data.message);
+                                window.location.reload();
+                            }
+                        }
+                    });
+                    break;
+                default:
+            }
+        })
+    });
 </script>
