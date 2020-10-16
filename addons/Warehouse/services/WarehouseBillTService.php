@@ -2,6 +2,7 @@
 
 namespace addons\Warehouse\services;
 
+use addons\Style\common\models\AttributeSpec;
 use Yii;
 use common\components\Service;
 use common\helpers\SnHelper;
@@ -1344,13 +1345,17 @@ class WarehouseBillTService extends Service
                 throw new \Exception($result['msg']);
             }
             if ($goods->style_sn && $form->attr_id) {
-                $valueList = $form->getAttrValueListByStyle($goods->style_sn, $form->attr_id);
-                if ($valueList
-                    && in_array($value, array_keys($valueList))) {
+            //if ($goods->style_sn && $form->attr_id) {
+                $attr = AttributeSpec::find()->where(['style_cate_id' => $form->style_cate_id, 'attr_id' => $form->attr_id, 'status' => StatusEnum::ENABLED])->count();
+                    //var_dump($attr);die;
+                    //$valueList = $form->getAttrValueListByStyle($goods->style_sn, $form->attr_id);
+                    //if ($valueList && in_array($value, array_keys($valueList))) {
+                if ($attr){
+                    $updateIds[] = $id;
+                    //}
+                } else {
                     $updateIds[] = $id;
                 }
-            } else {
-                $updateIds[] = $id;
             }
             $form->bill_id = $goods->bill_id;
         }
