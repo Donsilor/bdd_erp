@@ -189,13 +189,11 @@ class QibanController extends BaseController
         if ($model->load(Yii::$app->request->post())) {
             //重新编辑后，审核状态改为未审核
             if($isNewRecord){
-                $model->status = StatusEnum::DISABLED;
-                $model->audit_status = AuditStatusEnum::SAVE;
+                $model->status = StatusEnum::DISABLED;                
                 $model->creator_id = \Yii::$app->user->id;
                 $model->sort = time();
-            }/* else{
-                $model->audit_status = AuditStatusEnum::PENDING;
-            } */
+            }
+            $model->audit_status = AuditStatusEnum::SAVE;
             try{
                 $trans = Yii::$app->trans->beginTransaction();
                 if(false === $model->save()){
@@ -259,13 +257,11 @@ class QibanController extends BaseController
         if ($model->load(Yii::$app->request->post())) {
             //重新编辑后，审核状态改为未审核 
             if($isNewRecord){
-                $model->status = StatusEnum::DISABLED;
-                $model->audit_status = AuditStatusEnum::SAVE;
+                $model->status = StatusEnum::DISABLED;                
                 $model->creator_id = \Yii::$app->user->id;
                 $model->sort = time();
-            }/* else{
-                $model->audit_status = AuditStatusEnum::PENDING;
-            } */
+            }
+            $model->audit_status = AuditStatusEnum::SAVE;
             try{
                 $trans = Yii::$app->trans->beginTransaction();
                 if(false === $model->save()){
