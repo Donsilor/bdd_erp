@@ -523,8 +523,8 @@ $this->params['breadcrumbs'][] = $this->title;
                             [
                                 'attribute' => 'peiliao_way',
                                 'format' => 'raw',
-                                'headerOptions' => ['class' => 'col-md-1', 'attr-name' => 'peiliao_way', 'style' => 'background-color:#afdfe4;'],
-                                'footerOptions' => ['class' => 'col-md-1', 'attr-name' => 'peiliao_way', 'style' => 'background-color:#afdfe4;'],
+                                'headerOptions' => ['class' => 'col-md-1 batch_select_full', 'attr-name' => 'peiliao_way', 'style' => 'background-color:#afdfe4;'],
+                                'footerOptions' => ['class' => 'col-md-1 batch_select_full2', 'attr-name' => 'peiliao_way', 'style' => 'background-color:#afdfe4;'],
                                 'value' => function ($model, $key, $index, $widget) {
                                     $widget->footer = $model->getAttributeLabel('peiliao_way');
                                     return Html::ajaxSelect($model, 'peiliao_way', \addons\Warehouse\common\enums\PeiLiaoWayEnum::getMap(), ['data-id' => $model->id]);
@@ -881,8 +881,8 @@ $this->params['breadcrumbs'][] = $this->title;
                             [
                                 'attribute' => 'main_pei_type',
                                 'format' => 'raw',
-                                'headerOptions' => ['class' => 'col-md-1', 'attr-name' => 'main_pei_type', 'style' => 'background-color:#afb4db;'],
-                                'footerOptions' => ['class' => 'col-md-1', 'attr-name' => 'main_pei_type', 'style' => 'background-color:#afb4db;'],
+                                'headerOptions' => ['class' => 'col-md-1 batch_select_full', 'attr-name' => 'main_pei_type', 'style' => 'background-color:#afb4db;'],
+                                'footerOptions' => ['class' => 'col-md-1 batch_select_full2', 'attr-name' => 'main_pei_type', 'style' => 'background-color:#afb4db;'],
                                 'value' => function ($model, $key, $index, $widget) {
                                     $widget->footer = $model->getAttributeLabel('main_pei_type');
                                     return Html::ajaxSelect($model, 'main_pei_type', \addons\Warehouse\common\enums\PeiShiWayEnum::getMap(), ['data-id' => $model->id]);
@@ -1136,8 +1136,8 @@ $this->params['breadcrumbs'][] = $this->title;
                             [
                                 'attribute' => 'second_pei_type',
                                 'format' => 'raw',
-                                'headerOptions' => ['class' => 'col-md-1', 'attr-name' => 'second_pei_type', 'style' => 'background-color:#dec674;'],
-                                'footerOptions' => ['class' => 'col-md-1', 'attr-name' => 'second_pei_type', 'style' => 'background-color:#dec674;'],
+                                'headerOptions' => ['class' => 'col-md-1 batch_select_full', 'attr-name' => 'second_pei_type', 'style' => 'background-color:#dec674;'],
+                                'footerOptions' => ['class' => 'col-md-1 batch_select_full2', 'attr-name' => 'second_pei_type', 'style' => 'background-color:#dec674;'],
                                 'value' => function ($model, $key, $index, $widget) {
                                     $widget->footer = $model->getAttributeLabel('second_pei_type');
                                     return Html::ajaxSelect($model, 'second_pei_type', \addons\Warehouse\common\enums\PeiShiWayEnum::getMap(), ['data-id' => $model->id]);
@@ -1369,8 +1369,8 @@ $this->params['breadcrumbs'][] = $this->title;
                             [
                                 'attribute' => 'second_pei_type2',
                                 'format' => 'raw',
-                                'headerOptions' => ['class' => 'col-md-1', 'attr-name' => 'second_pei_type2', 'style' => 'background-color:#84bf96;'],
-                                'footerOptions' => ['class' => 'col-md-1', 'attr-name' => 'second_pei_type2', 'style' => 'background-color:#84bf96;'],
+                                'headerOptions' => ['class' => 'col-md-1 batch_select_full', 'attr-name' => 'second_pei_type2', 'style' => 'background-color:#84bf96;'],
+                                'footerOptions' => ['class' => 'col-md-1 batch_select_full2', 'attr-name' => 'second_pei_type2', 'style' => 'background-color:#84bf96;'],
                                 'value' => function ($model, $key, $index, $widget) {
                                     $widget->footer = $model->getAttributeLabel('second_pei_type2');
                                     return Html::ajaxSelect($model, 'second_pei_type2', \addons\Warehouse\common\enums\PeiShiWayEnum::getMap(), ['data-id' => $model->id]);
@@ -1675,8 +1675,8 @@ $this->params['breadcrumbs'][] = $this->title;
                             [
                                 'attribute' => 'second_pei_type3',
                                 'format' => 'raw',
-                                'headerOptions' => ['class' => 'col-md-1', 'attr-name' => 'second_pei_type3', 'style' => 'background-color:#6495ED;'],
-                                'footerOptions' => ['class' => 'col-md-1', 'attr-name' => 'second_pei_type3', 'style' => 'background-color:#6495ED;'],
+                                'headerOptions' => ['class' => 'col-md-1 batch_select_full', 'attr-name' => 'second_pei_type3', 'style' => 'background-color:#6495ED;'],
+                                'footerOptions' => ['class' => 'col-md-1 batch_select_full2', 'attr-name' => 'second_pei_type3', 'style' => 'background-color:#6495ED;'],
                                 'value' => function ($model, $key, $index, $widget) {
                                     $widget->footer = $model->getAttributeLabel('second_pei_type3');
                                     return Html::ajaxSelect($model, 'second_pei_type3', \addons\Warehouse\common\enums\PeiShiWayEnum::getMap(), ['data-id' => $model->id]);
@@ -2612,16 +2612,16 @@ $this->params['breadcrumbs'][] = $this->title;
                         ]
                     ]); ?>
                 </div>
-                <span class="navbar-fixed-bottom text-center" style="font-size:16px; margin-bottom:30px">
-                    <a id="mao_gold" style="color: #46be8a;" href="#gold">金料</a>
-                    <a id="mao_main_stone" style="color: #46be8a;" href="#main_stone">主石</a>
-                    <a id="mao_second_stone1" style="color: #46be8a;" href="#second_stone1">副石1</a>
-                    <a id="mao_second_stone2" style="color: #46be8a;" href="#second_stone2">副石2</a>
-                    <a id="mao_second_stone3" style="color: #46be8a;" href="#second_stone3">副石3</a>
-                    <a id="mao_parts" style="color: #46be8a;" href="#parts">配件</a>
-                    <a id="mao_fee1" style="color: #46be8a;" href="#fee1">工费1</a>
-                    <a id="mao_fee2" style="color: #46be8a;" href="#fee2">工费1</a>
-                    <a id="mao_price" style="color: #46be8a;" href="#price">价格</a>
+                <span class="navbar-fixed-bottom text-center" style="font-size:10px; margin-bottom:10px">
+                    <a id="mao_gold" style="color: #d3d7d4;" href="#gold">金料</a>
+                    <a id="mao_main_stone" style="color: #d3d7d4;" href="#main_stone">主石</a>
+                    <a id="mao_second_stone1" style="color: #d3d7d4;" href="#second_stone1">副石1</a>
+                    <a id="mao_second_stone2" style="color: #d3d7d4;" href="#second_stone2">副石2</a>
+                    <a id="mao_second_stone3" style="color: #d3d7d4;" href="#second_stone3">副石3</a>
+                    <a id="mao_parts" style="color: #d3d7d4;" href="#parts">配件</a>
+                    <a id="mao_fee1" style="color: #d3d7d4;" href="#fee1">工费1</a>
+                    <a id="mao_fee2" style="color: #d3d7d4;" href="#fee2">工费2</a>
+                    <a id="mao_price" style="color: #d3d7d4;" href="#price">价格</a>
                 </span>
             </div>
         </div>
