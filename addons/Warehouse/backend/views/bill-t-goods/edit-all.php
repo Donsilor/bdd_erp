@@ -91,7 +91,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             ],
                             [
                                 'attribute' => 'id',
-                                'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#feeeed;'],
+                                'headerOptions' => ['class' => 'col-md-1', 'id' => 'front', 'style' => 'background-color:#feeeed;'],
                                 'footerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#feeeed;'],
                                 'value' => function ($model, $key, $index, $widget) {
                                     $widget->footer = "汇总：";
@@ -418,7 +418,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             [
                                 'attribute' => 'xiangkou',
                                 'format' => 'raw',
-                                'headerOptions' => ['class' => 'col-md-1 batch_select_full', 'attr-name' => 'xiangkou', 'attr-id' => AttrIdEnum::XIANGKOU, 'style' => 'background-color:#F5DEB3;'],
+                                'headerOptions' => ['class' => 'col-md-1 batch_select_full', 'id' => 'attr', 'attr-name' => 'xiangkou', 'attr-id' => AttrIdEnum::XIANGKOU, 'style' => 'background-color:#F5DEB3;'],
                                 'footerOptions' => ['class' => 'col-md-1 batch_select_full2', 'attr-name' => 'xiangkou', 'attr-id' => AttrIdEnum::XIANGKOU, 'style' => 'background-color:#F5DEB3;'],
                                 'value' => function ($model, $key, $index, $widget) {
                                     $widget->footer = $model->getAttributeLabel('xiangkou');
@@ -2559,7 +2559,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             [
                                 'attribute' => 'remark',
                                 'format' => 'raw',
-                                'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#b7ba6b;'],
+                                'headerOptions' => ['class' => 'col-md-1', 'id' => 'end', 'style' => 'background-color:#b7ba6b;'],
                                 'footerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#b7ba6b;'],
                                 'value' => function ($model, $key, $index, $widget) {
                                     $widget->footer = $model->getAttributeLabel('remark');
@@ -2613,6 +2613,8 @@ $this->params['breadcrumbs'][] = $this->title;
                     ]); ?>
                 </div>
                 <span class="navbar-fixed-bottom text-center" style="font-size:10px; margin-bottom:10px">
+                    <a id="mao_front" style="color: #d3d7d4;" href="#front">开头</a>
+                    <a id="mao_attr" style="color: #d3d7d4;" href="#attr">属性</a>
                     <a id="mao_gold" style="color: #d3d7d4;" href="#gold">金料</a>
                     <a id="mao_main_stone" style="color: #d3d7d4;" href="#main_stone">主石</a>
                     <a id="mao_second_stone1" style="color: #d3d7d4;" href="#second_stone1">副石1</a>
@@ -2622,6 +2624,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     <a id="mao_fee1" style="color: #d3d7d4;" href="#fee1">工费1</a>
                     <a id="mao_fee2" style="color: #d3d7d4;" href="#fee2">工费2</a>
                     <a id="mao_price" style="color: #d3d7d4;" href="#price">价格</a>
+                    <a id="mao_end" style="color: #d3d7d4;" href="#end">结尾</a>
                 </span>
             </div>
         </div>
