@@ -2612,7 +2612,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         ]
                     ]); ?>
                 </div>
-                <span class="navbar-fixed-bottom text-center" style="font-size:16px; margin-bottom:30px">
+                <span class="navbar-fixed-bottom text-center" style="font-size:10px; margin-bottom:10px">
                     <a id="mao_gold" style="color: #d3d7d4;" href="#gold">金料</a>
                     <a id="mao_main_stone" style="color: #d3d7d4;" href="#main_stone">主石</a>
                     <a id="mao_second_stone1" style="color: #d3d7d4;" href="#second_stone1">副石1</a>

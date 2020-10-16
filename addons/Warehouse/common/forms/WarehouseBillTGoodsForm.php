@@ -1785,7 +1785,7 @@ class WarehouseBillTGoodsForm extends WarehouseBillGoodsL
 //            $msg[] = "克工费与件工费只能填写一个";
 //        }
         //验证石料编号格式
-        $pattern = '^[A-Za-z0-9\-]+$';
+        $pattern = '/^[A-Za-z0-9\-]+$/';
         if($form->main_stone_sn && !preg_match($pattern, $form->main_stone_sn)){
             $result['error'] = false;
             $msg[] = "主石编号格式有误";
