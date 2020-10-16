@@ -285,5 +285,48 @@ class PurchaseApplyGoodsForm extends PurchaseApplyGoods
         }
         return $attr_list;
     }
+
+
+    //去掉属性
+    public function getAttrType($type){
+        switch ($type){
+            case 'require':
+                $attr = [
+                    10,77
+                ];
+                break;
+            case 'remove':
+                $attr = [
+                    58,31
+                ];
+                break;
+            case 'base':
+                $attr = [
+                    10,11,77,91,78,38,53,75,86,83,43,42,90,57,81,48
+                ];
+                break;
+            case 'stone':
+                $attr = [
+                    56,65,59,6,7,2,4,28,29,8,87
+                ];
+                break;
+            case 'second_stone':
+                $attr = [
+                    60,45,44,84,46,47,97,88,64,62,63,85,106,104,98,103,102,101,107,105
+                ];
+                break;
+            case 'other':
+                $attr = [];
+                break;
+            default: $attr = [];
+        }
+        return $attr;
+
+    }
+
+
+
+
+
     
 }
