@@ -20,6 +20,10 @@
 					window.print();
 				}
 			}
+			function download()
+	        {
+	             window.location.href += "&download=1";
+	        }
 		</script>
         <style>
             body{
@@ -261,6 +265,7 @@
     <div class="text-center Noprint" style="text-align:right;">
         <!-- 打印按钮 -->
         <button type="button" class="btn btn-info btn-ms" target="_blank" onclick="preview(10)">打印</button>
+        <button type="button" class="btn btn-info btn-ms" target="_blank" onclick="download(10)">导出</button>
     </div>
     <body>
     <div class="template">
@@ -344,6 +349,7 @@
     <div class="text-center Noprint" style="text-align:center;">
         <!-- 打印按钮 -->
         <button type="button" class="btn btn-info btn-ms" onclick="preview(10)">打印</button>
+        <button type="button" class="btn btn-info btn-ms" target="_blank" onclick="download(10)">导出</button>
     </div>
     </body>
 </html>

@@ -292,6 +292,7 @@
             padding: 0px 14px;
         }
         .headerTable, .headerTable td{ border:0px}
+        .footerTable, .footerTable td{ border:0px}
     </style>
 </head>
 <body> 
@@ -516,7 +517,7 @@
             </tr>
             </tfoot>
         </table>
-<table class="headerTable" style="padding-top: 10px">
+<table class="footerTable" style="padding-top: 10px">
     <tr>
         <td class="algin-left" colspan="6">
             <div class="prepared-by">

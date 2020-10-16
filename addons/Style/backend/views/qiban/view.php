@@ -43,7 +43,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         <?php } ?>
                         <tr>
                             <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('style_channel_id') ?>：</td>
-                            <td><?= $model->style->channel->name ?? '' ?></td>
+                            <td><?= $model->channel->name ?? '' ?></td>
                         </tr>
                         <tr>
                             <td class="col-xs-2 text-right"><?= $model->getAttributeLabel('style_sex') ?>：</td>
