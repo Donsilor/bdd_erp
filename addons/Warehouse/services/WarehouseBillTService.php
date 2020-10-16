@@ -1659,10 +1659,34 @@ class WarehouseBillTService extends Service
      */
     public function calculateBasicGongFee($form)
     {
-        if (bccomp($form->piece_fee, 0, 5) > 0) {
-            return $form->piece_fee ?? 0;
-        }
+//        if (bccomp($form->piece_fee, 0, 5) > 0) {
+//            return $form->piece_fee ?? 0;
+//        }
+        return bcadd($this->calculateGongFee($form), $this->calculatePieceFee($form), 5) ?? 0;
+    }
+
+    /**
+     *
+     * 总/克/工费=(克/工费*含耗重)
+     * @param WarehouseBillTGoodsForm $form
+     * @return integer
+     * @throws
+     */
+    public function calculateGongFee($form)
+    {
         return bcmul($form->gong_fee, $this->calculateLossWeight($form), 5) ?? 0;
+    }
+
+    /**
+     *
+     * 总/件/工费=(件/工费*商品数量)
+     * @param WarehouseBillTGoodsForm $form
+     * @return integer
+     * @throws
+     */
+    public function calculatePieceFee($form)
+    {
+        return bcmul($form->piece_fee, $form->goods_num, 5) ?? 0;
     }
 
     /**

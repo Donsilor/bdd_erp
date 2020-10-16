@@ -190,6 +190,7 @@ class BillTGoodsController extends BaseController
                 if ($result['error'] == false) {
                     throw new \Exception($result['msg']);
                 }
+                list($model,) = $model->correctGoods($model);
                 if (false === $model->save()) {
                     throw new \Exception($this->getError($model));
                 }
@@ -247,7 +248,7 @@ class BillTGoodsController extends BaseController
             if ($result['error'] == false) {
                 throw new \Exception($result['msg']);
             }
-            $model = $model->correctGoods($model);
+            list($model,) = $model->correctGoods($model);
             if (!$model->save()) {
                 throw new \Exception("保存失败");
             }

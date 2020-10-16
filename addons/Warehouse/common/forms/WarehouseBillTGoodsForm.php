@@ -1780,10 +1780,29 @@ class WarehouseBillTGoodsForm extends WarehouseBillGoodsL
             $msg[] = "配件数量[$form->parts_num]/商品数量[$form->main_stone_num]=[$parts_num]，必须为整数";
         }
         //工费
-        if ($form->gong_fee > 0 && $form->piece_fee > 0) {
+//        if ($form->gong_fee > 0 && $form->piece_fee > 0) {
+//            $result['error'] = false;
+//            $msg[] = "克工费与件工费只能填写一个";
+//        }
+        //验证石料编号格式
+        $pattern = '^[A-Za-z0-9\-]+$';
+        if($form->main_stone_sn && !preg_match($pattern, $form->main_stone_sn)){
             $result['error'] = false;
-            $msg[] = "克工费与件工费只能填写一个";
+            $msg[] = "主石编号格式有误";
         }
+        if($form->second_stone_sn1 && !preg_match($pattern, $form->second_stone_sn1)){
+            $result['error'] = false;
+            $msg[] = "副石1编号格式有误";
+        }
+        if($form->second_stone_sn2 && !preg_match($pattern, $form->second_stone_sn2)){
+            $result['error'] = false;
+            $msg[] = "副石2编号格式有误";
+        }
+        if($form->second_stone_sn3 && !preg_match($pattern, $form->second_stone_sn3)){
+            $result['error'] = false;
+            $msg[] = "副石3编号格式有误";
+        }
+
         if (!empty($msg)) {
             $result['msg'] = implode('】,【', $msg)."[条码号=".$form->goods_id."]";
         }
@@ -1802,10 +1821,14 @@ class WarehouseBillTGoodsForm extends WarehouseBillGoodsL
     {
         $saveData = [];
         //配件金重，配件金价，配件总额，任意填写一个，配件类型：工厂配
-        if ($form->parts_gold_weight || $form->parts_price || $form->parts_amount) {
+        if (bccomp($form->parts_gold_weight, 0, 5) == 1
+            || bccomp($form->parts_price, 0, 5) == 1
+            || bccomp($form->parts_amount, 0, 5) == 1) {
             $form->parts_way = PeiJianWayEnum::FACTORY;
             $saveData['parts_way'] = PeiJianWayEnum::FACTORY;
-        }elseif(!$form->parts_gold_weight && !$form->parts_price && !$form->parts_amount) {
+        }elseif(bccomp($form->parts_gold_weight, 0, 5) != 1
+            && bccomp($form->parts_price, 0, 5) != 1
+            && bccomp($form->parts_amount, 0, 5) != 1) {
             $form->parts_way = PeiJianWayEnum::NO_PEI;
             $saveData['parts_way'] = PeiJianWayEnum::NO_PEI;
         }
