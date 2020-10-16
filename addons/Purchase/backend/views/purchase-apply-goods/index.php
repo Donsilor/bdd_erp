@@ -86,7 +86,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                          }
                                     },
                                     'format-edit' =>function($url, $model, $key) use($apply){
-                                        if($apply->apply_status <= ApplyStatusEnum::CONFIRM  && $model->confirm_status == \addons\Purchase\common\enums\ApplyConfirmEnum::DESIGN) {
+                                        if($apply->apply_status <= ApplyStatusEnum::DETAIL  && $model->confirm_status == \addons\Purchase\common\enums\ApplyConfirmEnum::DESIGN) {
                                             return Html::edit(['format-edit','id' => $model->id],'版式编辑',['class' => 'btn btn-primary btn-xs openIframe','data-width'=>'90%','data-height'=>'90%','data-offset'=>'20px']);
                                         }
                                     },
@@ -97,7 +97,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                     },
 
                                     'audit' => function($url, $model, $key) use($apply){
-                                        if($apply->apply_status == ApplyStatusEnum::CONFIRM){
+                                        if($apply->apply_status == ApplyStatusEnum::DETAIL){
                                             if($model->confirm_status == \addons\Purchase\common\enums\ApplyConfirmEnum::DESIGN){
                                                 return Html::edit(['design-confirm','id'=>$model->id], '设计部确认', [
                                                     'class'=>'btn btn-success btn-xs',

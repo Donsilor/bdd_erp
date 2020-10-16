@@ -95,13 +95,24 @@ class PurchaseApplyGoodsForm extends PurchaseApplyGoods
      */
     public function initAttrs()
     {
-        $attr_list = PurchaseApplyGoodsAttribute::find()->select(['attr_id','if(attr_value_id=0,attr_value,attr_value_id) as attr_value'])->where(['id'=>$this->id])->asArray()->all();
-        if(!empty($attr_list)) {
-            $attr_list = array_column($attr_list,'attr_value','attr_id');
-            $this->attr_custom  = $attr_list;
-            $this->attr_require = $attr_list;
+        $models = PurchaseApplyGoodsAttribute::find()->select(['attr_id','input_type','if(attr_value_id=0,attr_value,attr_value_id) as attr_value'])->where(['id'=>$this->id])->all();
+        if(empty($models)) {
+            return ;
         }
-        $this->goods_images = $this->goods_images ? explode(',', $this->goods_images) : [];
+        $attr_list = [];
+        foreach ($models as $model){
+            $attr_values = $model->attr_value;
+
+            if($model->input_type != InputTypeEnum::INPUT_TEXT) {
+                $split_values = explode(",",$attr_values);
+                if(count($split_values) > 1) {
+                    $attr_values = $split_values;
+                }
+            }
+            $attr_list[$model->attr_id] = $attr_values;
+        }
+        $this->attr_custom  = $attr_list;
+        $this->attr_require = $attr_list;
     }
 
     /**
@@ -173,28 +184,30 @@ class PurchaseApplyGoodsForm extends PurchaseApplyGoods
     {
         PurchaseApplyGoodsAttribute::deleteAll(['id'=>$this->id]);
         foreach ($this->getPostAttrs() as $attr_id => $attr_value_id) {
-            $spec = AttributeSpec::find()->where(['attr_id'=>$attr_id,'style_cate_id'=>$this->style_cate_id])->asArray()->one();
+            $spec = AttributeSpec::find()->where(['attr_id'=>$attr_id,'style_cate_id'=>$this->style_cate_id])->one();
             $model = new PurchaseApplyGoodsAttribute();
             $model->id = $this->id;
             $model->attr_id  = $attr_id;
-            if(InputTypeEnum::isText($spec['input_type']) || intval($attr_value_id) != $attr_value_id) {
-                $model->attr_value_id  = 0;
-                $model->attr_value = $attr_value_id;
+            $model->input_type = $spec->input_type;
+
+            if(InputTypeEnum::isText($spec->input_type)) {
+                $model->attr_value_id  = '0';
+                $model->attr_value = (string)$attr_value_id;
             }else if(is_numeric($attr_value_id)){
                 $attr_value = \Yii::$app->attr->valueName($attr_value_id);
-                $model->attr_value_id  = $attr_value_id;
-                $model->attr_value = $attr_value;
-                $pices = explode('-',$attr_value);
-                if(count($pices)==2) {
-                    if(is_numeric($pices[0]) && is_numeric($pices[1])) {
-                        $model->attr_value_min = $pices[0];
-                        $model->attr_value_max = $pices[1];
-                    }
+                $model->attr_value_id  = (string)$attr_value_id;
+                $model->attr_value = (string)$attr_value;
+            }else if(is_array($attr_value_id)){
+                $attr_value_arr = [];
+                foreach ($attr_value_id as $attr_id){
+                    $attr_value_arr[] = \Yii::$app->attr->valueName($attr_id);
                 }
+                $model->attr_value_id = implode(',',$attr_value_id);
+                $model->attr_value = implode(',',$attr_value_arr);
             }else{
                 continue;
             }
-            $model->sort = $spec['sort'];
+            $model->sort = $spec->sort;
             if(false === $model->save()) {
                 throw new \Exception($this->getErrors($model));
             }
@@ -272,5 +285,48 @@ class PurchaseApplyGoodsForm extends PurchaseApplyGoods
         }
         return $attr_list;
     }
+
+
+    //去掉属性
+    public function getAttrType($type){
+        switch ($type){
+            case 'require':
+                $attr = [
+                    10,77
+                ];
+                break;
+            case 'remove':
+                $attr = [
+                    58,31
+                ];
+                break;
+            case 'base':
+                $attr = [
+                    10,11,77,91,78,38,53,75,86,83,43,42,90,57,81,48
+                ];
+                break;
+            case 'stone':
+                $attr = [
+                    56,65,59,6,7,2,4,28,29,8,87
+                ];
+                break;
+            case 'second_stone':
+                $attr = [
+                    60,45,44,84,46,47,97,88,64,62,63,85,106,104,98,103,102,101,107,105
+                ];
+                break;
+            case 'other':
+                $attr = [];
+                break;
+            default: $attr = [];
+        }
+        return $attr;
+
+    }
+
+
+
+
+
     
 }

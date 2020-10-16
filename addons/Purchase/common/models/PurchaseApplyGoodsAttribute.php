@@ -40,10 +40,11 @@ class PurchaseApplyGoodsAttribute extends BaseModel
     {
         return [
             [['id', 'attr_id'], 'required'],
-            [['id', 'attr_id', 'attr_value_id', 'sort'], 'integer'],
+            [['id', 'attr_id','input_type', 'sort'], 'integer'],
             [['attr_value_min', 'attr_value_max'], 'number'],
             [['attr_value'], 'string', 'max' => 255],
             [['id', 'attr_id'], 'unique', 'targetAttribute' => ['id', 'attr_id']],
+            [['attr_value_id'], 'string','max'=>30]
         ];
     }
 
@@ -60,6 +61,7 @@ class PurchaseApplyGoodsAttribute extends BaseModel
             'attr_value_min' => Yii::t('app', '最小值(暂时作废)'),
             'attr_value_max' => Yii::t('app', '最大值（暂时作废）'),
             'sort' => Yii::t('app', '排序'),
+            'input_type' => Yii::t('app', '类型'),
         ];
     }
 }

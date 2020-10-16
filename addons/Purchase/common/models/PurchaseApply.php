@@ -73,7 +73,7 @@ class PurchaseApply extends BaseModel
             'total_num' => '总数量',
             'channel_id' => "采购渠道",
             'warehouse_id' => "入库仓库",
-            'delivery_time' => "预计交货时间",
+            'delivery_time' => "期望交货时间",
             'auditor_id' => '审核人',
             'audit_status' => '审核状态',
             'audit_time' => '审核时间',
