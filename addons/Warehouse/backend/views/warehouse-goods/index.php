@@ -1608,6 +1608,10 @@ $params = $params ? "&".http_build_query($params) : '';
     </div>
 </div>
 <script type="text/javascript">
+    $(document).ready(function(){
+        sessionStorageAdd('goodsSearch', '<?= $params;?>', true);
+    });
+
     function cleardd() {
         $('#select select').prop('selectedIndex', 0);
     }
@@ -1615,8 +1619,17 @@ $params = $params ? "&".http_build_query($params) : '';
     //批量导出
     function batchExport() {
         var ids = $("#grid").yiiGridView("getSelectedRows");
+        var search = sessionStorageGet('goodsSearch');
+        if(!search){
+            rfMsg("请点击搜索后再导出");
+            return;
+        }
+        if(searchTo(search)<1){
+            rfMsg("至少选择1个选项后导出");
+            return;
+        }
         if (ids.length == 0) {
-            var url = "<?= Url::to('index?action=export' . $params);?>";
+            var url = "<?= Url::to('index?action=export');?>" + search;
             rfExport(url)
         } else {
             window.location.href = "<?= Url::buildUrl('export', [], ['ids'])?>?ids=" + ids;
@@ -1632,5 +1645,20 @@ $params = $params ? "&".http_build_query($params) : '';
         } else {
             window.location.href = "<?= Url::buildUrl('label-export', [], ['ids'])?>?&ids=" + ids;
         }
+    }
+
+    function searchTo(search) {
+        var arr = search.split("&");
+        var s = 0;
+        for (var i = 0; i < arr.length; i++) {
+            var list = arr[i];
+            if (list) {
+                var temp = list.split("=");
+                if (temp[1]) {
+                    s++;
+                }
+            }
+        }
+        return s;
     }
 </script>

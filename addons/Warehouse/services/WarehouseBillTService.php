@@ -2,7 +2,6 @@
 
 namespace addons\Warehouse\services;
 
-use addons\Style\common\models\AttributeSpec;
 use Yii;
 use common\components\Service;
 use common\helpers\SnHelper;
@@ -14,6 +13,7 @@ use addons\Warehouse\common\forms\WarehouseBillTForm;
 use addons\Warehouse\common\forms\WarehouseBillTGoodsForm;
 use addons\Style\common\models\Style;
 use addons\Style\common\models\Qiban;
+use addons\Style\common\models\AttributeSpec;
 use addons\Warehouse\common\enums\PeiJianWayEnum;
 use addons\Warehouse\common\enums\PeiLiaoWayEnum;
 use addons\Warehouse\common\enums\PeiShiWayEnum;
@@ -1924,7 +1924,8 @@ class WarehouseBillTService extends Service
         }
         $form->cost_amount = $this->calculateCostAmount($form);//公司成本总额
         $form->market_price = $this->calculateMarketPrice($form);//标签价
-        list($form,) = $form->correctGoods($form);
+
+        list($form,) = $form->correctGoods($form);//调整数据
         if (false === $form->save()) {
             throw new \Exception($this->getError($form));
         }

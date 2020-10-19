@@ -231,9 +231,9 @@ class WarehouseBillCService extends WarehouseBillService
         if ($billGoods) {
             foreach ($billGoods as $goods) {
                 $res = WarehouseGoods::updateAll(['goods_status' => GoodsStatusEnum::IN_STOCK, 'chuku_time' => null], ['goods_id' => $goods->goods_id]);
-                if (!$res) {
-                    throw new \Exception("商品{$goods->goods_id}不存在，请查看原因");
-                }
+//                if (!$res) {
+//                    throw new \Exception("商品{$goods->goods_id}不存在，请查看原因");
+//                }
                 //还原库存
                 \Yii::$app->warehouseService->warehouseGoods->syncStockNum($goods->goods_id, $goods->goods_num, AdjustTypeEnum::ADD);
             }
