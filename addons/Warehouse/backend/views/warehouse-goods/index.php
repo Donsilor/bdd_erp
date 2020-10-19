@@ -1620,6 +1620,10 @@ $params = $params ? "&".http_build_query($params) : '';
     function batchExport() {
         var ids = $("#grid").yiiGridView("getSelectedRows");
         var search = sessionStorageGet('goodsSearch');
+        if(!search){
+            rfMsg("请点击搜索后再导出");
+            return;
+        }
         if (ids.length == 0) {
             var url = "<?= Url::to('index?action=export');?>" + search;
             console.log(url);
