@@ -1924,7 +1924,8 @@ class WarehouseBillTService extends Service
         }
         $form->cost_amount = $this->calculateCostAmount($form);//公司成本总额
         $form->market_price = $this->calculateMarketPrice($form);//标签价
-        list($form,) = $form->correctGoods($form);
+
+        list($form,) = $form->correctGoods($form);//调整数据
         if (false === $form->save()) {
             throw new \Exception($this->getError($form));
         }

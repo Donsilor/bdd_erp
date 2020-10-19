@@ -344,10 +344,9 @@ class WarehouseGoodsController extends BaseController
         if(!is_array($ids)){
             $ids = StringHelper::explodeIds($ids);
         }
-        if(!$ids){
-            return $this->message('库存ID不为空', $this->redirect(['index']), 'warning');
-        }
-
+//        if(!$ids){
+//            return $this->message('库存ID不为空', $this->redirect(['index']), 'warning');
+//        }
         list($list,) = $this->getData($ids);
         $header = [
             ['条码号', 'goods_id' , 'text'],
@@ -444,12 +443,43 @@ class WarehouseGoodsController extends BaseController
         return ExcelHelper::exportData($list, $header, $name.'数据导出_' . date('YmdHis',time()));
     }
     private function getData($ids){
+        $search = new WarehousGoodsSearchForm();
+        $search->attributes = Yii::$app->request->get();
         $select = ['g.*','type.name as product_type_name','cate.name as style_cate_name'];
         $query = WarehouseGoods::find()->alias('g')
             ->leftJoin(ProductType::tableName().' type','type.id=g.product_type_id')
             ->leftJoin(StyleCate::tableName().' cate','cate.id=g.style_cate_id')
-            ->where(['g.id' => $ids])
             ->select($select);
+        //if($ids){
+         //   $query->where(['g.id' => $ids]);
+        //}
+        //if(empty($query->count())){
+            $query->andFilterWhere(['g.goods_status'=>$search->goods_status])
+                ->andFilterWhere(['g.material_type'=>$search->material_type])
+                ->andFilterWhere(['g.jintuo_type'=>$search->jintuo_type])
+                ->andFilterWhere(['g.style_sn'=>$search->style_sn])
+                ->andFilterWhere(['g.finger_hk'=>$search->finger_hk])
+                ->andFilterWhere(['g.finger'=>$search->finger])
+                ->andFilterWhere(['g.diamond_color'=>$search->diamond_color])
+                ->andFilterWhere(['g.diamond_clarity'=>$search->diamond_clarity])
+                ->andFilterWhere(['g.main_stone_type'=>$search->main_stone_type])
+                ->andFilterWhere(['in', 'g.goods_id', $search->goods_ids()])
+                ->andFilterWhere(['in', 'g.style_cate_id', $search->styleCateIds()])
+                ->andFilterWhere(['in', 'g.product_type_id', $search->proTypeIds()])
+                ->andFilterWhere(['like', 'g.goods_name', $search->goods_name()])
+                ->andFilterWhere(['like', 'g.qiban_sn', $search->qiban_sn()])
+//                ->andFilterWhere($search->betweenGoldWeight())
+                ->andFilterWhere($search->betweenSuttleWeight())
+                ->andFilterWhere($search->betweenDiamondCarat())
+                ->andFilterWhere(['in', 'g.warehouse_id', $search->warehouse_id])
+                ->andFilterWhere(['in', 'g.supplier_id', $search->supplier_id])
+                ->andFilterWhere(['in', 'g.style_channel_id', $search->style_channel_id])
+                ->andFilterWhere(['in', 'g.goods_source', $search->goods_source])
+                ->andFilterWhere($search->betweenCreatedAt())
+                ->andFilterWhere($search->betweenChukuTime());
+           // $commandQuery = clone $query;
+            //echo $commandQuery->createCommand()->getRawSql();die;
+       // }
         $lists = PageHelper::findAll($query, 100);
         //统计
         $total = [
