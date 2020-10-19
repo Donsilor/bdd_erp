@@ -389,48 +389,49 @@ class WarehouseGoodsController extends BaseController
         return ExcelHelper::exportData($list, $header, '库存数据导出_' . date('YmdHis', time()));
     }
 
-    private function getData($ids){
-        if(!is_array($ids)){
+    private function getData($ids)
+    {
+        if (!is_array($ids)) {
             $ids = StringHelper::explodeIds($ids);
         }
         $search = new WarehousGoodsSearchForm();
         $search->attributes = Yii::$app->request->get();
-        $select = ['g.*','type.name as product_type_name','cate.name as style_cate_name','warehouse.name as warehouse_name'];
+        $select = ['g.*', 'type.name as product_type_name', 'cate.name as style_cate_name', 'warehouse.name as warehouse_name'];
         $query = WarehouseGoods::find()->alias('g')
-            ->leftJoin(Warehouse::tableName().' warehouse','warehouse.id=g.warehouse_id')
-            ->leftJoin(ProductType::tableName().' type','type.id=g.product_type_id')
-            ->leftJoin(StyleCate::tableName().' cate','cate.id=g.style_cate_id')
+            ->leftJoin(Warehouse::tableName() . ' warehouse', 'warehouse.id=g.warehouse_id')
+            ->leftJoin(ProductType::tableName() . ' type', 'type.id=g.product_type_id')
+            ->leftJoin(StyleCate::tableName() . ' cate', 'cate.id=g.style_cate_id')
             ->select($select);
         //if($ids){
-         //   $query->where(['g.id' => $ids]);
+        //   $query->where(['g.id' => $ids]);
         //}
         //if(empty($query->count())){
-            $query->andFilterWhere(['g.goods_status'=>$search->goods_status])
-                ->andFilterWhere(['g.material_type'=>$search->material_type])
-                ->andFilterWhere(['g.jintuo_type'=>$search->jintuo_type])
-                ->andFilterWhere(['g.style_sn'=>$search->style_sn])
-                ->andFilterWhere(['g.finger_hk'=>$search->finger_hk])
-                ->andFilterWhere(['g.finger'=>$search->finger])
-                ->andFilterWhere(['g.diamond_color'=>$search->diamond_color])
-                ->andFilterWhere(['g.diamond_clarity'=>$search->diamond_clarity])
-                ->andFilterWhere(['g.main_stone_type'=>$search->main_stone_type])
-                ->andFilterWhere(['in', 'g.goods_id', $search->goods_ids()])
-                ->andFilterWhere(['in', 'g.style_cate_id', $search->styleCateIds()])
-                ->andFilterWhere(['in', 'g.product_type_id', $search->proTypeIds()])
-                ->andFilterWhere(['like', 'g.goods_name', $search->goods_name()])
-                ->andFilterWhere(['like', 'g.qiban_sn', $search->qiban_sn()])
+        $query->andFilterWhere(['g.goods_status' => $search->goods_status])
+            ->andFilterWhere(['g.material_type' => $search->material_type])
+            ->andFilterWhere(['g.jintuo_type' => $search->jintuo_type])
+            ->andFilterWhere(['g.style_sn' => $search->style_sn])
+            ->andFilterWhere(['g.finger_hk' => $search->finger_hk])
+            ->andFilterWhere(['g.finger' => $search->finger])
+            ->andFilterWhere(['g.diamond_color' => $search->diamond_color])
+            ->andFilterWhere(['g.diamond_clarity' => $search->diamond_clarity])
+            ->andFilterWhere(['g.main_stone_type' => $search->main_stone_type])
+            ->andFilterWhere(['in', 'g.goods_id', $search->goods_ids()])
+            ->andFilterWhere(['in', 'g.style_cate_id', $search->styleCateIds()])
+            ->andFilterWhere(['in', 'g.product_type_id', $search->proTypeIds()])
+            ->andFilterWhere(['like', 'g.goods_name', $search->goods_name()])
+            ->andFilterWhere(['like', 'g.qiban_sn', $search->qiban_sn()])
 //                ->andFilterWhere($search->betweenGoldWeight())
-                ->andFilterWhere($search->betweenSuttleWeight())
-                ->andFilterWhere($search->betweenDiamondCarat())
-                ->andFilterWhere(['in', 'g.warehouse_id', $search->warehouse_id])
-                ->andFilterWhere(['in', 'g.supplier_id', $search->supplier_id])
-                ->andFilterWhere(['in', 'g.style_channel_id', $search->style_channel_id])
-                ->andFilterWhere(['in', 'g.goods_source', $search->goods_source])
-                ->andFilterWhere($search->betweenCreatedAt())
-                ->andFilterWhere($search->betweenChukuTime());
-           // $commandQuery = clone $query;
-            //echo $commandQuery->createCommand()->getRawSql();die;
-       // }
+            ->andFilterWhere($search->betweenSuttleWeight())
+            ->andFilterWhere($search->betweenDiamondCarat())
+            ->andFilterWhere(['in', 'g.warehouse_id', $search->warehouse_id])
+            ->andFilterWhere(['in', 'g.supplier_id', $search->supplier_id])
+            ->andFilterWhere(['in', 'g.style_channel_id', $search->style_channel_id])
+            ->andFilterWhere(['in', 'g.goods_source', $search->goods_source])
+            ->andFilterWhere($search->betweenCreatedAt())
+            ->andFilterWhere($search->betweenChukuTime());
+        // $commandQuery = clone $query;
+        //echo $commandQuery->createCommand()->getRawSql();die;
+        // }
         $lists = PageHelper::findAll($query, 100);
         //统计
         $total = [
@@ -447,7 +448,7 @@ class WarehouseGoodsController extends BaseController
             'cert_fee_count' => 0,
 
         ];
-        foreach ($lists as &$list){
+        foreach ($lists as &$list) {
             //商品状态
             $list['goods_status'] = GoodsStatusEnum::getValue($list['goods_status']);
             //材质
@@ -541,56 +542,56 @@ class WarehouseGoodsController extends BaseController
             $diamond_cert_type = empty($list['diamond_cert_type']) ? 0 : $list['diamond_cert_type'];
             $list['diamond_cert_type'] = \Yii::$app->attr->valueName($diamond_cert_type);
 
-            //副石1类型
-            $second_stone_type1 = empty($list['second_stone_type1']) ? 0 : $list['second_stone_type1'];
-            $list['second_stone_type1'] = \Yii::$app->attr->valueName($second_stone_type1);
-            //副石1颜色
-            $second_stone_color1 = empty($list['second_stone_color1']) ? 0 : $list['second_stone_color1'];
-            $list['second_stone_color1'] = \Yii::$app->attr->valueName($second_stone_color1);
-            //副石1净度
-            $second_stone_clarity1 = empty($list['second_stone_clarity1']) ? 0 : $list['second_stone_clarity1'];
-            $list['second_stone_clarity1'] = \Yii::$app->attr->valueName($second_stone_clarity1);
-            //副石1形状
-            $second_stone_shape1 = empty($list['second_stone_shape1']) ? 0 : $list['second_stone_shape1'];
-            $list['second_stone_shape1'] = \Yii::$app->attr->valueName($second_stone_shape1);
-            //副石1金额
-            $second_stone_price1 = empty($list['second_stone_price1']) ? 0 : $list['second_stone_price1'];
-            $list['second_stone_price1_sum'] = $second_stone_price1 * $list['second_stone_num1'];
-            //副石2类型
-            $second_stone_type2 = empty($list['second_stone_type2']) ? 0 : $list['second_stone_type2'];
-            $list['second_stone_type2'] = \Yii::$app->attr->valueName($second_stone_type2);
-            //副石2重
-            $second_stone_weight2 = empty($list['second_stone_weight2']) ? 0 : $list['second_stone_weight2'];
-            $list['second_stone_weight2'] = \Yii::$app->attr->valueName($second_stone_weight2);
-            //副石1形状
-            $second_stone_weight2 = empty($list['second_stone_weight2']) ? 0 : $list['second_stone_weight2'];
-            $list['second_stone_weight2'] = \Yii::$app->attr->valueName($second_stone_weight2);
+//            //副石1类型
+//            $second_stone_type1 = empty($list['second_stone_type1']) ? 0 : $list['second_stone_type1'];
+//            $list['second_stone_type1'] = \Yii::$app->attr->valueName($second_stone_type1);
+//            //副石1颜色
+//            $second_stone_color1 = empty($list['second_stone_color1']) ? 0 : $list['second_stone_color1'];
+//            $list['second_stone_color1'] = \Yii::$app->attr->valueName($second_stone_color1);
+//            //副石1净度
+//            $second_stone_clarity1 = empty($list['second_stone_clarity1']) ? 0 : $list['second_stone_clarity1'];
+//            $list['second_stone_clarity1'] = \Yii::$app->attr->valueName($second_stone_clarity1);
+//            //副石1形状
+//            $second_stone_shape1 = empty($list['second_stone_shape1']) ? 0 : $list['second_stone_shape1'];
+//            $list['second_stone_shape1'] = \Yii::$app->attr->valueName($second_stone_shape1);
+//            //副石1金额
+//            $second_stone_price1 = empty($list['second_stone_price1']) ? 0 : $list['second_stone_price1'];
+//            $list['second_stone_price1_sum'] = $second_stone_price1 * $list['second_stone_num1'];
+//            //副石2类型
+//            $second_stone_type2 = empty($list['second_stone_type2']) ? 0 : $list['second_stone_type2'];
+//            $list['second_stone_type2'] = \Yii::$app->attr->valueName($second_stone_type2);
+//            //副石2重
+//            $second_stone_weight2 = empty($list['second_stone_weight2']) ? 0 : $list['second_stone_weight2'];
+//            $list['second_stone_weight2'] = \Yii::$app->attr->valueName($second_stone_weight2);
+//            //副石1形状
+//            $second_stone_weight2 = empty($list['second_stone_weight2']) ? 0 : $list['second_stone_weight2'];
+//            $list['second_stone_weight2'] = \Yii::$app->attr->valueName($second_stone_weight2);
             //单价
-            $list['price'] = 0;
+            //$list['price'] = 0;
             //$list['price'] = $list['cost_price'] + $list['main_stone_price_sum'] + $list['gong_fee']
-                //+ $list['bukou_fee'] + $list['biaomiangongyi_fee'];
+            //+ $list['bukou_fee'] + $list['biaomiangongyi_fee'];
             //总额
-            $list['price_sum'] = $list['price'] * $list['goods_num'];
+            //$list['price_sum'] = $list['price'] * $list['goods_num'];
             //含耗重
-            $gold_loss = empty($list['gold_loss']) ? 0 : $list['gold_loss'];
-            $suttle_weight = empty($list['suttle_weight']) ? 0 : $list['suttle_weight'];
-            $list['gold_weight_sum'] = $suttle_weight + $gold_loss;
+//            $gold_loss = empty($list['gold_loss']) ? 0 : $list['gold_loss'];
+//            $suttle_weight = empty($list['suttle_weight']) ? 0 : $list['suttle_weight'];
+//            $list['gold_weight_sum'] = $suttle_weight + $gold_loss;
 
             //统计
-            $total['goods_num_count'] += $list['goods_num'];  //件数
-            $total['gold_weight_count'] += $list['gold_weight']; //货重
-            $total['suttle_weight_count'] += $list['suttle_weight']; //净重
-            $total['gold_amount_count'] += $list['gold_amount']; //金料额
-            $total['main_stone_weight_count'] += $list['diamond_carat']; //石重
-            //$total['main_stone_price_sum_count'] += $list['main_stone_price_sum']; //主石金额
-            $total['second_stone_weight1_count'] += $list['second_stone_weight1']; //副石石重
-            $total['second_stone_price1_sum_count'] += $list['second_stone_price1_sum']; //副石金额
-            $total['price_count'] += $list['price']; //单价
-            $total['price_sum_count'] += $list['price_sum']; //总额
-            $total['cert_fee_count'] += $list['price_sum']; //证书费
+//            $total['goods_num_count'] += $list['goods_num'];  //件数
+//            $total['gold_weight_count'] += $list['gold_weight']; //货重
+//            $total['suttle_weight_count'] += $list['suttle_weight']; //净重
+//            $total['gold_amount_count'] += $list['gold_amount']; //金料额
+//            $total['main_stone_weight_count'] += $list['diamond_carat']; //石重
+//            //$total['main_stone_price_sum_count'] += $list['main_stone_price_sum']; //主石金额
+//            $total['second_stone_weight1_count'] += $list['second_stone_weight1']; //副石石重
+//            $total['second_stone_price1_sum_count'] += $list['second_stone_price1_sum']; //副石金额
+//            $total['price_count'] += $list['price']; //单价
+//            $total['price_sum_count'] += $list['price_sum']; //总额
+//            $total['cert_fee_count'] += $list['price_sum']; //证书费
 
         }
-        return [$lists,$total];
+        return [$lists, $total];
     }
 
 
