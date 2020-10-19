@@ -343,6 +343,8 @@ class WarehouseGoodsController extends BaseController
      */
     public function actionExport($ids = null)
     {
+        ini_set('memory_limit', '64M');
+        set_time_limit(600);
         list($list,) = $this->getData($ids);
         $header = [
             ['条码号', 'goods_id', 'text'],
