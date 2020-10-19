@@ -541,6 +541,8 @@ class WarehouseGoodsController extends BaseController
             //钻石证书类型
             $diamond_cert_type = empty($list['diamond_cert_type']) ? 0 : $list['diamond_cert_type'];
             $list['diamond_cert_type'] = \Yii::$app->attr->valueName($diamond_cert_type);
+            $gModel = WarehouseGoods::findOne($list['id']);
+            $list['chuku_price'] = $gModel->getChukuPrice();
 
 //            //副石1类型
 //            $second_stone_type1 = empty($list['second_stone_type1']) ? 0 : $list['second_stone_type1'];
