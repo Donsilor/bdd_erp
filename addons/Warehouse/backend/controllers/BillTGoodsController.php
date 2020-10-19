@@ -128,14 +128,15 @@ class BillTGoodsController extends BaseController
         $id = \Yii::$app->request->get('id');
         $bill_id = \Yii::$app->request->get('bill_id');
         $download = \Yii::$app->request->get('download', 0);
+        $type = \Yii::$app->request->get('download_type', 0);
         $bill = WarehouseBill::findOne($bill_id);
         if ($download) {
             $model = new WarehouseBillTGoodsForm();
-            list($values, $fields) = $model->getTitleList();
+            list($values, $fields) = $model->getTitleList($type);
             if (empty($bill_id)) {
-                header("Content-Disposition: attachment;filename=【" . rand(100, 999) . "】入库单明细导入(" . date('Ymd') . ").csv");
+                header("Content-Disposition: attachment;filename=【" . rand(100, 999) . "】素金-其他入库单导入模板(" . date('Ymd') . ").csv");
             } else {
-                header("Content-Disposition: attachment;filename=【{$bill_id}】入库单明细导入($bill->bill_no).csv");
+                header("Content-Disposition: attachment;filename=【{$bill_id}】通用-其他入库单导入模板($bill->bill_no).csv");
             }
             $content = implode($values, ",") . "\n" . implode($fields, ",") . "\n";
             echo iconv("utf-8", "gbk", $content);
