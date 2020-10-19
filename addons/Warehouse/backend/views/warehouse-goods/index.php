@@ -1608,6 +1608,10 @@ $params = $params ? "&".http_build_query($params) : '';
     </div>
 </div>
 <script type="text/javascript">
+    $(document).ready(function(){
+        sessionStorageAdd('goodsSearch', '<?= $params;?>', true);
+    });
+
     function cleardd() {
         $('#select select').prop('selectedIndex', 0);
     }
@@ -1615,8 +1619,10 @@ $params = $params ? "&".http_build_query($params) : '';
     //批量导出
     function batchExport() {
         var ids = $("#grid").yiiGridView("getSelectedRows");
+        var search = sessionStorageGet('goodsSearch');
         if (ids.length == 0) {
-            var url = "<?= Url::to('index?action=export' . $params);?>";
+            var url = "<?= Url::to('index?action=export');?>" + search;
+            console.log(url);
             rfExport(url)
         } else {
             window.location.href = "<?= Url::buildUrl('export', [], ['ids'])?>?ids=" + ids;
