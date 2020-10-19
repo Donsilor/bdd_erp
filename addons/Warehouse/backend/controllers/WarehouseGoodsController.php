@@ -382,7 +382,7 @@ class WarehouseGoodsController extends BaseController
             ['表面工艺', 'biaomiangongyi', 'text'],
             ['主石证书类型', 'diamond_cert_type', 'text'],
             ['主石证书号', 'diamond_cert_id', 'text'],
-            ['出库成本/件', 'cost_price', 'text'],
+            ['出库成本/件', 'chuku_price', 'text'],
             ['市场价(标签价)', 'market_price', 'text'],
             ['所在仓库', 'warehouse_name', 'text'],
         ];
