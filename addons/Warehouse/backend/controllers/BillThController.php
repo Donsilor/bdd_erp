@@ -12,6 +12,7 @@ use common\enums\AuditStatusEnum;
 use addons\Warehouse\common\forms\WarehouseBillCForm;
 use addons\Warehouse\common\models\Warehouse;
 use common\enums\LogTypeEnum;
+use addons\Warehouse\common\forms\WarehouseBillThForm;
 
 /**
  * 其它退货单
@@ -21,7 +22,7 @@ class BillThController extends BaseController
 {
     use Curd;
     
-    public $modelClass = WarehouseBillCForm::class;
+    public $modelClass = WarehouseBillThForm::class;
     public $billType = BillTypeEnum::BILL_TYPE_TH;
     public $billFix  = BillTypeEnum::BILL_TYPE_TH;
 
@@ -35,7 +36,7 @@ class BillThController extends BaseController
         $searchModel = new SearchModel([
             'model' => $this->modelClass,
             'scenario' => 'default',
-            'partialMatchAttributes' => [], // 模糊查询
+            'partialMatchAttributes' => ['remark'], // 模糊查询
             'defaultOrder' => [
                 'id' => SORT_DESC
             ],
@@ -43,6 +44,7 @@ class BillThController extends BaseController
             'relations' => [
                 'creator' => ['username'],
                 'auditor' => ['username'],
+                'salesman' => ['username'],
             ]
         ]);
 

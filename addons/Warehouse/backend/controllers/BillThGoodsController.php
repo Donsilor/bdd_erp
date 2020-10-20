@@ -5,6 +5,9 @@ namespace addons\Warehouse\backend\controllers;
 use Yii;
 use common\traits\Curd;
 use common\helpers\Url;
+use yii\base\Exception;
+use common\helpers\ResultHelper;
+use common\helpers\ArrayHelper;
 use common\models\base\SearchModel;
 use addons\Warehouse\common\models\WarehouseBill;
 use addons\Warehouse\common\models\WarehouseBillGoods;
@@ -12,21 +15,18 @@ use addons\Warehouse\common\forms\WarehouseBillBForm;
 use addons\Warehouse\common\forms\WarehouseBillCForm;
 use addons\Warehouse\common\enums\BillTypeEnum;
 use addons\Warehouse\common\forms\WarehouseBillCGoodsForm;
-use addons\Warehouse\common\enums\GoodsStatusEnum;
-use addons\Warehouse\common\models\WarehouseGoods;
-use yii\base\Exception;
-use common\helpers\ResultHelper;
-use common\helpers\ArrayHelper;
+use addons\Warehouse\common\forms\WarehouseBillThGoodsForm;
+
 /**
  * WarehouseBillBGoodsController implements the CRUD actions for WarehouseBillBGoodsController model.
  */
-class BillCGoodsController extends BaseController
+class BillThGoodsController extends BaseController
 {
     use Curd;
     
     
-    public $modelClass = WarehouseBillCGoodsForm::class;
-    public $billType = BillTypeEnum::BILL_TYPE_C;
+    public $modelClass = WarehouseBillThGoodsForm::class;
+    public $billType = BillTypeEnum::BILL_TYPE_TH;
 
     /**
      * Lists all WarehouseBillBGoods models.
@@ -34,8 +34,6 @@ class BillCGoodsController extends BaseController
      */
     public function actionIndex()
     {
-        $tab = Yii::$app->request->get('tab',2);
-        $returnUrl = Yii::$app->request->get('returnUrl',Url::to(['bill-c/index']));
         $bill_id = Yii::$app->request->get('bill_id');
         $searchModel = new SearchModel([
             'model' => $this->modelClass,
@@ -59,8 +57,8 @@ class BillCGoodsController extends BaseController
             'dataProvider' => $dataProvider,
             'searchModel' => $searchModel,
             'bill' => $bill,
-            'tab' => $tab,
-            'tabList'=>\Yii::$app->warehouseService->bill->menuTabList($bill_id, $this->billType, $returnUrl),
+            'tab' => Yii::$app->request->get('tab',2),
+            'tabList'=>\Yii::$app->warehouseService->bill->menuTabList($bill_id, $this->billType, $this->returnUrl),
         ]);
     }
 
@@ -113,7 +111,7 @@ class BillCGoodsController extends BaseController
         }
         try{
             $trans = \Yii::$app->db->beginTransaction();
-            \Yii::$app->warehouseService->billC->scanGoods($bill_id,[$goods_id]);            
+            \Yii::$app->warehouseService->billTh->scanGoods($bill_id,[$goods_id]);            
             $trans->commit();
             
             \Yii::$app->getSession()->setFlash('success', '添加成功');
@@ -224,6 +222,43 @@ class BillCGoodsController extends BaseController
             'tab' => Yii::$app->request->get('tab',2),
             'tabList'=>\Yii::$app->warehouseService->bill->menuTabList($bill_id, $this->billType, $this->returnUrl),            
         ]);
+    }
+    
+    /**
+     *
+     * 删除
+     * @return mixed
+     */
+    public function actionDelete($id)
+    {
+        try {
+            $trans = \Yii::$app->trans->beginTransaction();           
+            \Yii::$app->warehouseService->billTh->deleteGoods($id);            
+            $trans->commit();            
+            return $this->message("删除成功", $this->redirect(\Yii::$app->request->referrer), 'success');
+        } catch (\Exception $e) {
+            $trans->rollBack();
+            return $this->message($e->getMessage(), $this->redirect(\Yii::$app->request->referrer), 'error');
+        }
+    }
+    
+    /**
+     * 更改退货数量
+     * @return array|mixed
+     */
+    public function actionAjaxReturnNum()
+    {
+        $id = Yii::$app->request->get("id");
+        $goods_num = Yii::$app->request->get("goods_num");
+        try{
+            $trans = \Yii::$app->trans->beginTransaction();
+            Yii::$app->warehouseService->billTh->updateReturnNum($id, $goods_num);
+            $trans->commit();
+            return $this->message("操作成功", $this->redirect(\Yii::$app->request->referrer), 'success');
+        }catch (\Exception $e){
+            $trans->rollBack();
+            return ResultHelper::json(422, $e->getMessage());
+        }
     }
 
 

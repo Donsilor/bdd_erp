@@ -8,7 +8,7 @@ use addons\Warehouse\common\enums\BillStatusEnum;
 /* @var $model common\models\WarehouseBill */
 /* @var $form yii\widgets\ActiveForm */
 
-$this->title = '其它出库单详情';
+$this->title = '其它退货单详情';
 $this->params['breadcrumbs'][] = ['label' => $this->title, 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
@@ -37,8 +37,8 @@ $this->params['breadcrumbs'][] = $this->title;
                             <td><?= $model->channel->name??"" ?></td>
                         </tr>                        
                         <tr>
-                            <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('delivery_type') ?>：</td>
-                            <td><?= \addons\Warehouse\common\enums\DeliveryTypeEnum::getValue($model->delivery_type) ?></td>
+                            <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('item_type') ?>：</td>
+                            <td><?= \addons\Warehouse\common\enums\ReturnTypeEnum::getValue($model->item_type) ?></td>
                         </tr>
                         <tr>
                             <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('goods_num') ?>：</td>
@@ -117,15 +117,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     'data-target' => '#ajaxModal',
                 ]);
             }
-            ?>
-            <?= Html::a('打印',['print','id'=>$model->id],[
-                'target'=>'_blank',
-                'class'=>'btn btn-info btn-ms',
-            ]); ?>
-            <?= Html::button('导出', [
-                'class'=>'btn btn-success btn-ms',
-                'onclick' => 'batchExport()',
-            ]);?>
+            ?>            
         </div>
 
         <!-- box end -->

@@ -120,7 +120,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                     'filter' => false,
                                     'value' => function ($model) {
                                         if($model->goodsW->should_num > 1 ) {
-                                            return Html::ajaxInput('actual_num', $model->goodsW->actual_num, ['data-id' => $model->id,'data-url'=>'ajax-pandian-num']);
+                                            return Html::ajaxInput('actual_num', $model->goodsW->actual_num, ['data-id' => $model->id,'data-url'=>'ajax-update-num']);
                                         }else{
                                             return $model->goodsW->actual_num;
                                         }                                        

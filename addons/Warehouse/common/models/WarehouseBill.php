@@ -63,7 +63,7 @@ class WarehouseBill extends BaseModel
     {
         return [
             //[['bill_status', 'audit_status','bill_no'], 'required'],
-            [['id', 'merchant_id', 'bill_status', 'channel_id', 'supplier_id', 'put_in_type', 'order_type', 'goods_num', 'to_warehouse_id', 'to_company_id', 'from_company_id', 'from_warehouse_id', 'is_settle_accounts', 'delivery_type', 'salesman_id', 'auditor_id', 'audit_status', 'audit_time', 'status', 'creator_id', 'created_at', 'updated_at'], 'integer'],
+            [['id', 'merchant_id', 'bill_status','item_type', 'channel_id', 'supplier_id', 'put_in_type', 'order_type', 'goods_num', 'to_warehouse_id', 'to_company_id', 'from_company_id', 'from_warehouse_id', 'is_settle_accounts', 'delivery_type', 'salesman_id', 'auditor_id', 'audit_status', 'audit_time', 'status', 'creator_id', 'created_at', 'updated_at'], 'integer'],
             [['total_cost', 'total_sale', 'total_market'], 'number'],
             [['bill_no', 'order_sn', 'send_goods_sn'], 'string', 'max' => 30],
             [['bill_type'], 'string', 'max' => 3],
@@ -130,7 +130,7 @@ class WarehouseBill extends BaseModel
      */
     public function getChannel()
     {
-        return $this->hasOne(StyleChannel::class, ['id'=>'channel_id'])->alias('channel');
+        return $this->hasOne(SaleChannel::class, ['id'=>'channel_id'])->alias('channel');
     }
     /**
      * 销售渠道

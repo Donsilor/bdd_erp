@@ -168,7 +168,7 @@ $(function () {
         // 获取标识数据
         var dataUrl = that.attr('href'),
             dataIndex = that.data('index'),
-            menuTitle = $.trim(that.data('title')),
+            menuTitle = $.trim(that.data('title') ? that.data('title') : that.data('title')),
             menuName = menuTitle.length > 0 ? menuTitle : $.trim(that.text()),
             flag = true;
 

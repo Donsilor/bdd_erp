@@ -29,7 +29,10 @@ class WarehouseBillThGoodsForm extends WarehouseBillGoods
     {
         //合并
         return ArrayHelper::merge(parent::attributeLabels() , [
-                
+             'to_warehouse_id' =>'退货仓库',  
+             'cost_price' =>'退货成本价/件',
+             'cost_amount' =>'退货成本总额',
+             'goods_num' =>'退货数量',
         ]);
     }
 }

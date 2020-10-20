@@ -19,7 +19,7 @@ class WarehouseBillThForm extends WarehouseBill
     public function rules()
     {
         $rules = [
-                
+             [['item_type', 'channel_id'], 'required'],
         ];
         return array_merge(parent::rules() , $rules);
     }
@@ -31,7 +31,12 @@ class WarehouseBillThForm extends WarehouseBill
     {
         //合并
         return ArrayHelper::merge(parent::attributeLabels() , [
-                
+              'goods_num' =>'退货数量',
+              'item_type' =>'退货原因',
+              'channel_id'=>'退货渠道', 
+              'salesman_id'=>'退货人',
+              'remark'=>'退货备注',
+              'order_sn'=>'参考编号/订单号',
         ]);
     }
     

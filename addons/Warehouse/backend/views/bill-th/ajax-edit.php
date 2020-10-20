@@ -20,14 +20,7 @@ $form = ActiveForm::begin([
 </div>
 <div class="modal-body">
     <div class="col-sm-12">
-        <?= $form->field($model, 'bill_no')->textInput(['disabled' => 'disabled', "placeholder"=>"系统自动生成"])?>
-        <?= $form->field($model, 'delivery_type')->widget(\kartik\select2\Select2::class, [
-            'data' => \addons\Warehouse\common\enums\DeliveryTypeEnum::getMap(),
-            'options' => ['placeholder' => '请选择'],
-            'pluginOptions' => [
-                'allowClear' => false
-            ],
-        ]);?>
+        <?= $form->field($model, 'bill_no')->textInput(['disabled' => 'disabled', "placeholder"=>"系统自动生成"])?>        
         <div class="row">
             <div class="col-sm-6">
                 <?= $form->field($model, 'channel_id')->widget(\kartik\select2\Select2::class, [
@@ -51,8 +44,22 @@ $form = ActiveForm::begin([
                 ]);?>
             </div>
         </div>
-        <?= $form->field($model, 'order_sn')->textInput() ?>
+        <div class="row">
+            <div class="col-sm-6">
+                <?= $form->field($model, 'item_type')->widget(\kartik\select2\Select2::class, [
+                    'data' => \addons\Warehouse\common\enums\ReturnTypeEnum::getMap(),
+                    'options' => ['placeholder' => '请选择'],
+                    'pluginOptions' => [
+                        'allowClear' => false
+                    ],
+                ]);?>
+            </div>
+            <div class="col-sm-6">
+                <?= $form->field($model, 'order_sn')->textInput() ?>
+            </div>
+        </div>
         <?= $form->field($model, 'remark')->textArea(); ?>
+        
     </div>
 </div>
 <div class="modal-footer">
