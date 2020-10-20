@@ -2,6 +2,7 @@
 
 namespace addons\Warehouse\backend\controllers;
 
+use addons\Warehouse\common\enums\IsHiddenEnum;
 use Yii;
 use common\traits\Curd;
 use common\helpers\Url;
@@ -512,7 +513,7 @@ class BillTGoodsController extends BaseController
         if ($name == 'show_all') {
             $save = [
                 'show_all' => $value,
-                //'show_basic' => $value,
+                'show_basic' => IsHiddenEnum::NO,
                 'show_attr' => $value,
                 'show_gold' => $value,
                 'show_main_stone' => $value,

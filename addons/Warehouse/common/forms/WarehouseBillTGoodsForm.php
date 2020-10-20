@@ -1979,7 +1979,7 @@ class WarehouseBillTGoodsForm extends WarehouseBillGoodsL
     {
         $fieldName = [
             'goods_image', 'style_cate_id', 'product_type_id', 'auto_goods_id', 'goods_id', 'style_sn', 'goods_name',
-            'qiban_sn', 'to_warehouse_id', 'goods_num',
+            'qiban_sn', 'to_warehouse_id', 'goods_num', 'front_operation',
 
         ];
         return $fieldName ?? [];
