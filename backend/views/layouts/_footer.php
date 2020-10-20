@@ -617,10 +617,7 @@ $this->registerJs($script);
             });
         }
     }
-    
-    function test() {
-        $("#mao_suttle_weight").trigger("click");
-    }
+
     /**
      * 一键粘贴
      * @param  {String} id [需要粘贴的内容]
@@ -670,6 +667,29 @@ $this->registerJs($script);
             // remove temp target
             target.parentElement.removeChild(target);
         }
+    }
+
+    function sessionStorageAdd(key, value, is_reset) {
+        if (is_reset) {
+            sessionStorage.setItem(key, JSON.stringify(value));
+        } else {
+            var result = sessionStorage.getItem(key);
+            if (result != null && result != "null") {
+                var list = JSON.parse(result);
+            } else {
+                var list = new Array();
+            }
+            list.push(JSON.stringify(value));
+            sessionStorage.setItem(key, JSON.stringify(list));
+        }
+    }
+
+    function sessionStorageGet(key) {
+        var result = sessionStorage.getItem(key);
+        if (result != null && result != "null") {
+            return JSON.parse(result);
+        }
+        return false;
     }
 
 </script>

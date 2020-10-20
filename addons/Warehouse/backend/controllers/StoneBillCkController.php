@@ -144,7 +144,7 @@ class StoneBillCkController extends BaseController
                 $trans->commit();
 
                 if($isNewRecord) {
-                    return $this->message("保存成功", $this->redirect(['view', 'id' => $model->id]), 'success');
+                    return $this->message("保存成功", $this->redirect(['stone-bill-ck-goods/index', 'bill_id' => $model->id]), 'success');
                 }else {
                     return $this->message('保存成功', $this->redirect(Yii::$app->request->referrer), 'success');
                 }
@@ -190,6 +190,13 @@ class StoneBillCkController extends BaseController
         if($model->bill_status != BillStatusEnum::SAVE){
             return $this->message('单据不是保存状态', $this->redirect(\Yii::$app->request->referrer), 'error');
         }
+
+        //判断明细是否存在金重或者数量为空的
+        $count = WarehouseStoneBillGoods::find()->where(['bill_id'=>$id])->andWhere(['or',['<=','stone_num',0],['<=','stone_weight',0]])->count();
+        if($count){
+            return $this->message('明细有数量或者石重为0', $this->redirect(\Yii::$app->request->referrer), 'error');
+        }
+
         if($model->total_weight<=0){
             return $this->message('金料重量不能为空', $this->redirect(\Yii::$app->request->referrer), 'error');
         }        

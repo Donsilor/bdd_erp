@@ -6,6 +6,7 @@ use addons\Warehouse\common\models\Warehouse;
 use common\enums\AuditStatusEnum;
 use common\enums\StatusEnum;
 use common\helpers\ExcelHelper;
+use common\helpers\ResultHelper;
 use common\helpers\StringHelper;
 use Yii;
 use common\traits\Curd;
@@ -149,6 +150,13 @@ class WarehouseController extends BaseController
         $name = Yii::$app->request->post('name');
         $str = StringHelper::getFirstCode($name);
         return substr($str,0,31);
+    }
+
+
+    public function actionGetW0arehouses(){
+        $channel_id = Yii::$app->request->post('channel_id');
+        $model = Yii::$app->warehouseService->warehouse::getDropDown(['channel_id'=>$channel_id]);
+        return ResultHelper::json(200, 'ok',$model);
     }
 
 

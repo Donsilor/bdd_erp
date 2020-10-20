@@ -23,7 +23,7 @@ $this->params['breadcrumbs'][] = $this->title;
         if($bill->bill_status == \addons\Warehouse\common\enums\BillStatusEnum::SAVE) {
             echo Html::edit(['edit-all', 'bill_id' => $bill->id], '编辑货品', ['class'=>'btn btn-info btn-xs']);
             echo '&nbsp;';
-            echo Html::tag('span', '刷新价格', ["class" => "btn btn-warning btn-xs jsBatchStatus", "data-grid" => "grid", "data-url" => Url::to(['update-price']),]);
+            echo Html::tag('span', '刷新价格', ["class" => "btn btn-warning btn-xs jsBatchUpdate", "data-grid" => "grid", "data-url" => Url::to(['update-price']),]);
         }
         ?>
     </div>
@@ -2048,3 +2048,43 @@ $this->params['breadcrumbs'][] = $this->title;
     </div>
     <!-- tab-content end -->
 </div>
+<script type="text/javascript">
+    $(".jsBatchUpdate").click(function () {
+        let grid = $(this).attr('data-grid');
+        let url = $(this).attr('data-url');
+        let status = $(this).attr('data-value');
+        let text = $(this).text();
+        let ids = $("#" + grid).yiiGridView("getSelectedRows");
+        if (!url) {
+            url = "<?= Url::to(['ajax-batch-update'])?>";
+        }
+        if (ids == "" || !ids) {
+            rfInfo('未选中数据！', '');
+            return false;
+        }
+        appConfirm("确定要" + text + "吗?", '', function (code) {
+            switch (code) {
+                case "defeat":
+                    $.ajax({
+                        type: "post",
+                        url: url,
+                        dataType: "json",
+                        data: {
+                            ids: ids,
+                            status: status
+                        },
+                        success: function (data) {
+                            if (parseInt(data.code) !== 200) {
+                                rfAffirm(data.message);
+                            } else {
+                                //rfAffirm(data.message);
+                                window.location.reload();
+                            }
+                        }
+                    });
+                    break;
+                default:
+            }
+        })
+    });
+</script>

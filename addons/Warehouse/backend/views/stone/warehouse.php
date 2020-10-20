@@ -78,7 +78,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
 
                             [
-                                'label' => '出/入库克重(g)',
+                                'label' => '出/入库石重(g)',
                                 'value' => function($model){
                                     switch ($model->bill_type){
                                         case \addons\Warehouse\common\enums\StoneBillTypeEnum::STONE_MS:

@@ -31,7 +31,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     <div class="modal-header">
                         <h4 class="modal-title">筛选查询<a
                                     class="btn-xs btn-default glyphicon glyphicon-chevron-down searchBox"
-                                    style="float:right;" href="javascript:void(0);" role="button">隐藏</a></h4>
+                                    style="float:right;" href="javascript:void(0);" role="button"></a></h4>
                     </div>
                     <div class="modal-body" id="search-content">
                         <div class="row">
@@ -41,7 +41,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                         <label class="control-label" for="cate-sort">款号：</label>
                                     </div>
                                     <div class="col-sm-8">
-                                        <?= Html::textInput('style_sn', $search->style_sn, ['class' => 'form-control', 'placeholder' => '多个以空格或者英文逗号隔开']) ?>
+                                        <?= Html::textInput('style_sn', $search->style_sn, ['class' => 'form-control', 'placeholder' => '多个以空格/英文/逗号隔开/单个模糊搜索', 'title'=>'多个以空格/英文/逗号隔开/单个模糊搜索']) ?>
                                         <div class="help-block"></div>
                                     </div>
                                 </div>
@@ -604,6 +604,16 @@ $this->params['breadcrumbs'][] = $this->title;
     </div>
 </div>
 <script type="text/javascript">
+    $(function () {
+        var search = sessionStorageGet('styleSearch');
+        if (search === false || search == '0') {
+            $(".searchBox").html("展开");
+            $("#search-content").attr("style", "display:none;");
+        }else{
+            $(".searchBox").html("隐藏");
+        }
+    });
+
     function clearSearch1() {
         $('#search-content select').prop('selectedIndex', 0);
     }
@@ -612,9 +622,11 @@ $this->params['breadcrumbs'][] = $this->title;
         if ($("#search-content").css("display") == "block") {
             $(".searchBox").html("展开");
             $(".searchBox").removeClass("glyphicon glyphicon-chevron-down").addClass("glyphicon glyphicon-chevron-up");
+            sessionStorageAdd('styleSearch', 0, true);
         } else {
             $(".searchBox").html("隐藏");
             $(".searchBox").removeClass("glyphicon glyphicon-chevron-up").addClass("glyphicon glyphicon-chevron-down");
+            sessionStorageAdd('styleSearch', 1, true);
         }
         $("#search-content").slideToggle();
     });

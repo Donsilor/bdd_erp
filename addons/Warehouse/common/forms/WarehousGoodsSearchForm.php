@@ -2,6 +2,7 @@
 
 namespace addons\Warehouse\common\forms;
 
+use addons\Warehouse\common\models\WarehouseGoods;
 use common\helpers\ArrayHelper;
 use common\helpers\StringHelper;
 use Yii;
@@ -38,6 +39,8 @@ class WarehousGoodsSearchForm extends Model
     public $finger;
     public $diamond_color;
     public $diamond_clarity;
+    public $created_at;
+    public $chuku_time;
 
     /**
      * @return array|array[]
@@ -46,7 +49,7 @@ class WarehousGoodsSearchForm extends Model
     {
         return [
 //            ['recommend', 'safe'],
-            [['goods_name','goods_id','style_sn'], 'string'],
+            [['goods_name','goods_id','style_sn','created_at','chuku_time'], 'string'],
             [['style_cate_id','product_type_id','goods_status','material_type','jintuo_type','main_stone_type'
                 ,'warehouse_id','supplier_id','style_channel_id','goods_source','finger_hk','finger',
                 'diamond_color','diamond_clarity'], 'integer'],
@@ -182,5 +185,53 @@ class WarehousGoodsSearchForm extends Model
             $product_type_id_arr = ArrayHelper::merge($product_type_id_arr,Yii::$app->styleService->productType->findChildIdsById($product_type_id));
         }
         return $product_type_id_arr;
+    }
+
+    /**
+     * 入库时间
+     *
+     * @return array
+     */
+    public function betweenCreatedAt()
+    {
+        if ($this->created_at
+            && count($created_ats = explode('/', $this->created_at)) == 2) {
+            $created_at_start = strtotime($created_ats[0]);
+            $created_at_end = strtotime($created_ats[1]) + 86400;
+            if (!empty($created_at_start) && !empty($created_at_end)) {
+                return ['between', WarehouseGoods::tableName() . '.created_at', $created_at_start, $created_at_end];
+            }
+            if (!empty($created_at_start)) {
+                return ['>=', WarehouseGoods::tableName() . '.created_at', $created_at_start];
+            }
+            if (!empty($created_at_end)) {
+                return ['<=', WarehouseGoods::tableName() . '.created_at', $created_at_end];
+            }
+        };
+        return [];
+    }
+
+    /**
+     * 出库时间
+     *
+     * @return array
+     */
+    public function betweenChukuTime()
+    {
+        if ($this->chuku_time
+            && count($created_ats = explode('/', $this->chuku_time)) == 2) {
+            $created_at_start = strtotime($created_ats[0]);
+            $created_at_end = strtotime($created_ats[1]) + 86400;
+            if (!empty($created_at_start) && !empty($created_at_end)) {
+                return ['between', WarehouseGoods::tableName() . '.chuku_time', $created_at_start, $created_at_end];
+            }
+            if (!empty($created_at_start)) {
+                return ['>=', WarehouseGoods::tableName() . '.chuku_time', $created_at_start];
+            }
+            if (!empty($created_at_end)) {
+                return ['<=', WarehouseGoods::tableName() . '.chuku_time', $created_at_end];
+            }
+        };
+        return [];
     }
 }

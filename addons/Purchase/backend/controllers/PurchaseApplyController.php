@@ -269,7 +269,7 @@ class PurchaseApplyController extends BaseController
                     $model->audit_time = time();
                     $model->auditor_id = \Yii::$app->user->identity->id;
                     if ($model->audit_status == AuditStatusEnum::PASS) {
-                        $model->apply_status = ApplyStatusEnum::CONFIRM;
+                        $model->apply_status = ApplyStatusEnum::DETAIL;
                     } else {
                         $model->apply_status = ApplyStatusEnum::SAVE;
                     }
@@ -288,18 +288,18 @@ class PurchaseApplyController extends BaseController
                 ];
                 Yii::$app->purchaseService->apply->createApplyLog($log);
                 
-                if($flow->flow_status == FlowStatusEnum::COMPLETE || $flow->flow_status == FlowStatusEnum::CANCEL){
-                    $flowS = Yii::$app->services->flowType->createFlow($this->targetSType,$id,$model->apply_sn);
-                    //日志
-                    $log = [
-                            'apply_id' => $model->id,
-                            'apply_sn' => $model->apply_sn,
-                            'log_type' => LogTypeEnum::SYSTEM,
-                            'log_module' => "单据审核",
-                            'log_msg' => "业务部提交申请到商品部,审批编号:".$flowS->id,
-                    ];
-                    Yii::$app->purchaseService->apply->createApplyLog($log);
-                }
+//                if($flow->flow_status == FlowStatusEnum::COMPLETE || $flow->flow_status == FlowStatusEnum::CANCEL){
+//                    $flowS = Yii::$app->services->flowType->createFlow($this->targetSType,$id,$model->apply_sn);
+//                    //日志
+//                    $log = [
+//                            'apply_id' => $model->id,
+//                            'apply_sn' => $model->apply_sn,
+//                            'log_type' => LogTypeEnum::SYSTEM,
+//                            'log_module' => "单据审核",
+//                            'log_msg' => "业务部提交申请到商品部,审批编号:".$flowS->id,
+//                    ];
+//                    Yii::$app->purchaseService->apply->createApplyLog($log);
+//                }
                 $trans->commit();
                 Yii::$app->getSession()->setFlash('success','保存成功');
                 return $this->redirect(Yii::$app->request->referrer);

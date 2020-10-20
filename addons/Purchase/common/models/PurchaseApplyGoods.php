@@ -114,7 +114,7 @@ class PurchaseApplyGoods extends BaseModel
             'product_type_id' => '产品线',            
             'style_sex' => '款式性别',
             'jintuo_type' => '金托类型',
-            'cost_price' => '成本价（¥）',
+            'cost_price' => '采购单价（¥）',
             'is_inlay' => '是否镶嵌',            
             'is_apply' => '是否申请修改',
             'apply_info' => '修改数据',

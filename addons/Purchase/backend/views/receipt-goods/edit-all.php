@@ -28,9 +28,9 @@ $this->params['breadcrumbs'][] = $this->title;
                 'data-offset' => '20px',
             ]);
             echo '&nbsp;';
-            echo Html::tag('span', '批量删除', ["class" => "btn btn-danger btn-xs jsBatchStatus", "data-grid" => "grid", "data-url" => Url::to(['batch-delete']),]);
+            echo Html::tag('span', '批量删除', ["class" => "btn btn-danger btn-xs jsBatchUpdate", "data-grid" => "grid", "data-url" => Url::to(['batch-delete']),]);
             echo '&nbsp;';
-            echo Html::tag('span', '刷新价格', ["class" => "btn btn-warning btn-xs jsBatchStatus", "data-grid" => "grid", "data-url" => Url::to(['update-price']),]);
+            echo Html::tag('span', '刷新价格', ["class" => "btn btn-warning btn-xs jsBatchUpdate", "data-grid" => "grid", "data-url" => Url::to(['update-price']),]);
             echo '&nbsp;';
             echo Html::a('返回列表', ['receipt-goods/index', 'receipt_id' => $receipt->id], ['class' => 'btn btn-white btn-xs']);
         }
@@ -1569,4 +1569,43 @@ $this->params['breadcrumbs'][] = $this->title;
             $(obj).val("");
         }
     }
+
+    $(".jsBatchUpdate").click(function () {
+        let grid = $(this).attr('data-grid');
+        let url = $(this).attr('data-url');
+        let status = $(this).attr('data-value');
+        let text = $(this).text();
+        let ids = $("#" + grid).yiiGridView("getSelectedRows");
+        if (!url) {
+            url = "<?= Url::to(['ajax-batch-update'])?>";
+        }
+        if (ids == "" || !ids) {
+            rfInfo('未选中数据！', '');
+            return false;
+        }
+        appConfirm("确定要" + text + "吗?", '', function (code) {
+            switch (code) {
+                case "defeat":
+                    $.ajax({
+                        type: "post",
+                        url: url,
+                        dataType: "json",
+                        data: {
+                            ids: ids,
+                            status: status
+                        },
+                        success: function (data) {
+                            if (parseInt(data.code) !== 200) {
+                                rfAffirm(data.message);
+                            } else {
+                                //rfAffirm(data.message);
+                                window.location.reload();
+                            }
+                        }
+                    });
+                    break;
+                default:
+            }
+        })
+    });
 </script>
