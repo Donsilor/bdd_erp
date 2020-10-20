@@ -4,7 +4,6 @@ namespace addons\Warehouse\backend\controllers;
 
 use Yii;
 use common\traits\Curd;
-use common\helpers\Url;
 use yii\base\Exception;
 use common\helpers\ResultHelper;
 use common\helpers\ArrayHelper;

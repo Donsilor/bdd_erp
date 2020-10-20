@@ -49,14 +49,6 @@ $this->params['breadcrumbs'][] = $this->title;
                             <td><?= $model->total_cost ?></td>
                         </tr>
                         <tr>
-                            <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('total_sale') ?>：</td>
-                            <td><?= $model->total_sale ?></td>
-                        </tr>
-                        <tr>
-                            <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('total_market') ?>：</td>
-                            <td><?= $model->total_market ?></td>
-                        </tr>
-                        <tr>
                             <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('order_sn') ?>：</td>
                             <td><?= $model->order_sn ?></td>
                         </tr>

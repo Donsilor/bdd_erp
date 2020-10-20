@@ -37,6 +37,7 @@ class WarehouseBillThForm extends WarehouseBill
               'salesman_id'=>'退货人',
               'remark'=>'退货备注',
               'order_sn'=>'参考编号/订单号',
+              'total_cost'=>'退货成本总额'
         ]);
     }
     

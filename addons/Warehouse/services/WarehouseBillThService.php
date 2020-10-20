@@ -185,14 +185,14 @@ class WarehouseBillThService extends WarehouseBillService
         $billGoodsList = WarehouseBillGoods::find()->select(['goods_id'])->where(['bill_id' => $form->id])->all();
         if($billGoodsList){
             foreach ($billGoodsList as $billGoods){
-                $goods = WarehouseGoods::find()->where(['goods_id'=>$billGoods->goods_id,'goods_stock'=>GoodsStatusEnum::IN_REFUND])->one();
+                $goods = WarehouseGoods::find()->where(['goods_id'=>$billGoods->goods_id,'goods_status'=>GoodsStatusEnum::IN_REFUND])->one();
                 if(empty($goods)) {
-                    throw new \Exception("[{$goods->goods_id}]条码货号不是退货中，请查看原因");
+                    throw new \Exception("[{$goods->goods_id}]商品状态不是退货中");
                 }
                 $goods->stock_num = $goods->stock_num - $billGoods->goods_num;
                 $goods->goods_status = $goods->stock_num <=0 ? GoodsStatusEnum::HAS_SOLD : GoodsStatusEnum::IN_STOCK;
-                if($goods->save(true,['goods_id','stock_num','goods_status'])){
-                    throw new \Exception("[{$goods->goods_id}]条码货号不是退货中，请查看原因");
+                if(false === $goods->save(true,['goods_id','stock_num','goods_status'])){
+                    throw new \Exception("取消失败");
                 }
             }
         }
@@ -220,23 +220,8 @@ class WarehouseBillThService extends WarehouseBillService
      */
     public function delete($form)
     {
-        if($form->bill_status != BillStatusEnum::SAVE) {
-             throw new \Exception("单据不是保存状态");
-        }
-        //更新库存状态
-        $billGoodsList = WarehouseBillGoods::find()->select(['goods_id'])->where(['bill_id' => $form->id])->all();
-        if($billGoodsList){
-            foreach ($billGoodsList as $billGoods){
-                $goods = WarehouseGoods::find()->where(['goods_id'=>$billGoods->goods_id,'goods_stock'=>GoodsStatusEnum::IN_REFUND])->one();
-                if(empty($goods)) {
-                    throw new \Exception("[{$goods->goods_id}]条码货号不是退货中，请查看原因");
-                }
-                $goods->stock_num = $goods->stock_num - $billGoods->goods_num;
-                $goods->goods_status = $goods->stock_num <=0 ? GoodsStatusEnum::HAS_SOLD : GoodsStatusEnum::IN_STOCK;
-                if($goods->save(true,['goods_id','stock_num','goods_status'])){
-                    throw new \Exception("[{$goods->goods_id}]条码货号不是退货中，请查看原因");
-                }
-            }
+        if($form->bill_status != BillStatusEnum::CANCEL) {
+             throw new \Exception("单据不是取消状态");
         }
         //删除明细
         WarehouseBillGoods::deleteAll(['bill_id' => $form->id]);
