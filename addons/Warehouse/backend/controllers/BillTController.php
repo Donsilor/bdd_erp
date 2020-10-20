@@ -7,6 +7,7 @@ use common\traits\Curd;
 use common\models\base\SearchModel;
 use addons\Warehouse\common\models\Warehouse;
 use addons\Warehouse\common\models\WarehouseBill;
+use addons\Warehouse\common\models\WarehouseBillL;
 use addons\Warehouse\common\models\WarehouseBillGoodsL;
 use addons\Warehouse\common\forms\WarehouseBillTForm;
 use addons\Warehouse\common\forms\WarehouseBillTGoodsForm;
@@ -14,6 +15,7 @@ use addons\Warehouse\common\enums\BillFixEnum;
 use addons\Warehouse\common\enums\BillStatusEnum;
 use addons\Warehouse\common\enums\BillTypeEnum;
 use addons\Warehouse\common\enums\PutInTypeEnum;
+use addons\Warehouse\common\enums\GoodsTypeEnum;
 use addons\Style\common\enums\LogTypeEnum;
 use addons\Style\common\models\ProductType;
 use addons\Style\common\models\StyleCate;
@@ -25,6 +27,7 @@ use common\helpers\ArrayHelper;
 use common\helpers\StringHelper;
 use common\helpers\ExcelHelper;
 use common\helpers\PageHelper;
+use common\helpers\ResultHelper;
 use common\helpers\Url;
 use yii\web\UploadedFile;
 
@@ -126,6 +129,15 @@ class BillTController extends BaseController
                     $gModel->file = UploadedFile::getInstance($model, 'file');
                     if (!empty($gModel->file) && isset($gModel->file)) {
                         \Yii::$app->warehouseService->billT->uploadGoods($gModel);
+                    }else{
+                        //创建收货单附属表
+                        $billT = WarehouseBillL::findOne($model->id);
+                        $billT = $billT ?? new WarehouseBillL();
+                        $billT->id = $model->id;
+                        $billT->goods_type = $model->goods_type ?? GoodsTypeEnum::All;
+                        if(false === $billT->save()){
+                            throw new \Exception($this->getError($billT));
+                        }
                     }
                     $log_msg = "创建其它入库单{$model->bill_no}";
                 } else {

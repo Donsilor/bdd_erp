@@ -2,6 +2,7 @@
 
 namespace common\helpers;
 
+use addons\Warehouse\common\enums\IsHiddenEnum;
 use common\enums\MethodEnum;
 use Yii;
 use yii\helpers\BaseHtml;
@@ -131,6 +132,41 @@ class Html extends BaseHtml
             )),
         ];
 
+        return $listBut[$status] ?? '';
+    }
+
+    /**
+     *
+     * 隐藏标签
+     * @param string $content
+     * @param int $status
+     * @return mixed
+     */
+    public static function hidden($status = 1, $content, $options = [])
+    {
+        if (!self::beforVerify('ajax-hidden')) {
+            return '';
+        }
+        $listBut = [
+            IsHiddenEnum::NO => self::tag('span', $content, array_merge(
+                [
+                    'class' => "btn btn-success btn-xs",
+                    'data-toggle' => 'tooltip',
+                    'data-original-title' => '点击隐藏',
+                    'onclick' => "rfHidden(this)"
+                ],
+                $options
+            )),
+            IsHiddenEnum::YES => self::tag('span', $content, array_merge(
+                [
+                    'class' => "btn btn-default btn-xs",
+                    'data-toggle' => 'tooltip',
+                    'data-original-title' => '点击显示',
+                    'onclick' => "rfHidden(this)"
+                ],
+                $options
+            )),
+        ];
         return $listBut[$status] ?? '';
     }
 

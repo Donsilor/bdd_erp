@@ -7,6 +7,7 @@ use common\traits\Curd;
 use common\helpers\Url;
 use common\models\base\SearchModel;
 use addons\Warehouse\common\models\WarehouseBill;
+use addons\Warehouse\common\models\WarehouseBillL;
 use addons\Warehouse\common\models\WarehouseBillGoodsL;
 use addons\Warehouse\common\forms\WarehouseBillPayForm;
 use addons\Warehouse\common\forms\WarehouseBillTGoodsForm;
@@ -488,6 +489,55 @@ class BillTGoodsController extends BaseController
             'model' => $model,
             'total' => $total,
         ]);
+    }
+
+    /**
+     * ajax显示/隐藏
+     *
+     * @param $id
+     * @return array
+     */
+    public function actionAjaxHidden($id)
+    {
+        $this->modelClass = WarehouseBillL::class;
+        if (!($model = $this->modelClass::findOne($id))) {
+            return ResultHelper::json(404, '找不到数据');
+        }
+        $params = Yii::$app->request->get();
+        if (!$params['name'] || $params['value'] === "") {
+            return ResultHelper::json(404, '参数值不能为空');
+        }
+        $name = $params['name'] ?? "";
+        $value = $params['value'] ?? 0;
+        if ($name == 'show_all') {
+            $save = [
+                'show_all' => $value,
+                //'show_basic' => $value,
+                'show_attr' => $value,
+                'show_gold' => $value,
+                'show_main_stone' => $value,
+                'show_second_stone1' => $value,
+                'show_second_stone2' => $value,
+                'show_second_stone3' => $value,
+                'show_parts' => $value,
+                'show_fee' => $value,
+                'show_price' => $value,
+            ];
+        } else {
+            $save[$name] = $value;
+        }
+        try {
+            $trans = \Yii::$app->db->beginTransaction();
+            $model->attributes = $save;
+            if (!$model->save()) {
+                throw new \Exception("保存失败");
+            }
+            $trans->commit();
+            return ResultHelper::json(200, '修改成功');
+        } catch (\Exception $e) {
+            $trans->rollBack();
+            return ResultHelper::json(422, $e->getMessage());
+        }
     }
 
 }

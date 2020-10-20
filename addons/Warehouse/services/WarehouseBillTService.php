@@ -2,20 +2,21 @@
 
 namespace addons\Warehouse\services;
 
-use addons\Style\common\models\StyleAttribute;
-use common\helpers\ArrayHelper;
+use addons\Warehouse\common\enums\GoodsTypeEnum;
 use Yii;
 use common\components\Service;
 use common\helpers\SnHelper;
+use common\helpers\ArrayHelper;
 use addons\Warehouse\common\models\WarehouseGoods;
 use addons\Warehouse\common\models\WarehouseBill;
+use addons\Warehouse\common\models\WarehouseBillL;
 use addons\Warehouse\common\models\WarehouseBillGoodsL;
 use addons\Warehouse\common\models\WarehouseStone;
 use addons\Warehouse\common\forms\WarehouseBillTForm;
 use addons\Warehouse\common\forms\WarehouseBillTGoodsForm;
 use addons\Style\common\models\Style;
 use addons\Style\common\models\Qiban;
-use addons\Style\common\models\AttributeSpec;
+use addons\Style\common\models\StyleAttribute;
 use addons\Warehouse\common\enums\PeiJianWayEnum;
 use addons\Warehouse\common\enums\PeiLiaoWayEnum;
 use addons\Warehouse\common\enums\PeiShiWayEnum;
@@ -190,6 +191,15 @@ class WarehouseBillTService extends Service
             if (false === $res) {
                 throw new \Exception("创建收货单据明细失败2");
             }
+        }
+
+        //创建收货单附属表
+        $billT = WarehouseBillL::findOne($form->bill_id);
+        $billT = $billT ?? new WarehouseBillL();
+        $billT->id = $form->bill_id;
+        $billT->goods_type = $form->goods_type ?? GoodsTypeEnum::All;
+        if (false === $billT->save()) {
+            throw new \Exception($this->getError($billT));
         }
 
         $this->warehouseBillTSummary($form->bill_id);
@@ -1291,8 +1301,6 @@ class WarehouseBillTService extends Service
         } else {
             $saveData = array_reverse($saveData);//倒序
         }
-//        echo '<pre>';
-//        var_dump($saveData);die;
         $value = [];
         $key = array_keys($saveData[0]);
         foreach ($saveData as $item) {
@@ -1315,6 +1323,15 @@ class WarehouseBillTService extends Service
             if (false === $res) {
                 throw new \Exception("创建收货单据明细失败2");
             }
+        }
+
+        //同步收货单附属表
+        $billT = WarehouseBillL::findOne($form->bill_id);
+        $billT = $billT ?? new WarehouseBillL();
+        $billT->id = $form->bill_id;
+        $billT->goods_type = $form->goods_type;
+        if(false === $billT->save()){
+            throw new \Exception($this->getError($billT));
         }
 
         //同步更新价格
