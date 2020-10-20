@@ -225,8 +225,11 @@ class WarehouseBillTService extends Service
         $i = 0;
         $flag = true;
         $error_off = true;
+        $goods_type = 0;
         $error = $saveData = $goods_ids = $style_sns = [];
         $bill = WarehouseBill::findOne($form->bill_id);
+        $billT = WarehouseBillL::findOne($form->bill_id);
+        $form->goods_type = $billT->goods_type ?? 0;
         $warehouseAll = $form->getWarehouseMap();
         while ($goods = fgetcsv($file)) {
             if ($i <= 1) {
@@ -236,6 +239,16 @@ class WarehouseBillTService extends Service
             $row = count($goods);
             if (!in_array($row, [33, 106])) {
                 throw new \Exception("模板格式不正确，请下载最新模板");
+            }
+            if ($row == 33) {
+                $goods_type = GoodsTypeEnum::PlainGold;
+            } elseif ($row == 106) {
+                $goods_type = GoodsTypeEnum::SeikoStone;
+            }
+            if ($form->goods_type
+                && $form->goods_type != $goods_type) {
+                $temp_name = GoodsTypeEnum::getValue($form->goods_type) ?? "通用";
+                throw new \Exception("模板格式不正确，请使用“{$temp_name}”模板导入");
             }
             $goods = $form->trimField($goods, $row);
             $goods_id = $goods['goods_id'] ?? "";//条码号
@@ -333,6 +346,11 @@ class WarehouseBillTService extends Service
                     $is_inlay = $style->type->is_inlay;
                 }
                 $is_inlay = $is_inlay ?? InlayEnum::No;
+                if ($form->goods_type == GoodsTypeEnum::PlainGold
+                    && $is_inlay == InlayEnum::No) {
+                    $flag = false;
+                    $error[$i][] = $qiban_error . "素金导入不能为非镶嵌【除了镶嵌以外的】产品";
+                }
             }
             if (!$flag) {
                 //$flag = true;
@@ -1329,8 +1347,8 @@ class WarehouseBillTService extends Service
         $billT = WarehouseBillL::findOne($form->bill_id);
         $billT = $billT ?? new WarehouseBillL();
         $billT->id = $form->bill_id;
-        $billT->goods_type = $form->goods_type;
-        if(false === $billT->save()){
+        $billT->goods_type = $goods_type;
+        if (false === $billT->save()) {
             throw new \Exception($this->getError($billT));
         }
 

@@ -130,7 +130,7 @@ class BillTController extends BaseController
                     $gModel->supplier_id = $model->supplier_id;
                     $gModel->put_in_type = $model->put_in_type;
                     $gModel->supplier_id = $model->supplier_id;
-                    $gModel->goods_type = $model->goods_type;
+                    //$gModel->goods_type = $model->goods_type;
                     $gModel->file = UploadedFile::getInstance($model, 'file');
                     if (!empty($gModel->file) && isset($gModel->file)) {
                         \Yii::$app->warehouseService->billT->uploadGoods($gModel);
