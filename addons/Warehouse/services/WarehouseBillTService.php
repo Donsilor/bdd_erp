@@ -2,6 +2,8 @@
 
 namespace addons\Warehouse\services;
 
+use addons\Style\common\models\StyleAttribute;
+use common\helpers\ArrayHelper;
 use Yii;
 use common\components\Service;
 use common\helpers\SnHelper;
@@ -1347,18 +1349,17 @@ class WarehouseBillTService extends Service
             if ($result['error'] == false) {
                 throw new \Exception($result['msg']);
             }
-            if ($goods->style_sn && $form->attr_id) {
-            //if ($goods->style_sn && $form->attr_id) {
-                $attr = AttributeSpec::find()->where(['style_cate_id' => $form->style_cate_id, 'attr_id' => $form->attr_id, 'status' => StatusEnum::ENABLED])->count();
-                    //var_dump($attr);die;
-                    //$valueList = $form->getAttrValueListByStyle($goods->style_sn, $form->attr_id);
-                    //if ($valueList && in_array($value, array_keys($valueList))) {
-                if ($attr){
+            if ($goods->style_id && $form->attr_id) {
+                $attrList = StyleAttribute::find()->select(['attr_id'])->where(['style_id' => $goods->style_id, 'status' => StatusEnum::ENABLED])->asArray()->all();
+                $attrList = ArrayHelper::getColumn($attrList, 'attr_id') ?? [];
+                if ($attrList
+                    && in_array($value, array_keys($attrList))) {
                     $updateIds[] = $id;
-                    //}
                 } else {
                     $updateIds[] = $id;
                 }
+            } else {
+                $updateIds[] = $id;
             }
             $form->bill_id = $goods->bill_id;
         }
@@ -1370,7 +1371,7 @@ class WarehouseBillTService extends Service
             $this->syncUpdatePriceAll(null, $updateIds);
             $this->WarehouseBillTSummary($form->bill_id);
         }
-        if($updateData){
+        if ($updateData) {
             foreach ($updateData as $id => $data) {
                 $goods = WarehouseBillTGoodsForm::findOne(['id' => $id]);
                 $goods->attributes = $data;
