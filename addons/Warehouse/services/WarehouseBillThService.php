@@ -136,12 +136,12 @@ class WarehouseBillThService extends WarehouseBillService
             }
             
             foreach ($billGoodsList as $billGoods){
-                $goods = WarehouseGoods::find()->where(['goods_id'=>$billGoods->goods_id,'goods_stock'=>GoodsStatusEnum::IN_REFUND])->one();
+                $goods = WarehouseGoods::find()->where(['goods_id'=>$billGoods->goods_id,'goods_status'=>GoodsStatusEnum::IN_REFUND])->one();
                 if(empty($goods)) {
                     throw new \Exception("[{$goods->goods_id}]商品不是退货中");
                 }
                 $goods->goods_status = GoodsStatusEnum::IN_STOCK;
-                if($goods->save(true,['goods_id','goods_status'])){
+                if(false === $goods->save(true,['goods_id','goods_status'])){
                     throw new \Exception("[{$goods->goods_id}]商品状态更新失败");
                 }
                 //插入商品日志
