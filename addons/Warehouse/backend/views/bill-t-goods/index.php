@@ -1,14 +1,11 @@
 <?php
 
-use addons\Warehouse\common\enums\BillStatusEnum;
-use addons\Purchase\common\enums\ReceiptGoodsStatusEnum;
-use common\enums\WhetherEnum;
+use common\helpers\Url;
 use common\helpers\Html;
 use common\helpers\ImageHelper;
-use common\helpers\Url;
+use addons\Warehouse\common\enums\BillStatusEnum;
 use kartik\select2\Select2;
 use yii\grid\GridView;
-use kartik\daterange\DateRangePicker;
 
 /* @var $this yii\web\View */
 /* @var $dataProvider yii\data\ActiveDataProvider */
@@ -76,11 +73,37 @@ $params = $params ? "&" . http_build_query($params) : '';
         <div class="col-xs-12">
             <div class="box">
                 <div class="box-body table-responsive">
-                    <?php echo Html::batchButtons(false) ?>
                     <span style="font-size:16px">
                         <!--<span style="font-weight:bold;">明细汇总：</span>-->
                         货品总数：<span style="color:green;"><?= $bill->goods_num ?></span>
                         总成本价：<span style="color:green;"><?= $bill->total_cost ?></span>
+                    </span>
+                    <span>
+                        <?php
+                            echo Html::batchButtons(false);
+                            echo '&nbsp;';
+                            echo Html::hidden($bill->billL->show_all ?? 0, '全部', ['data-id' => $bill->id, 'data-name' => 'show_all', 'data-text' => '全部']);
+                            echo '&nbsp;';
+                            echo Html::hidden($bill->billL->show_basic ?? 0, '基本', ['data-id' => $bill->id, 'data-name' => 'show_basic', 'data-text' => '基本']);
+                            echo '&nbsp;';
+                            echo Html::hidden($bill->billL->show_attr ?? 0, '属性', ['data-id' => $bill->id, 'data-name' => 'show_attr', 'data-text' => '属性']);
+                            echo '&nbsp;';
+                            echo Html::hidden($bill->billL->show_gold ?? 0, '金料', ['data-id' => $bill->id, 'data-name' => 'show_gold', 'data-text' => '金料']);
+                            echo '&nbsp;';
+                            echo Html::hidden($bill->billL->show_main_stone ?? 0, '主石', ['data-id' => $bill->id, 'data-name' => 'show_main_stone', 'data-text' => '主石']);
+                            echo '&nbsp;';
+                            echo Html::hidden($bill->billL->show_second_stone1 ?? 0, '副石1', ['data-id' => $bill->id, 'data-name' => 'show_second_stone1', 'data-text' => '副石1']);
+                            echo '&nbsp;';
+                            echo Html::hidden($bill->billL->show_second_stone2 ?? 0, '副石2', ['data-id' => $bill->id, 'data-name' => 'show_second_stone2', 'data-text' => '副石2']);
+                            echo '&nbsp;';
+                            echo Html::hidden($bill->billL->show_second_stone3 ?? 0, '副石3', ['data-id' => $bill->id, 'data-name' => 'show_second_stone3', 'data-text' => '副石3']);
+                            echo '&nbsp;';
+                            echo Html::hidden($bill->billL->show_parts ?? 0, '配件', ['data-id' => $bill->id, 'data-name' => 'show_parts', 'data-text' => '配件']);
+                            echo '&nbsp;';
+                            echo Html::hidden($bill->billL->show_fee ?? 0, '工费', ['data-id' => $bill->id, 'data-name' => 'show_fee', 'data-text' => '工费']);
+                            echo '&nbsp;';
+                            echo Html::hidden($bill->billL->show_price ?? 0, '价格', ['data-id' => $bill->id, 'data-name' => 'show_price', 'data-text' => '价格']);
+                        ?>
                     </span>
                     <span style="color:red;">（Ctrl+F键可快速查找字段名）</span>
                     <?= GridView::widget([
@@ -155,6 +178,7 @@ $params = $params ? "&" . http_build_query($params) : '';
                                         ]);
                                     },
                                 ],
+                                'visible' => $model->isVisible($bill, 'front_operation'),
                             ],
                             [
                                 'attribute' => 'goods_image',
@@ -165,6 +189,7 @@ $params = $params ? "&" . http_build_query($params) : '';
                                     return ImageHelper::fancyBox($model->goods_image, 30, 30);
                                 },
                                 'filter' => false,
+                                'visible' => $model->isVisible($bill, 'goods_image'),
                             ],
                             [
                                 'attribute' => 'style_cate_id',
@@ -181,6 +206,7 @@ $params = $params ? "&" . http_build_query($params) : '';
                                     'class' => 'form-control',
                                     'style' => 'width:60px;'
                                 ]),
+                                'visible' => $model->isVisible($bill, 'style_cate_id'),
                             ],
                             [
                                 'attribute' => 'product_type_id',
@@ -195,8 +221,8 @@ $params = $params ? "&" . http_build_query($params) : '';
                                     'prompt' => '全部',
                                     'class' => 'form-control',
                                     'style' => 'width:60px;'
-
                                 ]),
+                                'visible' => $model->isVisible($bill, 'product_type_id'),
                             ],
                             [
                                 'label' => '货号手填',
@@ -213,6 +239,7 @@ $params = $params ? "&" . http_build_query($params) : '';
                                     'class' => 'form-control',
                                     'style' => 'width:60px;'
                                 ]),
+                                'visible' => $model->isVisible($bill, 'auto_goods_id'),
                             ],
                             [
                                 'attribute' => 'goods_id',
@@ -235,6 +262,7 @@ $params = $params ? "&" . http_build_query($params) : '';
                                     'class' => 'form-control',
                                     'style' => 'width:100px;'
                                 ]),
+                                'visible' => $model->isVisible($bill, 'goods_id'),
                             ],
                             [
                                 'attribute' => 'style_sn',
@@ -256,6 +284,7 @@ $params = $params ? "&" . http_build_query($params) : '';
                                     'class' => 'form-control',
                                     'style' => 'width:100px;'
                                 ]),
+                                'visible' => $model->isVisible($bill, 'style_sn'),
                             ],
                             [
                                 'attribute' => 'goods_name',
@@ -270,6 +299,7 @@ $params = $params ? "&" . http_build_query($params) : '';
                                     'class' => 'form-control',
                                     'style' => 'width:90px;'
                                 ]),
+                                'visible' => $model->isVisible($bill, 'goods_name'),
                             ],
                             [
                                 'attribute' => 'qiban_sn',
@@ -283,13 +313,18 @@ $params = $params ? "&" . http_build_query($params) : '';
                                     'class' => 'form-control',
                                     'style' => 'width:100px;'
                                 ]),
+                                'visible' => $model->isVisible($bill, 'qiban_sn'),
                             ],
                             [
                                 'attribute' => 'to_warehouse_id',
                                 'format' => 'raw',
                                 'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#feeeed;'],
                                 'footerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#feeeed;'],
-                                'value' => "toWarehouse.name",
+                                'value' => function ($model, $key, $index, $widget) {
+                                    $widget->footer = $model->getAttributeLabel('to_warehouse_id');
+                                    return $model->toWarehouse->name ?? "";
+                                },
+                                //'value' => "toWarehouse.name",
                                 'filter' => Select2::widget([
                                     'name' => 'SearchModel[to_warehouse_id]',
                                     'value' => $searchModel->to_warehouse_id,
@@ -299,6 +334,7 @@ $params = $params ? "&" . http_build_query($params) : '';
                                         'allowClear' => true,
                                     ],
                                 ]),
+                                'visible' => $model->isVisible($bill, 'to_warehouse_id'),
                             ],
                             /* [
                                  'attribute' => 'material',
@@ -326,6 +362,7 @@ $params = $params ? "&" . http_build_query($params) : '';
                                     'class' => 'form-control',
                                     'style' => 'width:60px;'
                                 ]),
+                                'visible' => $model->isVisible($bill, 'material_type'),
                             ],
                             [
                                 'attribute' => 'material_color',
@@ -341,6 +378,7 @@ $params = $params ? "&" . http_build_query($params) : '';
                                     'class' => 'form-control',
                                     'style' => 'width:60px;'
                                 ]),
+                                'visible' => $model->isVisible($bill, 'material_color'),
                             ],
                             [
                                 'attribute' => 'goods_num',
@@ -355,6 +393,7 @@ $params = $params ? "&" . http_build_query($params) : '';
 //                                    'class' => 'form-control',
 //                                    'style' => 'width:80px;'
 //                                ]),
+                                'visible' => $model->isVisible($bill, 'goods_num'),
                             ],
                             [
                                 'attribute' => 'finger_hk',
@@ -370,6 +409,7 @@ $params = $params ? "&" . http_build_query($params) : '';
                                     'class' => 'form-control',
                                     'style' => 'width:60px;'
                                 ]),
+                                'visible' => $model->isVisible($bill, 'finger_hk'),
                             ],
                             [
                                 'attribute' => 'finger',
@@ -385,6 +425,7 @@ $params = $params ? "&" . http_build_query($params) : '';
                                     'class' => 'form-control',
                                     'style' => 'width:60px;'
                                 ]),
+                                'visible' => $model->isVisible($bill, 'finger'),
                             ],
                             [
                                 'attribute' => 'length',
@@ -399,6 +440,7 @@ $params = $params ? "&" . http_build_query($params) : '';
                                     'class' => 'form-control',
                                     'style' => 'width:60px;'
                                 ]),
+                                'visible' => $model->isVisible($bill, 'length'),
                             ],
                             [
                                 'attribute' => 'product_size',
@@ -412,6 +454,7 @@ $params = $params ? "&" . http_build_query($params) : '';
                                     'class' => 'form-control',
                                     'style' => 'width:60px;'
                                 ]),
+                                'visible' => $model->isVisible($bill, 'product_size'),
                             ],
                             [
                                 'attribute' => 'xiangkou',
@@ -427,6 +470,7 @@ $params = $params ? "&" . http_build_query($params) : '';
                                     'class' => 'form-control',
                                     'style' => 'width:60px;'
                                 ]),
+                                'visible' => $model->isVisible($bill, 'xiangkou'),
                             ],
                             [
                                 'attribute' => 'kezi',
@@ -440,6 +484,7 @@ $params = $params ? "&" . http_build_query($params) : '';
                                     'class' => 'form-control',
                                     'style' => 'width:40px;'
                                 ]),
+                                'visible' => $model->isVisible($bill, 'kezi'),
                             ],
                             [
                                 'attribute' => 'chain_type',
@@ -455,6 +500,7 @@ $params = $params ? "&" . http_build_query($params) : '';
                                     'class' => 'form-control',
                                     'style' => 'width:60px;'
                                 ]),
+                                'visible' => $model->isVisible($bill, 'chain_type'),
                             ],
 //                            [
 //                                'attribute' => 'chain_long',
@@ -478,6 +524,7 @@ $params = $params ? "&" . http_build_query($params) : '';
                                     'class' => 'form-control',
                                     'style' => 'width:60px;'
                                 ]),
+                                'visible' => $model->isVisible($bill, 'cramp_ring'),
                             ],
                             [
                                 'attribute' => 'talon_head_type',
@@ -493,6 +540,7 @@ $params = $params ? "&" . http_build_query($params) : '';
                                     'class' => 'form-control',
                                     'style' => 'width:60px;'
                                 ]),
+                                'visible' => $model->isVisible($bill, 'talon_head_type'),
                             ],
                             [
                                 'attribute' => 'peiliao_way',
@@ -508,6 +556,7 @@ $params = $params ? "&" . http_build_query($params) : '';
                                     'class' => 'form-control',
                                     'style' => 'width:60px;'
                                 ]),
+                                'visible' => $model->isVisible($bill, 'peiliao_way'),
                             ],
                             [
                                 'attribute' => 'suttle_weight',
@@ -522,6 +571,7 @@ $params = $params ? "&" . http_build_query($params) : '';
 //                                    'class' => 'form-control',
 //                                    'style' => 'width:80px;'
 //                                ]),
+                                'visible' => $model->isVisible($bill, 'suttle_weight'),
                             ],
                             [
                                 'attribute' => 'gold_weight',
@@ -536,6 +586,7 @@ $params = $params ? "&" . http_build_query($params) : '';
 //                                    'class' => 'form-control',
 //                                    'style' => 'width:80px;'
 //                                ]),
+                                'visible' => $model->isVisible($bill, 'gold_weight'),
                             ],
                             [
                                 'attribute' => 'gold_loss',
@@ -550,6 +601,7 @@ $params = $params ? "&" . http_build_query($params) : '';
 //                                    'class' => 'form-control',
 //                                    'style' => 'width:80px;'
 //                                ]),
+                                'visible' => $model->isVisible($bill, 'gold_loss'),
                             ],
                             [
                                 'attribute' => 'lncl_loss_weight',
@@ -564,6 +616,7 @@ $params = $params ? "&" . http_build_query($params) : '';
 //                                    'class' => 'form-control',
 //                                    'style' => 'width:80px;'
 //                                ]),
+                                'visible' => $model->isVisible($bill, 'lncl_loss_weight'),
                             ],
                             [
                                 'attribute' => 'gold_price',
@@ -578,6 +631,7 @@ $params = $params ? "&" . http_build_query($params) : '';
 //                                    'class' => 'form-control',
 //                                    'style' => 'width:80px;'
 //                                ]),
+                                'visible' => $model->isVisible($bill, 'gold_price'),
                             ],
                             [
                                 'attribute' => 'gold_amount',
@@ -592,6 +646,7 @@ $params = $params ? "&" . http_build_query($params) : '';
 //                                    'class' => 'form-control',
 //                                    'style' => 'width:80px;'
 //                                ]),
+                                'visible' => $model->isVisible($bill, 'gold_amount'),
                             ],
                             [
                                 'attribute' => 'pure_gold_rate',
@@ -606,6 +661,7 @@ $params = $params ? "&" . http_build_query($params) : '';
 //                                    'class' => 'form-control',
 //                                    'style' => 'width:80px;'
 //                                ]),
+                                'visible' => $model->isVisible($bill, 'pure_gold_rate'),
                             ],
                             [
                                 'attribute' => 'pure_gold',
@@ -620,6 +676,22 @@ $params = $params ? "&" . http_build_query($params) : '';
 //                                    'class' => 'form-control',
 //                                    'style' => 'width:80px;'
 //                                ]),
+                                'visible' => $model->isVisible($bill, 'pure_gold'),
+                            ],
+                            [
+                                'attribute' => 'factory_gold_weight',
+                                'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#FFD700;'],
+                                'footerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#FFD700;'],
+                                'value' => function ($model, $key, $index, $widget) use ($total) {
+                                    $widget->footer = $model->getFooterValues('factory_gold_weight', $total, "0.000");
+                                    return $model->factory_gold_weight ?? "0.000";
+                                },
+                                'filter' => false,
+//                                'filter' => Html::activeTextInput($searchModel, 'pure_gold', [
+//                                    'class' => 'form-control',
+//                                    'style' => 'width:80px;'
+//                                ]),
+                                'visible' => $model->isVisible($bill, 'factory_gold_weight'),
                             ],
                             /*[
                                 'attribute' => 'cert_id',
@@ -781,6 +853,7 @@ $params = $params ? "&" . http_build_query($params) : '';
                                     'class' => 'form-control',
                                     'style' => 'width:80px;'
                                 ]),
+                                'visible' => $model->isVisible($bill, 'main_pei_type'),
                             ],
                             [
                                 'attribute' => 'main_stone_sn',
@@ -795,6 +868,7 @@ $params = $params ? "&" . http_build_query($params) : '';
                                     'class' => 'form-control',
                                     'style' => 'width:60px;'
                                 ]),
+                                'visible' => $model->isVisible($bill, 'main_stone_sn'),
                             ],
                             [
                                 'attribute' => 'main_stone_type',
@@ -810,6 +884,7 @@ $params = $params ? "&" . http_build_query($params) : '';
                                     'class' => 'form-control',
                                     'style' => 'width:60px;'
                                 ]),
+                                'visible' => $model->isVisible($bill, 'main_stone_type'),
                             ],
                             [
                                 'attribute' => 'main_stone_num',
@@ -825,6 +900,7 @@ $params = $params ? "&" . http_build_query($params) : '';
 //                                    'class' => 'form-control',
 //                                    'style' => 'width:80px;'
 //                                ]),
+                                'visible' => $model->isVisible($bill, 'main_stone_num'),
                             ],
                             [
                                 'attribute' => 'main_stone_weight',
@@ -840,6 +916,7 @@ $params = $params ? "&" . http_build_query($params) : '';
 //                                    'class' => 'form-control',
 //                                    'style' => 'width:80px;'
 //                                ]),
+                                'visible' => $model->isVisible($bill, 'main_stone_weight'),
                             ],
                             [
                                 'attribute' => 'main_stone_price',
@@ -855,6 +932,7 @@ $params = $params ? "&" . http_build_query($params) : '';
 //                                    'class' => 'form-control',
 //                                    'style' => 'width:80px;'
 //                                ]),
+                                'visible' => $model->isVisible($bill, 'main_stone_price'),
                             ],
                             [
                                 'attribute' => 'main_stone_amount',
@@ -870,6 +948,7 @@ $params = $params ? "&" . http_build_query($params) : '';
 //                                    'class' => 'form-control',
 //                                    'style' => 'width:80px;'
 //                                ]),
+                                'visible' => $model->isVisible($bill, 'main_stone_amount'),
                             ],
                             [
                                 'attribute' => 'main_stone_shape',
@@ -885,6 +964,7 @@ $params = $params ? "&" . http_build_query($params) : '';
                                     'class' => 'form-control',
                                     'style' => 'width:60px;'
                                 ]),
+                                'visible' => $model->isVisible($bill, 'main_stone_shape'),
                             ],
                             [
                                 'attribute' => 'main_stone_color',
@@ -900,6 +980,7 @@ $params = $params ? "&" . http_build_query($params) : '';
                                     'class' => 'form-control',
                                     'style' => 'width:60px;'
                                 ]),
+                                'visible' => $model->isVisible($bill, 'main_stone_color'),
                             ],
                             [
                                 'attribute' => 'main_stone_clarity',
@@ -915,6 +996,7 @@ $params = $params ? "&" . http_build_query($params) : '';
                                     'class' => 'form-control',
                                     'style' => 'width:60px;'
                                 ]),
+                                'visible' => $model->isVisible($bill, 'main_stone_clarity'),
                             ],
                             [
                                 'attribute' => 'main_stone_cut',
@@ -930,6 +1012,7 @@ $params = $params ? "&" . http_build_query($params) : '';
                                     'class' => 'form-control',
                                     'style' => 'width:60px;'
                                 ]),
+                                'visible' => $model->isVisible($bill, 'main_stone_cut'),
                             ],
                             [
                                 'attribute' => 'main_stone_polish',
@@ -945,6 +1028,7 @@ $params = $params ? "&" . http_build_query($params) : '';
                                     'class' => 'form-control',
                                     'style' => 'width:60px;'
                                 ]),
+                                'visible' => $model->isVisible($bill, 'main_stone_polish'),
                             ],
                             [
                                 'attribute' => 'main_stone_symmetry',
@@ -960,6 +1044,7 @@ $params = $params ? "&" . http_build_query($params) : '';
                                     'class' => 'form-control',
                                     'style' => 'width:60px;'
                                 ]),
+                                'visible' => $model->isVisible($bill, 'main_stone_symmetry'),
                             ],
                             [
                                 'attribute' => 'main_stone_fluorescence',
@@ -975,6 +1060,7 @@ $params = $params ? "&" . http_build_query($params) : '';
                                     'class' => 'form-control',
                                     'style' => 'width:60px;'
                                 ]),
+                                'visible' => $model->isVisible($bill, 'main_stone_fluorescence'),
                             ],
                             [
                                 'attribute' => 'main_stone_colour',
@@ -990,6 +1076,7 @@ $params = $params ? "&" . http_build_query($params) : '';
                                     'class' => 'form-control',
                                     'style' => 'width:60px;'
                                 ]),
+                                'visible' => $model->isVisible($bill, 'main_stone_colour'),
                             ],
 //                            [
 //                                'attribute' => 'main_stone_size',
@@ -1018,6 +1105,7 @@ $params = $params ? "&" . http_build_query($params) : '';
                                     'class' => 'form-control',
                                     'style' => 'width:60px;'
                                 ]),
+                                'visible' => $model->isVisible($bill, 'main_cert_id'),
                             ],
                             [
                                 'attribute' => 'main_cert_type',
@@ -1033,6 +1121,7 @@ $params = $params ? "&" . http_build_query($params) : '';
                                     'class' => 'form-control',
                                     'style' => 'width:80px;'
                                 ]),
+                                'visible' => $model->isVisible($bill, 'main_cert_type'),
                             ],
                             [
                                 'attribute' => 'second_pei_type',
@@ -1048,6 +1137,7 @@ $params = $params ? "&" . http_build_query($params) : '';
                                     'class' => 'form-control',
                                     'style' => 'width:80px;'
                                 ]),
+                                'visible' => $model->isVisible($bill, 'second_pei_type'),
                             ],
                             [
                                 'attribute' => 'second_stone_type1',
@@ -1063,6 +1153,7 @@ $params = $params ? "&" . http_build_query($params) : '';
                                     'class' => 'form-control',
                                     'style' => 'width:60px;'
                                 ]),
+                                'visible' => $model->isVisible($bill, 'second_stone_type1'),
                             ],
                             [
                                 'attribute' => 'second_stone_sn1',
@@ -1077,6 +1168,7 @@ $params = $params ? "&" . http_build_query($params) : '';
                                     'class' => 'form-control',
                                     'style' => 'width:60px;'
                                 ]),
+                                'visible' => $model->isVisible($bill, 'second_stone_sn1'),
                             ],
                             [
                                 'attribute' => 'second_stone_num1',
@@ -1092,6 +1184,7 @@ $params = $params ? "&" . http_build_query($params) : '';
 //                                    'class' => 'form-control',
 //                                    'style' => 'width:80px;'
 //                                ]),
+                                'visible' => $model->isVisible($bill, 'second_stone_num1'),
                             ],
                             [
                                 'attribute' => 'second_stone_weight1',
@@ -1107,6 +1200,7 @@ $params = $params ? "&" . http_build_query($params) : '';
 //                                    'class' => 'form-control',
 //                                    'style' => 'width:80px;'
 //                                ]),
+                                'visible' => $model->isVisible($bill, 'second_stone_weight1'),
                             ],
                             [
                                 'attribute' => 'second_stone_price1',
@@ -1122,6 +1216,7 @@ $params = $params ? "&" . http_build_query($params) : '';
 //                                    'class' => 'form-control',
 //                                    'style' => 'width:80px;'
 //                                ]),
+                                'visible' => $model->isVisible($bill, 'second_stone_price1'),
                             ],
                             [
                                 'attribute' => 'second_stone_amount1',
@@ -1137,6 +1232,7 @@ $params = $params ? "&" . http_build_query($params) : '';
 //                                    'class' => 'form-control',
 //                                    'style' => 'width:80px;'
 //                                ]),
+                                'visible' => $model->isVisible($bill, 'second_stone_amount1'),
                             ],
                             [
                                 'attribute' => 'second_stone_shape1',
@@ -1152,6 +1248,7 @@ $params = $params ? "&" . http_build_query($params) : '';
                                     'class' => 'form-control',
                                     'style' => 'width:60px;'
                                 ]),
+                                'visible' => $model->isVisible($bill, 'second_stone_shape1'),
                             ],
                             [
                                 'attribute' => 'second_stone_color1',
@@ -1167,6 +1264,7 @@ $params = $params ? "&" . http_build_query($params) : '';
                                     'class' => 'form-control',
                                     'style' => 'width:60px;'
                                 ]),
+                                'visible' => $model->isVisible($bill, 'second_stone_color1'),
                             ],
                             [
                                 'attribute' => 'second_stone_clarity1',
@@ -1182,6 +1280,7 @@ $params = $params ? "&" . http_build_query($params) : '';
                                     'class' => 'form-control',
                                     'style' => 'width:60px;'
                                 ]),
+                                'visible' => $model->isVisible($bill, 'second_stone_clarity1'),
                             ],
                             [
                                 'attribute' => 'second_stone_cut1',
@@ -1197,6 +1296,7 @@ $params = $params ? "&" . http_build_query($params) : '';
                                     'class' => 'form-control',
                                     'style' => 'width:60px;'
                                 ]),
+                                'visible' => $model->isVisible($bill, 'second_stone_cut1'),
                             ],
                             [
                                 'attribute' => 'second_stone_colour1',
@@ -1212,6 +1312,7 @@ $params = $params ? "&" . http_build_query($params) : '';
                                     'class' => 'form-control',
                                     'style' => 'width:60px;'
                                 ]),
+                                'visible' => $model->isVisible($bill, 'second_stone_colour1'),
                             ],
 //                            [
 //                                'attribute' => 'second_stone_size1',
@@ -1257,6 +1358,7 @@ $params = $params ? "&" . http_build_query($params) : '';
                                     'class' => 'form-control',
                                     'style' => 'width:80px;'
                                 ]),
+                                'visible' => $model->isVisible($bill, 'second_pei_type2'),
                             ],
                             [
                                 'attribute' => 'second_stone_type2',
@@ -1272,6 +1374,7 @@ $params = $params ? "&" . http_build_query($params) : '';
                                     'class' => 'form-control',
                                     'style' => 'width:60px;'
                                 ]),
+                                'visible' => $model->isVisible($bill, 'second_stone_type2'),
                             ],
                             [
                                 'attribute' => 'second_stone_sn2',
@@ -1286,6 +1389,7 @@ $params = $params ? "&" . http_build_query($params) : '';
                                     'class' => 'form-control',
                                     'style' => 'width:60px;'
                                 ]),
+                                'visible' => $model->isVisible($bill, 'second_stone_sn2'),
                             ],
                             [
                                 'attribute' => 'second_stone_num2',
@@ -1301,6 +1405,7 @@ $params = $params ? "&" . http_build_query($params) : '';
 //                                    'class' => 'form-control',
 //                                    'style' => 'width:80px;'
 //                                ]),
+                                'visible' => $model->isVisible($bill, 'second_stone_num2'),
                             ],
                             [
                                 'attribute' => 'second_stone_weight2',
@@ -1316,6 +1421,7 @@ $params = $params ? "&" . http_build_query($params) : '';
 //                                    'class' => 'form-control',
 //                                    'style' => 'width:80px;'
 //                                ]),
+                                'visible' => $model->isVisible($bill, 'second_stone_weight2'),
                             ],
                             [
                                 'attribute' => 'second_stone_color2',
@@ -1331,6 +1437,7 @@ $params = $params ? "&" . http_build_query($params) : '';
                                     'class' => 'form-control',
                                     'style' => 'width:60px;'
                                 ]),
+                                'visible' => $model->isVisible($bill, 'second_stone_color2'),
                             ],
                             [
                                 'attribute' => 'second_stone_clarity2',
@@ -1346,6 +1453,7 @@ $params = $params ? "&" . http_build_query($params) : '';
                                     'class' => 'form-control',
                                     'style' => 'width:60px;'
                                 ]),
+                                'visible' => $model->isVisible($bill, 'second_stone_clarity2'),
                             ],
                             [
                                 'attribute' => 'second_stone_price2',
@@ -1361,6 +1469,7 @@ $params = $params ? "&" . http_build_query($params) : '';
 //                                    'class' => 'form-control',
 //                                    'style' => 'width:80px;'
 //                                ]),
+                                'visible' => $model->isVisible($bill, 'second_stone_price2'),
                             ],
                             [
                                 'attribute' => 'second_stone_amount2',
@@ -1376,6 +1485,7 @@ $params = $params ? "&" . http_build_query($params) : '';
 //                                    'class' => 'form-control',
 //                                    'style' => 'width:80px;'
 //                                ]),
+                                'visible' => $model->isVisible($bill, 'second_stone_amount2'),
                             ],
                             /*[
                                 'attribute' => 'second_stone_shape2',
@@ -1486,6 +1596,7 @@ $params = $params ? "&" . http_build_query($params) : '';
                                     'class' => 'form-control',
                                     'style' => 'width:80px;'
                                 ]),
+                                'visible' => $model->isVisible($bill, 'second_pei_type3'),
                             ],
                             [
                                 'attribute' => 'second_stone_type3',
@@ -1501,6 +1612,7 @@ $params = $params ? "&" . http_build_query($params) : '';
                                     'class' => 'form-control',
                                     'style' => 'width:60px;'
                                 ]),
+                                'visible' => $model->isVisible($bill, 'second_stone_type3'),
                             ],
                             [
                                 'attribute' => 'second_stone_sn3',
@@ -1515,6 +1627,7 @@ $params = $params ? "&" . http_build_query($params) : '';
                                     'class' => 'form-control',
                                     'style' => 'width:60px;'
                                 ]),
+                                'visible' => $model->isVisible($bill, 'second_stone_sn3'),
                             ],
                             [
                                 'attribute' => 'second_stone_num3',
@@ -1530,6 +1643,7 @@ $params = $params ? "&" . http_build_query($params) : '';
 //                                    'class' => 'form-control',
 //                                    'style' => 'width:80px;'
 //                                ]),
+                                'visible' => $model->isVisible($bill, 'second_stone_num3'),
                             ],
                             [
                                 'attribute' => 'second_stone_weight3',
@@ -1545,6 +1659,7 @@ $params = $params ? "&" . http_build_query($params) : '';
 //                                    'class' => 'form-control',
 //                                    'style' => 'width:80px;'
 //                                ]),
+                                'visible' => $model->isVisible($bill, 'second_stone_weight3'),
                             ],
                             [
                                 'attribute' => 'second_stone_color3',
@@ -1560,6 +1675,7 @@ $params = $params ? "&" . http_build_query($params) : '';
                                     'class' => 'form-control',
                                     'style' => 'width:60px;'
                                 ]),
+                                'visible' => $model->isVisible($bill, 'second_stone_color3'),
                             ],
                             [
                                 'attribute' => 'second_stone_clarity3',
@@ -1575,6 +1691,7 @@ $params = $params ? "&" . http_build_query($params) : '';
                                     'class' => 'form-control',
                                     'style' => 'width:60px;'
                                 ]),
+                                'visible' => $model->isVisible($bill, 'second_stone_clarity3'),
                             ],
                             [
                                 'attribute' => 'second_stone_price3',
@@ -1590,6 +1707,7 @@ $params = $params ? "&" . http_build_query($params) : '';
 //                                    'class' => 'form-control',
 //                                    'style' => 'width:80px;'
 //                                ]),
+                                'visible' => $model->isVisible($bill, 'second_stone_price3'),
                             ],
                             [
                                 'attribute' => 'second_stone_amount3',
@@ -1605,6 +1723,7 @@ $params = $params ? "&" . http_build_query($params) : '';
 //                                    'class' => 'form-control',
 //                                    'style' => 'width:80px;'
 //                                ]),
+                                'visible' => $model->isVisible($bill, 'second_stone_amount3'),
                             ],
                             [
                                 'attribute' => 'stone_remark',
@@ -1619,6 +1738,7 @@ $params = $params ? "&" . http_build_query($params) : '';
                                     'class' => 'form-control',
                                     'style' => 'width:160px;'
                                 ]),
+                                'visible' => $model->isVisible($bill, 'stone_remark'),
                             ],
                             [
                                 'attribute' => 'parts_way',
@@ -1634,6 +1754,7 @@ $params = $params ? "&" . http_build_query($params) : '';
                                     'class' => 'form-control',
                                     'style' => 'width:60px;'
                                 ]),
+                                'visible' => $model->isVisible($bill, 'parts_way'),
                             ],
                             [
                                 'attribute' => 'parts_type',
@@ -1649,6 +1770,7 @@ $params = $params ? "&" . http_build_query($params) : '';
                                     'class' => 'form-control',
                                     'style' => 'width:60px;'
                                 ]),
+                                'visible' => $model->isVisible($bill, 'parts_type'),
                             ],
                             [
                                 'attribute' => 'parts_material',
@@ -1664,6 +1786,7 @@ $params = $params ? "&" . http_build_query($params) : '';
                                     'class' => 'form-control',
                                     'style' => 'width:60px;'
                                 ]),
+                                'visible' => $model->isVisible($bill, 'parts_material'),
                             ],
                             [
                                 'attribute' => 'parts_num',
@@ -1679,6 +1802,7 @@ $params = $params ? "&" . http_build_query($params) : '';
 //                                    'class' => 'form-control',
 //                                    'style' => 'width:80px;'
 //                                ]),
+                                'visible' => $model->isVisible($bill, 'parts_num'),
                             ],
                             [
                                 'attribute' => 'parts_gold_weight',
@@ -1694,6 +1818,7 @@ $params = $params ? "&" . http_build_query($params) : '';
 //                                    'class' => 'form-control',
 //                                    'style' => 'width:80px;'
 //                                ]),
+                                'visible' => $model->isVisible($bill, 'parts_gold_weight'),
                             ],
                             [
                                 'attribute' => 'parts_price',
@@ -1709,6 +1834,7 @@ $params = $params ? "&" . http_build_query($params) : '';
 //                                    'class' => 'form-control',
 //                                    'style' => 'width:80px;'
 //                                ]),
+                                'visible' => $model->isVisible($bill, 'parts_price'),
                             ],
                             [
                                 'attribute' => 'parts_amount',
@@ -1724,6 +1850,7 @@ $params = $params ? "&" . http_build_query($params) : '';
 //                                    'class' => 'form-control',
 //                                    'style' => 'width:80px;'
 //                                ]),
+                                'visible' => $model->isVisible($bill, 'parts_amount'),
                             ],
                             [
                                 'attribute' => 'gong_fee',
@@ -1739,6 +1866,7 @@ $params = $params ? "&" . http_build_query($params) : '';
 //                                    'class' => 'form-control',
 //                                    'style' => 'width:80px;'
 //                                ]),
+                                'visible' => $model->isVisible($bill, 'gong_fee'),
                             ],
                             [
                                 'attribute' => 'piece_fee',
@@ -1754,6 +1882,7 @@ $params = $params ? "&" . http_build_query($params) : '';
 //                                    'class' => 'form-control',
 //                                    'style' => 'width:80px;'
 //                                ]),
+                                'visible' => $model->isVisible($bill, 'piece_fee'),
                             ],
                             [
                                 'attribute' => 'basic_gong_fee',
@@ -1769,6 +1898,7 @@ $params = $params ? "&" . http_build_query($params) : '';
 //                                    'class' => 'form-control',
 //                                    'style' => 'width:80px;'
 //                                ]),
+                                'visible' => $model->isVisible($bill, 'basic_gong_fee'),
                             ],
                             [
                                 'attribute' => 'peishi_weight',
@@ -1780,11 +1910,11 @@ $params = $params ? "&" . http_build_query($params) : '';
                                     return $model->peishi_weight ?? "0.000";
                                 },
                                 'filter' => false,
-
 //                                'filter' => Html::activeTextInput($searchModel, 'peishi_weight', [
 //                                    'class' => 'form-control',
 //                                    'style' => 'width:80px;'
 //                                ]),
+                                'visible' => $model->isVisible($bill, 'peishi_weight'),
                             ],
                             [
                                 'attribute' => 'peishi_gong_fee',
@@ -1800,6 +1930,7 @@ $params = $params ? "&" . http_build_query($params) : '';
 //                                    'class' => 'form-control',
 //                                    'style' => 'width:80px;'
 //                                ]),
+                                'visible' => $model->isVisible($bill, 'peishi_gong_fee'),
                             ],
                             [
                                 'attribute' => 'peishi_fee',
@@ -1815,6 +1946,7 @@ $params = $params ? "&" . http_build_query($params) : '';
 //                                    'class' => 'form-control',
 //                                    'style' => 'width:80px;'
 //                                ]),
+                                'visible' => $model->isVisible($bill, 'peishi_fee'),
                             ],
                             [
                                 'attribute' => 'parts_fee',
@@ -1830,6 +1962,7 @@ $params = $params ? "&" . http_build_query($params) : '';
 //                                    'class' => 'form-control',
 //                                    'style' => 'width:80px;'
 //                                ]),
+                                'visible' => $model->isVisible($bill, 'parts_fee'),
                             ],
                             [
                                 'attribute' => 'xiangqian_craft',
@@ -1845,6 +1978,7 @@ $params = $params ? "&" . http_build_query($params) : '';
                                     'class' => 'form-control',
                                     'style' => 'width:60px;'
                                 ]),
+                                'visible' => $model->isVisible($bill, 'xiangqian_craft'),
                             ],
 //                            [
 //                                'attribute' => 'xianqian_price',
@@ -1875,6 +2009,7 @@ $params = $params ? "&" . http_build_query($params) : '';
 //                                    'class' => 'form-control',
 //                                    'style' => 'width:80px;'
 //                                ]),
+                                'visible' => $model->isVisible($bill, 'second_stone_fee1'),
                             ],
                             [
                                 'attribute' => 'second_stone_fee2',
@@ -1890,6 +2025,7 @@ $params = $params ? "&" . http_build_query($params) : '';
 //                                    'class' => 'form-control',
 //                                    'style' => 'width:80px;'
 //                                ]),
+                                'visible' => $model->isVisible($bill, 'second_stone_fee2'),
                             ],
                             [
                                 'attribute' => 'second_stone_fee3',
@@ -1905,6 +2041,7 @@ $params = $params ? "&" . http_build_query($params) : '';
 //                                    'class' => 'form-control',
 //                                    'style' => 'width:80px;'
 //                                ]),
+                                'visible' => $model->isVisible($bill, 'second_stone_fee3'),
                             ],
                             [
                                 'attribute' => 'xianqian_fee',
@@ -1920,6 +2057,7 @@ $params = $params ? "&" . http_build_query($params) : '';
 //                                    'class' => 'form-control',
 //                                    'style' => 'width:80px;'
 //                                ]),
+                                'visible' => $model->isVisible($bill, 'xianqian_fee'),
                             ],
                             [
                                 'attribute' => 'biaomiangongyi',
@@ -1945,6 +2083,7 @@ $params = $params ? "&" . http_build_query($params) : '';
 //                                    'class' => 'form-control',
 //                                    'style' => 'width:100px;'
 //                                ]),
+                                'visible' => $model->isVisible($bill, 'biaomiangongyi'),
                             ],
                             [
                                 'attribute' => 'biaomiangongyi_fee',
@@ -1960,6 +2099,7 @@ $params = $params ? "&" . http_build_query($params) : '';
 //                                    'class' => 'form-control',
 //                                    'style' => 'width:80px;'
 //                                ]),
+                                'visible' => $model->isVisible($bill, 'biaomiangongyi_fee'),
                             ],
                             [
                                 'attribute' => 'fense_fee',
@@ -1975,6 +2115,7 @@ $params = $params ? "&" . http_build_query($params) : '';
 //                                    'class' => 'form-control',
 //                                    'style' => 'width:80px;'
 //                                ]),
+                                'visible' => $model->isVisible($bill, 'fense_fee'),
                             ],
                             [
                                 'attribute' => 'penlasha_fee',
@@ -1990,6 +2131,7 @@ $params = $params ? "&" . http_build_query($params) : '';
 //                                    'class' => 'form-control',
 //                                    'style' => 'width:80px;'
 //                                ]),
+                                'visible' => $model->isVisible($bill, 'penlasha_fee'),
                             ],
                             [
                                 'attribute' => 'lasha_fee',
@@ -2005,6 +2147,7 @@ $params = $params ? "&" . http_build_query($params) : '';
 //                                    'class' => 'form-control',
 //                                    'style' => 'width:80px;'
 //                                ]),
+                                'visible' => $model->isVisible($bill, 'lasha_fee'),
                             ],
                             [
                                 'attribute' => 'bukou_fee',
@@ -2020,6 +2163,7 @@ $params = $params ? "&" . http_build_query($params) : '';
 //                                    'class' => 'form-control',
 //                                    'style' => 'width:80px;'
 //                                ]),
+                                'visible' => $model->isVisible($bill, 'bukou_fee'),
                             ],
                             [
                                 'attribute' => 'templet_fee',
@@ -2035,6 +2179,7 @@ $params = $params ? "&" . http_build_query($params) : '';
 //                                    'class' => 'form-control',
 //                                    'style' => 'width:80px;'
 //                                ]),
+                                'visible' => $model->isVisible($bill, 'templet_fee'),
                             ],
                             [
                                 'attribute' => 'tax_fee',
@@ -2050,6 +2195,7 @@ $params = $params ? "&" . http_build_query($params) : '';
 //                                    'class' => 'form-control',
 //                                    'style' => 'width:80px;'
 //                                ]),
+                                'visible' => $model->isVisible($bill, 'tax_fee'),
                             ],
                             [
                                 'attribute' => 'tax_amount',
@@ -2065,6 +2211,7 @@ $params = $params ? "&" . http_build_query($params) : '';
 //                                    'class' => 'form-control',
 //                                    'style' => 'width:80px;'
 //                                ]),
+                                'visible' => $model->isVisible($bill, 'tax_amount'),
                             ],
                             [
                                 'attribute' => 'cert_fee',
@@ -2080,6 +2227,7 @@ $params = $params ? "&" . http_build_query($params) : '';
 //                                    'class' => 'form-control',
 //                                    'style' => 'width:80px;'
 //                                ]),
+                                'visible' => $model->isVisible($bill, 'cert_fee'),
                             ],
                             [
                                 'attribute' => 'other_fee',
@@ -2095,6 +2243,7 @@ $params = $params ? "&" . http_build_query($params) : '';
 //                                    'class' => 'form-control',
 //                                    'style' => 'width:80px;'
 //                                ]),
+                                'visible' => $model->isVisible($bill, 'other_fee'),
                             ],
                             [
                                 'attribute' => 'pure_gold',
@@ -2109,6 +2258,7 @@ $params = $params ? "&" . http_build_query($params) : '';
 //                                    'class' => 'form-control',
 //                                    'style' => 'width:80px;'
 //                                ]),
+                                'visible' => $model->isVisible($bill, 'pure_gold'),
                             ],
                             [
                                 'attribute' => 'factory_cost',
@@ -2124,6 +2274,7 @@ $params = $params ? "&" . http_build_query($params) : '';
 //                                    'class' => 'form-control',
 //                                    'style' => 'width:100px;'
 //                                ]),
+                                'visible' => $model->isVisible($bill, 'factory_cost'),
                             ],
                             [
                                 'label' => '成本手填',
@@ -2140,6 +2291,7 @@ $params = $params ? "&" . http_build_query($params) : '';
                                     'class' => 'form-control',
                                     'style' => 'width:60px;'
                                 ]),
+                                'visible' => $model->isVisible($bill, 'is_auto_price'),
                             ],
                             [
                                 'attribute' => 'cost_price',
@@ -2188,6 +2340,7 @@ $params = $params ? "&" . http_build_query($params) : '';
                                     'class' => 'form-control',
                                     'style' => 'width:80px;'
                                 ]),
+                                'visible' => $model->isVisible($bill, 'markup_rate'),
                             ],
                             [
                                 'attribute' => 'market_price',
@@ -2204,6 +2357,7 @@ $params = $params ? "&" . http_build_query($params) : '';
 //                                    'class' => 'form-control',
 //                                    'style' => 'width:100px;'
 //                                ]),
+                                'visible' => $model->isVisible($bill, 'market_price'),
                             ],
                             [
                                 'attribute' => 'style_sex',
@@ -2219,6 +2373,7 @@ $params = $params ? "&" . http_build_query($params) : '';
                                     'class' => 'form-control',
                                     'style' => 'width:60px;'
                                 ]),
+                                'visible' => $model->isVisible($bill, 'style_sex'),
                             ],
                             [
                                 'attribute' => 'jintuo_type',
@@ -2234,6 +2389,7 @@ $params = $params ? "&" . http_build_query($params) : '';
                                     'class' => 'form-control',
                                     'style' => 'width:60px;'
                                 ]),
+                                'visible' => $model->isVisible($bill, 'jintuo_type'),
                             ],
                             [
                                 'attribute' => 'qiban_type',
@@ -2249,6 +2405,7 @@ $params = $params ? "&" . http_build_query($params) : '';
                                     'class' => 'form-control',
                                     'style' => 'width:60px;'
                                 ]),
+                                'visible' => $model->isVisible($bill, 'qiban_type'),
                             ],
                             [
                                 'attribute' => 'is_inlay',
@@ -2264,6 +2421,7 @@ $params = $params ? "&" . http_build_query($params) : '';
                                     'class' => 'form-control',
                                     'style' => 'width:60px;'
                                 ]),
+                                'visible' => $model->isVisible($bill, 'is_inlay'),
                             ],
                             [
                                 'attribute' => 'pay_status',
@@ -2279,6 +2437,7 @@ $params = $params ? "&" . http_build_query($params) : '';
                                     'class' => 'form-control',
                                     'style' => 'width:60px;'
                                 ]),
+                                'visible' => $model->isVisible($bill, 'pay_status'),
                             ],
                             [
                                 'label' => '是否批发',
@@ -2295,6 +2454,7 @@ $params = $params ? "&" . http_build_query($params) : '';
                                     'class' => 'form-control',
                                     'style' => 'width:60px;'
                                 ]),
+                                'visible' => $model->isVisible($bill, 'is_wholesale'),
                             ],
                             [
                                 'attribute' => 'factory_mo',
@@ -2309,6 +2469,7 @@ $params = $params ? "&" . http_build_query($params) : '';
                                     'class' => 'form-control',
                                     'style' => 'width:60px;'
                                 ]),
+                                'visible' => $model->isVisible($bill, 'factory_mo'),
                             ],
                             [
                                 'attribute' => 'order_sn',
@@ -2322,6 +2483,7 @@ $params = $params ? "&" . http_build_query($params) : '';
                                     'class' => 'form-control',
                                     'style' => 'width:60px;'
                                 ]),
+                                'visible' => $model->isVisible($bill, 'order_sn'),
                             ],
                             [
                                 'attribute' => 'remark',
@@ -2336,6 +2498,7 @@ $params = $params ? "&" . http_build_query($params) : '';
                                     'class' => 'form-control',
                                     'style' => 'width:160px;'
                                 ]),
+                                'visible' => $model->isVisible($bill, 'remark'),
                             ],
                             /*[
                                 'attribute' => 'produce_sn',
@@ -2413,6 +2576,50 @@ $params = $params ? "&" . http_build_query($params) : '';
                 return;
             }
             window.location.href = "<?= \common\helpers\Url::buildUrl('../bill-t/export', [], ['ids'])?>?ids=<?php echo $bill->id ?>";
+        });
+    }
+
+    // 显示状态 status 1:隐藏;0显示;
+    function rfHidden(obj) {
+        let id = $(obj).attr('data-id');
+        let name = $(obj).attr('data-name');
+        let url = $(obj).attr('data-url');
+        let text = $(obj).attr('data-text');
+        let status = 0;
+        self = $(obj);
+        if (self.hasClass("btn-success")) {
+            status = 1;
+        }
+        if(!url){
+            url = "<?= Url::to(['ajax-hidden'])?>";
+        }
+        $.ajax({
+            type: "get",
+            url: url,
+            dataType: "json",
+            data: {
+                id: id,
+                name: name,
+                value: status,
+            },
+            success: function (data) {
+                if (parseInt(data.code) === 200) {
+                    if (self.hasClass("btn-success")) {
+                        self.removeClass("btn-success").addClass("btn-default");
+                        self.attr("data-toggle", 'tooltip');
+                        self.attr("data-original-title", '点击隐藏');
+                        self.text(text);
+                    } else {
+                        self.removeClass("btn-default").addClass("btn-success");
+                        self.attr("data-toggle", 'tooltip');
+                        self.attr("data-original-title", '点击显示');
+                        self.text(text);
+                    }
+                    window.location.reload();
+                } else {
+                    rfAffirm(data.message);
+                }
+            }
         });
     }
 

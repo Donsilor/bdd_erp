@@ -2,13 +2,15 @@
 
 namespace addons\Warehouse\common\forms;
 
+use common\helpers\ArrayHelper;
+use common\helpers\StringHelper;
+use addons\Warehouse\common\models\WarehouseBillL;
 use addons\Warehouse\common\models\WarehouseBillGoodsL;
 use addons\Warehouse\common\enums\PeiJianWayEnum;
-use addons\Warehouse\common\enums\PeiLiaoWayEnum;
 use addons\Warehouse\common\enums\PeiShiWayEnum;
+use addons\Warehouse\common\enums\GoodsTypeEnum;
+use addons\Warehouse\common\enums\IsHiddenEnum;
 use addons\Style\common\enums\AttrIdEnum;
-use common\helpers\StringHelper;
-use common\helpers\ArrayHelper;
 
 /**
  * 其它收货单明细 Form
@@ -22,6 +24,7 @@ class WarehouseBillTGoodsForm extends WarehouseBillGoodsL
     public $batch_value;
     public $attr_id;
     public $attr_list;
+    public $goods_type;
 
     /**
      * {@inheritdoc}
@@ -30,6 +33,7 @@ class WarehouseBillTGoodsForm extends WarehouseBillGoodsL
     {
         $rules = [
             [['goods_sn', 'to_warehouse_id', 'is_wholesale', 'auto_goods_id', 'goods_num'], 'required'],
+            [['goods_type'], 'integer'],
             [['file'], 'file', 'extensions' => ['csv']],//'skipOnEmpty' => false,
             [['ids', 'batch_name', 'batch_value', 'attr_id'], 'string'],
             [['attr_list'], 'safe'],
@@ -46,6 +50,7 @@ class WarehouseBillTGoodsForm extends WarehouseBillGoodsL
         return ArrayHelper::merge(parent::attributeLabels(), [
             'is_wholesale' => '是否批发',
             'file' => '文件上传',
+            'goods_type' => '商品类型',
         ]);
     }
 
@@ -81,9 +86,9 @@ class WarehouseBillTGoodsForm extends WarehouseBillGoodsL
     public function trimField($data, $row = null)
     {
         $res = [];
-        if($row == 33){
+        if ($row == 33) {
             $fieldName = $this->getFieldNameByGold();
-        }else{
+        } else {
             $fieldName = $this->getFieldName();
         }
         foreach ($data as $k => $v) {
@@ -145,6 +150,7 @@ class WarehouseBillTGoodsForm extends WarehouseBillGoodsL
             'gold_weight' => 0,
             'pure_gold' => 0,
             'lncl_loss_weight' => 0,
+            'factory_gold_weight' => 0,
             'gold_amount' => 0,
             'main_stone_num' => 0,
             'main_stone_weight' => 0,
@@ -190,6 +196,7 @@ class WarehouseBillTGoodsForm extends WarehouseBillGoodsL
                 $total['gold_weight'] = bcadd($total['gold_weight'], $good->gold_weight, 3);
                 $total['pure_gold'] = bcadd($total['pure_gold'], $good->pure_gold, 3);
                 $total['lncl_loss_weight'] = bcadd($total['lncl_loss_weight'], $good->lncl_loss_weight, 3);
+                $total['factory_gold_weight'] = bcadd($total['factory_gold_weight'], $good->factory_gold_weight, 3);
                 $total['gold_amount'] = bcadd($total['gold_amount'], $good->gold_amount, 3);
                 $total['main_stone_num'] = bcadd($total['main_stone_num'], $good->main_stone_num);
                 $total['main_stone_weight'] = bcadd($total['main_stone_weight'], $good->main_stone_weight, 3);
@@ -1843,25 +1850,25 @@ class WarehouseBillTGoodsForm extends WarehouseBillGoodsL
 //        }
         //验证石料编号格式
         $pattern = '/^[A-Za-z0-9\-]+$/';
-        if($form->main_stone_sn && !preg_match($pattern, $form->main_stone_sn)){
+        if ($form->main_stone_sn && !preg_match($pattern, $form->main_stone_sn)) {
             $result['error'] = false;
             $msg[] = "主石编号格式有误";
         }
-        if($form->second_stone_sn1 && !preg_match($pattern, $form->second_stone_sn1)){
+        if ($form->second_stone_sn1 && !preg_match($pattern, $form->second_stone_sn1)) {
             $result['error'] = false;
             $msg[] = "副石1编号格式有误";
         }
-        if($form->second_stone_sn2 && !preg_match($pattern, $form->second_stone_sn2)){
+        if ($form->second_stone_sn2 && !preg_match($pattern, $form->second_stone_sn2)) {
             $result['error'] = false;
             $msg[] = "副石2编号格式有误";
         }
-        if($form->second_stone_sn3 && !preg_match($pattern, $form->second_stone_sn3)){
+        if ($form->second_stone_sn3 && !preg_match($pattern, $form->second_stone_sn3)) {
             $result['error'] = false;
             $msg[] = "副石3编号格式有误";
         }
 
         if (!empty($msg)) {
-            $result['msg'] = implode('】,【', $msg)."[条码号=".$form->goods_id."]";
+            $result['msg'] = implode('】,【', $msg) . "[条码号=" . $form->goods_id . "]";
         }
         return $result;
     }
@@ -1883,7 +1890,7 @@ class WarehouseBillTGoodsForm extends WarehouseBillGoodsL
             || bccomp($form->parts_amount, 0, 5) == 1) {
             $form->parts_way = PeiJianWayEnum::FACTORY;
             $saveData['parts_way'] = PeiJianWayEnum::FACTORY;
-        }elseif(bccomp($form->parts_gold_weight, 0, 5) != 1
+        } elseif (bccomp($form->parts_gold_weight, 0, 5) != 1
             && bccomp($form->parts_price, 0, 5) != 1
             && bccomp($form->parts_amount, 0, 5) != 1) {
             $form->parts_way = PeiJianWayEnum::NO_PEI;
@@ -1895,5 +1902,217 @@ class WarehouseBillTGoodsForm extends WarehouseBillGoodsL
             }
         }
         return [$form, $saveData];
+    }
+
+    /**
+     *
+     * 列是否隐藏
+     * @param string $field
+     * @param WarehouseBillTForm $form
+     * @return bool
+     * @throws
+     */
+    public function isVisible($form, $field)
+    {
+        $is_visible = false;
+        $billL = WarehouseBillL::findOne($form->id);
+        $show_basic = $billL->show_basic ?? 0;
+        if ($show_basic == IsHiddenEnum::NO
+            && in_array($field, $this->getBasicField())) {
+            $is_visible = true;
+        }
+        $show_attr = $billL->show_attr ?? 0;
+        if ($show_attr == IsHiddenEnum::NO
+            && in_array($field, $this->getAttrField())) {
+            $is_visible = true;
+        }
+        $show_gold = $billL->show_gold ?? 0;
+        if ($show_gold == IsHiddenEnum::NO
+            && in_array($field, $this->getGoldField())) {
+            $is_visible = true;
+        }
+        $show_main_stone = $billL->show_main_stone ?? 0;
+        if ($show_main_stone == IsHiddenEnum::NO
+            && in_array($field, $this->getMainStoneField())) {
+            $is_visible = true;
+        }
+        $show_second_stone1 = $billL->show_second_stone1 ?? 0;
+        if ($show_second_stone1 == IsHiddenEnum::NO
+            && in_array($field, $this->getSecondStone1Field())) {
+            $is_visible = true;
+        }
+        $show_second_stone2 = $billL->show_second_stone2 ?? 0;
+        if ($show_second_stone2 == IsHiddenEnum::NO
+            && in_array($field, $this->getSecondStone2Field())) {
+            $is_visible = true;
+        }
+        $show_second_stone3 = $billL->show_second_stone3 ?? 0;
+        if ($show_second_stone3 == IsHiddenEnum::NO
+            && in_array($field, $this->getSecondStone3Field())) {
+            $is_visible = true;
+        }
+        $show_parts = $billL->show_parts ?? 0;
+        if ($show_parts == IsHiddenEnum::NO
+            && in_array($field, $this->getPartsField())) {
+            $is_visible = true;
+        }
+        $show_fee = $billL->show_fee ?? 0;
+        if ($show_fee == IsHiddenEnum::NO
+            && in_array($field, $this->getFeeField())) {
+            $is_visible = true;
+        }
+        $show_price = $billL->show_price ?? 0;
+        if ($show_price == IsHiddenEnum::NO
+            && in_array($field, $this->getPriceField())) {
+            $is_visible = true;
+        }
+        $goods_type = $billL->goods_type ?? 0;
+        if ($goods_type == GoodsTypeEnum::PlainGold
+            && in_array($field, $this->getPlainGoldField())) {
+            $is_visible = true;
+        }
+        return $is_visible;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getBasicField()
+    {
+        $fieldName = [
+            'goods_image', 'style_cate_id', 'product_type_id', 'auto_goods_id', 'goods_id', 'style_sn', 'goods_name',
+            'qiban_sn', 'to_warehouse_id', 'goods_num', 'front_operation',
+
+        ];
+        return $fieldName ?? [];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getAttrField()
+    {
+        $fieldName = [
+            'material', 'material_type', 'material_color', 'finger_hk', 'finger', 'length', 'chain_long',
+            'product_size', 'xiangkou', 'kezi', 'chain_type', 'cramp_ring', 'talon_head_type', 'goods_color'
+        ];
+        return $fieldName ?? [];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getGoldField()
+    {
+        $fieldName = [
+            'goods_name1', 'peiliao_way', 'suttle_weight', 'gold_weight', 'gold_loss', 'lncl_loss_weight', 'gold_price',
+            'gold_amount', 'pure_gold_rate', 'pure_gold', 'gross_weight', 'factory_gold_weight',
+        ];
+        return $fieldName ?? [];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getMainStoneField()
+    {
+        $fieldName = [
+            'goods_name2', 'main_pei_type', 'main_stone_sn', 'main_stone_type', 'main_stone_num', 'main_stone_weight',
+            'main_stone_price', 'main_stone_amount', 'main_stone_shape', 'main_stone_color',
+            'main_stone_clarity', 'main_stone_cut', 'main_stone_polish', 'main_stone_symmetry', 'main_stone_fluorescence',
+            'main_stone_colour', 'main_cert_id', 'main_cert_type'
+        ];
+        return $fieldName ?? [];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getSecondStone1Field()
+    {
+        $fieldName = [
+            'goods_name3', 'second_pei_type', 'second_stone_type1', 'second_stone_sn1', 'second_stone_num1', 'second_stone_weight1',
+            'second_stone_price1', 'second_stone_amount1', 'second_stone_shape1', 'second_stone_color1',
+            'second_stone_clarity1', 'second_stone_cut1', 'second_stone_colour1', 'second_stone_size1',
+            'second_cert_id1',
+        ];
+        return $fieldName ?? [];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getSecondStone2Field()
+    {
+        $fieldName = [
+            'goods_name4', 'second_pei_type2', 'second_stone_type2', 'second_stone_sn2', 'second_stone_num2', 'second_stone_weight2',
+            'second_stone_price2', 'second_stone_amount2', 'second_stone_color2', 'second_stone_clarity2',
+            'second_stone_shape2', 'second_stone_colour2', 'second_stone_size2', 'second_cert_id2',
+        ];
+        return $fieldName ?? [];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getSecondStone3Field()
+    {
+        $fieldName = [
+            'goods_name5', 'second_pei_type3', 'second_stone_type3', 'second_stone_sn3', 'second_stone_num3', 'second_stone_weight3',
+            'second_stone_price3', 'second_stone_amount3', 'second_stone_color3', 'second_stone_clarity3', 'stone_remark',
+        ];
+        return $fieldName ?? [];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getPartsField()
+    {
+        $fieldName = [
+            'goods_name6', 'parts_way', 'parts_type', 'parts_material', 'parts_num', 'parts_gold_weight', 'parts_price', 'parts_amount',
+        ];
+        return $fieldName ?? [];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getFeeField()
+    {
+        $fieldName = [
+            'goods_name7', 'peishi_weight', 'peishi_gong_fee', 'peishi_fee', 'parts_fee', 'gong_fee', 'piece_fee',
+            'xiangqian_craft', 'second_stone_fee1', 'second_stone_fee2', 'second_stone_fee3', 'xianqian_fee',
+            'biaomiangongyi', 'biaomiangongyi_fee', 'fense_fee', 'penlasha_fee', 'lasha_fee', 'bukou_fee',
+            'templet_fee', 'tax_fee', 'tax_amount', 'cert_fee', 'other_fee', 'basic_gong_fee', 'peishi_num',
+            'extra_stone_fee', 'total_gong_fee', 'xianqian_price',
+        ];
+        return $fieldName ?? [];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getPriceField()
+    {
+        $fieldName = [
+            'goods_name8', 'factory_cost', 'cost_price', 'cost_amount', 'markup_rate', 'market_price',
+            'is_inlay', 'is_wholesale', 'factory_mo', 'pay_status', 'style_sex', 'style_channel_id', 'remark',
+        ];
+        return $fieldName ?? [];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getPlainGoldField()
+    {
+        $fieldName = [
+            'goods_id', 'style_sn', 'goods_name', 'qiban_sn', 'to_warehouse_id', 'material_type', 'material_color', 'goods_num', 'finger_hk', 'finger', 'length', 'product_size', 'chain_type', 'cramp_ring',
+            'peiliao_way', 'gold_weight', 'gold_price', 'gold_amount',
+            'gong_fee', 'piece_fee', 'basic_gong_fee', 'biaomiangongyi', 'biaomiangongyi_fee', 'templet_fee', 'tax_fee', 'tax_amount', 'cert_fee', 'other_fee',
+            'main_cert_type', 'factory_cost', 'cost_amount', 'markup_rate', 'remark',
+        ];
+        return $fieldName ?? [];
     }
 }

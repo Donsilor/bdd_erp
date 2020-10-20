@@ -2,18 +2,21 @@
 
 namespace addons\Warehouse\services;
 
+use addons\Warehouse\common\enums\GoodsTypeEnum;
 use Yii;
 use common\components\Service;
 use common\helpers\SnHelper;
+use common\helpers\ArrayHelper;
 use addons\Warehouse\common\models\WarehouseGoods;
 use addons\Warehouse\common\models\WarehouseBill;
+use addons\Warehouse\common\models\WarehouseBillL;
 use addons\Warehouse\common\models\WarehouseBillGoodsL;
 use addons\Warehouse\common\models\WarehouseStone;
 use addons\Warehouse\common\forms\WarehouseBillTForm;
 use addons\Warehouse\common\forms\WarehouseBillTGoodsForm;
 use addons\Style\common\models\Style;
 use addons\Style\common\models\Qiban;
-use addons\Style\common\models\AttributeSpec;
+use addons\Style\common\models\StyleAttribute;
 use addons\Warehouse\common\enums\PeiJianWayEnum;
 use addons\Warehouse\common\enums\PeiLiaoWayEnum;
 use addons\Warehouse\common\enums\PeiShiWayEnum;
@@ -188,6 +191,15 @@ class WarehouseBillTService extends Service
             if (false === $res) {
                 throw new \Exception("创建收货单据明细失败2");
             }
+        }
+
+        //创建收货单附属表
+        $billT = WarehouseBillL::findOne($form->bill_id);
+        $billT = $billT ?? new WarehouseBillL();
+        $billT->id = $form->bill_id;
+        $billT->goods_type = $form->goods_type ?? GoodsTypeEnum::All;
+        if (false === $billT->save()) {
+            throw new \Exception($this->getError($billT));
         }
 
         $this->warehouseBillTSummary($form->bill_id);
@@ -1003,7 +1015,7 @@ class WarehouseBillTService extends Service
             }
             $gong_fee = $form->formatValue($goods['gong_fee'] ?? 0, 0) ?? 0;//克工费
             $piece_fee = $form->formatValue($goods['piece_fee'] ?? 0, 0) ?? 0;//件工费
-            $basic_gong_fee = $form->formatValue($goods['basic_gong_fee'], 0) ?? 0;//基本工费
+            $basic_gong_fee = $form->formatValue($goods['basic_gong_fee'] ?? 0, 0) ?? 0;//基本工费
 //            if (!empty($gong_fee) && !empty($piece_fee)) {
 //                $flag = false;
 //                $error[$i][] = "[克/工费]和[件/工费]只能填其一";
@@ -1289,8 +1301,6 @@ class WarehouseBillTService extends Service
         } else {
             $saveData = array_reverse($saveData);//倒序
         }
-//        echo '<pre>';
-//        var_dump($saveData);die;
         $value = [];
         $key = array_keys($saveData[0]);
         foreach ($saveData as $item) {
@@ -1313,6 +1323,15 @@ class WarehouseBillTService extends Service
             if (false === $res) {
                 throw new \Exception("创建收货单据明细失败2");
             }
+        }
+
+        //同步收货单附属表
+        $billT = WarehouseBillL::findOne($form->bill_id);
+        $billT = $billT ?? new WarehouseBillL();
+        $billT->id = $form->bill_id;
+        $billT->goods_type = $form->goods_type;
+        if(false === $billT->save()){
+            throw new \Exception($this->getError($billT));
         }
 
         //同步更新价格
@@ -1347,18 +1366,17 @@ class WarehouseBillTService extends Service
             if ($result['error'] == false) {
                 throw new \Exception($result['msg']);
             }
-            if ($goods->style_sn && $form->attr_id) {
-            //if ($goods->style_sn && $form->attr_id) {
-                $attr = AttributeSpec::find()->where(['style_cate_id' => $form->style_cate_id, 'attr_id' => $form->attr_id, 'status' => StatusEnum::ENABLED])->count();
-                    //var_dump($attr);die;
-                    //$valueList = $form->getAttrValueListByStyle($goods->style_sn, $form->attr_id);
-                    //if ($valueList && in_array($value, array_keys($valueList))) {
-                if ($attr){
+            if ($goods->style_id && $form->attr_id) {
+                $attrList = StyleAttribute::find()->select(['attr_id'])->where(['style_id' => $goods->style_id, 'status' => StatusEnum::ENABLED])->asArray()->all();
+                $attrList = ArrayHelper::getColumn($attrList, 'attr_id') ?? [];
+                if ($attrList
+                    && in_array($value, array_keys($attrList))) {
                     $updateIds[] = $id;
-                    //}
                 } else {
                     $updateIds[] = $id;
                 }
+            } else {
+                $updateIds[] = $id;
             }
             $form->bill_id = $goods->bill_id;
         }
@@ -1370,7 +1388,7 @@ class WarehouseBillTService extends Service
             $this->syncUpdatePriceAll(null, $updateIds);
             $this->WarehouseBillTSummary($form->bill_id);
         }
-        if($updateData){
+        if ($updateData) {
             foreach ($updateData as $id => $data) {
                 $goods = WarehouseBillTGoodsForm::findOne(['id' => $id]);
                 $goods->attributes = $data;
@@ -1462,6 +1480,20 @@ class WarehouseBillTService extends Service
                 $form->pure_gold_rate = 0;
             }
             return bcmul($this->calculateLossWeight($form), ($form->pure_gold_rate / 100), 5) ?? 0;
+        }
+        return 0;
+    }
+
+    /**
+     * 工厂金料总重(g):【①若配料类型：来料加工，则取值：金重，②若；非来料加工，则显示：0】
+     * @param WarehouseBillTGoodsForm $form
+     * @return integer
+     * @throws
+     */
+    public function calculateFactoryGoldWeight($form)
+    {
+        if ($form->peiliao_way == PeiLiaoWayEnum::LAILIAO) {
+            return $this->calculateGoldWeight($form) ?? 0;
         }
         return 0;
     }
@@ -1861,6 +1893,7 @@ class WarehouseBillTService extends Service
             $form->lncl_loss_weight = $this->calculateLossWeight($form);//含耗重
         }
         $form->pure_gold = $this->calculatePureGold($form);//折足
+        $form->factory_gold_weight = $this->calculateFactoryGoldWeight($form);//工厂金料总重
         if (empty($form->auto_gold_amount) || bccomp($form->gold_amount, 0, 5) != 1) {
             if (bccomp($form->gold_amount, 0, 5) != 1) {
                 $form->auto_gold_amount = ConfirmEnum::NO;

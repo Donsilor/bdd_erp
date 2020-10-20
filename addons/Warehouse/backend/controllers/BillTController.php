@@ -7,6 +7,7 @@ use common\traits\Curd;
 use common\models\base\SearchModel;
 use addons\Warehouse\common\models\Warehouse;
 use addons\Warehouse\common\models\WarehouseBill;
+use addons\Warehouse\common\models\WarehouseBillL;
 use addons\Warehouse\common\models\WarehouseBillGoodsL;
 use addons\Warehouse\common\forms\WarehouseBillTForm;
 use addons\Warehouse\common\forms\WarehouseBillTGoodsForm;
@@ -14,6 +15,7 @@ use addons\Warehouse\common\enums\BillFixEnum;
 use addons\Warehouse\common\enums\BillStatusEnum;
 use addons\Warehouse\common\enums\BillTypeEnum;
 use addons\Warehouse\common\enums\PutInTypeEnum;
+use addons\Warehouse\common\enums\GoodsTypeEnum;
 use addons\Style\common\enums\LogTypeEnum;
 use addons\Style\common\models\ProductType;
 use addons\Style\common\models\StyleCate;
@@ -25,6 +27,7 @@ use common\helpers\ArrayHelper;
 use common\helpers\StringHelper;
 use common\helpers\ExcelHelper;
 use common\helpers\PageHelper;
+use common\helpers\ResultHelper;
 use common\helpers\Url;
 use yii\web\UploadedFile;
 
@@ -56,11 +59,11 @@ class BillTController extends BaseController
             'relations' => [
                 'creator' => ['username'],
                 'auditor' => ['username'],
-
+                'billL' => ['goods_type'],
             ]
         ]);
 
-        $dataProvider = $searchModel->search(\Yii::$app->request->queryParams, ['created_at', 'audit_time']);
+        $dataProvider = $searchModel->search(\Yii::$app->request->queryParams, ['created_at', 'audit_time', 'goods_type']);
         $created_at = $searchModel->created_at;
         if (!empty($created_at)) {
             $dataProvider->query->andFilterWhere(['>=', Warehousebill::tableName() . '.created_at', strtotime(explode('/', $created_at)[0])]);//起始时间
@@ -70,6 +73,10 @@ class BillTController extends BaseController
         if (!empty($audit_time)) {
             $dataProvider->query->andFilterWhere(['>=', Warehousebill::tableName() . '.audit_time', strtotime(explode('/', $audit_time)[0])]);//起始时间
             $dataProvider->query->andFilterWhere(['<', Warehousebill::tableName() . '.audit_time', (strtotime(explode('/', $audit_time)[1]) + 86400)]);//结束时间
+        }
+        $goods_type = $searchModel->goods_type;
+        if (!empty($goods_type)) {
+            $dataProvider->query->andWhere(['=', 'billL.goods_type', $goods_type]);
         }
         $dataProvider->query->andWhere(['>', Warehousebill::tableName() . '.status', -1]);
         $dataProvider->query->andWhere(['=', Warehousebill::tableName() . '.bill_type', $this->billType]);
@@ -126,6 +133,15 @@ class BillTController extends BaseController
                     $gModel->file = UploadedFile::getInstance($model, 'file');
                     if (!empty($gModel->file) && isset($gModel->file)) {
                         \Yii::$app->warehouseService->billT->uploadGoods($gModel);
+                    }else{
+                        //创建收货单附属表
+                        $billT = WarehouseBillL::findOne($model->id);
+                        $billT = $billT ?? new WarehouseBillL();
+                        $billT->id = $model->id;
+                        $billT->goods_type = $model->goods_type ?? GoodsTypeEnum::All;
+                        if(false === $billT->save()){
+                            throw new \Exception($this->getError($billT));
+                        }
                     }
                     $log_msg = "创建其它入库单{$model->bill_no}";
                 } else {
