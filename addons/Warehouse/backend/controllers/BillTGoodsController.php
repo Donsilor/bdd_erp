@@ -2,7 +2,7 @@
 
 namespace addons\Warehouse\backend\controllers;
 
-use addons\Warehouse\common\enums\IsHiddenEnum;
+use addons\Warehouse\common\enums\GoodsTypeEnum;
 use Yii;
 use common\traits\Curd;
 use common\helpers\Url;
@@ -16,6 +16,7 @@ use addons\Warehouse\common\enums\BillStatusEnum;
 use addons\Warehouse\common\enums\BillTypeEnum;
 use addons\Warehouse\common\enums\PayMethodEnum;
 use addons\Warehouse\common\enums\PayTaxEnum;
+use addons\Warehouse\common\enums\IsHiddenEnum;
 use common\helpers\ArrayHelper;
 use common\helpers\ResultHelper;
 use yii\web\UploadedFile;
@@ -502,8 +503,16 @@ class BillTGoodsController extends BaseController
     public function actionAjaxHidden($id)
     {
         $this->modelClass = WarehouseBillL::class;
+        if(!$id){
+            return ResultHelper::json(404, 'ID不能为空');
+        }
         if (!($model = $this->modelClass::findOne($id))) {
-            return ResultHelper::json(404, '找不到数据');
+            $billT = WarehouseBillL::findOne($id);
+            $billT = $billT ?? new WarehouseBillL();
+            $billT->id = $id;
+            if(false === $billT->save()){
+                return ResultHelper::json(404, '找不到数据');
+            }
         }
         $params = Yii::$app->request->get();
         if (!$params['name'] || $params['value'] === "") {
