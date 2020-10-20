@@ -10,7 +10,7 @@ use Yii;
  * @property int $id 单据ID
  * @property string $total_factory_cost 工厂成本总计
  * @property string $total_pure_gold 折足重总计
- * @property int $is_gold 是否素金
+ * @property int $is_plain_gold 是否素金
  */
 class WarehouseBillL extends BaseModel
 {
@@ -29,7 +29,7 @@ class WarehouseBillL extends BaseModel
     {
         return [
             [['id'], 'required'],
-            [['id', 'is_gold'], 'integer'],
+            [['id', 'is_plain_gold'], 'integer'],
             [['total_factory_cost', 'total_pure_gold'], 'number'],
             [['id'], 'unique'],
         ];
@@ -44,7 +44,7 @@ class WarehouseBillL extends BaseModel
             'id' => '单据ID',
             'total_factory_cost' => '工厂成本总计',
             'total_pure_gold' => '折足重总计',
-            'is_gold' => '是否素金',
+            'is_plain_gold' => '是否素金',
         ];
     }
 }
