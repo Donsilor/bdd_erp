@@ -61,13 +61,13 @@ $this->params['breadcrumbs'][] = $this->title;
             [
                     'attribute'=>'order_time',
                     'value'=>function($model){
-                        return Yii::$app->formatter->asDatetime($model->order_time);
+                        return Yii::$app->formatter->asDate($model->order_time);
                      },
                     'filter' => \kartik\daterange\DateRangePicker::widget([    // 日期组件
                             'model' => $searchModel,
                             'attribute' => 'order_time',
                             'value' => $searchModel->order_time,
-                            'options' => ['readonly' => false,'class'=>'form-control','style'=>'background-color:#fff;width:150px;'],
+                            'options' => ['readonly' => false,'class'=>'form-control','style'=>'background-color:#fff;width:100px;'],
                             'pluginOptions' => [
                                     'format' => 'yyyy-mm-dd',
                                     'locale' => [

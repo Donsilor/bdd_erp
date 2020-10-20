@@ -167,7 +167,7 @@ class BillCGoodsController extends BaseController
         $goods_ids = Yii::$app->request->get('goods_ids');
         $message = Yii::$app->request->get('message');
         $billM = WarehouseBillCForm::findOne($bill_id);
-        $billM = $billM ?? new WarehouseBillCForm();
+        $billM = $billM ?? new WarehouseBillThForm();
         $billM->goods_ids = $goods_ids;
         if($search == 1){
             $valid_goods_ids = $billM->loadGoods();//查询校验
@@ -201,10 +201,11 @@ class BillCGoodsController extends BaseController
     public function actionEditAll()
     {
         $bill_id = Yii::$app->request->get('bill_id');
+
         $searchModel = new SearchModel([
             'model' => $this->modelClass,
             'scenario' => 'default',
-            'partialMatchAttributes' => ['goods_name', 'goods_remark'], // 模糊查询
+            'partialMatchAttributes' => [], // 模糊查询
             'defaultOrder' => [
                 'id' => SORT_DESC
             ],
@@ -225,38 +226,5 @@ class BillCGoodsController extends BaseController
         ]);
     }
 
-    /**
-     * 删除
-     *
-     * @param $id
-     * @return mixed
-     * @throws \Throwable
-     * @throws \yii\db\StaleObjectException
-     */
-    public function actionDelete($id)
-    {
-        $billGoods = $this->findModel($id);
-        $bill_id = $billGoods->bill_id;
-        $bill = WarehouseBill::find()->where(['id'=>$bill_id])->one();
-        try{
-            $trans = Yii::$app->db->beginTransaction();
-            //删除
-            $billGoods->delete();
-            //更新单据数量和金额
-            $bill->goods_num = Yii::$app->warehouseService->bill->sumGoodsNum($bill_id);
-            $bill->total_cost = Yii::$app->warehouseService->bill->sumCostPrice($bill_id);
-            $bill->total_sale = Yii::$app->warehouseService->bill->sumSalePrice($bill_id);
-            $bill->total_market = Yii::$app->warehouseService->bill->sumMarketPrice($bill_id);
-            $bill->save();
-
-            //更新库存表商品状态为库存
-            WarehouseGoods::updateAll(['goods_status'=>GoodsStatusEnum::IN_STOCK],['goods_id'=>$billGoods->goods_id]);
-            $trans->commit();
-            return $this->message("删除成功", $this->redirect(Yii::$app->request->referrer));
-        }catch (\Exception $e){
-            $trans->rollBack();
-            return $this->message($e->getMessage(), $this->redirect(Yii::$app->request->referrer), 'error');
-        }
-    }
 
 }

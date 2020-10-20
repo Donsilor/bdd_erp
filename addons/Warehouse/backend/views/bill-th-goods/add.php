@@ -267,7 +267,13 @@ $this->params['breadcrumbs'][] = $this->title;
                     var url = "<?= Url::buildUrl(\Yii::$app->request->url, [], ['goods_ids', 'message'])?>&goods_ids=" + data.data.valid_goods_ids + "&message=" + data.data.message;
                     console.log(url);
                     window.location.href = url;
-                }                
+                }
+                //if (parseInt(data.code) == 200) {
+                //    //$('#search_logs').html(data.message);//日志显示
+                //    window.location.href = "<?//= Url::buildUrl(\Yii::$app->request->url,[],['goods_ids', 'message'])?>//&goods_ids="+data.goods_ids+"message="+data.message;
+                //}else{
+                //    $('#search_logs').html(data.message);//日志显示
+                //}
             }
         });
     }

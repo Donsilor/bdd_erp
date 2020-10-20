@@ -89,6 +89,10 @@ return [
                         'route' => 'bill-c/index',
                     ],
                     [
+                        'title' => '其它退货单',
+                        'route' => 'bill-th/index',
+                    ],
+                    [
                         'title' => '货品调整单',
                         'route' => 'bill-a/index',
                     ],

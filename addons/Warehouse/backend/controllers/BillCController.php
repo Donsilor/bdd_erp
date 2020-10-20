@@ -66,16 +66,16 @@ class BillCController extends BaseController
         $dataProvider = $searchModel
             ->search(\Yii::$app->request->queryParams, ['created_at', 'audit_time']);
 
-        $created_at = $searchModel->created_at;
-        if (!empty($created_at)) {
-            $dataProvider->query->andFilterWhere(['>=', Warehousebill::tableName() . '.created_at', strtotime(explode('/', $created_at)[0])]);//起始时间
-            $dataProvider->query->andFilterWhere(['<', Warehousebill::tableName() . '.created_at', (strtotime(explode('/', $created_at)[1]) + 86400)]);//结束时间
+        if (!empty($searchModel->created_at)) {
+            $created_ats = explode('/', $searchModel->created_at);
+            $dataProvider->query->andFilterWhere(['>=', Warehousebill::tableName() . '.created_at', strtotime($created_ats[0])]);//起始时间
+            $dataProvider->query->andFilterWhere(['<', Warehousebill::tableName() . '.created_at', strtotime($created_ats[1]) + 86400]);//结束时间
         }
-
-        $audit_time = $searchModel->audit_time;
-        if (!empty($audit_time)) {
-            $dataProvider->query->andFilterWhere(['>=', Warehousebill::tableName() . '.audit_time', strtotime(explode('/', $audit_time)[0])]);//起始时间
-            $dataProvider->query->andFilterWhere(['<', Warehousebill::tableName() . '.audit_time', (strtotime(explode('/', $audit_time)[1]) + 86400)]);//结束时间
+        
+        if (!empty($searchModel->audit_time)) {
+            $audit_times = explode('/', $searchModel->audit_time);
+            $dataProvider->query->andFilterWhere(['>=', Warehousebill::tableName() . '.audit_time', strtotime($audit_times[0])]);//起始时间
+            $dataProvider->query->andFilterWhere(['<', Warehousebill::tableName() . '.audit_time', strtotime($audit_times[1]) + 86400]);//结束时间
         }
 
         $dataProvider->query->andWhere(['>', Warehousebill::tableName() . '.status', -1]);
