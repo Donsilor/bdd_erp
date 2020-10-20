@@ -197,7 +197,7 @@ class WarehouseBillTService extends Service
         $billT = WarehouseBillL::findOne($form->bill_id);
         $billT = $billT ?? new WarehouseBillL();
         $billT->id = $form->bill_id;
-        $billT->goods_type = $form->goods_type ?? GoodsTypeEnum::All;
+        $billT->goods_type = $form->goods_type ?? GoodsTypeEnum::SeikoStone;
         if (false === $billT->save()) {
             throw new \Exception($this->getError($billT));
         }
