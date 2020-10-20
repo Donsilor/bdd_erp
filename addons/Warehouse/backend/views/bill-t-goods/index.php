@@ -31,8 +31,8 @@ $params = $params ? "&" . http_build_query($params) : '';
     <?php echo Html::menuTab($tabList, $tab) ?>
     <div class="box-tools" style="float:right;margin-top:-40px; margin-right: 20px;">
         <?php
-//        echo Html::a('返回列表', ['bill-t/index'], ['class' => 'btn btn-white btn-xs']);
-//        echo '&nbsp;';
+        //        echo Html::a('返回列表', ['bill-t/index'], ['class' => 'btn btn-white btn-xs']);
+        //        echo '&nbsp;';
         if ($bill->bill_status == \addons\Warehouse\common\enums\BillStatusEnum::SAVE) {
             echo Html::create(['ajax-edit', 'bill_id' => $bill->id], '新增货品', [
                 'class' => 'btn btn-primary btn-xs',
@@ -40,11 +40,11 @@ $params = $params ? "&" . http_build_query($params) : '';
                 'data-target' => '#ajaxModal',
             ]);
             echo '&nbsp;';
-            echo Html::edit(['edit-all', 'bill_id' => $bill->id], '货品编辑', ['class' => 'btn btn-info btn-xs']);
+            echo Html::edit(['edit-all', 'bill_id' => $bill->id], '批量编辑', ['class' => 'btn btn-info btn-xs']);
             echo '&nbsp;';
         }
         if ($bill->bill_status == \addons\Warehouse\common\enums\BillStatusEnum::CONFIRM) {
-            echo Html::batchPopButton(['create-pay', 'bill_id' => $bill->id, 'check' => 1], '单据结算', [
+            echo Html::batchPopButton(['create-pay', 'bill_id' => $bill->id, 'check' => 1], '分批结算', [
                 'class' => 'btn btn-primary btn-xs',
                 'data-width' => '60%',
                 'data-height' => '60%',
@@ -65,10 +65,10 @@ $params = $params ? "&" . http_build_query($params) : '';
         }
         echo Html::button('明细导出', ['class' => 'btn btn-success btn-xs', 'onclick' => 'batchExport()',]);
         echo '&nbsp;';
-        echo Html::tag('span', '价格刷新', ["class" => "btn btn-warning btn-xs jsBatchStatus", "data-grid" => "grid", "data-url" => Url::to(['update-price']),]);
+        echo Html::tag('span', '价格刷新', ["class" => "btn btn-warning btn-xs jsBatchUpdate", "data-grid" => "grid", "data-url" => Url::to(['update-price']),]);
         echo '&nbsp;';
         if ($bill->bill_status == \addons\Warehouse\common\enums\BillStatusEnum::SAVE) {
-            echo Html::tag('span', '批量删除', ["class" => "btn btn-danger btn-xs jsBatchStatus", "data-grid" => "grid", "data-url" => Url::to(['batch-delete']),]);
+            echo Html::tag('span', '批量删除', ["class" => "btn btn-danger btn-xs jsBatchUpdate", "data-grid" => "grid", "data-url" => Url::to(['batch-delete']),]);
         }
         ?>
     </div>
@@ -217,15 +217,15 @@ $params = $params ? "&" . http_build_query($params) : '';
                             [
                                 'attribute' => 'goods_id',
                                 'format' => 'raw',
-                                'headerOptions' => ['id'=>'batch_copy_goods_id', 'class' => 'col-md-1', 'style' => 'background-color:#feeeed;'],
+                                'headerOptions' => ['id' => 'batch_copy_goods_id', 'class' => 'col-md-1', 'style' => 'background-color:#feeeed;'],
                                 'footerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#feeeed;'],
-                                'value' => function ($model, $key, $index, $widget) use($bill) {
+                                'value' => function ($model, $key, $index, $widget) use ($bill) {
                                     $widget->footer = $model->getAttributeLabel('goods_id');
                                     if ($model->goods_id) {
                                         //if($bill->bill_status == BillStatusEnum::CONFIRM){
                                         //    $model->goods_id = Html::a($model->goods_id, ['view', 'goods_id' => $model->goods_id, 'returnUrl' => Url::getReturnUrl()], ['class' => 'openContab', 'style' => "text-decoration:underline;color:#3c8dbc", 'id' => $model->goods_id]) . ' <i class="fa fa-copy" onclick="copy(\'' . $model->goods_id . '\')"></i>';
                                         //}else{
-                                            $model->goods_id = '<span id="goods_' . $model->goods_id . '">' . $model->goods_id . '</span> <i class="fa fa-copy" onclick="copy(\'goods_' . $model->goods_id . '\')"></i>';
+                                        $model->goods_id = '<span id="goods_' . $model->goods_id . '">' . $model->goods_id . '</span> <i class="fa fa-copy" onclick="copy(\'goods_' . $model->goods_id . '\')"></i>';
                                         //}
 
                                     }
@@ -2359,7 +2359,7 @@ $params = $params ? "&" . http_build_query($params) : '';
                                 'contentOptions' => ['style' => ['white-space' => 'nowrap']],
                                 'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#9b95c9;'],
                                 'footerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#9b95c9;'],
-                                'template' => '{edit} {delete} {show}',
+                                'template' => '{edit} {show} {delete}',
                                 'buttons' => [
                                     'edit' => function ($url, $model, $key) use ($bill) {
                                         if ($bill->bill_status == BillStatusEnum::SAVE) {
@@ -2402,12 +2402,9 @@ $params = $params ? "&" . http_build_query($params) : '';
         //默认全选
         $("input[name='id[]']").trigger("click");
 
-        //批量复制货号(文本)
+        //批量复制货号
         var button = '<span id="goods_ids" style="position: absolute; left: -1000000000px;"><?= $goods_ids ?></span><div class="btn btn-primary btn-xs" onclick="copy(\'goods_ids\')">批量复制 <i class="fa fa-copy"></i></div>';
         $("#batch_copy_goods_id > a").after(button);
-
-        //var bill_id = <?//= $bill->id ?>//;
-        //batchCopyGoodsId(bill_id, 'bill_t_goods_copy');
     });
 
     function batchExport() {
@@ -2419,37 +2416,42 @@ $params = $params ? "&" . http_build_query($params) : '';
         });
     }
 
-    ////批量复制单据货号
-    //function batchCopyGoodsId(bill_id, btnId) {
-    //    var client = new ZeroClipboard(document.getElementById(btnId));
-    //    var itemsId = "items_copy_" + btnId;
-    //    var div = '<div style="opacity:0.0;cursor: default;width:1px;height:1px;" ><textarea id="' + itemsId + '" redayonly="true"></textarea></div>';
-    //    var bool = false;
-    //    var url = "<?//= Url::to(['bill/batch-copy-goods-id'])?>//";
-    //    $.post(url, {'bill_id': bill_id}, function (data) {
-    //        client.on("ready", function (readyEvent) {
-    //            client.on("beforecopy", function (event) {
-    //                $('body').modalmanager('loading');
-    //            }),
-    //                client.on("copy", function (event) {
-    //                    var copy_text = data;
-    //                    event.clipboardData.setData("text/plain", copy_text);
-    //                }),
-    //                client.on("aftercopy", function (event) {
-    //                    $('.modal-scrollable').trigger('click');
-    //                    rfMsg('复制成功');
-    //                });
-    //        }),
-    //            client.on("error", function () {
-    //                ZeroClipboard.destroy();
-    //                $("#" + btn_id).on('click', function () {
-    //                    $(this).append(div);
-    //                    $("#" + itemsId).text(data);
-    //                    $("#" + itemsId).select();
-    //                    document.execCommand("Copy");
-    //                    rfMsg('复制成功');
-    //                });
-    //            });
-    //    });
-    //}
+    $(".jsBatchUpdate").click(function () {
+        let grid = $(this).attr('data-grid');
+        let url = $(this).attr('data-url');
+        let status = $(this).attr('data-value');
+        let text = $(this).text();
+        let ids = $("#" + grid).yiiGridView("getSelectedRows");
+        if (!url) {
+            url = "<?= Url::to(['ajax-batch-update'])?>";
+        }
+        if (ids == "" || !ids) {
+            rfInfo('未选中数据！', '');
+            return false;
+        }
+        appConfirm("确定要" + text + "吗?", '', function (code) {
+            switch (code) {
+                case "defeat":
+                    $.ajax({
+                        type: "post",
+                        url: url,
+                        dataType: "json",
+                        data: {
+                            ids: ids,
+                            status: status
+                        },
+                        success: function (data) {
+                            if (parseInt(data.code) !== 200) {
+                                rfAffirm(data.message);
+                            } else {
+                                //rfAffirm(data.message);
+                                window.location.reload();
+                            }
+                        }
+                    });
+                    break;
+                default:
+            }
+        })
+    });
 </script>

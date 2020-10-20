@@ -45,7 +45,7 @@ class StoneBillRkGoodsController extends BaseController
             'scenario' => 'default',
             'partialMatchAttributes' => ['gold_name', 'remark'], // 模糊查询
             'defaultOrder' => [
-                'id' => SORT_DESC
+                'id' => SORT_ASC
             ],
             'pageSize' => $this->pageSize,
             'relations' => [
@@ -165,38 +165,6 @@ class StoneBillRkGoodsController extends BaseController
 
 
 
-    /**
-     * ajax更新排序/状态
-     *
-     * @param $id
-     * @return array
-     */
-    public function actionAjaxUpdate($id)
-    {
-        if (!($model = $this->modelClass::findOne($id))) {
-            return ResultHelper::json(404, '找不到数据');
-        }
-        $params = Yii::$app->request->get();
-        $keys = array_keys($params);  //$model->attributes();
-        try {
-            $trans = \Yii::$app->db->beginTransaction();
-            $model->attributes = ArrayHelper::filter($params, $keys);
-            $result = $model->updateFromValidate($model);
-            if($result['error'] == false){
-                throw new \Exception($result['msg']);
-            }
-            if (!$model->save()) {
-                throw new \Exception("保存失败");
-            }
-            \Yii::$app->warehouseService->billT->syncUpdatePrice($model);
-            \Yii::$app->warehouseService->billT->WarehouseBillTSummary($model->bill_id);
-            $trans->commit();
-            return ResultHelper::json(200, '修改成功');
-        } catch (\Exception $e) {
-            $trans->rollBack();
-            return ResultHelper::json(422, $e->getMessage());
-        }
-    }
 
     /**
      *
@@ -235,17 +203,12 @@ class StoneBillRkGoodsController extends BaseController
                     if (false === $goods->validate()) {
                         throw new \Exception($this->getError($goods));
                     }
-                    $result = $model->updateFromValidate($goods);
-                    if($result['error'] == false){
-                        throw new \Exception($result['msg']);
-                    }
-                    if (false === $goods->save(true, [$name])) {
+
+                    if (false === $goods->save()) {
                         throw new \Exception($this->getError($goods));
                     }
-                    $model->bill_id = $goods->bill_id;
-                    \Yii::$app->warehouseService->billT->syncUpdatePrice($goods);
                 }
-                \Yii::$app->warehouseService->billT->WarehouseBillTSummary($model->bill_id);
+                \Yii::$app->warehouseService->stoneBill->stoneBillSummary($model->bill_id);
                 $trans->commit();
                 Yii::$app->getSession()->setFlash('success', '保存成功');
                 return ResultHelper::json(200, '保存成功');//['url'=>Url::to(['edit-all', 'bill_id' => $model->bill_id])."#suttle_weight"]

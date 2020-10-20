@@ -67,8 +67,7 @@ class WarehouseStoneBillGoods extends BaseModel
             [['stone_norms'], 'string', 'max' => 100],
             [['remark'], 'string', 'max' => 255],
             [['supplier_id','creator_id','auditor_id'], 'safe'],
-            [['cost_price'], 'parseCostPriceScope'],
-            [['carat'], 'parseCaratScope'],
+
         ];
     }
 
@@ -114,19 +113,7 @@ class WarehouseStoneBillGoods extends BaseModel
         ];
     }
 
-    public function parseCostPriceScope(){
-        $stone_price = $this->stone_price ?? 0;
-        $stone_weight = $this->stone_weight ?? 0;
-        $this->cost_price = $stone_price * $stone_weight;
-        return $this->cost_price;
-    }
 
-    public function parseCaratScope(){
-        $stone_weight = $this->stone_weight ?? 0;
-        $stone_num = $this->stone_num ?? 1;
-        $this->carat = round($stone_weight / $stone_num,3);
-        return $this->carat;
-    }
 
 
     /**

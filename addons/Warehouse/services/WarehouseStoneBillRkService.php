@@ -46,7 +46,7 @@ class WarehouseStoneBillRkService extends Service
                 $stoneM = new WarehouseStone();
                 $stone_sn = $billGoods->stone_sn;
                 $stoneData = [
-                    'stone_sn' =>(string) rand(10000000000,99999999999),//临时
+                    'stone_sn' => $stone_sn ?? (string) rand(10000000000,99999999999),//临时
                     'stone_name' => $billGoods->stone_name,
                     'stone_status' => StoneStatusEnum::IN_STOCK,
                     'style_sn' => $billGoods->style_sn,

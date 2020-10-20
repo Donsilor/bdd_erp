@@ -21,10 +21,11 @@ class WarehouseService extends Service
      * 非禁用仓库列表
      * @return array|\yii\db\ActiveRecord[]
      */
-    public static function getDropDown()
+    public static function getDropDown($where=[])
     {
         $models = Warehouse::find()
             ->where(['>', 'status', StatusEnum::DISABLED])
+            ->andWhere($where)
             ->select(['id', 'name'])
             ->orderBy('sort asc')
             ->asArray()

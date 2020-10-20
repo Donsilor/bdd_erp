@@ -250,5 +250,32 @@ class PurchaseApplyService extends Service
 
 
 
+    public function confirmAfter($apply_id){
+        $count = PurchaseApplyGoods::find()->where(['and',['=','apply_id',$apply_id],['<>','confirm_status',ApplyConfirmEnum::CONFIRM]])->count();
+        if($count == 0){
+            $model = PurchaseApply::find()->where(['id'=>$apply_id])->one();
+            $model->apply_status = ApplyStatusEnum::CONFIRM;
+            if(false === $model->save(true,['apply_status'])){
+                throw new \Exception($this->getError($model));
+            }
+            $flowS = Yii::$app->services->flowType->createFlow(TargetTypeEnum::PURCHASE_APPLY_S_MENT,$apply_id,$model->apply_sn);
+            //日志
+            $log = [
+                'apply_id' => $model->id,
+                'apply_sn' => $model->apply_sn,
+                'log_type' => LogTypeEnum::SYSTEM,
+                'log_module' => "单据审核",
+                'log_msg' => "业务部提交申请到商品部,审批编号:".$flowS->id,
+            ];
+            Yii::$app->purchaseService->apply->createApplyLog($log);
+
+        }
+    }
+
+
+
+
+
+
 
 }

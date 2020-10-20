@@ -45,6 +45,7 @@ class PageHelper {
             $start = ($page - 1) * $pagesize;
             $list = $query->offset($start)->limit($pagesize)->asArray()->all();
             $lists = array_merge($lists,$list);
+            unset($list);
         }
         return $lists;
     }

@@ -1,14 +1,10 @@
 <?php
 
 use addons\Warehouse\common\enums\BillStatusEnum;
-use addons\Purchase\common\enums\ReceiptGoodsStatusEnum;
-use common\enums\WhetherEnum;
+
 use common\helpers\Html;
-use common\helpers\ImageHelper;
-use common\helpers\Url;
-use kartik\select2\Select2;
+use \addons\Style\common\enums\AttrIdEnum;
 use yii\grid\GridView;
-use kartik\daterange\DateRangePicker;
 
 /* @var $this yii\web\View */
 /* @var $dataProvider yii\data\ActiveDataProvider */
@@ -138,17 +134,19 @@ $params = $params ? "&".http_build_query($params) : '';
 
                             [
                                 'attribute' => 'stone_num',
-                                'headerOptions' => ['width'=>60],
+                                'format' => 'raw',
+                                'headerOptions' => ['width'=>60,'class'=>'batch_full', 'attr-name' => 'stone_num'],
                                 'value' => function ($model, $key, $index){
-                                    return $model->stone_num ?? 0;
+                                    return Html::ajaxInput('stone_num', $model->stone_num ?? 0, ['data-id' => $model->id]);
                                 },
                                 'filter' => false,
                             ],
                             [
                                 'attribute' => 'stone_weight',
-                                'headerOptions' => ['width'=>60],
+                                'format' => 'raw',
+                                'headerOptions' => ['width'=>60, 'class'=>'batch_full', 'attr-name' => 'stone_weight'],
                                 'value' => function ($model, $key, $index){
-                                    return $model->stone_weight ?? 0;
+                                    return Html::ajaxInput('stone_weight', $model->stone_weight ?? 0, ['data-id' => $model->id]);
                                 },
                                 'filter' => false,
                             ],
@@ -162,9 +160,10 @@ $params = $params ? "&".http_build_query($params) : '';
                             ],
                             [
                                 'attribute' => 'stone_price',
-                                'headerOptions' => ['width'=>60],
+                                'format' => 'raw',
+                                'headerOptions' => ['width'=>60, 'class'=>'batch_full', 'attr-name' => 'stone_price'],
                                 'value' => function ($model, $key, $index) {
-                                    return $model->stone_price ?? 0;
+                                    return Html::ajaxInput('stone_price',$model->stone_price ?? 0, ['data-id' => $model->id]);
                                 },
                                 'filter' => false,
                             ],
@@ -178,20 +177,21 @@ $params = $params ? "&".http_build_query($params) : '';
                             ],
                             [
                                 'attribute' => 'incl_tax_price',
-                                'headerOptions' => ['width'=>60],
+                                'format' => 'raw',
+                                'headerOptions' => ['width'=>60, 'class'=>'batch_full', 'attr-name' => 'incl_tax_price'],
                                 'value' => function ($model, $key, $index){
-                                    return $model->incl_tax_price ?? 0;
+                                    return Html::ajaxInput('incl_tax_price', $model->incl_tax_price ?? 0, ['data-id' => $model->id]);
                                 },
                                 'filter' => false,
                             ],
                             [
                                 'attribute' => 'cert_type',
                                 'format' => 'raw',
-                                'headerOptions' => ['width' => 60],
+                                'headerOptions' => ['width' => 60, 'class'=>'cert_type','attr-name' => 'color','attr-id' => AttrIdEnum::DIA_CERT_TYPE],
                                 'value' => function ($model, $key, $index) {
-                                    return Yii::$app->attr->valueName($model->cert_type)??"";
+                                    return Html::ajaxSelect($model, 'cert_type', Yii::$app->attr->valueMap(AttrIdEnum::DIA_CERT_TYPE), ['data-id' => $model->id, 'prompt' => '请选择']);
                                 },
-                                'filter' => Html::activeDropDownList($searchModel, 'cert_type',Yii::$app->attr->valueMap(\addons\Style\common\enums\AttrIdEnum::DIA_CERT_TYPE), [
+                                'filter' => Html::activeDropDownList($searchModel, 'cert_type',Yii::$app->attr->valueMap(AttrIdEnum::DIA_CERT_TYPE), [
                                     'prompt' => '全部',
                                     'class' => 'form-control',
                                     'style' => 'width:60px;'
@@ -199,9 +199,10 @@ $params = $params ? "&".http_build_query($params) : '';
                             ],
                             [
                                 'attribute' => 'cert_id',
-                                'headerOptions' => ['width'=>60],
+                                'format' => 'raw',
+                                'headerOptions' => ['width'=>60, 'class'=>'batch_full', 'attr-name' => 'cert_id'],
                                 'value' => function ($model, $key, $index){
-                                    return $model->cert_id ?? '';
+                                    return Html::ajaxInput('cert_id', $model->cert_id ?? '', ['data-id' => $model->id]);
                                 },
                                 'filter' => false,
                             ],
@@ -212,7 +213,7 @@ $params = $params ? "&".http_build_query($params) : '';
                                 'value' => function ($model, $key, $index) {
                                     return Yii::$app->attr->valueName($model->shape)??"";
                                 },
-                                'filter' => Html::activeDropDownList($searchModel, 'shape',Yii::$app->attr->valueMap(\addons\Style\common\enums\AttrIdEnum::DIA_SHAPE), [
+                                'filter' => Html::activeDropDownList($searchModel, 'shape',Yii::$app->attr->valueMap(AttrIdEnum::DIA_SHAPE), [
                                     'prompt' => '全部',
                                     'class' => 'form-control',
                                     'style' => 'width:60px;'
@@ -221,11 +222,11 @@ $params = $params ? "&".http_build_query($params) : '';
                             [
                                 'attribute' => 'color',
                                 'format' => 'raw',
-                                'headerOptions' => ['width' => 60],
+                                'headerOptions' => ['width' => 60, 'class'=>'batch_select_full','attr-name' => 'color','attr-id' => AttrIdEnum::DIA_COLOR],
                                 'value' => function ($model, $key, $index) {
-                                    return Yii::$app->attr->valueName($model->color)??"";
+                                    return Html::ajaxSelect($model, 'color', Yii::$app->attr->valueMap(AttrIdEnum::DIA_COLOR), ['data-id' => $model->id, 'prompt' => '请选择']);
                                 },
-                                'filter' => Html::activeDropDownList($searchModel, 'color',Yii::$app->attr->valueMap(\addons\Style\common\enums\AttrIdEnum::DIA_COLOR), [
+                                'filter' => Html::activeDropDownList($searchModel, 'color',Yii::$app->attr->valueMap(AttrIdEnum::DIA_COLOR), [
                                     'prompt' => '全部',
                                     'class' => 'form-control',
                                     'style' => 'width:60px;'
@@ -234,11 +235,11 @@ $params = $params ? "&".http_build_query($params) : '';
                             [
                                 'attribute' => 'clarity',
                                 'format' => 'raw',
-                                'headerOptions' => ['width' => 60],
+                                'headerOptions' => ['width' => 60,  'class'=>'batch_select_full','attr-name' => 'clarity','attr-id' => AttrIdEnum::DIA_CLARITY],
                                 'value' => function ($model, $key, $index) {
-                                    return Yii::$app->attr->valueName($model->clarity)??"";
+                                    return Html::ajaxSelect($model, 'clarity', Yii::$app->attr->valueMap(AttrIdEnum::DIA_CLARITY), ['data-id' => $model->id, 'prompt' => '请选择']);
                                 },
-                                'filter' => Html::activeDropDownList($searchModel, 'clarity',Yii::$app->attr->valueMap(\addons\Style\common\enums\AttrIdEnum::DIA_CLARITY), [
+                                'filter' => Html::activeDropDownList($searchModel, 'clarity',Yii::$app->attr->valueMap(AttrIdEnum::DIA_CLARITY), [
                                     'prompt' => '全部',
                                     'class' => 'form-control',
                                     'style' => 'width:60px;'
@@ -247,11 +248,11 @@ $params = $params ? "&".http_build_query($params) : '';
                             [
                                 'attribute' => 'cut',
                                 'format' => 'raw',
-                                'headerOptions' => ['width' => 60],
+                                'headerOptions' => ['width' => 60, 'class'=>'batch_select_full','attr-name' => 'cut','attr-id' => AttrIdEnum::DIA_CUT],
                                 'value' => function ($model, $key, $index) {
-                                    return Yii::$app->attr->valueName($model->cut)??"";
+                                    return Html::ajaxSelect($model, 'cut', Yii::$app->attr->valueMap(AttrIdEnum::DIA_CUT), ['data-id' => $model->id, 'prompt' => '请选择']);
                                 },
-                                'filter' => Html::activeDropDownList($searchModel, 'cut',Yii::$app->attr->valueMap(\addons\Style\common\enums\AttrIdEnum::DIA_CUT), [
+                                'filter' => Html::activeDropDownList($searchModel, 'cut',Yii::$app->attr->valueMap(AttrIdEnum::DIA_CUT), [
                                     'prompt' => '全部',
                                     'class' => 'form-control',
                                     'style' => 'width:60px;'
@@ -260,11 +261,11 @@ $params = $params ? "&".http_build_query($params) : '';
                             [
                                 'attribute' => 'symmetry',
                                 'format' => 'raw',
-                                'headerOptions' => ['width' => 60],
+                                'headerOptions' => ['width' => 60, 'class'=>'batch_select_full','attr-name' => 'symmetry','attr-id' => AttrIdEnum::DIA_SYMMETRY],
                                 'value' => function ($model, $key, $index) {
-                                    return Yii::$app->attr->valueName($model->symmetry)??"";
+                                    return Html::ajaxSelect($model, 'symmetry', Yii::$app->attr->valueMap(AttrIdEnum::DIA_SYMMETRY), ['data-id' => $model->id, 'prompt' => '请选择']);
                                 },
-                                'filter' => Html::activeDropDownList($searchModel, 'symmetry',Yii::$app->attr->valueMap(\addons\Style\common\enums\AttrIdEnum::DIA_SYMMETRY), [
+                                'filter' => Html::activeDropDownList($searchModel, 'symmetry',Yii::$app->attr->valueMap(AttrIdEnum::DIA_SYMMETRY), [
                                     'prompt' => '全部',
                                     'class' => 'form-control',
                                     'style' => 'width:60px;'
@@ -273,11 +274,11 @@ $params = $params ? "&".http_build_query($params) : '';
                             [
                                 'attribute' => 'polish',
                                 'format' => 'raw',
-                                'headerOptions' => ['width' => 60],
+                                'headerOptions' => ['width' => 60, 'class'=>'batch_select_full','attr-name' => 'polish','attr-id' => AttrIdEnum::DIA_POLISH],
                                 'value' => function ($model, $key, $index) {
-                                    return Yii::$app->attr->valueName($model->polish)??"";
+                                    return Html::ajaxSelect($model, 'polish', Yii::$app->attr->valueMap(AttrIdEnum::DIA_POLISH), ['data-id' => $model->id, 'prompt' => '请选择']);
                                 },
-                                'filter' => Html::activeDropDownList($searchModel, 'polish',Yii::$app->attr->valueMap(\addons\Style\common\enums\AttrIdEnum::DIA_POLISH), [
+                                'filter' => Html::activeDropDownList($searchModel, 'polish',Yii::$app->attr->valueMap(AttrIdEnum::DIA_POLISH), [
                                     'prompt' => '全部',
                                     'class' => 'form-control',
                                     'style' => 'width:60px;'
@@ -286,11 +287,11 @@ $params = $params ? "&".http_build_query($params) : '';
                             [
                                 'attribute' => 'fluorescence',
                                 'format' => 'raw',
-                                'headerOptions' => ['width' => 60],
+                                'headerOptions' => ['width' => 60, 'class'=>'batch_select_full','attr-name' => 'fluorescence','attr-id' => AttrIdEnum::DIA_FLUORESCENCE],
                                 'value' => function ($model, $key, $index) {
-                                    return Yii::$app->attr->valueName($model->fluorescence)??"";
+                                    return Html::ajaxSelect($model, 'fluorescence', Yii::$app->attr->valueMap(AttrIdEnum::DIA_FLUORESCENCE), ['data-id' => $model->id, 'prompt' => '请选择']);
                                 },
-                                'filter' => Html::activeDropDownList($searchModel, 'fluorescence',Yii::$app->attr->valueMap(\addons\Style\common\enums\AttrIdEnum::DIA_FLUORESCENCE), [
+                                'filter' => Html::activeDropDownList($searchModel, 'fluorescence',Yii::$app->attr->valueMap(AttrIdEnum::DIA_FLUORESCENCE), [
                                     'prompt' => '全部',
                                     'class' => 'form-control',
                                     'style' => 'width:60px;'
@@ -299,11 +300,11 @@ $params = $params ? "&".http_build_query($params) : '';
                             [
                                 'attribute' => 'stone_colour',
                                 'format' => 'raw',
-                                'headerOptions' => ['width' => 60],
+                                'headerOptions' => ['width' => 60, 'class'=>'batch_select_full','attr-name' => 'stone_colour','attr-id' => AttrIdEnum::DIA_COLOUR],
                                 'value' => function ($model, $key, $index) {
-                                    return Yii::$app->attr->valueName($model->stone_colour)??"";
+                                    return Html::ajaxSelect($model, 'stone_colour', Yii::$app->attr->valueMap(AttrIdEnum::DIA_COLOUR), ['data-id' => $model->id, 'prompt' => '请选择']);
                                 },
-                                'filter' => Html::activeDropDownList($searchModel, 'stone_colour',Yii::$app->attr->valueMap(\addons\Style\common\enums\AttrIdEnum::DIA_COLOUR), [
+                                'filter' => Html::activeDropDownList($searchModel, 'stone_colour',Yii::$app->attr->valueMap(AttrIdEnum::DIA_COLOUR), [
                                     'prompt' => '全部',
                                     'class' => 'form-control',
                                     'style' => 'width:60px;'
@@ -311,28 +312,28 @@ $params = $params ? "&".http_build_query($params) : '';
                             ],
                             [
                                 'attribute' => 'stone_norms',
-                                //'format' => 'raw',
-                                'headerOptions' => ['class' => 'col-md-1'],
+                                'format' => 'raw',
+                                'headerOptions' => ['class' => 'col-md-1 batch_full', 'attr-name' => 'stone_norms'],
                                 'value' => function ($model, $key, $index) {
-                                    return $model->stone_norms ?? "";
+                                    return Html::ajaxInput('stone_norms', $model->stone_norms ?? "", ['data-id' => $model->id]);
                                 },
                                 'filter' => false,
                             ],
                             [
                                 'attribute' => 'stone_size',
-                                //'format' => 'raw',
-                                'headerOptions' => ['class' => 'col-md-1'],
+                                'format' => 'raw',
+                                'headerOptions' => ['class' => 'col-md-1 batch_full', 'attr-name' => 'stone_size'],
                                 'value' => function ($model, $key, $index) {
-                                    return $model->stone_size ?? "";
+                                    return Html::ajaxInput('stone_size', $model->stone_size ?? "", ['data-id' => $model->id]);
                                 },
                                 'filter' => false,
                             ],
                             [
                                 'attribute' => 'remark',
-                                //'format' => 'raw',
-                                'headerOptions' => ['class' => 'col-md-2'],
+                                'format' => 'raw',
+                                'headerOptions' => ['class' => 'col-md-2 batch_full', 'attr-name' => 'remark'],
                                 'value' => function ($model, $key, $index) {
-                                    return $model->remark ?? "";
+                                    return Html::ajaxInput('remark', $model->remark ?? "", ['data-id' => $model->id]);
                                 },
                                 'filter' => false,
                             ],
@@ -379,8 +380,31 @@ $params = $params ? "&".http_build_query($params) : '';
 
 
     function batchExport() {
-        window.location.href = "<?= \common\helpers\Url::buildUrl('../bill-t/export',[],['ids'])?>?ids=<?php echo $bill->id ?>";
+        window.location.href = "<?= \common\helpers\Url::buildUrl('../bill-stone-rk/export',[],['ids'])?>?ids=<?php echo $bill->id ?>";
     }
 
+
+</script>
+
+<script type="text/javascript">
+    $(function () {
+        <?php
+        if($bill->bill_status == BillStatusEnum::SAVE){
+        ?>
+        //批量填充(文本)
+        $(".batch_full > a").after('&nbsp;<?= Html::batchFullButton(['batch-edit'], "批量填充"); ?>');
+        //批量填充(下拉)
+        $(".batch_select_full > a").after('&nbsp;<?= Html::batchFullButton(['batch-edit', 'check' => 1], "批量填充", ['input_type' => 'select']); ?>');
+        //默认全选
+        $("input[name='id_all']").trigger("click").prop("checked",true);
+        <?php } ?>
+    });
+
+    function rfClearVal(obj) {
+        var val = $(obj).val();
+        if (val <= 0) {
+            $(obj).val("");
+        }
+    }
 
 </script>
