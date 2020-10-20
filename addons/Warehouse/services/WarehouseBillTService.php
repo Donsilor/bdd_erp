@@ -1015,7 +1015,7 @@ class WarehouseBillTService extends Service
             }
             $gong_fee = $form->formatValue($goods['gong_fee'] ?? 0, 0) ?? 0;//克工费
             $piece_fee = $form->formatValue($goods['piece_fee'] ?? 0, 0) ?? 0;//件工费
-            $basic_gong_fee = $form->formatValue($goods['basic_gong_fee'], 0) ?? 0;//基本工费
+            $basic_gong_fee = $form->formatValue($goods['basic_gong_fee'] ?? 0, 0) ?? 0;//基本工费
 //            if (!empty($gong_fee) && !empty($piece_fee)) {
 //                $flag = false;
 //                $error[$i][] = "[克/工费]和[件/工费]只能填其一";
@@ -1485,6 +1485,20 @@ class WarehouseBillTService extends Service
     }
 
     /**
+     * 工厂金料总重(g):【①若配料类型：来料加工，则取值：金重，②若；非来料加工，则显示：0】
+     * @param WarehouseBillTGoodsForm $form
+     * @return integer
+     * @throws
+     */
+    public function calculateFactoryGoldWeight($form)
+    {
+        if ($form->peiliao_way == PeiLiaoWayEnum::LAILIAO) {
+            return $this->calculateGoldWeight($form) ?? 0;
+        }
+        return 0;
+    }
+
+    /**
      *
      * 金料额=(金价*金重*(1+损耗))
      * @param WarehouseBillTGoodsForm $form
@@ -1879,6 +1893,7 @@ class WarehouseBillTService extends Service
             $form->lncl_loss_weight = $this->calculateLossWeight($form);//含耗重
         }
         $form->pure_gold = $this->calculatePureGold($form);//折足
+        $form->factory_gold_weight = $this->calculateFactoryGoldWeight($form);//工厂金料总重
         if (empty($form->auto_gold_amount) || bccomp($form->gold_amount, 0, 5) != 1) {
             if (bccomp($form->gold_amount, 0, 5) != 1) {
                 $form->auto_gold_amount = ConfirmEnum::NO;

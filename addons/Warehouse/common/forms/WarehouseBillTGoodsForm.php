@@ -150,6 +150,7 @@ class WarehouseBillTGoodsForm extends WarehouseBillGoodsL
             'gold_weight' => 0,
             'pure_gold' => 0,
             'lncl_loss_weight' => 0,
+            'factory_gold_weight' => 0,
             'gold_amount' => 0,
             'main_stone_num' => 0,
             'main_stone_weight' => 0,
@@ -195,6 +196,7 @@ class WarehouseBillTGoodsForm extends WarehouseBillGoodsL
                 $total['gold_weight'] = bcadd($total['gold_weight'], $good->gold_weight, 3);
                 $total['pure_gold'] = bcadd($total['pure_gold'], $good->pure_gold, 3);
                 $total['lncl_loss_weight'] = bcadd($total['lncl_loss_weight'], $good->lncl_loss_weight, 3);
+                $total['factory_gold_weight'] = bcadd($total['factory_gold_weight'], $good->factory_gold_weight, 3);
                 $total['gold_amount'] = bcadd($total['gold_amount'], $good->gold_amount, 3);
                 $total['main_stone_num'] = bcadd($total['main_stone_num'], $good->main_stone_num);
                 $total['main_stone_weight'] = bcadd($total['main_stone_weight'], $good->main_stone_weight, 3);
@@ -2003,8 +2005,8 @@ class WarehouseBillTGoodsForm extends WarehouseBillGoodsL
     public function getGoldField()
     {
         $fieldName = [
-            'peiliao_way', 'suttle_weight', 'gold_weight', 'gold_loss', 'lncl_loss_weight', 'gold_price',
-            'gold_amount', 'pure_gold_rate', 'pure_gold', 'gross_weight'
+            'goods_name1', 'peiliao_way', 'suttle_weight', 'gold_weight', 'gold_loss', 'lncl_loss_weight', 'gold_price',
+            'gold_amount', 'pure_gold_rate', 'pure_gold', 'gross_weight', 'factory_gold_weight',
         ];
         return $fieldName ?? [];
     }
@@ -2015,7 +2017,7 @@ class WarehouseBillTGoodsForm extends WarehouseBillGoodsL
     public function getMainStoneField()
     {
         $fieldName = [
-            'main_pei_type', 'main_stone_sn', 'main_stone_type', 'main_stone_num', 'main_stone_weight',
+            'goods_name2', 'main_pei_type', 'main_stone_sn', 'main_stone_type', 'main_stone_num', 'main_stone_weight',
             'main_stone_price', 'main_stone_amount', 'main_stone_shape', 'main_stone_color',
             'main_stone_clarity', 'main_stone_cut', 'main_stone_polish', 'main_stone_symmetry', 'main_stone_fluorescence',
             'main_stone_colour', 'main_cert_id', 'main_cert_type'
@@ -2029,7 +2031,7 @@ class WarehouseBillTGoodsForm extends WarehouseBillGoodsL
     public function getSecondStone1Field()
     {
         $fieldName = [
-            'second_pei_type', 'second_stone_type1', 'second_stone_sn1', 'second_stone_num1', 'second_stone_weight1',
+            'goods_name3', 'second_pei_type', 'second_stone_type1', 'second_stone_sn1', 'second_stone_num1', 'second_stone_weight1',
             'second_stone_price1', 'second_stone_amount1', 'second_stone_shape1', 'second_stone_color1',
             'second_stone_clarity1', 'second_stone_cut1', 'second_stone_colour1', 'second_stone_size1',
             'second_cert_id1',
@@ -2043,7 +2045,7 @@ class WarehouseBillTGoodsForm extends WarehouseBillGoodsL
     public function getSecondStone2Field()
     {
         $fieldName = [
-            'second_pei_type2', 'second_stone_type2', 'second_stone_sn2', 'second_stone_num2', 'second_stone_weight2',
+            'goods_name4', 'second_pei_type2', 'second_stone_type2', 'second_stone_sn2', 'second_stone_num2', 'second_stone_weight2',
             'second_stone_price2', 'second_stone_amount2', 'second_stone_color2', 'second_stone_clarity2',
             'second_stone_shape2', 'second_stone_colour2', 'second_stone_size2', 'second_cert_id2',
         ];
@@ -2056,7 +2058,7 @@ class WarehouseBillTGoodsForm extends WarehouseBillGoodsL
     public function getSecondStone3Field()
     {
         $fieldName = [
-            'second_pei_type3', 'second_stone_type3', 'second_stone_sn3', 'second_stone_num3', 'second_stone_weight3',
+            'goods_name5', 'second_pei_type3', 'second_stone_type3', 'second_stone_sn3', 'second_stone_num3', 'second_stone_weight3',
             'second_stone_price3', 'second_stone_amount3', 'second_stone_color3', 'second_stone_clarity3', 'stone_remark',
         ];
         return $fieldName ?? [];
@@ -2068,7 +2070,7 @@ class WarehouseBillTGoodsForm extends WarehouseBillGoodsL
     public function getPartsField()
     {
         $fieldName = [
-            'parts_way', 'parts_type', 'parts_material', 'parts_num', 'parts_gold_weight', 'parts_price', 'parts_amount',
+            'goods_name6', 'parts_way', 'parts_type', 'parts_material', 'parts_num', 'parts_gold_weight', 'parts_price', 'parts_amount',
         ];
         return $fieldName ?? [];
     }
@@ -2079,7 +2081,7 @@ class WarehouseBillTGoodsForm extends WarehouseBillGoodsL
     public function getFeeField()
     {
         $fieldName = [
-            'peishi_weight', 'peishi_gong_fee', 'peishi_fee', 'parts_fee', 'gong_fee', 'piece_fee',
+            'goods_name7', 'peishi_weight', 'peishi_gong_fee', 'peishi_fee', 'parts_fee', 'gong_fee', 'piece_fee',
             'xiangqian_craft', 'second_stone_fee1', 'second_stone_fee2', 'second_stone_fee3', 'xianqian_fee',
             'biaomiangongyi', 'biaomiangongyi_fee', 'fense_fee', 'penlasha_fee', 'lasha_fee', 'bukou_fee',
             'templet_fee', 'tax_fee', 'tax_amount', 'cert_fee', 'other_fee', 'basic_gong_fee', 'peishi_num',
@@ -2094,7 +2096,7 @@ class WarehouseBillTGoodsForm extends WarehouseBillGoodsL
     public function getPriceField()
     {
         $fieldName = [
-            'factory_cost', 'cost_price', 'cost_amount', 'markup_rate', 'market_price',
+            'goods_name8', 'factory_cost', 'cost_price', 'cost_amount', 'markup_rate', 'market_price',
             'is_inlay', 'is_wholesale', 'factory_mo', 'pay_status', 'style_sex', 'style_channel_id', 'remark',
         ];
         return $fieldName ?? [];

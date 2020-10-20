@@ -59,11 +59,11 @@ class BillTController extends BaseController
             'relations' => [
                 'creator' => ['username'],
                 'auditor' => ['username'],
-
+                'billL' => ['goods_type'],
             ]
         ]);
 
-        $dataProvider = $searchModel->search(\Yii::$app->request->queryParams, ['created_at', 'audit_time']);
+        $dataProvider = $searchModel->search(\Yii::$app->request->queryParams, ['created_at', 'audit_time', 'goods_type']);
         $created_at = $searchModel->created_at;
         if (!empty($created_at)) {
             $dataProvider->query->andFilterWhere(['>=', Warehousebill::tableName() . '.created_at', strtotime(explode('/', $created_at)[0])]);//起始时间
@@ -73,6 +73,10 @@ class BillTController extends BaseController
         if (!empty($audit_time)) {
             $dataProvider->query->andFilterWhere(['>=', Warehousebill::tableName() . '.audit_time', strtotime(explode('/', $audit_time)[0])]);//起始时间
             $dataProvider->query->andFilterWhere(['<', Warehousebill::tableName() . '.audit_time', (strtotime(explode('/', $audit_time)[1]) + 86400)]);//结束时间
+        }
+        $goods_type = $searchModel->goods_type;
+        if (!empty($goods_type)) {
+            $dataProvider->query->andWhere(['=', 'billL.goods_type', $goods_type]);
         }
         $dataProvider->query->andWhere(['>', Warehousebill::tableName() . '.status', -1]);
         $dataProvider->query->andWhere(['=', Warehousebill::tableName() . '.bill_type', $this->billType]);

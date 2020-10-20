@@ -19,7 +19,7 @@ class GoodsTypeEnum extends \common\enums\BaseEnum
     public static function getMap(): array
     {
         return [
-            self::All => '金工石',
+            self::All => '精工石',
             self::PlainGold => '素金',
         ];
     }

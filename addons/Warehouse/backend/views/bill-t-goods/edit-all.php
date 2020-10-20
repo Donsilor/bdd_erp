@@ -67,6 +67,33 @@ $this->params['breadcrumbs'][] = $this->title;
                         货品总数：<span style="color:green;"><?= $bill->goods_num ?></span>
                         总成本价：<span style="color:green;"><?= $bill->total_cost ?></span>
                     </span>
+                    <span>
+                        <?php
+                        echo Html::batchButtons(false);
+                        echo '&nbsp;';
+                        echo Html::hidden($bill->billL->show_all ?? 0, '全部', ['data-id' => $bill->id, 'data-name' => 'show_all', 'data-text' => '全部']);
+                        echo '&nbsp;';
+                        echo Html::hidden($bill->billL->show_basic ?? 0, '基本', ['data-id' => $bill->id, 'data-name' => 'show_basic', 'data-text' => '基本']);
+                        echo '&nbsp;';
+                        echo Html::hidden($bill->billL->show_attr ?? 0, '属性', ['data-id' => $bill->id, 'data-name' => 'show_attr', 'data-text' => '属性']);
+                        echo '&nbsp;';
+                        echo Html::hidden($bill->billL->show_gold ?? 0, '金料', ['data-id' => $bill->id, 'data-name' => 'show_gold', 'data-text' => '金料']);
+                        echo '&nbsp;';
+                        echo Html::hidden($bill->billL->show_main_stone ?? 0, '主石', ['data-id' => $bill->id, 'data-name' => 'show_main_stone', 'data-text' => '主石']);
+                        echo '&nbsp;';
+                        echo Html::hidden($bill->billL->show_second_stone1 ?? 0, '副石1', ['data-id' => $bill->id, 'data-name' => 'show_second_stone1', 'data-text' => '副石1']);
+                        echo '&nbsp;';
+                        echo Html::hidden($bill->billL->show_second_stone2 ?? 0, '副石2', ['data-id' => $bill->id, 'data-name' => 'show_second_stone2', 'data-text' => '副石2']);
+                        echo '&nbsp;';
+                        echo Html::hidden($bill->billL->show_second_stone3 ?? 0, '副石3', ['data-id' => $bill->id, 'data-name' => 'show_second_stone3', 'data-text' => '副石3']);
+                        echo '&nbsp;';
+                        echo Html::hidden($bill->billL->show_parts ?? 0, '配件', ['data-id' => $bill->id, 'data-name' => 'show_parts', 'data-text' => '配件']);
+                        echo '&nbsp;';
+                        echo Html::hidden($bill->billL->show_fee ?? 0, '工费', ['data-id' => $bill->id, 'data-name' => 'show_fee', 'data-text' => '工费']);
+                        echo '&nbsp;';
+                        echo Html::hidden($bill->billL->show_price ?? 0, '价格', ['data-id' => $bill->id, 'data-name' => 'show_price', 'data-text' => '价格']);
+                        ?>
+                    </span>
                     <span style="color:red;">（Ctrl+F键可快速查找字段名)</span>
                     <?= GridView::widget([
                         'dataProvider' => $dataProvider,
@@ -140,6 +167,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                         ]);
                                     },
                                 ],
+                                'visible' => $model->isVisible($bill, 'front_operation'),
                             ],
                             [
                                 'attribute' => 'goods_image',
@@ -539,7 +567,7 @@ $this->params['breadcrumbs'][] = $this->title;
 //                                    'class' => 'form-control',
 //                                    'style' => 'width:200px;'
 //                                ]),
-                                'visible' => $model->isVisible($bill, 'goods_name'),
+                                'visible' => $model->isVisible($bill, 'goods_name1'),
                             ],
                             [
                                 'attribute' => 'peiliao_way',
@@ -908,7 +936,7 @@ $this->params['breadcrumbs'][] = $this->title;
 //                                    'class' => 'form-control',
 //                                    'style' => 'width:200px;'
 //                                ]),
-                                'visible' => $model->isVisible($bill, 'goods_name'),
+                                'visible' => $model->isVisible($bill, 'goods_name2'),
                             ],
                             [
                                 'attribute' => 'main_pei_type',
@@ -1180,7 +1208,7 @@ $this->params['breadcrumbs'][] = $this->title;
 //                                    'class' => 'form-control',
 //                                    'style' => 'width:200px;'
 //                                ]),
-                                'visible' => $model->isVisible($bill, 'goods_name'),
+                                'visible' => $model->isVisible($bill, 'goods_name3'),
                             ],
                             [
                                 'attribute' => 'second_pei_type',
@@ -1427,7 +1455,7 @@ $this->params['breadcrumbs'][] = $this->title;
 //                                    'class' => 'form-control',
 //                                    'style' => 'width:200px;'
 //                                ]),
-                                'visible' => $model->isVisible($bill, 'goods_name'),
+                                'visible' => $model->isVisible($bill, 'goods_name4'),
                             ],
                             [
                                 'attribute' => 'second_pei_type2',
@@ -1745,7 +1773,7 @@ $this->params['breadcrumbs'][] = $this->title;
 //                                    'class' => 'form-control',
 //                                    'style' => 'width:200px;'
 //                                ]),
-                                'visible' => $model->isVisible($bill, 'goods_name'),
+                                'visible' => $model->isVisible($bill, 'goods_name5'),
                             ],
                             [
                                 'attribute' => 'second_pei_type3',
@@ -1924,7 +1952,7 @@ $this->params['breadcrumbs'][] = $this->title;
 //                                    'class' => 'form-control',
 //                                    'style' => 'width:200px;'
 //                                ]),
-                                'visible' => $model->isVisible($bill, 'goods_name'),
+                                'visible' => $model->isVisible($bill, 'goods_name6'),
                             ],
                             [
                                 'attribute' => 'parts_way',
@@ -2057,7 +2085,7 @@ $this->params['breadcrumbs'][] = $this->title;
 //                                    'class' => 'form-control',
 //                                    'style' => 'width:200px;'
 //                                ]),
-                                'visible' => $model->isVisible($bill, 'goods_name'),
+                                'visible' => $model->isVisible($bill, 'goods_name7'),
                             ],
                             [
                                 'attribute' => 'gong_fee',
@@ -2462,7 +2490,7 @@ $this->params['breadcrumbs'][] = $this->title;
 //                                    'class' => 'form-control',
 //                                    'style' => 'width:200px;'
 //                                ]),
-                                'visible' => $model->isVisible($bill, 'goods_name'),
+                                'visible' => $model->isVisible($bill, 'goods_name8'),
                             ],
                             [
                                 'attribute' => 'factory_cost',
@@ -2780,6 +2808,50 @@ $this->params['breadcrumbs'][] = $this->title;
         if (val <= 0) {
             $(obj).val("");
         }
+    }
+
+    // 显示状态 status 1:隐藏;0显示;
+    function rfHidden(obj) {
+        let id = $(obj).attr('data-id');
+        let name = $(obj).attr('data-name');
+        let url = $(obj).attr('data-url');
+        let text = $(obj).attr('data-text');
+        let status = 0;
+        self = $(obj);
+        if (self.hasClass("btn-success")) {
+            status = 1;
+        }
+        if(!url){
+            url = "<?= Url::to(['ajax-hidden'])?>";
+        }
+        $.ajax({
+            type: "get",
+            url: url,
+            dataType: "json",
+            data: {
+                id: id,
+                name: name,
+                value: status,
+            },
+            success: function (data) {
+                if (parseInt(data.code) === 200) {
+                    if (self.hasClass("btn-success")) {
+                        self.removeClass("btn-success").addClass("btn-default");
+                        self.attr("data-toggle", 'tooltip');
+                        self.attr("data-original-title", '点击隐藏');
+                        self.text(text);
+                    } else {
+                        self.removeClass("btn-default").addClass("btn-success");
+                        self.attr("data-toggle", 'tooltip');
+                        self.attr("data-original-title", '点击显示');
+                        self.text(text);
+                    }
+                    window.location.reload();
+                } else {
+                    rfAffirm(data.message);
+                }
+            }
+        });
     }
 
     $(".jsBatchUpdate").click(function () {

@@ -320,7 +320,11 @@ $params = $params ? "&" . http_build_query($params) : '';
                                 'format' => 'raw',
                                 'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#feeeed;'],
                                 'footerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#feeeed;'],
-                                'value' => "toWarehouse.name",
+                                'value' => function ($model, $key, $index, $widget) {
+                                    $widget->footer = $model->getAttributeLabel('to_warehouse_id');
+                                    return $model->toWarehouse->name ?? "";
+                                },
+                                //'value' => "toWarehouse.name",
                                 'filter' => Select2::widget([
                                     'name' => 'SearchModel[to_warehouse_id]',
                                     'value' => $searchModel->to_warehouse_id,
@@ -673,6 +677,21 @@ $params = $params ? "&" . http_build_query($params) : '';
 //                                    'style' => 'width:80px;'
 //                                ]),
                                 'visible' => $model->isVisible($bill, 'pure_gold'),
+                            ],
+                            [
+                                'attribute' => 'factory_gold_weight',
+                                'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#FFD700;'],
+                                'footerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#FFD700;'],
+                                'value' => function ($model, $key, $index, $widget) use ($total) {
+                                    $widget->footer = $model->getFooterValues('factory_gold_weight', $total, "0.000");
+                                    return $model->factory_gold_weight ?? "0.000";
+                                },
+                                'filter' => false,
+//                                'filter' => Html::activeTextInput($searchModel, 'pure_gold', [
+//                                    'class' => 'form-control',
+//                                    'style' => 'width:80px;'
+//                                ]),
+                                'visible' => $model->isVisible($bill, 'factory_gold_weight'),
                             ],
                             /*[
                                 'attribute' => 'cert_id',
