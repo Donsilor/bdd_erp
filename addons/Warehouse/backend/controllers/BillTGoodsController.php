@@ -173,7 +173,7 @@ class BillTGoodsController extends BaseController
     /**
      *
      * ajax编辑
-     * @return mixed|string|\yii\web\Response
+     * @return string
      * @throws
      */
     public function actionEdit()
@@ -181,20 +181,17 @@ class BillTGoodsController extends BaseController
         $this->layout = '@backend/views/layouts/iframe';
 
         $id = \Yii::$app->request->get('id');
-        //$bill_id = Yii::$app->request->get('bill_id');
         $model = $this->findModel($id);
         $model = $model ?? new WarehouseBillTGoodsForm();
+        $bill = WarehouseBill::findOne(['id' => $model->bill_id]);
         // ajax 校验
-        //$this->activeFormValidate($model);
         if ($model->load(\Yii::$app->request->post())) {
             try {
                 $trans = \Yii::$app->db->beginTransaction();
-                //$model->biaomiangongyi = join(',',$model->biaomiangongyi);
                 $result = $model->updateFromValidate($model);
                 if ($result['error'] == false) {
                     throw new \Exception($result['msg']);
                 }
-                //list($model,) = $model->correctGoods($model);
                 if (false === $model->save()) {
                     throw new \Exception($this->getError($model));
                 }
@@ -211,6 +208,7 @@ class BillTGoodsController extends BaseController
         $model->biaomiangongyi = explode(',', $model->biaomiangongyi);
         return $this->render($this->action->id, [
             'model' => $model,
+            'bill' => $bill,
         ]);
     }
 
