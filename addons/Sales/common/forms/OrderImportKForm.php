@@ -54,6 +54,7 @@ class OrderImportKForm extends ImportForm
     public $main_stone_type;
     public $main_stone_weight;
     public $main_stone_num;
+    public $main_stone_secai;
     public $main_stone_color;
     public $main_stone_clarity;
     public $main_stone_price;

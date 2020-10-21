@@ -169,26 +169,11 @@ $this->params['breadcrumbs'][] = ['label' => $this->title];
                             'contentOptions' => ['style' => ['white-space' => 'nowrap']],
                             'template' => '{edit} {view} {status}',
                             'buttons' => [
-                                'ajax-edit' => function ($url, $model, $key) {
-                                    return Html::linkButton(['ajax-edit', 'id' => $model->id], '账号密码', [
-                                        'data-toggle' => 'modal',
-                                        'data-target' => '#ajaxModal',
-                                    ]);
-                                },
-                                'address' => function ($url, $model, $key) {
-                                    return Html::linkButton(['address/index', 'member_id' => $model->id], '收货地址');
-                                },
-                                'recharge' => function ($url, $model, $key) {
-                                    return Html::linkButton(['recharge', 'id' => $model->id], '充值', [
-                                        'data-toggle' => 'modal',
-                                        'data-target' => '#ajaxModal',
-                                    ]);
-                                },
                                 'edit' => function ($url, $model, $key) {
-                                    return Html::edit(['edit', 'id' => $model->id]);
+                                    return Html::edit(['edit', 'id' => $model->id,'returnUrl'=>Url::getReturnTab()],'编辑',['class'=>'btn btn-primary btn-sm openContab','data-title'=>$model->realname."(编辑)"]);
                                 },
                                 'view' => function ($url, $model, $key) {
-                                    return Html::a('查看', ['view', 'id' => $model->id,'returnUrl'=>Url::getReturnUrl()], ['class' => 'btn btn-warning btn-sm']);
+                                    return Html::a('查看', ['view', 'id' => $model->id,'returnUrl'=>Url::getReturnTab()], ['class' => 'btn btn-warning btn-sm openContab','data-title'=>$model->realname]);
                                 },
                                 'status' => function ($url, $model, $key) {
                                     return Html::status($model->status);

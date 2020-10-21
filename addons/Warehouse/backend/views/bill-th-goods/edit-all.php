@@ -25,13 +25,13 @@ $this->params['breadcrumbs'][] = $this->title;
     <div class="box-tools" style="float:right;margin-top:-40px; margin-right: 20px;">
         <?php
         if($bill->bill_status == \addons\Warehouse\common\enums\BillStatusEnum::SAVE) {
-            /* echo Html::create(['add', 'bill_id' => $bill->id], '商品批量添加', [
+            echo Html::create(['add', 'bill_id' => $bill->id], '商品批量添加', [
                 'class' => 'btn btn-primary btn-xs openIframe',
                 'data-width'=>'90%',
                 'data-height'=>'90%',
                 'data-offset'=>'20px',
             ]);
-            echo '&nbsp;'; */
+            echo '&nbsp;'; 
             echo Html::edit(['edit-all', 'bill_id' => $bill->id,'scan'=>1,'returnUrl'=>Yii::$app->request->get('returnUrl')], '商品扫码添加', ['class'=>'btn btn-success btn-xs']);
             echo '&nbsp;';
             echo Html::a('返回列表', ['index', 'bill_id' => $bill->id,'returnUrl'=>Yii::$app->request->get('returnUrl')], ['class' => 'btn btn-info btn-xs']);

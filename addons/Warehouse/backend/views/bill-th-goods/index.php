@@ -15,7 +15,7 @@ $this->params['breadcrumbs'][] = $this->title;
     <div style="float:right;margin-top:-40px;margin-right: 20px;">
         <?php
         if ($bill->bill_status == BillStatusEnum::SAVE) {
-             echo Html::create(['add', 'bill_id' => $bill->id], '商品批量添加', [
+            echo Html::create(['add', 'bill_id' => $bill->id], '商品批量添加', [
                 'class' => 'btn btn-primary btn-xs openIframe',
                 'data-width' => '90%',
                 'data-height' => '90%',
