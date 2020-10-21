@@ -67,7 +67,6 @@ class WarehouseBillTService extends Service
      */
     public function addBillTGoods($form)
     {
-
         if (!$form->goods_sn) {
             throw new \Exception("款号/起版号不能为空");
         }
@@ -157,6 +156,24 @@ class WarehouseBillTService extends Service
             ];
         }
         $bill = WarehouseBill::findOne(['id' => $form->bill_id]);
+        $form->goods_type = 0;
+        if ($goods['style_sn']) {
+            $styleM = Style::find()->where(['style_sn' => $goods['style_sn']])->one();
+            $pid = $styleM->type->pid ?? 0;
+            if ($pid == 3) {
+                $form->goods_type = GoodsTypeEnum::PlainGold;
+            } else {
+                $form->goods_type = GoodsTypeEnum::SeikoStone;
+            }
+        }
+        $goods_type = $bill->billL->goods_type ?? 0;
+        if ($goods_type && $form->goods_type && $goods_type != $form->goods_type) {
+            if ($goods_type == GoodsTypeEnum::SeikoStone) {
+                throw new \Exception("请添加非素金款号");
+            } elseif ($goods_type == GoodsTypeEnum::PlainGold) {
+                throw new \Exception("请添加素金款号");
+            }
+        }
         $goodsM = new WarehouseBillGoodsL();
         $goodsInfo = [];
         for ($i = 0; $i < $form->goods_num; $i++) {
