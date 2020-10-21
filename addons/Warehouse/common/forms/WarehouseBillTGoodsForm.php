@@ -1927,55 +1927,55 @@ class WarehouseBillTGoodsForm extends WarehouseBillGoodsL
     /**
      * {@inheritdoc}
      */
-    public function getMergeField($form, $field, $merge = [])
+    public function getMergeField($model, $field, $merge = [])
     {
         $is_visible = false;
-        $show_basic = $billL->show_basic ?? 0;
+        $show_basic = $model->show_basic ?? 0;
         if ($show_basic == IsHiddenEnum::NO
             && in_array($field, $this->getBasicField($merge))) {
             $is_visible = true;
         }
-        $show_attr = $billL->show_attr ?? 0;
+        $show_attr = $model->show_attr ?? 0;
         if ($show_attr == IsHiddenEnum::NO
             && in_array($field, $this->getAttrField($merge))) {
             $is_visible = true;
         }
-        $show_gold = $billL->show_gold ?? 0;
+        $show_gold = $model->show_gold ?? 0;
         if ($show_gold == IsHiddenEnum::NO
             && in_array($field, $this->getGoldField($merge))) {
             $is_visible = true;
         }
-        $show_main_stone = $billL->show_main_stone ?? 0;
+        $show_main_stone = $model->show_main_stone ?? 0;
         if ($show_main_stone == IsHiddenEnum::NO
             && in_array($field, $this->getMainStoneField($merge))) {
             $is_visible = true;
         }
-        $show_second_stone1 = $billL->show_second_stone1 ?? 0;
+        $show_second_stone1 = $model->show_second_stone1 ?? 0;
         if ($show_second_stone1 == IsHiddenEnum::NO
             && in_array($field, $this->getSecondStone1Field($merge))) {
             $is_visible = true;
         }
-        $show_second_stone2 = $billL->show_second_stone2 ?? 0;
+        $show_second_stone2 = $model->show_second_stone2 ?? 0;
         if ($show_second_stone2 == IsHiddenEnum::NO
             && in_array($field, $this->getSecondStone2Field($merge))) {
             $is_visible = true;
         }
-        $show_second_stone3 = $billL->show_second_stone3 ?? 0;
+        $show_second_stone3 = $model->show_second_stone3 ?? 0;
         if ($show_second_stone3 == IsHiddenEnum::NO
             && in_array($field, $this->getSecondStone3Field($merge))) {
             $is_visible = true;
         }
-        $show_parts = $billL->show_parts ?? 0;
+        $show_parts = $model->show_parts ?? 0;
         if ($show_parts == IsHiddenEnum::NO
             && in_array($field, $this->getPartsField($merge))) {
             $is_visible = true;
         }
-        $show_fee = $billL->show_fee ?? 0;
+        $show_fee = $model->show_fee ?? 0;
         if ($show_fee == IsHiddenEnum::NO
             && in_array($field, $this->getFeeField($merge))) {
             $is_visible = true;
         }
-        $show_price = $billL->show_price ?? 0;
+        $show_price = $model->show_price ?? 0;
         if ($show_price == IsHiddenEnum::NO
             && in_array($field, $this->getPriceField($merge))) {
             $is_visible = true;
