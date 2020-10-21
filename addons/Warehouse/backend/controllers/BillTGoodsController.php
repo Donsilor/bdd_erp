@@ -3,6 +3,7 @@
 namespace addons\Warehouse\backend\controllers;
 
 use addons\Warehouse\common\enums\GoodsTypeEnum;
+use addons\Warehouse\common\enums\IsWholeSaleEnum;
 use Yii;
 use common\traits\Curd;
 use common\helpers\Url;
@@ -99,6 +100,7 @@ class BillTGoodsController extends BaseController
                 return $this->message($e->getMessage(), $this->redirect(\Yii::$app->request->referrer), 'error');
             }
         }
+        $model->is_wholesale = IsWholeSaleEnum::YES;
         return $this->renderAjax($this->action->id, [
             'model' => $model,
         ]);

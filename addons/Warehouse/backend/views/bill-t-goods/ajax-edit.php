@@ -26,11 +26,6 @@ $form = ActiveForm::begin([
 <!--                --><?//= $form->field($model, 'auto_goods_id')->radioList(\common\enums\ConfirmEnum::getMap()) ?>
 <!--            </div>-->
             <div class="col-sm-6">
-                <?= $form->field($model, 'goods_num')->textInput(["placeholder"=>"请输入数量"]) ?>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-sm-6">
                 <?= $form->field($model, 'to_warehouse_id')->widget(\kartik\select2\Select2::class, [
                     'data' => Yii::$app->warehouseService->warehouse::getDropDown(),
                     'options' => ['placeholder' => '请选择'],
@@ -38,6 +33,11 @@ $form = ActiveForm::begin([
                         'allowClear' => false
                     ],
                 ]); ?>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-6">
+                <?= $form->field($model, 'goods_num')->textInput(["placeholder"=>"请输入数量"]) ?>
             </div>
             <div class="col-sm-6">
                 <?= $form->field($model, 'cost_amount')->textInput(["placeholder"=>"请输入公司总成本"]) ?>
