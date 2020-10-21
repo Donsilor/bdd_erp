@@ -362,6 +362,8 @@ class BillTController extends BaseController
             if (false === $model->delete()) {
                 throw new \Exception($this->getError($model));
             }
+            $billL = WarehouseBillL::findOne($id);
+            $billL->delete();
             $log = [
                 'bill_id' => $model->id,
                 'log_type' => LogTypeEnum::ARTIFICIAL,
