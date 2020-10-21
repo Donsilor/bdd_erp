@@ -107,7 +107,7 @@ class WarehouseBillTService extends Service
 //                if ($exist) {
 //                    throw new \Exception("起版号已添加过");
 //                }
-                if ($form->cost_price) {
+                if ($form->cost_amount) {
                     $qiban->cost_price = $form->cost_amount;
                 }
                 //$qiban = new Qiban();
@@ -125,6 +125,7 @@ class WarehouseBillTService extends Service
                     'goods_num' => $goods_num,
                     'jintuo_type' => $qiban->jintuo_type,
                     'cost_price' => bcdiv($qiban->cost_price, $goods_num, 3),
+                    'cost_amount' => $form->cost_amount ?? 0,
                     //'market_price' => $style->market_price,
                     'is_inlay' => $qiban->is_inlay,
                     'remark' => $qiban->remark,
@@ -135,7 +136,7 @@ class WarehouseBillTService extends Service
         } elseif ($style->status != StatusEnum::ENABLED) {
             throw new \Exception("款号不可用");
         } else {
-            if ($form->cost_price) {
+            if ($form->cost_amount) {
                 $style->cost_price = $form->cost_amount;
             }
             //$style = new Style();
@@ -153,6 +154,7 @@ class WarehouseBillTService extends Service
                 'goods_num' => $goods_num,
                 'jintuo_type' => JintuoTypeEnum::Chengpin,
                 'cost_price' => bcdiv($style->cost_price, $goods_num, 3),
+                'cost_amount' => $form->cost_amount ?? 0,
                 'is_inlay' => $style->is_inlay,
                 //'market_price' => $style->market_price,
                 'creator_id' => \Yii::$app->user->identity->getId(),
