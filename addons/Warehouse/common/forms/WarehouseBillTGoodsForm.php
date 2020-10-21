@@ -244,7 +244,44 @@ class WarehouseBillTGoodsForm extends WarehouseBillGoodsL
      */
     public function getTitleList($type = 1)
     {
-        if ($type == 1) {
+        if ($type == GoodsTypeEnum::PlainGold) {
+            $values = [
+                '条码号(货号)为空则系统自动生成',
+                '[非起版]和[有款起版]款号不能为空',
+                '#',
+                '[起版号]和[款号]必填其一',
+                $this->formatTitle($this->getWarehouseMap()),//'入库仓库'
+                $this->formatTitle($this->getMaterialTypeMap()),//'材质'
+                $this->formatTitle($this->getMaterialColorMap()),//'材质颜色'
+                '不填默认为1',
+                $this->formatTitle($this->getFingerHkMap()),//'手寸(港号)'
+                $this->formatTitle($this->getFingerMap()),//'手寸(美号)'
+                '#', '#',
+                $this->formatTitle($this->getChainTypeMap()),//'链类型'
+                $this->formatTitle($this->getCrampRingMap()),//'扣环'
+
+                $this->formatTitle($this->getPeiLiaoWayMap()),//'配料方式'
+                '#', '#',
+                '填写则不自动计算',//金料额
+
+                '#', '#', '#',
+                $this->formatTitle($this->getFaceCraftMap(), "|"),//'表面工艺'
+                '#', '#', '#',
+                '填写则不自动计算',//税额
+                '#', '#',
+
+                $this->formatTitle($this->getCertTypeMap()),//'主石证书类型'
+                '填写则不自动计算',//工厂总成本
+                '填写则不自动计算',//公司成本价
+                '#', '#',
+            ];
+            $fields = [
+                '条码号(货号)', '(*)款号', '商品名称', '起版号', '(*)入库仓库', '材质', '材质颜色', '货品数量', '手寸(港号)', '手寸(美号)', '尺寸(cm)', '成品尺寸(mm)', '链类型', '扣环',
+                '配料方式', '金重(g)', '金价/g', '金料额',
+                '克/工费', '件/工费', '基本工费', '表面工艺(多个用“|”分割)', '表面工艺费', '版费', '税费/g', '税额', '证书费', '其它费用',
+                '主石证书类型', '工厂总成本', '公司成本总额', '倍率(默认1)', '备注',
+            ];
+        } else {
             $values = [
                 '条码号(货号)为空则系统自动生成',
                 '[非起版]和[有款起版]款号不能为空',
@@ -344,43 +381,6 @@ class WarehouseBillTGoodsForm extends WarehouseBillGoodsL
                 '配件方式', '配件类型', '配件材质', '配件数量', '配件金重(g)', '配件金价/g', '配件额',
                 '配石重量(ct)', '配石工费/ct', '配石费', '配件工费', '克/工费', '件/工费', '镶嵌工艺', '镶石1工费/颗', '镶石2工费/颗', '镶石3工费/颗', '镶石费', '表面工艺(多个用“|”分割)', '表面工艺费', '分色/分件费', '喷沙费', '拉沙费', '补口费', '版费', '税费', '税额', '证书费', '其它费用',
                 '主石证书号', '主石证书类型', '工厂总成本', '公司成本总额', '倍率(默认1)', '备注',
-            ];
-        } elseif ($type == 2) {
-            $values = [
-                '条码号(货号)为空则系统自动生成',
-                '[非起版]和[有款起版]款号不能为空',
-                '#',
-                '[起版号]和[款号]必填其一',
-                $this->formatTitle($this->getWarehouseMap()),//'入库仓库'
-                $this->formatTitle($this->getMaterialTypeMap()),//'材质'
-                $this->formatTitle($this->getMaterialColorMap()),//'材质颜色'
-                '不填默认为1',
-                $this->formatTitle($this->getFingerHkMap()),//'手寸(港号)'
-                $this->formatTitle($this->getFingerMap()),//'手寸(美号)'
-                '#', '#',
-                $this->formatTitle($this->getChainTypeMap()),//'链类型'
-                $this->formatTitle($this->getCrampRingMap()),//'扣环'
-
-                $this->formatTitle($this->getPeiLiaoWayMap()),//'配料方式'
-                '#', '#',
-                '填写则不自动计算',//金料额
-
-                '#', '#', '#',
-                $this->formatTitle($this->getFaceCraftMap(), "|"),//'表面工艺'
-                '#', '#', '#',
-                '填写则不自动计算',//税额
-                '#', '#',
-
-                $this->formatTitle($this->getCertTypeMap()),//'主石证书类型'
-                '填写则不自动计算',//工厂总成本
-                '填写则不自动计算',//公司成本价
-                '#', '#',
-            ];
-            $fields = [
-                '条码号(货号)', '(*)款号', '商品名称', '起版号', '(*)入库仓库', '材质', '材质颜色', '货品数量', '手寸(港号)', '手寸(美号)', '尺寸(cm)', '成品尺寸(mm)', '链类型', '扣环',
-                '配料方式', '金重(g)', '金价/g', '金料额',
-                '克/工费', '件/工费', '基本工费', '表面工艺(多个用“|”分割)', '表面工艺费', '版费', '税费/g', '税额', '证书费', '其它费用',
-                '主石证书类型', '工厂总成本', '公司成本总额', '倍率(默认1)', '备注',
             ];
         }
         return [$values ?? [], $fields ?? []];
@@ -1918,7 +1918,7 @@ class WarehouseBillTGoodsForm extends WarehouseBillGoodsL
         $goods_type = $billL->goods_type ?? 0;
         if ($goods_type == GoodsTypeEnum::PlainGold) {
             $is_visible = $this->getMergeField($billL, $field, $this->getPlainGoldField());
-        }else{
+        } else {
             $is_visible = $this->getMergeField($billL, $field);
         }
         return $is_visible;
@@ -1993,7 +1993,7 @@ class WarehouseBillTGoodsForm extends WarehouseBillGoodsL
             'qiban_sn', 'to_warehouse_id', 'goods_num', 'front_operation',
 
         ];
-        if($merge){
+        if ($merge) {
             $fieldName = array_intersect($fieldName, $merge);
         }
         return $fieldName ?? [];
@@ -2008,7 +2008,7 @@ class WarehouseBillTGoodsForm extends WarehouseBillGoodsL
             'material', 'material_type', 'material_color', 'finger_hk', 'finger', 'length', 'chain_long',
             'product_size', 'xiangkou', 'kezi', 'chain_type', 'cramp_ring', 'talon_head_type', 'goods_color'
         ];
-        if($merge){
+        if ($merge) {
             $fieldName = array_intersect($fieldName, $merge);
         }
         return $fieldName ?? [];
@@ -2023,7 +2023,7 @@ class WarehouseBillTGoodsForm extends WarehouseBillGoodsL
             'goods_name1', 'peiliao_way', 'suttle_weight', 'gold_weight', 'gold_loss', 'lncl_loss_weight', 'gold_price',
             'gold_amount', 'pure_gold_rate', 'pure_gold', 'gross_weight', 'factory_gold_weight',
         ];
-        if($merge){
+        if ($merge) {
             $fieldName = array_intersect($fieldName, $merge);
         }
         return $fieldName ?? [];
@@ -2040,7 +2040,7 @@ class WarehouseBillTGoodsForm extends WarehouseBillGoodsL
             'main_stone_clarity', 'main_stone_cut', 'main_stone_polish', 'main_stone_symmetry', 'main_stone_fluorescence',
             'main_stone_colour', 'main_cert_id', 'main_cert_type'
         ];
-        if($merge){
+        if ($merge) {
             $fieldName = array_intersect($fieldName, $merge);
         }
         return $fieldName ?? [];
@@ -2057,7 +2057,7 @@ class WarehouseBillTGoodsForm extends WarehouseBillGoodsL
             'second_stone_clarity1', 'second_stone_cut1', 'second_stone_colour1', 'second_stone_size1',
             'second_cert_id1',
         ];
-        if($merge){
+        if ($merge) {
             $fieldName = array_intersect($fieldName, $merge);
         }
         return $fieldName ?? [];
@@ -2073,7 +2073,7 @@ class WarehouseBillTGoodsForm extends WarehouseBillGoodsL
             'second_stone_price2', 'second_stone_amount2', 'second_stone_color2', 'second_stone_clarity2',
             'second_stone_shape2', 'second_stone_colour2', 'second_stone_size2', 'second_cert_id2',
         ];
-        if($merge){
+        if ($merge) {
             $fieldName = array_intersect($fieldName, $merge);
         }
         return $fieldName ?? [];
@@ -2088,7 +2088,7 @@ class WarehouseBillTGoodsForm extends WarehouseBillGoodsL
             'goods_name5', 'second_pei_type3', 'second_stone_type3', 'second_stone_sn3', 'second_stone_num3', 'second_stone_weight3',
             'second_stone_price3', 'second_stone_amount3', 'second_stone_color3', 'second_stone_clarity3', 'stone_remark',
         ];
-        if($merge){
+        if ($merge) {
             $fieldName = array_intersect($fieldName, $merge);
         }
         return $fieldName ?? [];
@@ -2102,7 +2102,7 @@ class WarehouseBillTGoodsForm extends WarehouseBillGoodsL
         $fieldName = [
             'goods_name6', 'parts_way', 'parts_type', 'parts_material', 'parts_num', 'parts_gold_weight', 'parts_price', 'parts_amount',
         ];
-        if($merge){
+        if ($merge) {
             $fieldName = array_intersect($fieldName, $merge);
         }
         return $fieldName ?? [];
@@ -2120,7 +2120,7 @@ class WarehouseBillTGoodsForm extends WarehouseBillGoodsL
             'templet_fee', 'tax_fee', 'tax_amount', 'cert_fee', 'other_fee', 'basic_gong_fee', 'peishi_num',
             'extra_stone_fee', 'total_gong_fee', 'xianqian_price',
         ];
-        if($merge){
+        if ($merge) {
             $fieldName = array_intersect($fieldName, $merge);
         }
         return $fieldName ?? [];
@@ -2135,7 +2135,7 @@ class WarehouseBillTGoodsForm extends WarehouseBillGoodsL
             'goods_name8', 'factory_cost', 'cost_price', 'cost_amount', 'markup_rate', 'market_price',
             'is_inlay', 'is_wholesale', 'factory_mo', 'pay_status', 'style_sex', 'style_channel_id', 'remark',
         ];
-        if($merge){
+        if ($merge) {
             $fieldName = array_intersect($fieldName, $merge);
         }
         return $fieldName ?? [];
