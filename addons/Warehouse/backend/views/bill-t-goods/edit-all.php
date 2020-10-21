@@ -17,6 +17,8 @@ use addons\Warehouse\common\enums\BillStatusEnum;
 $this->title = Yii::t('bill_t_goods', '其它入库单明细');
 $this->params['breadcrumbs'][] = ['label' => $this->title, 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
+
+$goods_type = $bill->billL->goods_type ?? 0;
 ?>
 <style>
     select.form-control {
