@@ -77,8 +77,10 @@ $goods_type = $bill->billL->goods_type ?? 0;
                 <div class="box-body table-responsive">
                     <span style="font-size:16px">
                         <!--<span style="font-weight:bold;">明细汇总：</span>-->
-                        货品总数：<span style="color:green;"><?= $bill->goods_num ?></span>
-                        总成本价：<span style="color:green;"><?= $bill->total_cost ?></span>
+                        货品总数：<span style="color:green;"><?= $bill->goods_num ?? 0 ?></span>
+                        折足总重：<span style="color:green;"><?= $bill->billL->total_pure_gold ?? 0 ?></span>
+                        工厂总成本：<span style="color:green;"><?= $bill->billL->total_factory_cost ?? 0 ?></span>
+                        公司总成本：<span style="color:green;"><?= $bill->total_cost ?? 0?></span>
                     </span>
                     <span>
                         <?php

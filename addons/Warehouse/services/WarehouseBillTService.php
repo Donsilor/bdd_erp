@@ -51,11 +51,15 @@ class WarehouseBillTService extends Service
     {
         $result = false;
         $sum = WarehouseBillGoodsL::find()
-            ->select(['sum(goods_num) as goods_num', 'sum(cost_amount) as total_cost', 'sum(market_price) as total_market'])
+            ->select(['sum(goods_num) as goods_num', 'sum(cost_amount) as total_cost', 'sum(market_price) as total_market', 'sum(pure_gold) as total_pure_gold', 'sum(factory_cost) as total_factory_cost'])
             ->where(['bill_id' => $bill_id])
             ->asArray()->one();
         if ($sum) {
             $result = WarehouseBill::updateAll(['goods_num' => $sum['goods_num'] / 1, 'total_cost' => $sum['total_cost'] / 1, 'total_market' => $sum['total_market'] / 1], ['id' => $bill_id]);
+        }
+        $billT = WarehouseBillL::findOne($bill_id);
+        if ($billT) {
+            $result = WarehouseBillL::updateAll([ 'total_pure_gold' => $sum['total_pure_gold'] / 1, 'total_factory_cost' => $sum['total_factory_cost'] / 1], ['id' => $bill_id]);
         }
         return $result;
     }
