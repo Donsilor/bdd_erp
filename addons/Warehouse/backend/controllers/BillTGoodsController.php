@@ -137,9 +137,9 @@ class BillTGoodsController extends BaseController
             $model = new WarehouseBillTGoodsForm();
             list($values, $fields) = $model->getTitleList($type);
             if (empty($bill_id)) {
-                header("Content-Disposition: attachment;filename=【" . rand(100, 999) . "】" . ($type ? "通用" : "素金") . "-其他入库单导入模板(" . date('Ymd') . ").csv");
+                header("Content-Disposition: attachment;filename=【" . rand(100, 999) . "】" . ($type == GoodsTypeEnum::PlainGold ? "素金" : "通用") . "-其他入库单导入模板(" . date('Ymd') . ").csv");
             } else {
-                header("Content-Disposition: attachment;filename=【{$bill_id}】" . ($type ? "通用" : "素金") . "-其他入库单导入模板($bill->bill_no).csv");
+                header("Content-Disposition: attachment;filename=【{$bill_id}】" . ($type == GoodsTypeEnum::PlainGold ? "素金" : "通用") . "-其他入库单导入模板($bill->bill_no).csv");
             }
             $content = implode($values, ",") . "\n" . implode($fields, ",") . "\n";
             echo iconv("utf-8", "gbk", $content);
