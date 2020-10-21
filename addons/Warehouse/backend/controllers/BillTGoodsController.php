@@ -2,6 +2,7 @@
 
 namespace addons\Warehouse\backend\controllers;
 
+use addons\Warehouse\common\enums\GoodsTypeEnum;
 use Yii;
 use common\traits\Curd;
 use common\helpers\Url;
@@ -508,9 +509,11 @@ class BillTGoodsController extends BaseController
             $billT = WarehouseBillL::findOne($id);
             $billT = $billT ?? new WarehouseBillL();
             $billT->id = $id;
+            $billT->goods_type = GoodsTypeEnum::SeikoStone;
             if (false === $billT->save()) {
-                return ResultHelper::json(404, '找不到数据');
+                return ResultHelper::json(404, '找不到数据[code=1]');
             }
+            return ResultHelper::json(404, '找不到数据[code=2]');
         }
         $params = Yii::$app->request->get();
         if (!$params['name'] || $params['value'] === "") {
