@@ -374,9 +374,9 @@ class WarehouseBillTService extends Service
                 }
                 $is_inlay = $is_inlay ?? InlayEnum::No;
                 if ($form->goods_type == GoodsTypeEnum::PlainGold
-                    && $is_inlay == InlayEnum::No) {
+                    && $is_inlay == InlayEnum::Yes) {
                     $flag = false;
-                    $error[$i][] = $qiban_error . "素金导入不能为非镶嵌【除了镶嵌以外的】产品";
+                    $error[$i][] = $qiban_error . "镶嵌，不可导入";
                 }
             }
             if (!$flag) {

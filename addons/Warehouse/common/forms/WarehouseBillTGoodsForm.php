@@ -2,8 +2,10 @@
 
 namespace addons\Warehouse\common\forms;
 
+use addons\Warehouse\common\enums\PeiLiaoWayEnum;
 use common\helpers\ArrayHelper;
 use common\helpers\StringHelper;
+use addons\Warehouse\common\models\WarehouseBill;
 use addons\Warehouse\common\models\WarehouseBillL;
 use addons\Warehouse\common\models\WarehouseBillGoodsL;
 use addons\Warehouse\common\enums\PeiJianWayEnum;
@@ -1883,6 +1885,11 @@ class WarehouseBillTGoodsForm extends WarehouseBillGoodsL
      */
     public function correctGoods($form, $save = false)
     {
+        $bill = WarehouseBill::findOne($form->bill_id);
+        $this->goods_type = 0;
+        if ($bill) {
+            $this->goods_type = $bill->billL->goods_type ?? 0;
+        }
         $saveData = [];
         //配件金重，配件金价，配件总额，任意填写一个，配件类型：工厂配
         if (bccomp($form->parts_gold_weight, 0, 5) == 1
@@ -1895,6 +1902,11 @@ class WarehouseBillTGoodsForm extends WarehouseBillGoodsL
             && bccomp($form->parts_amount, 0, 5) != 1) {
             $form->parts_way = PeiJianWayEnum::NO_PEI;
             $saveData['parts_way'] = PeiJianWayEnum::NO_PEI;
+        }
+        //金料
+        if($this->goods_type == GoodsTypeEnum::PlainGold
+            && bccomp($form->gold_weight, 0, 5) == 1){
+            $form->peiliao_way = PeiLiaoWayEnum::FACTORY;
         }
         if ($save) {
             if (false === $form->save()) {
