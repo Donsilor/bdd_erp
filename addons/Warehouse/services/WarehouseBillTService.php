@@ -108,7 +108,7 @@ class WarehouseBillTService extends Service
 //                    throw new \Exception("起版号已添加过");
 //                }
                 if ($form->cost_price) {
-                    $qiban->cost_price = $form->cost_price;
+                    $qiban->cost_price = $form->cost_amount;
                 }
                 //$qiban = new Qiban();
                 $goods = [
@@ -124,7 +124,7 @@ class WarehouseBillTService extends Service
                     'style_sex' => $qiban->style_sex,
                     'goods_num' => $goods_num,
                     'jintuo_type' => $qiban->jintuo_type,
-                    'cost_price' => bcmul($qiban->cost_price, $goods_num, 3),
+                    'cost_price' => bcdiv($qiban->cost_price, $goods_num, 3),
                     //'market_price' => $style->market_price,
                     'is_inlay' => $qiban->is_inlay,
                     'remark' => $qiban->remark,
@@ -136,7 +136,7 @@ class WarehouseBillTService extends Service
             throw new \Exception("款号不可用");
         } else {
             if ($form->cost_price) {
-                $style->cost_price = $form->cost_price;
+                $style->cost_price = $form->cost_amount;
             }
             //$style = new Style();
             $goods = [
@@ -152,7 +152,7 @@ class WarehouseBillTService extends Service
                 'style_sex' => $style->style_sex,
                 'goods_num' => $goods_num,
                 'jintuo_type' => JintuoTypeEnum::Chengpin,
-                'cost_price' => bcmul($style->cost_price, $goods_num, 3),
+                'cost_price' => bcdiv($style->cost_price, $goods_num, 3),
                 'is_inlay' => $style->is_inlay,
                 //'market_price' => $style->market_price,
                 'creator_id' => \Yii::$app->user->identity->getId(),
