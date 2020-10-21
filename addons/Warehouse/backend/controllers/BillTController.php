@@ -114,6 +114,7 @@ class BillTController extends BaseController
             try {
                 $trans = \Yii::$app->db->beginTransaction();
                 $isNewRecord = $model->isNewRecord;
+                $goods_type = $model->goods_type;
                 if ($isNewRecord) {
                     //$model->bill_no = SnHelper::createBillSn($this->billType);
                     if (!$model->bill_no) {
@@ -129,24 +130,22 @@ class BillTController extends BaseController
                     $gModel->bill_id = $model->id;
                     $gModel->supplier_id = $model->supplier_id;
                     $gModel->put_in_type = $model->put_in_type;
-                    $gModel->supplier_id = $model->supplier_id;
-                    //$gModel->goods_type = $model->goods_type;
+                    //$gModel->goods_type = $goods_type;
                     $gModel->file = UploadedFile::getInstance($model, 'file');
                     if (!empty($gModel->file) && isset($gModel->file)) {
                         \Yii::$app->warehouseService->billT->uploadGoods($gModel);
-                    }else{
-                        //创建收货单附属表
-                        $billT = WarehouseBillL::findOne($model->id);
-                        $billT = $billT ?? new WarehouseBillL();
-                        $billT->id = $model->id;
-                        $billT->goods_type = $model->goods_type ?? 0;
-                        if(false === $billT->save()){
-                            throw new \Exception($this->getError($billT));
-                        }
                     }
                     $log_msg = "创建其它入库单{$model->bill_no}";
                 } else {
                     $log_msg = "修改其它入库单{$model->bill_no}";
+                }
+                //创建收货单附属表
+                $billT = WarehouseBillL::findOne($model->id);
+                $billT = $billT ?? new WarehouseBillL();
+                $billT->id = $model->id;
+                $billT->goods_type = $goods_type ?? 0;
+                if(false === $billT->save()){
+                    throw new \Exception($this->getError($billT));
                 }
                 $log = [
                     'bill_id' => $model->id,
