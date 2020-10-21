@@ -40,6 +40,7 @@ use yii\helpers\Url;
  */
 class WarehouseBillTService extends Service
 {
+    public $goods_type;
 
     /**
      * 单据汇总
@@ -59,7 +60,7 @@ class WarehouseBillTService extends Service
         }
         $billT = WarehouseBillL::findOne($bill_id);
         if ($billT) {
-            $result = WarehouseBillL::updateAll([ 'total_pure_gold' => $sum['total_pure_gold'] / 1, 'total_factory_cost' => $sum['total_factory_cost'] / 1], ['id' => $bill_id]);
+            $result = WarehouseBillL::updateAll(['total_pure_gold' => $sum['total_pure_gold'] / 1, 'total_factory_cost' => $sum['total_factory_cost'] / 1], ['id' => $bill_id]);
         }
         return $result;
     }
@@ -316,6 +317,7 @@ class WarehouseBillTService extends Service
                 //throw new \Exception($row . "[款号]和[起版号]只能填其一");
             }
             $qiban_type = QibanTypeEnum::NON_VERSION;
+            $qiban = null;
             if (!empty($qiban_sn)) {
                 $qiban = Qiban::findOne(['qiban_sn' => $qiban_sn]);
                 if (!$qiban) {
@@ -334,8 +336,8 @@ class WarehouseBillTService extends Service
                     }
                     $qiban_type = QibanTypeEnum::HAVE_STYLE;
                 }
-                if(!$style_sn){
-                    $style_sn = $qiban->style_sn;
+                if (!$style_sn && $qiban) {
+                    $style_sn = $qiban->style_sn ?? "";
                 }
             }
             $is_inlay = InlayEnum::No;
@@ -381,18 +383,18 @@ class WarehouseBillTService extends Service
                 //$flag = true;
                 //continue;
             }
-            if (!empty($qiban_sn)) {
-                $style_image = $qiban->style_image;
-                $style_cate_id = $qiban->style_cate_id;
-                $product_type_id = $qiban->product_type_id;
-                $style_sex = $qiban->style_sex;
-                $style_channel_id = $qiban->style_channel_id;
+            if ($qiban) {
+                $style_image = $qiban->style_image ?? "";
+                $style_cate_id = $qiban->style_cate_id ?? "";
+                $product_type_id = $qiban->product_type_id ?? "";
+                $style_sex = $qiban->style_sex ?? "";
+                $style_channel_id = $qiban->style_channel_id ?? "";
             } else {
-                $style_image = $style->style_image;
-                $style_cate_id = $style->style_cate_id;
-                $product_type_id = $style->product_type_id;
-                $style_sex = $style->style_sex;
-                $style_channel_id = $style->style_channel_id;
+                $style_image = $style->style_image ?? "";
+                $style_cate_id = $style->style_cate_id ?? "";
+                $product_type_id = $style->product_type_id ?? "";
+                $style_sex = $style->style_sex ?? "";
+                $style_channel_id = $style->style_channel_id ?? "";
             }
             $goods_sn = !empty($style_sn) ? $style_sn : $qiban_sn;
             $goods_name = $goods['goods_name'] ?? "";//货品名称
@@ -538,14 +540,16 @@ class WarehouseBillTService extends Service
 //                $flag = false;
 //                $error[$i][] = "配料方式为来料加工，折足率必填";
 //            }
-            if (empty($peiliao_way) && $pure_gold_rate > 0) {
-                $peiliao_way = PeiLiaoWayEnum::LAILIAO;
-            } elseif (empty($peiliao_way) && !$pure_gold_rate && $suttle_weight) {
-                $peiliao_way = PeiLiaoWayEnum::FACTORY;
-            } elseif (!$pure_gold_rate && !$suttle_weight) {
-                $peiliao_way = PeiLiaoWayEnum::NO_PEI;
-            } else {
+            if (empty($peiliao_way)) {
+                if ($pure_gold_rate > 0) {
+                    $peiliao_way = PeiLiaoWayEnum::LAILIAO;
+                } elseif (!$pure_gold_rate && $suttle_weight) {
+                    $peiliao_way = PeiLiaoWayEnum::FACTORY;
+                } elseif (!$pure_gold_rate && !$suttle_weight) {
+                    $peiliao_way = PeiLiaoWayEnum::NO_PEI;
+                } else {
 
+                }
             }
             $main_pei_type = $form->formatValue($goods['main_pei_type'] ?? 0, 0) ?? 0;//主石配石方式
             $main_stone_sn = $goods['main_stone_sn'] ?? "";//主石编号
@@ -1475,11 +1479,15 @@ class WarehouseBillTService extends Service
      *
      * 金重=(连石重-(主石重*数量)-副石1重-副石2重-副石3重-(配件重*数量))
      * @param WarehouseBillTGoodsForm $form
+     * @param WarehouseBill $bill
      * @return integer
      * @throws
      */
     public function calculateGoldWeight($form)
     {
+        if ($this->goods_type == GoodsTypeEnum::PlainGold) {
+            return $form->gold_weight ?? 0;
+        }
         $stone_weight = bcadd($this->calculateMainStoneWeight($form), $this->calculateSecondStoneWeight($form), 5);
         $stone_weight = bcmul($stone_weight, 0.2, 5);//ct转换为克重
         $weight = bcsub($form->suttle_weight, $stone_weight, 5) ?? 0;
@@ -1687,7 +1695,7 @@ class WarehouseBillTService extends Service
     /**
      *
      * 配件额=(配件总重(g)*配件金价/g)
-     * @param WarehouseBillTGoodsForm $form
+     * @param WarehouseBillTGoodsForm $form =
      * @return integer
      * @throws
      */
@@ -1928,6 +1936,12 @@ class WarehouseBillTService extends Service
         if (!$form->validate()) {
             throw new \Exception($this->getError($form));
         }
+        $bill = WarehouseBill::findOne($form->bill_id);
+        $this->goods_type = 0;
+        if ($bill) {
+            $this->goods_type = $bill->billL->goods_type ?? 0;
+        }
+        list($form,) = $form->correctGoods($form);//调整数据
         $form->gold_weight = $this->calculateGoldWeight($form);//金重
         if (empty($form->auto_loss_weight) || bccomp($form->lncl_loss_weight, 0, 5) != 1) {
             if (bccomp($form->lncl_loss_weight, 0, 5) != 1) {
@@ -2005,7 +2019,6 @@ class WarehouseBillTService extends Service
         $form->cost_amount = $this->calculateCostAmount($form);//公司成本总额
         $form->market_price = $this->calculateMarketPrice($form);//标签价
 
-        list($form,) = $form->correctGoods($form);//调整数据
         if (false === $form->save()) {
             throw new \Exception($this->getError($form));
         }

@@ -2,8 +2,6 @@
 
 namespace addons\Warehouse\backend\controllers;
 
-use addons\Warehouse\common\enums\GoodsTypeEnum;
-use addons\Warehouse\common\enums\IsWholeSaleEnum;
 use Yii;
 use common\traits\Curd;
 use common\helpers\Url;
@@ -13,6 +11,8 @@ use addons\Warehouse\common\models\WarehouseBillL;
 use addons\Warehouse\common\models\WarehouseBillGoodsL;
 use addons\Warehouse\common\forms\WarehouseBillPayForm;
 use addons\Warehouse\common\forms\WarehouseBillTGoodsForm;
+use addons\Warehouse\common\enums\GoodsTypeEnum;
+use addons\Warehouse\common\enums\IsWholeSaleEnum;
 use addons\Warehouse\common\enums\BillStatusEnum;
 use addons\Warehouse\common\enums\BillTypeEnum;
 use addons\Warehouse\common\enums\PayMethodEnum;
