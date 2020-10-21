@@ -2,7 +2,6 @@
 
 namespace addons\Warehouse\services;
 
-use addons\Warehouse\common\enums\GoodsTypeEnum;
 use Yii;
 use common\components\Service;
 use common\helpers\SnHelper;
@@ -21,6 +20,7 @@ use addons\Warehouse\common\enums\PeiJianWayEnum;
 use addons\Warehouse\common\enums\PeiLiaoWayEnum;
 use addons\Warehouse\common\enums\PeiShiWayEnum;
 use addons\Warehouse\common\enums\IsWholeSaleEnum;
+use addons\Warehouse\common\enums\GoodsTypeEnum;
 use addons\Style\common\enums\StonePositionEnum;
 use addons\Style\common\enums\JintuoTypeEnum;
 use addons\Style\common\enums\QibanTypeEnum;
@@ -100,10 +100,10 @@ class WarehouseBillTService extends Service
             } elseif ($qiban->status != StatusEnum::ENABLED) {
                 throw new \Exception("起版号不可用");
             } else {
-                $exist = WarehouseBillGoodsL::find()->where(['bill_id' => $form->bill_id, 'qiban_sn' => $form->goods_sn, 'status' => StatusEnum::ENABLED])->count();
-                if ($exist) {
-                    //throw new \Exception("起版号已添加过");
-                }
+//                $exist = WarehouseBillGoodsL::find()->where(['bill_id' => $form->bill_id, 'qiban_sn' => $form->goods_sn, 'status' => StatusEnum::ENABLED])->count();
+//                if ($exist) {
+//                    throw new \Exception("起版号已添加过");
+//                }
                 if ($form->cost_price) {
                     $qiban->cost_price = $form->cost_price;
                 }

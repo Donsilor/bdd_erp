@@ -56,7 +56,7 @@ $form = ActiveForm::begin([
                 <div class="col-sm-6">
                     <?= $form->field($model, 'file')->fileInput() ?>
                     <?= Html::a("下载“通用产品”导入模板", ['bill-t-goods/ajax-upload', 'download' => 1, 'download_type' => 0], ['style' => "text-decoration:underline;color:#3c8dbc"]) ?> |
-                    <?= Html::a("下载“素金产品”导入模板", ['bill-t-goods/ajax-upload', 'download' => 1, 'download_type' => 1], ['style' => "text-decoration:underline;color:#3c8dbc"]) ?>
+                    <?= Html::a("下载“素金产品”导入模板", ['bill-t-goods/ajax-upload', 'download' => 1, 'download_type' => 1], ['style' => "text-decoration:underline;color:#45b97c"]) ?>
                 </div>
             <?php } ?>
         </div>

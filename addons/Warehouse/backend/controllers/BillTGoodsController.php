@@ -2,7 +2,6 @@
 
 namespace addons\Warehouse\backend\controllers;
 
-use addons\Warehouse\common\enums\GoodsTypeEnum;
 use Yii;
 use common\traits\Curd;
 use common\helpers\Url;
@@ -136,11 +135,10 @@ class BillTGoodsController extends BaseController
         if ($download) {
             $model = new WarehouseBillTGoodsForm();
             list($values, $fields) = $model->getTitleList($type);
-            $title = $type == 1 ? "通用" : "素金";
             if (empty($bill_id)) {
-                header("Content-Disposition: attachment;filename=【" . rand(100, 999) . "】{$title}-其他入库单导入模板(" . date('Ymd') . ").csv");
+                header("Content-Disposition: attachment;filename=【" . rand(100, 999) . "】" . ($type ? "通用" : "素金") . "-其他入库单导入模板(" . date('Ymd') . ").csv");
             } else {
-                header("Content-Disposition: attachment;filename=【{$bill_id}】{$title}-其他入库单导入模板($bill->bill_no).csv");
+                header("Content-Disposition: attachment;filename=【{$bill_id}】" . ($type ? "通用" : "素金") . "-其他入库单导入模板($bill->bill_no).csv");
             }
             $content = implode($values, ",") . "\n" . implode($fields, ",") . "\n";
             echo iconv("utf-8", "gbk", $content);
@@ -503,14 +501,14 @@ class BillTGoodsController extends BaseController
     public function actionAjaxHidden($id)
     {
         $this->modelClass = WarehouseBillL::class;
-        if(!$id){
+        if (!$id) {
             return ResultHelper::json(404, 'ID不能为空');
         }
         if (!($model = $this->modelClass::findOne($id))) {
             $billT = WarehouseBillL::findOne($id);
             $billT = $billT ?? new WarehouseBillL();
             $billT->id = $id;
-            if(false === $billT->save()){
+            if (false === $billT->save()) {
                 return ResultHelper::json(404, '找不到数据');
             }
         }
