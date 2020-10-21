@@ -262,10 +262,8 @@ class WarehouseBillTService extends Service
             } elseif ($row == 106) {
                 $goods_type = GoodsTypeEnum::SeikoStone;
             }
-            if ($form->goods_type
-                && $form->goods_type != $goods_type) {
-                $temp_name = GoodsTypeEnum::getValue($form->goods_type) ?? "通用";
-                throw new \Exception("模板格式不正确，请使用“{$temp_name}”模板导入");
+            if ($form->goods_type && $form->goods_type != $goods_type) {
+                throw new \Exception("模板格式不正确，请使用“" . ($form->goods_type == 2 ? "素金" : "通用") . "”模板导入");
             }
             $goods = $form->trimField($goods, $row);
             $goods_id = $goods['goods_id'] ?? "";//条码号
