@@ -125,13 +125,13 @@ class BillTController extends BaseController
                 if (false === $model->save()) {
                     throw new \Exception($this->getError($model));
                 }
+                $gModel = new WarehouseBillTGoodsForm();
+                $gModel->file = UploadedFile::getInstance($model, 'file');
                 if ($isNewRecord) {
-                    $gModel = new WarehouseBillTGoodsForm();
                     $gModel->bill_id = $model->id;
                     $gModel->supplier_id = $model->supplier_id;
                     $gModel->put_in_type = $model->put_in_type;
                     //$gModel->goods_type = $goods_type;
-                    $gModel->file = UploadedFile::getInstance($model, 'file');
                     if (!empty($gModel->file) && isset($gModel->file)) {
                         \Yii::$app->warehouseService->billT->uploadGoods($gModel);
                     }
@@ -139,13 +139,15 @@ class BillTController extends BaseController
                 } else {
                     $log_msg = "修改其它入库单{$model->bill_no}";
                 }
-                //创建收货单附属表
-                $billT = WarehouseBillL::findOne($model->id);
-                $billT = $billT ?? new WarehouseBillL();
-                $billT->id = $model->id;
-                $billT->goods_type = $goods_type ?? 0;
-                if(false === $billT->save()){
-                    throw new \Exception($this->getError($billT));
+                if (empty($gModel->file)) {
+                    //创建收货单附属表
+                    $billT = WarehouseBillL::findOne($model->id);
+                    $billT = $billT ?? new WarehouseBillL();
+                    $billT->id = $model->id;
+                    $billT->goods_type = $goods_type ?? 0;
+                    if (false === $billT->save()) {
+                        throw new \Exception($this->getError($billT));
+                    }
                 }
                 $log = [
                     'bill_id' => $model->id,
@@ -362,7 +364,7 @@ class BillTController extends BaseController
                 throw new \Exception($this->getError($model));
             }
             $billL = WarehouseBillL::findOne($id);
-            if($billL){
+            if ($billL) {
                 $billL->delete();
             }
             $log = [
