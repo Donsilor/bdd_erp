@@ -15,6 +15,8 @@ use addons\Warehouse\common\forms\WarehouseBillCForm;
 use addons\Warehouse\common\enums\BillTypeEnum;
 use addons\Warehouse\common\forms\WarehouseBillCGoodsForm;
 use addons\Warehouse\common\forms\WarehouseBillThGoodsForm;
+use addons\Warehouse\common\forms\WarehouseBillThForm;
+use addons\Warehouse\common\models\WarehouseGoods;
 
 /**
  * WarehouseBillBGoodsController implements the CRUD actions for WarehouseBillBGoodsController model.
@@ -110,7 +112,7 @@ class BillThGoodsController extends BaseController
         }
         try{
             $trans = \Yii::$app->db->beginTransaction();
-            \Yii::$app->warehouseService->billTh->scanGoods($bill_id,[$goods_id]);            
+            \Yii::$app->warehouseService->billTh->scanAddGoods($bill_id,[$goods_id]);            
             $trans->commit();
             
             \Yii::$app->getSession()->setFlash('success', '添加成功');
@@ -158,36 +160,47 @@ class BillThGoodsController extends BaseController
     public function actionAdd()
     {
         $this->layout = '@backend/views/layouts/iframe';
-
-        $search = Yii::$app->request->get('search');
+        
         $bill_id = Yii::$app->request->get('bill_id');
-        $goods_ids = Yii::$app->request->get('goods_ids');
-        $message = Yii::$app->request->get('message');
-        $billM = WarehouseBillCForm::findOne($bill_id);
-        $billM = $billM ?? new WarehouseBillThForm();
-        $billM->goods_ids = $goods_ids;
-        if($search == 1){
-            $valid_goods_ids = $billM->loadGoods();//查询校验
-            $error = $billM->getGoodsMessage();//获取错误
-            return ResultHelper::json(200, "", ['valid_goods_ids' => $valid_goods_ids, 'message'=>$error]);
-        }
-        $searchGoods = $billM->getSearchGoods();
-        if($billM->load(\Yii::$app->request->post()) && !empty($searchGoods)){
+        $this->modelClass = WarehouseBillThForm::class;
+        $form = $this->findModel($bill_id);
+        $form = $form ?? new WarehouseBillThForm();
+        if(\Yii::$app->request->post("search") == 1 && $form->load(\Yii::$app->request->post())){
+            $form->checkGoodsIds();//查询校验
+            $searchModel = new SearchModel([
+                'model' => WarehouseGoods::class,
+                'scenario' => 'default',
+                'partialMatchAttributes' => [], // 模糊查询
+                'defaultOrder' => [],
+                'pageSize' => 100,
+                'relations' => [
+                    
+                ]
+            ]);
+            $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+            $dataProvider->query->andWhere(['goods_id'=>$form->getGoodsIds()]);
+            return $this->render($this->action->id, [
+                'model' => $form,
+                'dataProvider' => $dataProvider,
+                'searchModel' => $searchModel,
+            ]);
+        } 
+        
+        if($form->load(\Yii::$app->request->post())){
             try {
                 $trans = Yii::$app->db->beginTransaction();
-                \Yii::$app->warehouseService->billC->createBillGoodsC($billM, $searchGoods);
+                //批量添加商品
+                \Yii::$app->warehouseService->billTh->batchAddGoods($form);
                 $trans->commit();
-                \Yii::$app->getSession()->setFlash('success','保存成功');
-                return $this->redirect(\Yii::$app->request->referrer);
+                return $this->message('保存成功', $this->redirect(Yii::$app->request->referrer), 'success');
             }catch (\Exception $e){
                 $trans->rollBack();
-                return $this->message($e->getMessage(), $this->redirect(Yii::$app->request->referrer), 'error');
+                return ResultHelper::json(424, $e->getMessage());
             }
-        }
+        }        
+        
         return $this->render($this->action->id, [
-            'model' => $billM,
-            'message' => $message,
-            'searchGoods' => $searchGoods
+            'model' => $form,
         ]);
     }
 

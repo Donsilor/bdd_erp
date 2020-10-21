@@ -138,7 +138,9 @@ use addons\Warehouse\common\enums\GoodsStatusEnum;
  * @property int $updated_at 更新时间
  */
 class WarehouseGoods extends BaseModel
-{
+{   
+    //退货数量临时变量
+    public $return_num;
     /**
      * {@inheritdoc}
      */

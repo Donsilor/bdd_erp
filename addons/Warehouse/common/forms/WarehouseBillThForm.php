@@ -6,6 +6,8 @@ use Yii;
 use addons\Warehouse\common\models\WarehouseBill;
 use common\helpers\ArrayHelper;
 use addons\Warehouse\common\models\WarehouseGoods;
+use common\helpers\StringHelper;
+use addons\Warehouse\common\enums\GoodsStatusEnum;
 
 /**
  * 其它退货单 Form
@@ -13,6 +15,11 @@ use addons\Warehouse\common\models\WarehouseGoods;
  */
 class WarehouseBillThForm extends WarehouseBill
 {
+    
+    //货号集合
+    public $goods_ids;
+    //商品列表
+    public $goods_list;
     /**
      * {@inheritdoc}
      */
@@ -20,6 +27,7 @@ class WarehouseBillThForm extends WarehouseBill
     {
         $rules = [
              [['item_type', 'channel_id'], 'required'],
+             [['goods_ids','goods_list'],'safe']
         ];
         return array_merge(parent::rules() , $rules);
     }
@@ -37,26 +45,18 @@ class WarehouseBillThForm extends WarehouseBill
               'salesman_id'=>'退货人',
               'remark'=>'退货备注',
               'order_sn'=>'参考编号/订单号',
-              'total_cost'=>'退货成本总额'
+              'total_cost'=>'退货成本总额',
+              'goods_ids' => '货号'
         ]);
-    }
-    
-    /**
-     * {@inheritdoc}
-     */
-    public function getIds()
-    {
-        if ($this->ids) {
-            return StringHelper::explode($this->ids);
-        }
-        return [];
-    }
-    
+    }    
     /**
      * 批量获取货号
      */
     public function getGoodsIds()
     {
+        if(is_array($this->goods_ids)) {
+            return $this->goods_ids;
+        }
         return StringHelper::explodeIds($this->goods_ids);
     }
     
@@ -64,69 +64,29 @@ class WarehouseBillThForm extends WarehouseBill
      * 查询商品数据校验
      * {@inheritdoc}
      */
-    public function loadGoods()
-    {
-        $valid_goods_ids = "";
-        $goodsIds = $this->getGoodsIds();
-        foreach ($goodsIds as $k => $goods_id) {
-            $flag = true;
-            $goods = WarehouseGoods::find()->where($where)->one();
+    public function checkGoodsIds()
+    {   
+        $goods_ids = $this->getGoodsIds();
+        $this->goods_ids = [];
+        foreach ($goods_ids as $k => $goods_id) {
+            $goods = WarehouseGoods::find()->select(['goods_num','stock_num','goods_status'])->where(['goods_id'=>$goods_id])->one();
             if (!$goods) {
-                $flag = false;
-                $this->addGoodsError($goods_id, 1,"不存在或者不是库存状态");
-            }            
-            if($flag){
-                $valid_goods_ids.= $goods_id.",";
+                $this->addGoodsError($goods_id, 1,"货号不存在");
+            }else if(!in_array($goods->goods_status,[GoodsStatusEnum::HAS_SOLD,GoodsStatusEnum::IN_STOCK])) {
+                $this->addGoodsError($goods_id, 1,"商品不是库存或已销售状态");
+            }else if($goods->stock_num >= $goods->goods_num) {
+                $this->addGoodsError($goods_id, 1,"商品不符合退货条件");
+            }else {
+                $this->goods_ids[] = $goods_id;
             }
         }
-        if($valid_goods_ids){
-            $valid_goods_ids = trim($valid_goods_ids, ',');
-        }
-        return $flag;
-    }
-    
-    /**
-     * @param WarehouseBillCForm $form
-     * {@inheritdoc}
-     */
-    public function getSearchGoods()
-    {
-        $searchGoods = [];
-        $goodsIds = $this->getGoodsIds();
-        if($goodsIds){
-            $goodsList = WarehouseGoods::find()->where(['goods_id'=>$goodsIds])->all();
-            foreach ($goodsList as $goods) {
-                $searchGoods[] = [
-                        'id' => null,
-                        'goods_id' => $goods->goods_id,
-                        'bill_id' => $this->id,
-                        'bill_no' => $this->bill_no,
-                        'bill_type' => $this->bill_type,
-                        'style_sn' => $goods->style_sn,
-                        'goods_name' => $goods->goods_name,
-                        'goods_num' => $goods->goods_num,
-                        'put_in_type' => $goods->put_in_type,
-                        'warehouse_id' => $goods->warehouse_id,
-                        'from_warehouse_id' => $goods->warehouse_id,
-                        'material' => $goods->material,
-                        'gold_weight' => $goods->gold_weight,
-                        'gold_loss' => $goods->gold_loss,
-                        'diamond_carat' => $goods->diamond_carat,
-                        'diamond_color' => $goods->diamond_color,
-                        'diamond_clarity' => $goods->diamond_clarity,
-                        'diamond_cert_id' => $goods->diamond_cert_id,
-                        'cost_price' => $goods->cost_price,
-                        'sale_price' => $goods->market_price,
-                        'market_price' => $goods->market_price,
-                ];
-            }
-        }
-        return $searchGoods;
+        return empty($this->_goodsErrors) ? true : false;
     }
     
     /**
      * {@inheritDoc}
      */
+    private $_goodsErrors;
     public function addGoodsError($goods_id, $type, $error)
     {
         $this->_goodsErrors[$goods_id][$type] = $error;

@@ -34,5 +34,5 @@ class WarehouseBillThGoodsForm extends WarehouseBillGoods
              'cost_amount' =>'退货成本总额',
              'goods_num' =>'退货数量',
         ]);
-    }
+    }    
 }

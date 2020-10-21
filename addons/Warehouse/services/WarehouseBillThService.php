@@ -17,6 +17,7 @@ use addons\Warehouse\common\enums\BillTypeEnum;
 use addons\Warehouse\common\enums\BillFixEnum;
 use addons\Warehouse\common\models\WarehouseBill;
 use addons\Warehouse\common\models\WarehouseBillLog;
+use addons\Warehouse\common\forms\WarehouseBillThForm;
 
 /**
  * 其它退货单
@@ -26,64 +27,29 @@ use addons\Warehouse\common\models\WarehouseBillLog;
 class WarehouseBillThService extends WarehouseBillService
 {
     public $billFix = BillFixEnum::BILL_CK;
+    
     /**
-     * 创建其它退货单明细
-     * @param WarehouseBillCForm $form
+     * 批量添加其它退货单明细
+     * @param WarehouseBillThForm $form
      * @param array $saveGoods
      * @throws
-     *
      */
-    public function create($form, $saveGoods)
+    public function batchAddGoods($form)
     {
         if(false === $form->validate()) {
             throw new \Exception($this->getError($form));
         }
-        //批量创建单据明细
-        $goods_ids = $goods_val = [];
-        foreach ($saveGoods as &$goods) {
-            $goods_id = $goods['goods_id'];
-            $goods_ids[] = $goods_id;
-            $goods_info = WarehouseGoods::find()->where(['goods_id' => $goods_id, 'goods_status'=>GoodsStatusEnum::IN_STOCK])->one();
-            if(empty($goods_info)){
-                throw new \Exception("货号{$goods_id}不存在或者不是库存中");
+        foreach ($form->goods_list ?? [] as $goods_id=>$goods) {
+            $wareGoods = WarehouseGoods::find()->where(['goods_id'=>$goods_id])->one();
+            if(empty($goods)) {
+                throw new \Exception("[{$goods_id}]条码货号不存在");
             }
-            $goods['bill_id'] = $form->id;
-            $goods['bill_no'] = $form->bill_no;
-            $goods['bill_type'] = $form->bill_type;
-            $goods['warehouse_id'] = $goods_info->warehouse_id;
-            $goods['from_warehouse_id'] = $goods_info->warehouse_id;
-            $goods['put_in_type'] = $goods_info->put_in_type;
-            $goods_val[] = array_values($goods);
-            $goods_key = array_keys($goods);
-            if(count($goods_val)>=10){
-                $res = \Yii::$app->db->createCommand()->batchInsert(WarehouseBillGoods::tableName(), $goods_key, $goods_val)->execute();
-                if(false === $res){
-                    throw new Exception('创建单据明细失败1');
-                }
-                $goods_val = [];
-            }
-        }
-        if(!empty($goods_val)){
-            $res = \Yii::$app->db->createCommand()->batchInsert(WarehouseBillGoods::tableName(), $goods_key, $goods_val)->execute();
-            if(false === $res){
-                throw new Exception('创建单据明细失败2');
-            }
-        }
-        foreach ($goods_ids as $goods_id){
-            $goods = WarehouseGoods::find()->where(['goods_id'=>$goods_id])->one();
-            if($goods->goods_status != GoodsStatusEnum::IN_STOCK) {
-                throw new \Exception("[{$goods_id}]货号条码不是库存状态");
-            }
-            $goods->chuku_price = $goods->getChukuPrice();
-            $goods->chuku_time = time();
-            $goods->goods_status = GoodsStatusEnum::IN_SALE;
-            if(false === $goods->save()){
-                throw new Exception('更新库存信息失败');
-            }
-        }
+            $wareGoods->return_num = $goods['return_num'];
+            $this->createBillGoodsByGoods($form, $wareGoods);
+        }        
         //更新收货单汇总：总金额和总数量
-        if(false === $this->billCSummary($form->id)){
-            throw new Exception('更新单据汇总失败');
+        if(false === $this->billSummary($form->id)){
+            throw new \Exception('更新单据汇总失败');
         }
     }
     
@@ -92,7 +58,7 @@ class WarehouseBillThService extends WarehouseBillService
      * @param int $bill_id
      * @param array $goods_ids
      */
-    public function scanGoods($bill_id, $goods_ids)
+    public function scanAddGoods($bill_id, $goods_ids)
     {
         $bill = WarehouseBill::find()->where(['id'=>$bill_id,'bill_type'=>BillTypeEnum::BILL_TYPE_TH])->one();
         if(empty($bill) || $bill->bill_status != BillStatusEnum::SAVE) {
@@ -296,9 +262,9 @@ class WarehouseBillThService extends WarehouseBillService
             throw new \Exception("不可更改,商品状态异常");
         }
         $max_num = $goods->goods_num - $goods->stock_num + $billGoods->goods_num;
-        //throw new \Exception($goods->goods_num .'-'. $goods->stock_num .'-'. $billGoods->goods_num);
+
         if($return_num > $max_num) {
-            throw new \Exception("退款数量不能大于{$max_num}");
+            throw new \Exception("退货数量不能大于{$max_num}");
         }
                 
         $goods->stock_num = $goods->stock_num + ($return_num - $billGoods->goods_num);
@@ -323,10 +289,16 @@ class WarehouseBillThService extends WarehouseBillService
     private function createBillGoodsByGoods($bill, $goods)
     {
         $goods_id = $goods->goods_id;
+        $return_num = $goods->return_num ? $goods->return_num : 1;        
+        
         if($goods->goods_num <= $goods->stock_num || !in_array($goods->goods_status,[GoodsStatusEnum::IN_STOCK,GoodsStatusEnum::HAS_SOLD])) {
             throw new \Exception("[{$goods_id}]不满足退货条件");
         }
-        
+        //最大退货数量
+        $max_num = $goods->goods_num - $goods->stock_num;        
+        if($return_num > $max_num) {
+            throw new \Exception("[{$goods->goods_id}]退货数量不能大于{$max_num}");
+        }
         $billGoods = new WarehouseBillGoods();
         $billGoods->attributes = [
                 'bill_id' =>$bill->id,
@@ -335,12 +307,11 @@ class WarehouseBillThService extends WarehouseBillService
                 'goods_id'=>$goods_id,
                 'goods_name'=>$goods->goods_name,
                 'style_sn'=>$goods->style_sn,
-                'goods_num'=>1,
+                'goods_num'=>$return_num,
                 'put_in_type'=>$goods->put_in_type,
                 'warehouse_id'=>$goods->warehouse_id,
                 'from_warehouse_id'=>$goods->warehouse_id,
                 'to_warehouse_id'=>$goods->warehouse_id,
-                //'material'=>$goods->material,
                 'material_type'=>$goods->material_type,
                 'material_color'=>$goods->material_color,
                 'gold_weight'=>$goods->gold_weight,
@@ -357,10 +328,11 @@ class WarehouseBillThService extends WarehouseBillService
         if(false === $billGoods->save()) {
             throw new \Exception("[{$goods_id}]".$this->getError($billGoods));
         }
-        $goods->stock_num = $goods->stock_num + $billGoods->goods_num;
+        $goods->stock_num = $goods->stock_num + $return_num;
         $goods->goods_status = GoodsStatusEnum::IN_REFUND;
         if(false === $goods->save(true,['goods_id','stock_num','goods_status'])){
             throw new \Exception("[{$goods->goods_id}]单据明细添加失败");
-        }        
+        }  
+        return $billGoods;
     }
 }
