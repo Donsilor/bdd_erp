@@ -79,16 +79,18 @@ $this->params['breadcrumbs'][] = $this->title;
                         echo '&nbsp;';
                         echo Html::hidden($bill->billL->show_gold ?? 0, '金料', ['data-id' => $bill->id, 'data-name' => 'show_gold', 'data-text' => '金料']);
                         echo '&nbsp;';
-                        echo Html::hidden($bill->billL->show_main_stone ?? 0, '主石', ['data-id' => $bill->id, 'data-name' => 'show_main_stone', 'data-text' => '主石']);
-                        echo '&nbsp;';
-                        echo Html::hidden($bill->billL->show_second_stone1 ?? 0, '副石1', ['data-id' => $bill->id, 'data-name' => 'show_second_stone1', 'data-text' => '副石1']);
-                        echo '&nbsp;';
-                        echo Html::hidden($bill->billL->show_second_stone2 ?? 0, '副石2', ['data-id' => $bill->id, 'data-name' => 'show_second_stone2', 'data-text' => '副石2']);
-                        echo '&nbsp;';
-                        echo Html::hidden($bill->billL->show_second_stone3 ?? 0, '副石3', ['data-id' => $bill->id, 'data-name' => 'show_second_stone3', 'data-text' => '副石3']);
-                        echo '&nbsp;';
-                        echo Html::hidden($bill->billL->show_parts ?? 0, '配件', ['data-id' => $bill->id, 'data-name' => 'show_parts', 'data-text' => '配件']);
-                        echo '&nbsp;';
+                        if ($goods_type != \addons\Warehouse\common\enums\GoodsTypeEnum::PlainGold) {
+                            echo Html::hidden($bill->billL->show_main_stone ?? 0, '主石', ['data-id' => $bill->id, 'data-name' => 'show_main_stone', 'data-text' => '主石']);
+                            echo '&nbsp;';
+                            echo Html::hidden($bill->billL->show_second_stone1 ?? 0, '副石1', ['data-id' => $bill->id, 'data-name' => 'show_second_stone1', 'data-text' => '副石1']);
+                            echo '&nbsp;';
+                            echo Html::hidden($bill->billL->show_second_stone2 ?? 0, '副石2', ['data-id' => $bill->id, 'data-name' => 'show_second_stone2', 'data-text' => '副石2']);
+                            echo '&nbsp;';
+                            echo Html::hidden($bill->billL->show_second_stone3 ?? 0, '副石3', ['data-id' => $bill->id, 'data-name' => 'show_second_stone3', 'data-text' => '副石3']);
+                            echo '&nbsp;';
+                            echo Html::hidden($bill->billL->show_parts ?? 0, '配件', ['data-id' => $bill->id, 'data-name' => 'show_parts', 'data-text' => '配件']);
+                            echo '&nbsp;';
+                        }
                         echo Html::hidden($bill->billL->show_fee ?? 0, '工费', ['data-id' => $bill->id, 'data-name' => 'show_fee', 'data-text' => '工费']);
                         echo '&nbsp;';
                         echo Html::hidden($bill->billL->show_price ?? 0, '价格', ['data-id' => $bill->id, 'data-name' => 'show_price', 'data-text' => '价格']);
