@@ -1914,61 +1914,71 @@ class WarehouseBillTGoodsForm extends WarehouseBillGoodsL
      */
     public function isVisible($form, $field)
     {
+        $goods_type = $billL->goods_type ?? 0;
+        if ($goods_type == GoodsTypeEnum::PlainGold
+            && $this->getMergeField($form, $field, $this->getPlainGoldField())) {
+            $is_visible = true;
+        }else{
+            $is_visible = $this->getMergeField($form, $field);
+        }
+        return $is_visible;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getMergeField($form, $field, $merge = [])
+    {
         $is_visible = false;
         $billL = WarehouseBillL::findOne($form->id);
         $show_basic = $billL->show_basic ?? 0;
         if ($show_basic == IsHiddenEnum::NO
-            && in_array($field, $this->getBasicField())) {
+            && in_array($field, $this->getBasicField($merge))) {
             $is_visible = true;
         }
         $show_attr = $billL->show_attr ?? 0;
         if ($show_attr == IsHiddenEnum::NO
-            && in_array($field, $this->getAttrField())) {
+            && in_array($field, $this->getAttrField($merge))) {
             $is_visible = true;
         }
         $show_gold = $billL->show_gold ?? 0;
         if ($show_gold == IsHiddenEnum::NO
-            && in_array($field, $this->getGoldField())) {
+            && in_array($field, $this->getGoldField($merge))) {
             $is_visible = true;
         }
         $show_main_stone = $billL->show_main_stone ?? 0;
         if ($show_main_stone == IsHiddenEnum::NO
-            && in_array($field, $this->getMainStoneField())) {
+            && in_array($field, $this->getMainStoneField($merge))) {
             $is_visible = true;
         }
         $show_second_stone1 = $billL->show_second_stone1 ?? 0;
         if ($show_second_stone1 == IsHiddenEnum::NO
-            && in_array($field, $this->getSecondStone1Field())) {
+            && in_array($field, $this->getSecondStone1Field($merge))) {
             $is_visible = true;
         }
         $show_second_stone2 = $billL->show_second_stone2 ?? 0;
         if ($show_second_stone2 == IsHiddenEnum::NO
-            && in_array($field, $this->getSecondStone2Field())) {
+            && in_array($field, $this->getSecondStone2Field($merge))) {
             $is_visible = true;
         }
         $show_second_stone3 = $billL->show_second_stone3 ?? 0;
         if ($show_second_stone3 == IsHiddenEnum::NO
-            && in_array($field, $this->getSecondStone3Field())) {
+            && in_array($field, $this->getSecondStone3Field($merge))) {
             $is_visible = true;
         }
         $show_parts = $billL->show_parts ?? 0;
         if ($show_parts == IsHiddenEnum::NO
-            && in_array($field, $this->getPartsField())) {
+            && in_array($field, $this->getPartsField($merge))) {
             $is_visible = true;
         }
         $show_fee = $billL->show_fee ?? 0;
         if ($show_fee == IsHiddenEnum::NO
-            && in_array($field, $this->getFeeField())) {
+            && in_array($field, $this->getFeeField($merge))) {
             $is_visible = true;
         }
         $show_price = $billL->show_price ?? 0;
         if ($show_price == IsHiddenEnum::NO
-            && in_array($field, $this->getPriceField())) {
-            $is_visible = true;
-        }
-        $goods_type = $billL->goods_type ?? 0;
-        if ($goods_type == GoodsTypeEnum::PlainGold
-            && in_array($field, $this->getPlainGoldField())) {
+            && in_array($field, $this->getPriceField($merge))) {
             $is_visible = true;
         }
         return $is_visible;
@@ -1977,44 +1987,53 @@ class WarehouseBillTGoodsForm extends WarehouseBillGoodsL
     /**
      * {@inheritdoc}
      */
-    public function getBasicField()
+    public function getBasicField($merge)
     {
         $fieldName = [
             'goods_image', 'style_cate_id', 'product_type_id', 'auto_goods_id', 'goods_id', 'style_sn', 'goods_name',
             'qiban_sn', 'to_warehouse_id', 'goods_num', 'front_operation',
 
         ];
+        if($merge){
+            $fieldName = array_intersect($fieldName, $merge);
+        }
         return $fieldName ?? [];
     }
 
     /**
      * {@inheritdoc}
      */
-    public function getAttrField()
+    public function getAttrField($merge)
     {
         $fieldName = [
             'material', 'material_type', 'material_color', 'finger_hk', 'finger', 'length', 'chain_long',
             'product_size', 'xiangkou', 'kezi', 'chain_type', 'cramp_ring', 'talon_head_type', 'goods_color'
         ];
+        if($merge){
+            $fieldName = array_intersect($fieldName, $merge);
+        }
         return $fieldName ?? [];
     }
 
     /**
      * {@inheritdoc}
      */
-    public function getGoldField()
+    public function getGoldField($merge)
     {
         $fieldName = [
             'goods_name1', 'peiliao_way', 'suttle_weight', 'gold_weight', 'gold_loss', 'lncl_loss_weight', 'gold_price',
             'gold_amount', 'pure_gold_rate', 'pure_gold', 'gross_weight', 'factory_gold_weight',
         ];
+        if($merge){
+            $fieldName = array_intersect($fieldName, $merge);
+        }
         return $fieldName ?? [];
     }
 
     /**
      * {@inheritdoc}
      */
-    public function getMainStoneField()
+    public function getMainStoneField($merge)
     {
         $fieldName = [
             'goods_name2', 'main_pei_type', 'main_stone_sn', 'main_stone_type', 'main_stone_num', 'main_stone_weight',
@@ -2022,13 +2041,16 @@ class WarehouseBillTGoodsForm extends WarehouseBillGoodsL
             'main_stone_clarity', 'main_stone_cut', 'main_stone_polish', 'main_stone_symmetry', 'main_stone_fluorescence',
             'main_stone_colour', 'main_cert_id', 'main_cert_type'
         ];
+        if($merge){
+            $fieldName = array_intersect($fieldName, $merge);
+        }
         return $fieldName ?? [];
     }
 
     /**
      * {@inheritdoc}
      */
-    public function getSecondStone1Field()
+    public function getSecondStone1Field($merge)
     {
         $fieldName = [
             'goods_name3', 'second_pei_type', 'second_stone_type1', 'second_stone_sn1', 'second_stone_num1', 'second_stone_weight1',
@@ -2036,49 +2058,61 @@ class WarehouseBillTGoodsForm extends WarehouseBillGoodsL
             'second_stone_clarity1', 'second_stone_cut1', 'second_stone_colour1', 'second_stone_size1',
             'second_cert_id1',
         ];
+        if($merge){
+            $fieldName = array_intersect($fieldName, $merge);
+        }
         return $fieldName ?? [];
     }
 
     /**
      * {@inheritdoc}
      */
-    public function getSecondStone2Field()
+    public function getSecondStone2Field($merge)
     {
         $fieldName = [
             'goods_name4', 'second_pei_type2', 'second_stone_type2', 'second_stone_sn2', 'second_stone_num2', 'second_stone_weight2',
             'second_stone_price2', 'second_stone_amount2', 'second_stone_color2', 'second_stone_clarity2',
             'second_stone_shape2', 'second_stone_colour2', 'second_stone_size2', 'second_cert_id2',
         ];
+        if($merge){
+            $fieldName = array_intersect($fieldName, $merge);
+        }
         return $fieldName ?? [];
     }
 
     /**
      * {@inheritdoc}
      */
-    public function getSecondStone3Field()
+    public function getSecondStone3Field($merge)
     {
         $fieldName = [
             'goods_name5', 'second_pei_type3', 'second_stone_type3', 'second_stone_sn3', 'second_stone_num3', 'second_stone_weight3',
             'second_stone_price3', 'second_stone_amount3', 'second_stone_color3', 'second_stone_clarity3', 'stone_remark',
         ];
+        if($merge){
+            $fieldName = array_intersect($fieldName, $merge);
+        }
         return $fieldName ?? [];
     }
 
     /**
      * {@inheritdoc}
      */
-    public function getPartsField()
+    public function getPartsField($merge)
     {
         $fieldName = [
             'goods_name6', 'parts_way', 'parts_type', 'parts_material', 'parts_num', 'parts_gold_weight', 'parts_price', 'parts_amount',
         ];
+        if($merge){
+            $fieldName = array_intersect($fieldName, $merge);
+        }
         return $fieldName ?? [];
     }
 
     /**
      * {@inheritdoc}
      */
-    public function getFeeField()
+    public function getFeeField($merge)
     {
         $fieldName = [
             'goods_name7', 'peishi_weight', 'peishi_gong_fee', 'peishi_fee', 'parts_fee', 'gong_fee', 'piece_fee',
@@ -2087,18 +2121,24 @@ class WarehouseBillTGoodsForm extends WarehouseBillGoodsL
             'templet_fee', 'tax_fee', 'tax_amount', 'cert_fee', 'other_fee', 'basic_gong_fee', 'peishi_num',
             'extra_stone_fee', 'total_gong_fee', 'xianqian_price',
         ];
+        if($merge){
+            $fieldName = array_intersect($fieldName, $merge);
+        }
         return $fieldName ?? [];
     }
 
     /**
      * {@inheritdoc}
      */
-    public function getPriceField()
+    public function getPriceField($merge)
     {
         $fieldName = [
             'goods_name8', 'factory_cost', 'cost_price', 'cost_amount', 'markup_rate', 'market_price',
             'is_inlay', 'is_wholesale', 'factory_mo', 'pay_status', 'style_sex', 'style_channel_id', 'remark',
         ];
+        if($merge){
+            $fieldName = array_intersect($fieldName, $merge);
+        }
         return $fieldName ?? [];
     }
 
