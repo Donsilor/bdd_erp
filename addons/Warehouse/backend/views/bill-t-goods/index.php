@@ -15,6 +15,8 @@ $this->params['breadcrumbs'][] = ['label' => $this->title, 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 $params = Yii::$app->request->queryParams;
 $params = $params ? "&" . http_build_query($params) : '';
+
+$goods_type = $bill->billL->goods_type ?? 0;
 ?>
 <style>
     select.form-control {
@@ -80,16 +82,17 @@ $params = $params ? "&" . http_build_query($params) : '';
                     </span>
                     <span>
                         <?php
-                            echo Html::batchButtons(false);
-                            echo '&nbsp;';
-                            echo Html::hidden($bill->billL->show_all ?? 0, '全部', ['data-id' => $bill->id, 'data-name' => 'show_all', 'data-text' => '全部']);
-                            echo '&nbsp;';
-                            echo Html::hidden($bill->billL->show_basic ?? 0, '基本', ['data-id' => $bill->id, 'data-name' => 'show_basic', 'data-text' => '基本']);
-                            echo '&nbsp;';
-                            echo Html::hidden($bill->billL->show_attr ?? 0, '属性', ['data-id' => $bill->id, 'data-name' => 'show_attr', 'data-text' => '属性']);
-                            echo '&nbsp;';
-                            echo Html::hidden($bill->billL->show_gold ?? 0, '金料', ['data-id' => $bill->id, 'data-name' => 'show_gold', 'data-text' => '金料']);
-                            echo '&nbsp;';
+                        echo Html::batchButtons(false);
+                        echo '&nbsp;';
+                        echo Html::hidden($bill->billL->show_all ?? 0, '全部', ['data-id' => $bill->id, 'data-name' => 'show_all', 'data-text' => '全部']);
+                        echo '&nbsp;';
+                        echo Html::hidden($bill->billL->show_basic ?? 0, '基本', ['data-id' => $bill->id, 'data-name' => 'show_basic', 'data-text' => '基本']);
+                        echo '&nbsp;';
+                        echo Html::hidden($bill->billL->show_attr ?? 0, '属性', ['data-id' => $bill->id, 'data-name' => 'show_attr', 'data-text' => '属性']);
+                        echo '&nbsp;';
+                        echo Html::hidden($bill->billL->show_gold ?? 0, '金料', ['data-id' => $bill->id, 'data-name' => 'show_gold', 'data-text' => '金料']);
+                        echo '&nbsp;';
+                        if ($goods_type != \addons\Warehouse\common\enums\GoodsTypeEnum::PlainGold) {
                             echo Html::hidden($bill->billL->show_main_stone ?? 0, '主石', ['data-id' => $bill->id, 'data-name' => 'show_main_stone', 'data-text' => '主石']);
                             echo '&nbsp;';
                             echo Html::hidden($bill->billL->show_second_stone1 ?? 0, '副石1', ['data-id' => $bill->id, 'data-name' => 'show_second_stone1', 'data-text' => '副石1']);
@@ -100,9 +103,10 @@ $params = $params ? "&" . http_build_query($params) : '';
                             echo '&nbsp;';
                             echo Html::hidden($bill->billL->show_parts ?? 0, '配件', ['data-id' => $bill->id, 'data-name' => 'show_parts', 'data-text' => '配件']);
                             echo '&nbsp;';
-                            echo Html::hidden($bill->billL->show_fee ?? 0, '工费', ['data-id' => $bill->id, 'data-name' => 'show_fee', 'data-text' => '工费']);
-                            echo '&nbsp;';
-                            echo Html::hidden($bill->billL->show_price ?? 0, '价格', ['data-id' => $bill->id, 'data-name' => 'show_price', 'data-text' => '价格']);
+                        }
+                        echo Html::hidden($bill->billL->show_fee ?? 0, '工费', ['data-id' => $bill->id, 'data-name' => 'show_fee', 'data-text' => '工费']);
+                        echo '&nbsp;';
+                        echo Html::hidden($bill->billL->show_price ?? 0, '价格', ['data-id' => $bill->id, 'data-name' => 'show_price', 'data-text' => '价格']);
                         ?>
                     </span>
                     <span style="color:red;">（Ctrl+F键可快速查找字段名）</span>
@@ -2590,7 +2594,7 @@ $params = $params ? "&" . http_build_query($params) : '';
         if (self.hasClass("btn-success")) {
             status = 1;
         }
-        if(!url){
+        if (!url) {
             url = "<?= Url::to(['ajax-hidden'])?>";
         }
         $.ajax({

@@ -1914,12 +1914,12 @@ class WarehouseBillTGoodsForm extends WarehouseBillGoodsL
      */
     public function isVisible($form, $field)
     {
+        $billL = WarehouseBillL::findOne($form->id);
         $goods_type = $billL->goods_type ?? 0;
-        if ($goods_type == GoodsTypeEnum::PlainGold
-            && $this->getMergeField($form, $field, $this->getPlainGoldField())) {
-            $is_visible = true;
+        if ($goods_type == GoodsTypeEnum::PlainGold) {
+            $is_visible = $this->getMergeField($billL, $field, $this->getPlainGoldField());
         }else{
-            $is_visible = $this->getMergeField($form, $field);
+            $is_visible = $this->getMergeField($billL, $field);
         }
         return $is_visible;
     }
@@ -1930,7 +1930,6 @@ class WarehouseBillTGoodsForm extends WarehouseBillGoodsL
     public function getMergeField($form, $field, $merge = [])
     {
         $is_visible = false;
-        $billL = WarehouseBillL::findOne($form->id);
         $show_basic = $billL->show_basic ?? 0;
         if ($show_basic == IsHiddenEnum::NO
             && in_array($field, $this->getBasicField($merge))) {
@@ -2148,10 +2147,11 @@ class WarehouseBillTGoodsForm extends WarehouseBillGoodsL
     public function getPlainGoldField()
     {
         $fieldName = [
-            'goods_id', 'style_sn', 'goods_name', 'qiban_sn', 'to_warehouse_id', 'material_type', 'material_color', 'goods_num', 'finger_hk', 'finger', 'length', 'product_size', 'chain_type', 'cramp_ring',
+            'id', 'goods_image', 'style_cate_id', 'product_type_id', 'auto_goods_id', 'front_operation',
+            'goods_id', 'style_sn', 'goods_name', 'qiban_sn', 'to_warehouse_id', 'material_type', 'material_color', 'goods_num', 'length', 'product_size', 'chain_type', 'cramp_ring',
             'peiliao_way', 'gold_weight', 'gold_price', 'gold_amount',
             'gong_fee', 'piece_fee', 'basic_gong_fee', 'biaomiangongyi', 'biaomiangongyi_fee', 'templet_fee', 'tax_fee', 'tax_amount', 'cert_fee', 'other_fee',
-            'main_cert_type', 'factory_cost', 'cost_amount', 'markup_rate', 'remark',
+            'factory_cost', 'cost_amount', 'markup_rate', 'remark',
         ];
         return $fieldName ?? [];
     }
