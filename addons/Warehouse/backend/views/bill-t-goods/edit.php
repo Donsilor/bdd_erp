@@ -54,16 +54,16 @@ $goods_type = $bill->billL->goods_type ?? 0;
                         <!--                    <div class="col-lg-4">-->
                         <!--                        --><? //= $form->field($model, 'material')->dropDownList(\Yii::$app->styleService->styleAttribute->getAttrValueListByStyle($model->style_sn,AttrIdEnum::MATERIAL),['prompt'=>'请选择']) ?>
                         <!--                    </div>-->
-                        <div class="col-lg-4">
-                            <?= $form->field($model, 'finger_hk')->dropDownList($model->getFingerHkDrop($model), ['prompt' => '请选择']) ?>
-                        </div>
-                        <div class="col-lg-4">
-                            <?= $form->field($model, 'finger')->dropDownList($model->getFingerDrop($model), ['prompt' => '请选择']) ?>
-                        </div>
-                        <div class="col-lg-4">
-                            <?= $form->field($model, 'kezi')->textInput() ?>
-                        </div>
                     <?php }?>
+                    <div class="col-lg-4">
+                        <?= $form->field($model, 'finger_hk')->dropDownList($model->getFingerHkDrop($model), ['prompt' => '请选择']) ?>
+                    </div>
+                    <div class="col-lg-4">
+                        <?= $form->field($model, 'finger')->dropDownList($model->getFingerDrop($model), ['prompt' => '请选择']) ?>
+                    </div>
+                    <div class="col-lg-4">
+                        <?= $form->field($model, 'kezi')->textInput() ?>
+                    </div>
                     <div class="col-lg-4">
                         <?= $form->field($model, 'length')->textInput() ?>
                     </div>

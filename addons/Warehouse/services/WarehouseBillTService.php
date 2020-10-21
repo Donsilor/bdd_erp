@@ -174,9 +174,10 @@ class WarehouseBillTService extends Service
         }
         $goods_type = $bill->billL->goods_type ?? 0;
         if ($goods_type && $form->goods_type && $goods_type != $form->goods_type) {
-            if ($goods_type == GoodsTypeEnum::SeikoStone) {
-                throw new \Exception("请添加非素金款号");
-            } elseif ($goods_type == GoodsTypeEnum::PlainGold) {
+//            if ($goods_type == GoodsTypeEnum::SeikoStone) {
+//                throw new \Exception("请添加非素金款号");
+//            }
+            if ($goods_type == GoodsTypeEnum::PlainGold) {
                 throw new \Exception("请添加素金款号");
             }
         }
@@ -268,7 +269,8 @@ class WarehouseBillTService extends Service
             } elseif ($row == 106) {
                 $goods_type = GoodsTypeEnum::SeikoStone;
             }
-            if ($form->goods_type && $form->goods_type != $goods_type) {
+            if ($form->goods_type == GoodsTypeEnum::PlainGold
+                && $form->goods_type != $goods_type) {
                 throw new \Exception("模板格式不正确，请使用“" . ($form->goods_type == 2 ? "素金" : "通用") . "”模板导入");
             }
             $goods = $form->trimField($goods, $row);
@@ -332,7 +334,9 @@ class WarehouseBillTService extends Service
                     }
                     $qiban_type = QibanTypeEnum::HAVE_STYLE;
                 }
-                $style_sn = $qiban->style_sn ?? "";
+                if(!$style_sn){
+                    $style_sn = $qiban->style_sn;
+                }
             }
             $is_inlay = InlayEnum::No;
             if ($qiban_type != QibanTypeEnum::NO_STYLE) {

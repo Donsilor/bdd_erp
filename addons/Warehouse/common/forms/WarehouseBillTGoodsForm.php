@@ -2147,11 +2147,11 @@ class WarehouseBillTGoodsForm extends WarehouseBillGoodsL
     public function getPlainGoldField()
     {
         $fieldName = [
-            'id', 'goods_image', 'style_cate_id', 'product_type_id', 'auto_goods_id', 'front_operation',
+            'id', 'goods_image', 'style_cate_id', 'product_type_id', 'auto_goods_id', 'front_operation', 'finger_hk', 'finger',
             'goods_id', 'style_sn', 'goods_name', 'qiban_sn', 'to_warehouse_id', 'material_type', 'material_color', 'goods_num', 'length', 'product_size', 'chain_type', 'cramp_ring',
-            'peiliao_way', 'gold_weight', 'gold_price', 'gold_amount',
+            'peiliao_way', 'gold_weight', 'gold_price', 'gold_amount', 'factory_gold_weight',
             'gong_fee', 'piece_fee', 'basic_gong_fee', 'biaomiangongyi', 'biaomiangongyi_fee', 'templet_fee', 'tax_fee', 'tax_amount', 'cert_fee', 'other_fee',
-            'factory_cost', 'cost_amount', 'markup_rate', 'remark',
+            'factory_cost', 'cost_amount', 'markup_rate', 'remark'
         ];
         return $fieldName ?? [];
     }
