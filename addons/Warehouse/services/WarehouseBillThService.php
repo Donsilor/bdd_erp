@@ -44,6 +44,9 @@ class WarehouseBillThService extends WarehouseBillService
             if(empty($goods)) {
                 throw new \Exception("[{$goods_id}]条码货号不存在");
             }
+            if($goods['return_num'] <= 0) {
+                throw new \Exception("[{$goods_id}]退货数量必须大于0");
+            }
             $wareGoods->return_num = $goods['return_num'];
             $this->createBillGoodsByGoods($form, $wareGoods);
         }        
