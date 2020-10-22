@@ -435,7 +435,7 @@ $goods_type = $model->billL->goods_type ?? 0
                     <?php if (!in_array($goods_type, [\addons\Warehouse\common\enums\GoodsTypeEnum::PlainGold])) { ?>
                         净重
                     <?php } else { ?>
-                        金重
+                        货重
                     <?php } ?>
                 </td>
                 <td class="algin-center padding-5 font-bold">损耗</td>
