@@ -77,7 +77,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'format' => 'raw',
                                 'headerOptions' => ['class' => 'col-md-1'],
                                 'value'=>function($model) {
-                                    return $model->goods_num - $model->stock_num;
+                                    return $model->goods_num - $model->stock_num - $model->do_chuku_num;
                                 }
                             ],
                             [
@@ -86,7 +86,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'format' => 'raw',
                                 'headerOptions' => ['class' => 'col-md-1',"style"=>"background-color:#84bf96;"],
                                 'value'=>function($_model) use($form, $model){
-                                    return $form->field($model, "goods_list[{$_model->goods_id}][return_num]")->textInput(['value'=>1])->label(false) ;
+                                    return $form->field($model, "goods_list[{$_model->goods_id}][return_num]")->textInput(['value'=>''])->label(false) ;
                                 }
                             ],                            
                             [

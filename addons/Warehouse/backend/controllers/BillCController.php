@@ -182,18 +182,18 @@ class BillCController extends BaseController
      */
     public function actionAjaxApply($id)
     {
-
         $id = \Yii::$app->request->get('id');
-        $model = $this->findModel($id) ?? new WarehouseBillCForm();
+        
+        $model = $this->findModel($id);        
         if ($model->bill_status != BillStatusEnum::SAVE) {
             return $this->message('单据不是保存状态', $this->redirect(\Yii::$app->request->referrer), 'error');
+        }        
+        $count = WarehouseBillGoods::find()->where(['bill_id'=>$model->id, 'goods_num'=>0])->count();
+        if($count > 0){
+            return $this->message("有{$count}个货号未填写出库数量", $this->redirect(\Yii::$app->request->referrer), 'error');
         }
         if ($model->goods_num <= 0) {
             return $this->message('单据明细不能为空', $this->redirect(\Yii::$app->request->referrer), 'error');
-        }
-        $goods = WarehouseBillGoods::findOne(['bill_id'=>$model->id, 'goods_num'=>0]);
-        if($goods){
-            return $this->message('货品出库数量不能为0', $this->redirect(\Yii::$app->request->referrer), 'error');
         }
         try {
             $trans = \Yii::$app->trans->beginTransaction();
@@ -238,12 +238,7 @@ class BillCController extends BaseController
 
             try {
                 $trans = \Yii::$app->trans->beginTransaction();
-
-                $model->audit_time = time();
-                $model->auditor_id = \Yii::$app->user->identity->getId();
-
-                \Yii::$app->warehouseService->billC->auditBillC($model);
-
+                \Yii::$app->warehouseService->billC->audit($model);
                 //日志
                 $log = [
                     'bill_id' => $model->id,
@@ -283,7 +278,7 @@ class BillCController extends BaseController
         try {
             $trans = \Yii::$app->trans->beginTransaction();
 
-            \Yii::$app->warehouseService->billC->cancelBillC($model);
+            \Yii::$app->warehouseService->billC->cancel($model);
 
             $trans->commit();
             $this->message('操作成功', $this->redirect(Yii::$app->request->referrer), 'success');
@@ -307,7 +302,7 @@ class BillCController extends BaseController
         }
         try {
             $trans = \Yii::$app->trans->beginTransaction();
-            \Yii::$app->warehouseService->billC->deleteBillC($model);
+            \Yii::$app->warehouseService->billC->delete($model);
             $trans->commit();
             $this->message('操作成功', $this->redirect(Yii::$app->request->referrer), 'success');
         } catch (\Exception $e) {
@@ -343,7 +338,7 @@ class BillCController extends BaseController
                 $model->file = UploadedFile::getInstance($model, 'file');
                 $model->bill_type = $this->billType;
 
-                \Yii::$app->warehouseService->billC->importBillC($model);
+                \Yii::$app->warehouseService->billC->import($model);
                 $trans->commit();
                 return $this->message('导入成功', $this->redirect(Yii::$app->request->referrer), 'success');
             } catch (\Exception $e) {
@@ -381,7 +376,7 @@ class BillCController extends BaseController
                 $trans = \Yii::$app->trans->beginTransaction();
                 $form->goods_ids = Yii::$app->request->get('ids');
                 $form->bill_type = $this->billType;
-                $model = Yii::$app->warehouseService->billC->quickBillC($form);
+                $model = Yii::$app->warehouseService->billC->quickCreate($form);
                 $trans->commit();
                 Yii::$app->getSession()->setFlash('success', '操作成功，出库单号:' . $model->bill_no);
                 return ResultHelper::json(200, '保存成功', ['jumpUrl' => Url::to(['bill-c-goods/index', 'bill_id' => $model->id])]);

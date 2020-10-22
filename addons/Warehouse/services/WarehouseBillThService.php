@@ -44,6 +44,9 @@ class WarehouseBillThService extends WarehouseBillService
             if(empty($goods)) {
                 throw new \Exception("[{$goods_id}]条码货号不存在");
             }
+            if($goods['return_num'] <= 0) {
+                throw new \Exception("[{$goods_id}]退货数量必须大于0");
+            }
             $wareGoods->return_num = $goods['return_num'];
             $this->createBillGoodsByGoods($form, $wareGoods);
         }        
@@ -96,7 +99,7 @@ class WarehouseBillThService extends WarehouseBillService
             
             $form->bill_status = BillStatusEnum::CONFIRM;
             //更新库存状态
-            $billGoodsList = WarehouseBillGoods::find()->where(['bill_id' => $form->id])->select(['goods_id'])->all();
+            $billGoodsList = WarehouseBillGoods::find()->select(['goods_id','goods_num'])->where(['bill_id' => $form->id])->all();
             if(empty($billGoodsList)) {
                 throw new \Exception("单据明细不能为空");
             }
@@ -113,9 +116,9 @@ class WarehouseBillThService extends WarehouseBillService
                 //插入商品日志
                 $log = [
                         'goods_id' => $goods->id,
-                        'goods_status' => GoodsStatusEnum::HAS_SOLD,
+                        'goods_status' => $goods->goods_status,
                         'log_type' => LogTypeEnum::ARTIFICIAL,
-                        'log_msg' => '其他退货单：'.$form->bill_no.";货品状态:“".GoodsStatusEnum::getValue(GoodsStatusEnum::IN_REFUND)."”变更为：“".GoodsStatusEnum::getValue($goods->goods_status)."”"
+                        'log_msg' => '其它退货单：'.$form->bill_no."，退货数量：".$billGoods->goods_num."件"
                 ];
                 Yii::$app->warehouseService->goodsLog->createGoodsLog($log);
                 
@@ -261,7 +264,7 @@ class WarehouseBillThService extends WarehouseBillService
         if(empty($goods)) {
             throw new \Exception("不可更改,商品状态异常");
         }
-        $max_num = $goods->goods_num - $goods->stock_num + $billGoods->goods_num;
+        $max_num = $goods->goods_num - $goods->stock_num - $goods->do_chuku_num + $billGoods->goods_num;
 
         if($return_num > $max_num) {
             throw new \Exception("退货数量不能大于{$max_num}");
@@ -289,15 +292,17 @@ class WarehouseBillThService extends WarehouseBillService
     private function createBillGoodsByGoods($bill, $goods)
     {
         $goods_id = $goods->goods_id;
-        $return_num = $goods->return_num ? $goods->return_num : 1;        
-        
-        if($goods->goods_num <= $goods->stock_num || !in_array($goods->goods_status,[GoodsStatusEnum::IN_STOCK,GoodsStatusEnum::HAS_SOLD])) {
-            throw new \Exception("[{$goods_id}]不满足退货条件");
-        }
+        $return_num = $goods->return_num ? $goods->return_num : 0;        
         //最大退货数量
-        $max_num = $goods->goods_num - $goods->stock_num;        
+        $max_num = $goods->goods_num - $goods->stock_num - $goods->do_chuku_num;
         if($return_num > $max_num) {
             throw new \Exception("[{$goods->goods_id}]退货数量不能大于{$max_num}");
+        }
+        if($max_num <= 0 || !in_array($goods->goods_status,[GoodsStatusEnum::IN_STOCK,GoodsStatusEnum::HAS_SOLD])) {
+            throw new \Exception("[{$goods_id}]不满足退货条件");
+        }
+        if($max_num == 1) {
+            $return_num = 1;
         }
         $billGoods = new WarehouseBillGoods();
         $billGoods->attributes = [

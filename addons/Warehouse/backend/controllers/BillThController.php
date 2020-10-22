@@ -13,6 +13,7 @@ use addons\Warehouse\common\forms\WarehouseBillCForm;
 use addons\Warehouse\common\models\Warehouse;
 use common\enums\LogTypeEnum;
 use addons\Warehouse\common\forms\WarehouseBillThForm;
+use addons\Warehouse\common\models\WarehouseBillGoods;
 
 /**
  * 其它退货单
@@ -149,6 +150,10 @@ class BillThController extends BaseController
         $model = $this->findModel($id);
         if ($model->bill_status != BillStatusEnum::SAVE) {
             return $this->message('单据不是保存状态', $this->redirect(\Yii::$app->request->referrer), 'error');
+        }        
+        $count = WarehouseBillGoods::find()->where(['bill_id'=>$id, 'goods_num'=>0])->count();
+        if($count > 0){
+            return $this->message("有{$count}个货号未填写退货数量", $this->redirect(\Yii::$app->request->referrer), 'error');
         }
         if ($model->goods_num <= 0) {
             return $this->message('单据明细不能为空', $this->redirect(\Yii::$app->request->referrer), 'error');

@@ -125,7 +125,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'format' => 'raw',
                                 'headerOptions' => ['class' => 'col-md-1'],
                                 'value'=>function($model) {
-                                    return $model->goods->goods_num - $model->goods->stock_num + $model->goods_num;
+                                    return $model->goods->goods_num - $model->goods->stock_num - $model->goods->do_chuku_num+ $model->goods_num;
                                 }
                             ],
                             [

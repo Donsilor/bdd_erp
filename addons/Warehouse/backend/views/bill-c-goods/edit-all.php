@@ -16,16 +16,16 @@ $this->params['breadcrumbs'][] = $this->title;
     <div class="box-tools" style="float:right;margin-top:-40px; margin-right: 20px;">
         <?php
         if ($bill->bill_status == \addons\Warehouse\common\enums\BillStatusEnum::SAVE) {
-            echo Html::create(['add', 'bill_id' => $bill->id], '批量添加商品', [
+            echo Html::create(['add', 'bill_id' => $bill->id,'returnUrl'=>Yii::$app->request->get("returnUrl")], '批量添加商品', [
                 'class' => 'btn btn-primary btn-xs openIframe',
                 'data-width' => '90%',
                 'data-height' => '90%',
                 'data-offset' => '20px',
             ]);
             echo '&nbsp;';
-            echo Html::edit(['edit-all', 'bill_id' => $bill->id, 'scan' => 1], '扫码添加商品', ['class' => 'btn btn-primary btn-xs']);
+            echo Html::edit(['edit-all', 'bill_id' => $bill->id, 'scan' => 1,'returnUrl'=>Yii::$app->request->get("returnUrl")], '扫码添加商品', ['class' => 'btn btn-primary btn-xs']);
             echo '&nbsp;';
-            echo Html::a('返回列表', ['bill-c-goods/index', 'bill_id' => $bill->id], ['class' => 'btn btn-info btn-xs']);
+            echo Html::a('返回列表', ['bill-c-goods/index', 'bill_id' => $bill->id,'returnUrl'=>Yii::$app->request->get("returnUrl")], ['class' => 'btn btn-info btn-xs']);
         }
         ?>
     </div>
@@ -78,7 +78,6 @@ $this->params['breadcrumbs'][] = $this->title;
                         'dataProvider' => $dataProvider,
                         'filterModel' => $searchModel,
                         'tableOptions' => ['class' => 'table table-hover'],
-                        //'options' => ['style'=>' width:120%;white-space:nowrap;'],
                         'options' => ['style' => 'white-space:nowrap;font-size:12px;'],
                         'showFooter' => false,//显示footer行
                         'id' => 'grid',
@@ -112,18 +111,22 @@ $this->params['breadcrumbs'][] = $this->title;
                                 ]),
                             ],
                             [
-                                'attribute' => 'goods.stock_num',
+                                'label' => '最大出库数量',
+                                'attribute' => 'goods_num',
+                                'format' => 'raw',
+                                'value' => function ($model) {                                    
+                                    return $model->goods->stock_num + $model->goods_num;
+                                },
                                 'filter' => false,
                             ],
                             [
                                 'label' => '出库数量',
                                 'attribute' => 'goods_num',
                                 'headerOptions' => ['style' => 'background-color:#FFFF88;'],
-                                'footerOptions' => ['style' => 'background-color:#FFFF88;'],
                                 'format' => 'raw',
                                 'value' => function ($model) {
                                     if ($model->goods->goods_num > 1) {
-                                        return Html::ajaxInput('goods_num', $model->goods_num, ['onfocus' => 'rfClearVal(this)', 'style' => "border:1px solid #BBD6FF", 'data-type' => 'number']);
+                                        return Html::ajaxInput('goods_num', $model->goods_num, [/*'onfocus' => 'rfClearVal(this)',*/ 'data-type' => 'number','data-id' => $model->id,'data-url'=>'ajax-chuku-num']);
                                     }
                                     return $model->goods_num ?? 0;
                                 },

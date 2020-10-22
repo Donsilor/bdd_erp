@@ -262,6 +262,9 @@ class BillThGoodsController extends BaseController
     {
         $id = Yii::$app->request->get("id");
         $goods_num = Yii::$app->request->get("goods_num");
+        if($goods_num <= 0) {
+            return ResultHelper::json(422, "退货数量必须大于0");
+        }
         try{
             $trans = \Yii::$app->trans->beginTransaction();
             Yii::$app->warehouseService->billTh->updateReturnNum($id, $goods_num);

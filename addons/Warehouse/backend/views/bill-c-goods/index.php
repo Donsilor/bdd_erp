@@ -16,16 +16,16 @@ $this->params['breadcrumbs'][] = $this->title;
     <div style="float:right;margin-top:-40px;margin-right: 20px;">
         <?php
         if ($bill->bill_status == BillStatusEnum::SAVE) {
-            echo Html::create(['add', 'bill_id' => $bill->id], '批量添加货品', [
+            echo Html::create(['add', 'bill_id' => $bill->id,'returnUrl'=>Yii::$app->request->get("returnUrl")], '批量添加货品', [
                 'class' => 'btn btn-primary btn-xs openIframe',
                 'data-width' => '90%',
                 'data-height' => '90%',
                 'data-offset' => '20px',
             ]);
             echo '&nbsp;';
-            echo Html::edit(['edit-all', 'bill_id' => $bill->id, 'scan' => 1], '扫码添加货品', ['class' => 'btn btn-primary btn-xs']);
+            echo Html::edit(['edit-all', 'bill_id' => $bill->id, 'scan' => 1,'returnUrl'=>Yii::$app->request->get("returnUrl")], '扫码添加货品', ['class' => 'btn btn-primary btn-xs']);
             echo '&nbsp;';
-            echo Html::edit(['edit-all', 'bill_id' => $bill->id], '编辑货品', ['class' => 'btn btn-info btn-xs']);
+            echo Html::edit(['edit-all', 'bill_id' => $bill->id,'returnUrl'=>Yii::$app->request->get("returnUrl")], '编辑货品', ['class' => 'btn btn-info btn-xs']);
             echo '&nbsp;';
         }
         echo Html::a('单据打印', ['bill-c/print', 'id' => $bill->id], [

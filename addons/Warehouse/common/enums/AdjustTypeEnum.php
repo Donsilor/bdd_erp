@@ -11,8 +11,9 @@ namespace addons\Warehouse\common\enums;
  */
 class AdjustTypeEnum extends \common\enums\BaseEnum
 {
-    const MINUS = 0;
     const ADD   = 1;
+    const MINUS = 2;
+    const RESTORE = 3;
 
     /**
      * @return array
@@ -20,8 +21,9 @@ class AdjustTypeEnum extends \common\enums\BaseEnum
     public static function getMap(): array
     {
         return [
-            self::MINUS => '减扣',
             self::ADD   => '增加',
+            self::MINUS => '减扣',
+            self::MINUS => '还原',
         ];
     }
 

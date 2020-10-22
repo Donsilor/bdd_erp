@@ -141,14 +141,14 @@ class WarehouseGoodsService extends Service
         }
 
     }
-
+    
     /**
      *
      * 同步库存数量
-     * @param string $goods_id
-     * @param int $modify_num
-     * @param int $adjust_type
-     * @param int $former_num
+     * @param string $goods_id 货号
+     * @param int $modify_num 修改数量
+     * @param int $adjust_type 调整类型
+     * @param int $former_num  原始数量
      * @throws \Exception
      */
     public function syncStockNum($goods_id, $modify_num, $adjust_type, $former_num = 0)
@@ -172,6 +172,64 @@ class WarehouseGoodsService extends Service
             }
             if (false === $goodsM->save(['id', 'stock_num'])) {
                 throw new \Exception($this->getError($goodsM));
+            }
+        }
+    }
+    
+    /**
+     *
+     * 修改商品库存数量(根据货号)
+     * @param string $goods_id 货号
+     * @param int $modify_num 修改数量
+     * @param int $adjust_type 调整类型
+     * @param int $doing 是否进行中
+     * @throws \Exception
+     */
+    public function updateStockNum($goods_id, $modify_num, $adjust_type, $doing = true)
+    {
+        $model = WarehouseGoods::findOne(['goods_id' => $goods_id]);
+        $this->updateStockNumByModel($model, $modify_num, $adjust_type, $doing);
+    }
+    /**
+     *
+     * 修改商品库存数量(根据model)
+     * @param WarehouseGoods $model 货号
+     * @param int $modify_num 修改数量
+     * @param int $adjust_type 调整类型
+     * @param int $doing 是否进行中
+     * @throws \Exception
+     */
+    public function updateStockNumByModel($model, $modify_num, $adjust_type, $doing = true)
+    {
+        if ($model) {
+            if($modify_num === ""){
+                throw new \Exception("调整数量不能为空");
+            }
+            //$modify_num 注：调整数量 可以为 负数
+            switch ($adjust_type) {
+                case AdjustTypeEnum::RESTORE :{
+                    //还原库存
+                    $model->stock_num    = $model->stock_num + $modify_num;
+                    if($doing === true) {
+                        $model->do_chuku_num = $model->do_chuku_num - $modify_num;
+                    }
+                    break;
+                }
+                case AdjustTypeEnum::MINUS :{
+                    //减库存
+                    $effectNum = $model->stock_num - $modify_num;
+                    if ($effectNum < 0) {
+                        throw new \Exception("库存不足");
+                    }
+                    $model->stock_num    = $model->stock_num - $modify_num;
+                    if($doing === true) {
+                        $model->do_chuku_num = $model->do_chuku_num + $modify_num;
+                    }
+                    break;
+                }
+            }
+            if (false === $model->save(['id', 'stock_num','do_chuku_num'])) {
+                throw new \Exception($this->getError($model));
             }
         }
     }
