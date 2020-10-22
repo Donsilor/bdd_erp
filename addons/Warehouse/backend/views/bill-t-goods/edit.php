@@ -138,24 +138,31 @@ $goods_type = $bill->billL->goods_type ?? 0;
                     <div class="col-sm-4">
                         <?= $form->field($model, 'peiliao_way')->radioList($model->getPeiLiaoWayMap()) ?>
                     </div>
-                    <!--                    <div class="col-lg-4">-->
-                    <!--                        --><? //= $form->field($model, 'gold_weight')->textInput() ?>
-                    <!--                    </div>-->
-                    <div class="col-lg-4">
-                        <?= $form->field($model, 'suttle_weight')->textInput(['onblur' => 'rfClearVal(this)']) ?>
-                    </div>
-                    <div class="col-lg-4">
-                        <?= $form->field($model, 'lncl_loss_weight')->textInput(['onblur' => 'rfClearVal(this)']) ?>
-                    </div>
-                    <div class="col-lg-4">
-                        <?= $form->field($model, 'gold_loss')->textInput(['onblur' => 'rfClearVal(this)']) ?>
-                    </div>
+                    <?php if (!in_array($goods_type, [\addons\Warehouse\common\enums\GoodsTypeEnum::PlainGold])) { ?>
+                        <div class="col-lg-4">
+                            <?= $form->field($model, 'suttle_weight')->textInput(['onblur' => 'rfClearVal(this)']) ?>
+                        </div>
+                    <?php }else{?>
+                        <div class="col-lg-4">
+                            <?= $form->field($model, 'gold_weight')->textInput(['onblur' => 'rfClearVal(this)']) ?>
+                        </div>
+                    <?php }?>
+                    <?php if (!in_array($goods_type, [\addons\Warehouse\common\enums\GoodsTypeEnum::PlainGold])) { ?>
+                        <div class="col-lg-4">
+                            <?= $form->field($model, 'lncl_loss_weight')->textInput(['onblur' => 'rfClearVal(this)']) ?>
+                        </div>
+                        <div class="col-lg-4">
+                            <?= $form->field($model, 'gold_loss')->textInput(['onblur' => 'rfClearVal(this)']) ?>
+                        </div>
+                    <?php }?>
                     <div class="col-lg-4">
                         <?= $form->field($model, 'gold_price')->textInput(['onblur' => 'rfClearVal(this)']) ?>
                     </div>
-                    <div class="col-lg-4">
-                        <?= $form->field($model, 'pure_gold')->textInput(['onblur' => 'rfClearVal(this)']) ?>
-                    </div>
+                    <?php if (!in_array($goods_type, [\addons\Warehouse\common\enums\GoodsTypeEnum::PlainGold])) { ?>
+                        <div class="col-lg-4">
+                            <?= $form->field($model, 'pure_gold')->textInput(['onblur' => 'rfClearVal(this)']) ?>
+                        </div>
+                    <?php }?>
                     <div class="col-lg-4">
                         <?= $form->field($model, 'gold_amount')->textInput(['onblur' => 'rfClearVal(this)']) ?>
                     </div>

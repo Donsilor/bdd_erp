@@ -41,6 +41,7 @@ use yii\helpers\Url;
 class WarehouseBillTService extends Service
 {
     public $goods_type;
+    public $is_import = false;
 
     /**
      * 单据汇总
@@ -251,6 +252,7 @@ class WarehouseBillTService extends Service
         $flag = true;
         $error_off = true;
         $goods_type = 0;
+        $this->is_import = true;
         $error = $saveData = $goods_ids = $style_sns = [];
         $bill = WarehouseBill::findOne($form->bill_id);
         $billT = WarehouseBillL::findOne($form->bill_id);
@@ -1941,7 +1943,7 @@ class WarehouseBillTService extends Service
         if ($bill) {
             $this->goods_type = $bill->billL->goods_type ?? 0;
         }
-        list($form,) = $form->correctGoods($form);//调整数据
+        list($form,) = $form->correctGoods($form, $this->is_import);//调整数据
         $form->gold_weight = $this->calculateGoldWeight($form);//金重
         if (empty($form->auto_loss_weight) || bccomp($form->lncl_loss_weight, 0, 5) != 1) {
             if (bccomp($form->lncl_loss_weight, 0, 5) != 1) {

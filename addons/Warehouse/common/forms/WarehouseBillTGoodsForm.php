@@ -1879,11 +1879,12 @@ class WarehouseBillTGoodsForm extends WarehouseBillGoodsL
      *
      * 调整数据
      * @param bool $save
+     * @param bool $is_import
      * @param WarehouseBillTGoodsForm $form
      * @return array
      * @throws
      */
-    public function correctGoods($form, $save = false)
+    public function correctGoods($form, $is_import = false, $save = false)
     {
         $bill = WarehouseBill::findOne($form->bill_id);
         $this->goods_type = 0;
@@ -1905,10 +1906,14 @@ class WarehouseBillTGoodsForm extends WarehouseBillGoodsL
         }
         //金料(配料方式)
         if ($this->goods_type == GoodsTypeEnum::PlainGold) {
-            if (bccomp($form->gold_weight, 0, 5) == 1) {
-                $form->peiliao_way = PeiLiaoWayEnum::FACTORY;
-            } else {
-                $form->peiliao_way = PeiLiaoWayEnum::NO_PEI;
+            if($is_import && $form->peiliao_way !== ''){
+
+            }else{
+                if (bccomp($form->gold_weight, 0, 5) == 1) {
+                    $form->peiliao_way = PeiLiaoWayEnum::FACTORY;
+                } else {
+                    $form->peiliao_way = PeiLiaoWayEnum::NO_PEI;
+                }
             }
         }
         if ($save) {
@@ -2147,7 +2152,7 @@ class WarehouseBillTGoodsForm extends WarehouseBillGoodsL
     public function getPriceField($merge)
     {
         $fieldName = [
-            'goods_name8', 'factory_cost', 'cost_price', 'cost_amount', 'markup_rate', 'market_price',
+            'goods_name8', 'factory_cost', 'cost_price', 'cost_amount', 'markup_rate', 'market_price', 'is_auto_price',
             'is_inlay', 'is_wholesale', 'factory_mo', 'pay_status', 'style_sex', 'style_channel_id', 'remark',
         ];
         if ($merge) {
@@ -2166,7 +2171,7 @@ class WarehouseBillTGoodsForm extends WarehouseBillGoodsL
             'goods_id', 'style_sn', 'goods_name', 'qiban_sn', 'to_warehouse_id', 'material_type', 'material_color', 'goods_num', 'length', 'product_size', 'chain_type', 'cramp_ring',
             'peiliao_way', 'gold_weight', 'gold_price', 'gold_amount', 'factory_gold_weight',
             'gong_fee', 'piece_fee', 'basic_gong_fee', 'biaomiangongyi', 'biaomiangongyi_fee', 'templet_fee', 'tax_fee', 'tax_amount', 'cert_fee', 'other_fee',
-            'factory_cost', 'cost_amount', 'markup_rate', 'remark'
+            'factory_cost', 'cost_amount', 'markup_rate', 'remark', 'is_auto_price',
         ];
         return $fieldName ?? [];
     }
