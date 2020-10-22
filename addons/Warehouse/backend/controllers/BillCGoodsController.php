@@ -140,19 +140,13 @@ class BillCGoodsController extends BaseController
             return ResultHelper::json(404, '找不到数据');
         }
         $data = Yii::$app->request->get();
-        $former_num = $model->goods_num;
         $model->attributes = ArrayHelper::filter($data, array_keys($data));
         try {
             $trans = Yii::$app->trans->beginTransaction();
             if (!$model->save()) {
                 return ResultHelper::json(422, $this->getError($model));
             }
-            $modify_num = $model->goods_num - $former_num;
-            if($modify_num != 0) {
-                \Yii::$app->warehouseService->warehouseGoods->updateStockNum($model->goods_id, $modify_num, AdjustTypeEnum::MINUS, true);
-            }
-            \Yii::$app->warehouseService->billC->billCSummary($model->bill_id);
-            
+            \Yii::$app->warehouseService->billC->billCSummary($model->bill_id);            
             $trans->commit();
             return ResultHelper::json(200, '修改成功');
         } catch (\Exception $e) {
@@ -161,7 +155,27 @@ class BillCGoodsController extends BaseController
         }
 
     }
-    
+    /**
+     * 更改退货数量
+     * @return array|mixed
+     */
+    public function actionAjaxChukuNum()
+    {
+        $id = Yii::$app->request->get("id");
+        $goods_num = Yii::$app->request->get("goods_num");
+        if($goods_num <= 0) {
+            return ResultHelper::json(422, "出库数量必须大于0");
+        }
+        try{
+            $trans = \Yii::$app->trans->beginTransaction();
+            \Yii::$app->warehouseService->billC->updateChukuNum($id,$goods_num);            
+            $trans->commit();
+            return $this->message("操作成功", $this->redirect(\Yii::$app->request->referrer), 'success');
+        }catch (\Exception $e){
+            $trans->rollBack();
+            return ResultHelper::json(422, $e->getMessage());
+        }
+    }
     /**
      * 编辑/创建
      * @property WarehouseBillBForm $model

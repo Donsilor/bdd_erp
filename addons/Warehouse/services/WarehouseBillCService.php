@@ -229,7 +229,32 @@ class WarehouseBillCService extends WarehouseBillService
         ];
         \Yii::$app->warehouseService->billLog->createBillLog($log);
     }    
-    
+    /**
+     * 更改明细出库数量
+     * @param int $id 单据明细ID
+     * @param int $goods_num 退货数量
+     * @throws \Exception
+     * @return boolean
+     */
+    public function updateChukuNum($id, $chuku_num)
+    {
+        if($chuku_num <= 0) {
+            throw new \Exception("出库数量必须大于0");
+        }
+        
+        $model = WarehouseBillGoods::find()->where(['id'=>$id])->one();
+        if(empty($model)) {
+            throw new \Exception("不可更改,明细查询失败");
+        }
+        
+        $modify_num = $chuku_num - $model->goods_num;
+        if($modify_num != 0) {
+            \Yii::$app->warehouseService->warehouseGoods->updateStockNum($model->goods_id, $modify_num, AdjustTypeEnum::MINUS, true);
+        }
+        //汇总统计
+        $this->billSummary($model->bill_id);
+        return true;
+    }
     /**
      * 其它出库单导入
      * @param unknown $form

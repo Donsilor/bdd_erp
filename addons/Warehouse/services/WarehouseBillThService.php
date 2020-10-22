@@ -99,7 +99,7 @@ class WarehouseBillThService extends WarehouseBillService
             
             $form->bill_status = BillStatusEnum::CONFIRM;
             //更新库存状态
-            $billGoodsList = WarehouseBillGoods::find()->where(['bill_id' => $form->id])->select(['goods_id'])->all();
+            $billGoodsList = WarehouseBillGoods::find()->select(['goods_id','goods_num'])->where(['bill_id' => $form->id])->all();
             if(empty($billGoodsList)) {
                 throw new \Exception("单据明细不能为空");
             }
@@ -118,7 +118,7 @@ class WarehouseBillThService extends WarehouseBillService
                         'goods_id' => $goods->id,
                         'goods_status' => $goods->goods_status,
                         'log_type' => LogTypeEnum::ARTIFICIAL,
-                        'log_msg' => '其他退货单：'.$form->bill_no.";退货数量：".$billGoods->goods_num
+                        'log_msg' => '其它退货单：'.$form->bill_no.";退货数量：".$billGoods->goods_num
                 ];
                 Yii::$app->warehouseService->goodsLog->createGoodsLog($log);
                 

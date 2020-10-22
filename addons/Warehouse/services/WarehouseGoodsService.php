@@ -185,10 +185,10 @@ class WarehouseGoodsService extends Service
      * @param int $doing 是否进行中
      * @throws \Exception
      */
-    public function updateStockNum($goods_id, $modify_num, $adjust_type, $real_do = true)
+    public function updateStockNum($goods_id, $modify_num, $adjust_type, $doing = true)
     {
         $model = WarehouseGoods::findOne(['goods_id' => $goods_id]);
-        $this->updateStockNumByModel($model, $modify_num, $adjust_type, $real_do);
+        $this->updateStockNumByModel($model, $modify_num, $adjust_type, $doing);
     }
     /**
      *
@@ -205,6 +205,7 @@ class WarehouseGoodsService extends Service
             if($modify_num === ""){
                 throw new \Exception("调整数量不能为空");
             }
+            //$modify_num 注：调整数量 可以为 负数
             switch ($adjust_type) {
                 case AdjustTypeEnum::RESTORE :{
                     //还原库存
