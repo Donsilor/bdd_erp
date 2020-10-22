@@ -20,8 +20,8 @@ class IsWholeSaleEnum extends \common\enums\BaseEnum
     public static function getMap(): array
     {
         return [
-            self::NO      => '否',
             self::YES     => '是',
+            self::NO      => '否',
         ];
     }
 

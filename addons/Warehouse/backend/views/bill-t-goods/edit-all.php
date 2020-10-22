@@ -17,6 +17,8 @@ use addons\Warehouse\common\enums\BillStatusEnum;
 $this->title = Yii::t('bill_t_goods', '其它入库单明细');
 $this->params['breadcrumbs'][] = ['label' => $this->title, 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
+
+$goods_type = $bill->billL->goods_type ?? 0;
 ?>
 <style>
     select.form-control {
@@ -65,7 +67,9 @@ $this->params['breadcrumbs'][] = $this->title;
                     <span style="font-size:16px">
                         <!--<span style="font-weight:bold;">明细汇总：</span>-->
                         货品总数：<span style="color:green;"><?= $bill->goods_num ?></span>
-                        总成本价：<span style="color:green;"><?= $bill->total_cost ?></span>
+                        折足总重：<span style="color:green;"><?= $bill->billL->total_pure_gold ?? 0 ?></span>
+                        工厂总成本：<span style="color:green;"><?= $bill->billL->total_factory_cost ?? 0 ?></span>
+                        公司总成本：<span style="color:green;"><?= $bill->total_cost ?></span>
                     </span>
                     <span>
                         <?php
@@ -79,16 +83,18 @@ $this->params['breadcrumbs'][] = $this->title;
                         echo '&nbsp;';
                         echo Html::hidden($bill->billL->show_gold ?? 0, '金料', ['data-id' => $bill->id, 'data-name' => 'show_gold', 'data-text' => '金料']);
                         echo '&nbsp;';
-                        echo Html::hidden($bill->billL->show_main_stone ?? 0, '主石', ['data-id' => $bill->id, 'data-name' => 'show_main_stone', 'data-text' => '主石']);
-                        echo '&nbsp;';
-                        echo Html::hidden($bill->billL->show_second_stone1 ?? 0, '副石1', ['data-id' => $bill->id, 'data-name' => 'show_second_stone1', 'data-text' => '副石1']);
-                        echo '&nbsp;';
-                        echo Html::hidden($bill->billL->show_second_stone2 ?? 0, '副石2', ['data-id' => $bill->id, 'data-name' => 'show_second_stone2', 'data-text' => '副石2']);
-                        echo '&nbsp;';
-                        echo Html::hidden($bill->billL->show_second_stone3 ?? 0, '副石3', ['data-id' => $bill->id, 'data-name' => 'show_second_stone3', 'data-text' => '副石3']);
-                        echo '&nbsp;';
-                        echo Html::hidden($bill->billL->show_parts ?? 0, '配件', ['data-id' => $bill->id, 'data-name' => 'show_parts', 'data-text' => '配件']);
-                        echo '&nbsp;';
+                        if ($goods_type != \addons\Warehouse\common\enums\GoodsTypeEnum::PlainGold) {
+                            echo Html::hidden($bill->billL->show_main_stone ?? 0, '主石', ['data-id' => $bill->id, 'data-name' => 'show_main_stone', 'data-text' => '主石']);
+                            echo '&nbsp;';
+                            echo Html::hidden($bill->billL->show_second_stone1 ?? 0, '副石1', ['data-id' => $bill->id, 'data-name' => 'show_second_stone1', 'data-text' => '副石1']);
+                            echo '&nbsp;';
+                            echo Html::hidden($bill->billL->show_second_stone2 ?? 0, '副石2', ['data-id' => $bill->id, 'data-name' => 'show_second_stone2', 'data-text' => '副石2']);
+                            echo '&nbsp;';
+                            echo Html::hidden($bill->billL->show_second_stone3 ?? 0, '副石3', ['data-id' => $bill->id, 'data-name' => 'show_second_stone3', 'data-text' => '副石3']);
+                            echo '&nbsp;';
+                            echo Html::hidden($bill->billL->show_parts ?? 0, '配件', ['data-id' => $bill->id, 'data-name' => 'show_parts', 'data-text' => '配件']);
+                            echo '&nbsp;';
+                        }
                         echo Html::hidden($bill->billL->show_fee ?? 0, '工费', ['data-id' => $bill->id, 'data-name' => 'show_fee', 'data-text' => '工费']);
                         echo '&nbsp;';
                         echo Html::hidden($bill->billL->show_price ?? 0, '价格', ['data-id' => $bill->id, 'data-name' => 'show_price', 'data-text' => '价格']);

@@ -10,8 +10,8 @@ namespace addons\Warehouse\common\enums;
  */
 class GoodsTypeEnum extends \common\enums\BaseEnum
 {
-    const All = 0;
-    const PlainGold = 1;
+    const SeikoStone = 1;
+    const PlainGold = 2;
 
     /**
      * @return array
@@ -19,7 +19,7 @@ class GoodsTypeEnum extends \common\enums\BaseEnum
     public static function getMap(): array
     {
         return [
-            self::All => '精工石',
+            self::SeikoStone => '金工石',
             self::PlainGold => '素金',
         ];
     }

@@ -2,7 +2,6 @@
 
 namespace addons\Warehouse\services;
 
-use addons\Warehouse\common\enums\GoodsTypeEnum;
 use Yii;
 use common\components\Service;
 use common\helpers\SnHelper;
@@ -21,6 +20,7 @@ use addons\Warehouse\common\enums\PeiJianWayEnum;
 use addons\Warehouse\common\enums\PeiLiaoWayEnum;
 use addons\Warehouse\common\enums\PeiShiWayEnum;
 use addons\Warehouse\common\enums\IsWholeSaleEnum;
+use addons\Warehouse\common\enums\GoodsTypeEnum;
 use addons\Style\common\enums\StonePositionEnum;
 use addons\Style\common\enums\JintuoTypeEnum;
 use addons\Style\common\enums\QibanTypeEnum;
@@ -40,6 +40,8 @@ use yii\helpers\Url;
  */
 class WarehouseBillTService extends Service
 {
+    public $goods_type;
+    public $is_import = false;
 
     /**
      * 单据汇总
@@ -51,11 +53,15 @@ class WarehouseBillTService extends Service
     {
         $result = false;
         $sum = WarehouseBillGoodsL::find()
-            ->select(['sum(goods_num) as goods_num', 'sum(cost_amount) as total_cost', 'sum(market_price) as total_market'])
+            ->select(['sum(goods_num) as goods_num', 'sum(cost_amount) as total_cost', 'sum(market_price) as total_market', 'sum(pure_gold) as total_pure_gold', 'sum(factory_cost) as total_factory_cost'])
             ->where(['bill_id' => $bill_id])
             ->asArray()->one();
         if ($sum) {
             $result = WarehouseBill::updateAll(['goods_num' => $sum['goods_num'] / 1, 'total_cost' => $sum['total_cost'] / 1, 'total_market' => $sum['total_market'] / 1], ['id' => $bill_id]);
+        }
+        $billT = WarehouseBillL::findOne($bill_id);
+        if ($billT) {
+            $result = WarehouseBillL::updateAll(['total_pure_gold' => $sum['total_pure_gold'] / 1, 'total_factory_cost' => $sum['total_factory_cost'] / 1], ['id' => $bill_id]);
         }
         return $result;
     }
@@ -67,7 +73,6 @@ class WarehouseBillTService extends Service
      */
     public function addBillTGoods($form)
     {
-
         if (!$form->goods_sn) {
             throw new \Exception("款号/起版号不能为空");
         }
@@ -100,12 +105,12 @@ class WarehouseBillTService extends Service
             } elseif ($qiban->status != StatusEnum::ENABLED) {
                 throw new \Exception("起版号不可用");
             } else {
-                $exist = WarehouseBillGoodsL::find()->where(['bill_id' => $form->bill_id, 'qiban_sn' => $form->goods_sn, 'status' => StatusEnum::ENABLED])->count();
-                if ($exist) {
-                    //throw new \Exception("起版号已添加过");
-                }
-                if ($form->cost_price) {
-                    $qiban->cost_price = $form->cost_price;
+//                $exist = WarehouseBillGoodsL::find()->where(['bill_id' => $form->bill_id, 'qiban_sn' => $form->goods_sn, 'status' => StatusEnum::ENABLED])->count();
+//                if ($exist) {
+//                    throw new \Exception("起版号已添加过");
+//                }
+                if ($form->cost_amount) {
+                    $qiban->cost_price = $form->cost_amount;
                 }
                 //$qiban = new Qiban();
                 $goods = [
@@ -121,7 +126,8 @@ class WarehouseBillTService extends Service
                     'style_sex' => $qiban->style_sex,
                     'goods_num' => $goods_num,
                     'jintuo_type' => $qiban->jintuo_type,
-                    'cost_price' => bcmul($qiban->cost_price, $goods_num, 3),
+                    'cost_price' => bcdiv($qiban->cost_price, $goods_num, 3),
+                    'cost_amount' => $form->cost_amount ?? 0,
                     //'market_price' => $style->market_price,
                     'is_inlay' => $qiban->is_inlay,
                     'remark' => $qiban->remark,
@@ -132,8 +138,8 @@ class WarehouseBillTService extends Service
         } elseif ($style->status != StatusEnum::ENABLED) {
             throw new \Exception("款号不可用");
         } else {
-            if ($form->cost_price) {
-                $style->cost_price = $form->cost_price;
+            if ($form->cost_amount) {
+                $style->cost_price = $form->cost_amount;
             }
             //$style = new Style();
             $goods = [
@@ -149,7 +155,8 @@ class WarehouseBillTService extends Service
                 'style_sex' => $style->style_sex,
                 'goods_num' => $goods_num,
                 'jintuo_type' => JintuoTypeEnum::Chengpin,
-                'cost_price' => bcmul($style->cost_price, $goods_num, 3),
+                'cost_price' => bcdiv($style->cost_price, $goods_num, 3),
+                'cost_amount' => $form->cost_amount ?? 0,
                 'is_inlay' => $style->is_inlay,
                 //'market_price' => $style->market_price,
                 'creator_id' => \Yii::$app->user->identity->getId(),
@@ -157,6 +164,25 @@ class WarehouseBillTService extends Service
             ];
         }
         $bill = WarehouseBill::findOne(['id' => $form->bill_id]);
+        $form->goods_type = 0;
+        if ($goods['style_sn']) {
+            $styleM = Style::find()->where(['style_sn' => $goods['style_sn']])->one();
+            $pid = $styleM->type->pid ?? 0;
+            if ($pid == 3) {
+                $form->goods_type = GoodsTypeEnum::PlainGold;
+            } else {
+                $form->goods_type = GoodsTypeEnum::SeikoStone;
+            }
+        }
+        $goods_type = $bill->billL->goods_type ?? 0;
+        if ($goods_type && $form->goods_type && $goods_type != $form->goods_type) {
+//            if ($goods_type == GoodsTypeEnum::SeikoStone) {
+//                throw new \Exception("请添加非素金款号");
+//            }
+            if ($goods_type == GoodsTypeEnum::PlainGold) {
+                throw new \Exception("请添加素金款号");
+            }
+        }
         $goodsM = new WarehouseBillGoodsL();
         $goodsInfo = [];
         for ($i = 0; $i < $form->goods_num; $i++) {
@@ -197,7 +223,7 @@ class WarehouseBillTService extends Service
         $billT = WarehouseBillL::findOne($form->bill_id);
         $billT = $billT ?? new WarehouseBillL();
         $billT->id = $form->bill_id;
-        $billT->goods_type = $form->goods_type ?? GoodsTypeEnum::All;
+        $billT->goods_type = $form->goods_type ?? GoodsTypeEnum::SeikoStone;
         if (false === $billT->save()) {
             throw new \Exception($this->getError($billT));
         }
@@ -225,8 +251,12 @@ class WarehouseBillTService extends Service
         $i = 0;
         $flag = true;
         $error_off = true;
+        $goods_type = 0;
+        $this->is_import = true;
         $error = $saveData = $goods_ids = $style_sns = [];
         $bill = WarehouseBill::findOne($form->bill_id);
+        $billT = WarehouseBillL::findOne($form->bill_id);
+        $form->goods_type = $billT->goods_type ?? 0;
         $warehouseAll = $form->getWarehouseMap();
         while ($goods = fgetcsv($file)) {
             if ($i <= 1) {
@@ -236,6 +266,15 @@ class WarehouseBillTService extends Service
             $row = count($goods);
             if (!in_array($row, [33, 106])) {
                 throw new \Exception("模板格式不正确，请下载最新模板");
+            }
+            if ($row == 33) {
+                $goods_type = GoodsTypeEnum::PlainGold;
+            } elseif ($row == 106) {
+                $goods_type = GoodsTypeEnum::SeikoStone;
+            }
+            if ($form->goods_type == GoodsTypeEnum::PlainGold
+                && $form->goods_type != $goods_type) {
+                throw new \Exception("模板格式不正确，请使用“" . ($form->goods_type == 2 ? "素金" : "通用") . "”模板导入");
             }
             $goods = $form->trimField($goods, $row);
             $goods_id = $goods['goods_id'] ?? "";//条码号
@@ -280,6 +319,7 @@ class WarehouseBillTService extends Service
                 //throw new \Exception($row . "[款号]和[起版号]只能填其一");
             }
             $qiban_type = QibanTypeEnum::NON_VERSION;
+            $qiban = null;
             if (!empty($qiban_sn)) {
                 $qiban = Qiban::findOne(['qiban_sn' => $qiban_sn]);
                 if (!$qiban) {
@@ -298,7 +338,9 @@ class WarehouseBillTService extends Service
                     }
                     $qiban_type = QibanTypeEnum::HAVE_STYLE;
                 }
-                $style_sn = $qiban->style_sn ?? "";
+                if (!$style_sn && $qiban) {
+                    $style_sn = $qiban->style_sn ?? "";
+                }
             }
             $is_inlay = InlayEnum::No;
             if ($qiban_type != QibanTypeEnum::NO_STYLE) {
@@ -333,23 +375,28 @@ class WarehouseBillTService extends Service
                     $is_inlay = $style->type->is_inlay;
                 }
                 $is_inlay = $is_inlay ?? InlayEnum::No;
+                if ($form->goods_type == GoodsTypeEnum::PlainGold
+                    && $is_inlay == InlayEnum::Yes) {
+                    $flag = false;
+                    $error[$i][] = $qiban_error . "[款号]为镶嵌类，不可导入";
+                }
             }
             if (!$flag) {
                 //$flag = true;
                 //continue;
             }
-            if (!empty($qiban_sn)) {
-                $style_image = $qiban->style_image;
-                $style_cate_id = $qiban->style_cate_id;
-                $product_type_id = $qiban->product_type_id;
-                $style_sex = $qiban->style_sex;
-                $style_channel_id = $qiban->style_channel_id;
+            if ($qiban) {
+                $style_image = $qiban->style_image ?? "";
+                $style_cate_id = $qiban->style_cate_id ?? "";
+                $product_type_id = $qiban->product_type_id ?? "";
+                $style_sex = $qiban->style_sex ?? "";
+                $style_channel_id = $qiban->style_channel_id ?? "";
             } else {
-                $style_image = $style->style_image;
-                $style_cate_id = $style->style_cate_id;
-                $product_type_id = $style->product_type_id;
-                $style_sex = $style->style_sex;
-                $style_channel_id = $style->style_channel_id;
+                $style_image = $style->style_image ?? "";
+                $style_cate_id = $style->style_cate_id ?? "";
+                $product_type_id = $style->product_type_id ?? "";
+                $style_sex = $style->style_sex ?? "";
+                $style_channel_id = $style->style_channel_id ?? "";
             }
             $goods_sn = !empty($style_sn) ? $style_sn : $qiban_sn;
             $goods_name = $goods['goods_name'] ?? "";//货品名称
@@ -495,14 +542,16 @@ class WarehouseBillTService extends Service
 //                $flag = false;
 //                $error[$i][] = "配料方式为来料加工，折足率必填";
 //            }
-            if (empty($peiliao_way) && $pure_gold_rate > 0) {
-                $peiliao_way = PeiLiaoWayEnum::LAILIAO;
-            } elseif (empty($peiliao_way) && !$pure_gold_rate && $suttle_weight) {
-                $peiliao_way = PeiLiaoWayEnum::FACTORY;
-            } elseif (!$pure_gold_rate && !$suttle_weight) {
-                $peiliao_way = PeiLiaoWayEnum::NO_PEI;
-            } else {
+            if (empty($peiliao_way)) {
+                if ($pure_gold_rate > 0) {
+                    $peiliao_way = PeiLiaoWayEnum::LAILIAO;
+                } elseif (!$pure_gold_rate && $suttle_weight) {
+                    $peiliao_way = PeiLiaoWayEnum::FACTORY;
+                } elseif (!$pure_gold_rate && !$suttle_weight) {
+                    $peiliao_way = PeiLiaoWayEnum::NO_PEI;
+                } else {
 
+                }
             }
             $main_pei_type = $form->formatValue($goods['main_pei_type'] ?? 0, 0) ?? 0;//主石配石方式
             $main_stone_sn = $goods['main_stone_sn'] ?? "";//主石编号
@@ -1329,8 +1378,8 @@ class WarehouseBillTService extends Service
         $billT = WarehouseBillL::findOne($form->bill_id);
         $billT = $billT ?? new WarehouseBillL();
         $billT->id = $form->bill_id;
-        $billT->goods_type = $form->goods_type;
-        if(false === $billT->save()){
+        $billT->goods_type = $goods_type;
+        if (false === $billT->save()) {
             throw new \Exception($this->getError($billT));
         }
 
@@ -1432,11 +1481,15 @@ class WarehouseBillTService extends Service
      *
      * 金重=(连石重-(主石重*数量)-副石1重-副石2重-副石3重-(配件重*数量))
      * @param WarehouseBillTGoodsForm $form
+     * @param WarehouseBill $bill
      * @return integer
      * @throws
      */
     public function calculateGoldWeight($form)
     {
+        if ($this->goods_type == GoodsTypeEnum::PlainGold) {
+            return $form->gold_weight ?? 0;
+        }
         $stone_weight = bcadd($this->calculateMainStoneWeight($form), $this->calculateSecondStoneWeight($form), 5);
         $stone_weight = bcmul($stone_weight, 0.2, 5);//ct转换为克重
         $weight = bcsub($form->suttle_weight, $stone_weight, 5) ?? 0;
@@ -1644,7 +1697,7 @@ class WarehouseBillTService extends Service
     /**
      *
      * 配件额=(配件总重(g)*配件金价/g)
-     * @param WarehouseBillTGoodsForm $form
+     * @param WarehouseBillTGoodsForm $form =
      * @return integer
      * @throws
      */
@@ -1885,6 +1938,12 @@ class WarehouseBillTService extends Service
         if (!$form->validate()) {
             throw new \Exception($this->getError($form));
         }
+        $bill = WarehouseBill::findOne($form->bill_id);
+        $this->goods_type = 0;
+        if ($bill) {
+            $this->goods_type = $bill->billL->goods_type ?? 0;
+        }
+        list($form,) = $form->correctGoods($form, $this->is_import);//调整数据
         $form->gold_weight = $this->calculateGoldWeight($form);//金重
         if (empty($form->auto_loss_weight) || bccomp($form->lncl_loss_weight, 0, 5) != 1) {
             if (bccomp($form->lncl_loss_weight, 0, 5) != 1) {
@@ -1962,7 +2021,6 @@ class WarehouseBillTService extends Service
         $form->cost_amount = $this->calculateCostAmount($form);//公司成本总额
         $form->market_price = $this->calculateMarketPrice($form);//标签价
 
-        list($form,) = $form->correctGoods($form);//调整数据
         if (false === $form->save()) {
             throw new \Exception($this->getError($form));
         }

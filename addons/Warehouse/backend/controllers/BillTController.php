@@ -114,6 +114,7 @@ class BillTController extends BaseController
             try {
                 $trans = \Yii::$app->db->beginTransaction();
                 $isNewRecord = $model->isNewRecord;
+                $goods_type = $model->goods_type;
                 if ($isNewRecord) {
                     //$model->bill_no = SnHelper::createBillSn($this->billType);
                     if (!$model->bill_no) {
@@ -124,28 +125,29 @@ class BillTController extends BaseController
                 if (false === $model->save()) {
                     throw new \Exception($this->getError($model));
                 }
+                $gModel = new WarehouseBillTGoodsForm();
+                $gModel->file = UploadedFile::getInstance($model, 'file');
                 if ($isNewRecord) {
-                    $gModel = new WarehouseBillTGoodsForm();
                     $gModel->bill_id = $model->id;
                     $gModel->supplier_id = $model->supplier_id;
                     $gModel->put_in_type = $model->put_in_type;
-                    $gModel->supplier_id = $model->supplier_id;
-                    $gModel->file = UploadedFile::getInstance($model, 'file');
+                    //$gModel->goods_type = $goods_type;
                     if (!empty($gModel->file) && isset($gModel->file)) {
                         \Yii::$app->warehouseService->billT->uploadGoods($gModel);
-                    }else{
-                        //创建收货单附属表
-                        $billT = WarehouseBillL::findOne($model->id);
-                        $billT = $billT ?? new WarehouseBillL();
-                        $billT->id = $model->id;
-                        $billT->goods_type = $model->goods_type ?? GoodsTypeEnum::All;
-                        if(false === $billT->save()){
-                            throw new \Exception($this->getError($billT));
-                        }
                     }
                     $log_msg = "创建其它入库单{$model->bill_no}";
                 } else {
                     $log_msg = "修改其它入库单{$model->bill_no}";
+                }
+                if (empty($gModel->file)) {
+                    //创建收货单附属表
+                    $billT = WarehouseBillL::findOne($model->id);
+                    $billT = $billT ?? new WarehouseBillL();
+                    $billT->id = $model->id;
+                    $billT->goods_type = $goods_type ?? 0;
+                    if (false === $billT->save()) {
+                        throw new \Exception($this->getError($billT));
+                    }
                 }
                 $log = [
                     'bill_id' => $model->id,
@@ -360,6 +362,10 @@ class BillTController extends BaseController
             }
             if (false === $model->delete()) {
                 throw new \Exception($this->getError($model));
+            }
+            $billL = WarehouseBillL::findOne($id);
+            if ($billL) {
+                $billL->delete();
             }
             $log = [
                 'bill_id' => $model->id,
@@ -661,7 +667,7 @@ class BillTController extends BaseController
         $select = [
             'w.bill_no', 'w.bill_type', 'w.bill_status', 'wg.goods_id', 'wg.style_sn', 'wg.goods_num', 'wg.goods_name', 'sc.name as channel_name', 'sc.code as channel_code',//基本
             'wg.material_type', 'wg.finger', 'wg.finger_hk',//属性
-            'wg.suttle_weight', 'wg.gold_weight', 'wg.gold_loss', 'wg.lncl_loss_weight', 'wg.gold_price', 'wg.gold_amount',//金料
+            'wg.suttle_weight', 'wg.gold_weight', 'wg.gold_loss', 'wg.lncl_loss_weight', 'wg.gold_price', 'wg.gold_amount', 'factory_gold_weight',//金料
             'wg.main_stone_sn', 'wg.main_stone_num', 'wg.main_stone_weight', 'wg.main_stone_price', 'wg.main_stone_amount',//主石
             'wg.second_stone_sn1', 'wg.second_stone_num1', 'wg.second_stone_weight1', 'wg.second_stone_price1', 'wg.second_stone_amount1',//副石1
             'parts_gold_weight', 'parts_amount', 'parts_fee',//配件
@@ -685,6 +691,7 @@ class BillTController extends BaseController
             'gold_weight' => 0,
             'lncl_loss_weight' => 0,
             'gold_amount' => 0,
+            'factory_gold_weight' => 0,
 
             'main_stone_num' => 0,
             'main_stone_weight' => 0,
@@ -749,6 +756,7 @@ class BillTController extends BaseController
             $total['gold_weight'] = bcadd($total['gold_weight'], $list['gold_weight'], 3);//金重
             $total['lncl_loss_weight'] = bcadd($total['lncl_loss_weight'], $list['lncl_loss_weight'], 3);//含耗重
             $total['gold_amount'] = bcadd($total['gold_amount'], $list['gold_amount'], 3);//金料额
+            $total['factory_gold_weight'] = bcadd($total['factory_gold_weight'], $list['factory_gold_weight'], 3);//工厂总金重
 
             $total['main_stone_num'] = bcadd($total['main_stone_num'], $list['main_stone_num']);//主石粒数
             $total['main_stone_weight'] = bcadd($total['main_stone_weight'], $list['main_stone_weight'], 3);//主石重

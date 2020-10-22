@@ -408,7 +408,7 @@ class WarehouseBillGoodsL extends BaseModel
             //其他信息
             'factory_mo' => '工厂模号',
             'is_inlay' => '是否镶嵌',
-            'is_wholesale' => '是否批发',
+            'is_wholesale' => '是否同一条码号',
             'auto_goods_id' => '是否手动录入货号',
             'is_auto_price' => '是否自动计算公司成本价',
             'auto_loss_weight' => '自动计算含耗重',

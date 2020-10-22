@@ -87,7 +87,8 @@ class StyleService extends Service
              throw new \Exception("款号不能为空");
          }
          if(strlen($model->style_sn) != 9 ){
-             throw new \Exception("款号编码错误,需要9位字符");
+             return true;
+             //throw new \Exception("款号编码错误,需要9位字符");
          }         
          $sort = substr($model->style_sn, 2,strlen($model->style_sn)-3);
          $model->style_sort = $sort/1;
