@@ -375,7 +375,7 @@ class WarehouseBillTService extends Service
                     $is_inlay = $style->type->is_inlay;
                 }
                 $is_inlay = $is_inlay ?? InlayEnum::No;
-                if ($form->goods_type == GoodsTypeEnum::PlainGold
+                if ($goods_type == GoodsTypeEnum::PlainGold
                     && $is_inlay == InlayEnum::Yes) {
                     $flag = false;
                     $error[$i][] = $qiban_error . "[款号]为镶嵌类，不可导入";
