@@ -1,5 +1,6 @@
 <?php
 
+use kartik\select2\Select2;
 use yii\widgets\ActiveForm;
 use addons\Style\common\enums\AttrIdEnum;
 
@@ -37,6 +38,9 @@ $goods_type = $bill->billL->goods_type ?? 0;
                     </div>
                     <div class="col-lg-4">
                         <?= $form->field($model, 'qiban_type')->dropDownList($model->getQibanTypeMap(), ['disabled' => true]) ?>
+                    </div>
+                    <div class="col-lg-4">
+                        <?= $form->field($model, 'goods_num')->textInput(['disabled' => true]) ?>
                     </div>
                     <div class="col-lg-4">
                         <?= $form->field($model, 'material_type')->dropDownList($model->getMaterialTypeDrop($model), ['prompt' => '请选择']) ?>
@@ -96,6 +100,15 @@ $goods_type = $bill->billL->goods_type ?? 0;
                     <div class="col-lg-4">
                         <?= $form->field($model, 'xiangqian_craft')->dropDownList($model->getXiangqianCraftDrop($model), ['prompt' => '请选择']) ?>
                     </div>
+                    <div class="col-sm-4">
+                        <?= $form->field($model, 'auto_goods_id')->radioList(\common\enums\ConfirmEnum::getMap()) ?>
+                    </div>
+                    <div class="col-sm-4">
+                        <?= $form->field($model, 'jintuo_type')->radioList($model->getJietuoTypeMap($model)) ?>
+                    </div>
+                    <div class="col-sm-4">
+                        <?= $form->field($model, 'is_inlay')->radioList($model->getIsInlayMap($model)) ?>
+                    </div>
                     <div class="col-lg-4">
                         <?= $form->field($model, 'biaomiangongyi')->widget(kartik\select2\Select2::class, [
                             'data' => $model->getFaceCraftDrop($model),
@@ -111,21 +124,12 @@ $goods_type = $bill->billL->goods_type ?? 0;
                     <div class="col-lg-4">
                         <?= $form->field($model, 'order_sn')->textInput() ?>
                     </div>
-                    <div class="col-sm-4">
-                        <?= $form->field($model, 'jintuo_type')->radioList($model->getJietuoTypeMap($model)) ?>
-                    </div>
-                    <div class="col-sm-4">
-                        <?= $form->field($model, 'is_inlay')->radioList($model->getIsInlayMap($model)) ?>
-                    </div>
                     <!--                    <div class="col-lg-4">-->
                     <!--                        --><? //= $form->field($model, 'gross_weight')->textInput() ?>
                     <!--                    </div>-->
                     <!--                    <div class="col-lg-4">-->
                     <!--                        --><? //= $form->field($model, 'goods_color')->dropDownList(\Yii::$app->styleService->styleAttribute->getAttrValueListByStyle($model->style_sn,AttrIdEnum::GOODS_COLOR),['prompt'=>'请选择']) ?>
                     <!--                    </div>-->
-                    <div class="col-sm-4">
-                        <?= $form->field($model, 'auto_goods_id')->radioList(\common\enums\ConfirmEnum::getMap()) ?>
-                    </div>
                 </div>
                 <div class="row">
                     <div class="with-border">
