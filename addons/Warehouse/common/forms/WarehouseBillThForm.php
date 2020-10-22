@@ -64,7 +64,7 @@ class WarehouseBillThForm extends WarehouseBill
      * 查询商品数据校验
      * {@inheritdoc}
      */
-    public function checkGoodsIds()
+    public function validateGoodsList()
     {   
         $goods_ids = $this->getGoodsIds();
         $this->goods_ids = [];
