@@ -1906,7 +1906,7 @@ class WarehouseBillTGoodsForm extends WarehouseBillGoodsL
         }
         //金料(配料方式)
         if ($this->goods_type == GoodsTypeEnum::PlainGold) {
-            if($is_import && $form->peiliao_way !== ''){
+            if($is_import && $form->peiliao_way){
 
             }else{
                 if (bccomp($form->gold_weight, 0, 5) == 1) {
