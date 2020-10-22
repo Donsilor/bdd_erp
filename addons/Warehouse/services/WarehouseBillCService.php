@@ -158,7 +158,7 @@ class WarehouseBillCService extends WarehouseBillService
                     'goods_id' => $wareGoods->id,
                     'goods_status' => $wareGoods->goods_status,
                     'log_type' => LogTypeEnum::ARTIFICIAL,
-                    'log_msg'  => "其它出库单：{$form->bill_no}, 出库数量：{$billGoods->goods_num}件"
+                    'log_msg'  => "其它出库单：{$form->bill_no}，出库数量：{$billGoods->goods_num}件"
                 ];
                 \Yii::$app->warehouseService->goodsLog->createGoodsLog($log);
             }
