@@ -401,7 +401,10 @@ $goods_type = $model->billL->goods_type ?? 0
             <?php if (!in_array($goods_type, [\addons\Warehouse\common\enums\GoodsTypeEnum::PlainGold])) { ?>
                 <td class="width-20 algin-center font-bold" rowspan="2">手寸</td>
             <?php } ?>
-            <td class="width-160 algin-center font-bold" colspan="4">金料</td>
+            <td class="width-160 algin-center font-bold"
+                colspan="<?php if (!in_array($goods_type, [\addons\Warehouse\common\enums\GoodsTypeEnum::PlainGold])) { ?>4<?php } else { ?>3<?php } ?>">
+                金料
+            </td>
             <?php if (!in_array($goods_type, [\addons\Warehouse\common\enums\GoodsTypeEnum::PlainGold])) { ?>
                 <td class="width-170 algin-center font-bold" colspan="5">主石</td>
                 <td class="width-170 algin-center font-bold" colspan="5">副石1</td>
@@ -514,7 +517,11 @@ $goods_type = $model->billL->goods_type ?? 0
                 <td class="algin-center padding-5"><?= floatval($val['templet_fee']) ?? "0" ?></td>
                 <!--                    <td class="algin-center padding-5">--><?//= $val['cert_id'] ?? "" ?><!--</td>-->
                 <td class="algin-center padding-5"><?= floatval($val['tax_amount']) ?? "0" ?></td>
-                <td class="algin-center padding-5"><?= floatval($val['pure_gold']) ?? "0" ?></td>
+                <?php if (!in_array($goods_type, [\addons\Warehouse\common\enums\GoodsTypeEnum::PlainGold])) { ?>
+                    <td class="algin-center padding-5"><?= floatval($val['pure_gold']) ?? "0" ?></td>
+                <?php } else { ?>
+                    <td class="algin-center padding-5"><?= floatval($val['factory_gold_weight']) ?? "0" ?></td>
+                <?php } ?>
                 <td class="algin-center padding-5"><?= floatval($val['factory_cost']) ?? "0" ?></td>
                 <td class="algin-center padding-5"><?= floatval(bcdiv($val['cost_price'], $val['goods_num'], 3)) ?></td>
                 <td class="algin-center padding-5"><?= floatval($val['cost_price']) ?? "0" ?></td>
@@ -569,7 +576,11 @@ $goods_type = $model->billL->goods_type ?? 0
                 <td class="algin-center padding-5"><?= floatval($total['templet_fee']) ?? '0.00'; ?></td>
                 <!--                <td class="algin-center padding-5"></td>-->
                 <td class="algin-center padding-5"><?= floatval($total['tax_amount']) ?? '0.00'; ?></td>
-                <td class="algin-center padding-5"><?= floatval($total['pure_gold']) ?? '0.00'; ?></td>
+                <?php if (!in_array($goods_type, [\addons\Warehouse\common\enums\GoodsTypeEnum::PlainGold])) { ?>
+                    <td class="algin-center padding-5"><?= floatval($total['pure_gold']) ?? '0.00'; ?></td>
+                <?php }else{ ?>
+                    <td class="algin-center padding-5"><?= floatval($total['factory_gold_weight']) ?? '0.00'; ?></td>
+                <?php } ?>
                 <td class="algin-center padding-5"><?= floatval($total['factory_cost']) ?? '0.00'; ?></td>
                 <td class="algin-center padding-5"><?= floatval($total['one_cost_price']) ?? '0.00'; ?></td>
                 <td class="algin-center padding-5"><?= floatval($total['cost_price']) ?? '0.00'; ?></td>
