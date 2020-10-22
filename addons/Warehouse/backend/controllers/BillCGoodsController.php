@@ -114,7 +114,7 @@ class BillCGoodsController extends BaseController
         }
         try{
             $trans = \Yii::$app->db->beginTransaction();
-            \Yii::$app->warehouseService->billC->scanGoods($bill_id,[$goods_id]);            
+            \Yii::$app->warehouseService->billC->scanAddGoods($bill_id,[$goods_id]);            
             $trans->commit();
             
             \Yii::$app->getSession()->setFlash('success', '添加成功');
@@ -147,8 +147,12 @@ class BillCGoodsController extends BaseController
             if (!$model->save()) {
                 return ResultHelper::json(422, $this->getError($model));
             }
-            \Yii::$app->warehouseService->warehouseGoods->syncStockNum($model->goods_id, $model->goods_num, AdjustTypeEnum::MINUS, $former_num);
+            $modify_num = $model->goods_num - $former_num;
+            if($modify_num != 0) {
+                \Yii::$app->warehouseService->warehouseGoods->updateStockNum($model->goods_id, $modify_num, AdjustTypeEnum::MINUS, true);
+            }
             \Yii::$app->warehouseService->billC->billCSummary($model->bill_id);
+            
             $trans->commit();
             return ResultHelper::json(200, '修改成功');
         } catch (\Exception $e) {
@@ -184,7 +188,7 @@ class BillCGoodsController extends BaseController
         if($billM->load(\Yii::$app->request->post()) && !empty($searchGoods)){
             try {
                 $trans = Yii::$app->db->beginTransaction();
-                \Yii::$app->warehouseService->billC->createBillGoodsC($billM, $searchGoods);
+                \Yii::$app->warehouseService->billC->batchAddGoods($billM, $searchGoods);
                 $trans->commit();
                 \Yii::$app->getSession()->setFlash('success','保存成功');
                 return $this->redirect(\Yii::$app->request->referrer);
@@ -260,7 +264,7 @@ class BillCGoodsController extends BaseController
             WarehouseGoods::updateAll(['goods_status'=>GoodsStatusEnum::IN_STOCK],['goods_id'=>$billGoods->goods_id]);
 
             //还原库存
-            \Yii::$app->warehouseService->warehouseGoods->syncStockNum($billGoods->goods_id, $billGoods->goods_num, AdjustTypeEnum::ADD);
+            \Yii::$app->warehouseService->warehouseGoods->updateStockNum($billGoods->goods_id, $billGoods->goods_num, AdjustTypeEnum::RESTORE);
             $trans->commit();
             return $this->message("删除成功", $this->redirect(Yii::$app->request->referrer));
         }catch (\Exception $e){

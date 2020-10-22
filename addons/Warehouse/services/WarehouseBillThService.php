@@ -261,7 +261,7 @@ class WarehouseBillThService extends WarehouseBillService
         if(empty($goods)) {
             throw new \Exception("不可更改,商品状态异常");
         }
-        $max_num = $goods->goods_num - $goods->stock_num + $billGoods->goods_num;
+        $max_num = $goods->goods_num - $goods->stock_num - $goods->do_chuku_num + $billGoods->goods_num;
 
         if($return_num > $max_num) {
             throw new \Exception("退货数量不能大于{$max_num}");
@@ -295,7 +295,7 @@ class WarehouseBillThService extends WarehouseBillService
             throw new \Exception("[{$goods_id}]不满足退货条件");
         }
         //最大退货数量
-        $max_num = $goods->goods_num - $goods->stock_num;        
+        $max_num = $goods->goods_num - $goods->stock_num - $goods->do_chuku_num;        
         if($return_num > $max_num) {
             throw new \Exception("[{$goods->goods_id}]退货数量不能大于{$max_num}");
         }

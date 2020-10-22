@@ -701,6 +701,14 @@ $params = $params ? "&".http_build_query($params) : '';
                             'headerOptions' => [],
                         ],
                         [
+                            'attribute'=>'do_chuku_num',
+                            'filter' => Html::activeTextInput($searchModel, 'do_chuku_num', [
+                                'class' => 'form-control',
+                                'style'=> 'width:60px;'
+                            ]),
+                            'headerOptions' => [],
+                        ],
+                        [
                             'attribute' => 'finger',
                             'value' => function($model){
                                 return Yii::$app->attr->valueName($model->finger);
