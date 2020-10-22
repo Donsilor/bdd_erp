@@ -116,9 +116,9 @@ class WarehouseBillThService extends WarehouseBillService
                 //插入商品日志
                 $log = [
                         'goods_id' => $goods->id,
-                        'goods_status' => GoodsStatusEnum::HAS_SOLD,
+                        'goods_status' => $goods->goods_status,
                         'log_type' => LogTypeEnum::ARTIFICIAL,
-                        'log_msg' => '其他退货单：'.$form->bill_no.";货品状态:“".GoodsStatusEnum::getValue(GoodsStatusEnum::IN_REFUND)."”变更为：“".GoodsStatusEnum::getValue($goods->goods_status)."”"
+                        'log_msg' => '其他退货单：'.$form->bill_no.";退货数量：".$billGoods->goods_num
                 ];
                 Yii::$app->warehouseService->goodsLog->createGoodsLog($log);
                 
