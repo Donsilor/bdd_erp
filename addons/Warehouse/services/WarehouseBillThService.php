@@ -85,7 +85,7 @@ class WarehouseBillThService extends WarehouseBillService
      * @param WarehouseBillCForm $form
      * @throws
      */
-    public function audit($form)
+    public function auditBill($form)
     {
         if(false === $form->validate()) {
             throw new \Exception($this->getError($form));
@@ -148,7 +148,7 @@ class WarehouseBillThService extends WarehouseBillService
      * @param WarehouseBill $form
      * @throws
      */
-    public function cancel($form)
+    public function cancelBill($form)
     {
         //更新库存状态
         $billGoodsList = WarehouseBillGoods::find()->select(['goods_id'])->where(['bill_id' => $form->id])->all();
@@ -187,7 +187,7 @@ class WarehouseBillThService extends WarehouseBillService
      * @param WarehouseBill $form
      * @throws
      */
-    public function delete($form)
+    public function deleteBill($form)
     {
         if($form->bill_status != BillStatusEnum::CANCEL) {
              throw new \Exception("单据不是取消状态");
