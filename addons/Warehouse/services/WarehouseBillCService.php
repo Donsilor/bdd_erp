@@ -462,8 +462,8 @@ class WarehouseBillCService extends WarehouseBillService
             throw new \Exception("[{$goods_id}]".$this->getError($billGoods));
         }        
         //扣减库存
-        if($chuku_num > 1) {
-            \Yii::$app->warehouseService->warehouseGoods->updateStockNum($goods_id, $billGoods->goods_num, AdjustTypeEnum::MINUS, true);
+        if($chuku_num >= 1) {
+            \Yii::$app->warehouseService->warehouseGoods->updateStockNum($goods_id, $chuku_num, AdjustTypeEnum::MINUS, true);
         }
         WarehouseGoods::updateAll(['chuku_price'=>$billGoods->chuku_price,'chuku_time'=>time()],['goods_id'=>$goods_id]);
     }

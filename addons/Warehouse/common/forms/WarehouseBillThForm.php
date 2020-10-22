@@ -69,12 +69,12 @@ class WarehouseBillThForm extends WarehouseBill
         $goods_ids = $this->getGoodsIds();
         $this->goods_ids = [];
         foreach ($goods_ids as $k => $goods_id) {
-            $goods = WarehouseGoods::find()->select(['goods_num','stock_num','goods_status'])->where(['goods_id'=>$goods_id])->one();
+            $goods = WarehouseGoods::find()->select(['goods_num','stock_num','do_chuku_num','goods_status'])->where(['goods_id'=>$goods_id])->one();
             if (!$goods) {
                 $this->addGoodsError($goods_id, 1,"货号不存在");
             }else if(!in_array($goods->goods_status,[GoodsStatusEnum::HAS_SOLD,GoodsStatusEnum::IN_STOCK])) {
                 $this->addGoodsError($goods_id, 1,"商品不是库存或已销售状态");
-            }else if($goods->stock_num >= $goods->goods_num) {
+            }else if(($goods->goods_num - $goods->stock_num-$goods->do_chuku_num) <=0) {
                 $this->addGoodsError($goods_id, 1,"商品不符合退货条件");
             }else {
                 $this->goods_ids[] = $goods_id;

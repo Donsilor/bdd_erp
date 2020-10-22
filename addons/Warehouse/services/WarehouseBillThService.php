@@ -292,8 +292,7 @@ class WarehouseBillThService extends WarehouseBillService
     private function createBillGoodsByGoods($bill, $goods)
     {
         $goods_id = $goods->goods_id;
-        $return_num = $goods->return_num ? $goods->return_num : 1;        
-       
+        $return_num = $goods->return_num ? $goods->return_num : 0;        
         //最大退货数量
         $max_num = $goods->goods_num - $goods->stock_num - $goods->do_chuku_num;
         if($return_num > $max_num) {
@@ -302,7 +301,9 @@ class WarehouseBillThService extends WarehouseBillService
         if($max_num <= 0 || !in_array($goods->goods_status,[GoodsStatusEnum::IN_STOCK,GoodsStatusEnum::HAS_SOLD])) {
             throw new \Exception("[{$goods_id}]不满足退货条件");
         }
-        
+        if($max_num == 1) {
+            $return_num = 1;
+        }
         $billGoods = new WarehouseBillGoods();
         $billGoods->attributes = [
                 'bill_id' =>$bill->id,
