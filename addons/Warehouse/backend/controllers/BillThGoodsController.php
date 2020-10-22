@@ -166,7 +166,7 @@ class BillThGoodsController extends BaseController
         $form = $this->findModel($bill_id);
         $form = $form ?? new WarehouseBillThForm();
         if(\Yii::$app->request->post("search") == 1 && $form->load(\Yii::$app->request->post())){
-            $form->checkGoodsIds();//查询校验
+            $form->validateGoodsList();//查询校验
             $searchModel = new SearchModel([
                 'model' => WarehouseGoods::class,
                 'scenario' => 'default',
