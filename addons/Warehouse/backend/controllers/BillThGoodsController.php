@@ -62,43 +62,6 @@ class BillThGoodsController extends BaseController
             'tabList'=>\Yii::$app->warehouseService->bill->menuTabList($bill_id, $this->billType, $this->returnUrl),
         ]);
     }
-
-    /**
-     * ajax添加商品
-     *
-     * @return mixed|string|\yii\web\Response
-     * @throws \yii\base\ExitException
-     */
-    public function actionAjaxEdit()
-    {
-        $id = \Yii::$app->request->get('id');
-        $model = $this->findModel($id);
-        $model = $model ?? new WarehouseBillCGoodsForm();
-        // ajax 校验
-        $this->activeFormValidate($model);
-        if ($model->load(\Yii::$app->request->post())) {
-            try{
-                $trans = \Yii::$app->db->beginTransaction();
-                if(false === $model->save()){
-                    throw new \Exception($this->getError($model));
-                }
-                //汇总：总金额和总数量
-                $res = \Yii::$app->warehouseService->billC->billCSummary($model->bill_id);
-                if(false === $res){
-                    throw new \Exception('更新单据汇总失败');
-                }
-                $trans->commit();
-                \Yii::$app->getSession()->setFlash('success', '保存成功');
-                return $this->redirect(\Yii::$app->request->referrer);
-            }catch (\Exception $e){
-                $trans->rollBack();
-                return $this->message($e->getMessage(), $this->redirect(\Yii::$app->request->referrer), 'error');
-            }
-        }
-        return $this->renderAjax($this->action->id, [
-            'model' => $model,
-        ]);
-    }
     /**
      * 扫码添加
      */
@@ -106,22 +69,17 @@ class BillThGoodsController extends BaseController
     {
         $bill_id  = Yii::$app->request->post('bill_id');
         $goods_id = Yii::$app->request->post('goods_id');
-        if($goods_id == "") {
-            \Yii::$app->getSession()->setFlash('error', '条码货号不能为空');
-            return ResultHelper::json(422, "条码货号不能为空");
+        if(empty($goods_id)) {
+            return $this->message('条码货号不能为空', $this->redirect(Yii::$app->request->referrer), 'error');
         }
         try{
             $trans = \Yii::$app->db->beginTransaction();
             \Yii::$app->warehouseService->billTh->scanAddGoods($bill_id,[$goods_id]);            
             $trans->commit();
-            
-            \Yii::$app->getSession()->setFlash('success', '添加成功');
-            return ResultHelper::json(200, "添加成功");
+            return $this->message("添加成功", $this->redirect(Yii::$app->request->referrer), 'success');
         }catch (\Exception $e){
             $trans->rollBack();
-            
-            \Yii::$app->getSession()->setFlash('error', $e->getMessage());
-            return ResultHelper::json(422, $e->getMessage());
+            return $this->message($e->getMessage(), $this->redirect(Yii::$app->request->referrer), 'error');
         }
     }
     /**
@@ -142,7 +100,7 @@ class BillThGoodsController extends BaseController
             if (!$model->save()) {
                 return ResultHelper::json(422, $this->getError($model));
             }
-            \Yii::$app->warehouseService->billC->billCSummary($model->bill_id);
+            \Yii::$app->warehouseService->billTh->billSummary($model->bill_id);
             $trans->commit();
             return ResultHelper::json(200, '修改成功');
         }catch (\Exception $e) {

@@ -199,7 +199,7 @@ class BillThController extends BaseController
             try {
                 $trans = \Yii::$app->trans->beginTransaction();
                 
-                \Yii::$app->warehouseService->billTh->audit($model);
+                \Yii::$app->warehouseService->billTh->auditBill($model);
                 $trans->commit();
                 
                 $this->message('操作成功', $this->redirect(Yii::$app->request->referrer), 'success');
@@ -232,7 +232,7 @@ class BillThController extends BaseController
         try {
             $trans = \Yii::$app->trans->beginTransaction();
 
-            \Yii::$app->warehouseService->billTh->cancel($model);
+            \Yii::$app->warehouseService->billTh->cancelBill($model);
 
             $trans->commit();
             $this->message('操作成功', $this->redirect(Yii::$app->request->referrer), 'success');
@@ -256,7 +256,7 @@ class BillThController extends BaseController
         }
         try {
             $trans = \Yii::$app->trans->beginTransaction();
-            \Yii::$app->warehouseService->billTh->delete($model);
+            \Yii::$app->warehouseService->billTh->deleteBill($model);
             $trans->commit();
             $this->message('操作成功', $this->redirect(Yii::$app->request->referrer), 'success');
         } catch (\Exception $e) {
