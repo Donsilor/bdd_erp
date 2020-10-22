@@ -468,6 +468,10 @@ $goods_type = $bill->billL->goods_type ?? 0;
                         <div class="col-lg-4">
                             <?= $form->field($model, 'bukou_fee')->textInput(['onblur' => 'rfClearVal(this)']) ?>
                         </div>
+                    <?php }else{?>
+                        <div class="col-lg-4">
+                            <?= $form->field($model, 'basic_gong_fee')->textInput(['onblur' => 'rfClearVal(this)']) ?>
+                        </div>
                     <?php }?>
                     <div class="col-lg-4">
                         <?= $form->field($model, 'biaomiangongyi_fee')->textInput(['onblur' => 'rfClearVal(this)']) ?>
