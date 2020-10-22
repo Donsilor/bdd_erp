@@ -126,7 +126,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'format' => 'raw',
                                 'value' => function ($model) {
                                     if ($model->goods->goods_num > 1) {
-                                        return Html::ajaxInput('goods_num', $model->goods_num, ['onfocus' => 'rfClearVal(this)', 'style' => "border:1px solid #BBD6FF", 'data-type' => 'number']);
+                                        return Html::ajaxInput('goods_num', $model->goods_num, [/*'onfocus' => 'rfClearVal(this)',*/ 'data-type' => 'number','data-id' => $model->id,'data-url'=>'ajax-chuku-num']);
                                     }
                                     return $model->goods_num ?? 0;
                                 },

@@ -182,18 +182,18 @@ class BillCController extends BaseController
      */
     public function actionAjaxApply($id)
     {
-
         $id = \Yii::$app->request->get('id');
-        $model = $this->findModel($id) ?? new WarehouseBillCForm();
+        
+        $model = $this->findModel($id);        
         if ($model->bill_status != BillStatusEnum::SAVE) {
             return $this->message('单据不是保存状态', $this->redirect(\Yii::$app->request->referrer), 'error');
+        }        
+        $count = WarehouseBillGoods::find()->where(['bill_id'=>$model->id, 'goods_num'=>0])->count();
+        if($count > 0){
+            return $this->message("有{$count}个货号未填写出库数量", $this->redirect(\Yii::$app->request->referrer), 'error');
         }
         if ($model->goods_num <= 0) {
             return $this->message('单据明细不能为空', $this->redirect(\Yii::$app->request->referrer), 'error');
-        }
-        $goods = WarehouseBillGoods::findOne(['bill_id'=>$model->id, 'goods_num'=>0]);
-        if($goods){
-            return $this->message('货品出库数量不能为0', $this->redirect(\Yii::$app->request->referrer), 'error');
         }
         try {
             $trans = \Yii::$app->trans->beginTransaction();

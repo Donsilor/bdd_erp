@@ -158,7 +158,7 @@ class WarehouseBillCService extends WarehouseBillService
                     'goods_id' => $wareGoods->id,
                     'goods_status' => $wareGoods->goods_status,
                     'log_type' => LogTypeEnum::ARTIFICIAL,
-                    'log_msg'  => "其他出库单：{$form->bill_no}, 出库数量：{$billGoods->goods_num}"
+                    'log_msg'  => "其它出库单：{$form->bill_no}, 出库数量：{$billGoods->goods_num}件"
                 ];
                 \Yii::$app->warehouseService->goodsLog->createGoodsLog($log);
             }
@@ -242,17 +242,20 @@ class WarehouseBillCService extends WarehouseBillService
             throw new \Exception("出库数量必须大于0");
         }
         
-        $model = WarehouseBillGoods::find()->where(['id'=>$id])->one();
+        $model = WarehouseBillGoods::find()->select(['id','bill_id','goods_id','goods_num'])->where(['id'=>$id])->one();
         if(empty($model)) {
             throw new \Exception("不可更改,明细查询失败");
-        }
-        
+        }       
         $modify_num = $chuku_num - $model->goods_num;
         if($modify_num != 0) {
             \Yii::$app->warehouseService->warehouseGoods->updateStockNum($model->goods_id, $modify_num, AdjustTypeEnum::MINUS, true);
         }
+        $model->goods_num = $chuku_num;
+        if(false === $model->save(true,['id','goods_num'])) {
+            throw new \Exception($this->getError($model));
+        }
         //汇总统计
-        $this->billSummary($model->bill_id);
+        $this->billCSummary($model->bill_id);
         return true;
     }
     /**

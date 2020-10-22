@@ -25,7 +25,7 @@ $this->params['breadcrumbs'][] = $this->title;
             echo '&nbsp;';
             echo Html::edit(['edit-all', 'bill_id' => $bill->id, 'scan' => 1,'returnUrl'=>Yii::$app->request->get("returnUrl")], '扫码添加货品', ['class' => 'btn btn-primary btn-xs']);
             echo '&nbsp;';
-            echo Html::edit(['edit-all', 'bill_id' => $bill->id], '编辑货品', ['class' => 'btn btn-info btn-xs']);
+            echo Html::edit(['edit-all', 'bill_id' => $bill->id,'returnUrl'=>Yii::$app->request->get("returnUrl")], '编辑货品', ['class' => 'btn btn-info btn-xs']);
             echo '&nbsp;';
         }
         echo Html::a('单据打印', ['bill-c/print', 'id' => $bill->id], [
