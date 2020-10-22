@@ -96,9 +96,9 @@ class ExternalOrderController extends BaseController
                 $model->currency = $platform->currency;
                 $model->sale_channel_id = $platform->channel_id;
                 $model->pay_type = $platform->payment_id;
-                $model->address = $platform;
+                $model->_platform = $platform;
             }else{
-                $this->message("系统异常", $this->redirect(Yii::$app->request->referrer), 'error');
+                return $this->message("系统异常", $this->redirect(Yii::$app->request->referrer), 'error');
             }            
         }  
         if($isNewRecord === false) {
