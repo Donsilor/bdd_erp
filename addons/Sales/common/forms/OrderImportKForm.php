@@ -54,6 +54,7 @@ class OrderImportKForm extends ImportForm
     public $main_stone_type;
     public $main_stone_weight;
     public $main_stone_num;
+    public $main_stone_secai;
     public $main_stone_color;
     public $main_stone_clarity;
     public $main_stone_price;
@@ -275,7 +276,7 @@ class OrderImportKForm extends ImportForm
             }else if($this->customer_email){
                 $customer = Customer::find()->where(['email'=>$this->customer_email,'channel_id'=>$this->channel_id])->one();
                 if(empty($customer)) {
-                    $this->addRowError($rowIndex, 'customer_email', "[{$this->customer_email}]查询不到客户".var_export(['email'=>$this->customer_email,'channel_id'=>$this->channel_id],true));
+                    $this->addRowError($rowIndex, 'customer_email', "[{$this->customer_email}]查询不到客户");
                 }
             }else{                
                 $this->addRowError($rowIndex, 'customer_no', "客户编号和客户邮箱 不能同时为空");

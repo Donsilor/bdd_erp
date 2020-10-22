@@ -126,7 +126,7 @@ class WarehouseBillWService extends WarehouseBillService
             $billGoods->status = PandianStatusEnum::LOSS;//盘亏
         }else if($billGoods->goods_num < $actual_num) {
             $billGoods->status = PandianStatusEnum::PROFIT;//盘盈
-        }else if($billGoods->goods_num = $actual_num) {
+        }else if($billGoods->goods_num == $actual_num) {
             $billGoods->status = PandianStatusEnum::NORMAL;//正常
         }
         //如果仓库不对，为 盘盈

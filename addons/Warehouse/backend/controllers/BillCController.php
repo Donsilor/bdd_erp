@@ -66,16 +66,16 @@ class BillCController extends BaseController
         $dataProvider = $searchModel
             ->search(\Yii::$app->request->queryParams, ['created_at', 'audit_time']);
 
-        $created_at = $searchModel->created_at;
-        if (!empty($created_at)) {
-            $dataProvider->query->andFilterWhere(['>=', Warehousebill::tableName() . '.created_at', strtotime(explode('/', $created_at)[0])]);//起始时间
-            $dataProvider->query->andFilterWhere(['<', Warehousebill::tableName() . '.created_at', (strtotime(explode('/', $created_at)[1]) + 86400)]);//结束时间
+        if (!empty($searchModel->created_at)) {
+            $created_ats = explode('/', $searchModel->created_at);
+            $dataProvider->query->andFilterWhere(['>=', Warehousebill::tableName() . '.created_at', strtotime($created_ats[0])]);//起始时间
+            $dataProvider->query->andFilterWhere(['<', Warehousebill::tableName() . '.created_at', strtotime($created_ats[1]) + 86400]);//结束时间
         }
-
-        $audit_time = $searchModel->audit_time;
-        if (!empty($audit_time)) {
-            $dataProvider->query->andFilterWhere(['>=', Warehousebill::tableName() . '.audit_time', strtotime(explode('/', $audit_time)[0])]);//起始时间
-            $dataProvider->query->andFilterWhere(['<', Warehousebill::tableName() . '.audit_time', (strtotime(explode('/', $audit_time)[1]) + 86400)]);//结束时间
+        
+        if (!empty($searchModel->audit_time)) {
+            $audit_times = explode('/', $searchModel->audit_time);
+            $dataProvider->query->andFilterWhere(['>=', Warehousebill::tableName() . '.audit_time', strtotime($audit_times[0])]);//起始时间
+            $dataProvider->query->andFilterWhere(['<', Warehousebill::tableName() . '.audit_time', strtotime($audit_times[1]) + 86400]);//结束时间
         }
 
         $dataProvider->query->andWhere(['>', Warehousebill::tableName() . '.status', -1]);
@@ -474,14 +474,29 @@ class BillCController extends BaseController
     {
         $this->layout = '@backend/views/layouts/print';
         $id = \Yii::$app->request->get('id');
-        if (empty($id)) {
-            exit("ID不能为空");
-        }
         $model = $this->findModel($id);
         if (!$model) {
             exit("单据不存在");
         }
         list($lists, $total) = $this->getData($id);
+       
+        if(Yii::$app->request->get("download")) {
+            header("Pragma: public");
+            header("Expires: 0");
+            header("Cache-Control:must-revalidate, post-check=0, pre-check=0");
+            header("Content-Type:application/force-download");
+            header("Content-Type:application/vnd.ms-execl");
+            header("Content-Type:application/octet-stream");
+            header("Content-Type:application/download");
+            header("Content-Disposition:attachment;filename=其它出库单打印导出({$model->bill_no}).xls");
+            header("Content-Transfer-Encoding:binary");
+            echo $this->render("export", [
+                    'model' => $model,
+                    'lists' => $lists,
+                    'total' => $total
+            ]);
+            exit;
+        }
         return $this->render($this->action->id, [
             'model' => $model,
             'lists' => $lists,

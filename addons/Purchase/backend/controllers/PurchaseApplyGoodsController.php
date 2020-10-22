@@ -3,9 +3,11 @@
 namespace addons\Purchase\backend\controllers;
 
 use addons\Purchase\common\enums\ApplyConfirmEnum;
+use addons\Purchase\common\enums\ApplyStatusEnum;
 use addons\Purchase\common\forms\PurchaseApplyDiamondForm;
 use addons\Purchase\common\forms\PurchaseApplyFormatForm;
 use addons\Purchase\common\forms\PurchaseApplyGoodsConfimForm;
+use addons\Purchase\common\models\PurchaseApplyGoods;
 use addons\Shop\common\enums\AttrIdEnum;
 use addons\Style\common\enums\JintuoTypeEnum;
 use addons\Style\common\enums\StyleSexEnum;
@@ -384,6 +386,59 @@ class PurchaseApplyGoodsController extends BaseController
             return $this->message($e->getMessage(), $this->redirect($this->returnUrl), 'error');
         }
     }
+
+
+    /**
+     * 复制
+     *
+     * @param $id
+     * @return mixed
+     * @throws \Throwable
+     * @throws \yii\db\StaleObjectException
+     */
+    public function actionCopy($id)
+    {
+        try{
+
+            $trans = Yii::$app->trans->beginTransaction();
+            $model = $this->findModel($id);
+            if(!$model->apply) {
+                throw new \Exception("无效采购单",422);
+            }
+            if($model->apply->audit_status == AuditStatusEnum::PASS) {
+                throw new \Exception("采购申请单已审核,不允许复制商品",422);
+            }
+            $new_model = new PurchaseApplyGoodsForm();
+            $purchase_apply_goods = $model->toArray();
+            unset($purchase_apply_goods['id']);
+            $new_model->attributes = $purchase_apply_goods;
+            if(false === $new_model->save()){
+                throw new \Exception($this->getError($new_model));
+            }
+
+           //属性复制
+            $purchase_apply_goods_attr = new PurchaseApplyGoodsAttribute();
+            $goods_attributes = PurchaseApplyGoodsAttribute::find()->where(['id'=>$id])->asArray()->all();
+            foreach ($goods_attributes as $goods_attribute){
+                $_model = clone $purchase_apply_goods_attr;
+                $_model->attributes = $goods_attribute;
+                $_model->id = $new_model->id;
+                if(false === $_model->save()){
+                    throw new \Exception($this->getError($_model));
+                }
+            }
+
+            //更新单据汇总
+            Yii::$app->purchaseService->apply->applySummary($model->apply->id);
+            $trans->commit();
+
+            return $this->message("复制成功", $this->redirect($this->returnUrl));
+        }catch (\Exception $e) {
+
+            $trans->rollback();
+            return $this->message($e->getMessage(), $this->redirect($this->returnUrl), 'error');
+        }
+    }
     /**
      * 申请编辑
      * @property PurchaseApplyGoodsForm $model
@@ -550,7 +605,7 @@ class PurchaseApplyGoodsController extends BaseController
                     $qibanForm = new QibanAttrForm();
                     $qibanForm->id = $qiban->id;
                     $qibanForm->initAttrs();
-                    
+
                     $model->attr_custom = $qibanForm->attr_custom;
                     $model->attr_require = $qibanForm->attr_require;
                 }
@@ -573,14 +628,31 @@ class PurchaseApplyGoodsController extends BaseController
                 $images = Yii::$app->styleService->style->getStyleImages($goods_sn);
                 $model->goods_images = join(',',$images);
 
-
                 $styleForm = new StyleAttrForm();
                 $styleForm->style_id = $style->id;
                 $styleForm->initAttrs();
-
                 $model->attr_custom = $styleForm->attr_custom;
-                $model->attr_require = [];
+                $model->attr_require = $styleForm->attr_require;
             }
+
+
+            //取消指定默认值
+            $attr_custom = $model->attr_custom;
+            foreach ($attr_custom as $k=>$v){
+                if(in_array($k,$model->getAttrType('no_value'))){
+                    unset($attr_custom[$k]);
+                }
+            }
+            $model->attr_custom = $attr_custom;
+
+            $attr_require = $model->attr_require;
+            foreach ($attr_require as $k=>$v){
+                if(in_array($k,$model->getAttrType('no_value'))){
+                    unset($attr_require[$k]);
+                }
+            }
+            $model->attr_require = $attr_require;
+
         }
         
         return true;
@@ -595,15 +667,27 @@ class PurchaseApplyGoodsController extends BaseController
     public function actionDesignConfirm()
     {
         $id = Yii::$app->request->get('id');
-        $model = $this->findModel($id);
-        $model->confirm_status = ApplyConfirmEnum::CONFIRM;
-        $model->confirm_design_time = time();
-        $model->confirm_design_id = \Yii::$app->user->identity->id;
-        if(false === $model->save()){
-            return $this->message($this->getError($model), $this->redirect(\Yii::$app->request->referrer), 'error');
+        try{
+            $trans = Yii::$app->db->beginTransaction();
+
+            $model = $this->findModel($id);
+            $model->confirm_status = ApplyConfirmEnum::CONFIRM;
+            $model->confirm_design_time = time();
+            $model->confirm_design_id = \Yii::$app->user->identity->id;
+            if(false === $model->save()){
+                return $this->message($this->getError($model), $this->redirect(\Yii::$app->request->referrer), 'error');
+            }
+            Yii::$app->purchaseService->apply->confirmAfter($model->apply_id);
+
+            $trans->commit();
+            return $this->message('操作成功', $this->redirect(\Yii::$app->request->referrer), 'success');
+
+
+        }catch (\Exception $e){
+            $trans->rollBack();
+            return $this->message($e->getMessage(), $this->redirect(Yii::$app->request->referrer), 'error');
         }
 
-        return $this->message('操作成功', $this->redirect(\Yii::$app->request->referrer), 'success');
 
     }
 
@@ -633,9 +717,12 @@ class PurchaseApplyGoodsController extends BaseController
                 if(false === $model->save()){
                     throw new \Exception($this->getError($model));
                 }
+
+                Yii::$app->purchaseService->apply->confirmAfter($model->apply_id);
+                
                 $trans->commit();
-                Yii::$app->getSession()->setFlash('success','保存成功');
-                return $this->redirect(Yii::$app->request->referrer);
+                return $this->message('操作成功', $this->redirect(\Yii::$app->request->referrer), 'success');
+
             }catch (\Exception $e){
                 $trans->rollBack();
                 return $this->message($e->getMessage(), $this->redirect(Yii::$app->request->referrer), 'error');

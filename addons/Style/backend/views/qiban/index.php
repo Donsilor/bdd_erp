@@ -40,7 +40,7 @@ $this->params['breadcrumbs'][] = $this->title;
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
         'tableOptions' => ['class' => 'table table-hover'],
-        'options' => ['style'=>' width:120%;white-space:nowrap;' ],
+        'options' => ['style'=>' width:100%;white-space:nowrap;' ],
         'showFooter' => false,//显示footer行
         'id'=>'grid',            
         'columns' => [
@@ -208,7 +208,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     'model' => $searchModel,
                     'attribute' => 'created_at',
                     'value' => $searchModel->created_at,
-                    'options' => ['readonly' => false,'class'=>'form-control','style'=>'background-color:#fff;width:150px;'],
+                    'options' => ['readonly' => false,'class'=>'form-control','style'=>'background-color:#fff;width:100px;'],
                     'pluginOptions' => [
                         'format' => 'yyyy-mm-dd',
                         'locale' => [
@@ -284,12 +284,12 @@ $this->params['breadcrumbs'][] = $this->title;
 
                     'status' => function($url, $model, $key){
                         if($model->audit_status == AuditStatusEnum::PASS){
-                            return Html::status($model->status);
+                            return Html::lockStatus($model->status);
                         }                        
                     },
                     'delete' => function ($url, $model, $key) {
                         //未审核 + 保存 才可以删除
-                        if($model->audit_status == AuditStatusEnum::SAVE && $model->status == StatusEnum::DISABLED) {
+                        if($model->status == StatusEnum::DISABLED) {
                             return Html::delete(['delete', 'id' => $model->id]);
                         }
                     },

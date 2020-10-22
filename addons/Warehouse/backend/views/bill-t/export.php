@@ -1,37 +1,10 @@
-<!DOCTYPE html>
-<html lang="en">
+<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-microsoft-com:office:excel5" xmlns="http://www.w3.org/TR/REC-html40">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>货品核价入库单</title>
-    <script language="javascript">
-        function preview(fang) {
-            if (fang < 10) {
-                bdhtml = window.document.body.innerHTML; //获取当前页的html代码
-                sprnstr = "<!--startprint" + fang + "-->"; //设置打印开始区域
-                eprnstr = "<!--endprint" + fang + "-->"; //设置打印结束区域
-                prnhtml = bdhtml.substring(bdhtml.indexOf(sprnstr) + 18); //从开始代码向后取html
-                prnhtml = prnhtml.substring(0, prnhtml.indexOf(eprnstr)); //从结束代码向前取html
-                window.document.body.innerHTML = prnhtml;
-                window.print();
-                window.document.body.innerHTML = bdhtml;
-            } else {
-                window.print();
-            }
-        }
-        function download()
-        {
-             window.location.href += "&download=1";
-        }
-    </script>
+<meta http-equiv=Content-Type content="text/html; charset=utf-8">
     <style>
         body {
             font-family: initial; /*浏览器打印不出div背景颜色*/
             -webkit-print-color-adjust: exact;
-        }
-
-        .information {
-            width: 100%;
         }
 
         td {
@@ -123,7 +96,6 @@
         }
 
         table, table tr th, table tr td {
-            border: 1px solid #000;
             font-size: 10px;
         }
 
@@ -319,78 +291,94 @@
         .padding-14 {
             padding: 0px 14px;
         }
-    </style>
-    <style media="print">
-        .Noprint {
-            DISPLAY: none;
-        }
-        .PageNext {
-            PAGE-BREAK-AFTER: always
-        }
+        .headerTable, .headerTable td{ border:0px}
+        .footerTable, .footerTable td{ border:0px}
     </style>
 </head>
-<div class="text-center Noprint" style="text-align:right;">
-    <!-- 打印按钮 -->
-    <button type="button" class="btn btn-info btn-ms" target="_blank" onclick="preview(10)">打印</button>
-    <button type="button" class="btn btn-info btn-ms" onclick="download()">导出</button>
-</div>
-<body>
-<div class="template">
-    <div class="information">
-        <p class="font-bold font-20">深圳市恒得利珠宝有限公司</p>
-        <p class="font-bold font-16">货品核价入库单</p>
-        <div class="midd"></div>
-        <div class="msg">
-            <div class="top">
-                <div class="height"><span></span><span></span></div>
+<body> 
+<table class="headerTable">
+    <tr>
+        <td class="algin-center" colspan="36">
+            <p class="font-18"><b>深圳市恒得利珠宝有限公司</b></p>
+            <p class="font-14">货品核价入库单</p>
+        </td>
+    </tr>
+    <tr>
+        <td class="algin-left" colspan="6">
                 <div class="one">
                     <span>供应商：</span>
                     <span contenteditable="true"><?= $model->supplier->supplier_name ?? "无"; ?></span>
                 </div>
-                <div class="one">
-                    <span>订单类型：</span>
-                    <span contenteditable="true">成品采购</span>
-                </div>
-                <div class="one">
-                    <span>入库单号：</span>
-                    <span contenteditable="true"><?= $model->bill_no ?? "无" ?></span>
-                </div>
-            </div>
-            <div class="middle">
-                <div class="height"><span></span><span></span></div>
+        </td>
+        <td class="algin-left" colspan="23">
                 <div class="two">
                     <span>采购订单号：</span>
                     <span contenteditable="true">无</span>
                 </div>
-                <div class="two">
-                    <span>销售渠道：</span>
-                    <span contenteditable="true"><?= $total['channel'] ?? "无"; ?></span>
-                </div>
-                <div class="two">
-                    <span>入库方法：</span>
-                    <span contenteditable="true">无</span>
-                </div>
-            </div>
-            <div class="bottom">
+        </td>
+        <td class="algin-left" colspan="7">
                 <div class="three">
                     <span>金价/g：</span>
                     <span contenteditable="true"><?= $total['gold_price'] ?? '无' ?></span>
                 </div>
+        </td>
+    </tr>
+    <tr>
+        <td class="algin-left" colspan="6">
+                <div class="one">
+                    <span>订单类型：</span>
+                    <span contenteditable="true">成品采购</span>
+                </div>
+        </td>
+        <td class="algin-left" colspan="23">
+                <div class="two">
+                    <span>销售渠道：</span>
+                    <span contenteditable="true"><?= $total['channel'] ?? "无"; ?></span>
+                </div>
+        </td>
+        <td class="algin-left" colspan="7">
                 <div class="three">
                     <span>工厂结算单号：</span>
                     <span contenteditable="true"><?= $model->send_goods_sn ?? "无" ?></span>
                 </div>
+        </td>
+    </tr>
+    <tr>
+        <td class="algin-left" colspan="6">
+                <div class="one">
+                    <span>入库单号：</span>
+                    <span contenteditable="true"><?= $model->bill_no ?? "无" ?></span>
+                </div>
+        </td>
+        <td class="algin-left" colspan="23">
+                <div class="two">
+                    <span>入库方法：</span>
+                    <span contenteditable="true">无</span>
+                </div>
+        </td>
+        <td class="algin-left" colspan="7">
                 <div class="three">
                     <span>结价：</span>
                     <span contenteditable="true">无</span>
                 </div>
-                <div class="three">
-                    <span>日期：</span>
-                    <span contenteditable="true"><?= date('Y/m/d', $model->created_at)?></span>
-                </div>
+        </td>       
+    </tr>
+    <tr>
+        <td class="algin-left" colspan="6">
+               
+        </td>
+        <td class="algin-left" colspan="23">
+                
+        </td>
+        <td class="algin-left" colspan="7">
+            <div class="three">
+                <span>日期：</span>
+                <span contenteditable="true"><?= date('Y/m/d', $model->created_at)?></span>
             </div>
-        </div>
-        <table class="table">
+        </td>       
+    </tr>
+</table>
+<table border=1 style="border-collapse:collapse;margin-top: 5px">
             <thead>
             <td class="width-25 algin-center font-bold" rowspan="2">序号</td>
             <td class="width-80 algin-center font-bold" rowspan="2">条码号</td>
@@ -405,7 +393,7 @@
             <td class="width-170 algin-center font-bold" colspan="5">副石1</td>
             <td class="width-30 algin-center font-bold" rowspan="2">配件(g)</td>
             <td class="width-30 algin-center font-bold" rowspan="2">配件额</td>
-            <td class="width-30 algin-center font-bold" rowspan="2">配件<br>工费</td>
+            <td class="width-30 algin-center font-bold" rowspan="2">配件<br/>工费</td>
             <td class="width-30 algin-center font-bold" rowspan="2">工费</td>
             <td class="width-30 algin-center font-bold" rowspan="2">镶石费</td>
             <td class="width-30 algin-center font-bold" rowspan="2">车花片</td>
@@ -416,7 +404,7 @@
             <td class="width-30 algin-center font-bold" rowspan="2">税额</td>
             <td class="width-80 algin-center font-bold" colspan="2">工厂结算</td>
             <td class="width-50 algin-center font-bold" rowspan="2">成本单价</td>
-            <td class="width-55 algin-center font-bold" rowspan="2">总成本<br>金额</td>
+            <td class="width-55 algin-center font-bold" rowspan="2">总成本<br/>金额</td>
             <tr class="algin-left">
                 <td class="algin-center padding-5 font-bold">货重</td>
                 <td class="algin-center padding-5 font-bold">净重</td>
@@ -433,7 +421,7 @@
                 <td class="algin-center padding-5 font-bold">石重</td>
                 <td class="algin-center padding-5 font-bold">单价</td>
                 <td class="algin-center padding-5 font-bold">金额</td>
-                <td class="algin-center padding-5 font-bold">折足<br>金料</td>
+                <td class="algin-center padding-5 font-bold">折足<br/>金料</td>
                 <td class="algin-center padding-5 font-bold">金额</td>
             </tr>
             </thead>
@@ -529,26 +517,27 @@
             </tr>
             </tfoot>
         </table>
-        <div class="foot-info">
+<table class="footerTable" style="padding-top: 10px">
+    <tr>
+        <td class="algin-left" colspan="6">
             <div class="prepared-by">
                 <span>制单人：</span>
-                <span contenteditable="true"><?= $model->creator->username ?? '无'; ?></span>
-            </div>
-            <div class="reviewer">
+                <span contenteditable="true"><?= $model->creator->username ?? ''; ?></span>
+            </div>            
+        </td>
+        <td class="algin-left" colspan="23">
+           <div class="reviewer">
                 <span>复核人：</span>
-                <span contenteditable="true">无</span>
-            </div>
+                <span contenteditable="true"></span>
+            </div>            
+        </td>
+        <td class="algin-left" colspan="7">
             <div class="review">
                 <span>审核人：</span>
-                <span contenteditable="true"><?= $model->auditor->username ?? '无'; ?></span>
+                <span contenteditable="true"><?= $model->auditor->username ?? ''; ?></span>
             </div>
-        </div>
-    </div>
-</div>
-<div class="text-center Noprint" style="text-align:center;">
-    <!-- 打印按钮 -->
-    <button type="button" class="btn btn-info btn-ms" onclick="preview(10)">打印</button>
-    <button type="button" class="btn btn-info btn-ms" onclick="download()">导出</button>
-</div>
+        </td>
+    </tr>    
+</table>
 </body>
 </html>

@@ -153,9 +153,8 @@ $this->params['breadcrumbs'][] = $this->title;
          </div>
         <div class="box-footer text-center">
             <?php
-                echo Html::edit(['edit', 'id' => $model->id, 'returnUrl' => Url::getReturnUrl()]);
+            echo Html::edit(['edit', 'id' => $model->id],'编辑',['class'=>'btn btn-primary btn-sm openContab','data-title'=>$model->realname."(编辑)"]);
             ?>
-            <span class="btn btn-white" onclick="history.go(-1)">返回</span>
         </div>
     </div>
 </div>

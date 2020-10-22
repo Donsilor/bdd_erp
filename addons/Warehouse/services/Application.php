@@ -21,6 +21,7 @@ use common\components\Service;
  * @property \addons\Warehouse\services\WarehouseBillDService $billD 销售退货单据
  * @property \addons\Warehouse\services\WarehouseBillTService $billT 其它收货单据
  * @property \addons\Warehouse\services\WarehouseBillCService $billC 其它出库单据
+ * @property \addons\Warehouse\services\WarehouseBillThService $billTh 其它退货单据
  * @property \addons\Warehouse\services\WarehouseBillBService $billB 退货返厂单据
  * @property \addons\Warehouse\services\WarehouseBillLogService $billLog 单据日志
  * @property \addons\Warehouse\services\WarehouseGoodsLogService $goodsLog 单据日志
@@ -82,6 +83,7 @@ class Application extends Service
         'billJ' => 'addons\Warehouse\services\WarehouseBillJService',
         'billS' => 'addons\Warehouse\services\WarehouseBillSService',
         'billD' => 'addons\Warehouse\services\WarehouseBillDService',
+        'billTh' => 'addons\Warehouse\services\WarehouseBillThService',
         'billLog' => 'addons\Warehouse\services\WarehouseBillLogService',
         'billPay' => 'addons\Warehouse\services\WarehouseBillPayService',
         'goodsLog' => 'addons\Warehouse\services\WarehouseGoodsLogService',

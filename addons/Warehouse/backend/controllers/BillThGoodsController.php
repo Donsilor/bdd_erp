@@ -2,10 +2,11 @@
 
 namespace addons\Warehouse\backend\controllers;
 
-use addons\Warehouse\common\enums\AdjustTypeEnum;
 use Yii;
 use common\traits\Curd;
-use common\helpers\Url;
+use yii\base\Exception;
+use common\helpers\ResultHelper;
+use common\helpers\ArrayHelper;
 use common\models\base\SearchModel;
 use addons\Warehouse\common\models\WarehouseBill;
 use addons\Warehouse\common\models\WarehouseBillGoods;
@@ -13,21 +14,20 @@ use addons\Warehouse\common\forms\WarehouseBillBForm;
 use addons\Warehouse\common\forms\WarehouseBillCForm;
 use addons\Warehouse\common\enums\BillTypeEnum;
 use addons\Warehouse\common\forms\WarehouseBillCGoodsForm;
-use addons\Warehouse\common\enums\GoodsStatusEnum;
+use addons\Warehouse\common\forms\WarehouseBillThGoodsForm;
+use addons\Warehouse\common\forms\WarehouseBillThForm;
 use addons\Warehouse\common\models\WarehouseGoods;
-use yii\base\Exception;
-use common\helpers\ResultHelper;
-use common\helpers\ArrayHelper;
+
 /**
  * WarehouseBillBGoodsController implements the CRUD actions for WarehouseBillBGoodsController model.
  */
-class BillCGoodsController extends BaseController
+class BillThGoodsController extends BaseController
 {
     use Curd;
     
     
-    public $modelClass = WarehouseBillCGoodsForm::class;
-    public $billType = BillTypeEnum::BILL_TYPE_C;
+    public $modelClass = WarehouseBillThGoodsForm::class;
+    public $billType = BillTypeEnum::BILL_TYPE_TH;
 
     /**
      * Lists all WarehouseBillBGoods models.
@@ -35,8 +35,6 @@ class BillCGoodsController extends BaseController
      */
     public function actionIndex()
     {
-        $tab = Yii::$app->request->get('tab',2);
-        $returnUrl = Yii::$app->request->get('returnUrl',Url::to(['bill-c/index']));
         $bill_id = Yii::$app->request->get('bill_id');
         $searchModel = new SearchModel([
             'model' => $this->modelClass,
@@ -60,8 +58,8 @@ class BillCGoodsController extends BaseController
             'dataProvider' => $dataProvider,
             'searchModel' => $searchModel,
             'bill' => $bill,
-            'tab' => $tab,
-            'tabList'=>\Yii::$app->warehouseService->bill->menuTabList($bill_id, $this->billType, $returnUrl),
+            'tab' => Yii::$app->request->get('tab',2),
+            'tabList'=>\Yii::$app->warehouseService->bill->menuTabList($bill_id, $this->billType, $this->returnUrl),
         ]);
     }
 
@@ -114,7 +112,7 @@ class BillCGoodsController extends BaseController
         }
         try{
             $trans = \Yii::$app->db->beginTransaction();
-            \Yii::$app->warehouseService->billC->scanGoods($bill_id,[$goods_id]);            
+            \Yii::$app->warehouseService->billTh->scanAddGoods($bill_id,[$goods_id]);            
             $trans->commit();
             
             \Yii::$app->getSession()->setFlash('success', '添加成功');
@@ -126,13 +124,11 @@ class BillCGoodsController extends BaseController
             return ResultHelper::json(422, $e->getMessage());
         }
     }
-
     /**
-     *
      * ajax 更新商品明细
+     *
      * @param $id
      * @return array
-     * @throws
      */
     public function actionAjaxUpdate($id)
     {
@@ -140,22 +136,20 @@ class BillCGoodsController extends BaseController
             return ResultHelper::json(404, '找不到数据');
         }
         $data = Yii::$app->request->get();
-        $former_num = $model->goods_num;
         $model->attributes = ArrayHelper::filter($data, array_keys($data));
-        try {
+        try{
             $trans = Yii::$app->trans->beginTransaction();
             if (!$model->save()) {
                 return ResultHelper::json(422, $this->getError($model));
             }
-            \Yii::$app->warehouseService->warehouseGoods->syncStockNum($model->goods_id, $model->goods_num, AdjustTypeEnum::MINUS, $former_num);
             \Yii::$app->warehouseService->billC->billCSummary($model->bill_id);
             $trans->commit();
             return ResultHelper::json(200, '修改成功');
-        } catch (\Exception $e) {
+        }catch (\Exception $e) {
             $trans->rollback();
-            return ResultHelper::json(404, $e->getMessage());
+            return ResultHelper::json(404, '找不到数据');
         }
-
+        
     }
     
     /**
@@ -166,38 +160,47 @@ class BillCGoodsController extends BaseController
     public function actionAdd()
     {
         $this->layout = '@backend/views/layouts/iframe';
-
-        $search = Yii::$app->request->get('search');
+        
         $bill_id = Yii::$app->request->get('bill_id');
-        $goods_ids = Yii::$app->request->get('goods_ids');
-        $message = Yii::$app->request->get('message');
-        $gModel = new WarehouseBillCGoodsForm();
-        $billM = WarehouseBillCForm::findOne($bill_id);
-        $billM = $billM ?? new WarehouseBillCForm();
-        $billM->goods_ids = $goods_ids;
-        if($search == 1){
-            $valid_goods_ids = $billM->loadGoods();//查询校验
-            $error = $billM->getGoodsMessage();//获取错误
-            return ResultHelper::json(200, "", ['valid_goods_ids' => $valid_goods_ids, 'message'=>$error]);
-        }
-        $searchGoods = $billM->getSearchGoods();
-        if($billM->load(\Yii::$app->request->post()) && !empty($searchGoods)){
+        $this->modelClass = WarehouseBillThForm::class;
+        $form = $this->findModel($bill_id);
+        $form = $form ?? new WarehouseBillThForm();
+        if(\Yii::$app->request->post("search") == 1 && $form->load(\Yii::$app->request->post())){
+            $form->checkGoodsIds();//查询校验
+            $searchModel = new SearchModel([
+                'model' => WarehouseGoods::class,
+                'scenario' => 'default',
+                'partialMatchAttributes' => [], // 模糊查询
+                'defaultOrder' => [],
+                'pageSize' => 100,
+                'relations' => [
+                    
+                ]
+            ]);
+            $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+            $dataProvider->query->andWhere(['goods_id'=>$form->getGoodsIds()]);
+            return $this->render($this->action->id, [
+                'model' => $form,
+                'dataProvider' => $dataProvider,
+                'searchModel' => $searchModel,
+            ]);
+        } 
+        
+        if($form->load(\Yii::$app->request->post())){
             try {
                 $trans = Yii::$app->db->beginTransaction();
-                \Yii::$app->warehouseService->billC->createBillGoodsC($billM, $searchGoods);
+                //批量添加商品
+                \Yii::$app->warehouseService->billTh->batchAddGoods($form);
                 $trans->commit();
-                \Yii::$app->getSession()->setFlash('success','保存成功');
-                return $this->redirect(\Yii::$app->request->referrer);
+                return $this->message('保存成功', $this->redirect(Yii::$app->request->referrer), 'success');
             }catch (\Exception $e){
                 $trans->rollBack();
-                return $this->message($e->getMessage(), $this->redirect(Yii::$app->request->referrer), 'error');
+                return ResultHelper::json(424, $e->getMessage());
             }
-        }
+        }        
+        
         return $this->render($this->action->id, [
-            'model' => $billM,
-            'gModel' => $gModel,
-            'message' => $message,
-            'searchGoods' => $searchGoods
+            'model' => $form,
         ]);
     }
 
@@ -208,10 +211,11 @@ class BillCGoodsController extends BaseController
     public function actionEditAll()
     {
         $bill_id = Yii::$app->request->get('bill_id');
+
         $searchModel = new SearchModel([
             'model' => $this->modelClass,
             'scenario' => 'default',
-            'partialMatchAttributes' => ['goods_name', 'goods_remark'], // 模糊查询
+            'partialMatchAttributes' => [], // 模糊查询
             'defaultOrder' => [
                 'id' => SORT_DESC
             ],
@@ -231,42 +235,43 @@ class BillCGoodsController extends BaseController
             'tabList'=>\Yii::$app->warehouseService->bill->menuTabList($bill_id, $this->billType, $this->returnUrl),            
         ]);
     }
-
+    
     /**
-     * 删除
      *
-     * @param $id
+     * 删除
      * @return mixed
-     * @throws \Throwable
-     * @throws \yii\db\StaleObjectException
      */
     public function actionDelete($id)
     {
-        $billGoods = $this->findModel($id);
-        $bill_id = $billGoods->bill_id;
-        $bill = WarehouseBill::find()->where(['id'=>$bill_id])->one();
-        try{
-            $trans = Yii::$app->db->beginTransaction();
-            //删除
-            $billGoods->delete();
-            //更新单据数量和金额
-            $bill->goods_num = Yii::$app->warehouseService->bill->sumGoodsNum($bill_id);
-            $bill->total_cost = Yii::$app->warehouseService->bill->sumCostPrice($bill_id);
-            $bill->total_sale = Yii::$app->warehouseService->bill->sumSalePrice($bill_id);
-            $bill->total_market = Yii::$app->warehouseService->bill->sumMarketPrice($bill_id);
-            $bill->save();
-
-            //更新库存表商品状态为库存
-            WarehouseGoods::updateAll(['goods_status'=>GoodsStatusEnum::IN_STOCK],['goods_id'=>$billGoods->goods_id]);
-
-            //还原库存
-            \Yii::$app->warehouseService->warehouseGoods->syncStockNum($billGoods->goods_id, $billGoods->goods_num, AdjustTypeEnum::ADD);
-            $trans->commit();
-            return $this->message("删除成功", $this->redirect(Yii::$app->request->referrer));
-        }catch (\Exception $e){
+        try {
+            $trans = \Yii::$app->trans->beginTransaction();           
+            \Yii::$app->warehouseService->billTh->deleteGoods($id);            
+            $trans->commit();            
+            return $this->message("删除成功", $this->redirect(\Yii::$app->request->referrer), 'success');
+        } catch (\Exception $e) {
             $trans->rollBack();
-            return $this->message($e->getMessage(), $this->redirect(Yii::$app->request->referrer), 'error');
+            return $this->message($e->getMessage(), $this->redirect(\Yii::$app->request->referrer), 'error');
         }
     }
+    
+    /**
+     * 更改退货数量
+     * @return array|mixed
+     */
+    public function actionAjaxReturnNum()
+    {
+        $id = Yii::$app->request->get("id");
+        $goods_num = Yii::$app->request->get("goods_num");
+        try{
+            $trans = \Yii::$app->trans->beginTransaction();
+            Yii::$app->warehouseService->billTh->updateReturnNum($id, $goods_num);
+            $trans->commit();
+            return $this->message("操作成功", $this->redirect(\Yii::$app->request->referrer), 'success');
+        }catch (\Exception $e){
+            $trans->rollBack();
+            return ResultHelper::json(422, $e->getMessage());
+        }
+    }
+
 
 }
