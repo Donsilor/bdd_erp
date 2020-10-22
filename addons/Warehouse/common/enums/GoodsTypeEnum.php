@@ -2,17 +2,16 @@
 
 namespace addons\Warehouse\common\enums;
 
-
 /**
  *
- * 是否批发
+ * 商品类型
  * @package common\enums
  * @author jianyan74 <751393839@qq.com>
  */
-class IsWholeSaleEnum extends \common\enums\BaseEnum
+class GoodsTypeEnum extends \common\enums\BaseEnum
 {
-    const NO    = 0;
-    const YES   = 1;
+    const SeikoStone = 1;
+    const PlainGold = 2;
 
     /**
      * @return array
@@ -20,8 +19,8 @@ class IsWholeSaleEnum extends \common\enums\BaseEnum
     public static function getMap(): array
     {
         return [
-            self::YES     => '是',
-            self::NO      => '否',
+            self::SeikoStone => '金工石',
+            self::PlainGold => '素金',
         ];
     }
 

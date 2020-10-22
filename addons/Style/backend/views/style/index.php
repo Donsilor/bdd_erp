@@ -568,7 +568,6 @@ $this->params['breadcrumbs'][] = $this->title;
                                         ]);
                                     }
                                 },
-
                                 'audit' => function ($url, $model, $key) {
                                     $isAudit = Yii::$app->services->flowType->isAudit(\common\enums\TargetTypeEnum::STYLE_STYLE, $model->id);
                                     if ($model->audit_status == AuditStatusEnum::PENDING && $isAudit) {

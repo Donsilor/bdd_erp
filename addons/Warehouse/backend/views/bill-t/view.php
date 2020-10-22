@@ -63,6 +63,10 @@ $this->params['breadcrumbs'][] = $this->title;
                             <td><?= $model->order_sn ?></td>
                         </tr>-->
                         <tr>
+                            <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('goods_type') ?>：</td>
+                            <td><?= \addons\Warehouse\common\enums\GoodsTypeEnum::getValue($model->billL->goods_type ?? '');?></td>
+                        </tr>
+                        <tr>
                             <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('send_goods_sn') ?>：</td>
                             <td><?= $model->send_goods_sn ?></td>
                         </tr>

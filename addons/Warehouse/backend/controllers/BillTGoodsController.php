@@ -7,13 +7,17 @@ use common\traits\Curd;
 use common\helpers\Url;
 use common\models\base\SearchModel;
 use addons\Warehouse\common\models\WarehouseBill;
+use addons\Warehouse\common\models\WarehouseBillL;
 use addons\Warehouse\common\models\WarehouseBillGoodsL;
 use addons\Warehouse\common\forms\WarehouseBillPayForm;
 use addons\Warehouse\common\forms\WarehouseBillTGoodsForm;
+use addons\Warehouse\common\enums\GoodsTypeEnum;
+use addons\Warehouse\common\enums\IsWholeSaleEnum;
 use addons\Warehouse\common\enums\BillStatusEnum;
 use addons\Warehouse\common\enums\BillTypeEnum;
 use addons\Warehouse\common\enums\PayMethodEnum;
 use addons\Warehouse\common\enums\PayTaxEnum;
+use addons\Warehouse\common\enums\IsHiddenEnum;
 use common\helpers\ArrayHelper;
 use common\helpers\ResultHelper;
 use yii\web\UploadedFile;
@@ -55,7 +59,7 @@ class BillTGoodsController extends BaseController
         $dataProvider->query->andWhere(['>', WarehouseBillGoodsL::tableName() . '.status', -1]);
         $bill = WarehouseBill::find()->where(['id' => $bill_id])->one();
         $model = new WarehouseBillTGoodsForm();
-        $goods = $model::find()->select(['goods_id'])->where(['bill_id'=>$bill_id])->all();
+        $goods = $model::find()->select(['goods_id'])->where(['bill_id' => $bill_id])->all();
         $goods_ids = $model->getCopyGoodsIds($goods);
         $total = $model->goodsSummary($bill_id, Yii::$app->request->queryParams);
         return $this->render($this->action->id, [
@@ -96,6 +100,7 @@ class BillTGoodsController extends BaseController
                 return $this->message($e->getMessage(), $this->redirect(\Yii::$app->request->referrer), 'error');
             }
         }
+        $model->is_wholesale = IsWholeSaleEnum::YES;
         return $this->renderAjax($this->action->id, [
             'model' => $model,
         ]);
@@ -134,9 +139,9 @@ class BillTGoodsController extends BaseController
             $model = new WarehouseBillTGoodsForm();
             list($values, $fields) = $model->getTitleList($type);
             if (empty($bill_id)) {
-                header("Content-Disposition: attachment;filename=【" . rand(100, 999) . "】素金-其他入库单导入模板(" . date('Ymd') . ").csv");
+                header("Content-Disposition: attachment;filename=【" . rand(100, 999) . "】" . ($type == GoodsTypeEnum::PlainGold ? "素金" : "通用") . "-其他入库单导入模板(" . date('Ymd') . ").csv");
             } else {
-                header("Content-Disposition: attachment;filename=【{$bill_id}】通用-其他入库单导入模板($bill->bill_no).csv");
+                header("Content-Disposition: attachment;filename=【{$bill_id}】" . ($type == GoodsTypeEnum::PlainGold ? "素金" : "通用") . "-其他入库单导入模板($bill->bill_no).csv");
             }
             $content = implode($values, ",") . "\n" . implode($fields, ",") . "\n";
             echo iconv("utf-8", "gbk", $content);
@@ -170,7 +175,7 @@ class BillTGoodsController extends BaseController
     /**
      *
      * ajax编辑
-     * @return mixed|string|\yii\web\Response
+     * @return string
      * @throws
      */
     public function actionEdit()
@@ -178,20 +183,17 @@ class BillTGoodsController extends BaseController
         $this->layout = '@backend/views/layouts/iframe';
 
         $id = \Yii::$app->request->get('id');
-        //$bill_id = Yii::$app->request->get('bill_id');
         $model = $this->findModel($id);
         $model = $model ?? new WarehouseBillTGoodsForm();
+        $bill = WarehouseBill::findOne(['id' => $model->bill_id]);
         // ajax 校验
-        //$this->activeFormValidate($model);
         if ($model->load(\Yii::$app->request->post())) {
             try {
                 $trans = \Yii::$app->db->beginTransaction();
-                //$model->biaomiangongyi = join(',',$model->biaomiangongyi);
                 $result = $model->updateFromValidate($model);
                 if ($result['error'] == false) {
                     throw new \Exception($result['msg']);
                 }
-                //list($model,) = $model->correctGoods($model);
                 if (false === $model->save()) {
                     throw new \Exception($this->getError($model));
                 }
@@ -208,6 +210,7 @@ class BillTGoodsController extends BaseController
         $model->biaomiangongyi = explode(',', $model->biaomiangongyi);
         return $this->render($this->action->id, [
             'model' => $model,
+            'bill' => $bill,
         ]);
     }
 
@@ -488,6 +491,65 @@ class BillTGoodsController extends BaseController
             'model' => $model,
             'total' => $total,
         ]);
+    }
+
+    /**
+     * ajax显示/隐藏
+     *
+     * @param $id
+     * @return array
+     */
+    public function actionAjaxHidden($id)
+    {
+        $this->modelClass = WarehouseBillL::class;
+        if (!$id) {
+            return ResultHelper::json(404, 'ID不能为空');
+        }
+        if (!($model = $this->modelClass::findOne($id))) {
+            $billT = WarehouseBillL::findOne($id);
+            $billT = $billT ?? new WarehouseBillL();
+            $billT->id = $id;
+            $billT->goods_type = GoodsTypeEnum::SeikoStone;
+            if (false === $billT->save()) {
+                return ResultHelper::json(404, '找不到数据[code=1]');
+            }
+            return ResultHelper::json(404, '找不到数据[code=2]');
+        }
+        $params = Yii::$app->request->get();
+        if (!$params['name'] || $params['value'] === "") {
+            return ResultHelper::json(404, '参数值不能为空');
+        }
+        $name = $params['name'] ?? "";
+        $value = $params['value'] ?? 0;
+        if ($name == 'show_all') {
+            $save = [
+                'show_all' => $value,
+                'show_basic' => IsHiddenEnum::NO,
+                'show_attr' => $value,
+                'show_gold' => $value,
+                'show_main_stone' => $value,
+                'show_second_stone1' => $value,
+                'show_second_stone2' => $value,
+                'show_second_stone3' => $value,
+                'show_parts' => $value,
+                'show_fee' => $value,
+                'show_price' => $value,
+            ];
+        } else {
+            $save[$name] = $value;
+        }
+        try {
+            $trans = \Yii::$app->db->beginTransaction();
+            $model->attributes = $save;
+            if (!$model->save()) {
+                throw new \Exception("保存失败");
+            }
+            $trans->commit();
+            return ResultHelper::json(200, '修改成功');
+        } catch (\Exception $e) {
+            $trans->rollBack();
+            return ResultHelper::json(422, $e->getMessage());
+        }
     }
 
 }

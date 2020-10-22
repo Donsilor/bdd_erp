@@ -144,6 +144,19 @@ $params = $params ? "&" . http_build_query($params) : '';
                             'headerOptions' => ['class' => 'col-md-1'],
                         ],
                         [
+                            'attribute' => 'goods_type',
+                            'value'=>function($model) {
+                                $goods_type = $model->billL->goods_type ?? 0;
+                                return \addons\Warehouse\common\enums\GoodsTypeEnum::getValue($goods_type) ?? "";
+                            },
+                            'filter' => Html::activeDropDownList($searchModel, 'goods_type',\addons\Warehouse\common\enums\GoodsTypeEnum::getMap(), [
+                                'prompt' => '全部',
+                                'class' => 'form-control',
+                            ]),
+                            'format' => 'raw',
+                            'headerOptions' => ['class' => 'col-md-1'],
+                        ],
+                        [
                             'attribute' => 'send_goods_sn',
                             'value' => function ($model) {
 //                                if($model->send_goods_sn){

@@ -17,6 +17,8 @@ use addons\Warehouse\common\enums\BillStatusEnum;
 $this->title = Yii::t('bill_t_goods', '其它入库单明细');
 $this->params['breadcrumbs'][] = ['label' => $this->title, 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
+
+$goods_type = $bill->billL->goods_type ?? 0;
 ?>
 <style>
     select.form-control {
@@ -24,7 +26,8 @@ $this->params['breadcrumbs'][] = $this->title;
     }
 </style>
 <div class="box-body nav-tabs-custom">
-    <h2 class="page-header"><?= $this->title; ?> - <?= $bill->bill_no ?> <i class="fa fa-copy" onclick="copy(<?= $bill->bill_no ?>)"></i>
+    <h2 class="page-header"><?= $this->title; ?> - <?= $bill->bill_no ?> <i class="fa fa-copy"
+                                                                            onclick="copy(<?= $bill->bill_no ?>)"></i>
         - <?= \addons\Warehouse\common\enums\BillStatusEnum::getValue($bill->bill_status) ?></h2>
     <?php echo Html::menuTab($tabList, $tab) ?>
     <div class="box-tools" style="float:right;margin-top:-40px; margin-right: 20px;">
@@ -65,7 +68,38 @@ $this->params['breadcrumbs'][] = $this->title;
                     <span style="font-size:16px">
                         <!--<span style="font-weight:bold;">明细汇总：</span>-->
                         货品总数：<span style="color:green;"><?= $bill->goods_num ?></span>
-                        总成本价：<span style="color:green;"><?= $bill->total_cost ?></span>
+                        折足总重：<span style="color:green;"><?= $bill->billL->total_pure_gold ?? 0 ?></span>
+                        工厂总成本：<span style="color:green;"><?= $bill->billL->total_factory_cost ?? 0 ?></span>
+                        公司总成本：<span style="color:green;"><?= $bill->total_cost ?></span>
+                    </span>
+                    <span>
+                        <?php
+                        echo Html::batchButtons(false);
+                        echo '&nbsp;';
+                        echo Html::hidden($bill->billL->show_all ?? 0, '全部', ['data-id' => $bill->id, 'data-name' => 'show_all', 'data-text' => '全部']);
+                        echo '&nbsp;';
+                        echo Html::hidden($bill->billL->show_basic ?? 0, '基本', ['data-id' => $bill->id, 'data-name' => 'show_basic', 'data-text' => '基本']);
+                        echo '&nbsp;';
+                        echo Html::hidden($bill->billL->show_attr ?? 0, '属性', ['data-id' => $bill->id, 'data-name' => 'show_attr', 'data-text' => '属性']);
+                        echo '&nbsp;';
+                        echo Html::hidden($bill->billL->show_gold ?? 0, '金料', ['data-id' => $bill->id, 'data-name' => 'show_gold', 'data-text' => '金料']);
+                        echo '&nbsp;';
+                        if ($goods_type != \addons\Warehouse\common\enums\GoodsTypeEnum::PlainGold) {
+                            echo Html::hidden($bill->billL->show_main_stone ?? 0, '主石', ['data-id' => $bill->id, 'data-name' => 'show_main_stone', 'data-text' => '主石']);
+                            echo '&nbsp;';
+                            echo Html::hidden($bill->billL->show_second_stone1 ?? 0, '副石1', ['data-id' => $bill->id, 'data-name' => 'show_second_stone1', 'data-text' => '副石1']);
+                            echo '&nbsp;';
+                            echo Html::hidden($bill->billL->show_second_stone2 ?? 0, '副石2', ['data-id' => $bill->id, 'data-name' => 'show_second_stone2', 'data-text' => '副石2']);
+                            echo '&nbsp;';
+                            echo Html::hidden($bill->billL->show_second_stone3 ?? 0, '副石3', ['data-id' => $bill->id, 'data-name' => 'show_second_stone3', 'data-text' => '副石3']);
+                            echo '&nbsp;';
+                            echo Html::hidden($bill->billL->show_parts ?? 0, '配件', ['data-id' => $bill->id, 'data-name' => 'show_parts', 'data-text' => '配件']);
+                            echo '&nbsp;';
+                        }
+                        echo Html::hidden($bill->billL->show_fee ?? 0, '工费', ['data-id' => $bill->id, 'data-name' => 'show_fee', 'data-text' => '工费']);
+                        echo '&nbsp;';
+                        echo Html::hidden($bill->billL->show_price ?? 0, '价格', ['data-id' => $bill->id, 'data-name' => 'show_price', 'data-text' => '价格']);
+                        ?>
                     </span>
                     <span style="color:red;">（Ctrl+F键可快速查找字段名)</span>
                     <?= GridView::widget([
@@ -140,6 +174,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                         ]);
                                     },
                                 ],
+                                'visible' => $model->isVisible($bill, 'front_operation'),
                             ],
                             [
                                 'attribute' => 'goods_image',
@@ -150,6 +185,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                     return ImageHelper::fancyBox($model->goods_image, 30, 30);
                                 },
                                 'filter' => false,
+                                'visible' => $model->isVisible($bill, 'goods_image'),
                             ],
                             [
                                 'attribute' => 'style_cate_id',
@@ -165,8 +201,8 @@ $this->params['breadcrumbs'][] = $this->title;
                                     'prompt' => '全部',
                                     'class' => 'form-control',
                                     'style' => 'width:80px;'
-
                                 ]),
+                                'visible' => $model->isVisible($bill, 'style_cate_id'),
                             ],
                             [
                                 'attribute' => 'product_type_id',
@@ -181,8 +217,8 @@ $this->params['breadcrumbs'][] = $this->title;
                                     'prompt' => '全部',
                                     'class' => 'form-control',
                                     'style' => 'width:80px;'
-
                                 ]),
+                                'visible' => $model->isVisible($bill, 'product_type_id'),
                             ],
                             [
                                 'label' => '货号手填',
@@ -200,6 +236,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                     'class' => 'form-control',
                                     'style' => 'width:60px;'
                                 ]),
+                                'visible' => $model->isVisible($bill, 'auto_goods_id'),
                             ],
                             [
                                 'attribute' => 'goods_id',
@@ -218,6 +255,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                     'class' => 'form-control',
                                     'style' => 'width:120px;'
                                 ]),
+                                'visible' => $model->isVisible($bill, 'goods_id'),
                             ],
                             [
                                 'attribute' => 'style_sn',
@@ -239,6 +277,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                     'class' => 'form-control',
                                     'style' => 'width:80px;'
                                 ]),
+                                'visible' => $model->isVisible($bill, 'style_sn'),
                             ],
                             [
                                 'attribute' => 'goods_name',
@@ -253,6 +292,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                     'class' => 'form-control goods_name',
                                     'style' => 'width:130px;'
                                 ]),
+                                'visible' => $model->isVisible($bill, 'goods_name'),
                             ],
                             [
                                 'attribute' => 'qiban_sn',
@@ -266,6 +306,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                     'class' => 'form-control',
                                     'style' => 'width:80px;'
                                 ]),
+                                'visible' => $model->isVisible($bill, 'qiban_sn'),
                             ],
                             /*[
                                 'attribute' => 'order_sn',
@@ -323,6 +364,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                     'class' => 'form-control',
                                     'style' => 'width:80px;'
                                 ]),
+                                'visible' => $model->isVisible($bill, 'material_type'),
                             ],
                             [
                                 'attribute' => 'material_color',
@@ -338,6 +380,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                     'class' => 'form-control',
                                     'style' => 'width:80px;'
                                 ]),
+                                'visible' => $model->isVisible($bill, 'material_color'),
                             ],
                             [
                                 'attribute' => 'goods_num',
@@ -352,10 +395,12 @@ $this->params['breadcrumbs'][] = $this->title;
 //                                    'class' => 'form-control',
 //                                    'style' => 'width:80px;'
 //                                ]),
+                                'visible' => $model->isVisible($bill, 'goods_num'),
                             ],
                             [
                                 'class' => 'yii\grid\CheckboxColumn',
                                 'name' => 'id',  //设置每行数据的复选框属性
+                                'visible' => $model->isVisible($bill, 'id'),
                             ],
                             [
                                 'attribute' => 'finger_hk',
@@ -371,6 +416,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                     'class' => 'form-control',
                                     'style' => 'width:100px;'
                                 ]),
+                                'visible' => $model->isVisible($bill, 'finger_hk'),
                             ],
                             [
                                 'attribute' => 'finger',
@@ -386,6 +432,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                     'class' => 'form-control',
                                     'style' => 'width:100px;'
                                 ]),
+                                'visible' => $model->isVisible($bill, 'finger'),
                             ],
                             [
                                 'attribute' => 'length',
@@ -400,6 +447,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                     'class' => 'form-control',
                                     'style' => 'width:80px;'
                                 ]),
+                                'visible' => $model->isVisible($bill, 'length'),
                             ],
                             [
                                 'attribute' => 'product_size',
@@ -414,6 +462,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                     'class' => 'form-control',
                                     'style' => 'width:100px;'
                                 ]),
+                                'visible' => $model->isVisible($bill, 'product_size'),
                             ],
                             [
                                 'attribute' => 'xiangkou',
@@ -429,6 +478,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                     'class' => 'form-control',
                                     'style' => 'width:100px;'
                                 ]),
+                                'visible' => $model->isVisible($bill, 'xiangkou'),
                             ],
                             [
                                 'attribute' => 'kezi',
@@ -443,6 +493,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                     'class' => 'form-control',
                                     'style' => 'width:80px;'
                                 ]),
+                                'visible' => $model->isVisible($bill, 'kezi'),
                             ],
                             [
                                 'attribute' => 'chain_type',
@@ -458,6 +509,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                     'class' => 'form-control',
                                     'style' => 'width:80px;'
                                 ]),
+                                'visible' => $model->isVisible($bill, 'chain_type'),
                             ],
 //                            [
 //                                'attribute' => 'chain_long',
@@ -485,6 +537,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                     'class' => 'form-control',
                                     'style' => 'width:80px;'
                                 ]),
+                                'visible' => $model->isVisible($bill, 'cramp_ring'),
                             ],
                             [
                                 'attribute' => 'talon_head_type',
@@ -500,10 +553,12 @@ $this->params['breadcrumbs'][] = $this->title;
                                     'class' => 'form-control',
                                     'style' => 'width:80px;'
                                 ]),
+                                'visible' => $model->isVisible($bill, 'talon_head_type'),
                             ],
                             [
                                 'class' => 'yii\grid\CheckboxColumn',
                                 'name' => 'id',  //设置每行数据的复选框属性
+                                'visible' => $model->isVisible($bill, 'id'),
                             ],
                             [
                                 'attribute' => 'goods_name',
@@ -519,6 +574,7 @@ $this->params['breadcrumbs'][] = $this->title;
 //                                    'class' => 'form-control',
 //                                    'style' => 'width:200px;'
 //                                ]),
+                                'visible' => $model->isVisible($bill, 'goods_name1'),
                             ],
                             [
                                 'attribute' => 'peiliao_way',
@@ -534,6 +590,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                     'class' => 'form-control',
                                     'style' => 'width:80px;'
                                 ]),
+                                'visible' => $model->isVisible($bill, 'peiliao_way'),
                             ],
                             [
                                 'attribute' => 'suttle_weight',
@@ -549,6 +606,7 @@ $this->params['breadcrumbs'][] = $this->title;
 //                                    'class' => 'form-control',
 //                                    'style' => 'width:80px;'
 //                                ]),
+                                'visible' => $model->isVisible($bill, 'suttle_weight'),
                             ],
                             [
                                 'attribute' => 'gold_weight',
@@ -564,6 +622,7 @@ $this->params['breadcrumbs'][] = $this->title;
 //                                    'class' => 'form-control',
 //                                    'style' => 'width:80px;'
 //                                ]),
+                                'visible' => $model->isVisible($bill, 'gold_weight'),
                             ],
                             [
                                 'attribute' => 'gold_loss',
@@ -579,6 +638,7 @@ $this->params['breadcrumbs'][] = $this->title;
 //                                    'class' => 'form-control',
 //                                    'style' => 'width:80px;'
 //                                ]),
+                                'visible' => $model->isVisible($bill, 'gold_loss'),
                             ],
                             [
                                 'attribute' => 'lncl_loss_weight',
@@ -594,6 +654,7 @@ $this->params['breadcrumbs'][] = $this->title;
 //                                    'class' => 'form-control',
 //                                    'style' => 'width:80px;'
 //                                ]),
+                                'visible' => $model->isVisible($bill, 'lncl_loss_weight'),
                             ],
                             [
                                 'attribute' => 'gold_price',
@@ -609,6 +670,7 @@ $this->params['breadcrumbs'][] = $this->title;
 //                                    'class' => 'form-control',
 //                                    'style' => 'width:80px;'
 //                                ]),
+                                'visible' => $model->isVisible($bill, 'gold_price'),
                             ],
                             [
                                 'attribute' => 'gold_amount',
@@ -624,6 +686,7 @@ $this->params['breadcrumbs'][] = $this->title;
 //                                    'class' => 'form-control',
 //                                    'style' => 'width:80px;'
 //                                ]),
+                                'visible' => $model->isVisible($bill, 'gold_amount'),
                             ],
                             [
                                 'attribute' => 'pure_gold_rate',
@@ -639,6 +702,7 @@ $this->params['breadcrumbs'][] = $this->title;
 //                                    'class' => 'form-control',
 //                                    'style' => 'width:80px;'
 //                                ]),
+                                'visible' => $model->isVisible($bill, 'pure_gold_rate'),
                             ],
                             [
                                 'attribute' => 'pure_gold',
@@ -654,6 +718,7 @@ $this->params['breadcrumbs'][] = $this->title;
 //                                    'class' => 'form-control',
 //                                    'style' => 'width:80px;'
 //                                ]),
+                                'visible' => $model->isVisible($bill, 'pure_gold'),
                             ],
                             /*[
                                 'attribute' => 'gold_amount',
@@ -862,6 +927,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             [
                                 'class' => 'yii\grid\CheckboxColumn',
                                 'name' => 'id',  //设置每行数据的复选框属性
+                                'visible' => $model->isVisible($bill, 'id'),
                             ],
                             [
                                 'attribute' => 'goods_name',
@@ -877,6 +943,7 @@ $this->params['breadcrumbs'][] = $this->title;
 //                                    'class' => 'form-control',
 //                                    'style' => 'width:200px;'
 //                                ]),
+                                'visible' => $model->isVisible($bill, 'goods_name2'),
                             ],
                             [
                                 'attribute' => 'main_pei_type',
@@ -892,6 +959,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                     'class' => 'form-control',
                                     'style' => 'width:80px;'
                                 ]),
+                                'visible' => $model->isVisible($bill, 'main_pei_type'),
                             ],
                             [
                                 'attribute' => 'main_stone_sn',
@@ -906,6 +974,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                     'class' => 'form-control',
                                     'style' => 'width:100px;'
                                 ]),
+                                'visible' => $model->isVisible($bill, 'main_stone_sn'),
                             ],
                             [
                                 'attribute' => 'main_stone_type',
@@ -921,6 +990,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                     'class' => 'form-control',
                                     'style' => 'width:80px;'
                                 ]),
+                                'visible' => $model->isVisible($bill, 'main_stone_type'),
                             ],
                             [
                                 'attribute' => 'main_stone_num',
@@ -936,6 +1006,7 @@ $this->params['breadcrumbs'][] = $this->title;
 //                                    'class' => 'form-control',
 //                                    'style' => 'width:80px;'
 //                                ]),
+                                'visible' => $model->isVisible($bill, 'main_stone_num'),
                             ],
                             [
                                 'attribute' => 'main_stone_weight',
@@ -951,6 +1022,7 @@ $this->params['breadcrumbs'][] = $this->title;
 //                                    'class' => 'form-control',
 //                                    'style' => 'width:80px;'
 //                                ]),
+                                'visible' => $model->isVisible($bill, 'main_stone_weight'),
                             ],
                             [
                                 'attribute' => 'main_stone_price',
@@ -965,6 +1037,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                     'class' => 'form-control',
                                     'style' => 'width:80px;'
                                 ]),
+                                'visible' => $model->isVisible($bill, 'main_stone_price'),
                             ],
                             [
                                 'attribute' => 'main_stone_amount',
@@ -979,6 +1052,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                     'class' => 'form-control',
                                     'style' => 'width:80px;'
                                 ]),
+                                'visible' => $model->isVisible($bill, 'main_stone_amount'),
                             ],
                             [
                                 'attribute' => 'main_stone_shape',
@@ -994,6 +1068,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                     'class' => 'form-control',
                                     'style' => 'width:80px;'
                                 ]),
+                                'visible' => $model->isVisible($bill, 'main_stone_shape'),
                             ],
                             [
                                 'attribute' => 'main_stone_color',
@@ -1009,6 +1084,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                     'class' => 'form-control',
                                     'style' => 'width:80px;'
                                 ]),
+                                'visible' => $model->isVisible($bill, 'main_stone_color'),
                             ],
                             [
                                 'attribute' => 'main_stone_clarity',
@@ -1024,6 +1100,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                     'class' => 'form-control',
                                     'style' => 'width:80px;'
                                 ]),
+                                'visible' => $model->isVisible($bill, 'main_stone_clarity'),
                             ],
                             [
                                 'attribute' => 'main_stone_cut',
@@ -1039,6 +1116,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                     'class' => 'form-control',
                                     'style' => 'width:80px;'
                                 ]),
+                                'visible' => $model->isVisible($bill, 'main_stone_cut'),
                             ],
                             [
                                 'attribute' => 'main_stone_polish',
@@ -1054,6 +1132,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                     'class' => 'form-control',
                                     'style' => 'width:80px;'
                                 ]),
+                                'visible' => $model->isVisible($bill, 'main_stone_polish'),
                             ],
                             [
                                 'attribute' => 'main_stone_symmetry',
@@ -1069,6 +1148,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                     'class' => 'form-control',
                                     'style' => 'width:80px;'
                                 ]),
+                                'visible' => $model->isVisible($bill, 'main_stone_symmetry'),
                             ],
                             [
                                 'attribute' => 'main_stone_fluorescence',
@@ -1084,6 +1164,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                     'class' => 'form-control',
                                     'style' => 'width:80px;'
                                 ]),
+                                'visible' => $model->isVisible($bill, 'main_stone_fluorescence'),
                             ],
                             [
                                 'attribute' => 'main_stone_colour',
@@ -1099,6 +1180,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                     'class' => 'form-control',
                                     'style' => 'width:80px;'
                                 ]),
+                                'visible' => $model->isVisible($bill, 'main_stone_colour'),
                             ],
 //                            [
 //                                'attribute' => 'main_stone_size',
@@ -1117,6 +1199,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             [
                                 'class' => 'yii\grid\CheckboxColumn',
                                 'name' => 'id',  //设置每行数据的复选框属性
+                                'visible' => $model->isVisible($bill, 'id'),
                             ],
                             [
                                 'attribute' => 'goods_name',
@@ -1132,6 +1215,7 @@ $this->params['breadcrumbs'][] = $this->title;
 //                                    'class' => 'form-control',
 //                                    'style' => 'width:200px;'
 //                                ]),
+                                'visible' => $model->isVisible($bill, 'goods_name3'),
                             ],
                             [
                                 'attribute' => 'second_pei_type',
@@ -1147,6 +1231,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                     'class' => 'form-control',
                                     'style' => 'width:80px;'
                                 ]),
+                                'visible' => $model->isVisible($bill, 'second_pei_type'),
                             ],
                             [
                                 'attribute' => 'second_stone_type1',
@@ -1162,6 +1247,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                     'class' => 'form-control',
                                     'style' => 'width:80px;'
                                 ]),
+                                'visible' => $model->isVisible($bill, 'second_stone_type1'),
                             ],
                             [
                                 'attribute' => 'second_stone_sn1',
@@ -1176,6 +1262,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                     'class' => 'form-control',
                                     'style' => 'width:100px;'
                                 ]),
+                                'visible' => $model->isVisible($bill, 'second_stone_sn1'),
                             ],
                             [
                                 'attribute' => 'second_stone_num1',
@@ -1191,6 +1278,7 @@ $this->params['breadcrumbs'][] = $this->title;
 //                                    'class' => 'form-control',
 //                                    'style' => 'width:80px;'
 //                                ]),
+                                'visible' => $model->isVisible($bill, 'second_stone_num1'),
                             ],
                             [
                                 'attribute' => 'second_stone_weight1',
@@ -1206,6 +1294,7 @@ $this->params['breadcrumbs'][] = $this->title;
 //                                    'class' => 'form-control',
 //                                    'style' => 'width:80px;'
 //                                ]),
+                                'visible' => $model->isVisible($bill, 'second_stone_weight1'),
                             ],
                             [
                                 'attribute' => 'second_stone_price1',
@@ -1220,6 +1309,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                     'class' => 'form-control',
                                     'style' => 'width:80px;'
                                 ]),
+                                'visible' => $model->isVisible($bill, 'second_stone_price1'),
                             ],
                             [
                                 'attribute' => 'second_stone_amount1',
@@ -1234,6 +1324,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                     'class' => 'form-control',
                                     'style' => 'width:80px;'
                                 ]),
+                                'visible' => $model->isVisible($bill, 'second_stone_amount1'),
                             ],
                             [
                                 'attribute' => 'second_stone_shape1',
@@ -1249,6 +1340,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                     'class' => 'form-control',
                                     'style' => 'width:80px;'
                                 ]),
+                                'visible' => $model->isVisible($bill, 'second_stone_shape1'),
                             ],
                             [
                                 'attribute' => 'second_stone_color1',
@@ -1264,6 +1356,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                     'class' => 'form-control',
                                     'style' => 'width:80px;'
                                 ]),
+                                'visible' => $model->isVisible($bill, 'second_stone_color1'),
                             ],
                             [
                                 'attribute' => 'second_stone_clarity1',
@@ -1279,6 +1372,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                     'class' => 'form-control',
                                     'style' => 'width:80px;'
                                 ]),
+                                'visible' => $model->isVisible($bill, 'second_stone_clarity1'),
                             ],
                             [
                                 'attribute' => 'second_stone_cut1',
@@ -1294,6 +1388,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                     'class' => 'form-control',
                                     'style' => 'width:80px;'
                                 ]),
+                                'visible' => $model->isVisible($bill, 'second_stone_cut1'),
                             ],
                             [
                                 'attribute' => 'second_stone_colour1',
@@ -1309,6 +1404,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                     'class' => 'form-control',
                                     'style' => 'width:80px;'
                                 ]),
+                                'visible' => $model->isVisible($bill, 'second_stone_colour1'),
                             ],
                             /*[
                                 'attribute' => 'second_stone_size1',
@@ -1350,6 +1446,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             [
                                 'class' => 'yii\grid\CheckboxColumn',
                                 'name' => 'id',  //设置每行数据的复选框属性
+                                'visible' => $model->isVisible($bill, 'id'),
                             ],
                             [
                                 'attribute' => 'goods_name',
@@ -1365,6 +1462,7 @@ $this->params['breadcrumbs'][] = $this->title;
 //                                    'class' => 'form-control',
 //                                    'style' => 'width:200px;'
 //                                ]),
+                                'visible' => $model->isVisible($bill, 'goods_name4'),
                             ],
                             [
                                 'attribute' => 'second_pei_type2',
@@ -1380,6 +1478,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                     'class' => 'form-control',
                                     'style' => 'width:80px;'
                                 ]),
+                                'visible' => $model->isVisible($bill, 'second_pei_type2'),
                             ],
                             [
                                 'attribute' => 'second_stone_type2',
@@ -1395,6 +1494,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                     'class' => 'form-control',
                                     'style' => 'width:80px;'
                                 ]),
+                                'visible' => $model->isVisible($bill, 'second_stone_type2'),
                             ],
                             [
                                 'attribute' => 'second_stone_sn2',
@@ -1409,6 +1509,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                     'class' => 'form-control',
                                     'style' => 'width:100px;'
                                 ]),
+                                'visible' => $model->isVisible($bill, 'second_stone_sn2'),
                             ],
 //                            [
 //                                'attribute' => 'second_cert_id2',
@@ -1423,6 +1524,7 @@ $this->params['breadcrumbs'][] = $this->title;
 //                                    'class' => 'form-control',
 //                                    'style' => 'width:100px;'
 //                                ]),
+//                                'visible' => $model->isVisible($bill, 'material_type'),
 //                            ],
                             [
                                 'attribute' => 'second_stone_num2',
@@ -1438,6 +1540,7 @@ $this->params['breadcrumbs'][] = $this->title;
 //                                    'class' => 'form-control',
 //                                    'style' => 'width:80px;'
 //                                ]),
+                                'visible' => $model->isVisible($bill, 'second_stone_num2'),
                             ],
                             [
                                 'attribute' => 'second_stone_weight2',
@@ -1453,6 +1556,7 @@ $this->params['breadcrumbs'][] = $this->title;
 //                                    'class' => 'form-control',
 //                                    'style' => 'width:80px;'
 //                                ]),
+                                'visible' => $model->isVisible($bill, 'second_stone_weight2'),
                             ],
                             [
                                 'attribute' => 'second_stone_color2',
@@ -1468,6 +1572,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                     'class' => 'form-control',
                                     'style' => 'width:80px;'
                                 ]),
+                                'visible' => $model->isVisible($bill, 'second_stone_color2'),
                             ],
                             [
                                 'attribute' => 'second_stone_clarity2',
@@ -1483,6 +1588,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                     'class' => 'form-control',
                                     'style' => 'width:80px;'
                                 ]),
+                                'visible' => $model->isVisible($bill, 'second_stone_clarity2'),
                             ],
                             [
                                 'attribute' => 'second_stone_price2',
@@ -1498,6 +1604,7 @@ $this->params['breadcrumbs'][] = $this->title;
 //                                    'class' => 'form-control',
 //                                    'style' => 'width:80px;'
 //                                ]),
+                                'visible' => $model->isVisible($bill, 'second_stone_price2'),
                             ],
                             [
                                 'attribute' => 'second_stone_amount2',
@@ -1513,6 +1620,7 @@ $this->params['breadcrumbs'][] = $this->title;
 //                                    'class' => 'form-control',
 //                                    'style' => 'width:80px;'
 //                                ]),
+                                'visible' => $model->isVisible($bill, 'second_stone_amount2'),
                             ],
                             /*[
                                 'attribute' => 'second_stone_shape2',
@@ -1656,6 +1764,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             [
                                 'class' => 'yii\grid\CheckboxColumn',
                                 'name' => 'id',  //设置每行数据的复选框属性
+                                'visible' => $model->isVisible($bill, 'id'),
                             ],
                             [
                                 'attribute' => 'goods_name',
@@ -1671,6 +1780,7 @@ $this->params['breadcrumbs'][] = $this->title;
 //                                    'class' => 'form-control',
 //                                    'style' => 'width:200px;'
 //                                ]),
+                                'visible' => $model->isVisible($bill, 'goods_name5'),
                             ],
                             [
                                 'attribute' => 'second_pei_type3',
@@ -1686,6 +1796,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                     'class' => 'form-control',
                                     'style' => 'width:80px;'
                                 ]),
+                                'visible' => $model->isVisible($bill, 'second_pei_type3'),
                             ],
                             [
                                 'attribute' => 'second_stone_type3',
@@ -1701,6 +1812,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                     'class' => 'form-control',
                                     'style' => 'width:80px;'
                                 ]),
+                                'visible' => $model->isVisible($bill, 'second_stone_type3'),
                             ],
                             [
                                 'attribute' => 'second_stone_sn3',
@@ -1715,6 +1827,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                     'class' => 'form-control',
                                     'style' => 'width:100px;'
                                 ]),
+                                'visible' => $model->isVisible($bill, 'second_stone_sn3'),
                             ],
                             [
                                 'attribute' => 'second_stone_num3',
@@ -1730,6 +1843,7 @@ $this->params['breadcrumbs'][] = $this->title;
 //                                    'class' => 'form-control',
 //                                    'style' => 'width:80px;'
 //                                ]),
+                                'visible' => $model->isVisible($bill, 'second_stone_num3'),
                             ],
                             [
                                 'attribute' => 'second_stone_weight3',
@@ -1745,6 +1859,7 @@ $this->params['breadcrumbs'][] = $this->title;
 //                                    'class' => 'form-control',
 //                                    'style' => 'width:80px;'
 //                                ]),
+                                'visible' => $model->isVisible($bill, 'second_stone_weight3'),
                             ],
                             [
                                 'attribute' => 'second_stone_color3',
@@ -1760,6 +1875,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                     'class' => 'form-control',
                                     'style' => 'width:80px;'
                                 ]),
+                                'visible' => $model->isVisible($bill, 'second_stone_color3'),
                             ],
                             [
                                 'attribute' => 'second_stone_clarity3',
@@ -1775,6 +1891,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                     'class' => 'form-control',
                                     'style' => 'width:80px;'
                                 ]),
+                                'visible' => $model->isVisible($bill, 'second_stone_clarity3'),
                             ],
                             [
                                 'attribute' => 'second_stone_price3',
@@ -1790,6 +1907,7 @@ $this->params['breadcrumbs'][] = $this->title;
 //                                    'class' => 'form-control',
 //                                    'style' => 'width:80px;'
 //                                ]),
+                                'visible' => $model->isVisible($bill, 'second_stone_price3'),
                             ],
                             [
                                 'attribute' => 'second_stone_amount3',
@@ -1805,6 +1923,7 @@ $this->params['breadcrumbs'][] = $this->title;
 //                                    'class' => 'form-control',
 //                                    'style' => 'width:80px;'
 //                                ]),
+                                'visible' => $model->isVisible($bill, 'second_stone_amount3'),
                             ],
                             [
                                 'attribute' => 'stone_remark',
@@ -1819,10 +1938,12 @@ $this->params['breadcrumbs'][] = $this->title;
                                     'class' => 'form-control',
                                     'style' => 'width:80px;'
                                 ]),
+                                'visible' => $model->isVisible($bill, 'stone_remark'),
                             ],
                             [
                                 'class' => 'yii\grid\CheckboxColumn',
                                 'name' => 'id',  //设置每行数据的复选框属性
+                                'visible' => $model->isVisible($bill, 'id'),
                             ],
                             [
                                 'attribute' => 'goods_name',
@@ -1838,11 +1959,12 @@ $this->params['breadcrumbs'][] = $this->title;
 //                                    'class' => 'form-control',
 //                                    'style' => 'width:200px;'
 //                                ]),
+                                'visible' => $model->isVisible($bill, 'goods_name6'),
                             ],
                             [
                                 'attribute' => 'parts_way',
                                 'format' => 'raw',
-                                'headerOptions' => ['class' => 'col-md-1 batch_select_full', 'id'=>'parts', 'attr-name' => 'parts_way', 'style' => 'background-color:#cde6c7;'],
+                                'headerOptions' => ['class' => 'col-md-1 batch_select_full', 'id' => 'parts', 'attr-name' => 'parts_way', 'style' => 'background-color:#cde6c7;'],
                                 'footerOptions' => ['class' => 'col-md-1 batch_select_full2', 'attr-name' => 'parts_way', 'style' => 'background-color:#cde6c7;'],
                                 'value' => function ($model, $key, $index, $widget) {
                                     $widget->footer = $model->getAttributeLabel('parts_way');
@@ -1853,6 +1975,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                     'class' => 'form-control',
                                     'style' => 'width:80px;'
                                 ]),
+                                'visible' => $model->isVisible($bill, 'parts_way'),
                             ],
                             [
                                 'attribute' => 'parts_type',
@@ -1868,6 +1991,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                     'class' => 'form-control',
                                     'style' => 'width:80px;'
                                 ]),
+                                'visible' => $model->isVisible($bill, 'parts_type'),
                             ],
                             [
                                 'attribute' => 'parts_material',
@@ -1883,6 +2007,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                     'class' => 'form-control',
                                     'style' => 'width:80px;'
                                 ]),
+                                'visible' => $model->isVisible($bill, 'parts_material'),
                             ],
                             [
                                 'attribute' => 'parts_num',
@@ -1898,6 +2023,7 @@ $this->params['breadcrumbs'][] = $this->title;
 //                                    'class' => 'form-control',
 //                                    'style' => 'width:80px;'
 //                                ]),
+                                'visible' => $model->isVisible($bill, 'parts_num'),
                             ],
                             [
                                 'attribute' => 'parts_gold_weight',
@@ -1913,6 +2039,7 @@ $this->params['breadcrumbs'][] = $this->title;
 //                                    'class' => 'form-control',
 //                                    'style' => 'width:80px;'
 //                                ]),
+                                'visible' => $model->isVisible($bill, 'parts_gold_weight'),
                             ],
                             [
                                 'attribute' => 'parts_price',
@@ -1928,6 +2055,7 @@ $this->params['breadcrumbs'][] = $this->title;
 //                                    'class' => 'form-control',
 //                                    'style' => 'width:80px;'
 //                                ]),
+                                'visible' => $model->isVisible($bill, 'parts_price'),
                             ],
                             [
                                 'attribute' => 'parts_amount',
@@ -1943,10 +2071,12 @@ $this->params['breadcrumbs'][] = $this->title;
 //                                    'class' => 'form-control',
 //                                    'style' => 'width:80px;'
 //                                ]),
+                                'visible' => $model->isVisible($bill, 'parts_amount'),
                             ],
                             [
                                 'class' => 'yii\grid\CheckboxColumn',
                                 'name' => 'id',  //设置每行数据的复选框属性
+                                'visible' => $model->isVisible($bill, 'id'),
                             ],
                             [
                                 'attribute' => 'goods_name',
@@ -1962,6 +2092,7 @@ $this->params['breadcrumbs'][] = $this->title;
 //                                    'class' => 'form-control',
 //                                    'style' => 'width:200px;'
 //                                ]),
+                                'visible' => $model->isVisible($bill, 'goods_name7'),
                             ],
                             [
                                 'attribute' => 'gong_fee',
@@ -1977,6 +2108,7 @@ $this->params['breadcrumbs'][] = $this->title;
 //                                    'class' => 'form-control',
 //                                    'style' => 'width:80px;'
 //                                ]),
+                                'visible' => $model->isVisible($bill, 'gong_fee'),
                             ],
                             [
                                 'attribute' => 'piece_fee',
@@ -1992,6 +2124,23 @@ $this->params['breadcrumbs'][] = $this->title;
 //                                    'class' => 'form-control',
 //                                    'style' => 'width:80px;'
 //                                ]),
+                                'visible' => $model->isVisible($bill, 'piece_fee'),
+                            ],
+                            [
+                                'attribute' => 'basic_gong_fee',
+                                'format' => 'raw',
+                                'headerOptions' => ['class' => 'col-md-1 batch_full', 'attr-name' => 'piece_fee', 'style' => 'background-color:#FFA500;'],
+                                'footerOptions' => ['class' => 'col-md-1 batch_full2', 'attr-name' => 'piece_fee', 'style' => 'background-color:#FFA500;'],
+                                'value' => function ($model, $key, $index, $widget) use ($total) {
+                                    $widget->footer = $model->getFooterValues('basic_gong_fee', $total, "0.00");
+                                    return Html::ajaxInput('basic_gong_fee', $model->basic_gong_fee, ['data-id' => $model->id, 'onfocus' => 'rfClearVal(this)', 'data-type' => 'number']);
+                                },
+                                'filter' => false,
+//                                'filter' => Html::activeTextInput($searchModel, 'basic_gong_fee', [
+//                                    'class' => 'form-control',
+//                                    'style' => 'width:80px;'
+//                                ]),
+                                'visible' => $model->isVisible($bill, 'basic_gong_fee'),
                             ],
 //                            [
 //                                'attribute' => 'peishi_num',
@@ -2020,6 +2169,7 @@ $this->params['breadcrumbs'][] = $this->title;
 //                                    'class' => 'form-control',
 //                                    'style' => 'width:80px;'
 //                                ]),
+                                'visible' => $model->isVisible($bill, 'peishi_weight'),
                             ],
                             [
                                 'attribute' => 'peishi_gong_fee',
@@ -2035,6 +2185,7 @@ $this->params['breadcrumbs'][] = $this->title;
 //                                    'class' => 'form-control',
 //                                    'style' => 'width:80px;'
 //                                ]),
+                                'visible' => $model->isVisible($bill, 'peishi_gong_fee'),
                             ],
                             [
                                 'attribute' => 'peishi_fee',
@@ -2050,6 +2201,7 @@ $this->params['breadcrumbs'][] = $this->title;
 //                                    'class' => 'form-control',
 //                                    'style' => 'width:80px;'
 //                                ]),
+                                'visible' => $model->isVisible($bill, 'peishi_fee'),
                             ],
                             [
                                 'attribute' => 'parts_fee',
@@ -2065,6 +2217,7 @@ $this->params['breadcrumbs'][] = $this->title;
 //                                    'class' => 'form-control',
 //                                    'style' => 'width:80px;'
 //                                ]),
+                                'visible' => $model->isVisible($bill, 'parts_fee'),
                             ],
                             [
                                 'attribute' => 'xiangqian_craft',
@@ -2080,6 +2233,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                     'class' => 'form-control',
                                     'style' => 'width:80px;'
                                 ]),
+                                'visible' => $model->isVisible($bill, 'xiangqian_craft'),
                             ],
                             [
                                 'attribute' => 'second_stone_fee1',
@@ -2095,6 +2249,7 @@ $this->params['breadcrumbs'][] = $this->title;
 //                                    'class' => 'form-control',
 //                                    'style' => 'width:80px;'
 //                                ]),
+                                'visible' => $model->isVisible($bill, 'second_stone_fee1'),
                             ],
                             [
                                 'attribute' => 'second_stone_fee2',
@@ -2110,6 +2265,7 @@ $this->params['breadcrumbs'][] = $this->title;
 //                                    'class' => 'form-control',
 //                                    'style' => 'width:80px;'
 //                                ]),
+                                'visible' => $model->isVisible($bill, 'second_stone_fee2'),
                             ],
                             [
                                 'attribute' => 'second_stone_fee3',
@@ -2125,6 +2281,7 @@ $this->params['breadcrumbs'][] = $this->title;
 //                                    'class' => 'form-control',
 //                                    'style' => 'width:80px;'
 //                                ]),
+                                'visible' => $model->isVisible($bill, 'second_stone_fee3'),
                             ],
                             [
                                 'attribute' => 'xianqian_fee',
@@ -2140,6 +2297,7 @@ $this->params['breadcrumbs'][] = $this->title;
 //                                    'class' => 'form-control',
 //                                    'style' => 'width:80px;'
 //                                ]),
+                                'visible' => $model->isVisible($bill, 'xianqian_fee'),
                             ],
 //                            [
 //                                'attribute' => 'xianqian_price',
@@ -2174,6 +2332,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             [
                                 'class' => 'yii\grid\CheckboxColumn',
                                 'name' => 'id',  //设置每行数据的复选框属性
+                                'visible' => $model->isVisible($bill, 'id'),
                             ],
                             [
                                 'attribute' => 'biaomiangongyi_fee',
@@ -2189,6 +2348,7 @@ $this->params['breadcrumbs'][] = $this->title;
 //                                    'class' => 'form-control',
 //                                    'style' => 'width:80px;'
 //                                ]),
+                                'visible' => $model->isVisible($bill, 'biaomiangongyi_fee'),
                             ],
                             [
                                 'attribute' => 'fense_fee',
@@ -2204,6 +2364,7 @@ $this->params['breadcrumbs'][] = $this->title;
 //                                    'class' => 'form-control',
 //                                    'style' => 'width:80px;'
 //                                ]),
+                                'visible' => $model->isVisible($bill, 'fense_fee'),
                             ],
                             [
                                 'attribute' => 'penlasha_fee',
@@ -2219,6 +2380,7 @@ $this->params['breadcrumbs'][] = $this->title;
 //                                    'class' => 'form-control',
 //                                    'style' => 'width:80px;'
 //                                ]),
+                                'visible' => $model->isVisible($bill, 'penlasha_fee'),
                             ],
                             [
                                 'attribute' => 'lasha_fee',
@@ -2234,6 +2396,7 @@ $this->params['breadcrumbs'][] = $this->title;
 //                                    'class' => 'form-control',
 //                                    'style' => 'width:80px;'
 //                                ]),
+                                'visible' => $model->isVisible($bill, 'lasha_fee'),
                             ],
                             [
                                 'attribute' => 'bukou_fee',
@@ -2249,6 +2412,7 @@ $this->params['breadcrumbs'][] = $this->title;
 //                                    'class' => 'form-control',
 //                                    'style' => 'width:80px;'
 //                                ]),
+                                'visible' => $model->isVisible($bill, 'bukou_fee'),
                             ],
                             [
                                 'attribute' => 'templet_fee',
@@ -2264,6 +2428,7 @@ $this->params['breadcrumbs'][] = $this->title;
 //                                    'class' => 'form-control',
 //                                    'style' => 'width:80px;'
 //                                ]),
+                                'visible' => $model->isVisible($bill, 'templet_fee'),
                             ],
                             [
                                 'attribute' => 'tax_fee',
@@ -2279,6 +2444,7 @@ $this->params['breadcrumbs'][] = $this->title;
 //                                    'class' => 'form-control',
 //                                    'style' => 'width:80px;'
 //                                ]),
+                                'visible' => $model->isVisible($bill, 'tax_fee'),
                             ],
                             [
                                 'attribute' => 'tax_amount',
@@ -2294,6 +2460,7 @@ $this->params['breadcrumbs'][] = $this->title;
 //                                    'class' => 'form-control',
 //                                    'style' => 'width:80px;'
 //                                ]),
+                                'visible' => $model->isVisible($bill, 'tax_amount'),
                             ],
                             [
                                 'attribute' => 'cert_fee',
@@ -2309,6 +2476,7 @@ $this->params['breadcrumbs'][] = $this->title;
 //                                    'class' => 'form-control',
 //                                    'style' => 'width:80px;'
 //                                ]),
+                                'visible' => $model->isVisible($bill, 'cert_fee'),
                             ],
                             [
                                 'attribute' => 'other_fee',
@@ -2324,10 +2492,12 @@ $this->params['breadcrumbs'][] = $this->title;
 //                                    'class' => 'form-control',
 //                                    'style' => 'width:80px;'
 //                                ]),
+                                'visible' => $model->isVisible($bill, 'other_fee'),
                             ],
                             [
                                 'class' => 'yii\grid\CheckboxColumn',
                                 'name' => 'id',  //设置每行数据的复选框属性
+                                'visible' => $model->isVisible($bill, 'id'),
                             ],
                             [
                                 'attribute' => 'goods_name',
@@ -2343,6 +2513,7 @@ $this->params['breadcrumbs'][] = $this->title;
 //                                    'class' => 'form-control',
 //                                    'style' => 'width:200px;'
 //                                ]),
+                                'visible' => $model->isVisible($bill, 'goods_name8'),
                             ],
                             [
                                 'attribute' => 'factory_cost',
@@ -2357,6 +2528,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                     'class' => 'form-control',
                                     'style' => 'width:80px;'
                                 ]),
+                                'visible' => $model->isVisible($bill, 'factory_cost'),
                             ],
                             [
                                 'attribute' => 'markup_rate',
@@ -2371,6 +2543,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                     'class' => 'form-control',
                                     'style' => 'width:80px;'
                                 ]),
+                                'visible' => $model->isVisible($bill, 'markup_rate'),
                             ],
                             [
                                 'label' => '成本手填',
@@ -2387,6 +2560,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                     'class' => 'form-control',
                                     'style' => 'width:60px;'
                                 ]),
+                                'visible' => $model->isVisible($bill, 'is_auto_price'),
                             ],
                             [
                                 'attribute' => 'cost_price',
@@ -2440,7 +2614,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             [
                                 'attribute' => 'jintuo_type',
                                 'format' => 'raw',
-                                'headerOptions' => ['class' => 'col-md-1 batch_select_full', 'id' => 'price', 'id'=>'parts', 'attr-name' => 'jintuo_type', 'style' => 'background-color:#b7ba6b;'],
+                                'headerOptions' => ['class' => 'col-md-1 batch_select_full', 'id' => 'price', 'id' => 'parts', 'attr-name' => 'jintuo_type', 'style' => 'background-color:#b7ba6b;'],
                                 'footerOptions' => ['class' => 'col-md-1 batch_select_full2', 'attr-name' => 'jintuo_type', 'style' => 'background-color:#b7ba6b;'],
                                 'value' => function ($model, $key, $index, $widget) {
                                     $widget->footer = $model->getAttributeLabel('jintuo_type');
@@ -2451,6 +2625,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                     'class' => 'form-control',
                                     'style' => 'width:60px;'
                                 ]),
+                                'visible' => $model->isVisible($bill, 'jintuo_type'),
                             ],
 //                            [
 //                                'attribute' => 'qiban_type',
@@ -2497,6 +2672,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                     'class' => 'form-control',
                                     'style' => 'width:80px;'
                                 ]),
+                                'visible' => $model->isVisible($bill, 'main_cert_type'),
                             ],
                             [
                                 'attribute' => 'main_cert_id',
@@ -2511,6 +2687,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                     'class' => 'form-control',
                                     'style' => 'width:100px;'
                                 ]),
+                                'visible' => $model->isVisible($bill, 'main_cert_id'),
                             ],
                             [
                                 'label' => '是否批发',
@@ -2527,6 +2704,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                     'class' => 'form-control',
                                     'style' => 'width:60px;'
                                 ]),
+                                'visible' => $model->isVisible($bill, 'is_wholesale'),
                             ],
                             [
                                 'attribute' => 'factory_mo',
@@ -2541,6 +2719,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                     'class' => 'form-control',
                                     'style' => 'width:100px;'
                                 ]),
+                                'visible' => $model->isVisible($bill, 'factory_mo'),
                             ],
                             [
                                 'attribute' => 'order_sn',
@@ -2555,6 +2734,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                     'class' => 'form-control',
                                     'style' => 'width:100px;'
                                 ]),
+                                'visible' => $model->isVisible($bill, 'order_sn'),
                             ],
                             [
                                 'attribute' => 'remark',
@@ -2569,6 +2749,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                     'class' => 'form-control',
                                     'style' => 'width:160px;'
                                 ]),
+                                'visible' => $model->isVisible($bill, 'remark'),
                             ],
                             [
                                 'class' => 'yii\grid\ActionColumn',
@@ -2608,6 +2789,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             [
                                 'class' => 'yii\grid\CheckboxColumn',
                                 'name' => 'id',  //设置每行数据的复选框属性
+                                'visible' => $model->isVisible($bill, 'id'),
                             ],
                         ]
                     ]); ?>
@@ -2649,6 +2831,50 @@ $this->params['breadcrumbs'][] = $this->title;
         if (val <= 0) {
             $(obj).val("");
         }
+    }
+
+    // 显示状态 status 1:隐藏;0显示;
+    function rfHidden(obj) {
+        let id = $(obj).attr('data-id');
+        let name = $(obj).attr('data-name');
+        let url = $(obj).attr('data-url');
+        let text = $(obj).attr('data-text');
+        let status = 0;
+        self = $(obj);
+        if (self.hasClass("btn-success")) {
+            status = 1;
+        }
+        if (!url) {
+            url = "<?= Url::to(['ajax-hidden'])?>";
+        }
+        $.ajax({
+            type: "get",
+            url: url,
+            dataType: "json",
+            data: {
+                id: id,
+                name: name,
+                value: status,
+            },
+            success: function (data) {
+                if (parseInt(data.code) === 200) {
+                    if (self.hasClass("btn-success")) {
+                        self.removeClass("btn-success").addClass("btn-default");
+                        self.attr("data-toggle", 'tooltip');
+                        self.attr("data-original-title", '点击隐藏');
+                        self.text(text);
+                    } else {
+                        self.removeClass("btn-default").addClass("btn-success");
+                        self.attr("data-toggle", 'tooltip');
+                        self.attr("data-original-title", '点击显示');
+                        self.text(text);
+                    }
+                    window.location.reload();
+                } else {
+                    rfAffirm(data.message);
+                }
+            }
+        });
     }
 
     $(".jsBatchUpdate").click(function () {
