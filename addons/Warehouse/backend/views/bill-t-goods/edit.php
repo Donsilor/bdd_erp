@@ -468,6 +468,10 @@ $goods_type = $bill->billL->goods_type ?? 0;
                         <div class="col-lg-4">
                             <?= $form->field($model, 'bukou_fee')->textInput(['onblur' => 'rfClearVal(this)']) ?>
                         </div>
+                    <?php }else{?>
+                        <div class="col-lg-4">
+                            <?= $form->field($model, 'basic_gong_fee')->textInput(['onblur' => 'rfClearVal(this)']) ?>
+                        </div>
                     <?php }?>
                     <div class="col-lg-4">
                         <?= $form->field($model, 'biaomiangongyi_fee')->textInput(['onblur' => 'rfClearVal(this)']) ?>
@@ -534,6 +538,9 @@ $goods_type = $bill->billL->goods_type ?? 0;
                             <?= $form->field($model, 'auto_parts_amount')->radioList(\addons\Warehouse\common\enums\IsAutoCalculateEnum::getMap()) ?>
                         </div>
                         <div class="col-sm-4">
+                            <?= $form->field($model, 'auto_basic_fee')->radioList(\addons\Warehouse\common\enums\IsAutoCalculateEnum::getMap(), ['onclick'=>'return false;']) ?>
+                        </div>
+                        <div class="col-sm-4">
                             <?= $form->field($model, 'auto_peishi_fee')->radioList(\addons\Warehouse\common\enums\IsAutoCalculateEnum::getMap()) ?>
                         </div>
                         <div class="col-sm-4">
@@ -545,9 +552,9 @@ $goods_type = $bill->billL->goods_type ?? 0;
                         <div class="col-sm-4">
                             <?= $form->field($model, 'auto_factory_cost')->radioList(\addons\Warehouse\common\enums\IsAutoCalculateEnum::getMap()) ?>
                         </div>
-                        <div class="col-sm-4">
-                            <?= $form->field($model, 'is_auto_price')->radioList(\addons\Warehouse\common\enums\IsAutoCalculateEnum::getMap()) ?>
-                        </div>
+<!--                        <div class="col-sm-4">-->
+<!--                            --><?//= $form->field($model, 'is_auto_price')->radioList(\addons\Warehouse\common\enums\IsAutoCalculateEnum::getMap()) ?>
+<!--                        </div>-->
                     </div>
                 <?php }else{?>
                     <div class="row">
@@ -576,6 +583,9 @@ $goods_type = $bill->billL->goods_type ?? 0;
                             <?= $form->field($model, 'auto_parts_amount')->radioList(\addons\Warehouse\common\enums\IsAutoCalculateEnum::getMap(), ['onclick'=>'return false;']) ?>
                         </div>
                         <div class="col-sm-4">
+                            <?= $form->field($model, 'auto_basic_fee')->radioList(\addons\Warehouse\common\enums\IsAutoCalculateEnum::getMap(), ['onclick'=>'return false;']) ?>
+                        </div>
+                        <div class="col-sm-4">
                             <?= $form->field($model, 'auto_peishi_fee')->radioList(\addons\Warehouse\common\enums\IsAutoCalculateEnum::getMap(), ['onclick'=>'return false;']) ?>
                         </div>
                         <div class="col-sm-4">
@@ -587,9 +597,9 @@ $goods_type = $bill->billL->goods_type ?? 0;
                         <div class="col-sm-4">
                             <?= $form->field($model, 'auto_factory_cost')->radioList(\addons\Warehouse\common\enums\IsAutoCalculateEnum::getMap(), ['onclick'=>'return false;']) ?>
                         </div>
-                        <div class="col-sm-4">
-                            <?= $form->field($model, 'is_auto_price')->radioList(\addons\Warehouse\common\enums\IsAutoCalculateEnum::getMap(), ['onclick'=>'return false;']) ?>
-                        </div>
+<!--                        <div class="col-sm-4">-->
+<!--                            --><?//= $form->field($model, 'is_auto_price')->radioList(\addons\Warehouse\common\enums\IsAutoCalculateEnum::getMap(), ['onclick'=>'return false;']) ?>
+<!--                        </div>-->
                     </div>
                 <?php }?>
                 <!-- ./box-body -->

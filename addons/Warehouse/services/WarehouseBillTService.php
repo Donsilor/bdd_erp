@@ -375,7 +375,7 @@ class WarehouseBillTService extends Service
                     $is_inlay = $style->type->is_inlay;
                 }
                 $is_inlay = $is_inlay ?? InlayEnum::No;
-                if ($form->goods_type == GoodsTypeEnum::PlainGold
+                if ($goods_type == GoodsTypeEnum::PlainGold
                     && $is_inlay == InlayEnum::Yes) {
                     $flag = false;
                     $error[$i][] = $qiban_error . "[款号]为镶嵌类，不可导入";
@@ -1065,10 +1065,10 @@ class WarehouseBillTService extends Service
             $gong_fee = $form->formatValue($goods['gong_fee'] ?? 0, 0) ?? 0;//克工费
             $piece_fee = $form->formatValue($goods['piece_fee'] ?? 0, 0) ?? 0;//件工费
             $basic_gong_fee = $form->formatValue($goods['basic_gong_fee'] ?? 0, 0) ?? 0;//基本工费
-//            if (!empty($gong_fee) && !empty($piece_fee)) {
-//                $flag = false;
-//                $error[$i][] = "[克/工费]和[件/工费]只能填其一";
-//            }
+            $auto_basic_fee = ConfirmEnum::NO;
+            if (bccomp($basic_gong_fee, 0, 5) > 0) {
+                $auto_basic_fee = ConfirmEnum::YES;
+            }
             $xiangqian_craft = $goods['xiangqian_craft'] ?? "";//镶嵌工艺
             if (!empty($xiangqian_craft)) {
                 $attr_id = $form->getAttrIdByAttrValue($style_sn, $xiangqian_craft, AttrIdEnum::XIANGQIAN_CRAFT);
@@ -1296,6 +1296,7 @@ class WarehouseBillTService extends Service
                 'auto_second_stone2' => $auto_second_stone2,
                 'auto_second_stone3' => $auto_second_stone3,
                 'auto_parts_amount' => $auto_parts_amount,
+                'auto_basic_fee' => $auto_basic_fee,
                 'auto_peishi_fee' => $auto_peishi_fee,
                 'auto_xianqian_fee' => $auto_xianqian_fee,
                 'auto_factory_cost' => $auto_factory_cost,
@@ -1378,7 +1379,9 @@ class WarehouseBillTService extends Service
         $billT = WarehouseBillL::findOne($form->bill_id);
         $billT = $billT ?? new WarehouseBillL();
         $billT->id = $form->bill_id;
-        $billT->goods_type = $goods_type;
+        if(!$form->goods_type){
+            $billT->goods_type = $goods_type;
+        }
         if (false === $billT->save()) {
             throw new \Exception($this->getError($billT));
         }
@@ -1755,6 +1758,9 @@ class WarehouseBillTService extends Service
 //        if (bccomp($form->piece_fee, 0, 5) > 0) {
 //            return $form->piece_fee ?? 0;
 //        }
+        if ($form->auto_basic_fee) {
+            return $form->basic_gong_fee ?? 0;
+        }
         return bcadd($this->calculateGongFee($form), $this->calculatePieceFee($form), 5) ?? 0;
     }
 
@@ -2001,7 +2007,12 @@ class WarehouseBillTService extends Service
             }
             $form->parts_amount = $this->calculatePartsAmount($form);//配件额
         }
-        $form->basic_gong_fee = $this->calculateBasicGongFee($form);//基本工费
+        if (empty($form->auto_basic_fee) || bccomp($form->basic_gong_fee, 0, 5) != 1) {
+            if (bccomp($form->basic_gong_fee, 0, 5) != 1) {
+                $form->auto_basic_fee = ConfirmEnum::NO;
+            }
+            $form->basic_gong_fee = $this->calculateBasicGongFee($form);//基本工费
+        }
         $form->total_gong_fee = $this->calculateTotalGongFee($form);//总工费
         if (empty($form->auto_factory_cost) || bccomp($form->factory_cost, 0, 5) != 1) {
             if (bccomp($form->factory_cost, 0, 5) != 1) {

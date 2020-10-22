@@ -26,7 +26,8 @@ $goods_type = $bill->billL->goods_type ?? 0;
     }
 </style>
 <div class="box-body nav-tabs-custom">
-    <h2 class="page-header"><?= $this->title; ?> - <?= $bill->bill_no ?> <i class="fa fa-copy" onclick="copy(<?= $bill->bill_no ?>)"></i>
+    <h2 class="page-header"><?= $this->title; ?> - <?= $bill->bill_no ?> <i class="fa fa-copy"
+                                                                            onclick="copy(<?= $bill->bill_no ?>)"></i>
         - <?= \addons\Warehouse\common\enums\BillStatusEnum::getValue($bill->bill_status) ?></h2>
     <?php echo Html::menuTab($tabList, $tab) ?>
     <div class="box-tools" style="float:right;margin-top:-40px; margin-right: 20px;">
@@ -1963,7 +1964,7 @@ $goods_type = $bill->billL->goods_type ?? 0;
                             [
                                 'attribute' => 'parts_way',
                                 'format' => 'raw',
-                                'headerOptions' => ['class' => 'col-md-1 batch_select_full', 'id'=>'parts', 'attr-name' => 'parts_way', 'style' => 'background-color:#cde6c7;'],
+                                'headerOptions' => ['class' => 'col-md-1 batch_select_full', 'id' => 'parts', 'attr-name' => 'parts_way', 'style' => 'background-color:#cde6c7;'],
                                 'footerOptions' => ['class' => 'col-md-1 batch_select_full2', 'attr-name' => 'parts_way', 'style' => 'background-color:#cde6c7;'],
                                 'value' => function ($model, $key, $index, $widget) {
                                     $widget->footer = $model->getAttributeLabel('parts_way');
@@ -2124,6 +2125,22 @@ $goods_type = $bill->billL->goods_type ?? 0;
 //                                    'style' => 'width:80px;'
 //                                ]),
                                 'visible' => $model->isVisible($bill, 'piece_fee'),
+                            ],
+                            [
+                                'attribute' => 'basic_gong_fee',
+                                'format' => 'raw',
+                                'headerOptions' => ['class' => 'col-md-1 batch_full', 'attr-name' => 'piece_fee', 'style' => 'background-color:#FFA500;'],
+                                'footerOptions' => ['class' => 'col-md-1 batch_full2', 'attr-name' => 'piece_fee', 'style' => 'background-color:#FFA500;'],
+                                'value' => function ($model, $key, $index, $widget) use ($total) {
+                                    $widget->footer = $model->getFooterValues('basic_gong_fee', $total, "0.00");
+                                    return Html::ajaxInput('basic_gong_fee', $model->basic_gong_fee, ['data-id' => $model->id, 'onfocus' => 'rfClearVal(this)', 'data-type' => 'number']);
+                                },
+                                'filter' => false,
+//                                'filter' => Html::activeTextInput($searchModel, 'basic_gong_fee', [
+//                                    'class' => 'form-control',
+//                                    'style' => 'width:80px;'
+//                                ]),
+                                'visible' => $model->isVisible($bill, 'basic_gong_fee'),
                             ],
 //                            [
 //                                'attribute' => 'peishi_num',
@@ -2597,7 +2614,7 @@ $goods_type = $bill->billL->goods_type ?? 0;
                             [
                                 'attribute' => 'jintuo_type',
                                 'format' => 'raw',
-                                'headerOptions' => ['class' => 'col-md-1 batch_select_full', 'id' => 'price', 'id'=>'parts', 'attr-name' => 'jintuo_type', 'style' => 'background-color:#b7ba6b;'],
+                                'headerOptions' => ['class' => 'col-md-1 batch_select_full', 'id' => 'price', 'id' => 'parts', 'attr-name' => 'jintuo_type', 'style' => 'background-color:#b7ba6b;'],
                                 'footerOptions' => ['class' => 'col-md-1 batch_select_full2', 'attr-name' => 'jintuo_type', 'style' => 'background-color:#b7ba6b;'],
                                 'value' => function ($model, $key, $index, $widget) {
                                     $widget->footer = $model->getAttributeLabel('jintuo_type');
@@ -2827,7 +2844,7 @@ $goods_type = $bill->billL->goods_type ?? 0;
         if (self.hasClass("btn-success")) {
             status = 1;
         }
-        if(!url){
+        if (!url) {
             url = "<?= Url::to(['ajax-hidden'])?>";
         }
         $.ajax({
