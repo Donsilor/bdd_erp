@@ -21,6 +21,7 @@ use common\enums\LogTypeEnum;
 use common\enums\AuditStatusEnum;
 use common\enums\StatusEnum;
 use common\helpers\ArrayHelper;
+use addons\Warehouse\common\enums\BillTypeEnum;
 
 /**
  * 收货单
@@ -388,7 +389,7 @@ class WarehouseBillLService extends Service
                         'goods_id' => $id,
                         'goods_status' => GoodsStatusEnum::IN_STOCK,
                         'log_type' => LogTypeEnum::ARTIFICIAL,
-                        'log_msg' => '入库单：' . $form->bill_no . ";货品状态:“" . GoodsStatusEnum::getValue(GoodsStatusEnum::IN_STOCK) . "”"
+                        'log_msg' => BillTypeEnum::getValue($form->bill_type).'：' . $form->bill_no . "，入库数量：" . $goods->goods_num . "件"
                     ];
                     Yii::$app->warehouseService->goodsLog->createGoodsLog($log);
 
