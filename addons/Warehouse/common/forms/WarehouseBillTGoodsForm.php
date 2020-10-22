@@ -1903,7 +1903,7 @@ class WarehouseBillTGoodsForm extends WarehouseBillGoodsL
             $form->parts_way = PeiJianWayEnum::NO_PEI;
             $saveData['parts_way'] = PeiJianWayEnum::NO_PEI;
         }
-        //金料
+        //金料(配料方式)
         if ($this->goods_type == GoodsTypeEnum::PlainGold) {
             if (bccomp($form->gold_weight, 0, 5) == 1) {
                 $form->peiliao_way = PeiLiaoWayEnum::FACTORY;
