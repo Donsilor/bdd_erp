@@ -144,7 +144,7 @@ class BillTController extends BaseController
                     $billT = WarehouseBillL::findOne($model->id);
                     $billT = $billT ?? new WarehouseBillL();
                     $billT->id = $model->id;
-                    $billT->goods_type = $goods_type ?? 0;
+                    $billT->goods_type = $goods_type ?? $billT->goods_type;
                     if (false === $billT->save()) {
                         throw new \Exception($this->getError($billT));
                     }
