@@ -2,13 +2,13 @@
 
 namespace addons\Warehouse\common\forms;
 
-use addons\Warehouse\common\enums\PeiLiaoWayEnum;
 use common\helpers\ArrayHelper;
 use common\helpers\StringHelper;
 use addons\Warehouse\common\models\WarehouseBill;
 use addons\Warehouse\common\models\WarehouseBillL;
 use addons\Warehouse\common\models\WarehouseBillGoodsL;
 use addons\Warehouse\common\enums\PeiJianWayEnum;
+use addons\Warehouse\common\enums\PeiLiaoWayEnum;
 use addons\Warehouse\common\enums\PeiShiWayEnum;
 use addons\Warehouse\common\enums\GoodsTypeEnum;
 use addons\Warehouse\common\enums\IsHiddenEnum;
