@@ -2013,18 +2013,18 @@ class WarehouseBillTService extends Service
             }
             $form->basic_gong_fee = $this->calculateBasicGongFee($form);//基本工费
         }
+        if (empty($form->auto_tax_amount) || bccomp($form->tax_amount, 0, 5) != 1) {
+            if (bccomp($form->tax_amount, 0, 5) != 1) {
+                $form->auto_tax_amount = ConfirmEnum::NO;
+            }
+            $form->tax_amount = $this->calculateTaxAmount($form);//税额
+        }
         $form->total_gong_fee = $this->calculateTotalGongFee($form);//总工费
         if (empty($form->auto_factory_cost) || bccomp($form->factory_cost, 0, 5) != 1) {
             if (bccomp($form->factory_cost, 0, 5) != 1) {
                 $form->auto_factory_cost = ConfirmEnum::NO;
             }
             $form->factory_cost = $this->calculateFactoryCost($form);//工厂成本
-        }
-        if (empty($form->auto_tax_amount) || bccomp($form->tax_amount, 0, 5) != 1) {
-            if (bccomp($form->tax_amount, 0, 5) != 1) {
-                $form->auto_tax_amount = ConfirmEnum::NO;
-            }
-            $form->tax_amount = $this->calculateTaxAmount($form);//税额
         }
         if (empty($form->is_auto_price) || bccomp($form->cost_price, 0, 5) != 1) {
             $form->cost_price = $this->calculateCostPrice($form);//公司成本/件
