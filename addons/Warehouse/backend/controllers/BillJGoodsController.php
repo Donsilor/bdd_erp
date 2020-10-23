@@ -83,9 +83,9 @@ class BillJGoodsController extends BaseController
         $this->layout = '@backend/views/layouts/iframe';
 
         $bill_id = Yii::$app->request->get('bill_id');
-        $this->modelClass = WarehouseBillThForm::class;
+        $this->modelClass = WarehouseBillJGoodsForm::class;
         $form = $this->findModel($bill_id);
-        $form = $form ?? new WarehouseBillJForm();
+        $form = $form ?? new WarehouseBillJGoodsForm();
         if(\Yii::$app->request->post("search") == 1 && $form->load(\Yii::$app->request->post())){
             $form->validateGoodsList();//查询校验
             $searchModel = new SearchModel([
@@ -107,6 +107,7 @@ class BillJGoodsController extends BaseController
         if($form->load(\Yii::$app->request->post())){
             try {
                 $trans = Yii::$app->db->beginTransaction();
+                $form->bill_id = $bill_id;
                 //批量添加商品
                 \Yii::$app->warehouseService->billJ->batchAddGoods($form);
                 $trans->commit();

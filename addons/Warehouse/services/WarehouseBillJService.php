@@ -66,30 +66,34 @@ class WarehouseBillJService extends WarehouseBillService
     }
 
     /**
-     *
-     * 添加明细
-     * @param WarehouseBillCForm $form
+     * 批量添加其它退货单明细
+     * @param WarehouseBillJGoodsForm $form
      * @param array $saveGoods
      * @throws
      */
-    public function batchAddGoods($form, $saveGoods)
+    public function batchAddGoods($form)
     {
+        $bill = WarehouseBill::findOne($form->bill_id);
+        $form->bill_no = $bill->bill_no;
+        $form->bill_type = $bill->bill_type;
         if(false === $form->validate()) {
             throw new \Exception($this->getError($form));
         }
-        $goods_id_arr = [];
-        //批量创建单据明细
-        foreach ($saveGoods as $good) {
-            $goods_id = $good['goods_id'];
-            $goods_id_arr[] = $goods_id;
-            $goods = WarehouseGoods::find()->where(['goods_id' => $goods_id, 'goods_status'=>GoodsStatusEnum::IN_STOCK])->one();
-            if(empty($goods)){
-                throw new \Exception("货号{$goods_id}不存在或者不是库存中");
+        foreach ($form->goods_list ?? [] as $goods_id=>$goods) {
+            $wareGoods = WarehouseGoods::find()->where(['goods_id'=>$goods_id])->one();
+            if(empty($goods)) {
+                throw new \Exception("[{$goods_id}]条码货号不存在");
             }
-            $this->createBillGoodsByGoods($form, $goods);
+            if($goods['goods_num'] <= 0) {
+                throw new \Exception("[{$goods_id}]借货数量必须大于0");
+            }
+            $wareGoods->goods_num = $goods['goods_num'];
+            $this->createBillGoodsByGoods($bill, $wareGoods);
         }
         //更新收货单汇总：总金额和总数量
-        \Yii::$app->warehouseService->bill->WarehouseBillSummary($form->id);
+        if(false === \Yii::$app->warehouseService->bill->WarehouseBillSummary($form->id)){
+            throw new \Exception('更新单据汇总失败');
+        }
     }
 
     /**
