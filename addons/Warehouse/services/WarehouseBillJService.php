@@ -2,7 +2,8 @@
 
 namespace addons\Warehouse\services;
 
-use common\enums\LogTypeEnum;
+use addons\Warehouse\common\enums\AdjustTypeEnum;
+use addons\Warehouse\common\forms\WarehouseBillCForm;
 use Yii;
 use yii\db\Exception;
 use addons\Warehouse\common\models\WarehouseGoods;
@@ -16,6 +17,8 @@ use addons\Warehouse\common\forms\WarehouseBillJGoodsForm;
 use addons\Warehouse\common\enums\LendStatusEnum;
 use addons\Warehouse\common\enums\BillStatusEnum;
 use addons\Warehouse\common\enums\GoodsStatusEnum;
+use addons\Warehouse\common\enums\BillTypeEnum;
+use common\enums\LogTypeEnum;
 use common\enums\AuditStatusEnum;
 use common\helpers\ArrayHelper;
 use common\helpers\Url;
@@ -60,6 +63,58 @@ class WarehouseBillJService extends WarehouseBillService
         if(false === $billJ->save()){
             throw new \Exception($this->getError($billJ));
         }
+    }
+
+    /**
+     *
+     * 添加明细
+     * @param WarehouseBillCForm $form
+     * @param array $saveGoods
+     * @throws
+     */
+    public function batchAddGoods($form, $saveGoods)
+    {
+        if(false === $form->validate()) {
+            throw new \Exception($this->getError($form));
+        }
+        $goods_id_arr = [];
+        //批量创建单据明细
+        foreach ($saveGoods as $good) {
+            $goods_id = $good['goods_id'];
+            $goods_id_arr[] = $goods_id;
+            $goods = WarehouseGoods::find()->where(['goods_id' => $goods_id, 'goods_status'=>GoodsStatusEnum::IN_STOCK])->one();
+            if(empty($goods)){
+                throw new \Exception("货号{$goods_id}不存在或者不是库存中");
+            }
+            $this->createBillGoodsByGoods($form, $goods);
+        }
+        //更新收货单汇总：总金额和总数量
+        \Yii::$app->warehouseService->bill->WarehouseBillSummary($form->id);
+    }
+
+    /**
+     * 扫码添加退货单明细
+     * @param int $bill_id
+     * @param array $goods_ids
+     * @return object
+     * @throws
+     */
+    public function scanAddGoods($bill_id, $goods_ids)
+    {
+        $bill = WarehouseBill::find()->where(['id' => $bill_id, 'bill_type' => BillTypeEnum::BILL_TYPE_J])->one();
+        if (empty($bill) || $bill->bill_status != BillStatusEnum::SAVE) {
+            throw new \Exception("单据不是保存状态");
+        }
+        foreach ($goods_ids as $goods_id) {
+            $goods = WarehouseGoods::find()->where(['goods_id' => $goods_id])->one();
+            if (empty($goods)) {
+                throw new \Exception("[{$goods_id}]条码货号不存在");
+            }
+            $this->createBillGoodsByGoods($bill, $goods);
+        }
+        //更新收货单汇总：总金额和总数量
+        \Yii::$app->warehouseService->bill->WarehouseBillSummary($bill->id);
+        return $bill;
     }
 
     /**
@@ -130,11 +185,69 @@ class WarehouseBillJService extends WarehouseBillService
     }
 
     /**
+     * 添加单据明细 通用代码
+     * @param WarehouseBillCForm $bill
+     * @param WarehouseGoods $goods
+     * @throws \Exception
+     */
+    private function createBillGoodsByGoods($bill, $goods)
+    {
+        $goods_id = $goods->goods_id;
+        if ($goods->goods_status != GoodsStatusEnum::IN_STOCK) {
+            throw new \Exception("[{$goods_id}]条码货号不是库存状态");
+        }
+        $chuku_num = 1;
+        $billGoods = new WarehouseBillGoods();
+        $billGoods->attributes = [
+            'bill_id' => $bill->id,
+            'bill_no' => $bill->bill_no,
+            'bill_type' => $bill->bill_type,
+            'goods_id' => $goods_id,
+            'goods_name' => $goods->goods_name,
+            'style_sn' => $goods->style_sn,
+            'goods_num' => $chuku_num,
+            'put_in_type' => $goods->put_in_type,
+            'warehouse_id' => $goods->warehouse_id,
+            'from_warehouse_id' => $goods->warehouse_id,
+            'material' => $goods->material,
+            'material_type' => $goods->material_type,
+            'material_color' => $goods->material_color,
+            'gold_weight' => $goods->gold_weight,
+            'gold_loss' => $goods->gold_loss,
+            'diamond_carat' => $goods->diamond_carat,
+            'diamond_color' => $goods->diamond_color,
+            'diamond_clarity' => $goods->diamond_clarity,
+            'diamond_cert_id' => $goods->diamond_cert_id,
+            'diamond_cert_type' => $goods->diamond_cert_type,
+            'cost_price' => $goods->cost_price,//采购成本价
+            'chuku_price' => $goods->calcChukuPrice(),//计算出库成本价
+            'market_price' => $goods->market_price,
+            'markup_rate' => $goods->markup_rate,
+        ];
+        if (false === $billGoods->save()) {
+            throw new \Exception("[{$goods_id}]" . $this->getError($billGoods));
+        }
+        //同步借货单明细附属表
+        $billGJ = WarehouseBillGoodsJ::findOne($billGoods->id);
+        $billGJ = $billGJ ?? new WarehouseBillGoodsJ();
+        $billGJ->id = $billGoods->id;
+        $billGJ->bill_id = $billGoods->bill_id;
+        if (false === $billGJ->save()) {
+            throw new \Exception($this->getError($billGJ));
+        }
+        //扣减库存
+        if ($chuku_num >= 1) {
+            \Yii::$app->warehouseService->warehouseGoods->updateStockNum($goods_id, $chuku_num, AdjustTypeEnum::MINUS, true);
+        }
+        //WarehouseGoods::updateAll(['chuku_price' => $billGoods->chuku_price, 'chuku_time' => time()], ['goods_id' => $goods_id]);
+    }
+
+    /**
      * 借货单-审核
      * @param WarehouseBill $form
      * @throws
      */
-    public function auditBillC($form)
+    public function auditBillJ($form)
     {
         if(false === $form->validate()) {
             throw new \Exception($this->getError($form));
@@ -279,7 +392,7 @@ class WarehouseBillJService extends WarehouseBillService
                 'goods_id' => $goods->goods->id,
                 'goods_status' => GoodsStatusEnum::HAS_LEND,
                 'log_type' => LogTypeEnum::ARTIFICIAL,
-                'log_msg' => '接货单：'.$form->bill_no.";;货品状态:“".GoodsStatusEnum::getValue(GoodsStatusEnum::IN_STOCK)."”变更为：“".GoodsStatusEnum::getValue(GoodsStatusEnum::HAS_LEND)."”"
+                'log_msg' => '借货单：'.$form->bill_no.";;货品状态:“".GoodsStatusEnum::getValue(GoodsStatusEnum::IN_STOCK)."”变更为：“".GoodsStatusEnum::getValue(GoodsStatusEnum::HAS_LEND)."”"
             ];
             Yii::$app->warehouseService->goodsLog->createGoodsLog($log);
 

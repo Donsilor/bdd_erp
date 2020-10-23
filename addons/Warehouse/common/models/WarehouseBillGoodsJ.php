@@ -14,6 +14,7 @@ use common\models\backend\Member;
  * @property int $receive_id 接收人
  * @property int $receive_time 接收时间
  * @property string $receive_remark 接收备注
+ * @property int $restore_num 还货数量
  * @property int $restore_time 还货时间
  * @property int $qc_status 质检状态
  * @property string $qc_remark 质检备注
@@ -35,7 +36,7 @@ class WarehouseBillGoodsJ extends BaseModel
     {
         return [
             [['id'], 'required'],
-            [['id', 'bill_id', 'lend_status', 'receive_id', 'receive_time', 'restore_time', 'qc_status'], 'integer'],
+            [['id', 'bill_id', 'lend_status', 'receive_id', 'receive_time', 'restore_num', 'restore_time', 'qc_status'], 'integer'],
             [['receive_remark', 'qc_remark'], 'string', 'max' => 255],
             [['id'], 'unique'],
         ];
@@ -50,9 +51,10 @@ class WarehouseBillGoodsJ extends BaseModel
             'id' => '单据明细ID',
             'bill_id' => '单据ID',
             'lend_status' => '借货状态',
-            'receive_id' => '接收人',
-            'receive_time' => '接收时间',
-            'receive_remark' => '接收备注',
+            'receive_id' => '借货人',
+            'receive_time' => '借货时间',
+            'receive_remark' => '借货备注',
+            'restore_num' => '还货数量',
             'restore_time' => '还货时间',
             'qc_status' => '质检状态',
             'qc_remark' => '质检备注',

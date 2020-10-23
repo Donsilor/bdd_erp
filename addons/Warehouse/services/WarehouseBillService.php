@@ -147,12 +147,12 @@ class WarehouseBillService extends Service
                 }
             case BillTypeEnum::BILL_TYPE_TH :
                 {
-                        $tab = [
-                                1 => ['name' => '单据详情', 'url' => Url::to(['bill-th/view', 'id' => $bill_id, 'tab' => 1, 'returnUrl' => $returnUrl])],
-                                2 => ['name' => '单据明细', 'url' => Url::to(['bill-th-goods/index', 'bill_id' => $bill_id, 'tab' => 2, 'returnUrl' => $returnUrl])],
-                                3 => ['name' => '日志列表', 'url' => Url::to(['bill-log/index', 'bill_id' => $bill_id, 'tab' => 3, 'returnUrl' => $returnUrl])],
-                        ];
-                        break;
+                    $tab = [
+                        1 => ['name' => '单据详情', 'url' => Url::to(['bill-th/view', 'id' => $bill_id, 'tab' => 1, 'returnUrl' => $returnUrl])],
+                        2 => ['name' => '单据明细', 'url' => Url::to(['bill-th-goods/index', 'bill_id' => $bill_id, 'tab' => 2, 'returnUrl' => $returnUrl])],
+                        3 => ['name' => '日志列表', 'url' => Url::to(['bill-log/index', 'bill_id' => $bill_id, 'tab' => 3, 'returnUrl' => $returnUrl])],
+                    ];
+                    break;
                 }
 
         }
@@ -269,9 +269,9 @@ class WarehouseBillService extends Service
     {
         $number_max = 0;
         $billM = WarehouseBill::find()->select(['bill_no'])->where(['like', 'bill_no', $prefix . date('Ymd') . '-%', false])->orderBy(['id' => SORT_DESC])->one();
-        if($billM){
+        if ($billM) {
             $bill_no = $billM->bill_no ?? 0;
-            if($bill_no){
+            if ($bill_no) {
                 $snInfo = StringHelper::explode($bill_no, '-');
                 $number_max = $snInfo[1] ?? 0;
             }

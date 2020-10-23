@@ -2,7 +2,6 @@
 
 namespace addons\Warehouse\common\enums;
 
-
 /**
  *
  * 借货状态
@@ -25,8 +24,9 @@ class LendStatusEnum extends \common\enums\BaseEnum
         return [
             self::SAVE => '保存',
             self::IN_RECEIVE => '待接收',
-            self::HAS_LEND => '已借货',
-            self::HAS_RETURN  => '已还货',
+            self::HAS_LEND => '已借出',
+            self::PORTION_RETURN => '部分还货',
+            self::HAS_RETURN => '已还货',
         ];
     }
 
@@ -37,7 +37,8 @@ class LendStatusEnum extends \common\enums\BaseEnum
     public static function getBillMap(): array
     {
         return [
-            self::HAS_LEND => '已借货',
+            self::SAVE => '保存',
+            self::HAS_LEND => '已借出',
             self::PORTION_RETURN => '部分还货',
             self::HAS_RETURN => '已还货',
         ];

@@ -41,6 +41,7 @@ class WarehouseBillJGoodsForm extends WarehouseBillGoods
         //合并
         return ArrayHelper::merge(parent::attributeLabels() , [
             'goods_ids' => '货号',
+            'goods_num' => '借货数量',
             'qc_status' => '质检状态',
             'qc_remark' => '质检备注',
             'restore_time' => '还货日期',

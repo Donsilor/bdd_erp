@@ -13,8 +13,9 @@ $this->params['breadcrumbs'][] = ['label' => $this->title, 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="box-body nav-tabs-custom">
-    <h2 class="page-header"><?php echo $this->title; ?> - <?php echo $model->bill_no?> - <?= \addons\Warehouse\common\enums\BillStatusEnum::getValue($model->bill_status)?></h2>
-    <?php echo Html::menuTab($tabList,$tab)?>
+    <h2 class="page-header"><?php echo $this->title; ?> - <?php echo $model->bill_no ?>
+        - <?= \addons\Warehouse\common\enums\BillStatusEnum::getValue($model->bill_status) ?></h2>
+    <?php echo Html::menuTab($tabList, $tab) ?>
     <div class="tab-content">
         <div class="col-xs-12">
             <div class="box">
@@ -26,23 +27,15 @@ $this->params['breadcrumbs'][] = $this->title;
                         </tr>
                         <tr>
                             <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('bill_type') ?>：</td>
-                            <td><?= \addons\Warehouse\common\enums\BillTypeEnum::getValue($model->bill_type)?></td>
+                            <td><?= \addons\Warehouse\common\enums\BillTypeEnum::getValue($model->bill_type) ?></td>
                         </tr>
                         <tr>
                             <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('channel_id') ?>：</td>
-                            <td><?= $model->channel->name??"" ?></td>
-                        </tr>
-                        <tr>
-                            <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('supplier_id') ?>：</td>
-                            <td><?= $model->supplier->supplier_name??"" ?></td>
+                            <td><?= $model->channel->name ?? "" ?></td>
                         </tr>
                         <tr>
                             <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('bill_status') ?>：</td>
-                            <td><?= \addons\Warehouse\common\enums\BillStatusEnum::getValue($model->bill_status)?></td>
-                        </tr>
-                        <tr>
-                            <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('delivery_type') ?>：</td>
-                            <td><?= \addons\Warehouse\common\enums\DeliveryTypeEnum::getValue($model->delivery_type) ?></td>
+                            <td><?= \addons\Warehouse\common\enums\BillStatusEnum::getValue($model->bill_status) ?></td>
                         </tr>
                         <tr>
                             <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('goods_num') ?>：</td>
@@ -50,51 +43,47 @@ $this->params['breadcrumbs'][] = $this->title;
                         </tr>
                         <tr>
                             <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('restore_num') ?>：</td>
-                            <td><?= $model->billJ->restore_num??0; ?></td>
+                            <td><?= $model->billJ->restore_num ?? 0; ?></td>
                         </tr>
                         <tr>
-                            <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('total_cost') ?>：</td>
-                            <td><?= $model->total_cost ?></td>
+                            <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('lender_id') ?>：</td>
+                            <td><?= $model->billJ->lender->username ?? 0; ?></td>
                         </tr>
                         <tr>
-                            <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('total_sale') ?>：</td>
-                            <td><?= $model->total_sale ?></td>
+                            <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('est_restore_time') ?>：</td>
+                            <td><?= \Yii::$app->formatter->asDate($model->billJ->est_restore_time) ?></td>
                         </tr>
                         <tr>
-                            <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('total_market') ?>：</td>
-                            <td><?= $model->total_market ?></td>
-                        </tr>
-                        <tr>
-                            <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('order_sn') ?>：</td>
-                            <td><?= $model->order_sn ?></td>
-                        </tr>
-                        <tr>
-                            <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('status') ?>：</td>
-                            <td><?= \common\enums\StatusEnum::getValue($model->status)?></td>
-                        </tr>
-                        <tr>
-                            <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('audit_status') ?>：</td>
-                            <td><?= \common\enums\AuditStatusEnum::getValue($model->audit_status)?></td>
+                            <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('rel_restore_time') ?>：</td>
+                            <td><?= \Yii::$app->formatter->asDate($model->billJ->rel_restore_time) ?></td>
                         </tr>
                         <tr>
                             <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('creator_id') ?>：</td>
-                            <td><?= $model->creator ? $model->creator->username:''  ?></td>
-                        </tr>
-                        <tr>
-                            <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('auditor_id') ?>：</td>
-                            <td><?= $model->auditor ? $model->auditor->username:''  ?></td>
-                        </tr>
-                        <tr>
-                            <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('audit_remark') ?>：</td>
-                            <td><?= $model->audit_remark ?></td>
+                            <td><?= $model->creator ? $model->creator->username : '' ?></td>
                         </tr>
                         <tr>
                             <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('created_at') ?>：</td>
                             <td><?= \Yii::$app->formatter->asDatetime($model->created_at) ?></td>
                         </tr>
                         <tr>
+                            <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('audit_status') ?>：</td>
+                            <td><?= \common\enums\AuditStatusEnum::getValue($model->audit_status) ?></td>
+                        </tr>
+                        <tr>
+                            <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('auditor_id') ?>：</td>
+                            <td><?= $model->auditor ? $model->auditor->username : '' ?></td>
+                        </tr>
+                        <tr>
                             <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('audit_time') ?>：</td>
                             <td><?= \Yii::$app->formatter->asDatetime($model->audit_time) ?></td>
+                        </tr>
+                        <tr>
+                            <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('audit_remark') ?>：</td>
+                            <td><?= $model->audit_remark ?></td>
+                        </tr>
+                        <tr>
+                            <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('status') ?>：</td>
+                            <td><?= \common\enums\StatusEnum::getValue($model->status) ?></td>
                         </tr>
                         <tr>
                             <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('remark') ?>：</td>
@@ -104,11 +93,9 @@ $this->params['breadcrumbs'][] = $this->title;
                 </div>
             </div>
         </div>
-
-
         <div class="box-footer text-center">
             <?php
-            if($model->bill_status == BillStatusEnum::SAVE) {
+            if ($model->bill_status == BillStatusEnum::SAVE) {
                 echo Html::edit(['ajax-edit', 'id' => $model->id], '编辑', [
                     'data-toggle' => 'modal',
                     'class' => 'btn btn-primary btn-ms',
@@ -119,33 +106,32 @@ $this->params['breadcrumbs'][] = $this->title;
                     'class' => 'btn btn-success btn-ms',
                     'onclick' => 'rfTwiceAffirm(this,"提交审核","确定提交吗？");return false;',
                 ]);
-            }
-            ?>
-            <?php
-            if($model->bill_status == BillStatusEnum::PENDING){
-                echo Html::edit(['ajax-audit','id'=>$model->id], '审核', [
-                    'class'=>'btn btn-success btn-ms',
+                echo '&nbsp;';
+            } elseif ($model->bill_status == BillStatusEnum::PENDING) {
+                echo Html::edit(['ajax-audit', 'id' => $model->id], '审核', [
+                    'class' => 'btn btn-success btn-ms',
                     'data-toggle' => 'modal',
                     'data-target' => '#ajaxModal',
                 ]);
+                echo '&nbsp;';
             }
+//            echo Html::a('打印', ['print', 'id' => $model->id], [
+//                'target' => '_blank',
+//                'class' => 'btn btn-info btn-ms',
+//            ]);
+//            echo '&nbsp;';
+//            echo Html::button('导出', [
+//                'class' => 'btn btn-success btn-ms',
+//                'onclick' => 'batchExport()',
+//            ]);
             ?>
-            <?= Html::a('打印',['print','id'=>$model->id],[
-                'target'=>'_blank',
-                'class'=>'btn btn-info btn-ms',
-            ]); ?>
-            <?= Html::button('导出', [
-                'class'=>'btn btn-success btn-ms',
-                'onclick' => 'batchExport()',
-            ]);?>
         </div>
-
         <!-- box end -->
     </div>
     <!-- tab-content end -->
 </div>
 <script>
     function batchExport() {
-        window.location.href = "<?= \common\helpers\Url::buildUrl('export',[],['ids'])?>?ids=<?php echo $model->id ?>";
+        window.location.href = "<?= \common\helpers\Url::buildUrl('export', [], ['ids'])?>?ids=<?php echo $model->id ?>";
     }
 </script>
