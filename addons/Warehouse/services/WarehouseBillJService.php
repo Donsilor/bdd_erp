@@ -255,7 +255,7 @@ class WarehouseBillJService extends WarehouseBillService
             foreach ($billGoods as $goods) {
                 $res = WarehouseGoods::updateAll(['goods_status' => GoodsStatusEnum::IN_STOCK], ['goods_id' => $goods->goods_id]);//'goods_status' => GoodsStatusEnum::IN_LEND
                 if (!$res) {
-                    throw new Exception("商品{$goods->goods_id}不是借货中或者不存在，请查看原因");
+                    //throw new Exception("商品{$goods->goods_id}不是借货中或者不存在，请查看原因");
                 }
             }
         }
