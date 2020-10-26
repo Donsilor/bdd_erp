@@ -6,6 +6,7 @@ use kartik\select2\Select2;
 use yii\grid\GridView;
 use kartik\daterange\DateRangePicker;
 use addons\Warehouse\common\enums\BillStatusEnum;
+use addons\Warehouse\common\enums\LendStatusEnum;
 
 /* @var $this yii\web\View */
 /* @var $dataProvider yii\data\ActiveDataProvider */
@@ -25,10 +26,10 @@ $params = $params ? "&" . http_build_query($params) : '';
                         'data-toggle' => 'modal',
                         'data-target' => '#ajaxModal',
                     ]); ?>
-<!--                    --><?//= Html::button('导出', [
-//                        'class' => 'btn btn-success btn-xs',
-//                        'onclick' => 'batchExport()',
-//                    ]); ?>
+                    <!--                    --><? //= Html::button('导出', [
+                    //                        'class' => 'btn btn-success btn-xs',
+                    //                        'onclick' => 'batchExport()',
+                    //                    ]); ?>
                 </div>
             </div>
             <div class="box-body table-responsive">
@@ -144,7 +145,7 @@ $params = $params ? "&" . http_build_query($params) : '';
                             'value' => function ($model) {
                                 return \addons\Warehouse\common\enums\LendStatusEnum::getValue($model->billJ->lend_status);
                             },
-                            'filter' => Html::activeDropDownList($searchModel, 'billJ.lend_status', \addons\Warehouse\common\enums\LendStatusEnum::getBillMap(), [
+                            'filter' => Html::activeDropDownList($searchModel, 'billJ.lend_status', \addons\Warehouse\common\enums\LendStatusEnum::getMap(), [
                                 'prompt' => '全部',
                                 'class' => 'form-control',
                                 'style' => 'width:80px;',
@@ -226,7 +227,7 @@ $params = $params ? "&" . http_build_query($params) : '';
                             'class' => 'yii\grid\ActionColumn',
                             'header' => '操作',
                             'contentOptions' => ['style' => ['white-space' => 'nowrap']],
-                            'template' => '{edit} {apply} {audit} {goods} {cancel} {delete}',
+                            'template' => '{edit} {apply} {audit} {receive} {goods} {cancel} {delete}',
                             'buttons' => [
                                 'edit' => function ($url, $model, $key) {
                                     if ($model->bill_status == BillStatusEnum::SAVE) {
@@ -248,6 +249,16 @@ $params = $params ? "&" . http_build_query($params) : '';
                                     if ($model->bill_status == BillStatusEnum::PENDING) {
                                         return Html::edit(['ajax-audit', 'id' => $model->id], '审核', [
                                             'class' => 'btn btn-success btn-sm',
+                                            'data-toggle' => 'modal',
+                                            'data-target' => '#ajaxModal',
+                                        ]);
+                                    }
+                                },
+                                'receive' => function ($url, $model, $key) {
+                                    if ($model->bill_status == BillStatusEnum::CONFIRM
+                                        && $model->billJ->lend_status == LendStatusEnum::IN_RECEIVE) {
+                                        return Html::edit(['ajax-receive', 'id' => $model->id], '接收', [
+                                            'class' => 'btn btn-primary btn-sm',
                                             'data-toggle' => 'modal',
                                             'data-target' => '#ajaxModal',
                                         ]);

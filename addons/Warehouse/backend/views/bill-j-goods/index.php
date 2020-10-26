@@ -28,14 +28,7 @@ $this->params['breadcrumbs'][] = $this->title;
             echo Html::edit(['edit-all', 'bill_id' => $bill->id, 'returnUrl' => Yii::$app->request->get('returnUrl')], '编辑货品', ['class' => 'btn btn-info btn-xs']);
             echo '&nbsp;';
         } elseif ($bill->bill_status == BillStatusEnum::CONFIRM) {
-            echo Html::batchPopButton(['batch-receive', 'bill_id' => $bill->id, 'check' => 1], '批量接收', [
-                'class' => 'btn btn-primary btn-xs',
-                'data-width' => '50%',
-                'data-height' => '60%',
-                'data-offset' => '10px',
-            ]);
-            echo '&nbsp;';
-            echo Html::batchPopButton(['batch-return', 'bill_id' => $bill->id, 'check' => 1], '批量还货', [
+            echo Html::batchPopButton(['batch-return', 'bill_id' => $bill->id, 'check' => 1], '分批还货', [
                 'class' => 'btn btn-info btn-xs',
                 'data-width' => '40%',
                 'data-height' => '85%',

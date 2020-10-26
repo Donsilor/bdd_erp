@@ -30,18 +30,4 @@ class LendStatusEnum extends \common\enums\BaseEnum
         ];
     }
 
-    /**
-     *
-     * @return array
-     */
-    public static function getBillMap(): array
-    {
-        return [
-            self::SAVE => '保存',
-            self::HAS_LEND => '已借出',
-            self::PORTION_RETURN => '部分还货',
-            self::HAS_RETURN => '已还货',
-        ];
-    }
-
 }

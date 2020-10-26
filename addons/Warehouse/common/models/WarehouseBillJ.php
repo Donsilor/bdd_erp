@@ -10,6 +10,9 @@ use common\models\backend\Member;
  *
  * @property int $id 单据ID
  * @property int $lender_id 借货人
+ * @property int $receive_id 接收人
+ * @property int $receive_time 接收时间
+ * @property string $receive_remark 接收备注
  * @property int $restore_num 还货数量
  * @property int $est_restore_time 预计还货时间
  * @property int $rel_restore_time 实际还货时间
@@ -32,7 +35,8 @@ class WarehouseBillJ extends BaseModel
     {
         return [
             [['id'], 'required'],
-            [['id', 'lender_id', 'lend_status', 'restore_num', 'est_restore_time', 'rel_restore_time'], 'integer'],
+            [['id', 'lender_id', 'receive_id', 'receive_time', 'restore_num', 'est_restore_time', 'rel_restore_time', 'lend_status'], 'integer'],
+            [['receive_remark'], 'string', 'max' => 255],
             [['id'], 'unique'],
         ];
     }
@@ -45,6 +49,9 @@ class WarehouseBillJ extends BaseModel
         return [
             'id' => '单据ID',
             'lender_id' => '借货人',
+            'receive_id' => '接收人',
+            'receive_time' => '接收时间',
+            'receive_remark' => '接收备注',
             'restore_num' => '还货数量',
             'est_restore_time' => '预计还货时间',
             'rel_restore_time' => '实际还货时间',

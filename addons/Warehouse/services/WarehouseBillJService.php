@@ -4,6 +4,7 @@ namespace addons\Warehouse\services;
 
 use addons\Warehouse\common\enums\AdjustTypeEnum;
 use addons\Warehouse\common\forms\WarehouseBillCForm;
+use common\enums\StatusEnum;
 use Yii;
 use yii\db\Exception;
 use addons\Warehouse\common\models\WarehouseGoods;
@@ -273,7 +274,7 @@ class WarehouseBillJService extends WarehouseBillService
                 throw new \Exception("同步更新商品明细状态失败");
             }
             $form->bill_status = BillStatusEnum::CONFIRM;
-            $billJ->lend_status = LendStatusEnum::HAS_LEND;
+            $billJ->lend_status = LendStatusEnum::IN_RECEIVE;
         } else {
             $form->bill_status = BillStatusEnum::SAVE;
             $billJ->lend_status = LendStatusEnum::SAVE;
@@ -371,11 +372,13 @@ class WarehouseBillJService extends WarehouseBillService
      */
     public function receiveGoods($form)
     {
-        $ids = $form->getIds();
+//        $ids = $form->getIds();
+        $bill = WarehouseBill::findOne($form->id);
+        $goodsM = WarehouseBillGoods::find()->select(['id'])->where(['bill_id' => $form->id])->all();
+        $ids = ArrayHelper::getColumn($goodsM, 'id');
         if (!$ids && !is_array($ids)) {
             throw new \Exception("ID不能为空");
         }
-
         //同步更新明细关系表
         $update = [
             'lend_status' => LendStatusEnum::HAS_LEND,
@@ -385,15 +388,18 @@ class WarehouseBillJService extends WarehouseBillService
         ];
         $execute_num = WarehouseBillGoodsJ::updateAll($update, ['id' => $ids, 'lend_status' => LendStatusEnum::IN_RECEIVE]);
         if ($execute_num <> count($ids)) {
-            throw new \Exception("同步更新明细关系表失败");
+            //throw new \Exception("同步更新明细关系表失败");
         }
+
+        //同步借货单附表
+        WarehouseBillJ::updateAll($update, ['id' => $form->id]);
 
         //同步更新商品库存状态
         $billGoods = WarehouseBillGoods::find()->where(['id' => $ids])->select(['goods_id'])->all();
         foreach ($billGoods as $goods) {
-            $res = WarehouseGoods::updateAll(['goods_status' => GoodsStatusEnum::HAS_LEND], ['goods_id' => $goods->goods_id, 'goods_status' => GoodsStatusEnum::IN_LEND]);
+            $res = WarehouseGoods::updateAll(['goods_status' => GoodsStatusEnum::HAS_LEND], ['goods_id' => $goods->goods_id]);//, 'goods_status' => GoodsStatusEnum::IN_LEND
             if (!$res) {
-                throw new \Exception("商品{$goods->goods_id}状态不是借货中或者不存在，请查看原因");
+                //throw new \Exception("商品{$goods->goods_id}状态不是借货中或者不存在，请查看原因");
             }
 
             //插入商品日志
@@ -401,10 +407,9 @@ class WarehouseBillJService extends WarehouseBillService
                 'goods_id' => $goods->goods->id,
                 'goods_status' => GoodsStatusEnum::HAS_LEND,
                 'log_type' => LogTypeEnum::ARTIFICIAL,
-                'log_msg' => '借货单：' . $form->bill_no . ";;货品状态:“" . GoodsStatusEnum::getValue(GoodsStatusEnum::IN_STOCK) . "”变更为：“" . GoodsStatusEnum::getValue(GoodsStatusEnum::HAS_LEND) . "”"
+                'log_msg' => '借货单：' . $bill->bill_no . ";;货品状态:“" . GoodsStatusEnum::getValue(GoodsStatusEnum::IN_STOCK) . "”变更为：“" . GoodsStatusEnum::getValue(GoodsStatusEnum::HAS_LEND) . "”"
             ];
             Yii::$app->warehouseService->goodsLog->createGoodsLog($log);
-
 
         }
     }
@@ -487,6 +492,13 @@ class WarehouseBillJService extends WarehouseBillService
      */
     public function goodsJSummary($bill_id)
     {
+        $sum = WarehouseBillGoods::find()
+            ->select(['sum(goods_num) as goods_num', 'sum(cost_price) as total_cost', 'sum(sale_price) as total_sale', 'sum(market_price) as total_market'])
+            ->where(['bill_id' => $bill_id, 'status' => StatusEnum::ENABLED])
+            ->asArray()->one();
+        if ($sum) {
+            WarehouseBill::updateAll(['goods_num' => $sum['goods_num'] / 1, 'total_cost' => $sum['total_cost'] / 1, 'total_sale' => $sum['total_sale'] / 1, 'total_market' => $sum['total_market'] / 1], ['id' => $bill_id]);
+        }
         $goods = WarehouseBillGoods::find()->select(['id'])->where(['bill_id' => $bill_id])->all();
         if ($goods) {
             $ids = ArrayHelper::getColumn($goods, 'id');
@@ -531,6 +543,7 @@ class WarehouseBillJService extends WarehouseBillService
         }
 
         $goods->stock_num = ($goods->stock_num + $billGoods->goods_num) - $lend_num;
+        //$goods->do_chuku_num = ($goods->do_chuku_num + $billGoods->goods_num) - $lend_num;
         if (false === $goods->save(true, ['stock_num'])) {
             throw new \Exception($this->getError($goods));
         }
@@ -543,9 +556,9 @@ class WarehouseBillJService extends WarehouseBillService
         $this->goodsJSummary($billGoods->bill_id);
 
         //更新收货单汇总：总金额和总数量
-        if (false === \Yii::$app->warehouseService->bill->WarehouseBillSummary($billGoods->bill_id)) {
-            throw new \Exception('更新单据汇总失败');
-        }
+//        if (false === \Yii::$app->warehouseService->bill->WarehouseBillSummary($billGoods->bill_id)) {
+//            throw new \Exception('更新单据汇总失败');
+//        }
         return true;
     }
 }

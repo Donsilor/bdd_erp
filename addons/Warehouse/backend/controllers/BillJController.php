@@ -234,7 +234,7 @@ class BillJController extends BaseController
                 $trans = \Yii::$app->trans->beginTransaction();
 
                 $model->audit_time = time();
-                $model->auditor_id = \Yii::$app->user->identity->id;
+                $model->auditor_id = \Yii::$app->user->identity->getId();
 
                 \Yii::$app->warehouseService->billJ->auditBillJ($model);
 
@@ -255,6 +255,36 @@ class BillJController extends BaseController
             }
         }
 
+        return $this->renderAjax($this->action->id, [
+            'model' => $model,
+        ]);
+    }
+
+    /**
+     *
+     * ajax接收
+     * @return mixed|string
+     * @throws
+     */
+    public function actionAjaxReceive()
+    {
+        $id = \Yii::$app->request->get('id');
+        $this->modelClass = WarehouseBillJ::class;
+        $model = $this->findModel($id);
+        $model = $model ?? new WarehouseBillJ();
+        // ajax 校验
+        $this->activeFormValidate($model);
+        if ($model->load(\Yii::$app->request->post())) {
+            try {
+                $trans = \Yii::$app->db->beginTransaction();
+                \Yii::$app->warehouseService->billJ->receiveGoods($model);
+                $trans->commit();
+                return $this->message('保存成功', $this->redirect(Yii::$app->request->referrer), 'success');
+            } catch (\Exception $e) {
+                $trans->rollBack();
+                return $this->message($e->getMessage(), $this->redirect(\Yii::$app->request->referrer), 'error');
+            }
+        }
         return $this->renderAjax($this->action->id, [
             'model' => $model,
         ]);
