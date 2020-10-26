@@ -224,12 +224,15 @@ class WarehouseBillJService extends WarehouseBillService
     public function closeBillJ($form)
     {
         //更新库存状态
-        $billGoods = WarehouseBillGoods::find()->where(['bill_id' => $form->id])->select(['goods_id'])->all();
+        $billGoods = WarehouseBillGoods::find()->where(['bill_id' => $form->id])->select(['goods_id', 'goods_num'])->all();
         if ($billGoods) {
             foreach ($billGoods as $goods) {
-                $res = WarehouseGoods::updateAll(['goods_status' => GoodsStatusEnum::IN_STOCK], ['goods_id' => $goods->goods_id, 'goods_status' => GoodsStatusEnum::IN_LEND]);
-                if (!$res) {
-                    throw new Exception("商品{$goods->goods_id}不是借货中或者不存在，请查看原因");
+                $goodsM = WarehouseGoods::findOne(['goods_id' => $goods->goods_id]);
+                $goodsM->goods_status = GoodsStatusEnum::IN_STOCK;
+                $goodsM->stock_num = $goodsM->stock_num + $goods->goods_num;
+                $goodsM->do_chuku_num = $goodsM->do_chuku_num - $goods->goods_num;
+                if (false === $goodsM->save()) {
+                    throw new \Exception($this->getError($goodsM));
                 }
             }
         }
