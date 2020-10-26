@@ -427,7 +427,7 @@ class WarehouseBillJService extends WarehouseBillService
                 $goods = WarehouseBillGoodsForm::find()->where(['id' => $id])->select(['status', 'goods_id'])->one();
                 $goodsJ = WarehouseBillGoodsJ::findOne($id);
                 if ($goodsJ->lend_status != LendStatusEnum::HAS_LEND) {
-                    throw new Exception("货号【{$goods->goods_id}】不是已借货状态");
+                    throw new Exception("货号【{$goods->goods_id}】不是已借出状态");
                 }
             }
         } else {

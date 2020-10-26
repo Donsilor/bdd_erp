@@ -30,9 +30,9 @@ $this->params['breadcrumbs'][] = $this->title;
         } elseif ($bill->bill_status == BillStatusEnum::CONFIRM) {
             echo Html::batchPopButton(['batch-return', 'bill_id' => $bill->id, 'check' => 1], '分批还货', [
                 'class' => 'btn btn-info btn-xs',
-                'data-width' => '40%',
-                'data-height' => '85%',
-                'data-offset' => '10px',
+                'data-width' => '90%',
+                'data-height' => '90%',
+                'data-offset' => '20px',
             ]);
             echo '&nbsp;';
         }

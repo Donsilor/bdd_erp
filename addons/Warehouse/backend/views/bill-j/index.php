@@ -227,7 +227,7 @@ $params = $params ? "&" . http_build_query($params) : '';
                             'class' => 'yii\grid\ActionColumn',
                             'header' => '操作',
                             'contentOptions' => ['style' => ['white-space' => 'nowrap']],
-                            'template' => '{edit} {apply} {audit} {receive} {goods} {cancel} {delete}',
+                            'template' => '{edit} {apply} {audit} {receive} {restore} {goods} {cancel} {delete}',
                             'buttons' => [
                                 'edit' => function ($url, $model, $key) {
                                     if ($model->bill_status == BillStatusEnum::SAVE) {
@@ -262,6 +262,12 @@ $params = $params ? "&" . http_build_query($params) : '';
                                             'data-toggle' => 'modal',
                                             'data-target' => '#ajaxModal',
                                         ]);
+                                    }
+                                },
+                                'restore' => function ($url, $model, $key) {
+                                    if ($model->bill_status == BillStatusEnum::CONFIRM
+                                        && $model->billJ->lend_status == LendStatusEnum::HAS_LEND) {
+                                        return Html::a('还货', ['bill-j-goods/index', 'bill_id' => $model->id, 'returnUrl' => Url::getReturnUrl()], ['class' => 'btn btn-primary btn-sm']);
                                     }
                                 },
                                 'goods' => function ($url, $model, $key) {

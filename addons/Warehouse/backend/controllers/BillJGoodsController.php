@@ -224,8 +224,24 @@ class BillJGoodsController extends BaseController
                 return ResultHelper::json(422, $e->getMessage());
             }
         }
+        $searchModel = new SearchModel([
+            'model' => $this->modelClass,
+            'scenario' => 'default',
+            'partialMatchAttributes' => [], // 模糊查询
+            'defaultOrder' => [
+                'id' => SORT_DESC
+            ],
+            'pageSize' => $this->pageSize,
+            'relations' => ['goodsJ'=>['lend_status']]
+        ]);
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+        $dataProvider->query->andWhere(['=', WarehouseBillJGoodsForm::tableName() . '.bill_id', $bill_id]);
+        $dataProvider->query->andWhere(['in', 'goodsJ.lend_status', [LendStatusEnum::HAS_LEND, LendStatusEnum::PORTION_RETURN]]);
+        $dataProvider->query->andWhere(['>', WarehouseBillJGoodsForm::tableName() . '.status', -1]);
         $model->qc_status = QcStatusEnum::PASS;
         return $this->render($this->action->id, [
+            'dataProvider' => $dataProvider,
+            'searchModel' => $searchModel,
             'model' => $model,
         ]);
     }

@@ -17,13 +17,25 @@ class QcStatusEnum extends \common\enums\BaseEnum
     const NOT_PASS   = 2;
     
     /**
-     * 单据通用状态
+     * 质检状态
      * @return array
      */
     public static function getMap(): array
     {
         return [
             self::SAVE      => '未质检',
+            self::PASS      => '质检通过',
+            self::NOT_PASS  => '质检未过',
+        ];
+    }
+
+    /**
+     * 质检状态
+     * @return array
+     */
+    public static function getReturnMap(): array
+    {
+        return [
             self::PASS      => '质检通过',
             self::NOT_PASS  => '质检未过',
         ];
