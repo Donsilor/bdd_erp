@@ -219,7 +219,7 @@ class WarehouseGoodsService extends Service
                     //减库存
                     $effectNum = $model->stock_num - $modify_num;
                     if ($effectNum < 0) {
-                        throw new \Exception("库存不足");
+                        throw new \Exception("条码号[".$model->goods_id."]库存不足");
                     }
                     $model->stock_num    = $model->stock_num - $modify_num;
                     if($doing === true) {
