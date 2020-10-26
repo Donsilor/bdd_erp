@@ -216,7 +216,7 @@ class BillTController extends BaseController
             if (false === $model->save()) {
                 return $this->message($this->getError($model), $this->redirect(\Yii::$app->request->referrer), 'error');
             }
-            \Yii::$app->warehouseService->billT->syncUpdatePriceAll($model);
+            //\Yii::$app->warehouseService->billT->syncUpdatePriceAll($model);
             //日志
             $log = [
                 'bill_id' => $model->id,
