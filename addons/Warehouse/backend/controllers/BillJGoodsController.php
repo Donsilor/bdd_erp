@@ -267,6 +267,58 @@ class BillJGoodsController extends BaseController
     }
 
     /**
+     * ajax 更新商品明细
+     *
+     * @param $id
+     * @return array
+     */
+    public function actionAjaxUpdate($id)
+    {
+        if (!($model = $this->modelClass::findOne($id))) {
+            return ResultHelper::json(404, '找不到数据');
+        }
+        $data = Yii::$app->request->get();
+        $model->attributes = ArrayHelper::filter($data, array_keys($data));
+        try{
+            $trans = Yii::$app->trans->beginTransaction();
+            if (!$model->save()) {
+                return ResultHelper::json(422, $this->getError($model));
+            }
+            \Yii::$app->warehouseService->billJ->goodsJSummary($model->bill_id);
+            $trans->commit();
+            return ResultHelper::json(200, '修改成功');
+        }catch (\Exception $e) {
+            $trans->rollback();
+            return ResultHelper::json(404, '找不到数据');
+        }
+
+    }
+
+    /**
+     *
+     * 更改借货数量
+     * @return array|mixed
+     * @throws
+     */
+    public function actionAjaxReceiveNum()
+    {
+        $id = Yii::$app->request->get("id");
+        $goods_num = Yii::$app->request->get("goods_num");
+        if($goods_num <= 0) {
+            return ResultHelper::json(422, "借货数量必须大于0");
+        }
+        try{
+            $trans = \Yii::$app->trans->beginTransaction();
+            Yii::$app->warehouseService->billJ->updateLendNum($id, $goods_num);
+            $trans->commit();
+            return $this->message("操作成功", $this->redirect(\Yii::$app->request->referrer), 'success');
+        }catch (\Exception $e){
+            $trans->rollBack();
+            return ResultHelper::json(422, $e->getMessage());
+        }
+    }
+
+    /**
      * 删除
      *
      * @param $id

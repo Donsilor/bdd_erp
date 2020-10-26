@@ -78,7 +78,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             'format' => 'raw',
                             'headerOptions' => ['class' => 'col-md-1'],
                             'value' => function ($model) {
-                                return $model->stock_num - $model->do_chuku_num;
+                                return $model->stock_num ?? 0;
                             }
                         ],
                         [

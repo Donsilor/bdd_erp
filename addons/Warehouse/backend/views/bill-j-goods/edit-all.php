@@ -5,13 +5,15 @@ use common\helpers\Html;
 use addons\Warehouse\common\enums\BillStatusEnum;
 use yii\grid\GridView;
 use yii\web\View;
+
 /* @var $this yii\web\View */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 $this->title = Yii::t('bill_j_goods', '借货单编辑');
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="box-body nav-tabs-custom">
-    <h2 class="page-header"><?php echo $this->title; ?> - <?php echo $bill->bill_no ?> - <?= \addons\Warehouse\common\enums\BillStatusEnum::getValue($bill->bill_status) ?></h2>
+    <h2 class="page-header"><?php echo $this->title; ?> - <?php echo $bill->bill_no ?>
+        - <?= \addons\Warehouse\common\enums\BillStatusEnum::getValue($bill->bill_status) ?></h2>
     <?php echo Html::menuTab($tabList, $tab) ?>
     <div style="float:right;margin-top:-40px;margin-right: 20px;">
         <?php
@@ -33,30 +35,32 @@ $this->params['breadcrumbs'][] = $this->title;
         <div class="row col-xs-12">
             <div class="box">
                 <div class="box-body table-responsive">
-                    <?php if(Yii::$app->request->get('scan')) {?>
+                    <?php if (Yii::$app->request->get('scan')) { ?>
                         <div class="row">
                             <div class="col-lg-8">
                                 <div class="form-group field-cate-sort">
                                     <div class="col-sm-6">
-                                        <?= Html::textInput('scan_goods_id', '', ['id'=>'scan_goods_id','on','class' => 'form-control','placeholder'=>'请输入货号 或 扫商品条码录入']).'<br/>' ?>
+                                        <?= Html::textInput('scan_goods_id', '', ['id' => 'scan_goods_id', 'on', 'class' => 'form-control', 'placeholder' => '请输入货号 或 扫商品条码录入']) . '<br/>' ?>
                                     </div>
                                     <div class="col-sm-2 text-left">
-                                        <button id="scan_submit" type="button" class="btn btn-primary btn-ms" >保存</button>
+                                        <button id="scan_submit" type="button" class="btn btn-primary btn-ms">保存
+                                        </button>
                                     </div>
                                 </div>
                             </div>
                         </div>
                         <script type="text/javascript">
                             $('#scan_goods_id').focus();
-                            $('#scan_goods_id').keydown(function(e){
-                                if(e.keyCode == 13){
+                            $('#scan_goods_id').keydown(function (e) {
+                                if (e.keyCode == 13) {
                                     scanGoods();
                                 }
                             });
-                            $("#scan_submit").click(function(){
+                            $("#scan_submit").click(function () {
                                 scanGoods();
                             });
-                            function scanGoods(){
+
+                            function scanGoods() {
                                 var goods_id = $("#scan_goods_id").val();
                                 $.ajax({
                                     type: "post",
@@ -64,15 +68,15 @@ $this->params['breadcrumbs'][] = $this->title;
                                     dataType: "json",
                                     data: {
                                         bill_id: '<?php echo $bill->id?>',
-                                        goods_id:goods_id,
+                                        goods_id: goods_id,
                                     },
                                     success: function (data) {
-                                        window.location.href='<?= \Yii::$app->request->getUrl(); ?>';
+                                        window.location.href = '<?= \Yii::$app->request->getUrl(); ?>';
                                     }
                                 });
                             }
                         </script>
-                    <?php }?>
+                    <?php } ?>
                     <?php echo Html::batchButtons(false) ?>
                     <?= GridView::widget([
                         'dataProvider' => $dataProvider,
@@ -112,7 +116,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'format' => 'raw',
                                 'value' => function ($model) {
                                     if ($model->goods->goods_num > 1) {
-                                        return Html::ajaxInput('goods_num', $model->goods_num, [/*'onfocus' => 'rfClearVal(this)',*/ 'data-type' => 'number', 'data-id' => $model->id]);
+                                        return Html::ajaxInput('goods_num', $model->goods_num, [/*'onfocus' => 'rfClearVal(this)',*/ 'data-type' => 'number', 'data-id' => $model->id, 'data-url' => 'ajax-lend-num']);
                                     }
                                     return $model->goods_num ?? 0;
                                 },
