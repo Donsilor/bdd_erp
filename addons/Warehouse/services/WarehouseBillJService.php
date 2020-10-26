@@ -395,20 +395,21 @@ class WarehouseBillJService extends WarehouseBillService
         //同步更新商品库存状态
         $billGoods = WarehouseBillGoods::find()->where(['id' => $ids])->select(['goods_id'])->all();
         foreach ($billGoods as $goods) {
-            $res = WarehouseGoods::updateAll(['goods_status' => GoodsStatusEnum::HAS_LEND], ['goods_id' => $goods->goods_id]);//, 'goods_status' => GoodsStatusEnum::IN_LEND
-            if (!$res) {
-                //throw new \Exception("商品{$goods->goods_id}状态不是借货中或者不存在，请查看原因");
+            $goodsM = WarehouseGoods::findOne(['goods_id' => $goods->goods_id]);
+            if(!$goodsM->stock_num){
+                $res = WarehouseGoods::updateAll(['goods_status' => GoodsStatusEnum::HAS_LEND], ['goods_id' => $goods->goods_id]);//, 'goods_status' => GoodsStatusEnum::IN_LEND
+                if (!$res) {
+                    //throw new \Exception("商品{$goods->goods_id}状态不是借货中或者不存在，请查看原因");
+                }
+                //插入商品日志
+                $log = [
+                    'goods_id' => $goods->goods->id,
+                    'goods_status' => GoodsStatusEnum::HAS_LEND,
+                    'log_type' => LogTypeEnum::ARTIFICIAL,
+                    'log_msg' => '借货单：' . $bill->bill_no . ";;货品状态:“" . GoodsStatusEnum::getValue(GoodsStatusEnum::IN_STOCK) . "”变更为：“" . GoodsStatusEnum::getValue(GoodsStatusEnum::HAS_LEND) . "”"
+                ];
+                Yii::$app->warehouseService->goodsLog->createGoodsLog($log);
             }
-
-            //插入商品日志
-            $log = [
-                'goods_id' => $goods->goods->id,
-                'goods_status' => GoodsStatusEnum::HAS_LEND,
-                'log_type' => LogTypeEnum::ARTIFICIAL,
-                'log_msg' => '借货单：' . $bill->bill_no . ";;货品状态:“" . GoodsStatusEnum::getValue(GoodsStatusEnum::IN_STOCK) . "”变更为：“" . GoodsStatusEnum::getValue(GoodsStatusEnum::HAS_LEND) . "”"
-            ];
-            Yii::$app->warehouseService->goodsLog->createGoodsLog($log);
-
         }
     }
 
@@ -549,15 +550,15 @@ class WarehouseBillJService extends WarehouseBillService
         if (empty($goods)) {
             throw new \Exception("不可更改,商品状态异常");
         }
-        $max_num = $goods->goods_num - $goods->stock_num - $goods->do_chuku_num + $billGoods->goods_num;
+        $max_num = $goods->stock_num - $goods->do_chuku_num + $billGoods->goods_num;
 
         if ($lend_num > $max_num) {
             throw new \Exception("借货数量不能大于{$max_num}");
         }
 
         $goods->stock_num = ($goods->stock_num + $billGoods->goods_num) - $lend_num;
-        //$goods->do_chuku_num = ($goods->do_chuku_num + $billGoods->goods_num) - $lend_num;
-        if (false === $goods->save(true, ['stock_num'])) {
+        $goods->do_chuku_num = $goods->do_chuku_num + $lend_num;
+        if (false === $goods->save(true, ['goods_id', 'stock_num', 'do_chuku_num'])) {
             throw new \Exception($this->getError($goods));
         }
 
