@@ -201,7 +201,7 @@ class WarehouseGoods extends BaseModel
             'company_id' => '公司',
             'warehouse_id' => '仓库',
             'gold_weight' => '金重(g)',
-            'suttle_weight' => '连石重(g)',
+            'suttle_weight' => '总重(连石重(g))',
             'gold_loss' => '损耗(%)',
             'gold_price' => '金价',
             'gold_amount' => '金料额',
