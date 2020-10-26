@@ -300,7 +300,7 @@ class BillJGoodsController extends BaseController
      * @return array|mixed
      * @throws
      */
-    public function actionAjaxReceiveNum()
+    public function actionAjaxLendNum()
     {
         $id = Yii::$app->request->get("id");
         $goods_num = Yii::$app->request->get("goods_num");

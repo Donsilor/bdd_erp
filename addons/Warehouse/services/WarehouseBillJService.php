@@ -530,7 +530,7 @@ class WarehouseBillJService extends WarehouseBillService
             throw new \Exception("借货数量不能大于{$max_num}");
         }
 
-        $goods->stock_num = $goods->stock_num + ($lend_num - $billGoods->goods_num);
+        $goods->stock_num = ($goods->stock_num + $billGoods->goods_num) - $lend_num;
         if (false === $goods->save(true, ['stock_num'])) {
             throw new \Exception($this->getError($goods));
         }
