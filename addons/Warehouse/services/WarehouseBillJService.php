@@ -67,9 +67,8 @@ class WarehouseBillJService extends WarehouseBillService
     }
 
     /**
-     * 批量添加其它退货单明细
+     * 批量添加借货单明细
      * @param WarehouseBillJGoodsForm $form
-     * @param array $saveGoods
      * @throws
      */
     public function batchAddGoods($form)
@@ -201,10 +200,9 @@ class WarehouseBillJService extends WarehouseBillService
         if ($goods->goods_status != GoodsStatusEnum::IN_STOCK) {
             throw new \Exception("[{$goods_id}]条码货号不是库存状态");
         }
-        $chuku_num = 1;
         $billGoods = new WarehouseBillGoods();
         $bGoods = $billGoods::findOne(['bill_id' => $bill->id, 'goods_id' => $goods_id]);
-        if($bGoods){
+        if ($bGoods) {
             throw new \Exception("[{$goods_id}]条码货号不能重复添加");
         }
         $billGoods->attributes = [
@@ -214,7 +212,7 @@ class WarehouseBillJService extends WarehouseBillService
             'goods_id' => $goods_id,
             'goods_name' => $goods->goods_name,
             'style_sn' => $goods->style_sn,
-            'goods_num' => $chuku_num,
+            'goods_num' => $goods->goods_num,
             'put_in_type' => $goods->put_in_type,
             'warehouse_id' => $goods->warehouse_id,
             'from_warehouse_id' => $goods->warehouse_id,
@@ -245,8 +243,8 @@ class WarehouseBillJService extends WarehouseBillService
             throw new \Exception($this->getError($billGJ));
         }
         //扣减库存
-        if ($chuku_num >= 1) {
-            \Yii::$app->warehouseService->warehouseGoods->updateStockNum($goods_id, $chuku_num, AdjustTypeEnum::MINUS, true);
+        if ($goods->goods_num >= 1) {
+            \Yii::$app->warehouseService->warehouseGoods->updateStockNum($goods_id, $goods->goods_num, AdjustTypeEnum::MINUS, true);
         }
         //WarehouseGoods::updateAll(['chuku_price' => $billGoods->chuku_price, 'chuku_time' => time()], ['goods_id' => $goods_id]);
     }
@@ -426,8 +424,8 @@ class WarehouseBillJService extends WarehouseBillService
             foreach ($ids as $id) {
                 $goods = WarehouseBillGoodsForm::find()->where(['id' => $id])->select(['status', 'goods_id'])->one();
                 $goodsJ = WarehouseBillGoodsJ::findOne($id);
-                if ($goodsJ->lend_status != LendStatusEnum::HAS_LEND) {
-                    throw new Exception("货号【{$goods->goods_id}】不是已借出状态");
+                if ($goodsJ->lend_status == LendStatusEnum::HAS_RETURN) {
+                    throw new Exception("货号【{$goods->goods_id}】已还货");
                 }
             }
         } else {
@@ -442,36 +440,51 @@ class WarehouseBillJService extends WarehouseBillService
      */
     public function returnGoods($form)
     {
-
         $ids = $form->getIds();
         if (!$ids && !is_array($ids)) {
             throw new \Exception("ID不能为空");
         }
 
-        //同步更新明细关系表
-        $update = [
-            'lend_status' => LendStatusEnum::HAS_RETURN,
-            'qc_status' => $form->qc_status,
-            'restore_time' => $form->restore_time ? strtotime($form->restore_time) : 0,
-            'qc_remark' => $form->qc_remark,
-        ];
-        $execute_num = WarehouseBillGoodsJ::updateAll($update, ['id' => $ids, 'lend_status' => LendStatusEnum::HAS_LEND]);
-        if ($execute_num <> count($ids)) {
-            throw new \Exception("同步更新明细关系表失败");
-        }
+        foreach ($form->goods_list as $id => $item) {
+            $bGoods = WarehouseBillGoods::findOne($id);
+            $restore_num = $item['restore_num'] ?? 0;
+            if (!is_numeric($restore_num) || $restore_num <= 0) {
+                throw new \Exception("[{$bGoods->goods_id}]还货数量必须大于0");
+            }
+            $goodsJ = WarehouseBillGoodsJ::findOne($id);
+            //最大还货数量
+            $max_num = $bGoods->goods_num - $goodsJ->restore_num;
+            if ($restore_num > $max_num) {
+                throw new \Exception("[{$bGoods->goods_id}]还货数量不能大于{$max_num}");
+            }
 
-        //同步更新商品库存状态
-        $billGoods = WarehouseBillGoods::find()->where(['id' => $ids])->select(['goods_id'])->all();
-        foreach ($billGoods as $goods) {
-            $res = WarehouseGoods::updateAll(['goods_status' => GoodsStatusEnum::IN_STOCK], ['goods_id' => $goods->goods_id, 'goods_status' => GoodsStatusEnum::HAS_LEND]);
-            if (!$res) {
-                throw new \Exception("商品{$goods->goods_id}状态不是已借货或者不存在，请查看原因");
+            //总还货数量
+            $restore_num_total = $goodsJ->restore_num + $restore_num;
+            $is_over = $restore_num_total == $bGoods->goods_num ? true : false;//是否还货完结
+            //同步更新明细关系表
+            $update = [
+                'lend_status' => $is_over ? LendStatusEnum::HAS_RETURN : LendStatusEnum::PORTION_RETURN,
+                'qc_status' => $form->qc_status,
+                'restore_num' => $restore_num_total,
+                'restore_time' => $form->restore_time ? strtotime($form->restore_time) : 0,
+                'qc_remark' => $form->qc_remark,
+            ];
+            $execute_num = WarehouseBillGoodsJ::updateAll($update, ['id' => $id]);//, 'lend_status' => LendStatusEnum::HAS_LEND
+            if ($execute_num <> count([$id])) {
+                throw new \Exception("同步更新明细关系表失败");
+            }
+            //同步更新商品库存状态
+            $goods = WarehouseGoods::findOne(['goods_id' => $bGoods->goods_id]);
+            $goods->stock_num = $goods->stock_num + $restore_num;
+            $goods->goods_status = GoodsStatusEnum::IN_STOCK;
+            if (false === $goods->save(true, ['goods_id', 'stock_num', 'goods_status'])) {
+                throw new \Exception("[{$goods->goods_id}]单据明细添加失败");
             }
         }
 
         //同步更新单据附表
         $billJ = WarehouseBillJ::findOne($form->bill_id);
-        $count = WarehouseBillGoodsJ::find()->where(['bill_id' => $form->bill_id, 'lend_status' => LendStatusEnum::HAS_LEND])->count();
+        $count = WarehouseBillGoodsJ::find()->where(['bill_id' => $form->bill_id, 'lend_status' => [LendStatusEnum::HAS_LEND, LendStatusEnum::PORTION_RETURN]])->count();
         if ($count > 0) {
             $billJ->lend_status = LendStatusEnum::PORTION_RETURN;
         } else {

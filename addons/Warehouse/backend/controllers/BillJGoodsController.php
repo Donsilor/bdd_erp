@@ -2,6 +2,7 @@
 
 namespace addons\Warehouse\backend\controllers;
 
+use addons\Warehouse\common\enums\AdjustTypeEnum;
 use addons\Warehouse\common\enums\DeliveryTypeEnum;
 use addons\Warehouse\common\enums\LendStatusEnum;
 use addons\Warehouse\common\enums\QcStatusEnum;
@@ -57,7 +58,7 @@ class BillJGoodsController extends BaseController
             ],
             'pageSize' => $this->pageSize,
             'relations' => [
-                'goodsJ' => ['lend_status','receive_id','receive_time','receive_remark','restore_time','qc_status','qc_remark',],
+                'goodsJ' => ['lend_status', 'receive_id', 'receive_time', 'receive_remark', 'restore_time', 'qc_status', 'qc_remark',],
             ]
         ]);
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
@@ -86,7 +87,7 @@ class BillJGoodsController extends BaseController
         $this->modelClass = WarehouseBillJGoodsForm::class;
         $form = $this->findModel($bill_id);
         $form = $form ?? new WarehouseBillJGoodsForm();
-        if(\Yii::$app->request->post("search") == 1 && $form->load(\Yii::$app->request->post())){
+        if (\Yii::$app->request->post("search") == 1 && $form->load(\Yii::$app->request->post())) {
             $form->validateGoodsList();//查询校验
             $searchModel = new SearchModel([
                 'model' => WarehouseGoods::class,
@@ -97,14 +98,14 @@ class BillJGoodsController extends BaseController
                 'relations' => []
             ]);
             $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
-            $dataProvider->query->andWhere(['goods_id'=>$form->getGoodsIds()]);
+            $dataProvider->query->andWhere(['goods_id' => $form->getGoodsIds()]);
             return $this->render($this->action->id, [
                 'model' => $form,
                 'dataProvider' => $dataProvider,
                 'searchModel' => $searchModel,
             ]);
         }
-        if($form->load(\Yii::$app->request->post())){
+        if ($form->load(\Yii::$app->request->post())) {
             try {
                 $trans = Yii::$app->db->beginTransaction();
                 $form->bill_id = $bill_id;
@@ -112,7 +113,7 @@ class BillJGoodsController extends BaseController
                 \Yii::$app->warehouseService->billJ->batchAddGoods($form);
                 $trans->commit();
                 return $this->message('保存成功', $this->redirect(Yii::$app->request->referrer), 'success');
-            }catch (\Exception $e){
+            } catch (\Exception $e) {
                 $trans->rollBack();
                 return ResultHelper::json(424, $e->getMessage());
             }
@@ -232,10 +233,11 @@ class BillJGoodsController extends BaseController
                 'id' => SORT_DESC
             ],
             'pageSize' => $this->pageSize,
-            'relations' => ['goodsJ'=>['lend_status']]
+            'relations' => ['goodsJ' => ['lend_status']]
         ]);
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
         $dataProvider->query->andWhere(['=', WarehouseBillJGoodsForm::tableName() . '.bill_id', $bill_id]);
+        $dataProvider->query->andWhere(['in', WarehouseBillJGoodsForm::tableName() . '.id', $model->getIds()]);
         $dataProvider->query->andWhere(['in', 'goodsJ.lend_status', [LendStatusEnum::HAS_LEND, LendStatusEnum::PORTION_RETURN]]);
         $dataProvider->query->andWhere(['>', WarehouseBillJGoodsForm::tableName() . '.status', -1]);
         $model->qc_status = QcStatusEnum::PASS;
@@ -295,7 +297,7 @@ class BillJGoodsController extends BaseController
         }
         $data = Yii::$app->request->get();
         $model->attributes = ArrayHelper::filter($data, array_keys($data));
-        try{
+        try {
             $trans = Yii::$app->trans->beginTransaction();
             if (!$model->save()) {
                 return ResultHelper::json(422, $this->getError($model));
@@ -303,7 +305,7 @@ class BillJGoodsController extends BaseController
             \Yii::$app->warehouseService->billJ->goodsJSummary($model->bill_id);
             $trans->commit();
             return ResultHelper::json(200, '修改成功');
-        }catch (\Exception $e) {
+        } catch (\Exception $e) {
             $trans->rollback();
             return ResultHelper::json(404, '找不到数据');
         }
@@ -320,15 +322,15 @@ class BillJGoodsController extends BaseController
     {
         $id = Yii::$app->request->get("id");
         $goods_num = Yii::$app->request->get("goods_num");
-        if($goods_num <= 0) {
+        if ($goods_num <= 0) {
             return ResultHelper::json(422, "借货数量必须大于0");
         }
-        try{
+        try {
             $trans = \Yii::$app->trans->beginTransaction();
             Yii::$app->warehouseService->billJ->updateLendNum($id, $goods_num);
             $trans->commit();
             return $this->message("操作成功", $this->redirect(\Yii::$app->request->referrer), 'success');
-        }catch (\Exception $e){
+        } catch (\Exception $e) {
             $trans->rollBack();
             return ResultHelper::json(422, $e->getMessage());
         }
@@ -349,10 +351,14 @@ class BillJGoodsController extends BaseController
         $bill = WarehouseBillJForm::findOne($bill_id);
         try {
             $trans = Yii::$app->db->beginTransaction();
-            //删除
-            $billGoods->delete();
             //删除明细关系表
             $goodJ = WarehouseBillGoodsJ::findOne($billGoods->id);
+            //更新库存表商品状态为库存
+            WarehouseGoods::updateAll(['goods_status' => GoodsStatusEnum::IN_STOCK], ['goods_id' => $billGoods->goods_id]);
+            //还原库存
+            \Yii::$app->warehouseService->warehouseGoods->updateStockNum($billGoods->goods_id, $billGoods->goods_num, AdjustTypeEnum::RESTORE);
+            //删除
+            $billGoods->delete();
             $goodJ->delete();
             //更新单据数量和金额
             $bill->goods_num = Yii::$app->warehouseService->bill->sumGoodsNum($bill_id);
@@ -360,9 +366,6 @@ class BillJGoodsController extends BaseController
             $bill->total_sale = Yii::$app->warehouseService->bill->sumSalePrice($bill_id);
             $bill->total_market = Yii::$app->warehouseService->bill->sumMarketPrice($bill_id);
             $bill->save();
-
-            //更新库存表商品状态为库存
-            WarehouseGoods::updateAll(['goods_status' => GoodsStatusEnum::IN_STOCK], ['goods_id' => $billGoods->goods_id]);
             $trans->commit();
             return $this->message("删除成功", $this->redirect(['bill-j-goods/index', 'bill_id' => $bill_id]));
         } catch (\Exception $e) {

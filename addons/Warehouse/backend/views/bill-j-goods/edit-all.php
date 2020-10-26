@@ -108,6 +108,9 @@ $this->params['breadcrumbs'][] = $this->title;
                             ],
                             [
                                 'attribute' => 'goods.stock_num',
+//                                'value' => function ($model) {
+//                                    return $model->goods_num + $model->goods->stock_num;
+//                                },
                                 'filter' => false,
                             ],
                             [

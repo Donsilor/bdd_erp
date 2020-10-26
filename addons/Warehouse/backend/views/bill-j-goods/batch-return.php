@@ -63,7 +63,9 @@ use kartik\date\DatePicker;
                     'format' => 'raw',
                     'headerOptions' => ['class' => 'col-md-1'],
                     'value' => function ($model) {
-                        return $model->stock_num ?? 0;
+                        $goods_num = $model->goods_num ?? 0;
+                        $restore_num = $model->goodsJ->restore_num ?? 0;
+                        return ($goods_num - $restore_num);
                     },
                     'filter' => false,
                 ],
@@ -72,7 +74,7 @@ use kartik\date\DatePicker;
                     'format' => 'raw',
                     'headerOptions' => ['class' => 'col-md-1', "style" => "background-color:#84bf96;"],
                     'value' => function ($_model) use ($form, $model) {
-                        return $form->field($model, "goods_list[{$_model->goods_id}][goods_num]")->textInput(['value' => ''])->label(false);
+                        return $form->field($model, "goods_list[{$_model->id}][restore_num]")->textInput(['value' => ''])->label(false);
                     },
                     'filter' => false,
                 ],
