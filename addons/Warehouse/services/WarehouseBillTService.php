@@ -264,10 +264,10 @@ class WarehouseBillTService extends Service
                 continue;
             }
             $row = count($goods);
-            if (!in_array($row, [33, 106])) {
+            if (!in_array($row, [34, 106])) {
                 throw new \Exception("模板格式不正确，请下载最新模板");
             }
-            if ($row == 33) {
+            if ($row == 34) {
                 $goods_type = GoodsTypeEnum::PlainGold;
             } elseif ($row == 106) {
                 $goods_type = GoodsTypeEnum::SeikoStone;

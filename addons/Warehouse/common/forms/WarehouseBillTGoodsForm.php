@@ -88,7 +88,7 @@ class WarehouseBillTGoodsForm extends WarehouseBillGoodsL
     public function trimField($data, $row = null)
     {
         $res = [];
-        if ($row == 33) {
+        if ($row == 34) {
             $fieldName = $this->getFieldNameByGold();
         } else {
             $fieldName = $this->getFieldName();
