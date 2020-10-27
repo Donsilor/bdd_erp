@@ -64,8 +64,10 @@ $goods_type = $bill->billL->goods_type ?? 0;
         }
         echo Html::button('明细导出', ['class' => 'btn btn-success btn-xs', 'onclick' => 'batchExport()',]);
         echo '&nbsp;';
-        echo Html::tag('span', '价格刷新', ["class" => "btn btn-warning btn-xs jsBatchUpdate", "data-grid" => "grid", "data-url" => Url::to(['update-price']),]);
-        echo '&nbsp;';
+        if ($goods_type == \addons\Warehouse\common\enums\GoodsTypeEnum::SeikoStone) {
+            echo Html::tag('span', '价格刷新', ["class" => "btn btn-warning btn-xs jsBatchUpdate", "data-grid" => "grid", "data-url" => Url::to(['update-price']),]);
+            echo '&nbsp;';
+        }
         if ($bill->bill_status == \addons\Warehouse\common\enums\BillStatusEnum::SAVE) {
             echo Html::tag('span', '批量删除', ["class" => "btn btn-danger btn-xs jsBatchUpdate", "data-grid" => "grid", "data-url" => Url::to(['batch-delete']),]);
         }

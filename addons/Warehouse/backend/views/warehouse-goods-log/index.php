@@ -31,30 +31,10 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'class' => 'yii\grid\SerialColumn',
                                 'visible' => false,
                             ],
-
-                            [
-                                'attribute'=>'log_msg',
-                                'filter' => true,
-                                'headerOptions' => [],
-                            ],
-
-                            [
-                                'attribute' => 'log_type',
-                                'format' => 'raw',
-                                'headerOptions' => ['class' => 'col-md-1','style'=>'width:100px;'],
-                                'value' => function ($model){
-                                    return \common\enums\LogTypeEnum::getValue($model->log_type);
-                                },
-                                'filter' => Html::activeDropDownList($searchModel, 'log_type',\addons\Style\common\enums\LogTypeEnum::getMap(), [
-                                    'prompt' => '全部',
-                                    'class' => 'form-control',
-                                    'style' => 'width:120px;'
-
-                                ]),
-                            ],
                             [
                                 'attribute'=>'created_at',
-                                'filter' => DateRangePicker::widget([    // 日期组件
+                                'headerOptions' => ['style'=>'width:180px'],
+                                'filter' => false/*DateRangePicker::widget([    // 日期组件
                                     'model' => $searchModel,
                                     'attribute' => 'created_at',
                                     'value' => $searchModel->created_at,
@@ -68,19 +48,42 @@ $this->params['breadcrumbs'][] = $this->title;
                                         'todayHighlight' => true,
                                         'autoclose' => true,
                                         'todayBtn' => 'linked',
-                                        'clearBtn' => true,
-
-
+                                        'clearBtn' => true, 
                                     ],
-
-                                ]),
+                                    
+                                ])*/,
                                 'value'=>function($model){
                                     return Yii::$app->formatter->asDatetime($model->created_at);
-                                }
-
+                                }                                        
                             ],
+                            [
+                                'attribute'=>'log_msg',
+                                'filter' => false,
+                                'headerOptions' => [],
+                            ],
+                            [
+                                'attribute' => 'goods_status',
+                                'format' => 'raw',
+                                'headerOptions' => ['class' => 'col-md-1','style'=>'width:100px;'],
+                                'value' => function ($model){
+                                    return addons\Warehouse\common\enums\GoodsStatusEnum::getValue($model->goods_status);
+                                },
+                                'filter' => false,
+                            ],
+                            [
+                                'attribute' => 'log_type',
+                                'format' => 'raw',
+                                'headerOptions' => ['class' => 'col-md-1'],
+                                'value' => function ($model){
+                                    return \common\enums\LogTypeEnum::getValue($model->log_type);
+                                },
+                                'filter' => Html::activeDropDownList($searchModel, 'log_type',\addons\Style\common\enums\LogTypeEnum::getMap(), [
+                                    'prompt' => '全部',
+                                    'class' => 'form-control',
+                                    'style' => 'width:120px;'
 
-
+                                ]),
+                            ],
                             [
                                 'label' => '操作人',
                                 'attribute' => 'member.username',

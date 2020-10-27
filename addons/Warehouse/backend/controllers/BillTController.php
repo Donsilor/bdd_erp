@@ -144,7 +144,7 @@ class BillTController extends BaseController
                     $billT = WarehouseBillL::findOne($model->id);
                     $billT = $billT ?? new WarehouseBillL();
                     $billT->id = $model->id;
-                    $billT->goods_type = $goods_type ?? 0;
+                    $billT->goods_type = $goods_type ?? $billT->goods_type;
                     if (false === $billT->save()) {
                         throw new \Exception($this->getError($billT));
                     }
@@ -216,7 +216,7 @@ class BillTController extends BaseController
             if (false === $model->save()) {
                 return $this->message($this->getError($model), $this->redirect(\Yii::$app->request->referrer), 'error');
             }
-            \Yii::$app->warehouseService->billT->syncUpdatePriceAll($model);
+            //\Yii::$app->warehouseService->billT->syncUpdatePriceAll($model);
             //日志
             $log = [
                 'bill_id' => $model->id,

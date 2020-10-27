@@ -277,7 +277,7 @@ class WarehouseBillGoodsL extends BaseModel
             //金料信息
             'peiliao_way' => '配料方式',
             'gold_weight' => '金重(g)',
-            'suttle_weight' => '连石重[净重](g)',
+            'suttle_weight' => '总重(连石重(g))',
             'lncl_loss_weight' => '含耗重(g)',
             'gold_loss' => '损耗[金损](%)',
             'pure_gold' => '折足(g)',
