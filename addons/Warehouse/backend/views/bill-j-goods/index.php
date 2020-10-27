@@ -3,12 +3,16 @@
 use common\helpers\Url;
 use common\helpers\Html;
 use addons\Warehouse\common\enums\BillStatusEnum;
+use addons\Warehouse\common\enums\LendStatusEnum;
 use yii\grid\GridView;
 use yii\web\View;
+
 /* @var $this yii\web\View */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 $this->title = Yii::t('bill_j_goods', '借货单明细');
 $this->params['breadcrumbs'][] = $this->title;
+
+$lend_status = $bill->billJ->lend_status ?? 0;
 ?>
 <div class="box-body nav-tabs-custom">
     <h2 class="page-header"><?php echo $this->title; ?> - <?php echo $bill->bill_no ?> - <?= \addons\Warehouse\common\enums\BillStatusEnum::getValue($bill->bill_status) ?></h2>
@@ -27,7 +31,8 @@ $this->params['breadcrumbs'][] = $this->title;
             echo '&nbsp;';
             echo Html::edit(['edit-all', 'bill_id' => $bill->id, 'returnUrl' => Yii::$app->request->get('returnUrl')], '编辑货品', ['class' => 'btn btn-info btn-xs']);
             echo '&nbsp;';
-        } elseif ($bill->bill_status == BillStatusEnum::CONFIRM && $bill->billJ->lend_status == \addons\Warehouse\common\enums\LendStatusEnum::HAS_LEND) {
+        } elseif ($bill->bill_status == BillStatusEnum::CONFIRM
+            && $lend_status == LendStatusEnum::HAS_LEND) {
             echo Html::batchPopButton(['batch-return', 'bill_id' => $bill->id, 'check' => 1], '分批还货', [
                 'class' => 'btn btn-info btn-xs',
                 'data-width' => '90%',
