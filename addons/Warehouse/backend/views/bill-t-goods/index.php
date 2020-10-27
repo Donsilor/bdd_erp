@@ -80,7 +80,7 @@ $goods_type = $bill->billL->goods_type ?? 0;
                     <span style="font-size:16px">
                         <!--<span style="font-weight:bold;">明细汇总：</span>-->
                         货品总数：<span style="color:green;"><?= $bill->goods_num ?? 0 ?></span>
-                        折足总重：<span style="color:green;"><?= $bill->billL->total_pure_gold ?? 0 ?></span>
+                        折足总重：<span style="color:green;"><?= $total['factory_gold_weight'] ?? 0 ?></span>
                         工厂总成本：<span style="color:green;"><?= $bill->billL->total_factory_cost ?? 0 ?></span>
                         公司总成本：<span style="color:green;"><?= $bill->total_cost ?? 0?></span>
                     </span>
@@ -528,7 +528,7 @@ $goods_type = $bill->billL->goods_type ?? 0;
                                 'footerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#FFD700;'],
                                 'value' => function ($model, $key, $index, $widget) use ($total) {
                                     $widget->footer = $model->getFooterValues('suttle_weight', $total, "0.000");
-                                    return $model->suttle_weight ?? "0.000";
+                                    return round($model->suttle_weight, 2) ?? "0.000";
                                 },
                                 'filter' => false,
 //                                'filter' => Html::activeTextInput($searchModel, 'suttle_weight', [
@@ -543,7 +543,7 @@ $goods_type = $bill->billL->goods_type ?? 0;
                                 'footerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#FFD700;'],
                                 'value' => function ($model, $key, $index, $widget) use ($total) {
                                     $widget->footer = $model->getFooterValues('gold_weight', $total, "0.000");
-                                    return $model->gold_weight ?? "0.000";
+                                    return round($model->gold_weight, 2) ?? "0.000";
                                 },
                                 'filter' => false,
 //                                'filter' => Html::activeTextInput($searchModel, 'gold_weight', [
@@ -558,7 +558,7 @@ $goods_type = $bill->billL->goods_type ?? 0;
                                 'footerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#FFD700;'],
                                 'value' => function ($model, $key, $index, $widget) {
                                     $widget->footer = $model->getAttributeLabel('gold_loss');
-                                    return $model->gold_loss ?? "0";
+                                    return round($model->gold_loss, 2) ?? "0";
                                 },
                                 'filter' => false,
 //                                'filter' => Html::activeTextInput($searchModel, 'gold_loss', [
@@ -574,7 +574,7 @@ $goods_type = $bill->billL->goods_type ?? 0;
                                 'footerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#FFD700;'],
                                 'value' => function ($model, $key, $index, $widget) use ($total) {
                                     $widget->footer = $model->getFooterValues('lncl_loss_weight', $total, "0.000");
-                                    return $model->lncl_loss_weight ?? "0.000";
+                                    return round($model->lncl_loss_weight, 2) ?? "0.000";
                                 },
 //                                'filter' => Html::activeTextInput($searchModel, 'lncl_loss_weight', [
 //                                    'class' => 'form-control',
@@ -588,7 +588,7 @@ $goods_type = $bill->billL->goods_type ?? 0;
                                 'footerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#FFD700;'],
                                 'value' => function ($model, $key, $index, $widget) {
                                     $widget->footer = $model->getAttributeLabel('gold_price');
-                                    return $model->gold_price ?? "";
+                                    return round($model->gold_price, 2) ?? "";
                                 },
                                 'filter' => false,
 //                                'filter' => Html::activeTextInput($searchModel, 'gold_price', [
@@ -604,7 +604,7 @@ $goods_type = $bill->billL->goods_type ?? 0;
                                 'footerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#FFD700;'],
                                 'value' => function ($model, $key, $index, $widget) use ($total) {
                                     $widget->footer = $model->getFooterValues('gold_amount', $total, "0.000");
-                                    return $model->gold_amount ?? "0.000";
+                                    return round($model->gold_amount, 2) ?? "0.000";
                                 },
 //                                'filter' => Html::activeTextInput($searchModel, 'gold_amount', [
 //                                    'class' => 'form-control',
@@ -618,7 +618,7 @@ $goods_type = $bill->billL->goods_type ?? 0;
                                 'footerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#FFD700;'],
                                 'value' => function ($model, $key, $index, $widget) {
                                     $widget->footer = $model->getAttributeLabel('pure_gold_rate');
-                                    return $model->pure_gold_rate ?? "0";
+                                    return round($model->pure_gold_rate, 2) ?? "0";
                                 },
                                 'filter' => false,
 //                                'filter' => Html::activeTextInput($searchModel, 'pure_gold_rate', [
@@ -633,7 +633,7 @@ $goods_type = $bill->billL->goods_type ?? 0;
                                 'footerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#FFD700;'],
                                 'value' => function ($model, $key, $index, $widget) use ($total) {
                                     $widget->footer = $model->getFooterValues('pure_gold', $total, "0.000");
-                                    return $model->pure_gold ?? "0.000";
+                                    return round($model->pure_gold, 2) ?? "0.000";
                                 },
                                 'filter' => false,
 //                                'filter' => Html::activeTextInput($searchModel, 'pure_gold', [
@@ -857,8 +857,8 @@ $goods_type = $bill->billL->goods_type ?? 0;
                                 'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#afb4db;'],
                                 'footerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#afb4db;'],
                                 'value' => function ($model, $key, $index, $widget) use ($total) {
-                                    $widget->footer = $model->getFooterValues('main_stone_weight', $total, "0.000");
-                                    return $model->main_stone_weight ?? "0.000";
+                                    $widget->footer = $model->getFooterValues('main_stone_weight', $total, "0.000", 3);
+                                    return round($model->main_stone_weight, 3) ?? "0.000";
                                 },
                                 'filter' => false,
 //                                'filter' => Html::activeTextInput($searchModel, 'main_stone_weight', [
@@ -874,7 +874,7 @@ $goods_type = $bill->billL->goods_type ?? 0;
                                 'footerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#afb4db;'],
                                 'value' => function ($model, $key, $index, $widget) {
                                     $widget->footer = $model->getAttributeLabel('main_stone_price');
-                                    return $model->main_stone_price ?? "0.00";
+                                    return round($model->main_stone_price, 2) ?? "0.00";
                                 },
                                 'filter' => false,
 //                                'filter' => Html::activeTextInput($searchModel, 'main_stone_price', [
@@ -890,7 +890,7 @@ $goods_type = $bill->billL->goods_type ?? 0;
                                 'footerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#afb4db;'],
                                 'value' => function ($model, $key, $index, $widget) use ($total) {
                                     $widget->footer = $model->getFooterValues('main_stone_amount', $total, "0.000");
-                                    return $model->main_stone_amount ?? "0.00";
+                                    return round($model->main_stone_amount, 2) ?? "0.00";
                                 },
                                 'filter' => false,
 //                                'filter' => Html::activeTextInput($searchModel, 'main_stone_amount', [
@@ -1141,8 +1141,8 @@ $goods_type = $bill->billL->goods_type ?? 0;
                                 'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#dec674;'],
                                 'footerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#dec674;'],
                                 'value' => function ($model, $key, $index, $widget) use ($total) {
-                                    $widget->footer = $model->getFooterValues('second_stone_weight1', $total, "0.000");
-                                    return $model->second_stone_weight1 ?? "0.000";
+                                    $widget->footer = $model->getFooterValues('second_stone_weight1', $total, "0.000", 3);
+                                    return round($model->second_stone_weight1, 3) ?? "0.000";
                                 },
                                 'filter' => false,
 //                                'filter' => Html::activeTextInput($searchModel, 'second_stone_weight1', [
@@ -1158,7 +1158,7 @@ $goods_type = $bill->billL->goods_type ?? 0;
                                 'footerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#dec674;'],
                                 'value' => function ($model, $key, $index, $widget) {
                                     $widget->footer = $model->getAttributeLabel('second_stone_price1');
-                                    return $model->second_stone_price1 ?? "0.00";
+                                    return round($model->second_stone_price1, 2) ?? "0.00";
                                 },
                                 'filter' => false,
 //                                'filter' => Html::activeTextInput($searchModel, 'second_stone_price1', [
@@ -1174,7 +1174,7 @@ $goods_type = $bill->billL->goods_type ?? 0;
                                 'footerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#dec674;'],
                                 'value' => function ($model, $key, $index, $widget) use ($total) {
                                     $widget->footer = $model->getFooterValues('second_stone_amount1', $total, "0.00");
-                                    return $model->second_stone_amount1 ?? "0.00";
+                                    return round($model->second_stone_amount1, 2) ?? "0.00";
                                 },
                                 'filter' => false,
 //                                'filter' => Html::activeTextInput($searchModel, 'second_stone_amount1', [
@@ -1362,8 +1362,8 @@ $goods_type = $bill->billL->goods_type ?? 0;
                                 'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#84bf96;'],
                                 'footerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#84bf96;'],
                                 'value' => function ($model, $key, $index, $widget) use ($total) {
-                                    $widget->footer = $model->getFooterValues('second_stone_weight2', $total, "0.000");
-                                    return $model->second_stone_weight2 ?? "0.000";
+                                    $widget->footer = $model->getFooterValues('second_stone_weight2', $total, "0.000", 3);
+                                    return round($model->second_stone_weight2, 3) ?? "0.000";
                                 },
                                 'filter' => false,
 //                                'filter' => Html::activeTextInput($searchModel, 'second_stone_weight2', [
@@ -1411,7 +1411,7 @@ $goods_type = $bill->billL->goods_type ?? 0;
                                 'footerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#84bf96;'],
                                 'value' => function ($model, $key, $index, $widget) {
                                     $widget->footer = $model->getAttributeLabel('second_stone_price2');
-                                    return $model->second_stone_price2 ?? "0.00";
+                                    return round($model->second_stone_price2, 2) ?? "0.00";
                                 },
                                 'filter' => false,
 //                                'filter' => Html::activeTextInput($searchModel, 'second_stone_price2', [
@@ -1427,7 +1427,7 @@ $goods_type = $bill->billL->goods_type ?? 0;
                                 'footerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#84bf96;'],
                                 'value' => function ($model, $key, $index, $widget) use ($total) {
                                     $widget->footer = $model->getFooterValues('second_stone_amount2', $total, "0.00");
-                                    return $model->second_stone_amount2 ?? "0.00";
+                                    return round($model->second_stone_amount2, 2) ?? "0.00";
                                 },
                                 'filter' => false,
 //                                'filter' => Html::activeTextInput($searchModel, 'second_stone_amount2', [
@@ -1600,8 +1600,8 @@ $goods_type = $bill->billL->goods_type ?? 0;
                                 'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#6495ED;'],
                                 'footerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#6495ED;'],
                                 'value' => function ($model, $key, $index, $widget) use ($total) {
-                                    $widget->footer = $model->getFooterValues('second_stone_weight3', $total, "0.000");
-                                    return $model->second_stone_weight3 ?? "0.000";
+                                    $widget->footer = $model->getFooterValues('second_stone_weight3', $total, "0.000", 3);
+                                    return round($model->second_stone_weight3, 3) ?? "0.000";
                                 },
                                 'filter' => false,
 //                                'filter' => Html::activeTextInput($searchModel, 'second_stone_weight3', [
@@ -1649,7 +1649,7 @@ $goods_type = $bill->billL->goods_type ?? 0;
                                 'footerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#6495ED;'],
                                 'value' => function ($model, $key, $index, $widget) {
                                     $widget->footer = $model->getAttributeLabel('second_stone_price3');
-                                    return $model->second_stone_price3 ?? "0.00";
+                                    return round($model->second_stone_price3, 2) ?? "0.00";
                                 },
                                 'filter' => false,
 //                                'filter' => Html::activeTextInput($searchModel, 'second_stone_price3', [
@@ -1665,7 +1665,7 @@ $goods_type = $bill->billL->goods_type ?? 0;
                                 'footerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#6495ED;'],
                                 'value' => function ($model, $key, $index, $widget) use ($total) {
                                     $widget->footer = $model->getFooterValues('second_stone_amount3', $total, "0.00");
-                                    return $model->second_stone_amount3 ?? "0.00";
+                                    return round($model->second_stone_amount3, 2) ?? "0.00";
                                 },
                                 'filter' => false,
 //                                'filter' => Html::activeTextInput($searchModel, 'second_stone_amount3', [
@@ -1760,7 +1760,7 @@ $goods_type = $bill->billL->goods_type ?? 0;
                                 'footerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#cde6c7;'],
                                 'value' => function ($model, $key, $index, $widget) use ($total) {
                                     $widget->footer = $model->getFooterValues('parts_gold_weight', $total, "0.000");
-                                    return $model->parts_gold_weight ?? "0.000";
+                                    return round($model->parts_gold_weight, 2) ?? "0.000";
                                 },
                                 'filter' => false,
 //                                'filter' => Html::activeTextInput($searchModel, 'parts_gold_weight', [
@@ -1776,7 +1776,7 @@ $goods_type = $bill->billL->goods_type ?? 0;
                                 'footerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#cde6c7;'],
                                 'value' => function ($model, $key, $index, $widget) {
                                     $widget->footer = $model->getAttributeLabel('parts_price');
-                                    return $model->parts_price ?? "0.00";
+                                    return round($model->parts_price, 2) ?? "0.00";
                                 },
                                 'filter' => false,
 //                                'filter' => Html::activeTextInput($searchModel, 'parts_price', [
@@ -1792,7 +1792,7 @@ $goods_type = $bill->billL->goods_type ?? 0;
                                 'footerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#cde6c7;'],
                                 'value' => function ($model, $key, $index, $widget) use ($total) {
                                     $widget->footer = $model->getFooterValues('parts_amount', $total, "0.00");
-                                    return $model->parts_amount ?? "0.00";
+                                    return round($model->parts_amount, 2) ?? "0.00";
                                 },
                                 'filter' => false,
 //                                'filter' => Html::activeTextInput($searchModel, 'parts_amount', [
@@ -1808,7 +1808,7 @@ $goods_type = $bill->billL->goods_type ?? 0;
                                 'footerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#b7ba6b;'],
                                 'value' => function ($model, $key, $index, $widget) {
                                     $widget->footer = $model->getAttributeLabel('gong_fee');
-                                    return $model->gong_fee ?? "0.00";
+                                    return round($model->gong_fee, 2) ?? "0.00";
                                 },
                                 'filter' => false,
 //                                'filter' => Html::activeTextInput($searchModel, 'gong_fee', [
@@ -1824,7 +1824,7 @@ $goods_type = $bill->billL->goods_type ?? 0;
                                 'footerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#b7ba6b;'],
                                 'value' => function ($model, $key, $index, $widget) {
                                     $widget->footer = $model->getAttributeLabel('piece_fee');
-                                    return $model->piece_fee ?? "0.00";
+                                    return round($model->piece_fee, 2) ?? "0.00";
                                 },
                                 'filter' => false,
 //                                'filter' => Html::activeTextInput($searchModel, 'piece_fee', [
@@ -1840,7 +1840,7 @@ $goods_type = $bill->billL->goods_type ?? 0;
                                 'footerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#b7ba6b;'],
                                 'value' => function ($model, $key, $index, $widget) use ($total) {
                                     $widget->footer = $model->getFooterValues('basic_gong_fee', $total, "0.00");
-                                    return $model->basic_gong_fee ?? "0.00";
+                                    return round($model->basic_gong_fee, 2) ?? "0.00";
                                 },
                                 'filter' => false,
 //                                'filter' => Html::activeTextInput($searchModel, 'basic_gong_fee', [
@@ -1855,8 +1855,8 @@ $goods_type = $bill->billL->goods_type ?? 0;
                                 'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#b7ba6b;'],
                                 'footerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#b7ba6b;'],
                                 'value' => function ($model, $key, $index, $widget) use ($total) {
-                                    $widget->footer = $model->getFooterValues('peishi_weight', $total, "0.000");
-                                    return $model->peishi_weight ?? "0.000";
+                                    $widget->footer = $model->getFooterValues('peishi_weight', $total, "0.000", 3);
+                                    return round($model->peishi_weight, 3) ?? "0.000";
                                 },
                                 'filter' => false,
 //                                'filter' => Html::activeTextInput($searchModel, 'peishi_weight', [
@@ -1872,7 +1872,7 @@ $goods_type = $bill->billL->goods_type ?? 0;
                                 'footerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#b7ba6b;'],
                                 'value' => function ($model, $key, $index, $widget) use ($total) {
                                     $widget->footer = $model->getFooterValues('peishi_gong_fee', $total, "0.00");
-                                    return $model->peishi_gong_fee ?? "0.00";
+                                    return round($model->peishi_gong_fee, 2) ?? "0.00";
                                 },
                                 'filter' => false,
 //                                'filter' => Html::activeTextInput($searchModel, 'peishi_gong_fee', [
@@ -1888,7 +1888,7 @@ $goods_type = $bill->billL->goods_type ?? 0;
                                 'footerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#b7ba6b;'],
                                 'value' => function ($model, $key, $index, $widget) use ($total) {
                                     $widget->footer = $model->getFooterValues('peishi_fee', $total, "0.00");
-                                    return $model->peishi_fee ?? "0.00";
+                                    return round($model->peishi_fee, 2) ?? "0.00";
                                 },
                                 'filter' => false,
 //                                'filter' => Html::activeTextInput($searchModel, 'peishi_fee', [
@@ -1904,7 +1904,7 @@ $goods_type = $bill->billL->goods_type ?? 0;
                                 'footerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#b7ba6b;'],
                                 'value' => function ($model, $key, $index, $widget) use ($total) {
                                     $widget->footer = $model->getFooterValues('parts_fee', $total, "0.00");
-                                    return $model->parts_fee ?? "0.000";
+                                    return round($model->parts_fee, 2) ?? "0.000";
                                 },
                                 'filter' => false,
 //                                'filter' => Html::activeTextInput($searchModel, 'parts_fee', [
@@ -1951,7 +1951,7 @@ $goods_type = $bill->billL->goods_type ?? 0;
                                 'footerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#b7ba6b;'],
                                 'value' => function ($model, $key, $index, $widget) {
                                     $widget->footer = $model->getAttributeLabel('second_stone_fee1');
-                                    return $model->second_stone_fee1 ?? "0.00";
+                                    return round($model->second_stone_fee1, 2) ?? "0.00";
                                 },
                                 'filter' => false,
 //                                'filter' => Html::activeTextInput($searchModel, second_stone_fee1, [
@@ -1967,7 +1967,7 @@ $goods_type = $bill->billL->goods_type ?? 0;
                                 'footerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#b7ba6b;'],
                                 'value' => function ($model, $key, $index, $widget) {
                                     $widget->footer = $model->getAttributeLabel('second_stone_fee2');
-                                    return $model->second_stone_fee2 ?? "0.00";
+                                    return round($model->second_stone_fee2, 2) ?? "0.00";
                                 },
                                 'filter' => false,
 //                                'filter' => Html::activeTextInput($searchModel, second_stone_fee2, [
@@ -1983,7 +1983,7 @@ $goods_type = $bill->billL->goods_type ?? 0;
                                 'footerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#b7ba6b;'],
                                 'value' => function ($model, $key, $index, $widget) {
                                     $widget->footer = $model->getAttributeLabel('second_stone_fee3');
-                                    return $model->second_stone_fee3 ?? "0.00";
+                                    return round($model->second_stone_fee3, 2) ?? "0.00";
                                 },
                                 'filter' => false,
 //                                'filter' => Html::activeTextInput($searchModel, second_stone_fee3, [
@@ -1999,7 +1999,7 @@ $goods_type = $bill->billL->goods_type ?? 0;
                                 'footerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#b7ba6b;'],
                                 'value' => function ($model, $key, $index, $widget) use ($total) {
                                     $widget->footer = $model->getFooterValues('xianqian_fee', $total, "0.00");
-                                    return $model->xianqian_fee ?? "0.00";
+                                    return round($model->xianqian_fee, 2) ?? "0.00";
                                 },
                                 'filter' => false,
 //                                'filter' => Html::activeTextInput($searchModel, 'xianqian_fee', [
@@ -2041,7 +2041,7 @@ $goods_type = $bill->billL->goods_type ?? 0;
                                 'footerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#b7ba6b;'],
                                 'value' => function ($model, $key, $index, $widget) use ($total) {
                                     $widget->footer = $model->getFooterValues('biaomiangongyi_fee', $total, "0.00");
-                                    return $model->biaomiangongyi_fee ?? "0.00";
+                                    return round($model->biaomiangongyi_fee, 2) ?? "0.00";
                                 },
                                 'filter' => false,
 //                                'filter' => Html::activeTextInput($searchModel, 'biaomiangongyi_fee', [
@@ -2057,7 +2057,7 @@ $goods_type = $bill->billL->goods_type ?? 0;
                                 'footerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#b7ba6b;'],
                                 'value' => function ($model, $key, $index, $widget) use ($total) {
                                     $widget->footer = $model->getFooterValues('fense_fee', $total, "0.00");
-                                    return $model->fense_fee ?? "0.00";
+                                    return round($model->fense_fee, 2) ?? "0.00";
                                 },
                                 'filter' => false,
 //                                'filter' => Html::activeTextInput($searchModel, 'fense_fee', [
@@ -2073,7 +2073,7 @@ $goods_type = $bill->billL->goods_type ?? 0;
                                 'footerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#b7ba6b;'],
                                 'value' => function ($model, $key, $index, $widget) use ($total) {
                                     $widget->footer = $model->getFooterValues('penlasha_fee', $total, "0.00");
-                                    return $model->penlasha_fee ?? "0.00";
+                                    return round($model->penlasha_fee, 2) ?? "0.00";
                                 },
                                 'filter' => false,
 //                                'filter' => Html::activeTextInput($searchModel, 'penlasha_fee', [
@@ -2089,7 +2089,7 @@ $goods_type = $bill->billL->goods_type ?? 0;
                                 'footerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#b7ba6b;'],
                                 'value' => function ($model, $key, $index, $widget) use ($total) {
                                     $widget->footer = $model->getFooterValues('lasha_fee', $total, "0.00");
-                                    return $model->lasha_fee ?? "0.00";
+                                    return round($model->lasha_fee, 2) ?? "0.00";
                                 },
                                 'filter' => false,
 //                                'filter' => Html::activeTextInput($searchModel, 'lasha_fee', [
@@ -2105,7 +2105,7 @@ $goods_type = $bill->billL->goods_type ?? 0;
                                 'footerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#b7ba6b;'],
                                 'value' => function ($model, $key, $index, $widget) use ($total) {
                                     $widget->footer = $model->getFooterValues('bukou_fee', $total, "0.00");
-                                    return $model->bukou_fee ?? "0.00";
+                                    return round($model->bukou_fee, 2) ?? "0.00";
                                 },
                                 'filter' => false,
 //                                'filter' => Html::activeTextInput($searchModel, 'bukou_fee', [
@@ -2121,7 +2121,7 @@ $goods_type = $bill->billL->goods_type ?? 0;
                                 'footerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#b7ba6b;'],
                                 'value' => function ($model, $key, $index, $widget) use ($total) {
                                     $widget->footer = $model->getFooterValues('templet_fee', $total, "0.00");
-                                    return $model->templet_fee ?? "0.00";
+                                    return round($model->templet_fee, 2) ?? "0.00";
                                 },
                                 'filter' => false,
 //                                'filter' => Html::activeTextInput($searchModel, 'templet_fee', [
@@ -2137,7 +2137,7 @@ $goods_type = $bill->billL->goods_type ?? 0;
                                 'footerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#b7ba6b;'],
                                 'value' => function ($model, $key, $index, $widget) {
                                     $widget->footer = $model->getAttributeLabel('tax_fee');
-                                    return $model->tax_fee ?? "0.00";
+                                    return round($model->tax_fee, 2) ?? "0.00";
                                 },
                                 'filter' => false,
 //                                'filter' => Html::activeTextInput($searchModel, 'tax_fee', [
@@ -2153,7 +2153,7 @@ $goods_type = $bill->billL->goods_type ?? 0;
                                 'footerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#b7ba6b;'],
                                 'value' => function ($model, $key, $index, $widget) use ($total) {
                                     $widget->footer = $model->getFooterValues('tax_amount', $total, "0.00");
-                                    return $model->tax_amount ?? "0.00";
+                                    return round($model->tax_amount, 2) ?? "0.00";
                                 },
                                 'filter' => false,
 //                                'filter' => Html::activeTextInput($searchModel, 'tax_amount', [
@@ -2169,7 +2169,7 @@ $goods_type = $bill->billL->goods_type ?? 0;
                                 'footerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#b7ba6b;'],
                                 'value' => function ($model, $key, $index, $widget) use ($total) {
                                     $widget->footer = $model->getFooterValues('cert_fee', $total, "0.00");
-                                    return $model->cert_fee ?? "0.00";
+                                    return round($model->cert_fee, 2) ?? "0.00";
                                 },
                                 'filter' => false,
 //                                'filter' => Html::activeTextInput($searchModel, 'cert_fee', [
@@ -2185,7 +2185,7 @@ $goods_type = $bill->billL->goods_type ?? 0;
                                 'footerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#b7ba6b;'],
                                 'value' => function ($model, $key, $index, $widget) use ($total) {
                                     $widget->footer = $model->getFooterValues('other_fee', $total, "0.00");
-                                    return $model->other_fee ?? "0.00";
+                                    return round($model->other_fee, 2) ?? "0.00";
                                 },
                                 'filter' => false,
 //                                'filter' => Html::activeTextInput($searchModel, 'other_fee', [
@@ -2200,7 +2200,7 @@ $goods_type = $bill->billL->goods_type ?? 0;
                                 'footerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#b7ba6b;'],
                                 'value' => function ($model, $key, $index, $widget) use ($total) {
                                     $widget->footer = $model->getFooterValues('pure_gold', $total, "0.000");
-                                    return $model->pure_gold ?? "0.000";
+                                    return round($model->pure_gold, 2) ?? "0.000";
                                 },
                                 'filter' => false,
 //                                'filter' => Html::activeTextInput($searchModel, 'pure_gold', [
@@ -2216,7 +2216,7 @@ $goods_type = $bill->billL->goods_type ?? 0;
                                 'footerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#9b95c9;'],
                                 'value' => function ($model, $key, $index, $widget) use ($total) {
                                     $widget->footer = $model->getFooterValues('factory_cost', $total, "0.00");
-                                    return $model->factory_cost ?? "0.00";
+                                    return round($model->factory_cost, 2) ?? "0.00";
                                 },
                                 'filter' => false,
 //                                'filter' => Html::activeTextInput($searchModel, 'factory_cost', [
@@ -2231,7 +2231,7 @@ $goods_type = $bill->billL->goods_type ?? 0;
                                 'footerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#9b95c9;'],
                                 'value' => function ($model, $key, $index, $widget) use ($total) {
                                     $widget->footer = $model->getFooterValues('factory_gold_weight', $total, "0.000");
-                                    return $model->factory_gold_weight ?? "0.000";
+                                    return round($model->factory_gold_weight, 2) ?? "0.000";
                                 },
                                 'filter' => false,
 //                                'filter' => Html::activeTextInput($searchModel, 'pure_gold', [
@@ -2265,7 +2265,7 @@ $goods_type = $bill->billL->goods_type ?? 0;
                                 'footerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#9b95c9;'],
                                 'value' => function ($model, $key, $index, $widget) use ($total) {
                                     $widget->footer = $model->getFooterValues('cost_price', $total, "0.00");
-                                    return $model->cost_price ?? "0.00";
+                                    return round($model->cost_price, 2) ?? "0.00";
                                 },
                                 'visible' => \common\helpers\Auth::verify(\common\enums\SpecialAuthEnum::VIEW_CAIGOU_PRICE),
                                 'filter' => false,
@@ -2282,7 +2282,7 @@ $goods_type = $bill->billL->goods_type ?? 0;
                                 'footerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#9b95c9;'],
                                 'value' => function ($model, $key, $index, $widget) use ($total) {
                                     $widget->footer = $model->getFooterValues('cost_amount', $total, "0.00");
-                                    return $model->cost_amount ?? "0.00";
+                                    return round($model->cost_amount, 2) ?? "0.00";
                                 },
                                 'visible' => \common\helpers\Auth::verify(\common\enums\SpecialAuthEnum::VIEW_CAIGOU_PRICE),
                                 'filter' => false,
@@ -2298,12 +2298,13 @@ $goods_type = $bill->billL->goods_type ?? 0;
                                 'footerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#9b95c9;'],
                                 'value' => function ($model, $key, $index, $widget) {
                                     $widget->footer = $model->getAttributeLabel('markup_rate');
-                                    return $model->markup_rate ?? "";
+                                    return round($model->markup_rate, 2) ?? "";
                                 },
-                                'filter' => Html::activeTextInput($searchModel, 'markup_rate', [
-                                    'class' => 'form-control',
-                                    'style' => 'width:80px;'
-                                ]),
+                                'filter' => false,
+//                                'filter' => Html::activeTextInput($searchModel, 'markup_rate', [
+//                                    'class' => 'form-control',
+//                                    'style' => 'width:80px;'
+//                                ]),
                                 'visible' => $model->isVisible($bill, 'markup_rate'),
                             ],
                             [
@@ -2314,7 +2315,7 @@ $goods_type = $bill->billL->goods_type ?? 0;
                                 'footerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#9b95c9;'],
                                 'value' => function ($model, $key, $index, $widget) use ($total) {
                                     $widget->footer = $model->getFooterValues('market_price', $total, "0.00");
-                                    return $model->market_price ?? "0.00";
+                                    return round($model->market_price, 2) ?? "0.00";
                                 },
                                 'filter' => false,
 //                                'filter' => Html::activeTextInput($searchModel, 'market_price', [

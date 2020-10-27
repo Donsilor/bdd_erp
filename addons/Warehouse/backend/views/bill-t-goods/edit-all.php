@@ -1014,7 +1014,7 @@ $goods_type = $bill->billL->goods_type ?? 0;
                                 'headerOptions' => ['class' => 'col-md-1 batch_full', 'attr-name' => 'main_stone_weight', 'style' => 'background-color:#afb4db;'],
                                 'footerOptions' => ['class' => 'col-md-1 batch_full2', 'attr-name' => 'main_stone_weight', 'style' => 'background-color:#afb4db;'],
                                 'value' => function ($model, $key, $index, $widget) use ($total) {
-                                    $widget->footer = $model->getFooterValues('main_stone_weight', $total, "0.000");
+                                    $widget->footer = $model->getFooterValues('main_stone_weight', $total, "0.000", 3);
                                     return Html::ajaxInput('main_stone_weight', $model->main_stone_weight, ['data-id' => $model->id, 'onfocus' => 'rfClearVal(this)', 'data-type' => 'number']);
                                 },
                                 'filter' => false,
@@ -1286,7 +1286,7 @@ $goods_type = $bill->billL->goods_type ?? 0;
                                 'headerOptions' => ['class' => 'col-md-1 batch_full', 'attr-name' => 'second_stone_weight1', 'style' => 'background-color:#dec674;'],
                                 'footerOptions' => ['class' => 'col-md-1 batch_full2', 'attr-name' => 'second_stone_weight1', 'style' => 'background-color:#dec674;'],
                                 'value' => function ($model, $key, $index, $widget) use ($total) {
-                                    $widget->footer = $model->getFooterValues('second_stone_weight1', $total, "0.000");
+                                    $widget->footer = $model->getFooterValues('second_stone_weight1', $total, "0.000", 3);
                                     return Html::ajaxInput('second_stone_weight1', $model->second_stone_weight1, ['data-id' => $model->id, 'onfocus' => 'rfClearVal(this)', 'data-type' => 'number']);
                                 },
                                 'filter' => false,
@@ -1548,7 +1548,7 @@ $goods_type = $bill->billL->goods_type ?? 0;
                                 'headerOptions' => ['class' => 'col-md-1 batch_full', 'id' => 'second_stone2', 'attr-name' => 'second_stone_weight2', 'style' => 'background-color:#84bf96;'],
                                 'footerOptions' => ['class' => 'col-md-1 batch_full2', 'attr-name' => 'second_stone_weight2', 'style' => 'background-color:#84bf96;'],
                                 'value' => function ($model, $key, $index, $widget) use ($total) {
-                                    $widget->footer = $model->getFooterValues('second_stone_weight2', $total, "0.000");
+                                    $widget->footer = $model->getFooterValues('second_stone_weight2', $total, "0.000", 3);
                                     return Html::ajaxInput('second_stone_weight2', $model->second_stone_weight2, ['data-id' => $model->id, 'onfocus' => 'rfClearVal(this)', 'data-type' => 'number']);
                                 },
                                 'filter' => false,
@@ -1851,7 +1851,7 @@ $goods_type = $bill->billL->goods_type ?? 0;
                                 'headerOptions' => ['class' => 'col-md-1 batch_full', 'id' => 'second_stone3', 'attr-name' => 'second_stone_weight3', 'style' => 'background-color:#6495ED;'],
                                 'footerOptions' => ['class' => 'col-md-1 batch_full2', 'attr-name' => 'second_stone_weight3', 'style' => 'background-color:#6495ED;'],
                                 'value' => function ($model, $key, $index, $widget) use ($total) {
-                                    $widget->footer = $model->getFooterValues('second_stone_weight3', $total, "0.000");
+                                    $widget->footer = $model->getFooterValues('second_stone_weight3', $total, "0.000", 3);
                                     return Html::ajaxInput('second_stone_weight3', $model->second_stone_weight3, ['data-id' => $model->id, 'onfocus' => 'rfClearVal(this)', 'data-type' => 'number']);
                                 },
                                 'filter' => false,

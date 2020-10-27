@@ -88,7 +88,7 @@ class WarehouseBillTGoodsForm extends WarehouseBillGoodsL
     public function trimField($data, $row = null)
     {
         $res = [];
-        if ($row == 34) {
+        if ($row == 32) {
             $fieldName = $this->getFieldNameByGold();
         } else {
             $fieldName = $this->getFieldName();
@@ -134,12 +134,12 @@ class WarehouseBillTGoodsForm extends WarehouseBillGoodsL
     /**
      * {@inheritdoc}
      */
-    public function getFooterValues($name = null, $total = [], $defaultValue = 0)
+    public function getFooterValues($name = null, $total = [], $defaultValue = 0, $places = 2)
     {
         $footer_value = '';
         $value = $total[$name] ?? $defaultValue;
         //$footer_value .= $this->getAttributeLabel($name);
-        $footer_value .= "<span style='font-size:13px; color: red;'>[$value]</span>";
+        $footer_value .= "<span style='font-size:13px; color: red;'>[".round($value, $places)."]</span>";
         return $footer_value;
     }
 
@@ -261,8 +261,8 @@ class WarehouseBillTGoodsForm extends WarehouseBillGoodsL
                 $this->formatTitle($this->getFingerHkMap()),//'手寸(港号)'
                 $this->formatTitle($this->getFingerMap()),//'手寸(美号)'
                 '#', '#',
-                $this->formatTitle($this->getChainTypeMap()),//'链类型'
-                $this->formatTitle($this->getCrampRingMap()),//'扣环'
+//                $this->formatTitle($this->getChainTypeMap()),//'链类型'
+//                $this->formatTitle($this->getCrampRingMap()),//'扣环'
 
                 $this->formatTitle($this->getPeiLiaoWayMap()),//'配料方式'
                 '#', '#', '#',
@@ -280,7 +280,7 @@ class WarehouseBillTGoodsForm extends WarehouseBillGoodsL
                 '#', '#',
             ];
             $fields = [
-                '条码号(货号)', '(*)款号', '商品名称', '起版号', '(*)入库仓库', '材质', '材质颜色', '货品数量', '手寸(港号)', '手寸(美号)', '尺寸(cm)', '成品尺寸(mm)', '链类型', '扣环',
+                '条码号(货号)', '(*)款号', '商品名称', '起版号', '(*)入库仓库', '材质', '材质颜色', '货品数量', '手寸(港号)', '手寸(美号)', '尺寸(cm)', '成品尺寸(mm)',//, '链类型', '扣环'
                 '配料方式', '总重(连石重(g))', '金重(g)', '金价/g', '金料额',
                 '克/工费', '件/工费', '基本工费', '表面工艺(多个用“|”分割)', '表面工艺费', '版费', '税费/g', '税额', '证书费', '其它费用',
                 '主石证书类型', '工厂总成本', '公司成本总额', '倍率(默认1)', '备注',
@@ -301,8 +301,8 @@ class WarehouseBillTGoodsForm extends WarehouseBillGoodsL
                 '#', '#',
                 $this->formatTitle($this->getXiangkouMap()),//'镶口'
                 '#',
-                $this->formatTitle($this->getChainTypeMap()),//'链类型'
-                $this->formatTitle($this->getCrampRingMap()),//'扣环'
+//                $this->formatTitle($this->getChainTypeMap()),//'链类型'
+//                $this->formatTitle($this->getCrampRingMap()),//'扣环'
                 $this->formatTitle($this->getTalonHeadTypeMap()),//'爪头形状'
 
                 $this->formatTitle($this->getPeiLiaoWayMap()),//'配料方式'
@@ -376,7 +376,7 @@ class WarehouseBillTGoodsForm extends WarehouseBillGoodsL
                 '#', '#',
             ];
             $fields = [
-                '条码号(货号)', '(*)款号', '商品名称', '(*)金托类型', '起版号', '(*)入库仓库', '材质', '材质颜色', '货品数量', '手寸(港号)', '手寸(美号)', '尺寸(cm)', '成品尺寸(mm)', '镶口(ct)', '刻字', '链类型', '扣环', '爪头形状',
+                '条码号(货号)', '(*)款号', '商品名称', '(*)金托类型', '起版号', '(*)入库仓库', '材质', '材质颜色', '货品数量', '手寸(港号)', '手寸(美号)', '尺寸(cm)', '成品尺寸(mm)', '镶口(ct)', '刻字', '爪头形状',//, '链类型', '扣环'
                 '配料方式', '总重(连石重(g))', '损耗(%)', '含耗重(g)', '金价/g', '金料额', '折足率(%)',
                 '主石配石方式', '主石编号', '主石类型', '主石粒数', '主石重(ct)', '主石单价/ct', '主石成本', '主石形状', '主石颜色', '主石净度', '主石切工', '主石抛光', '主石对称', '主石荧光', '主石色彩',
                 '副石1配石方式', '副石1类型', '副石1编号', '副石1粒数', '副石1重(ct)', '副石1单价/ct', '副石1成本', '副石1形状', '副石1颜色', '副石1净度', '副石1切工', '副石1色彩',
@@ -396,7 +396,7 @@ class WarehouseBillTGoodsForm extends WarehouseBillGoodsL
     public function getFieldName()
     {
         $fieldName = [
-            'goods_id', 'style_sn', 'goods_name', 'jintuo_type', 'qiban_sn', 'to_warehouse_id', 'material_type', 'material_color', 'goods_num', 'finger_hk', 'finger', 'length', 'product_size', 'xiangkou', 'kezi', 'chain_type', 'cramp_ring', 'talon_head_type',
+            'goods_id', 'style_sn', 'goods_name', 'jintuo_type', 'qiban_sn', 'to_warehouse_id', 'material_type', 'material_color', 'goods_num', 'finger_hk', 'finger', 'length', 'product_size', 'xiangkou', 'kezi', 'talon_head_type',//, 'chain_type', 'cramp_ring'
             'peiliao_way', 'suttle_weight', 'gold_loss', 'lncl_loss_weight', 'gold_price', 'gold_amount', 'pure_gold_rate',
             'main_pei_type', 'main_stone_sn', 'main_stone_type', 'main_stone_num', 'main_stone_weight', 'main_stone_price', 'main_stone_amount', 'main_stone_shape', 'main_stone_color', 'main_stone_clarity', 'main_stone_cut', 'main_stone_polish', 'main_stone_symmetry', 'main_stone_fluorescence', 'main_stone_colour',
             'second_pei_type', 'second_stone_type1', 'second_stone_sn1', 'second_stone_num1', 'second_stone_weight1', 'second_stone_price1', 'second_stone_amount1', 'second_stone_shape1', 'second_stone_color1', 'second_stone_clarity1', 'second_stone_cut1', 'second_stone_colour1',
@@ -415,7 +415,7 @@ class WarehouseBillTGoodsForm extends WarehouseBillGoodsL
     public function getFieldNameByGold()
     {
         $fieldName = [
-            'goods_id', 'style_sn', 'goods_name', 'qiban_sn', 'to_warehouse_id', 'material_type', 'material_color', 'goods_num', 'finger_hk', 'finger', 'length', 'product_size', 'chain_type', 'cramp_ring',
+            'goods_id', 'style_sn', 'goods_name', 'qiban_sn', 'to_warehouse_id', 'material_type', 'material_color', 'goods_num', 'finger_hk', 'finger', 'length', 'product_size',// 'chain_type', 'cramp_ring',
             'peiliao_way', 'suttle_weight', 'gold_weight', 'gold_price', 'gold_amount',
             'gong_fee', 'piece_fee', 'basic_gong_fee', 'biaomiangongyi', 'biaomiangongyi_fee', 'templet_fee', 'tax_fee', 'tax_amount', 'cert_fee', 'other_fee',
             'main_cert_type', 'factory_cost', 'cost_amount', 'markup_rate', 'remark',
