@@ -27,7 +27,7 @@ $this->params['breadcrumbs'][] = $this->title;
             echo '&nbsp;';
             echo Html::edit(['edit-all', 'bill_id' => $bill->id, 'returnUrl' => Yii::$app->request->get('returnUrl')], '编辑货品', ['class' => 'btn btn-info btn-xs']);
             echo '&nbsp;';
-        } elseif ($bill->bill_status == BillStatusEnum::CONFIRM) {
+        } elseif ($bill->bill_status == BillStatusEnum::CONFIRM && $bill->billJ->lend_status == \addons\Warehouse\common\enums\LendStatusEnum::HAS_LEND) {
             echo Html::batchPopButton(['batch-return', 'bill_id' => $bill->id, 'check' => 1], '分批还货', [
                 'class' => 'btn btn-info btn-xs',
                 'data-width' => '90%',
