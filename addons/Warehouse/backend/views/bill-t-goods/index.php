@@ -310,20 +310,6 @@ $goods_type = $bill->billL->goods_type ?? 0;
                                 'visible' => $model->isVisible($bill, 'goods_name'),
                             ],
                             [
-                                'attribute' => 'qiban_sn',
-                                'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#feeeed;'],
-                                'footerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#feeeed;'],
-                                'value' => function ($model, $key, $index, $widget) {
-                                    $widget->footer = $model->getAttributeLabel('qiban_sn');
-                                    return $model->qiban_sn ?? "";
-                                },
-                                'filter' => Html::activeTextInput($searchModel, 'qiban_sn', [
-                                    'class' => 'form-control',
-                                    //'style' => 'width:100px;'
-                                ]),
-                                'visible' => $model->isVisible($bill, 'qiban_sn'),
-                            ],
-                            [
                                 'attribute' => 'to_warehouse_id',
                                 'format' => 'raw',
                                 'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#feeeed;'],
@@ -373,22 +359,6 @@ $goods_type = $bill->billL->goods_type ?? 0;
                                 'visible' => $model->isVisible($bill, 'material_type'),
                             ],
                             [
-                                'attribute' => 'material_color',
-                                'format' => 'raw',
-                                'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#feeeed;'],
-                                'footerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#feeeed;'],
-                                'value' => function ($model, $key, $index, $widget) {
-                                    $widget->footer = $model->getAttributeLabel('material_color');
-                                    return Yii::$app->attr->valueName($model->material_color) ?? "";
-                                },
-                                'filter' => Html::activeDropDownList($searchModel, 'material_color', $model->getMaterialColorMap(), [
-                                    'prompt' => '全部',
-                                    'class' => 'form-control',
-                                    'style' => 'width:60px;'
-                                ]),
-                                'visible' => $model->isVisible($bill, 'material_color'),
-                            ],
-                            [
                                 'attribute' => 'goods_num',
                                 'headerOptions' => ['style' => 'background-color:#feeeed;'],
                                 'footerOptions' => ['style' => 'background-color:#feeeed;'],
@@ -436,35 +406,6 @@ $goods_type = $bill->billL->goods_type ?? 0;
                                 'visible' => $model->isVisible($bill, 'finger'),
                             ],
                             [
-                                'attribute' => 'length',
-                                //'format' => 'raw',
-                                'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#feeeed;'],
-                                'footerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#feeeed;'],
-                                'value' => function ($model, $key, $index, $widget) {
-                                    $widget->footer = $model->getAttributeLabel('length');
-                                    return $model->length ?? "";
-                                },
-                                'filter' => Html::activeTextInput($searchModel, 'length', [
-                                    'class' => 'form-control',
-                                    'style' => 'width:60px;'
-                                ]),
-                                'visible' => $model->isVisible($bill, 'length'),
-                            ],
-                            [
-                                'attribute' => 'product_size',
-                                'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#feeeed;'],
-                                'footerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#feeeed;'],
-                                'value' => function ($model, $key, $index, $widget) {
-                                    $widget->footer = $model->getAttributeLabel('product_size');
-                                    return $model->product_size ?? "";
-                                },
-                                'filter' => Html::activeTextInput($searchModel, 'product_size', [
-                                    'class' => 'form-control',
-                                    'style' => 'width:60px;'
-                                ]),
-                                'visible' => $model->isVisible($bill, 'product_size'),
-                            ],
-                            [
                                 'attribute' => 'xiangkou',
                                 'format' => 'raw',
                                 'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#feeeed;'],
@@ -481,6 +422,21 @@ $goods_type = $bill->billL->goods_type ?? 0;
                                 'visible' => $model->isVisible($bill, 'xiangkou'),
                             ],
                             [
+                                'attribute' => 'length',
+                                //'format' => 'raw',
+                                'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#feeeed;'],
+                                'footerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#feeeed;'],
+                                'value' => function ($model, $key, $index, $widget) {
+                                    $widget->footer = $model->getAttributeLabel('length');
+                                    return $model->length ?? "";
+                                },
+                                'filter' => Html::activeTextInput($searchModel, 'length', [
+                                    'class' => 'form-control',
+                                    'style' => 'width:60px;'
+                                ]),
+                                'visible' => $model->isVisible($bill, 'length'),
+                            ],
+                            [
                                 'attribute' => 'kezi',
                                 'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#feeeed;'],
                                 'footerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#feeeed;'],
@@ -494,22 +450,22 @@ $goods_type = $bill->billL->goods_type ?? 0;
                                 ]),
                                 'visible' => $model->isVisible($bill, 'kezi'),
                             ],
-                            [
-                                'attribute' => 'chain_type',
-                                'format' => 'raw',
-                                'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#feeeed;'],
-                                'footerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#feeeed;'],
-                                'value' => function ($model, $key, $index, $widget) {
-                                    $widget->footer = $model->getAttributeLabel('chain_type');
-                                    return Yii::$app->attr->valueName($model->chain_type) ?? "";
-                                },
-                                'filter' => Html::activeDropDownList($searchModel, 'chain_type', $model->getChainTypeMap(), [
-                                    'prompt' => '全部',
-                                    'class' => 'form-control',
-                                    'style' => 'width:60px;'
-                                ]),
-                                'visible' => $model->isVisible($bill, 'chain_type'),
-                            ],
+//                            [
+//                                'attribute' => 'chain_type',
+//                                'format' => 'raw',
+//                                'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#feeeed;'],
+//                                'footerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#feeeed;'],
+//                                'value' => function ($model, $key, $index, $widget) {
+//                                    $widget->footer = $model->getAttributeLabel('chain_type');
+//                                    return Yii::$app->attr->valueName($model->chain_type) ?? "";
+//                                },
+//                                'filter' => Html::activeDropDownList($searchModel, 'chain_type', $model->getChainTypeMap(), [
+//                                    'prompt' => '全部',
+//                                    'class' => 'form-control',
+//                                    'style' => 'width:60px;'
+//                                ]),
+//                                'visible' => $model->isVisible($bill, 'chain_type'),
+//                            ],
 //                            [
 //                                'attribute' => 'chain_long',
 //                                'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#afdfe4'],
@@ -518,22 +474,22 @@ $goods_type = $bill->billL->goods_type ?? 0;
 //                                    'style' => 'width:100px;'
 //                                ]),
 //                            ],
-                            [
-                                'attribute' => 'cramp_ring',
-                                'format' => 'raw',
-                                'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#feeeed;'],
-                                'footerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#feeeed;'],
-                                'value' => function ($model, $key, $index, $widget) {
-                                    $widget->footer = $model->getAttributeLabel('cramp_ring');
-                                    return Yii::$app->attr->valueName($model->cramp_ring) ?? "";
-                                },
-                                'filter' => Html::activeDropDownList($searchModel, 'cramp_ring', $model->getCrampRingMap(), [
-                                    'prompt' => '全部',
-                                    'class' => 'form-control',
-                                    'style' => 'width:60px;'
-                                ]),
-                                'visible' => $model->isVisible($bill, 'cramp_ring'),
-                            ],
+//                            [
+//                                'attribute' => 'cramp_ring',
+//                                'format' => 'raw',
+//                                'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#feeeed;'],
+//                                'footerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#feeeed;'],
+//                                'value' => function ($model, $key, $index, $widget) {
+//                                    $widget->footer = $model->getAttributeLabel('cramp_ring');
+//                                    return Yii::$app->attr->valueName($model->cramp_ring) ?? "";
+//                                },
+//                                'filter' => Html::activeDropDownList($searchModel, 'cramp_ring', $model->getCrampRingMap(), [
+//                                    'prompt' => '全部',
+//                                    'class' => 'form-control',
+//                                    'style' => 'width:60px;'
+//                                ]),
+//                                'visible' => $model->isVisible($bill, 'cramp_ring'),
+//                            ],
                             [
                                 'attribute' => 'talon_head_type',
                                 'format' => 'raw',
@@ -2448,7 +2404,7 @@ $goods_type = $bill->billL->goods_type ?? 0;
                                 'visible' => $model->isVisible($bill, 'pay_status'),
                             ],
                             [
-                                'label' => '是否批发',
+                                'label' => '是否多件',
                                 'attribute' => 'is_wholesale',
                                 'format' => 'raw',
                                 'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#9b95c9;'],
@@ -2463,6 +2419,50 @@ $goods_type = $bill->billL->goods_type ?? 0;
                                     //'style' => 'width:60px;'
                                 ]),
                                 'visible' => $model->isVisible($bill, 'is_wholesale'),
+                            ],
+                            [
+                                'attribute' => 'material_color',
+                                'format' => 'raw',
+                                'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#9b95c9;'],
+                                'footerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#9b95c9;'],
+                                'value' => function ($model, $key, $index, $widget) {
+                                    $widget->footer = $model->getAttributeLabel('material_color');
+                                    return Yii::$app->attr->valueName($model->material_color) ?? "";
+                                },
+                                'filter' => Html::activeDropDownList($searchModel, 'material_color', $model->getMaterialColorMap(), [
+                                    'prompt' => '全部',
+                                    'class' => 'form-control',
+                                    //'style' => 'width:60px;'
+                                ]),
+                                'visible' => $model->isVisible($bill, 'material_color'),
+                            ],
+                            [
+                                'attribute' => 'product_size',
+                                'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#9b95c9;'],
+                                'footerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#9b95c9;'],
+                                'value' => function ($model, $key, $index, $widget) {
+                                    $widget->footer = $model->getAttributeLabel('product_size');
+                                    return $model->product_size ?? "";
+                                },
+                                'filter' => Html::activeTextInput($searchModel, 'product_size', [
+                                    'class' => 'form-control',
+                                    'style' => 'width:60px;'
+                                ]),
+                                'visible' => $model->isVisible($bill, 'product_size'),
+                            ],
+                            [
+                                'attribute' => 'qiban_sn',
+                                'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#9b95c9;'],
+                                'footerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#9b95c9;'],
+                                'value' => function ($model, $key, $index, $widget) {
+                                    $widget->footer = $model->getAttributeLabel('qiban_sn');
+                                    return $model->qiban_sn ?? "";
+                                },
+                                'filter' => Html::activeTextInput($searchModel, 'qiban_sn', [
+                                    'class' => 'form-control',
+                                    //'style' => 'width:100px;'
+                                ]),
+                                'visible' => $model->isVisible($bill, 'qiban_sn'),
                             ],
                             [
                                 'attribute' => 'factory_mo',

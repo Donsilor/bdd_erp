@@ -450,21 +450,6 @@ $goods_type = $bill->billL->goods_type ?? 0;
                                 'visible' => $model->isVisible($bill, 'length'),
                             ],
                             [
-                                'attribute' => 'product_size',
-                                'format' => 'raw',
-                                'headerOptions' => ['class' => 'col-md-1 batch_full', 'attr-name' => 'product_size', 'style' => 'background-color:#F5DEB3;'],
-                                'footerOptions' => ['class' => 'col-md-1 batch_full2', 'attr-name' => 'product_size', 'style' => 'background-color:#F5DEB3;'],
-                                'value' => function ($model, $key, $index, $widget) {
-                                    $widget->footer = $model->getAttributeLabel('product_size');
-                                    return Html::ajaxInput('product_size', $model->product_size, ['data-id' => $model->id]);
-                                },
-                                'filter' => Html::activeTextInput($searchModel, 'product_size', [
-                                    'class' => 'form-control',
-                                    'style' => 'width:100px;'
-                                ]),
-                                'visible' => $model->isVisible($bill, 'product_size'),
-                            ],
-                            [
                                 'attribute' => 'xiangkou',
                                 'format' => 'raw',
                                 'headerOptions' => ['class' => 'col-md-1 batch_select_full', 'id' => 'attr', 'attr-name' => 'xiangkou', 'attr-id' => AttrIdEnum::XIANGKOU, 'style' => 'background-color:#F5DEB3;'],
@@ -481,6 +466,21 @@ $goods_type = $bill->billL->goods_type ?? 0;
                                 'visible' => $model->isVisible($bill, 'xiangkou'),
                             ],
                             [
+                                'attribute' => 'product_size',
+                                'format' => 'raw',
+                                'headerOptions' => ['class' => 'col-md-1 batch_full', 'attr-name' => 'product_size', 'style' => 'background-color:#F5DEB3;'],
+                                'footerOptions' => ['class' => 'col-md-1 batch_full2', 'attr-name' => 'product_size', 'style' => 'background-color:#F5DEB3;'],
+                                'value' => function ($model, $key, $index, $widget) {
+                                    $widget->footer = $model->getAttributeLabel('product_size');
+                                    return Html::ajaxInput('product_size', $model->product_size, ['data-id' => $model->id]);
+                                },
+                                'filter' => Html::activeTextInput($searchModel, 'product_size', [
+                                    'class' => 'form-control',
+                                    'style' => 'width:100px;'
+                                ]),
+                                'visible' => $model->isVisible($bill, 'product_size'),
+                            ],
+                            [
                                 'attribute' => 'kezi',
                                 'format' => 'raw',
                                 'headerOptions' => ['class' => 'col-md-1 batch_full', 'attr-name' => 'kezi', 'style' => 'background-color:#F5DEB3;'],
@@ -495,22 +495,22 @@ $goods_type = $bill->billL->goods_type ?? 0;
                                 ]),
                                 'visible' => $model->isVisible($bill, 'kezi'),
                             ],
-                            [
-                                'attribute' => 'chain_type',
-                                'format' => 'raw',
-                                'headerOptions' => ['class' => 'col-md-1 batch_select_full', 'attr-name' => 'chain_type', 'attr-id' => AttrIdEnum::CHAIN_TYPE, 'style' => 'background-color:#F5DEB3;'],
-                                'footerOptions' => ['class' => 'col-md-1 batch_select_full2', 'attr-name' => 'chain_type', 'attr-id' => AttrIdEnum::CHAIN_TYPE, 'style' => 'background-color:#F5DEB3;'],
-                                'value' => function ($model, $key, $index, $widget) {
-                                    $widget->footer = $model->getAttributeLabel('chain_type');
-                                    return Html::ajaxSelect($model, 'chain_type', $model->getChainTypeDrop($model), ['data-id' => $model->id, 'prompt' => '请选择']);
-                                },
-                                'filter' => Html::activeDropDownList($searchModel, 'chain_type', $model->getChainTypeMap(), [
-                                    'prompt' => '全部',
-                                    'class' => 'form-control',
-                                    'style' => 'width:80px;'
-                                ]),
-                                'visible' => $model->isVisible($bill, 'chain_type'),
-                            ],
+//                            [
+//                                'attribute' => 'chain_type',
+//                                'format' => 'raw',
+//                                'headerOptions' => ['class' => 'col-md-1 batch_select_full', 'attr-name' => 'chain_type', 'attr-id' => AttrIdEnum::CHAIN_TYPE, 'style' => 'background-color:#F5DEB3;'],
+//                                'footerOptions' => ['class' => 'col-md-1 batch_select_full2', 'attr-name' => 'chain_type', 'attr-id' => AttrIdEnum::CHAIN_TYPE, 'style' => 'background-color:#F5DEB3;'],
+//                                'value' => function ($model, $key, $index, $widget) {
+//                                    $widget->footer = $model->getAttributeLabel('chain_type');
+//                                    return Html::ajaxSelect($model, 'chain_type', $model->getChainTypeDrop($model), ['data-id' => $model->id, 'prompt' => '请选择']);
+//                                },
+//                                'filter' => Html::activeDropDownList($searchModel, 'chain_type', $model->getChainTypeMap(), [
+//                                    'prompt' => '全部',
+//                                    'class' => 'form-control',
+//                                    'style' => 'width:80px;'
+//                                ]),
+//                                'visible' => $model->isVisible($bill, 'chain_type'),
+//                            ],
 //                            [
 //                                'attribute' => 'chain_long',
 //                                'format' => 'raw',
@@ -523,22 +523,22 @@ $goods_type = $bill->billL->goods_type ?? 0;
 //                                    'style' => 'width:100px;'
 //                                ]),
 //                            ],
-                            [
-                                'attribute' => 'cramp_ring',
-                                'format' => 'raw',
-                                'headerOptions' => ['class' => 'col-md-1 batch_select_full', 'attr-name' => 'cramp_ring', 'attr-id' => AttrIdEnum::CHAIN_BUCKLE, 'style' => 'background-color:#F5DEB3;'],
-                                'footerOptions' => ['class' => 'col-md-1 batch_select_full2', 'attr-name' => 'cramp_ring', 'attr-id' => AttrIdEnum::CHAIN_BUCKLE, 'style' => 'background-color:#F5DEB3;'],
-                                'value' => function ($model, $key, $index, $widget) {
-                                    $widget->footer = $model->getAttributeLabel('cramp_ring');
-                                    return Html::ajaxSelect($model, 'cramp_ring', $model->getCrampRingDrop($model), ['data-id' => $model->id, 'prompt' => '请选择']);
-                                },
-                                'filter' => Html::activeDropDownList($searchModel, 'cramp_ring', $model->getCrampRingMap(), [
-                                    'prompt' => '全部',
-                                    'class' => 'form-control',
-                                    'style' => 'width:80px;'
-                                ]),
-                                'visible' => $model->isVisible($bill, 'cramp_ring'),
-                            ],
+//                            [
+//                                'attribute' => 'cramp_ring',
+//                                'format' => 'raw',
+//                                'headerOptions' => ['class' => 'col-md-1 batch_select_full', 'attr-name' => 'cramp_ring', 'attr-id' => AttrIdEnum::CHAIN_BUCKLE, 'style' => 'background-color:#F5DEB3;'],
+//                                'footerOptions' => ['class' => 'col-md-1 batch_select_full2', 'attr-name' => 'cramp_ring', 'attr-id' => AttrIdEnum::CHAIN_BUCKLE, 'style' => 'background-color:#F5DEB3;'],
+//                                'value' => function ($model, $key, $index, $widget) {
+//                                    $widget->footer = $model->getAttributeLabel('cramp_ring');
+//                                    return Html::ajaxSelect($model, 'cramp_ring', $model->getCrampRingDrop($model), ['data-id' => $model->id, 'prompt' => '请选择']);
+//                                },
+//                                'filter' => Html::activeDropDownList($searchModel, 'cramp_ring', $model->getCrampRingMap(), [
+//                                    'prompt' => '全部',
+//                                    'class' => 'form-control',
+//                                    'style' => 'width:80px;'
+//                                ]),
+//                                'visible' => $model->isVisible($bill, 'cramp_ring'),
+//                            ],
                             [
                                 'attribute' => 'talon_head_type',
                                 'format' => 'raw',
@@ -2690,7 +2690,7 @@ $goods_type = $bill->billL->goods_type ?? 0;
                                 'visible' => $model->isVisible($bill, 'main_cert_id'),
                             ],
                             [
-                                'label' => '是否批发',
+                                'label' => '是否多件',
                                 'attribute' => 'is_wholesale',
                                 'format' => 'raw',
                                 'headerOptions' => ['class' => 'col-md-1', 'style' => 'background-color:#b7ba6b;'],
