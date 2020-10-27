@@ -480,54 +480,54 @@ $goods_type = $model->billL->goods_type ?? 0
                 <?php if (!in_array($goods_type, [\addons\Warehouse\common\enums\GoodsTypeEnum::PlainGold])) { ?>
                     <td class="algin-center padding-5"><?= $val['finger'] ?? "/" ?></td>
                 <!-- 金料-->
-                    <td class="algin-center padding-5"><?= floatval($val['suttle_weight']) ?? "0" ?></td>
+                    <td class="algin-center padding-5"><?= round($val['suttle_weight'], 2) ?? "0" ?></td>
                 <?php } ?>
                 <td class="algin-center padding-5">
                     <?= floatval($val['gold_weight']) ?? "0" ?>
                 </td>
-                <td class="algin-center padding-5"><?= floatval($val['gold_loss']) ?? "0" ?></td>
+                <td class="algin-center padding-5"><?= round($val['gold_loss'], 2) ?? "0" ?></td>
                 <!--                    <td class="algin-center padding-5">-->
                 <?//= $val['lncl_loss_weight'] ?? "0" ?><!--</td>-->
-                <td class="algin-center padding-5"><?= floatval($val['gold_amount']) ?? "0" ?></td>
+                <td class="algin-center padding-5"><?= round($val['gold_amount'], 2) ?? "0" ?></td>
                 <?php if (!in_array($goods_type, [\addons\Warehouse\common\enums\GoodsTypeEnum::PlainGold])) { ?>
                     <!-- 主石-->
                     <td class="algin-center padding-5"><?= $val['main_stone_sn'] ?? "/" ?></td>
                     <td class="algin-center padding-5"><?= $val['main_stone_num'] ?? "0" ?></td>
-                    <td class="algin-center padding-5"><?= floatval($val['main_stone_weight']) ?? "0" ?></td>
-                    <td class="algin-center padding-5"><?= floatval($val['main_stone_price']) ?? "0" ?></td>
-                    <td class="algin-center padding-5"><?= floatval($val['main_stone_amount']) ?? "0" ?></td>
+                    <td class="algin-center padding-5"><?= round($val['main_stone_weight'], 3) ?? "0" ?></td>
+                    <td class="algin-center padding-5"><?= round($val['main_stone_price'], 2) ?? "0" ?></td>
+                    <td class="algin-center padding-5"><?= round($val['main_stone_amount'], 2) ?? "0" ?></td>
                     <!-- 副石1-->
                     <td class="algin-center padding-5"><?= $val['second_stone_sn1'] ?? "/" ?></td>
                     <td class="algin-center padding-5"><?= $val['second_stone_num1'] ?? "0" ?></td>
-                    <td class="algin-center padding-5"><?= floatval($val['second_stone_weight1']) ?? "0" ?></td>
-                    <td class="algin-center padding-5"><?= floatval($val['second_stone_price1']) ?? "0" ?></td>
-                    <td class="algin-center padding-5"><?= floatval($val['second_stone_amount1']) ?? "0" ?></td>
+                    <td class="algin-center padding-5"><?= round($val['second_stone_weight1'], 3) ?? "0" ?></td>
+                    <td class="algin-center padding-5"><?= round($val['second_stone_price1'], 2) ?? "0" ?></td>
+                    <td class="algin-center padding-5"><?= round($val['second_stone_amount1'], 2) ?? "0" ?></td>
                     <!-- 配件-->
-                    <td class="algin-center padding-5"><?= floatval($val['parts_gold_weight']) ?? "0" ?></td>
-                    <td class="algin-center padding-5"><?= floatval($val['parts_amount']) ?? "0" ?></td>
-                    <td class="algin-center padding-5"><?= floatval($val['parts_fee']) ?? "0" ?></td>
+                    <td class="algin-center padding-5"><?= round($val['parts_gold_weight'], 2) ?? "0" ?></td>
+                    <td class="algin-center padding-5"><?= round($val['parts_amount'], 2) ?? "0" ?></td>
+                    <td class="algin-center padding-5"><?= round($val['parts_fee'], 2) ?? "0" ?></td>
                 <?php } ?>
                 <!-- 工费-->
-                <td class="algin-center padding-5"><?= floatval($val['basic_gong_fee']) ?? "0" ?></td>
+                <td class="algin-center padding-5"><?= round($val['basic_gong_fee'], 2) ?? "0" ?></td>
                 <?php if (!in_array($goods_type, [\addons\Warehouse\common\enums\GoodsTypeEnum::PlainGold])) { ?>
-                    <td class="algin-center padding-5"><?= floatval($val['xianqian_fee']) ?? "0" ?></td>
+                    <td class="algin-center padding-5"><?= round($val['xianqian_fee'], 2) ?? "0" ?></td>
                 <?php } ?>
-                <td class="algin-center padding-5"><?= floatval($val['biaomiangongyi_fee']) ?? "0" ?></td>
+                <td class="algin-center padding-5"><?= round($val['biaomiangongyi_fee'], 2) ?? "0" ?></td>
                 <?php if (!in_array($goods_type, [\addons\Warehouse\common\enums\GoodsTypeEnum::PlainGold])) { ?>
-                    <td class="algin-center padding-5"><?= floatval($val['fense_fee']) ?? "0" ?></td>
-                    <td class="algin-center padding-5"><?= floatval($val['bukou_fee']) ?? "0" ?></td>
+                    <td class="algin-center padding-5"><?= round($val['fense_fee'], 2) ?? "0" ?></td>
+                    <td class="algin-center padding-5"><?= round($val['bukou_fee'], 2) ?? "0" ?></td>
                 <?php } ?>
-                <td class="algin-center padding-5"><?= floatval($val['templet_fee']) ?? "0" ?></td>
+                <td class="algin-center padding-5"><?= round($val['templet_fee'], 2) ?? "0" ?></td>
                 <!--                    <td class="algin-center padding-5">--><?//= $val['cert_id'] ?? "" ?><!--</td>-->
-                <td class="algin-center padding-5"><?= floatval($val['tax_amount']) ?? "0" ?></td>
+                <td class="algin-center padding-5"><?= round($val['tax_amount'], 2) ?? "0" ?></td>
                 <?php if (!in_array($goods_type, [\addons\Warehouse\common\enums\GoodsTypeEnum::PlainGold])) { ?>
-                    <td class="algin-center padding-5"><?= floatval($val['pure_gold']) ?? "0" ?></td>
+                    <td class="algin-center padding-5"><?= round($val['pure_gold'], 2) ?? "0" ?></td>
                 <?php } else { ?>
-                    <td class="algin-center padding-5"><?= floatval($val['factory_gold_weight']) ?? "0" ?></td>
+                    <td class="algin-center padding-5"><?= round($val['factory_gold_weight'], 2) ?? "0" ?></td>
                 <?php } ?>
-                <td class="algin-center padding-5"><?= floatval($val['factory_cost']) ?? "0" ?></td>
-                <td class="algin-center padding-5"><?= floatval(bcdiv($val['cost_price'], $val['goods_num'], 3)) ?></td>
-                <td class="algin-center padding-5"><?= floatval($val['cost_price']) ?? "0" ?></td>
+                <td class="algin-center padding-5"><?= round($val['factory_cost'], 2) ?? "0" ?></td>
+                <td class="algin-center padding-5"><?= round(bcdiv($val['cost_price'], $val['goods_num'], 3), 2) ?></td>
+                <td class="algin-center padding-5"><?= round($val['cost_price'], 2) ?? "0" ?></td>
             </tr>
             </tbody>
             <?php
@@ -539,52 +539,52 @@ $goods_type = $model->billL->goods_type ?? 0
                 <td class="algin-center padding-5"><?= $total['goods_num'] ?? 0; ?></td>
                 <?php if (!in_array($goods_type, [\addons\Warehouse\common\enums\GoodsTypeEnum::PlainGold])) { ?>
                     <td class="algin-center padding-5">/</td>
-                    <td class="algin-center padding-5"><?= floatval($total['suttle_weight']) ?? '0.00'; ?></td>
+                    <td class="algin-center padding-5"><?= round($total['suttle_weight'], 2) ?? '0.00'; ?></td>
                 <?php } ?>
-                <td class="algin-center padding-5"><?= floatval($total['gold_weight']) ?? '0.00'; ?></td>
+                <td class="algin-center padding-5"><?= round($total['gold_weight'], 2) ?? '0.00'; ?></td>
                 <td class="algin-center padding-5">/</td>
                 <!--                <td class="algin-center padding-5">-->
                 <? //= $total['lncl_loss_weight'] ?? '0.00'; ?><!--</td>-->
-                <td class="algin-center padding-5"><?= floatval($total['gold_amount']) ?? '0.00'; ?></td>
+                <td class="algin-center padding-5"><?= round($total['gold_amount'], 2) ?? '0.00'; ?></td>
                 <?php if (!in_array($goods_type, [\addons\Warehouse\common\enums\GoodsTypeEnum::PlainGold])) { ?>
                     <!--                主石-->
                     <td class="algin-center padding-5">/</td>
                     <td class="algin-center padding-5"><?= $total['main_stone_num'] ?? 0; ?></td>
-                    <td class="algin-center padding-5"><?= floatval($total['main_stone_weight']) ?? '0.00'; ?></td>
+                    <td class="algin-center padding-5"><?= round($total['main_stone_weight'], 3) ?? '0.00'; ?></td>
                     <td class="algin-center padding-5">/</td>
-                    <td class="algin-center padding-5"><?= floatval($total['main_stone_amount']) ?? '0.00'; ?></td>
+                    <td class="algin-center padding-5"><?= round($total['main_stone_amount'], 2) ?? '0.00'; ?></td>
                     <!--                副石1-->
                     <td class="algin-center padding-5">/</td>
                     <td class="algin-center padding-5"><?= $total['second_stone_num1'] ?? 0; ?></td>
-                    <td class="algin-center padding-5"><?= floatval($total['second_stone_weight1']) ?? '0.00'; ?></td>
+                    <td class="algin-center padding-5"><?= round($total['second_stone_weight1'], 3) ?? '0.00'; ?></td>
                     <td class="algin-center padding-5">/</td>
-                    <td class="algin-center padding-5"><?= floatval($total['second_stone_amount1']) ?? '0.00'; ?></td>
+                    <td class="algin-center padding-5"><?= round($total['second_stone_amount1'], 2) ?? '0.00'; ?></td>
                     <!--                配件-->
-                    <td class="algin-center padding-5"><?= floatval($total['parts_gold_weight']) ?? '0.00'; ?></td>
-                    <td class="algin-center padding-5"><?= floatval($total['parts_amount']) ?? '0.00'; ?></td>
-                    <td class="algin-center padding-5"><?= floatval($total['parts_fee']) ?? '0.00'; ?></td>
+                    <td class="algin-center padding-5"><?= round($total['parts_gold_weight'], 2) ?? '0.00'; ?></td>
+                    <td class="algin-center padding-5"><?= round($total['parts_amount'], 2) ?? '0.00'; ?></td>
+                    <td class="algin-center padding-5"><?= round($total['parts_fee'], 2) ?? '0.00'; ?></td>
                 <?php } ?>
                 <!--                工费-->
-                <td class="algin-center padding-5"><?= floatval($total['basic_gong_fee']) ?? '0.00'; ?></td>
+                <td class="algin-center padding-5"><?= round($total['basic_gong_fee'], 2) ?? '0.00'; ?></td>
                 <?php if (!in_array($goods_type, [\addons\Warehouse\common\enums\GoodsTypeEnum::PlainGold])) { ?>
-                    <td class="algin-center padding-5"><?= floatval($total['xianqian_fee']) ?? '0.00'; ?></td>
+                    <td class="algin-center padding-5"><?= round($total['xianqian_fee'], 2) ?? '0.00'; ?></td>
                 <?php } ?>
-                <td class="algin-center padding-5"><?= floatval($total['biaomiangongyi_fee']) ?? '0.00'; ?></td>
+                <td class="algin-center padding-5"><?= round($total['biaomiangongyi_fee'], 2) ?? '0.00'; ?></td>
                 <?php if (!in_array($goods_type, [\addons\Warehouse\common\enums\GoodsTypeEnum::PlainGold])) { ?>
-                    <td class="algin-center padding-5"><?= floatval($total['fense_fee']) ?? '0.00'; ?></td>
-                    <td class="algin-center padding-5"><?= floatval($total['bukou_fee']) ?? '0.00'; ?></td>
+                    <td class="algin-center padding-5"><?= round($total['fense_fee'], 2) ?? '0.00'; ?></td>
+                    <td class="algin-center padding-5"><?= round($total['bukou_fee'], 2) ?? '0.00'; ?></td>
                 <?php } ?>
-                <td class="algin-center padding-5"><?= floatval($total['templet_fee']) ?? '0.00'; ?></td>
+                <td class="algin-center padding-5"><?= round($total['templet_fee'], 2) ?? '0.00'; ?></td>
                 <!--                <td class="algin-center padding-5"></td>-->
-                <td class="algin-center padding-5"><?= floatval($total['tax_amount']) ?? '0.00'; ?></td>
+                <td class="algin-center padding-5"><?= round($total['tax_amount'], 2) ?? '0.00'; ?></td>
                 <?php if (!in_array($goods_type, [\addons\Warehouse\common\enums\GoodsTypeEnum::PlainGold])) { ?>
-                    <td class="algin-center padding-5"><?= floatval($total['pure_gold']) ?? '0.00'; ?></td>
+                    <td class="algin-center padding-5"><?= round($total['pure_gold'], 2) ?? '0.00'; ?></td>
                 <?php }else{ ?>
-                    <td class="algin-center padding-5"><?= floatval($total['factory_gold_weight']) ?? '0.00'; ?></td>
+                    <td class="algin-center padding-5"><?= round($total['factory_gold_weight'], 2) ?? '0.00'; ?></td>
                 <?php } ?>
-                <td class="algin-center padding-5"><?= floatval($total['factory_cost']) ?? '0.00'; ?></td>
-                <td class="algin-center padding-5"><?= floatval($total['one_cost_price']) ?? '0.00'; ?></td>
-                <td class="algin-center padding-5"><?= floatval($total['cost_price']) ?? '0.00'; ?></td>
+                <td class="algin-center padding-5"><?= round($total['factory_cost'], 2) ?? '0.00'; ?></td>
+                <td class="algin-center padding-5"><?= round($total['one_cost_price'], 2) ?? '0.00'; ?></td>
+                <td class="algin-center padding-5"><?= round($total['cost_price'], 2) ?? '0.00'; ?></td>
             </tr>
             </tfoot>
         </table>

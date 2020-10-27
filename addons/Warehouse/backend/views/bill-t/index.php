@@ -207,7 +207,7 @@ $params = $params ? "&" . http_build_query($params) : '';
                             'headerOptions' => ['class' => 'col-md-1'],
                             'value' => function ($model) {
                                 $remark = "";
-                                if($model->remark && strlen($model->remark) > 7){
+                                if($model->remark && strlen($model->remark) > 15){
                                     $remark = mb_substr($model->remark, 0, 15)."..." ?? "";
                                 }
                                 return "<span title='{$model->remark}'>".$remark."</span>";
