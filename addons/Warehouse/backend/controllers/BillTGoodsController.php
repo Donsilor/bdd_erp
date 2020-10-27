@@ -259,12 +259,12 @@ class BillTGoodsController extends BaseController
             \Yii::$app->warehouseService->billT->syncUpdatePrice($model);
             \Yii::$app->warehouseService->billT->WarehouseBillTSummary($model->bill_id);
             $trans->commit();
-            return $this->redirect(\Yii::$app->request->referrer);
-            //return ResultHelper::json(200, '修改成功');
+            //return $this->redirect(\Yii::$app->request->referrer);
+            return ResultHelper::json(200, '修改成功');
         } catch (\Exception $e) {
             $trans->rollBack();
-            return $this->message($e->getMessage(), $this->redirect(\Yii::$app->request->referrer), 'error');
-            //return ResultHelper::json(422, $e->getMessage());
+            //return $this->message($e->getMessage(), $this->redirect(\Yii::$app->request->referrer), 'error');
+            return ResultHelper::json(422, $e->getMessage());
         }
     }
 
