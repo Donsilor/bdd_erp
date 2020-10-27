@@ -80,9 +80,9 @@ $goods_type = $bill->billL->goods_type ?? 0;
                     <span style="font-size:16px">
                         <!--<span style="font-weight:bold;">明细汇总：</span>-->
                         货品总数：<span style="color:green;"><?= $bill->goods_num ?? 0 ?></span>
-                        折足总重：<span style="color:green;"><?= $total['factory_gold_weight'] ?? 0 ?></span>
-                        工厂总成本：<span style="color:green;"><?= $bill->billL->total_factory_cost ?? 0 ?></span>
-                        公司总成本：<span style="color:green;"><?= $bill->total_cost ?? 0?></span>
+                        折足总重：<span style="color:green;"><?= round($total['factory_gold_weight'] ?? 0, 2) ?? 0 ?></span>
+                        工厂总成本：<span style="color:green;"><?= round($bill->billL->total_factory_cost ?? 0, 2) ?? 0 ?></span>
+                        公司总成本：<span style="color:green;"><?= round($bill->total_cost ?? 0, 2) ?? 0?></span>
                     </span>
                     <span>
                         <?php
@@ -245,7 +245,7 @@ $goods_type = $bill->billL->goods_type ?? 0;
                                 'filter' => Html::activeDropDownList($searchModel, 'auto_goods_id', \common\enums\ConfirmEnum::getMap(), [
                                     'prompt' => '全部',
                                     'class' => 'form-control',
-                                    'style' => 'width:60px;'
+                                    //'style' => 'width:60px;'
                                 ]),
                                 'visible' => $model->isVisible($bill, 'auto_goods_id'),
                             ],
