@@ -342,11 +342,11 @@ class Html extends BaseHtml
      * @param array $options
      * @return string
      */
-    public static function batchFullButton(array $url, $content = "批量填充", $options = [])
+    public static function batchFullButton(array $url, $content = "", $options = [])
     {
         $options = ArrayHelper::merge([
             'data-grid'=>'grid',
-            'class' => "btn btn-info btn-xs",
+            'class' => "btn btn-info btn-xs glyphicon glyphicon-edit",
             'data-toggle' => 'tooltip',
             'data-original-title'=> '批量填充',
             'onclick' => "rfBatchFull(this);return false;"

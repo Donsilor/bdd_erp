@@ -28,9 +28,9 @@ $this->params['breadcrumbs'][] = $this->title;
                 ?>
                 <?= Html::beginForm(Url::to($url), 'get') ?>
                 <div class="modal-content">
-                    <div class="modal-header">
+                    <div class="modal-header searchBox">
                         <h4 class="modal-title">筛选查询<a
-                                    class="btn-xs btn-default glyphicon glyphicon-chevron-down searchBox"
+                                    class="btn-xs btn-default glyphicon glyphicon-chevron-up searchBox1"
                                     style="float:right;" href="javascript:void(0);" role="button"></a></h4>
                     </div>
                     <div class="modal-body" id="search-content">
@@ -335,7 +335,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         </div>
                         <div class="box-footer text-center">
                             <button type="reset" class="btn btn-white btn-sm" onclick="clearSearch1()">重置</button>
-                            <button class="btn btn-primary btn-sm">确定</button>
+                            <button class="btn btn-primary btn-sm">查询</button>
                         </div>
                     </div>
                 </div>
@@ -606,10 +606,10 @@ $this->params['breadcrumbs'][] = $this->title;
     $(function () {
         var search = sessionStorageGet('styleSearch');
         if (search === false || search == '0') {
-            $(".searchBox").html("展开");
+            //$(".searchBox1").html("展开");
             $("#search-content").attr("style", "display:none;");
         }else{
-            $(".searchBox").html("隐藏");
+            //$(".searchBox1").html("隐藏");
         }
     });
 
@@ -619,12 +619,12 @@ $this->params['breadcrumbs'][] = $this->title;
 
     $(document).delegate('.searchBox', 'click', function () {
         if ($("#search-content").css("display") == "block") {
-            $(".searchBox").html("展开");
-            $(".searchBox").removeClass("glyphicon glyphicon-chevron-down").addClass("glyphicon glyphicon-chevron-up");
+            //$(".searchBox1").html("展开");
+            $(".searchBox1").removeClass("glyphicon glyphicon-chevron-down").addClass("glyphicon glyphicon-chevron-up");
             sessionStorageAdd('styleSearch', 0, true);
         } else {
-            $(".searchBox").html("隐藏");
-            $(".searchBox").removeClass("glyphicon glyphicon-chevron-up").addClass("glyphicon glyphicon-chevron-down");
+            //$(".searchBox1").html("隐藏");
+            $(".searchBox1").removeClass("glyphicon glyphicon-chevron-up").addClass("glyphicon glyphicon-chevron-down");
             sessionStorageAdd('styleSearch', 1, true);
         }
         $("#search-content").slideToggle();

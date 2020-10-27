@@ -495,7 +495,7 @@ $params = $params ? "&".http_build_query($params) : '';
                         </div>
                         <div class="box-footer text-center">
                             <button type="reset" class="btn btn-white btn-sm" onclick="cleardd()">重置</button>
-                            <button class="btn btn-primary btn-sm">确定</button>
+                            <button class="btn btn-primary btn-sm">查询</button>
                         </div>
                     </div>
                     <?= Html::endForm() ?>
