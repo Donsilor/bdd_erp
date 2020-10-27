@@ -2817,11 +2817,11 @@ $goods_type = $bill->billL->goods_type ?? 0;
 <script type="text/javascript">
     $(function () {
         //批量填充(文本)
-        $(".batch_full > a").after('&nbsp;<?= Html::batchFullButton(['batch-edit'], "批量填充"); ?>');
-        $(".batch_full2").append('&nbsp;<?= Html::batchFullButton(['batch-edit'], "批量填充"); ?>');
+        $(".batch_full > a").after('&nbsp;<?= Html::batchFullButton(['batch-edit'], "填充"); ?>');
+        $(".batch_full2").append('&nbsp;<?= Html::batchFullButton(['batch-edit'], "填充"); ?>');
         //批量填充(下拉)
-        $(".batch_select_full > a").after('&nbsp;<?= Html::batchFullButton(['batch-edit', 'check' => 1], "批量填充", ['input_type' => 'select']); ?>');
-        $(".batch_select_full2").append('&nbsp;<?= Html::batchFullButton(['batch-edit', 'check' => 1], "批量填充", ['input_type' => 'select']); ?>');
+        $(".batch_select_full > a").after('&nbsp;<?= Html::batchFullButton(['batch-edit', 'check' => 1], "填充", ['input_type' => 'select']); ?>');
+        $(".batch_select_full2").append('&nbsp;<?= Html::batchFullButton(['batch-edit', 'check' => 1], "填充", ['input_type' => 'select']); ?>');
         //默认全选
         $("input[name='id[]']").trigger("click");
     });

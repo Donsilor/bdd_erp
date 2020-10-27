@@ -319,7 +319,7 @@ $goods_type = $bill->billL->goods_type ?? 0;
                                 },
                                 'filter' => Html::activeTextInput($searchModel, 'qiban_sn', [
                                     'class' => 'form-control',
-                                    'style' => 'width:100px;'
+                                    //'style' => 'width:100px;'
                                 ]),
                                 'visible' => $model->isVisible($bill, 'qiban_sn'),
                             ],
@@ -844,7 +844,7 @@ $goods_type = $bill->billL->goods_type ?? 0;
                                 'filter' => Html::activeDropDownList($searchModel, 'main_pei_type', $model->getPeiShiWayMap(), [
                                     'prompt' => '全部',
                                     'class' => 'form-control',
-                                    'style' => 'width:80px;'
+                                    //'style' => 'width:80px;'
                                 ]),
                                 'visible' => $model->isVisible($bill, 'main_pei_type'),
                             ],
@@ -859,7 +859,7 @@ $goods_type = $bill->billL->goods_type ?? 0;
                                 },
                                 'filter' => Html::activeTextInput($searchModel, 'main_stone_sn', [
                                     'class' => 'form-control',
-                                    'style' => 'width:60px;'
+                                    //'style' => 'width:60px;'
                                 ]),
                                 'visible' => $model->isVisible($bill, 'main_stone_sn'),
                             ],
@@ -875,7 +875,7 @@ $goods_type = $bill->billL->goods_type ?? 0;
                                 'filter' => Html::activeDropDownList($searchModel, 'main_stone_type', $model->getMainStoneTypeMap(), [
                                     'prompt' => '全部',
                                     'class' => 'form-control',
-                                    'style' => 'width:60px;'
+                                    //'style' => 'width:60px;'
                                 ]),
                                 'visible' => $model->isVisible($bill, 'main_stone_type'),
                             ],
@@ -955,7 +955,7 @@ $goods_type = $bill->billL->goods_type ?? 0;
                                 'filter' => Html::activeDropDownList($searchModel, 'main_stone_shape', $model->getMainStoneShapeMap(), [
                                     'prompt' => '全部',
                                     'class' => 'form-control',
-                                    'style' => 'width:60px;'
+                                    //'style' => 'width:60px;'
                                 ]),
                                 'visible' => $model->isVisible($bill, 'main_stone_shape'),
                             ],
@@ -971,7 +971,7 @@ $goods_type = $bill->billL->goods_type ?? 0;
                                 'filter' => Html::activeDropDownList($searchModel, 'main_stone_color', $model->getMainStoneColorMap(), [
                                     'prompt' => '全部',
                                     'class' => 'form-control',
-                                    'style' => 'width:60px;'
+                                    //'style' => 'width:60px;'
                                 ]),
                                 'visible' => $model->isVisible($bill, 'main_stone_color'),
                             ],
@@ -987,7 +987,7 @@ $goods_type = $bill->billL->goods_type ?? 0;
                                 'filter' => Html::activeDropDownList($searchModel, 'main_stone_clarity', $model->getMainStoneClarityMap(), [
                                     'prompt' => '全部',
                                     'class' => 'form-control',
-                                    'style' => 'width:60px;'
+                                    //'style' => 'width:60px;'
                                 ]),
                                 'visible' => $model->isVisible($bill, 'main_stone_clarity'),
                             ],
@@ -1003,7 +1003,7 @@ $goods_type = $bill->billL->goods_type ?? 0;
                                 'filter' => Html::activeDropDownList($searchModel, 'main_stone_cut', $model->getMainStoneCutMap(), [
                                     'prompt' => '全部',
                                     'class' => 'form-control',
-                                    'style' => 'width:60px;'
+                                    //'style' => 'width:60px;'
                                 ]),
                                 'visible' => $model->isVisible($bill, 'main_stone_cut'),
                             ],
@@ -1019,7 +1019,7 @@ $goods_type = $bill->billL->goods_type ?? 0;
                                 'filter' => Html::activeDropDownList($searchModel, 'main_stone_polish', $model->getMainStonePolishMap(), [
                                     'prompt' => '全部',
                                     'class' => 'form-control',
-                                    'style' => 'width:60px;'
+                                    //'style' => 'width:60px;'
                                 ]),
                                 'visible' => $model->isVisible($bill, 'main_stone_polish'),
                             ],
@@ -1035,7 +1035,7 @@ $goods_type = $bill->billL->goods_type ?? 0;
                                 'filter' => Html::activeDropDownList($searchModel, 'main_stone_symmetry', $model->getMainStoneSymmetryMap(), [
                                     'prompt' => '全部',
                                     'class' => 'form-control',
-                                    'style' => 'width:60px;'
+                                    //'style' => 'width:60px;'
                                 ]),
                                 'visible' => $model->isVisible($bill, 'main_stone_symmetry'),
                             ],
@@ -1051,7 +1051,7 @@ $goods_type = $bill->billL->goods_type ?? 0;
                                 'filter' => Html::activeDropDownList($searchModel, 'main_stone_fluorescence', $model->getMainStoneFluorescenceMap(), [
                                     'prompt' => '全部',
                                     'class' => 'form-control',
-                                    'style' => 'width:60px;'
+                                    //'style' => 'width:60px;'
                                 ]),
                                 'visible' => $model->isVisible($bill, 'main_stone_fluorescence'),
                             ],
@@ -1067,7 +1067,7 @@ $goods_type = $bill->billL->goods_type ?? 0;
                                 'filter' => Html::activeDropDownList($searchModel, 'main_stone_colour', $model->getMainStoneColourMap(), [
                                     'prompt' => '全部',
                                     'class' => 'form-control',
-                                    'style' => 'width:60px;'
+                                    //'style' => 'width:60px;'
                                 ]),
                                 'visible' => $model->isVisible($bill, 'main_stone_colour'),
                             ],
@@ -1096,7 +1096,7 @@ $goods_type = $bill->billL->goods_type ?? 0;
                                 },
                                 'filter' => Html::activeTextInput($searchModel, 'main_cert_id', [
                                     'class' => 'form-control',
-                                    'style' => 'width:60px;'
+                                    //'style' => 'width:60px;'
                                 ]),
                                 'visible' => $model->isVisible($bill, 'main_cert_id'),
                             ],
@@ -1112,7 +1112,7 @@ $goods_type = $bill->billL->goods_type ?? 0;
                                 'filter' => Html::activeDropDownList($searchModel, 'main_cert_type', $model->getMainCertTypeMap(), [
                                     'prompt' => '全部',
                                     'class' => 'form-control',
-                                    'style' => 'width:80px;'
+                                    //'style' => 'width:80px;'
                                 ]),
                                 'visible' => $model->isVisible($bill, 'main_cert_type'),
                             ],
@@ -1128,7 +1128,7 @@ $goods_type = $bill->billL->goods_type ?? 0;
                                 'filter' => Html::activeDropDownList($searchModel, 'second_pei_type', $model->getPeiShiWayMap(), [
                                     'prompt' => '全部',
                                     'class' => 'form-control',
-                                    'style' => 'width:80px;'
+                                    //'style' => 'width:80px;'
                                 ]),
                                 'visible' => $model->isVisible($bill, 'second_pei_type'),
                             ],
@@ -1144,7 +1144,7 @@ $goods_type = $bill->billL->goods_type ?? 0;
                                 'filter' => Html::activeDropDownList($searchModel, 'second_stone_type1', $model->getSecondStoneType1Map(), [
                                     'prompt' => '全部',
                                     'class' => 'form-control',
-                                    'style' => 'width:60px;'
+                                    //'style' => 'width:60px;'
                                 ]),
                                 'visible' => $model->isVisible($bill, 'second_stone_type1'),
                             ],
@@ -1159,7 +1159,7 @@ $goods_type = $bill->billL->goods_type ?? 0;
                                 },
                                 'filter' => Html::activeTextInput($searchModel, 'second_stone_sn1', [
                                     'class' => 'form-control',
-                                    'style' => 'width:60px;'
+                                    //'style' => 'width:60px;'
                                 ]),
                                 'visible' => $model->isVisible($bill, 'second_stone_sn1'),
                             ],
@@ -1239,7 +1239,7 @@ $goods_type = $bill->billL->goods_type ?? 0;
                                 'filter' => Html::activeDropDownList($searchModel, 'second_stone_shape1', $model->getSecondStoneShape1Map(), [
                                     'prompt' => '全部',
                                     'class' => 'form-control',
-                                    'style' => 'width:60px;'
+                                    //'style' => 'width:60px;'
                                 ]),
                                 'visible' => $model->isVisible($bill, 'second_stone_shape1'),
                             ],
@@ -1255,7 +1255,7 @@ $goods_type = $bill->billL->goods_type ?? 0;
                                 'filter' => Html::activeDropDownList($searchModel, 'second_stone_color1', $model->getSecondStoneColor1Map(), [
                                     'prompt' => '全部',
                                     'class' => 'form-control',
-                                    'style' => 'width:60px;'
+                                    //'style' => 'width:60px;'
                                 ]),
                                 'visible' => $model->isVisible($bill, 'second_stone_color1'),
                             ],
@@ -1271,7 +1271,7 @@ $goods_type = $bill->billL->goods_type ?? 0;
                                 'filter' => Html::activeDropDownList($searchModel, 'second_stone_clarity1', $model->getSecondStoneClarity1Map(), [
                                     'prompt' => '全部',
                                     'class' => 'form-control',
-                                    'style' => 'width:60px;'
+                                    //'style' => 'width:60px;'
                                 ]),
                                 'visible' => $model->isVisible($bill, 'second_stone_clarity1'),
                             ],
@@ -1287,7 +1287,7 @@ $goods_type = $bill->billL->goods_type ?? 0;
                                 'filter' => Html::activeDropDownList($searchModel, 'second_stone_cut1', $model->getSecondStoneCut1Map(), [
                                     'prompt' => '全部',
                                     'class' => 'form-control',
-                                    'style' => 'width:60px;'
+                                    //'style' => 'width:60px;'
                                 ]),
                                 'visible' => $model->isVisible($bill, 'second_stone_cut1'),
                             ],
@@ -1303,7 +1303,7 @@ $goods_type = $bill->billL->goods_type ?? 0;
                                 'filter' => Html::activeDropDownList($searchModel, 'second_stone_colour1', $model->getSecondStoneColour1Map(), [
                                     'prompt' => '全部',
                                     'class' => 'form-control',
-                                    'style' => 'width:60px;'
+                                    //'style' => 'width:60px;'
                                 ]),
                                 'visible' => $model->isVisible($bill, 'second_stone_colour1'),
                             ],
@@ -1349,7 +1349,7 @@ $goods_type = $bill->billL->goods_type ?? 0;
                                 'filter' => Html::activeDropDownList($searchModel, 'second_pei_type2', $model->getPeiShiWayMap(), [
                                     'prompt' => '全部',
                                     'class' => 'form-control',
-                                    'style' => 'width:80px;'
+                                    //'style' => 'width:80px;'
                                 ]),
                                 'visible' => $model->isVisible($bill, 'second_pei_type2'),
                             ],
@@ -1365,7 +1365,7 @@ $goods_type = $bill->billL->goods_type ?? 0;
                                 'filter' => Html::activeDropDownList($searchModel, 'second_stone_type2', $model->getSecondStoneType2Map(), [
                                     'prompt' => '全部',
                                     'class' => 'form-control',
-                                    'style' => 'width:60px;'
+                                    //'style' => 'width:60px;'
                                 ]),
                                 'visible' => $model->isVisible($bill, 'second_stone_type2'),
                             ],
@@ -1380,7 +1380,7 @@ $goods_type = $bill->billL->goods_type ?? 0;
                                 },
                                 'filter' => Html::activeTextInput($searchModel, 'second_stone_sn2', [
                                     'class' => 'form-control',
-                                    'style' => 'width:60px;'
+                                    //'style' => 'width:60px;'
                                 ]),
                                 'visible' => $model->isVisible($bill, 'second_stone_sn2'),
                             ],
@@ -1428,7 +1428,7 @@ $goods_type = $bill->billL->goods_type ?? 0;
                                 'filter' => Html::activeDropDownList($searchModel, 'second_stone_color2', $model->getSecondStoneColor2Map(), [
                                     'prompt' => '全部',
                                     'class' => 'form-control',
-                                    'style' => 'width:60px;'
+                                    //'style' => 'width:60px;'
                                 ]),
                                 'visible' => $model->isVisible($bill, 'second_stone_color2'),
                             ],
@@ -1444,7 +1444,7 @@ $goods_type = $bill->billL->goods_type ?? 0;
                                 'filter' => Html::activeDropDownList($searchModel, 'second_stone_clarity2', $model->getSecondStoneClarity2Map(), [
                                     'prompt' => '全部',
                                     'class' => 'form-control',
-                                    'style' => 'width:60px;'
+                                    //'style' => 'width:60px;'
                                 ]),
                                 'visible' => $model->isVisible($bill, 'second_stone_clarity2'),
                             ],
@@ -1587,7 +1587,7 @@ $goods_type = $bill->billL->goods_type ?? 0;
                                 'filter' => Html::activeDropDownList($searchModel, 'second_pei_type3', $model->getPeiShiWayMap(), [
                                     'prompt' => '全部',
                                     'class' => 'form-control',
-                                    'style' => 'width:80px;'
+                                    //'style' => 'width:80px;'
                                 ]),
                                 'visible' => $model->isVisible($bill, 'second_pei_type3'),
                             ],
@@ -1603,7 +1603,7 @@ $goods_type = $bill->billL->goods_type ?? 0;
                                 'filter' => Html::activeDropDownList($searchModel, 'second_stone_type3', $model->getSecondStoneType3Map(), [
                                     'prompt' => '全部',
                                     'class' => 'form-control',
-                                    'style' => 'width:60px;'
+                                    //'style' => 'width:60px;'
                                 ]),
                                 'visible' => $model->isVisible($bill, 'second_stone_type3'),
                             ],
@@ -1618,7 +1618,7 @@ $goods_type = $bill->billL->goods_type ?? 0;
                                 },
                                 'filter' => Html::activeTextInput($searchModel, 'second_stone_sn3', [
                                     'class' => 'form-control',
-                                    'style' => 'width:60px;'
+                                    //'style' => 'width:60px;'
                                 ]),
                                 'visible' => $model->isVisible($bill, 'second_stone_sn3'),
                             ],
@@ -1666,7 +1666,7 @@ $goods_type = $bill->billL->goods_type ?? 0;
                                 'filter' => Html::activeDropDownList($searchModel, 'second_stone_color3', $model->getSecondStoneColor3Map(), [
                                     'prompt' => '全部',
                                     'class' => 'form-control',
-                                    'style' => 'width:60px;'
+                                    //'style' => 'width:60px;'
                                 ]),
                                 'visible' => $model->isVisible($bill, 'second_stone_color3'),
                             ],
@@ -1682,7 +1682,7 @@ $goods_type = $bill->billL->goods_type ?? 0;
                                 'filter' => Html::activeDropDownList($searchModel, 'second_stone_clarity3', $model->getSecondStoneClarity3Map(), [
                                     'prompt' => '全部',
                                     'class' => 'form-control',
-                                    'style' => 'width:60px;'
+                                    //'style' => 'width:60px;'
                                 ]),
                                 'visible' => $model->isVisible($bill, 'second_stone_clarity3'),
                             ],
@@ -1729,7 +1729,7 @@ $goods_type = $bill->billL->goods_type ?? 0;
                                 },
                                 'filter' => Html::activeTextInput($searchModel, 'stone_remark', [
                                     'class' => 'form-control',
-                                    'style' => 'width:160px;'
+                                    //'style' => 'width:160px;'
                                 ]),
                                 'visible' => $model->isVisible($bill, 'stone_remark'),
                             ],
@@ -1745,7 +1745,7 @@ $goods_type = $bill->billL->goods_type ?? 0;
                                 'filter' => Html::activeDropDownList($searchModel, 'parts_way', $model->getPeiJianWayMap(), [
                                     'prompt' => '全部',
                                     'class' => 'form-control',
-                                    'style' => 'width:60px;'
+                                    //'style' => 'width:60px;'
                                 ]),
                                 'visible' => $model->isVisible($bill, 'parts_way'),
                             ],
@@ -1761,7 +1761,7 @@ $goods_type = $bill->billL->goods_type ?? 0;
                                 'filter' => Html::activeDropDownList($searchModel, 'parts_type', $model->getPartsTypeMap(), [
                                     'prompt' => '全部',
                                     'class' => 'form-control',
-                                    'style' => 'width:60px;'
+                                    //'style' => 'width:60px;'
                                 ]),
                                 'visible' => $model->isVisible($bill, 'parts_type'),
                             ],
@@ -1777,7 +1777,7 @@ $goods_type = $bill->billL->goods_type ?? 0;
                                 'filter' => Html::activeDropDownList($searchModel, 'parts_material', $model->getPartsMaterialMap(), [
                                     'prompt' => '全部',
                                     'class' => 'form-control',
-                                    'style' => 'width:60px;'
+                                    //'style' => 'width:60px;'
                                 ]),
                                 'visible' => $model->isVisible($bill, 'parts_material'),
                             ],
@@ -1969,7 +1969,7 @@ $goods_type = $bill->billL->goods_type ?? 0;
                                 'filter' => Html::activeDropDownList($searchModel, 'xiangqian_craft', $model->getXiangqianCraftMap(), [
                                     'prompt' => '全部',
                                     'class' => 'form-control',
-                                    'style' => 'width:60px;'
+                                    //'style' => 'width:60px;'
                                 ]),
                                 'visible' => $model->isVisible($bill, 'xiangqian_craft'),
                             ],
@@ -2297,7 +2297,7 @@ $goods_type = $bill->billL->goods_type ?? 0;
                                 'filter' => Html::activeDropDownList($searchModel, 'is_auto_price', \common\enums\ConfirmEnum::getMap(), [
                                     'prompt' => '全部',
                                     'class' => 'form-control',
-                                    'style' => 'width:60px;'
+                                    //'style' => 'width:60px;'
                                 ]),
                                 'visible' => $model->isVisible($bill, 'is_auto_price'),
                             ],
@@ -2379,7 +2379,7 @@ $goods_type = $bill->billL->goods_type ?? 0;
                                 'filter' => Html::activeDropDownList($searchModel, 'style_sex', $model->getStyleSexMap(), [
                                     'prompt' => '全部',
                                     'class' => 'form-control',
-                                    'style' => 'width:60px;'
+                                    //'style' => 'width:60px;'
                                 ]),
                                 'visible' => $model->isVisible($bill, 'style_sex'),
                             ],
@@ -2395,7 +2395,7 @@ $goods_type = $bill->billL->goods_type ?? 0;
                                 'filter' => Html::activeDropDownList($searchModel, 'jintuo_type', $model->getJietuoTypeMap(), [
                                     'prompt' => '全部',
                                     'class' => 'form-control',
-                                    'style' => 'width:60px;'
+                                    //'style' => 'width:60px;'
                                 ]),
                                 'visible' => $model->isVisible($bill, 'jintuo_type'),
                             ],
@@ -2411,7 +2411,7 @@ $goods_type = $bill->billL->goods_type ?? 0;
                                 'filter' => Html::activeDropDownList($searchModel, 'qiban_type', $model->getQibanTypeMap(), [
                                     'prompt' => '全部',
                                     'class' => 'form-control',
-                                    'style' => 'width:60px;'
+                                    //'style' => 'width:60px;'
                                 ]),
                                 'visible' => $model->isVisible($bill, 'qiban_type'),
                             ],
@@ -2427,7 +2427,7 @@ $goods_type = $bill->billL->goods_type ?? 0;
                                 'filter' => Html::activeDropDownList($searchModel, 'is_inlay', $model->getIsInlayMap(), [
                                     'prompt' => '全部',
                                     'class' => 'form-control',
-                                    'style' => 'width:60px;'
+                                    //'style' => 'width:60px;'
                                 ]),
                                 'visible' => $model->isVisible($bill, 'is_inlay'),
                             ],
@@ -2443,7 +2443,7 @@ $goods_type = $bill->billL->goods_type ?? 0;
                                 'filter' => Html::activeDropDownList($searchModel, 'pay_status', $model->getPayStatusMap(), [
                                     'prompt' => '全部',
                                     'class' => 'form-control',
-                                    'style' => 'width:60px;'
+                                    //'style' => 'width:60px;'
                                 ]),
                                 'visible' => $model->isVisible($bill, 'pay_status'),
                             ],
@@ -2460,7 +2460,7 @@ $goods_type = $bill->billL->goods_type ?? 0;
                                 'filter' => Html::activeDropDownList($searchModel, 'is_wholesale', \addons\Warehouse\common\enums\IsWholeSaleEnum::getMap(), [
                                     'prompt' => '全部',
                                     'class' => 'form-control',
-                                    'style' => 'width:60px;'
+                                    //'style' => 'width:60px;'
                                 ]),
                                 'visible' => $model->isVisible($bill, 'is_wholesale'),
                             ],
@@ -2475,7 +2475,7 @@ $goods_type = $bill->billL->goods_type ?? 0;
                                 },
                                 'filter' => Html::activeTextInput($searchModel, 'factory_mo', [
                                     'class' => 'form-control',
-                                    'style' => 'width:60px;'
+                                    //'style' => 'width:60px;'
                                 ]),
                                 'visible' => $model->isVisible($bill, 'factory_mo'),
                             ],
@@ -2489,7 +2489,7 @@ $goods_type = $bill->billL->goods_type ?? 0;
                                 },
                                 'filter' => Html::activeTextInput($searchModel, 'order_sn', [
                                     'class' => 'form-control',
-                                    'style' => 'width:60px;'
+                                    //'style' => 'width:60px;'
                                 ]),
                                 'visible' => $model->isVisible($bill, 'order_sn'),
                             ],
@@ -2504,7 +2504,7 @@ $goods_type = $bill->billL->goods_type ?? 0;
                                 },
                                 'filter' => Html::activeTextInput($searchModel, 'remark', [
                                     'class' => 'form-control',
-                                    'style' => 'width:160px;'
+                                    //'style' => 'width:160px;'
                                 ]),
                                 'visible' => $model->isVisible($bill, 'remark'),
                             ],
@@ -2574,7 +2574,7 @@ $goods_type = $bill->billL->goods_type ?? 0;
         $("input[name='id[]']").trigger("click");
 
         //批量复制货号
-        var button = '<span id="goods_ids" style="position: absolute; left: -1000000000px;"><?= $goods_ids ?></span><div class="btn btn-primary btn-xs" onclick="copy(\'goods_ids\')">批量复制 <i class="fa fa-copy"></i></div>';
+        var button = '<span id="goods_ids" style="position: absolute; left: -1000000000px;"><?= $goods_ids ?></span><div class="btn btn-default btn-xs" onclick="copy(\'goods_ids\')"><i class="fa fa-copy"></i></div>';
         $("#batch_copy_goods_id > a").after(button);
     });
 

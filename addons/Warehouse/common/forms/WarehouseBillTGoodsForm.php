@@ -136,8 +136,10 @@ class WarehouseBillTGoodsForm extends WarehouseBillGoodsL
      */
     public function getFooterValues($name = null, $total = [], $defaultValue = 0)
     {
+        $footer_value = '';
         $value = $total[$name] ?? $defaultValue;
-        $footer_value = $this->getAttributeLabel($name) . "<span style='font-size:16px; color: red;'>[$value]</span>";
+        //$footer_value .= $this->getAttributeLabel($name);
+        $footer_value .= "<span style='font-size:13px; color: red;'>[$value]</span>";
         return $footer_value;
     }
 
