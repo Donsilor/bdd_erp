@@ -2575,7 +2575,7 @@ $goods_type = $bill->billL->goods_type ?? 0;
         $("input[name='id[]']").trigger("click");
 
         //批量复制货号
-        var button = '<span id="goods_ids" style="position: absolute; left: -1000000000px;"><?= $goods_ids ?></span><div class="btn btn-default btn-xs" onclick="copy(\'goods_ids\')"><i class="fa fa-copy"></i></div>';
+        var button = '<span id="goods_ids" style="position: absolute; left: -1000000000px;"><?= $goods_ids ?></span><div class="btn btn-default btn-xs" data-toggle="tooltip" data-original-title="批量复制" onclick="copy(\'goods_ids\')"><i class="fa fa-copy"></i></div>';
         $("#batch_copy_goods_id > a").after(button);
     });
 
