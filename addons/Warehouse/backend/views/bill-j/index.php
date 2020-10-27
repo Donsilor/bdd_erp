@@ -258,7 +258,7 @@ $params = $params ? "&" . http_build_query($params) : '';
                                     if ($model->bill_status == BillStatusEnum::CONFIRM
                                         && $model->billJ->lend_status == LendStatusEnum::IN_RECEIVE) {
                                         return Html::edit(['ajax-receive', 'id' => $model->id], '接收', [
-                                            'class' => 'btn btn-primary btn-sm',
+                                            'class' => 'btn btn-success btn-sm',
                                             'data-toggle' => 'modal',
                                             'data-target' => '#ajaxModal',
                                         ]);
@@ -266,7 +266,7 @@ $params = $params ? "&" . http_build_query($params) : '';
                                 },
                                 'restore' => function ($url, $model, $key) {
                                     if ($model->bill_status == BillStatusEnum::CONFIRM
-                                        && $model->billJ->lend_status == LendStatusEnum::HAS_LEND) {
+                                        && in_array($model->billJ->lend_status, [LendStatusEnum::HAS_LEND, LendStatusEnum::PORTION_RETURN])) {
                                         return Html::a('还货', ['bill-j-goods/index', 'bill_id' => $model->id, 'returnUrl' => Url::getReturnUrl()], ['class' => 'btn btn-primary btn-sm']);
                                     }
                                 },

@@ -86,8 +86,8 @@ class WarehouseBillJGoodsForm extends WarehouseBillGoods
             $goods = WarehouseGoods::find()->select(['goods_num','stock_num','do_chuku_num','goods_status'])->where(['goods_id'=>$goods_id])->one();
             if (!$goods) {
                 $this->addGoodsError($goods_id, 1,"货号不存在");
-            }else if(!in_array($goods->goods_status,[GoodsStatusEnum::HAS_SOLD,GoodsStatusEnum::IN_STOCK])) {
-                $this->addGoodsError($goods_id, 1,"商品不是库存或已销售状态");
+            }else if(!in_array($goods->goods_status,[GoodsStatusEnum::IN_STOCK])) {
+                $this->addGoodsError($goods_id, 1,"商品不是库存状态");
             }else if(($goods->goods_num - $goods->stock_num-$goods->do_chuku_num) <0) {
                 $this->addGoodsError($goods_id, 1,"商品不符合借货条件");
             }else {

@@ -32,7 +32,7 @@ $lend_status = $bill->billJ->lend_status ?? 0;
             echo Html::edit(['edit-all', 'bill_id' => $bill->id, 'returnUrl' => Yii::$app->request->get('returnUrl')], '编辑货品', ['class' => 'btn btn-info btn-xs']);
             echo '&nbsp;';
         } elseif ($bill->bill_status == BillStatusEnum::CONFIRM
-            && $lend_status == LendStatusEnum::HAS_LEND) {
+            && in_array($lend_status, [LendStatusEnum::HAS_LEND, LendStatusEnum::PORTION_RETURN])) {
             echo Html::batchPopButton(['batch-return', 'bill_id' => $bill->id, 'check' => 1], '分批还货', [
                 'class' => 'btn btn-info btn-xs',
                 'data-width' => '90%',

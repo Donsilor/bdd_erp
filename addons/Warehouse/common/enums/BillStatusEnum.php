@@ -29,7 +29,7 @@ class BillStatusEnum extends \common\enums\BaseEnum
             self::SAVE    => '已保存',
             self::PENDING => '待审核',
             self::CONFIRM => '已审核',
-            self::SIGN  => '已签收',
+            //self::SIGN  => '已签收',
             self::CANCEL => '已取消',
         ];
     }

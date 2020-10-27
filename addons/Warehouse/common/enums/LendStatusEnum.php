@@ -24,7 +24,7 @@ class LendStatusEnum extends \common\enums\BaseEnum
         return [
             self::SAVE => '保存',
             self::IN_RECEIVE => '待接收',
-            self::HAS_LEND => '已借出',
+            self::HAS_LEND => '待还货',
             self::PORTION_RETURN => '部分还货',
             self::HAS_RETURN => '已还货',
         ];

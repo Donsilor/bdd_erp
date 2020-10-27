@@ -192,18 +192,42 @@ class WarehouseBillJService extends WarehouseBillService
         }
         $billJ = WarehouseBillJ::findOne($form->id);
         if ($form->audit_status == AuditStatusEnum::PASS) {
-            $goods = WarehouseBillGoods::find()->select(['id', 'goods_id'])->where(['bill_id' => $form->id])->all();
-            if (!$goods) {
+            $billGoods = WarehouseBillGoods::find()->select(['id', 'goods_id', 'goods_num'])->where(['bill_id' => $form->id])->all();
+            if (!$billGoods) {
                 throw new \Exception("单据明细不能为空");
             }
             //更新单据明细状态
-            $ids = ArrayHelper::getColumn($goods, 'id');
+            $ids = ArrayHelper::getColumn($billGoods, 'id');
             $execute_num = WarehouseBillGoodsJ::updateAll(['lend_status' => LendStatusEnum::IN_RECEIVE], ['id' => $ids, 'lend_status' => LendStatusEnum::SAVE]);
             if ($execute_num <> count($ids)) {
                 throw new \Exception("同步更新商品明细状态失败");
             }
             $form->bill_status = BillStatusEnum::CONFIRM;
             $billJ->lend_status = LendStatusEnum::IN_RECEIVE;
+            //同步更新商品库存状态
+            foreach ($billGoods as $goods) {
+                $stock_num = $goods->goods->stock_num ?? 0;
+                $do_chuku_num = $goods->goods->do_chuku_num ?? 0;
+                $log_msg = '';
+                if ($stock_num) {
+                    $goods_status = GoodsStatusEnum::IN_STOCK;
+                } else {
+                    $goods_status = GoodsStatusEnum::HAS_LEND;
+                    $log_msg .= "货品状态:“" . GoodsStatusEnum::getValue(GoodsStatusEnum::IN_STOCK) . "”变更为:“" . GoodsStatusEnum::getValue($goods_status) . "”;";
+                }
+                $res = WarehouseGoods::updateAll(['goods_status' => $goods_status, 'do_chuku_num' => ($do_chuku_num - $goods->goods_num)], ['goods_id' => $goods->goods_id]);//, 'goods_status' => GoodsStatusEnum::IN_LEND
+                if (!$res) {
+                    //throw new \Exception("商品{$goods->goods_id}状态不是借货中或者不存在，请查看原因");
+                }
+                //插入商品日志
+                $log = [
+                    'goods_id' => $goods->goods->id,
+                    'goods_status' => $goods_status,
+                    'log_type' => LogTypeEnum::ARTIFICIAL,
+                    'log_msg' => '借货单: ' . $form->bill_no . ";" . $log_msg . "借货数量: " . $goods->goods_num,
+                ];
+                Yii::$app->warehouseService->goodsLog->createGoodsLog($log);
+            }
         } else {
             $form->bill_status = BillStatusEnum::SAVE;
             $billJ->lend_status = LendStatusEnum::SAVE;
@@ -325,29 +349,6 @@ class WarehouseBillJService extends WarehouseBillService
 
         //同步借货单附表
         WarehouseBillJ::updateAll($update, ['id' => $form->id]);
-
-        //同步更新商品库存状态
-        $billGoods = WarehouseBillGoods::find()->where(['id' => $ids])->select(['goods_id', 'goods_num'])->all();
-        foreach ($billGoods as $goods) {
-            $goodsM = WarehouseGoods::findOne(['goods_id' => $goods->goods_id]);
-            if($goodsM->stock_num) {
-                $goods_status = GoodsStatusEnum::IN_STOCK;
-            }else{
-                $goods_status = GoodsStatusEnum::HAS_LEND;
-            }
-            $res = WarehouseGoods::updateAll(['goods_status' => $goods_status, 'do_chuku_num' => ($goodsM->do_chuku_num-$goods->goods_num)], ['goods_id' => $goods->goods_id]);//, 'goods_status' => GoodsStatusEnum::IN_LEND
-            if (!$res) {
-                //throw new \Exception("商品{$goods->goods_id}状态不是借货中或者不存在，请查看原因");
-            }
-            //插入商品日志
-            $log = [
-                'goods_id' => $goods->goods->id,
-                'goods_status' => GoodsStatusEnum::HAS_LEND,
-                'log_type' => LogTypeEnum::ARTIFICIAL,
-                'log_msg' => '借货单：' . $bill->bill_no . ";;货品状态:“" . GoodsStatusEnum::getValue(GoodsStatusEnum::IN_STOCK) . "”变更为：“" . GoodsStatusEnum::getValue(GoodsStatusEnum::HAS_LEND) . "”"
-            ];
-            Yii::$app->warehouseService->goodsLog->createGoodsLog($log);
-        }
     }
 
     /**
@@ -418,6 +419,15 @@ class WarehouseBillJService extends WarehouseBillService
             if (false === $goods->save(true, ['goods_id', 'stock_num', 'goods_status'])) {
                 throw new \Exception("[{$goods->goods_id}]单据明细添加失败");
             }
+            $log_msg = "货品状态变更为:“" . GoodsStatusEnum::getValue($goods->goods_status) . "”;";
+            //插入商品日志
+            $log = [
+                'goods_id' => $goods->id,
+                'goods_status' => $goods->goods_status,
+                'log_type' => LogTypeEnum::ARTIFICIAL,
+                'log_msg' => '借货单: ' . $bGoods->bill_no . ";" . $log_msg . "还货数量: " . $restore_num,
+            ];
+            Yii::$app->warehouseService->goodsLog->createGoodsLog($log);
         }
 
         //同步更新单据附表
