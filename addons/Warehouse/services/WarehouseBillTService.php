@@ -343,6 +343,7 @@ class WarehouseBillTService extends Service
                 }
             }
             $is_inlay = InlayEnum::No;
+            $style_id = null;
             if ($qiban_type != QibanTypeEnum::NO_STYLE) {
                 if (empty($style_sn)) {
                     $flag = false;
@@ -380,6 +381,7 @@ class WarehouseBillTService extends Service
                     $flag = false;
                     $error[$i][] = $qiban_error . "[款号]为镶嵌类，不可导入";
                 }
+                $style_id = $style->id;
             }
             if (!$flag) {
                 //$flag = true;
@@ -487,6 +489,9 @@ class WarehouseBillTService extends Service
                 } else {
                     $chain_type = $attr_id;
                 }
+            } elseif ($style_id) {
+                $chainAttr = StyleAttribute::find()->where(['style_id' => $style_id, 'attr_id' => AttrIdEnum::CHAIN_TYPE])->one();
+                $chain_type = $chainAttr->attr_values ?? "";
             }
             $cramp_ring = $goods['cramp_ring'] ?? "";//扣环
             if (!empty($cramp_ring)) {
@@ -498,6 +503,9 @@ class WarehouseBillTService extends Service
                 } else {
                     $cramp_ring = $attr_id;
                 }
+            } elseif ($style_id) {
+                $crampAttr = StyleAttribute::find()->where(['style_id' => $style_id, 'attr_id' => AttrIdEnum::CHAIN_BUCKLE])->one();
+                $cramp_ring = $crampAttr->attr_values ?? "";
             }
             $talon_head_type = $goods['talon_head_type'] ?? "";//爪头形状
             if (!empty($talon_head_type)) {
@@ -1379,7 +1387,7 @@ class WarehouseBillTService extends Service
         $billT = WarehouseBillL::findOne($form->bill_id);
         $billT = $billT ?? new WarehouseBillL();
         $billT->id = $form->bill_id;
-        if(!$form->goods_type){
+        if (!$form->goods_type) {
             $billT->goods_type = $goods_type;
         }
         if (false === $billT->save()) {

@@ -479,9 +479,7 @@ $goods_type = $model->billL->goods_type ?? 0
                 <td class="algin-center padding-5"><?= $val['goods_num'] ?? "0" ?></td>
                 <?php if (!in_array($goods_type, [\addons\Warehouse\common\enums\GoodsTypeEnum::PlainGold])) { ?>
                     <td class="algin-center padding-5"><?= $val['finger'] ?? "/" ?></td>
-                <?php } ?>
                 <!-- 金料-->
-                <?php if (!in_array($goods_type, [\addons\Warehouse\common\enums\GoodsTypeEnum::PlainGold])) { ?>
                     <td class="algin-center padding-5"><?= floatval($val['suttle_weight']) ?? "0" ?></td>
                 <?php } ?>
                 <td class="algin-center padding-5">
@@ -539,14 +537,12 @@ $goods_type = $model->billL->goods_type ?? 0
             <tr>
                 <td class="algin-center padding-5" colspan="6">合计</td>
                 <td class="algin-center padding-5"><?= $total['goods_num'] ?? 0; ?></td>
-                <td class="algin-center padding-5">/</td>
                 <?php if (!in_array($goods_type, [\addons\Warehouse\common\enums\GoodsTypeEnum::PlainGold])) { ?>
+                    <td class="algin-center padding-5">/</td>
                     <td class="algin-center padding-5"><?= floatval($total['suttle_weight']) ?? '0.00'; ?></td>
                 <?php } ?>
                 <td class="algin-center padding-5"><?= floatval($total['gold_weight']) ?? '0.00'; ?></td>
-                <?php if (!in_array($goods_type, [\addons\Warehouse\common\enums\GoodsTypeEnum::PlainGold])) { ?>
-                    <td class="algin-center padding-5">/</td>
-                <?php } ?>
+                <td class="algin-center padding-5">/</td>
                 <!--                <td class="algin-center padding-5">-->
                 <? //= $total['lncl_loss_weight'] ?? '0.00'; ?><!--</td>-->
                 <td class="algin-center padding-5"><?= floatval($total['gold_amount']) ?? '0.00'; ?></td>
