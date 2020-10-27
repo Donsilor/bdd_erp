@@ -483,7 +483,7 @@ $goods_type = $model->billL->goods_type ?? 0
                     <td class="algin-center padding-5"><?= round($val['suttle_weight'], 2) ?? "0" ?></td>
                 <?php } ?>
                 <td class="algin-center padding-5">
-                    <?= floatval($val['gold_weight']) ?? "0" ?>
+                    <?= round($val['gold_weight'], 2) ?? "0" ?>
                 </td>
                 <td class="algin-center padding-5"><?= round($val['gold_loss'], 2) ?? "0" ?></td>
                 <!--                    <td class="algin-center padding-5">-->
