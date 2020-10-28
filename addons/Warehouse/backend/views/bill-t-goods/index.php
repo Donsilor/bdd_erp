@@ -260,7 +260,7 @@ $goods_type = $bill->billL->goods_type ?? 0;
                                         //if($bill->bill_status == BillStatusEnum::CONFIRM){
                                         //    $model->goods_id = Html::a($model->goods_id, ['view', 'goods_id' => $model->goods_id, 'returnUrl' => Url::getReturnUrl()], ['class' => 'openContab', 'style' => "text-decoration:underline;color:#3c8dbc", 'id' => $model->goods_id]) . ' <i class="fa fa-copy" onclick="copy(\'' . $model->goods_id . '\')"></i>';
                                         //}else{
-                                        $model->goods_id = '<span id="goods_' . $model->goods_id . '">' . $model->goods_id . '</span> <i class="fa fa-copy" onclick="copy(\'goods_' . $model->goods_id . '\')"></i>';
+                                        $model->goods_id = '<span id="goods_' . $model->goods_id . '">' . $model->goods_id . '</span> <i class="fa fa-copy" data-toggle="tooltip" data-original-title="复制" onclick="copy(\'goods_' . $model->goods_id . '\')"></i>';
                                         //}
 
                                     }
@@ -280,10 +280,10 @@ $goods_type = $bill->billL->goods_type ?? 0;
                                 'value' => function ($model, $key, $index, $widget) {
                                     $widget->footer = $model->getAttributeLabel('style_sn');
                                     if (false) {//!empty($model->style_sn) && !empty($model->id)
-                                        return Html::a($model->style_sn, ['/style/style/view', 'id' => $model->id, 'returnUrl' => Url::getReturnUrl()], ['style' => "text-decoration:underline;color:#3c8dbc", 'id' => $model->style_sn . '_' . $model->id]) . ' <i class="fa fa-copy" onclick="copy(\'' . $model->style_sn . '_' . $model->id . '\')"></i>';
+                                        return Html::a($model->style_sn, ['/style/style/view', 'id' => $model->id, 'returnUrl' => Url::getReturnUrl()], ['style' => "text-decoration:underline;color:#3c8dbc", 'id' => $model->style_sn . '_' . $model->id]) . ' <i class="fa fa-copy" data-toggle="tooltip" data-original-title="复制" onclick="copy(\'' . $model->style_sn . '_' . $model->id . '\')"></i>';
                                     } else {
                                         if ($model->style_sn) {
-                                            return "<span id='{$model->style_sn}_{$model->id}'>" . $model->style_sn . "</span>" . ' <i class="fa fa-copy" onclick="copy(\'' . $model->style_sn . '_' . $model->id . '\')"></i>';
+                                            return "<span id='{$model->style_sn}_{$model->id}'>" . $model->style_sn . "</span>" . ' <i class="fa fa-copy" data-toggle="tooltip" data-original-title="复制" onclick="copy(\'' . $model->style_sn . '_' . $model->id . '\')"></i>';
                                         }
                                         return $model->style_sn ?? "";
                                     }
