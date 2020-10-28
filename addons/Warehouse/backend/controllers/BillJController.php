@@ -58,7 +58,7 @@ class BillJController extends BaseController
             ->search(\Yii::$app->request->queryParams, ['created_at', 'audit_time', 'lender_id', 'lend_status', 'est_restore_time', 'rel_restore_time']);
         $lender_id = $searchModel->lender_id;
         if (!empty($lender_id)) {
-            $dataProvider->query->andWhere(['like', 'creator.username', $lender_id]);
+            $dataProvider->query->andWhere(['=', 'billJ.lender_id', $lender_id]);
         }
         $lend_status = $searchModel->lend_status;
         if (!empty($lend_status)) {

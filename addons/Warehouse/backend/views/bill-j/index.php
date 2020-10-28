@@ -77,10 +77,17 @@ $params = $params ? "&" . http_build_query($params) : '';
                         ],
                         [
                             'attribute' => 'lender_id',
-                            'value' => 'billJ.lender.username',
-                            'filter' => Html::activeTextInput($searchModel, 'lender_id', [
-                                'class' => 'form-control',
+                            'value' => "billJ.lender.username",
+                            'filter' => \kartik\select2\Select2::widget([
+                                'name' => 'SearchModel[lender_id]',
+                                'value' => $searchModel->lender_id,
+                                'data' => \Yii::$app->services->backendMember->getDropDown(),
+                                'options' => ['placeholder' => "请选择"],
+                                'pluginOptions' => [
+                                    'allowClear' => true,
+                                ],
                             ]),
+                            'format' => 'raw',
                         ],
                         [
                             'attribute' => 'goods_num',
@@ -92,6 +99,41 @@ $params = $params ? "&" . http_build_query($params) : '';
                                 return $model->billJ->restore_num ?? 0;
                             },
                             'filter' => false,
+                        ],
+                        [
+                            'attribute' => 'billJ.lend_status',
+                            'format' => 'raw',
+                            'value' => function ($model) {
+                                return \addons\Warehouse\common\enums\LendStatusEnum::getValue($model->billJ->lend_status);
+                            },
+                            'filter' => Html::activeDropDownList($searchModel, 'billJ.lend_status', \addons\Warehouse\common\enums\LendStatusEnum::getMap(), [
+                                'prompt' => '全部',
+                                'class' => 'form-control',
+                                'style' => 'width:80px;',
+                            ]),
+                        ],
+                        [
+                            'attribute' => 'audit_time',
+                            'filter' => DateRangePicker::widget([    // 日期组件
+                                'model' => $searchModel,
+                                'attribute' => 'audit_time',
+                                'value' => $searchModel->audit_time,
+                                'options' => ['readonly' => false, 'class' => 'form-control', 'style' => 'background-color:#fff;width:100px;'],
+                                'pluginOptions' => [
+                                    'format' => 'yyyy-mm-dd',
+                                    'locale' => [
+                                        'separator' => '/',
+                                    ],
+                                    'endDate' => date('Y-m-d', time()),
+                                    'todayHighlight' => true,
+                                    'autoclose' => true,
+                                    'todayBtn' => 'linked',
+                                    'clearBtn' => true,
+                                ],
+                            ]),
+                            'value' => function ($model) {
+                                return Yii::$app->formatter->asDate($model->updated_at);
+                            }
                         ],
                         [
                             'attribute' => 'est_restore_time',
@@ -140,18 +182,6 @@ $params = $params ? "&" . http_build_query($params) : '';
                             }
                         ],
                         [
-                            'attribute' => 'billJ.lend_status',
-                            'format' => 'raw',
-                            'value' => function ($model) {
-                                return \addons\Warehouse\common\enums\LendStatusEnum::getValue($model->billJ->lend_status);
-                            },
-                            'filter' => Html::activeDropDownList($searchModel, 'billJ.lend_status', \addons\Warehouse\common\enums\LendStatusEnum::getMap(), [
-                                'prompt' => '全部',
-                                'class' => 'form-control',
-                                'style' => 'width:80px;',
-                            ]),
-                        ],
-                        [
                             'attribute' => 'order_sn',
                             'filter' => Html::activeTextInput($searchModel, 'order_sn', [
                                 'class' => 'form-control',
@@ -160,10 +190,17 @@ $params = $params ? "&" . http_build_query($params) : '';
                         ],
                         [
                             'attribute' => 'creator_id',
-                            'value' => 'creator.username',
-                            'filter' => Html::activeTextInput($searchModel, 'creator.username', [
-                                'class' => 'form-control',
+                            'value' => "creator.username",
+                            'filter' => \kartik\select2\Select2::widget([
+                                'name' => 'SearchModel[creator_id]',
+                                'value' => $searchModel->creator_id,
+                                'data' => \Yii::$app->services->backendMember->getDropDown(),
+                                'options' => ['placeholder' => "请选择"],
+                                'pluginOptions' => [
+                                    'allowClear' => true,
+                                ],
                             ]),
+                            'format' => 'raw',
                         ],
                         [
                             'attribute' => 'created_at',
@@ -186,29 +223,6 @@ $params = $params ? "&" . http_build_query($params) : '';
                             ]),
                             'value' => function ($model) {
                                 return Yii::$app->formatter->asDate($model->created_at);
-                            }
-                        ],
-                        [
-                            'attribute' => 'audit_time',
-                            'filter' => DateRangePicker::widget([    // 日期组件
-                                'model' => $searchModel,
-                                'attribute' => 'audit_time',
-                                'value' => $searchModel->audit_time,
-                                'options' => ['readonly' => false, 'class' => 'form-control', 'style' => 'background-color:#fff;width:100px;'],
-                                'pluginOptions' => [
-                                    'format' => 'yyyy-mm-dd',
-                                    'locale' => [
-                                        'separator' => '/',
-                                    ],
-                                    'endDate' => date('Y-m-d', time()),
-                                    'todayHighlight' => true,
-                                    'autoclose' => true,
-                                    'todayBtn' => 'linked',
-                                    'clearBtn' => true,
-                                ],
-                            ]),
-                            'value' => function ($model) {
-                                return Yii::$app->formatter->asDate($model->updated_at);
                             }
                         ],
                         [
