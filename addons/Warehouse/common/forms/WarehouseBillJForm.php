@@ -52,7 +52,7 @@ class WarehouseBillJForm extends WarehouseBill
             'creator_id' => '制单人',
             'created_at' => '制单时间',
             'est_restore_time' => '预计还货时间',
-            'rel_restore_time' => '实际还货时间',
+            'rel_restore_time' => '最新还货时间',
             'returned_time' => '还货日期',
             'audit_time' => '借货时间',
             'goods_remark' => '质检备注',

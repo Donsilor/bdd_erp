@@ -438,6 +438,7 @@ class WarehouseBillJService extends WarehouseBillService
         } else {
             $billJ->lend_status = LendStatusEnum::HAS_RETURN;
         }
+        $billJ->rel_restore_time = time();
         if (false === $billJ->save()) {
             throw new \Exception($this->getError($billJ));
         }

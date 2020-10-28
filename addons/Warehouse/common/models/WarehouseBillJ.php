@@ -53,7 +53,7 @@ class WarehouseBillJ extends BaseModel
             'receive_time' => '接收时间',
             'receive_remark' => '接收备注',
             'restore_num' => '还货数量',
-            'est_restore_time' => '预计还货时间',
+            'est_restore_time' => '最新还货时间',
             'rel_restore_time' => '实际还货时间',
             'lend_status' => '借货状态',
         ];
