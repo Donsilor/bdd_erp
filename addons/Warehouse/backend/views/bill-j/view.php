@@ -55,7 +55,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         </tr>
                         <tr>
                             <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('rel_restore_time') ?>：</td>
-                            <td><?= \Yii::$app->formatter->asDate($model->billJ->rel_restore_time) ?></td>
+                            <td><?= \Yii::$app->formatter->asDatetime($model->billJ->rel_restore_time) ?></td>
                         </tr>
                         <tr>
                             <td class="col-xs-1 text-right"><?= $model->getAttributeLabel('creator_id') ?>：</td>
