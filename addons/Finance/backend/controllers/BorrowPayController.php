@@ -8,6 +8,7 @@ use addons\Finance\common\forms\BorrowPayForm;
 use addons\Finance\common\models\BorrowPay;
 use common\enums\CurrencyEnum;
 use common\enums\FlowStatusEnum;
+use common\enums\OperTypeEnum;
 use common\helpers\ResultHelper;
 use common\models\common\Flow;
 use common\models\common\FlowDetails;
@@ -114,7 +115,7 @@ class BorrowPayController extends BaseController
                          * 审批流程
                          * 根据流程ID生成单号，并把单号反写到流程中
                         */
-                        $flow = Yii::$app->services->flowType->createFlow($model->targetType, $id);
+                        $flow = Yii::$app->services->flowType->createFlow($model->targetType, $id,'',OperTypeEnum::BORROW_PAY);
                         if(!$flow){
                             throw new \Exception('创建审批流程错误');
                         }
@@ -176,7 +177,7 @@ class BorrowPayController extends BaseController
                     /**
                      * 审批不通过，重新生成审批流程
                      */
-                    $flow = Yii::$app->services->flowType->createFlow($model->targetType, $id,$model->finance_no);
+                    $flow = Yii::$app->services->flowType->createFlow($model->targetType, $id,$model->finance_no,OperTypeEnum::BORROW_PAY);
                     if(!$flow){
                         throw new \Exception('创建审批流程错误');
                     }
@@ -238,7 +239,7 @@ class BorrowPayController extends BaseController
                     'audit_time' => time(),
                     'audit_remark' => $model->audit_remark
                 ];
-                $res = \Yii::$app->services->flowType->flowAudit($model->targetType,$id,$audit);
+                $res = \Yii::$app->services->flowType->flowAudit($model->targetType,$id,$audit,OperTypeEnum::BORROW_PAY);
                 //审批完结或者审批不通过才会走下面
                 if($res->flow_status == FlowStatusEnum::COMPLETE || $res->flow_status == FlowStatusEnum::CANCEL){
                     $model->audit_time = time();

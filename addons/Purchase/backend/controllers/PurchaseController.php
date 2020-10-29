@@ -4,6 +4,7 @@ namespace addons\Purchase\backend\controllers;
 
 
 use common\enums\FlowStatusEnum;
+use common\enums\OperTypeEnum;
 use common\enums\TargetType;
 use common\enums\TargetTypeEnum;
 use common\helpers\PageHelper;
@@ -162,7 +163,7 @@ class PurchaseController extends BaseController
         try{
             $trans = Yii::$app->db->beginTransaction();
             //审批流程
-            $flow = Yii::$app->services->flowType->createFlow($this->targetType,$id,$model->purchase_sn);
+            $flow = Yii::$app->services->flowType->createFlow($this->targetType,$id,$model->purchase_sn,OperTypeEnum::PURCHASE);
 
             $model->purchase_status = PurchaseStatusEnum::PENDING;
             $model->audit_status = AuditStatusEnum::PENDING;
@@ -247,7 +248,7 @@ class PurchaseController extends BaseController
                     'audit_time' => time(),
                     'audit_remark' => $model->audit_remark
                 ];
-                $flow = \Yii::$app->services->flowType->flowAudit($this->targetType,$id,$audit);
+                $flow = \Yii::$app->services->flowType->flowAudit($this->targetType,$id,$audit,OperTypeEnum::PURCHASE);
                 //审批完结或者审批不通过才会走下面
                 if($flow->flow_status == FlowStatusEnum::COMPLETE || $flow->flow_status == FlowStatusEnum::CANCEL){
                     $model->audit_time = time();

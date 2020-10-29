@@ -43,7 +43,7 @@ class FlowTypeService extends Service
     /***
      * 创建具体审批流程
      */
-    public function createFlow($flow_type_id,$target_id,$target_no=''){
+    public function createFlow($flow_type_id,$target_id,$target_no='',$oper_type=''){
 
 
         //取消之前的流程
@@ -104,8 +104,8 @@ class FlowTypeService extends Service
             //发送待处理通知
             $pend = new Pend();
             $pend->oper_id = $target_id;
-            $pend->oper_sn = $target_no;
-            $pend->oper_type = OperTypeEnum::SUPPLY_MOD;
+            $pend->oper_sn = $target_no ?? '马上处理';
+            $pend->oper_type = $oper_type;
             $pend->pend_status = PendStatusEnum::PENDING;
             $pend->pend_module = $flow->cate;
             $pend->operor_id = $user_id;
@@ -143,7 +143,7 @@ class FlowTypeService extends Service
         return [$current_users_arr ,$flow_detail];
     }
 
-    public function flowAudit($flow_type_id,$target_id, $audit){
+    public function flowAudit($flow_type_id,$target_id, $audit,$oper_type=''){
 
         $flow = Flow::find()->where(['flow_type'=>$flow_type_id,'target_id' => $target_id])->orderBy('id desc')->one();
         if(empty($flow)){
@@ -192,8 +192,8 @@ class FlowTypeService extends Service
                 foreach ($operorIds as $operorId) {
                     $pend = new Pend();
                     $pend->oper_id = $target_id;
-                    $pend->oper_sn = $flow->target_no;
-                    $pend->oper_type = OperTypeEnum::SUPPLY_MOD;
+                    $pend->oper_sn = $flow->target_no ?? '马上处理';
+                    $pend->oper_type = $oper_type;
                     $pend->pend_status = PendStatusEnum::PENDING;
                     $pend->pend_module = $flow->cate;
                     $pend->operor_id = (int)$operorId;

@@ -2,13 +2,14 @@
 
 namespace addons\Supply\backend\controllers;
 
-use addons\Style\common\models\StyleFactory;
-use common\enums\FlowStatusEnum;
 use Yii;
 use common\helpers\Url;
 use common\models\base\SearchModel;
 use addons\Supply\common\models\Supplier;
 use addons\Supply\common\forms\SupplierForm;
+use addons\Style\common\models\StyleFactory;
+use common\enums\FlowStatusEnum;
+use common\enums\OperTypeEnum;
 use common\enums\AuditStatusEnum;
 use common\enums\StatusEnum;
 use common\helpers\ExcelHelper;
@@ -187,7 +188,7 @@ class SupplierController extends BaseController
             $trans = Yii::$app->db->beginTransaction();
             if($model->targetType){
                 //审批流程
-                Yii::$app->services->flowType->createFlow($model->targetType,$id,$model->supplier_name);
+                Yii::$app->services->flowType->createFlow($model->targetType,$id,$model->supplier_name,OperTypeEnum::SUPPLIER);
             }
             $model->audit_status = AuditStatusEnum::PENDING;
             if(false === $model->save()){
@@ -224,7 +225,7 @@ class SupplierController extends BaseController
                         'audit_time' => time(),
                         'audit_remark' => $model->audit_remark
                     ];
-                    $res = \Yii::$app->services->flowType->flowAudit($model->targetType,$id,$audit);
+                    $res = \Yii::$app->services->flowType->flowAudit($model->targetType,$id,$audit,OperTypeEnum::SUPPLIER);
                     //审批完结或者审批不通过才会走下面
                     if($res->flow_status == FlowStatusEnum::COMPLETE || $res->flow_status == FlowStatusEnum::CANCEL) {
                         if ($model->audit_status == AuditStatusEnum::PASS) {

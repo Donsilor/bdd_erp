@@ -24,6 +24,7 @@ use addons\Style\common\forms\StyleSearchForm;
 use addons\Style\common\enums\StonePositionEnum;
 use addons\Style\common\enums\LogTypeEnum;
 use addons\Style\common\enums\AttrIdEnum;
+use common\enums\OperTypeEnum;
 use common\enums\AuditStatusEnum;
 use common\enums\FlowStatusEnum;
 use common\enums\TargetTypeEnum;
@@ -268,7 +269,7 @@ class StyleController extends BaseController
         try{
             $trans = \Yii::$app->trans->beginTransaction();
             //审批流程
-            \Yii::$app->services->flowType->createFlow($this->targetType,$id,$model->style_sn);
+            \Yii::$app->services->flowType->createFlow($this->targetType,$id,$model->style_sn,OperTypeEnum::STYLE);
             $model->audit_status = AuditStatusEnum::PENDING;
             if(false === $model->save()){
                 throw new \Exception($this->getError($model));
@@ -315,7 +316,7 @@ class StyleController extends BaseController
                     'audit_time' => time(),
                     'audit_remark' => $model->audit_remark
                 ];
-                $res = \Yii::$app->services->flowType->flowAudit($this->targetType,$id,$audit);
+                $res = \Yii::$app->services->flowType->flowAudit($this->targetType,$id,$audit,OperTypeEnum::STYLE);
                 //审批完结或者审批不通过才会走下面
                 if($res->flow_status == FlowStatusEnum::COMPLETE || $res->flow_status == FlowStatusEnum::CANCEL){
                     if ($model->audit_status == AuditStatusEnum::PASS) {

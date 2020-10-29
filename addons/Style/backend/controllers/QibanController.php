@@ -8,6 +8,7 @@ use addons\Style\common\forms\QibanAttrForm;
 use addons\Style\common\forms\QibanAuditForm;
 use addons\Style\common\models\Style;
 use common\enums\FlowStatusEnum;
+use common\enums\OperTypeEnum;
 use common\enums\TargetTypeEnum;
 use common\helpers\ResultHelper;
 use Yii;
@@ -330,7 +331,7 @@ class QibanController extends BaseController
             }
             
             //审批流程
-            Yii::$app->services->flowType->createFlow($this->targetType,$id,$model->qiban_sn);
+            Yii::$app->services->flowType->createFlow($this->targetType,$id,$model->qiban_sn,OperTypeEnum::QIBAN);
             
             //创建款号
             Yii::$app->styleService->qiban->createStyleSn($model);

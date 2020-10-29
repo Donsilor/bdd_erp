@@ -23,6 +23,7 @@ use addons\Style\common\enums\LogTypeEnum;
 use addons\Style\common\enums\StonePositionEnum;
 use common\enums\AuditStatusEnum;
 use common\enums\TargetTypeEnum;
+use common\enums\OperTypeEnum;
 use common\enums\ConfirmEnum;
 use common\enums\StatusEnum;
 use common\enums\AutoSnEnum;
@@ -602,7 +603,7 @@ class StyleService extends Service
             }
             //创建审批流程
             if ($styleM->status != StatusEnum::ENABLED) {//未启用走审批流程
-                Yii::$app->services->flowType->createFlow($this->targetType, $styleM->id, $styleM->style_sn);
+                Yii::$app->services->flowType->createFlow($this->targetType, $styleM->id, $styleM->style_sn, OperTypeEnum::STYLE);
             }
             //款式属性值
             foreach ($attrList[$k] as $attrId => $val) {

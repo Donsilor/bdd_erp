@@ -15,6 +15,7 @@ use addons\Sales\common\models\SalesReturnLog;
 use common\enums\AuditStatusEnum;
 use common\enums\ConfirmEnum;
 use common\enums\FlowStatusEnum;
+use common\enums\OperTypeEnum;
 use common\helpers\ArrayHelper;
 use Yii;
 use common\traits\Curd;
@@ -349,7 +350,7 @@ class OrderController extends BaseController
             $trans = Yii::$app->db->beginTransaction();
             if($model->targetType){
                 //审批流程
-                $flow = Yii::$app->services->flowType->createFlow($model->targetType,$id,$model->order_sn);               
+                $flow = Yii::$app->services->flowType->createFlow($model->targetType,$id,$model->order_sn,OperTypeEnum::ORDER);
             }
 
             $model->order_status = OrderStatusEnum::PENDING;
@@ -401,7 +402,7 @@ class OrderController extends BaseController
                         'audit_time' => time(),
                         'audit_remark' => $model->audit_remark
                     ];
-                    $flow = \Yii::$app->services->flowType->flowAudit($model->targetType,$id,$audit);
+                    $flow = \Yii::$app->services->flowType->flowAudit($model->targetType,$id,$audit,OperTypeEnum::ORDER);
                     //审批完结或者审批不通过才会走下面
 					if($flow->flow_status == FlowStatusEnum::COMPLETE || $flow->flow_status == FlowStatusEnum::CANCEL){
                         $model->auditor_id = \Yii::$app->user->id;
