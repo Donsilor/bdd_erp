@@ -34,19 +34,19 @@ $this->params['breadcrumbs'][] = $this->title;
                     'columns' => [
                         [
                             'class' => 'yii\grid\SerialColumn',
-                            'visible' => false,
+                            'visible' => true,
                         ],
                         [
                             'class' => 'yii\grid\CheckboxColumn',
                             'name' => 'id',  //设置每行数据的复选框属性
-                            'headerOptions' => ['width'=>'60'],
+                            'headerOptions' => ['width' => '60'],
                         ],
-                        [
-                            'attribute' => 'id',
-                            'filter' => true,
-                            'format' => 'raw',
-                            'headerOptions' => ['width'=>'80'],
-                        ],
+//                        [
+//                            'attribute' => 'id',
+//                            'filter' => true,
+//                            'format' => 'raw',
+//                            'headerOptions' => ['width'=>'80'],
+//                        ],
                         [
                             'attribute' => 'oper_type',
                             'value' => function ($model) {
@@ -58,12 +58,6 @@ $this->params['breadcrumbs'][] = $this->title;
                             ]),
                             'format' => 'raw',
                             'headerOptions' => ['class' => 'col-md-1'],
-                        ],
-                        [
-                            'attribute' => 'oper_id',
-                            'filter' => true,
-                            'format' => 'raw',
-                            'headerOptions' => ['width'=>'80'],
                         ],
                         [
                             'attribute' => 'oper_sn',
@@ -78,9 +72,23 @@ $this->params['breadcrumbs'][] = $this->title;
                             'headerOptions' => ['class' => 'col-md-1'],
                         ],
                         [
+                            'attribute' => 'operor_id',
+                            'value' => function ($model) {
+                                return $model->operor->username ?? '';
+                            },
+                            'headerOptions' => ['class' => 'col-md-1'],
+                            'filter' => false
+                        ],
+                        [
                             'attribute' => 'pend_status',
                             'value' => function ($model) {
-                                return \common\enums\PendStatusEnum::getValue($model->pend_status);
+                                $pend_status = \common\enums\PendStatusEnum::getValue($model->pend_status);
+                                if ($model->pend_status == \common\enums\PendStatusEnum::CONFIRM) {
+                                    $pend_status = "<span style='color: #00a65a'>{$pend_status}</span>";
+                                } else {
+                                    $pend_status = "<span style='color: red'>{$pend_status}</span>";
+                                }
+                                return $pend_status;
                             },
                             'filter' => Html::activeDropDownList($searchModel, 'pend_status', \common\enums\PendStatusEnum::getMap(), [
                                 'prompt' => '全部',
@@ -90,12 +98,26 @@ $this->params['breadcrumbs'][] = $this->title;
                             'headerOptions' => ['class' => 'col-md-1'],
                         ],
                         [
-                            'attribute' => 'operor_id',
-                            'value' => function ($model) {
-                                return $model->operor->username ?? '';
-                            },
+                            'attribute' => 'pend_way',
+                            'filter' => true,
                             'headerOptions' => ['class' => 'col-md-1'],
-                            'filter' => false
+                        ],
+                        [
+                            'attribute' => 'pend_module',
+                            'value' => function ($model) {
+                                return \common\enums\FlowCateEnum::getValue($model->pend_module);
+                            },
+                            'filter' => Html::activeDropDownList($searchModel, 'pend_module', \common\enums\FlowCateEnum::getMap(), [
+                                'prompt' => '全部',
+                                'class' => 'form-control',
+                            ]),
+                            'format' => 'raw',
+                            'headerOptions' => ['class' => 'col-md-1'],
+                        ],
+                        [
+                            'attribute' => 'oper_id',
+                            'filter' => true,
+                            'headerOptions' => ['width' => '80'],
                         ],
                         [
                             'attribute' => 'creator_id',
@@ -114,6 +136,29 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'model' => $searchModel,
                                 'attribute' => 'created_at',
                                 'value' => $searchModel->created_at,
+                                'options' => ['readonly' => false, 'class' => 'form-control', 'style' => 'background-color:#fff;width:150px;'],
+                                'pluginOptions' => [
+                                    'format' => 'yyyy-mm-dd',
+                                    'locale' => [
+                                        'separator' => '/',
+                                    ],
+                                    'endDate' => date('Y-m-d', time()),
+                                    'todayHighlight' => true,
+                                    'autoclose' => true,
+                                    'todayBtn' => 'linked',
+                                    'clearBtn' => true,
+                                ],
+                            ]),
+                        ],
+                        [
+                            'attribute' => 'pend_time',
+                            'value' => function ($model) {
+                                return Yii::$app->formatter->asDatetime($model->pend_time);
+                            },
+                            'filter' => DateRangePicker::widget([    // 日期组件
+                                'model' => $searchModel,
+                                'attribute' => 'pend_time',
+                                'value' => $searchModel->pend_time,
                                 'options' => ['readonly' => false, 'class' => 'form-control', 'style' => 'background-color:#fff;width:150px;'],
                                 'pluginOptions' => [
                                     'format' => 'yyyy-mm-dd',

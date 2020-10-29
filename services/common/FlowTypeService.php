@@ -3,15 +3,19 @@
 namespace services\common;
 use common\components\Service;
 use common\enums\AuditStatusEnum;
+use common\enums\FlowCateEnum;
 use common\enums\FlowMethodEnum;
 use common\enums\FlowStatus;
 use common\enums\FlowStatusEnum;
+use common\enums\OperTypeEnum;
+use common\enums\PendStatusEnum;
 use common\enums\StatusEnum;
 use common\enums\TargetTypeEnum;
 use common\helpers\ArrayHelper;
 use common\models\common\Flow;
 use common\models\common\FlowDetails;
 use common\models\common\FlowType;
+use common\models\common\Pend;
 
 
 /**
@@ -85,7 +89,6 @@ class FlowTypeService extends Service
             throw new \Exception($this->getError($flow));
         }
 
-
         $flow_detail_id = null;
         foreach ($users_arr as $user_id){
             $flow_detail = new FlowDetails();
@@ -98,6 +101,19 @@ class FlowTypeService extends Service
                 $flow_detail_id = $flow_detail->id;
             }
 
+            //发送待处理通知
+            $pend = new Pend();
+            $pend->oper_id = $target_id;
+            $pend->oper_sn = $target_no;
+            $pend->oper_type = OperTypeEnum::SUPPLY_MOD;
+            $pend->pend_status = PendStatusEnum::PENDING;
+            $pend->pend_module = $flow->cate;
+            $pend->operor_id = $user_id;
+            $pend->creator_id = $member_id;
+            $pend->created_at = time();
+            if (false === $pend->save()) {
+                throw new \Exception($this->getError($pend));
+            }
         }
 
         //更新第一个审核人明细ID到流程中
@@ -168,7 +184,37 @@ class FlowTypeService extends Service
                     $user_id_arr = array_values(array_column($current_flow_detail,'user_id'));
                     $flow->current_users = explode(',',$user_id_arr);
                 }
+            }
 
+            //发送待处理通知#pend
+            if ($flow->current_users) {
+                $operorIds = implode(',', $flow->current_users) ?? [];
+                foreach ($operorIds as $operorId) {
+                    $pend = new Pend();
+                    $pend->oper_id = $target_id;
+                    $pend->oper_sn = $flow->target_no;
+                    $pend->oper_type = OperTypeEnum::SUPPLY_MOD;
+                    $pend->pend_status = PendStatusEnum::PENDING;
+                    $pend->pend_module = $flow->cate;
+                    $pend->operor_id = (int)$operorId;
+                    $pend->creator_id = $user_id;
+                    $pend->created_at = time();
+                    if (false === $pend->save()) {
+                        throw new \Exception($this->getError($pend));
+                    }
+                }
+            }
+
+        }
+
+        //回写待处理状态#pend
+        $pend = Pend::findOne(['oper_id' => $target_id, 'operor_id' => $user_id, 'pend_status' => PendStatusEnum::PENDING]);
+        if ($pend) {
+            $pend->pend_status = PendStatusEnum::CONFIRM;
+            $pend->pend_time = time();
+            $pend->pend_way = AuditStatusEnum::getValue($audit['audit_status']) ?? "";
+            if (false === $pend->save()) {
+                throw new \Exception($this->getError($pend));
             }
         }
 

@@ -16,6 +16,7 @@ use Yii;
  * @property int $flow_method 流程方式
  * @property int $target_id 目标ID
  * @property string $target_no 目标编号
+ * @property int $current_users
  * @property int $target_type 目标类型
  * @property int $flow_detail_id 最新审批记录
  * @property int $flow_status 流程状态
