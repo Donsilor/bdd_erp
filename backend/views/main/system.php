@@ -363,7 +363,7 @@ $this->params['breadcrumbs'][] = ['label' => $this->title];
                                             $authUrl = \common\helpers\Auth::verify($url);
                                         }
                                         ?>
-                                        <?php if ($authUrl) { ?>
+                                        <?php if ($authUrl = true) { ?>
                                             <a class="quick-child openContab"
                                                href="<?= $url ?? 'javascript:;' ?>">
                                                 <div class="inline clf">
