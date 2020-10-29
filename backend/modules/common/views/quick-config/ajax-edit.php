@@ -30,6 +30,7 @@ $form = ActiveForm::begin([
             ]); ?>
             <?= $form->field($model, 'name')->textInput(); ?>
             <?= $form->field($model, 'url')->textInput(); ?>
+            <?= $form->field($model, 'code')->textInput(); ?>
             <?= $form->field($model, 'sort')->textInput(); ?>
             <?= $form->field($model, 'status')->radioList(StatusEnum::getMap()); ?>
             <!-- /.tab-pane -->
