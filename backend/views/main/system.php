@@ -299,7 +299,7 @@ $this->params['breadcrumbs'][] = ['label' => $this->title];
                 <div class="padding-layer">
                     <div class="pending-head clf">
                         <div class="total fl">待处理（<span><?= $pend['num'] ?? 0 ?></span>条）</div>
-                        <a class="more clf fr openContab" href="<?= Url::buildUrl('../common/pend/index', [], []) ?>">
+                        <a class="more clf fr openContab" href="<?= Url::buildUrl('../base/pend/index', [], []) ?>">
                             <span id="more" class="fl">more</span>
                             <div class="more-icon fl">
                                 <span></span>

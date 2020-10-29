@@ -1,6 +1,6 @@
 <?php
 
-namespace backend\modules\common\controllers;
+namespace backend\modules\base\controllers;
 
 use Yii;
 use common\traits\Curd;
