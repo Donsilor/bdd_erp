@@ -360,10 +360,10 @@ $this->params['breadcrumbs'][] = ['label' => $this->title];
                                     <?php foreach ($list ?? [] as $id => $name) {
                                         if ($urls) {
                                             $url = Url::buildUrl('../' . $urls[$id] ?? "", [], []);
-                                            $authUrl = \common\helpers\Auth::verify($url);
+                                            $authUrl = \common\helpers\Auth::verify('/'.$urls[$id]);
                                         }
                                         ?>
-                                        <?php if ($authUrl = true) { ?>
+                                        <?php if ($authUrl) { ?>
                                             <a class="quick-child openContab"
                                                href="<?= $url ?? 'javascript:;' ?>">
                                                 <div class="inline clf">
