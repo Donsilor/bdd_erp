@@ -58,7 +58,7 @@ class Pend extends BaseModel
             'pend_module' => '业务模块',
             'pend_status' => '处理状态',
             'pend_time' => '处理时间',
-            'pend_way' => '处理方式',
+            'pend_way' => '处理结果',
             'status' => '状态',
             'creator_id' => '发起人',
             'created_at' => '发起时间',
