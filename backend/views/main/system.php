@@ -352,21 +352,29 @@ $this->params['breadcrumbs'][] = ['label' => $this->title];
                 <div class="padding-layer">
                     <div class="quick-box">
                         <?php foreach ($quick['list'] ?? [] as $title => $list) {
-                            $url = $quick['url'] ?? []; ?>
+                            $urls = $quick['url'] ?? [];
+                            ?>
                             <div class="quick-list clf">
                                 <div class="quick-nav fl"><?= $title; ?></div>
                                 <div class="quick-content fl">
-                                    <?php foreach ($list ?? [] as $id => $name) { ?>
-                                        <a class="quick-child openContab"
-                                           href="<?= Url::buildUrl('../' . $url[$id] ?? "", [], []); ?>">
-                                            <div class="inline clf">
-                                                <span class="quick-text fl"><?= $name ?? "" ?></span>
-                                                <div class="more-icon fl">
-                                                    <span></span>
-                                                    <span></span>
+                                    <?php foreach ($list ?? [] as $id => $name) {
+                                        if ($urls) {
+                                            $url = Url::buildUrl('../' . $urls[$id] ?? "", [], []);
+                                            $authUrl = \common\helpers\Auth::verify($url);
+                                        }
+                                        ?>
+                                        <?php if ($authUrl) { ?>
+                                            <a class="quick-child openContab"
+                                               href="<?= $url ?? 'javascript:;' ?>">
+                                                <div class="inline clf">
+                                                    <span class="quick-text fl"><?= $name ?? "" ?></span>
+                                                    <div class="more-icon fl">
+                                                        <span></span>
+                                                        <span></span>
+                                                    </div>
                                                 </div>
-                                            </div>
-                                        </a>
+                                            </a>
+                                        <?php } ?>
                                     <?php } ?>
                                 </div>
                             </div>
