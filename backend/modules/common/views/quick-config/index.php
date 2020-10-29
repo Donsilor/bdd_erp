@@ -79,7 +79,12 @@ $this->params['breadcrumbs'][] = ['label' => $this->title];
                                 ]);
                                 return $str;
                             },
-                            'headerOptions' => ['class' => 'col-md-3'],
+                            'headerOptions' => ['class' => 'col-md-2'],
+                        ],
+                        [
+                            'attribute' => 'code',
+                            'value' => 'code',
+                            'headerOptions' => ['class' => 'col-md-1'],
                         ],
                         [
                             'attribute' => 'url',
