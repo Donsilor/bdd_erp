@@ -34,6 +34,7 @@ use common\components\Service;
  * @property \services\member\RechargeConfigService $memberRechargeConfig 会员充值
  * @property \services\common\FlowTypeService $flowType 审批流程
  * @property \services\common\FlowService $flow 审批流程
+ * @property \services\common\PendService $pend 待处理
  * @property \services\common\QuickConfigService $quick 快捷入口
  * @property \services\common\ActionLogService $actionLog 行为日志
  * @property \services\common\ActionBehaviorService $actionBehavior 可被记录的行为
@@ -113,6 +114,7 @@ class Application extends Service
         /** ------ 公用部分 ------ **/
         'flowType' => 'services\common\FlowTypeService',
         'flow' => 'services\common\FlowService',
+        'pend' => 'services\common\PendService',
         'quick' => 'services\common\QuickConfigService',
         'menu' => 'services\common\MenuService',
         'menuCate' => 'services\common\MenuCateService',

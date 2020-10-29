@@ -36,6 +36,20 @@ class MainController extends BaseController
      */
     public function actionSystem()
     {
+        $user_id = \Yii::$app->user->identity->getId();
+
+        return $this->render($this->action->id, [
+            'pend' => \Yii::$app->services->pend->getPendListByUid($user_id),
+        ]);
+    }
+
+    /**
+     * 子框架默认主页
+     *
+     * @return string
+     */
+    public function actionSystemBak()
+    {
         $merchant_id = Yii::$app->services->merchant->getId();
 
         return $this->render($this->action->id, [
