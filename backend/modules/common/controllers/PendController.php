@@ -54,9 +54,11 @@ class PendController extends BaseController
         }
         $dataProvider->query
             ->andWhere(['>=', 'status', StatusEnum::DISABLED]);
-        $dataProvider->query
-            ->andWhere(['=', 'operor_id', \Yii::$app->user->identity->getId()]);
-
+        $uid = \Yii::$app->user->identity->getId();
+        if ($uid > 1) {
+            $dataProvider->query
+                ->andWhere(['=', 'operor_id', $uid]);
+        }
         return $this->render($this->action->id, [
             'dataProvider' => $dataProvider,
             'searchModel' => $searchModel,
