@@ -54,7 +54,7 @@ class QuickConfig extends BaseModel
             'id' => '主键',
             'merchant_id' => '商户ID',
             'code' => '编码',
-            'name' => '业务名称',
+            'name' => '名称',
             'url' => '路由',
             'image' => '图片URL',
             'sort' => '排序',
