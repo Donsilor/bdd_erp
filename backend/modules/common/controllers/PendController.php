@@ -2,13 +2,12 @@
 
 namespace backend\modules\common\controllers;
 
-use common\enums\StatusEnum;
 use Yii;
 use common\traits\Curd;
-use common\models\base\SearchModel;
-use common\models\common\ConfigCate;
-use common\models\common\Pend;
 use backend\controllers\BaseController;
+use common\models\base\SearchModel;
+use common\models\common\Pend;
+use common\enums\StatusEnum;
 
 /**
  * Class PendController
@@ -42,9 +41,22 @@ class PendController extends BaseController
         ]);
 
         $dataProvider = $searchModel
-            ->search(Yii::$app->request->queryParams);
+            ->search(Yii::$app->request->queryParams, ['created_at', 'pend_time']);
+        $created_at = $searchModel->created_at;
+        if (!empty($created_at)) {
+            $dataProvider->query->andFilterWhere(['>=', 'created_at', strtotime(explode('/', $created_at)[0])]);//起始时间
+            $dataProvider->query->andFilterWhere(['<', 'created_at', (strtotime(explode('/', $created_at)[1]) + 86400)]);//结束时间
+        }
+        $pend_time = $searchModel->pend_time;
+        if (!empty($pend_time)) {
+            $dataProvider->query->andFilterWhere(['>=', 'pend_time', strtotime(explode('/', $pend_time)[0])]);//起始时间
+            $dataProvider->query->andFilterWhere(['<', 'pend_time', (strtotime(explode('/', $pend_time)[1]) + 86400)]);//结束时间
+        }
         $dataProvider->query
             ->andWhere(['>=', 'status', StatusEnum::DISABLED]);
+        $dataProvider->query
+            ->andWhere(['=', 'operor_id', \Yii::$app->user->identity->getId()]);
+
         return $this->render($this->action->id, [
             'dataProvider' => $dataProvider,
             'searchModel' => $searchModel,
