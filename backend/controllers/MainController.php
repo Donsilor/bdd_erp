@@ -40,6 +40,7 @@ class MainController extends BaseController
 
         return $this->render($this->action->id, [
             'pend' => \Yii::$app->services->pend->getPendListByUid($user_id),
+            'quick' => \Yii::$app->services->quick->getQuickInByUid($user_id),
         ]);
     }
 

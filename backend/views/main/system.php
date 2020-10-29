@@ -267,7 +267,7 @@ $this->params['breadcrumbs'][] = ['label' => $this->title];
     }
 
     .quick-child {
-        width: 100px;
+        width: 110px;
         height: 26px;
         border: 1px solid #359549;
         font-size: 12px;
@@ -308,29 +308,28 @@ $this->params['breadcrumbs'][] = ['label' => $this->title];
                         </a>
                     </div>
                     <div class="pending-content">
-                        <?php foreach ($pend['list'] ?? [] as $d => $p) { ?>
+                        <?php foreach ($pend['list'] ?? [] as $time => $list) { ?>
                             <div class="pending-list">
                                 <div class="date-box">
-                                    <div class="date"><?= $d ?? "" ?></div>
+                                    <div class="date"><?= $time ?? "" ?></div>
                                     <div class="date date-start"></div>
                                 </div>
                                 <div class="order-box">
                                     <div>
-                                        <?php foreach ($p as $l) { ?>
-                                            <div class="order-child <?php if ($l['pend_status']) {
+                                        <?php foreach ($list ?? [] as $p) { ?>
+                                            <div class="order-child <?php if ($p['pend_status'] ?? 0) {
                                                 echo 'finish';
                                             } ?>">
                                                 <div class="order-l">
-                                                    <div class="order-date"><?= date('Y/m/d H:i', $l['created_at'] ?? 0) ?? "" ?></div>
+                                                    <div class="order-date"><?= date('Y/m/d H:i', $p['created_at'] ?? 0) ?? "" ?></div>
                                                     <div class="order-text">
-                                                        [<?= \common\enums\OperTypeEnum::getValue($l['oper_type'] ?? "") ?? "" ?>
-                                                        ]：<span><a class="openContab" style="text-decoration:underline;"
-                                                                   href="<?= Url::buildUrl('../' . \common\enums\OperTypeEnum::getUrlValue($l['oper_type']), [], ['id']) . '?id=' . $l['oper_id']; ?>"><?= $l['oper_sn'] ?? "" ?></a></span>，需审核请及时处理！
+                                                        <?= '[' . \common\enums\OperTypeEnum::getValue($p['oper_type'] ?? "") . ']：' ?? "" ?>
+                                                        <span><a class="openContab" style="text-decoration:underline;"
+                                                                 href="<?= Url::buildUrl('../' . \common\enums\OperTypeEnum::getUrlValue($p['oper_type']), [], ['id']) . '?id=' . $p['oper_id']; ?>"><?= $p['oper_sn'] ?? "" ?></a></span>，需审核请及时处理！
                                                     </div>
                                                 </div>
                                                 <div class="order-state">
-                                                    【<?= \common\enums\PendStatusEnum::getValue($l['pend_status'] ?? 0) ?? "" ?>
-                                                    】
+                                                    <?= '【' . \common\enums\PendStatusEnum::getValue($p['pend_status'] ?? 0) . "】" ?? "" ?>
                                                 </div>
                                             </div>
                                         <?php } ?>
@@ -352,172 +351,26 @@ $this->params['breadcrumbs'][] = ['label' => $this->title];
                 </div>
                 <div class="padding-layer">
                     <div class="quick-box">
-                        <!-- 款式管理 -->
-                        <div class="quick-list clf">
-                            <div class="quick-nav fl">款式管理</div>
-                            <div class="quick-content fl">
-                                <a class="quick-child" href="javascript:;">
-                                    <div class="inline clf">
-                                        <span class="quick-text fl">客户订单</span>
-                                        <div class="more-icon fl">
-                                            <span></span>
-                                            <span></span>
-                                        </div>
-                                    </div>
-                                </a>
-                                <a class="quick-child" href="javascript:;">
-                                    <div class="inline clf">
-                                        <span class="quick-text fl">退款订单</span>
-                                        <div class="more-icon fl">
-                                            <span></span>
-                                            <span></span>
-                                        </div>
-                                    </div>
-                                </a>
-                                <a class="quick-child" href="javascript:;">
-                                    <div class="inline clf">
-                                        <span class="quick-text fl">客户管理</span>
-                                        <div class="more-icon fl">
-                                            <span></span>
-                                            <span></span>
-                                        </div>
-                                    </div>
-                                </a>
+                        <?php foreach ($quick['list'] ?? [] as $title => $list) {
+                            $url = $quick['url'] ?? []; ?>
+                            <div class="quick-list clf">
+                                <div class="quick-nav fl"><?= $title; ?></div>
+                                <div class="quick-content fl">
+                                    <?php foreach ($list ?? [] as $id => $name) { ?>
+                                        <a class="quick-child openContab"
+                                           href="<?= Url::buildUrl('../' . $url[$id] ?? "", [], []); ?>">
+                                            <div class="inline clf">
+                                                <span class="quick-text fl"><?= $name ?? "" ?></span>
+                                                <div class="more-icon fl">
+                                                    <span></span>
+                                                    <span></span>
+                                                </div>
+                                            </div>
+                                        </a>
+                                    <?php } ?>
+                                </div>
                             </div>
-                        </div>
-                        <!-- 款式管理 -->
-                        <div class="quick-list clf">
-                            <div class="quick-nav fl">采购管理</div>
-                            <div class="quick-content fl">
-                                <a class="quick-child" href="javascript:;">
-                                    <div class="inline clf">
-                                        <span class="quick-text fl">采购申请单</span>
-                                        <div class="more-icon fl">
-                                            <span></span>
-                                            <span></span>
-                                        </div>
-                                    </div>
-                                </a>
-                            </div>
-                        </div>
-
-                        <!-- 款式管理 -->
-                        <div class="quick-list clf">
-                            <div class="quick-nav fl">仓库管理</div>
-                            <div class="quick-content fl">
-                                <a class="quick-child" href="javascript:;">
-                                    <div class="inline clf">
-                                        <span class="quick-text fl">商品库存</span>
-                                        <div class="more-icon fl">
-                                            <span></span>
-                                            <span></span>
-                                        </div>
-                                    </div>
-                                </a>
-                                <a class="quick-child" href="javascript:;">
-                                    <div class="inline clf">
-                                        <span class="quick-text fl">裸钻库存</span>
-                                        <div class="more-icon fl">
-                                            <span></span>
-                                            <span></span>
-                                        </div>
-                                    </div>
-                                </a>
-                                <a class="quick-child" href="javascript:;">
-                                    <div class="inline clf">
-                                        <span class="quick-text fl">莫桑石参考表</span>
-                                        <div class="more-icon fl">
-                                            <span></span>
-                                            <span></span>
-                                        </div>
-                                    </div>
-                                </a>
-                                <a class="quick-child" href="javascript:;">
-                                    <div class="inline clf">
-                                        <span class="quick-text fl">赠品库存</span>
-                                        <div class="more-icon fl">
-                                            <span></span>
-                                            <span></span>
-                                        </div>
-                                    </div>
-                                </a>
-                            </div>
-                        </div>
-
-                        <!-- 款式管理 -->
-                        <div class="quick-list clf">
-                            <div class="quick-nav fl">销售管理</div>
-                            <div class="quick-content fl">
-                                <a class="quick-child" href="javascript:;">
-                                    <div class="inline clf">
-                                        <span class="quick-text fl">商品款式</span>
-                                        <div class="more-icon fl">
-                                            <span></span>
-                                            <span></span>
-                                        </div>
-                                    </div>
-                                </a>
-                                <a class="quick-child" href="javascript:;">
-                                    <div class="inline clf">
-                                        <span class="quick-text fl">起板款式</span>
-                                        <div class="more-icon fl">
-                                            <span></span>
-                                            <span></span>
-                                        </div>
-                                    </div>
-                                </a>
-                            </div>
-                        </div>
-
-                        <!-- 款式管理 -->
-                        <div class="quick-list clf">
-                            <div class="quick-nav fl">销售管理</div>
-                            <div class="quick-content fl">
-                                <a class="quick-child" href="javascript:;">
-                                    <div class="inline clf">
-                                        <span class="quick-text fl">商品款式</span>
-                                        <div class="more-icon fl">
-                                            <span></span>
-                                            <span></span>
-                                        </div>
-                                    </div>
-                                </a>
-                                <a class="quick-child" href="javascript:;">
-                                    <div class="inline clf">
-                                        <span class="quick-text fl">起板款式</span>
-                                        <div class="more-icon fl">
-                                            <span></span>
-                                            <span></span>
-                                        </div>
-                                    </div>
-                                </a>
-                            </div>
-                        </div>
-
-                        <!-- 款式管理 -->
-                        <div class="quick-list clf">
-                            <div class="quick-nav fl">销售管理</div>
-                            <div class="quick-content fl">
-                                <a class="quick-child" href="javascript:;">
-                                    <div class="inline clf">
-                                        <span class="quick-text fl">商品款式</span>
-                                        <div class="more-icon fl">
-                                            <span></span>
-                                            <span></span>
-                                        </div>
-                                    </div>
-                                </a>
-                                <a class="quick-child" href="javascript:;">
-                                    <div class="inline clf">
-                                        <span class="quick-text fl">起板款式</span>
-                                        <div class="more-icon fl">
-                                            <span></span>
-                                            <span></span>
-                                        </div>
-                                    </div>
-                                </a>
-                            </div>
-                        </div>
+                        <?php } ?>
                     </div>
                 </div>
             </div>

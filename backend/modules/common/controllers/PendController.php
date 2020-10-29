@@ -2,6 +2,7 @@
 
 namespace backend\modules\common\controllers;
 
+use common\enums\StatusEnum;
 use Yii;
 use common\traits\Curd;
 use common\models\base\SearchModel;
@@ -42,6 +43,8 @@ class PendController extends BaseController
 
         $dataProvider = $searchModel
             ->search(Yii::$app->request->queryParams);
+        $dataProvider->query
+            ->andWhere(['>=', 'status', StatusEnum::DISABLED]);
         return $this->render($this->action->id, [
             'dataProvider' => $dataProvider,
             'searchModel' => $searchModel,

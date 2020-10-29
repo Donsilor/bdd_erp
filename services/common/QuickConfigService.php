@@ -22,7 +22,8 @@ class QuickConfigService extends Service
      * @param string $pid
      * @return array
      */
-    public static function getDropDownForEdit($pid = ''){
+    public static function getDropDownForEdit($pid = '')
+    {
         $data = self::getDropDown($pid);
         return ArrayHelper::merge([0 => '顶级分类'], $data);
     }
@@ -41,7 +42,7 @@ class QuickConfigService extends Service
             ->asArray()
             ->all();
         $models = ArrayHelper::itemsMerge($list);
-        return ArrayHelper::map(ArrayHelper::itemsMergeDropDown($models,'id', 'name'), 'id', 'name');
+        return ArrayHelper::map(ArrayHelper::itemsMergeDropDown($models, 'id', 'name'), 'id', 'name');
 
     }
 
@@ -54,12 +55,12 @@ class QuickConfigService extends Service
     public static function getGrpDropDown($pid = null, $treeStat = 1)
     {
         $query = QuickConfig::find()->alias('a')
-            ->where(['status' => StatusEnum::ENABLED]) ;
-        if($pid !== null){
-            if($pid ==0){
-                $query->andWhere(['a.pid'=>$pid]);
-            }else{
-                $query->andWhere(['or',['a.pid'=>$pid],['a.id'=>$pid]]);
+            ->where(['status' => StatusEnum::ENABLED]);
+        if ($pid !== null) {
+            if ($pid == 0) {
+                $query->andWhere(['a.pid' => $pid]);
+            } else {
+                $query->andWhere(['or', ['a.pid' => $pid], ['a.id' => $pid]]);
             }
         }
         $models = $query
@@ -67,6 +68,24 @@ class QuickConfigService extends Service
             ->orderBy('sort asc,created_at asc')
             ->asArray()
             ->all();
-        return  ArrayHelper::itemsMergeGrpDropDown($models,0,'id','name','pid', $treeStat);
+        return ArrayHelper::itemsMergeGrpDropDown($models, 0, 'id', 'name', 'pid', $treeStat);
+    }
+
+    /**
+     * @param integer $uid
+     * @return array
+     */
+    public static function getQuickInByUid($uid = null)
+    {
+        //Auth::beforVerify($url);
+        $models = QuickConfig::find()
+            ->where(['=', 'status', StatusEnum::ENABLED])
+            //->andFilterWhere(['=', 'operor_id', $uid])
+            ->select(['id', 'name', 'url', 'pid', 'level'])
+            ->orderBy('sort desc')
+            ->asArray()
+            ->all();
+        $list = ArrayHelper::itemsMergeGrpDropDown($models, 0, 'id', 'name', 'pid');
+        return ['list' => $list, 'url' => ArrayHelper::map($models, 'id', 'url')];
     }
 }

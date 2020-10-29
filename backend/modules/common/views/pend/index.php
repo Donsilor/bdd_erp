@@ -48,6 +48,18 @@ $this->params['breadcrumbs'][] = $this->title;
 //                            'headerOptions' => ['width'=>'80'],
 //                        ],
                         [
+                            'attribute' => 'pend_module',
+                            'value' => function ($model) {
+                                return \common\enums\FlowCateEnum::getValue($model->pend_module);
+                            },
+                            'filter' => Html::activeDropDownList($searchModel, 'pend_module', \common\enums\FlowCateEnum::getMap(), [
+                                'prompt' => '全部',
+                                'class' => 'form-control',
+                            ]),
+                            'format' => 'raw',
+                            'headerOptions' => ['class' => 'col-md-1'],
+                        ],
+                        [
                             'attribute' => 'oper_type',
                             'value' => function ($model) {
                                 return \common\enums\OperTypeEnum::getValue($model->oper_type);
@@ -62,7 +74,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         [
                             'attribute' => 'oper_sn',
                             'value' => function ($model) {
-                                return Html::a($model->oper_sn, ['view', 'id' => $model->oper_id], ['style' => "text-decoration:underline;color:#3c8dbc"]);
+                                return Html::a($model->oper_sn, ['../' . \common\enums\OperTypeEnum::getUrlValue($model->oper_type), 'id' => $model->oper_id], ['class' => 'openContab', 'style' => "text-decoration:underline;color:#3c8dbc"]);
                             },
                             'filter' => Html::activeTextInput($searchModel, 'oper_sn', [
                                 'class' => 'form-control',
@@ -96,28 +108,6 @@ $this->params['breadcrumbs'][] = $this->title;
                             ]),
                             'format' => 'raw',
                             'headerOptions' => ['class' => 'col-md-1'],
-                        ],
-                        [
-                            'attribute' => 'pend_way',
-                            'filter' => true,
-                            'headerOptions' => ['class' => 'col-md-1'],
-                        ],
-                        [
-                            'attribute' => 'pend_module',
-                            'value' => function ($model) {
-                                return \common\enums\FlowCateEnum::getValue($model->pend_module);
-                            },
-                            'filter' => Html::activeDropDownList($searchModel, 'pend_module', \common\enums\FlowCateEnum::getMap(), [
-                                'prompt' => '全部',
-                                'class' => 'form-control',
-                            ]),
-                            'format' => 'raw',
-                            'headerOptions' => ['class' => 'col-md-1'],
-                        ],
-                        [
-                            'attribute' => 'oper_id',
-                            'filter' => true,
-                            'headerOptions' => ['width' => '80'],
                         ],
                         [
                             'attribute' => 'creator_id',
@@ -172,6 +162,16 @@ $this->params['breadcrumbs'][] = $this->title;
                                     'clearBtn' => true,
                                 ],
                             ]),
+                        ],
+                        [
+                            'attribute' => 'pend_way',
+                            'filter' => true,
+                            'headerOptions' => ['class' => 'col-md-1'],
+                        ],
+                        [
+                            'attribute' => 'oper_id',
+                            'filter' => true,
+                            'headerOptions' => ['width' => '80'],
                         ],
                     ]
                 ]);

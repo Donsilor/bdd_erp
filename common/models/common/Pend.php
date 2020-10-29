@@ -54,14 +54,14 @@ class Pend extends BaseModel
             'oper_type' => '业务类型',
             'oper_id' => '编号ID',
             'oper_sn' => '业务编号',
-            'operor_id' => '业务操作人',
+            'operor_id' => '待操作人',
             'pend_module' => '业务模块',
             'pend_status' => '处理状态',
             'pend_time' => '处理时间',
             'pend_way' => '处理方式',
             'status' => '状态',
-            'creator_id' => '创建人',
-            'created_at' => '创建时间',
+            'creator_id' => '发起人',
+            'created_at' => '发起时间',
             'updated_at' => '更新时间',
         ];
     }
