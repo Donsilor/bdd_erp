@@ -9,6 +9,7 @@ use addons\Style\common\enums\InlayEnum;
 use addons\Style\common\enums\LogTypeEnum;
 use addons\Supply\common\enums\PeishiTypeEnum;
 use addons\Warehouse\common\enums\PutInTypeEnum;
+use common\enums\OperTypeEnum;
 use common\enums\TargetTypeEnum;
 use common\helpers\SnHelper;
 use Yii;
@@ -258,7 +259,7 @@ class PurchaseApplyService extends Service
             if(false === $model->save(true,['apply_status'])){
                 throw new \Exception($this->getError($model));
             }
-            $flowS = Yii::$app->services->flowType->createFlow(TargetTypeEnum::PURCHASE_APPLY_S_MENT,$apply_id,$model->apply_sn);
+            $flowS = Yii::$app->services->flowType->createFlow(TargetTypeEnum::PURCHASE_APPLY_S_MENT,$apply_id,$model->apply_sn,OperTypeEnum::PURCHASE_APPLY);
             //日志
             $log = [
                 'apply_id' => $model->id,

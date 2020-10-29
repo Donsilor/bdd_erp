@@ -11,6 +11,7 @@ use addons\Style\common\enums\AttrIdEnum;
 use addons\Style\common\models\StyleChannel;
 use addons\Supply\common\enums\GoodsTypeEnum;
 use common\enums\FlowStatusEnum;
+use common\enums\OperTypeEnum;
 use common\enums\TargetTypeEnum;
 use common\helpers\PageHelper;
 use Yii;
@@ -210,7 +211,7 @@ class PurchaseApplyController extends BaseController
         try{
             $trans = Yii::$app->db->beginTransaction();
             //审批流程
-            $flow = Yii::$app->services->flowType->createFlow($this->getTargetYType($model->channel_id),$id,$model->apply_sn);
+            $flow = Yii::$app->services->flowType->createFlow($this->getTargetYType($model->channel_id),$id,$model->apply_sn,OperTypeEnum::PURCHASE_APPLY);
            // Yii::$app->services->flowType->createFlow($this->targetSType,$id,$model->apply_sn);
 
             $model->apply_status = ApplyStatusEnum::PENDING;
@@ -263,7 +264,7 @@ class PurchaseApplyController extends BaseController
                     'audit_time' => time(),
                     'audit_remark' => $model->audit_remark
                 ];
-                $flow = \Yii::$app->services->flowType->flowAudit($this->getTargetYType($model->channel_id),$id,$audit);                
+                $flow = \Yii::$app->services->flowType->flowAudit($this->getTargetYType($model->channel_id),$id,$audit,OperTypeEnum::PURCHASE_APPLY);
                 //审批完结或者审批不通过才会走下面
                 if($flow->flow_status == FlowStatusEnum::COMPLETE || $flow->flow_status == FlowStatusEnum::CANCEL){
                     $model->audit_time = time();
@@ -356,7 +357,7 @@ class PurchaseApplyController extends BaseController
                     'audit_time' => time(),
                     'audit_remark' => $model->audit_remark
                 ];
-                $flow = \Yii::$app->services->flowType->flowAudit($this->targetSType,$id,$audit);
+                $flow = \Yii::$app->services->flowType->flowAudit($this->targetSType,$id,$audit,OperTypeEnum::PURCHASE_APPLY);
                 //审批完结或者审批不通过才会走下面
                 if($flow->flow_status == FlowStatusEnum::COMPLETE || $flow->flow_status == FlowStatusEnum::CANCEL){
 
