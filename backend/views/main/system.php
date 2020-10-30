@@ -356,6 +356,7 @@ $this->params['breadcrumbs'][] = ['label' => $this->title];
                     <div class="quick-box">
                         <?php foreach ($quick['list'] ?? [] as $title => $list) {
                             $urls = $quick['url'] ?? [];
+                            $btns = $quick['btn'] ?? [];
                             if ($list && is_array($list)) {
                                 ?>
                                 <div class="quick-list clf">
@@ -365,9 +366,10 @@ $this->params['breadcrumbs'][] = ['label' => $this->title];
                                             if ($urls) {
                                                 $url = Url::buildUrl('../' . $urls[$id] ?? "", [], []);
                                                 $authUrl = \common\helpers\Auth::verify('/' . $urls[$id]);
+                                                $authBtn = \common\helpers\Auth::verify($btns[$id] ?? "");
                                             }
                                             ?>
-                                            <?php if ($authUrl) { ?>
+                                            <?php if ($authUrl && $authBtn) { ?>
                                                 <a class="quick-child openContab"
                                                    href="<?= $url ?? 'javascript:;' ?>">
                                                     <div class="inline clf">

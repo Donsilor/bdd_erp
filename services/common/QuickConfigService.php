@@ -77,15 +77,18 @@ class QuickConfigService extends Service
      */
     public static function getQuickInByUid($uid = null)
     {
-        //Auth::beforVerify($url);
         $models = QuickConfig::find()
             ->where(['=', 'status', StatusEnum::ENABLED])
             //->andFilterWhere(['=', 'operor_id', $uid])
-            ->select(['id', 'name', 'url', 'pid', 'level'])
+            ->select(['id', 'name', 'code', 'url', 'pid', 'level'])
             ->orderBy('sort desc')
             ->asArray()
             ->all();
         $list = ArrayHelper::itemsMergeGrpDropDown($models, 0, 'id', 'name', 'pid');
-        return ['list' => $list, 'url' => ArrayHelper::map($models, 'id', 'url')];
+        return [
+            'list' => $list,
+            'url' => ArrayHelper::map($models, 'id', 'url'),
+            'btn' => ArrayHelper::map($models, 'id', 'code'),
+        ];
     }
 }

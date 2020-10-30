@@ -39,8 +39,7 @@ class QuickConfig extends BaseModel
     {
         return [
             [['merchant_id', 'sort', 'level', 'pid', 'status', 'created_at', 'updated_at'], 'integer'],
-            [['code'], 'string', 'max' => 15],
-            [['name'], 'string', 'max' => 100],
+            [['name', 'code'], 'string', 'max' => 100],
             [['url', 'image', 'tree'], 'string', 'max' => 500],
         ];
     }
@@ -53,7 +52,7 @@ class QuickConfig extends BaseModel
         return [
             'id' => '主键',
             'merchant_id' => '商户ID',
-            'code' => '编码',
+            'code' => '权限/编码',
             'name' => '名称',
             'url' => '路由',
             'image' => '图片URL',
