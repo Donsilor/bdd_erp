@@ -20,7 +20,7 @@ class CateSalesService extends Service
     /**
      * @throws
      */
-    public function getCateSalesReport()
+    public function getCateSalesReport($uid = null)
     {
         //1.取订单商品数据
         $select = [];

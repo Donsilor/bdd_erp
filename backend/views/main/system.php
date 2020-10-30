@@ -118,7 +118,6 @@ $this->params['breadcrumbs'][] = ['label' => $this->title];
                 <span class="tit-text fl">产品销量</span>
             </div>
         </div>
-
         <div class="sales-volume">
             <div class="sales-volume-head clf">
                 <div class="total fl">产品销量（本月）</div>
@@ -130,12 +129,10 @@ $this->params['breadcrumbs'][] = ['label' => $this->title];
                     </div>
                 </div>
             </div>
-
             <div class="sales-volume-content clf">
                 <div class="sales-volume-list fl">
                     <div class="sales-volume-list-head">
                         <div class="BDD">BDD<span class="color">(总数量：<i>100</i>件)</span></div>
-
                         <a class="more clf" href="javascript:;">
                             <span class="fl">more</span>
                             <div class="more-icon fl">
@@ -144,7 +141,6 @@ $this->params['breadcrumbs'][] = ['label' => $this->title];
                             </div>
                         </a>
                     </div>
-
                     <div class="sales-chart">
                         <div class="sales-chart-box">
                             <div class="sales-chart-list">
