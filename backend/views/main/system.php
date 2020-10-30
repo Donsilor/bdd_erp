@@ -37,7 +37,7 @@ $this->params['breadcrumbs'][] = ['label' => $this->title];
                                         <div class="date date-start"></div>
                                     </div>
                                     <div class="order-box">
-                                        <div>
+                                        <div class="order-group">
                                             <?php foreach ($list ?? [] as $p) {
                                                 $url = Url::buildUrl('../' . \common\enums\OperTypeEnum::getUrlValue($p['oper_type']), [], ['id']) . '?id=' . $p['oper_id'];
                                                 ?>
@@ -58,6 +58,7 @@ $this->params['breadcrumbs'][] = ['label' => $this->title];
                                             <?php } ?>
                                         </div>
                                         <div class="point"></div>
+                                        <div class="point point-start"></div>
                                         <div class="line"></div>
                                     </div>
                                 </div>
@@ -112,4 +113,5 @@ $this->params['breadcrumbs'][] = ['label' => $this->title];
             </div>
         </div>
     </div>
+    <!-- 产品销量 -->
 </div>

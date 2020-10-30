@@ -38,7 +38,7 @@ a {
 .container {
     min-width: 1340px;
     background-color: #fff;
-    padding: 30px;
+    padding: 30px 10px;
 }
 
 .bg-empty {
@@ -55,6 +55,10 @@ a {
     height: 40px;
     padding-left: 20px;
     margin-top: -40px;
+}
+
+.quick-entry .title {
+    padding: 0;
 }
 
 .tit-list {
@@ -77,15 +81,101 @@ a {
     line-height: 22px;
 }
 
-.bg-box {
-    /* height: 800px; */
-    background-color: #fff;
-    padding: 20px 3%;
+.order-box {
+    flex-grow: 1;
+    margin-left: 10px;
+    padding: 10px 0 10px 20px;
+    border-left: 1px solid #268e3c;
+    position: relative;
+    display: flex;
 }
 
-.pending,
-.quick-entry {
-    width: 49%;
+.order-group {
+    width: 100%;
+}
+
+.order-child {
+    display: flex;
+    margin-bottom: 10px;
+}
+
+.order-box .order-child:last-child {
+    margin: 0;
+}
+
+.order-l {
+    display: flex;
+}
+
+.order-date {
+    width: 106px;
+    color: #999;
+}
+
+.order-text {
+    width: 430px;
+    margin-left: 10px;
+    color: #268e3c;
+}
+
+.order-state {
+    flex: 1;
+    text-align: right;
+    color: #f00;
+}
+
+.order-box .point {
+    position: absolute;
+    top: 0;
+    left: 0;
+    background-color: #268e3c;
+    transform: translate(-50%, -50%);
+    margin-top: 0;
+}
+
+.order-box .point-start {
+    top: inherit;
+    bottom: 0;
+    transform: translate(-50%, 50%);
+    margin-top: 0;
+    display: none;
+}
+
+.pending-list:last-child .point-start {
+    display: block;
+}
+
+.order-box .line {
+    position: absolute;
+    top: 0;
+    left: 30px;
+    height: 1px;
+    width: 80%;
+    background-color: #fff;
+}
+
+.order-child.finish .order-date,
+.order-child.finish .order-text,
+.order-child.finish .order-state {
+    color: #999;
+}
+
+/*待处理*/
+.pending {
+    width: 48%;
+}
+
+.padding-layer {
+    padding: 20px;
+}
+
+.pending-head {
+    height: 40px;
+    background-color: #eb6709;
+    padding: 0 20px;
+    line-height: 40px;
+    font-size: 14px;
+    color: #fff;
 }
 
 .more {
@@ -93,7 +183,7 @@ a {
 }
 
 .more-icon {
-    width: 10px;
+    width: 6px;
     height: 1px;
     margin: 21px 0 0 6px;
     position: relative;
@@ -114,25 +204,11 @@ a {
     transform: rotate(-18deg);
 }
 
-/*待处理*/
-.padding-layer {
-    padding: 20px;
-}
-
-.pending-head {
-    height: 40px;
-    background-color: #eb6709;
-    padding: 0 20px;
-    line-height: 40px;
-    font-size: 14px;
-    color: #fff;
-}
-
 .pending-content {
     height: 361px;
     padding: 20px;
     border: 1px solid #eb6709;
-    overflow: scroll;
+    overflow-y: scroll;
 }
 
 .pending-list {
@@ -153,13 +229,17 @@ a {
     height: 20px;
     text-align: center;
     color: #268e3c;
-    transform: translate(-50%, 50%)
+    transform: translate(-50%, -8px)
 }
 
 /*快捷入口*/
 .quick-entry {
-    margin-left: 2%;
+    width: 52%;
     height: 403px;
+}
+
+.quick-entry .padding-layer {
+    padding: 20px 20px 20px 0;
 }
 
 .quick-box {
@@ -170,24 +250,18 @@ a {
 
 .quick-nav {
     width: 40px;
-    height: 100px;
+    height: 80px;
     background-color: #eb6709;
     font-size: 14px;
     color: #fff;
-    padding: 30px 4px;
+    padding: 20px 4px;
     letter-spacing: 2px;
     border-bottom: 1px solid #fff;
 }
 
-.quick-content {
-    width: calc(100% - 40px);
-    height: 100px;
-    border-bottom: 1px solid #f2f2f2;
-}
-
 .quick-list:last-child .quick-nav,
 .quick-list:last-child .quick-content {
-    border: none;
+    border-bottom: none;
 }
 
 .quick-content {
@@ -196,18 +270,22 @@ a {
     flex-wrap: wrap;
     align-content: flex-start;
     justify-content: space-between;
-    padding: 14px 20px;
+    width: calc(100% - 40px);
+    height: 80px;
+    border-bottom: 1px solid #fff;
+    padding: 8px 20px 8px;
+    overflow: hidden;
 }
 
 .quick-child {
-    width: 110px;
+    width: 138px;
     height: 26px;
     border: 1px solid #359549;
     font-size: 12px;
     color: #359549;
     line-height: 25px;
     text-align: center;
-    margin-right: 30px;
+    margin-right: 18px;
 }
 
 .quick-child .more-icon {
@@ -219,63 +297,107 @@ a {
 }
 
 /*产品销量*/
-.order-box {
-    flex-grow: 1;
-    margin-left: 10px;
-    padding: 10px 0 10px 20px;
-    border-left: 1px solid #268e3c;
+.sales-volume-head {
+    height: 40px;
+    background-color: #2782d7;
+    padding: 0 20px;
+    line-height: 40px;
+    font-size: 14px;
+    color: #fff;
+}
+
+.sales-volume-content {
+    padding: 20px 0;
+}
+
+.sales-volume-list {
+    margin-bottom: 20px;
+}
+
+.sales-volume-list-head {
+    height: 40px;
+    line-height: 40px;
+    font-size: 14px;
+    color: #2782d7;
+    padding-left: 100px;
     position: relative;
-    display: flex;
 }
 
-.order-child {
-    display: flex;
-    margin-bottom: 10px;
+.sales-volume-list-head .BDD {
+    font-size: 18px;
+    font-weight: bold;
 }
 
-.order-box .order-child:last-child {
-    margin: 0;
-}
-
-.order-l {
-    display: flex;
-}
-
-.order-date {
+.sales-volume-list-head .color {
+    font-weight: normal;
     color: #999;
-}
-
-.order-text {
+    font-size: 12px;
     margin-left: 10px;
-    color: #268e3c;
 }
 
-.order-state {
-    flex: 1;
-    text-align: center;
-    color: #f00;
-}
-
-.order-box .point {
+.sales-volume-list-head .more {
     position: absolute;
+    right: 12px;
     top: 0;
-    left: 0;
-    background-color: #268e3c;
-    transform: translate(-50%, -50%);
-    margin-top: 0;
-}
-
-.order-box .line {
-    position: absolute;
-    top: 0;
-    left: 30px;
-    height: 1px;
-    width: 80%;
-    background-color: #fff;
-}
-
-.order-child.finish .order-date,
-.order-child.finish .order-text,
-.order-child.finish .order-state {
     color: #999;
+}
+
+.sales-chart {
+    position: relative;
+    padding-right: 30px;
+    margin-top: 10px;
+}
+
+.sales-chart-list {
+    display: flex;
+    height: 20px;
+    margin-bottom: 14px;
+    line-height: 20px;
+    font-size: 12px;
+}
+
+.sales-chart-list .type {
+    width: 80px;
+    text-align: center;
+    text-decoration: underline;
+    color: #f3a167;
+}
+
+.sales-chart-list .bar-box {
+    width: 208px;
+}
+
+.bar {
+    width: 180px;
+    height: 100%;
+    background-color: #f3a167;
+    text-align: center;
+    color: #fff;
+}
+
+.percent {
+    margin-left: 22px;
+}
+
+.line-a {
+    position: absolute;
+    top: 0;
+    left: 80px;
+    width: 2px;
+    height: 100%;
+    background-color: #f3a167;
+}
+
+.line-b {
+    position: absolute;
+    top: 50%;
+    right: 0;
+    width: 1px;
+    height: 70%;
+    background-color: #f3a167;
+    transform: translateY(-50%) scaleX(0.5);
+}
+
+.sales-volume-list:nth-child(4n) .line-b {
+    background-color: transparent;
 }
