@@ -18,7 +18,7 @@ class OperTypeEnum extends BaseEnum
     const QIBAN = 4;//起版列表
     const ORDER = 5;//客户订单
     const SUPPLIER = 6;//供应商列表
-    const BACK_PAY = 7;//财务-银行支付单
+    const BANK_PAY = 7;//财务-银行支付单
     const CONTRACT_PAY = 8;//财务-个人因公借款单
     const BORROW_PAY = 9;//财务-合同款支付单
 
@@ -34,7 +34,7 @@ class OperTypeEnum extends BaseEnum
             self::QIBAN => "起版列表",
             self::ORDER => "客户订单",
             self::SUPPLIER => "供应商列表",
-            self::BACK_PAY => "财务-银行支付单",
+            self::BANK_PAY => "财务-银行支付单",
             self::CONTRACT_PAY => "财务-个人因公借款单",
             self::BORROW_PAY => "财务-合同款支付单",
         ];
@@ -52,7 +52,7 @@ class OperTypeEnum extends BaseEnum
             self::QIBAN => "style/qiban/view",
             self::ORDER => "sales/order/view",
             self::SUPPLIER => "supply/supplier/view",
-            self::BACK_PAY => "finance/back-pay/view",
+            self::BANK_PAY => "finance/bank-pay/view",
             self::CONTRACT_PAY => "finance/contract-pay/view",
             self::BORROW_PAY => "finance/borrow-pay/view",
         ];

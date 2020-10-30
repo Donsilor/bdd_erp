@@ -9,10 +9,12 @@ use addons\Finance\common\models\BankPay;
 use common\enums\CurrencyEnum;
 use common\enums\FlowStatusEnum;
 use common\enums\OperTypeEnum;
+use common\enums\PendStatusEnum;
 use common\enums\TargetType;
 use common\helpers\ResultHelper;
 use common\models\common\Flow;
 use common\models\common\FlowDetails;
+use common\models\common\Pend;
 use Yii;
 use common\enums\AuditStatusEnum;
 use common\models\base\SearchModel;
@@ -117,7 +119,7 @@ class BankPayController extends BaseController
                          * 审批流程
                          * 根据流程ID生成单号，并把单号反写到流程中
                         */
-                        $flow = Yii::$app->services->flowType->createFlow($model->targetType, $id,'',OperTypeEnum::BACK_PAY);
+                        $flow = Yii::$app->services->flowType->createFlow($model->targetType, $id,'',OperTypeEnum::BANK_PAY);
                         if(!$flow){
                             throw new \Exception('创建审批流程错误');
                         }
@@ -141,6 +143,9 @@ class BankPayController extends BaseController
                             throw new \Exception($this->getError($flow));
                             return $this->message($this->getError($flow), $this->redirect(\Yii::$app->request->referrer), 'error');
                         }
+
+                        //反写待处理
+                        Pend::updateAll(['oper_id' => $model->target_id, 'oper_sn' => $model->finance_no], ['flow_id' => $flow->id, 'pend_status' => PendStatusEnum::PENDING]);
                     }
                 }
 
@@ -179,7 +184,7 @@ class BankPayController extends BaseController
                     /**
                      * 审批不通过，重新生成审批流程
                      */
-                    $flow = Yii::$app->services->flowType->createFlow($model->targetType, $id,$model->finance_no,OperTypeEnum::BACK_PAY);
+                    $flow = Yii::$app->services->flowType->createFlow($model->targetType, $id,$model->finance_no,OperTypeEnum::BANK_PAY);
                     if(!$flow){
                         throw new \Exception('创建审批流程错误');
                     }
@@ -241,7 +246,7 @@ class BankPayController extends BaseController
                     'audit_time' => time(),
                     'audit_remark' => $model->audit_remark
                 ];
-                $res = \Yii::$app->services->flowType->flowAudit($model->targetType,$id,$audit,OperTypeEnum::BACK_PAY);
+                $res = \Yii::$app->services->flowType->flowAudit($model->targetType,$id,$audit,OperTypeEnum::BANK_PAY);
                 //审批完结或者审批不通过才会走下面
                 if($res->flow_status == FlowStatusEnum::COMPLETE || $res->flow_status == FlowStatusEnum::CANCEL){
                     $model->audit_time = time();

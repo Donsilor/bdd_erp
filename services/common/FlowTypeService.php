@@ -12,6 +12,7 @@ use common\enums\PendStatusEnum;
 use common\enums\StatusEnum;
 use common\enums\TargetTypeEnum;
 use common\helpers\ArrayHelper;
+use common\helpers\StringHelper;
 use common\models\common\Flow;
 use common\models\common\FlowDetails;
 use common\models\common\FlowType;
@@ -78,8 +79,10 @@ class FlowTypeService extends Service
         $flow->target_no = $target_no;
         if($flow->flow_method == FlowMethodEnum::IN_ORDER){
             $flow->current_users = $users_arr[0];
+            $pendSend = [$flow->current_users];
         }else{
             $flow->current_users = $users;
+            $pendSend = $users_arr;
         }
         $flow->flow_status = FlowStatusEnum::GO_ON;
         $flow->flow_total = count($users_arr);
@@ -88,7 +91,6 @@ class FlowTypeService extends Service
         if(false === $flow->save()){
             throw new \Exception($this->getError($flow));
         }
-
         $flow_detail_id = null;
         foreach ($users_arr as $user_id){
             $flow_detail = new FlowDetails();
@@ -100,19 +102,23 @@ class FlowTypeService extends Service
             if($flow_detail_id == null){
                 $flow_detail_id = $flow_detail->id;
             }
-
-            //发送待处理通知
-            $pend = new Pend();
-            $pend->oper_id = $target_id;
-            $pend->oper_sn = $target_no ?? '立即处理';
-            $pend->oper_type = $oper_type;
-            $pend->pend_status = PendStatusEnum::PENDING;
-            $pend->pend_module = $flow->cate;
-            $pend->operor_id = $user_id;
-            $pend->creator_id = $member_id;
-            $pend->created_at = time();
-            if (false === $pend->save()) {
-                throw new \Exception($this->getError($pend));
+        }
+        //发送待处理通知
+        if ($pendSend && is_array($pendSend)) {
+            foreach ($pendSend as $send_uid) {
+                $pend = new Pend();
+                $pend->oper_id = $target_id;
+                $pend->oper_sn = $target_no ?? '立即处理';
+                $pend->oper_type = $oper_type;
+                $pend->pend_status = PendStatusEnum::PENDING;
+                $pend->pend_module = $flow->cate;
+                $pend->operor_id = $send_uid;
+                $pend->flow_id = $flow->id;
+                $pend->creator_id = $member_id;
+                $pend->created_at = time();
+                if (false === $pend->save()) {
+                    throw new \Exception($this->getError($pend));
+                }
             }
         }
 
@@ -121,12 +127,6 @@ class FlowTypeService extends Service
         if(false === $flow->save(true,['flow_detail_id'])){
             throw new \Exception($this->getError($flow));
         }
-
-
-
-
-
-
 
         return $flow ;
     }
@@ -188,19 +188,22 @@ class FlowTypeService extends Service
 
             //发送待处理通知#pend
             if ($flow->current_users) {
-                $operorIds = implode(',', $flow->current_users) ?? [];
-                foreach ($operorIds as $operorId) {
-                    $pend = new Pend();
-                    $pend->oper_id = $target_id;
-                    $pend->oper_sn = $flow->target_no ?? '立即处理';
-                    $pend->oper_type = $oper_type;
-                    $pend->pend_status = PendStatusEnum::PENDING;
-                    $pend->pend_module = $flow->cate;
-                    $pend->operor_id = (int)$operorId;
-                    $pend->creator_id = $user_id;
-                    $pend->created_at = time();
-                    if (false === $pend->save()) {
-                        throw new \Exception($this->getError($pend));
+                $operorIds = StringHelper::explode($flow->current_users) ?? [];
+                if ($operorIds && is_array($operorIds)) {
+                    foreach ($operorIds as $operorId) {
+                        $pend = new Pend();
+                        $pend->oper_id = $target_id;
+                        $pend->oper_sn = $flow->target_no ?? '立即处理';
+                        $pend->oper_type = $oper_type;
+                        $pend->pend_status = PendStatusEnum::PENDING;
+                        $pend->pend_module = $flow->cate;
+                        $pend->operor_id = (int)$operorId;
+                        $pend->flow_id = $flow->id;
+                        $pend->creator_id = $user_id;
+                        $pend->created_at = time();
+                        if (false === $pend->save()) {
+                            throw new \Exception($this->getError($pend));
+                        }
                     }
                 }
             }

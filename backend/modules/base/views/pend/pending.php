@@ -195,6 +195,11 @@ $this->params['breadcrumbs'][] = $this->title;
                             'filter' => true,
                             'headerOptions' => ['width' => '80'],
                         ],
+                        [
+                            'attribute' => 'flow_id',
+                            'filter' => true,
+                            'headerOptions' => ['width' => '80'],
+                        ],
                     ]
                 ]);
                 ?>

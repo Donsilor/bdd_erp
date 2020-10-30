@@ -18,6 +18,7 @@ use common\models\backend\Member;
  * @property int $pend_status 处理状态
  * @property int $pend_time 处理时间
  * @property string $pend_way 处理方式
+ * @property int $flow_id 流程ID
  * @property int $status 状态 1启用 0禁用 -1删除
  * @property int $creator_id 创建人
  * @property int $created_at 创建时间
@@ -39,7 +40,7 @@ class Pend extends BaseModel
     public function rules()
     {
         return [
-            [['oper_type', 'oper_id', 'operor_id', 'pend_module', 'pend_status', 'pend_time', 'status', 'creator_id', 'created_at', 'updated_at'], 'integer'],
+            [['oper_type', 'oper_id', 'operor_id', 'pend_module', 'pend_status', 'pend_time', 'flow_id', 'status', 'creator_id', 'created_at', 'updated_at'], 'integer'],
             [['oper_sn', 'pend_way'], 'string', 'max' => 60],
         ];
     }
@@ -59,6 +60,7 @@ class Pend extends BaseModel
             'pend_status' => '处理状态',
             'pend_time' => '处理时间',
             'pend_way' => '处理结果',
+            'flow_id' => '审批流程ID',
             'status' => '状态',
             'creator_id' => '发起人',
             'created_at' => '发起时间',
