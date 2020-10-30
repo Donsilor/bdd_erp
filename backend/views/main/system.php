@@ -38,7 +38,9 @@ $this->params['breadcrumbs'][] = ['label' => $this->title];
                                     </div>
                                     <div class="order-box">
                                         <div>
-                                            <?php foreach ($list ?? [] as $p) { ?>
+                                            <?php foreach ($list ?? [] as $p) {
+                                                $url = Url::buildUrl('../' . \common\enums\OperTypeEnum::getUrlValue($p['oper_type']), [], ['id']) . '?id=' . $p['oper_id'];
+                                                ?>
                                                 <div class="order-child <?php if ($p['pend_status'] ?? 0) {
                                                     echo 'finish';
                                                 } ?>">
@@ -48,7 +50,7 @@ $this->params['breadcrumbs'][] = ['label' => $this->title];
                                                             <?= '[' . \common\enums\OperTypeEnum::getValue($p['oper_type'] ?? "") . ']：' ?? "" ?>
                                                             <span><a class="openContab"
                                                                      style="text-decoration:underline;"
-                                                                     href="<?= Url::buildUrl('../' . \common\enums\OperTypeEnum::getUrlValue($p['oper_type']), [], ['id']) . '?id=' . $p['oper_id']; ?>"><?= $p['oper_sn'] ?? "" ?></a></span>，需审核请及时处理！
+                                                                     href="<?= $url; ?>"><?= $p['oper_sn'] ?? "立即处理" ?></a></span>，需审核请及时处理！
                                                         </div>
                                                     </div>
                                                     <div class="order-state">
@@ -86,8 +88,8 @@ $this->params['breadcrumbs'][] = ['label' => $this->title];
                                         <?php foreach ($list ?? [] as $id => $name) {
                                             if ($urls) {
                                                 $url = Url::buildUrl('../' . $urls[$id] ?? "", [], []);
-                                                $authUrl = \common\helpers\Auth::verify('/' . $urls[$id]);
-                                                $authBtn = \common\helpers\Auth::verify($btns[$id] ?? "");
+                                                $authUrl = \common\helpers\Auth::verify('/' . $urls[$id]);//路由权限
+                                                $authBtn = \common\helpers\Auth::verify($btns[$id] ?? "");//按钮权限
                                             }
                                             ?>
                                             <?php if ($authUrl && $authBtn) { ?>

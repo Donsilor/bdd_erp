@@ -104,7 +104,7 @@ class FlowTypeService extends Service
             //发送待处理通知
             $pend = new Pend();
             $pend->oper_id = $target_id;
-            $pend->oper_sn = $target_no ?? '马上处理';
+            $pend->oper_sn = $target_no ?? '立即处理';
             $pend->oper_type = $oper_type;
             $pend->pend_status = PendStatusEnum::PENDING;
             $pend->pend_module = $flow->cate;
@@ -192,7 +192,7 @@ class FlowTypeService extends Service
                 foreach ($operorIds as $operorId) {
                     $pend = new Pend();
                     $pend->oper_id = $target_id;
-                    $pend->oper_sn = $flow->target_no ?? '马上处理';
+                    $pend->oper_sn = $flow->target_no ?? '立即处理';
                     $pend->oper_type = $oper_type;
                     $pend->pend_status = PendStatusEnum::PENDING;
                     $pend->pend_module = $flow->cate;
