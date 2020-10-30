@@ -3,6 +3,7 @@
 namespace services\common;
 
 use Yii;
+use \common\helpers\Auth;
 use common\components\Service;
 use common\models\common\QuickConfig;
 use common\enums\StatusEnum;
@@ -84,11 +85,22 @@ class QuickConfigService extends Service
             ->orderBy('sort desc')
             ->asArray()
             ->all();
-        $list = ArrayHelper::itemsMergeGrpDropDown($models, 0, 'id', 'name', 'pid');
-        return [
-            'list' => $list,
-            'url' => ArrayHelper::map($models, 'id', 'url'),
-            'btn' => ArrayHelper::map($models, 'id', 'code'),
-        ];
+        $lists = ArrayHelper::itemsMergeGrpDropDown($models, 0, 'id', 'name', 'pid');
+        $urls = ArrayHelper::map($models, 'id', 'url');
+        $btns = ArrayHelper::map($models, 'id', 'code');
+//        if ($lists && is_array($lists)) {
+//            foreach ($lists as $u => $list) {
+//                $is_show = true;
+//                if ($list) {
+//                    foreach ($list as $id => $p) {
+//                        if (!Auth::verify('/' . $urls[$id]) || !Auth::verify($btns[$id] ?? "")) {
+//                            $is_show = false;
+//                        }
+//                    }
+//                }
+//                if (!$is_show)  unset($lists[$u]);
+//            }
+//        }
+        return ['list' => $lists ?? [], 'url' => $urls ?? [], 'btn' => $btns ?? []];
     }
 }
