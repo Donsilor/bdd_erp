@@ -16,7 +16,7 @@ use common\helpers\StringHelper;
 use common\models\common\Flow;
 use common\models\common\FlowDetails;
 use common\models\common\FlowType;
-use common\models\common\Pend;
+use common\models\member\Pend;
 
 
 /**

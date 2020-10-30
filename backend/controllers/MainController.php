@@ -39,7 +39,7 @@ class MainController extends BaseController
         $user_id = \Yii::$app->user->identity->getId();
 
         return $this->render($this->action->id, [
-            'pend' => \Yii::$app->services->pend->getPendListByUid($user_id),//待处理
+            'pend' => \Yii::$app->services->backendMemberPend->getPendListByUid($user_id),//待处理
             'quick' => \Yii::$app->services->quick->getQuickInByUid($user_id),//快捷入口
             //'cateSales' => \Yii::$app->reportService->cateSales->getCateSalesReport($user_id),//产品销量
         ]);

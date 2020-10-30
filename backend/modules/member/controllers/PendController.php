@@ -6,7 +6,7 @@ use Yii;
 use common\traits\Curd;
 use backend\controllers\BaseController;
 use common\models\base\SearchModel;
-use common\models\common\Pend;
+use common\models\member\Pend;
 use common\enums\StatusEnum;
 
 /**

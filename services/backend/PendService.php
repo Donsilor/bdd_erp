@@ -1,11 +1,11 @@
 <?php
 
-namespace services\common;
+namespace services\backend;
 
-use common\enums\PendStatusEnum;
 use Yii;
 use common\components\Service;
-use common\models\common\Pend;
+use common\models\member\Pend;
+use common\enums\PendStatusEnum;
 use common\enums\StatusEnum;
 use common\helpers\ArrayHelper;
 

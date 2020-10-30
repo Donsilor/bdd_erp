@@ -21,6 +21,7 @@ use common\components\Service;
  * @property \services\backend\NotifyService $backendNotify 消息
  * @property \services\backend\NotifyPullTimeService $backendNotifyPullTime 消息拉取日志
  * @property \services\backend\NotifySubscriptionConfigService $backendNotifySubscriptionConfig 提醒配置
+ * @property \services\backend\PendService $backendMemberPend 业务待处理
  * @property \services\api\AccessTokenService $apiAccessToken Api授权key
  * @property \services\merapi\AccessTokenService $merapiAccessToken 商户Api授权key
  * @property \services\member\MemberService $member 会员
@@ -34,7 +35,6 @@ use common\components\Service;
  * @property \services\member\RechargeConfigService $memberRechargeConfig 会员充值
  * @property \services\common\FlowTypeService $flowType 审批流程
  * @property \services\common\FlowService $flow 审批流程
- * @property \services\common\PendService $pend 待处理
  * @property \services\common\QuickConfigService $quick 快捷入口
  * @property \services\common\ActionLogService $actionLog 行为日志
  * @property \services\common\ActionBehaviorService $actionBehavior 可被记录的行为
@@ -80,6 +80,7 @@ class Application extends Service
         'backendNotifyPullTime' => 'services\backend\NotifyPullTimeService',
         'backendNotifySubscriptionConfig' => 'services\backend\NotifySubscriptionConfigService',
         'backendMember' => 'services\backend\MemberService',
+        'backendMemberPend' => 'services\member\PendService',
         /** ------ 用户 ------ **/
         'member' => 'services\member\MemberService',
         'memberAuth' => 'services\member\AuthService',
@@ -114,8 +115,6 @@ class Application extends Service
         /** ------ 公用部分 ------ **/
         'flowType' => 'services\common\FlowTypeService',
         'flow' => 'services\common\FlowService',
-        'pend' => 'services\common\PendService',
-        'quick' => 'services\common\QuickConfigService',
         'menu' => 'services\common\MenuService',
         'menuCate' => 'services\common\MenuCateService',
         'config' => 'services\common\ConfigService',
@@ -150,6 +149,7 @@ class Application extends Service
             'queueSwitch' => false, // 是否丢进队列
         ],
         'department' => 'services\common\DepartmentService',
+        'quick' => 'services\common\QuickConfigService',//快捷入口
         /** ------ rbac ------ **/
         'rbacAuthItem' => 'services\rbac\AuthItemService',
         'rbacAuthItemChild' => 'services\rbac\AuthItemChildService',

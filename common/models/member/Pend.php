@@ -1,13 +1,12 @@
 <?php
 
-namespace common\models\common;
+namespace common\models\member;
 
 use Yii;
 use common\models\base\BaseModel;
-use common\models\backend\Member;
 
 /**
- * This is the model class for table "common_pend".
+ * This is the model class for table "member_pend".
  *
  * @property int $id ID
  * @property int $oper_type 业务类型
@@ -31,7 +30,7 @@ class Pend extends BaseModel
      */
     public static function tableName()
     {
-        return self::tableFullName('common_pend');
+        return self::tableFullName('member_pend');
     }
 
     /**
