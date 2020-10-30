@@ -3,11 +3,13 @@
 namespace addons\Report;
 
 use common\components\BaseAddonConfig;
+use addons\Report\services\Application;
 use addons\Report\common\components\Bootstrap;
 
 /**
  * Class Addon
- * @package addons\Report */
+ * @package addons\Report
+ */
 class AddonConfig extends BaseAddonConfig
 {
     /**
@@ -47,7 +49,7 @@ class AddonConfig extends BaseAddonConfig
     *
     * @var Bootstrap
     */
-    public $bootstrap = '';
+    public $bootstrap = Bootstrap::class;
 
     /**
     * 服务层
@@ -64,7 +66,7 @@ class AddonConfig extends BaseAddonConfig
     *
     * @var string
     */
-    public $service = '';
+    public $service = Application::class;
 
     /**
      * 参数配置开启
@@ -87,7 +89,7 @@ class AddonConfig extends BaseAddonConfig
     *
     * @var bool
     */
-    public $isMerchantRouteMap = true;
+    public $isMerchantRouteMap = false;
 
     /**
      * 类别

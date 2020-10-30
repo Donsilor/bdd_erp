@@ -38,6 +38,7 @@ class MainController extends BaseController
     {
         $user_id = \Yii::$app->user->identity->getId();
 
+        var_dump(\Yii::$app->reportService->cateSales->getCateSalesReport($user_id));die;
         return $this->render($this->action->id, [
             'pend' => \Yii::$app->services->backendMemberPend->getPendListByUid($user_id),//待处理
             'quick' => \Yii::$app->services->quick->getQuickInByUid($user_id),//快捷入口
