@@ -22,14 +22,11 @@ class PendService extends Service
      */
     public static function getPendListByUid($uid = null)
     {
-        $list = Pend::find()
-            ->where(['=', 'status', StatusEnum::ENABLED])
-            ->andFilterWhere(['=', 'operor_id', $uid])
+        $query = Pend::find()
             ->select(['oper_type', 'oper_id', 'oper_sn', 'pend_status', 'created_at'])
-            ->orderBy('created_at desc')
-            ->asArray()
-            ->limit(20)
-            ->all();
+            ->where(['=', 'status', StatusEnum::ENABLED]);
+        $query->andFilterWhere(['=', 'operor_id', $uid]);
+        $list = $query->orderBy('created_at desc')->limit(20)->asArray()->all();
         $pend_num = 0;
         if ($list) {
             foreach ($list as $item) {

@@ -74,7 +74,13 @@ $this->params['breadcrumbs'][] = $this->title;
                         [
                             'attribute' => 'oper_sn',
                             'value' => function ($model) {
-                                return Html::a($model->oper_sn, ['../' . \common\enums\OperTypeEnum::getUrlValue($model->oper_type), 'id' => $model->oper_id], ['class' => 'openContab', 'style' => "text-decoration:underline;color:#3c8dbc"]);
+                                $authUrl = \common\enums\OperTypeEnum::getUrlValue($model->oper_type);
+                                $model->oper_sn = $model->oper_sn ?? "立即处理";
+                                //if (\common\helpers\Auth::verify($authUrl)) {
+                                    $url = Url::buildUrl('../' . $authUrl, [], ['id']) . '?id=' . $model->oper_id;
+                                    $a = '<a href="' . $url . '" class="openContab" style="text-decoration:underline;color:#3c8dbc;">' . $model->oper_sn . '</a>';
+                                //}
+                                return $a ?? $model->oper_sn;
                             },
                             'filter' => Html::activeTextInput($searchModel, 'oper_sn', [
                                 'class' => 'form-control',
@@ -122,8 +128,16 @@ $this->params['breadcrumbs'][] = $this->title;
                             'value' => function ($model) {
                                 return $model->creator->username ?? '';
                             },
+                            'filter' => \kartik\select2\Select2::widget([
+                                'name' => 'SearchModel[creator_id]',
+                                'value' => $searchModel->creator_id,
+                                'data' => \Yii::$app->services->backendMember->getDropDown(),
+                                'options' => ['placeholder' => "请选择"],
+                                'pluginOptions' => [
+                                    'allowClear' => true,
+                                ],
+                            ]),
                             'headerOptions' => ['class' => 'col-md-1'],
-                            'filter' => false
                         ],
                         [
                             'attribute' => 'created_at',
