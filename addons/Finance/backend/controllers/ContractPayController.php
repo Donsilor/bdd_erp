@@ -12,6 +12,7 @@ use common\enums\OperTypeEnum;
 use common\helpers\ResultHelper;
 use common\models\common\Flow;
 use common\models\common\FlowDetails;
+use common\models\common\Pend;
 use Yii;
 use common\enums\AuditStatusEnum;
 use common\models\base\SearchModel;
@@ -137,6 +138,9 @@ class ContractPayController extends BaseController
                             throw new \Exception($this->getError($flow));
                             return $this->message($this->getError($flow), $this->redirect(\Yii::$app->request->referrer), 'error');
                         }
+
+                        //反写待处理
+                        Pend::updateAll(['oper_id' => $model->id, 'oper_sn' => $model->finance_no], ['flow_id' => $flow->id]);
                     }
                 }
 
