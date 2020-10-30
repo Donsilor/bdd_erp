@@ -41,10 +41,8 @@ $this->params['breadcrumbs'][] = ['label' => $this->title];
                                             <?php foreach ($list ?? [] as $p) {
                                                 $url = Url::buildUrl('../' . \common\enums\OperTypeEnum::getUrlValue($p['oper_type']), [], ['id']) . '?id=' . $p['oper_id'];
                                                 ?>
-                                                <div class="order-child <?php if ($p['pend_status'] ?? 0) {
-                                                    echo 'finish';
-                                                } ?>">
-                                                    <div class="order-l">
+                                                <div class="order-child <?= $p['pend_status'] ? 'finish' : ''; ?>">
+                                                <div class="order-l">
                                                         <div class="order-date"><?= date('Y/m/d H:i', $p['created_at'] ?? 0) ?? "" ?></div>
                                                         <div class="order-text">
                                                             <?= '[' . \common\enums\OperTypeEnum::getValue($p['oper_type'] ?? "") . ']：' ?? "" ?>
