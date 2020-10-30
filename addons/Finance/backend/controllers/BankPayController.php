@@ -145,7 +145,7 @@ class BankPayController extends BaseController
                         }
 
                         //反写待处理
-                        Pend::updateAll(['oper_id' => $model->target_id, 'oper_sn' => $model->finance_no], ['flow_id' => $flow->id, 'pend_status' => PendStatusEnum::PENDING]);
+                        Pend::updateAll(['oper_id' => $model->id, 'oper_sn' => $model->finance_no], ['flow_id' => $flow->id]);
                     }
                 }
 
