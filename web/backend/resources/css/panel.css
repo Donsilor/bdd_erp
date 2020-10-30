@@ -126,7 +126,7 @@ i {
 }
 
 .pending .title {
-    margin: 0 0 10px 20px;
+    margin: 10px 0 0 20px;
 }
 
 .pending-content {
@@ -248,7 +248,7 @@ i {
 }
 
 .quick-entry .title {
-    margin: 0 0 10px 0;
+    margin: 10px 0 0 0;
 }
 
 .quick-box {
