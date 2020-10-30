@@ -88,8 +88,16 @@ $this->params['breadcrumbs'][] = $this->title;
                             'value' => function ($model) {
                                 return $model->operor->username ?? '';
                             },
+                            'filter' => \kartik\select2\Select2::widget([
+                                'name' => 'SearchModel[operor_id]',
+                                'value' => $searchModel->operor_id,
+                                'data' => \Yii::$app->services->backendMember->getDropDown(),
+                                'options' => ['placeholder' => "请选择"],
+                                'pluginOptions' => [
+                                    'allowClear' => true,
+                                ],
+                            ]),
                             'headerOptions' => ['class' => 'col-md-1'],
-                            'filter' => false
                         ],
                         [
                             'attribute' => 'pend_status',
