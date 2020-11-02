@@ -26,11 +26,12 @@ class CateSalesService extends Service
         $select = [];
         $query = Order::find()->alias('o')
             ->leftJoin(OrderGoods::tableName() . ' og', 'o.id=og.order_id')
-            ->leftJoin(ProductType::tableName() . ' type', 'type.id=g.product_type_id')
-            ->leftJoin(StyleCate::tableName() . ' cate', 'cate.id=g.style_cate_id')
+            ->leftJoin(ProductType::tableName() . ' type', 'type.id=og.product_type_id')
+            ->leftJoin(StyleCate::tableName() . ' cate', 'cate.id=og.style_cate_id')
             ->select($select);
         $query->andFilterWhere(['o.order_status' => 1]);
         $goods = $query->asArray()->all();
-        print_r($goods);die;
+        //print_r($goods);
+        //die;
     }
 }

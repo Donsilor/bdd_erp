@@ -4,7 +4,7 @@ namespace services\backend;
 
 use Yii;
 use common\components\Service;
-use common\models\member\Pend;
+use common\models\backend\Pend;
 use common\enums\PendStatusEnum;
 use common\enums\StatusEnum;
 use common\helpers\ArrayHelper;

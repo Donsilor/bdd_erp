@@ -21,7 +21,7 @@ use common\components\Service;
  * @property \services\backend\NotifyService $backendNotify 消息
  * @property \services\backend\NotifyPullTimeService $backendNotifyPullTime 消息拉取日志
  * @property \services\backend\NotifySubscriptionConfigService $backendNotifySubscriptionConfig 提醒配置
- * @property \services\backend\PendService $backendMemberPend 业务待处理
+ * @property \services\backend\PendService $pend 业务待处理
  * @property \services\api\AccessTokenService $apiAccessToken Api授权key
  * @property \services\merapi\AccessTokenService $merapiAccessToken 商户Api授权key
  * @property \services\member\MemberService $member 会员
@@ -80,7 +80,7 @@ class Application extends Service
         'backendNotifyPullTime' => 'services\backend\NotifyPullTimeService',
         'backendNotifySubscriptionConfig' => 'services\backend\NotifySubscriptionConfigService',
         'backendMember' => 'services\backend\MemberService',
-        'backendMemberPend' => 'services\member\PendService',
+        'pend' => 'services\backend\PendService',
         /** ------ 用户 ------ **/
         'member' => 'services\member\MemberService',
         'memberAuth' => 'services\member\AuthService',

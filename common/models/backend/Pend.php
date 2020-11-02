@@ -1,6 +1,6 @@
 <?php
 
-namespace common\models\member;
+namespace common\models\backend;
 
 use Yii;
 use common\models\base\BaseModel;
@@ -30,7 +30,7 @@ class Pend extends BaseModel
      */
     public static function tableName()
     {
-        return self::tableFullName('member_pend');
+        return self::tableFullName('backend_pend');
     }
 
     /**
