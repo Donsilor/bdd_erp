@@ -12,7 +12,7 @@ use common\enums\OperTypeEnum;
 use common\helpers\ResultHelper;
 use common\models\common\Flow;
 use common\models\common\FlowDetails;
-use common\models\backend\Pend;
+use common\models\backend\MemberPend;
 use Yii;
 use common\enums\AuditStatusEnum;
 use common\models\base\SearchModel;
@@ -140,7 +140,7 @@ class ContractPayController extends BaseController
                         }
 
                         //反写待处理
-                        Pend::updateAll(['oper_id' => $model->id, 'oper_sn' => $model->finance_no], ['flow_id' => $flow->id]);
+                        MemberPend::updateAll(['oper_id' => $model->id, 'oper_sn' => $model->finance_no], ['flow_id' => $flow->id]);
                     }
                 }
 

@@ -35,6 +35,6 @@ return [
         '/base/member-works/works',  //个人日报
         '/base/member-works/ajax-edit',  //创建日报
         '/base/member-works/works-view',  //创建日报
-        '/base/pend/pending',  //待处理
+        '/base/member-pend/pending',  //待处理
     ],
 ];

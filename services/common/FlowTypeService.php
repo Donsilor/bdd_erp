@@ -16,7 +16,7 @@ use common\helpers\StringHelper;
 use common\models\common\Flow;
 use common\models\common\FlowDetails;
 use common\models\common\FlowType;
-use common\models\member\Pend;
+use common\models\member\MemberPend;
 
 
 /**
@@ -106,7 +106,7 @@ class FlowTypeService extends Service
         //发送待处理通知
         if ($pendSend && is_array($pendSend)) {
             foreach ($pendSend as $send_uid) {
-                $pend = new Pend();
+                $pend = new MemberPend();
                 $pend->oper_id = $target_id;
                 $pend->oper_sn = $target_no ?? '立即处理';
                 $pend->oper_type = $oper_type;
@@ -191,7 +191,7 @@ class FlowTypeService extends Service
                 $operorIds = StringHelper::explode($flow->current_users) ?? [];
                 if ($operorIds && is_array($operorIds)) {
                     foreach ($operorIds as $operorId) {
-                        $pend = new Pend();
+                        $pend = new MemberPend();
                         $pend->oper_id = $target_id;
                         $pend->oper_sn = $flow->target_no ?? '立即处理';
                         $pend->oper_type = $oper_type;
@@ -211,7 +211,7 @@ class FlowTypeService extends Service
         }
 
         //回写待处理状态#pend
-        $pend = Pend::findOne(['oper_id' => $target_id, 'operor_id' => $user_id, 'pend_status' => PendStatusEnum::PENDING]);
+        $pend = MemberPend::findOne(['oper_id' => $target_id, 'operor_id' => $user_id, 'pend_status' => PendStatusEnum::PENDING]);
         if ($pend) {
             $pend->pend_status = PendStatusEnum::CONFIRM;
             $pend->pend_time = time();
