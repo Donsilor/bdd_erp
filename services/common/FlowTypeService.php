@@ -1,13 +1,11 @@
 <?php
 
 namespace services\common;
+
 use common\components\Service;
 use common\enums\AuditStatusEnum;
-use common\enums\FlowCateEnum;
 use common\enums\FlowMethodEnum;
-use common\enums\FlowStatus;
 use common\enums\FlowStatusEnum;
-use common\enums\OperTypeEnum;
 use common\enums\PendStatusEnum;
 use common\enums\StatusEnum;
 use common\enums\TargetTypeEnum;
@@ -16,8 +14,7 @@ use common\helpers\StringHelper;
 use common\models\common\Flow;
 use common\models\common\FlowDetails;
 use common\models\common\FlowType;
-use common\models\member\MemberPend;
-
+use common\models\backend\MemberPend;
 
 /**
  * Class FlowTypeService
