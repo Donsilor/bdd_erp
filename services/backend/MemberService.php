@@ -6,6 +6,8 @@ use Yii;
 use common\enums\StatusEnum;
 use common\helpers\ArrayHelper;
 use common\models\backend\Member;
+use common\models\backend\MemberPend;
+use common\enums\PendStatusEnum;
 use common\components\Service;
 
 /**
@@ -73,6 +75,32 @@ class MemberService extends Service
 
         $model = $this->findAll();
         return ArrayHelper::map($model,'id', 'username');
+    }
+
+    /**
+     *
+     * 用户待处理
+     * @param integer $uid
+     * @return array
+     */
+    public static function getPendListByUid($uid = null)
+    {
+        $query = MemberPend::find()
+            ->select(['oper_type', 'oper_id', 'oper_sn', 'pend_status', 'created_at'])
+            ->where(['=', 'status', StatusEnum::ENABLED]);
+        $query->andFilterWhere(['=', 'operor_id', $uid]);
+        $pendNum = clone $query;
+        $pendNum->andFilterWhere(['=', 'pend_status', PendStatusEnum::PENDING]);
+        $pend_num = $pendNum->count();
+        $list = $query->orderBy('created_at desc')->limit(20)->asArray()->all();
+        if ($list) {
+            foreach ($list as $item) {
+                $day = date('m.d', $item['created_at']) ?? 0;
+                $day = $day == date('m.d', time()) ? '今天' : $day;
+                $data[$day][] = $item;
+            }
+        }
+        return ['list' => $data ?? [], 'num' => $pend_num ?? 0];
     }
 
 }

@@ -23,14 +23,14 @@ use common\models\base\BaseModel;
  * @property int $created_at 创建时间
  * @property int $updated_at 更新时间
  */
-class Pend extends BaseModel
+class MemberPend extends BaseModel
 {
     /**
      * {@inheritdoc}
      */
     public static function tableName()
     {
-        return self::tableFullName('backend_pend');
+        return self::tableFullName('backend_member_pend');
     }
 
     /**
