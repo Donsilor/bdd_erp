@@ -81,6 +81,7 @@ class CateSalesService extends Service
                     $cateArr[$cate] = $num;
                     $total_num = bcadd($total_num, $num);
                 }
+                arsort($cateArr);
                 $cateArr['总计'] = $total_num;
                 $list[$cnl] = $cateArr;
             }
