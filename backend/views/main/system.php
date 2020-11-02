@@ -18,7 +18,8 @@ $this->params['breadcrumbs'][] = ['label' => $this->title];
             <div class="padding-layer">
                 <div class="pending-head clf">
                     <div class="total fl">待处理（<span><?= $pend['num'] ?? 0 ?></span>条）</div>
-                    <a class="more clf fr openContab" href="<?= Url::buildUrl('../base/member-pend/pending', [], []) ?>">
+                    <a class="more clf fr openContab"
+                       href="<?= Url::buildUrl('../base/member-pend/pending', [], []) ?>">
                         <span id="more" class="fl">more</span>
                         <div class="more-icon fl">
                             <span></span>
@@ -40,7 +41,7 @@ $this->params['breadcrumbs'][] = ['label' => $this->title];
                                             $url = Url::buildUrl('../' . \common\enums\OperTypeEnum::getUrlValue($p['oper_type']), [], ['id']) . '?id=' . $p['oper_id'];
                                             ?>
                                             <div class="order-child <?= $p['pend_status'] ? 'finish' : ''; ?>">
-                                            <div class="order-l">
+                                                <div class="order-l">
                                                     <div class="order-date"><?= date('Y/m/d H:i', $p['created_at'] ?? 0) ?? "" ?></div>
                                                     <div class="order-text">
                                                         <?= '[' . \common\enums\OperTypeEnum::getValue($p['oper_type'] ?? "") . ']：' ?? "" ?>
@@ -130,371 +131,36 @@ $this->params['breadcrumbs'][] = ['label' => $this->title];
                 </div>
             </div>
             <div class="sales-volume-content clf">
-                <div class="sales-volume-list fl">
-                    <div class="sales-volume-list-head">
-                        <div class="BDD">BDD<span class="color">(总数量：<i>100</i>件)</span></div>
-                        <a class="more clf" href="javascript:;">
-                            <span class="fl">more</span>
-                            <div class="more-icon fl">
-                                <span></span>
-                                <span></span>
-                            </div>
-                        </a>
-                    </div>
-                    <div class="sales-chart">
-                        <div class="sales-chart-box">
-                            <div class="sales-chart-list">
-                                <div class="type">戒指</div>
-                                <div class="bar-box">
-                                    <div class="bar">35</div>
+                <?php foreach ($cateSales['list'] ?? [] as $channel => $cateSale) { ?>
+                    <div class="sales-volume-list fl">
+                        <div class="sales-volume-list-head">
+                            <div class="BDD"><?= $channel ?? '' ?><span
+                                        class="color">(总数量：<i><?= $cateSale['总计'] ?? 0; ?></i>件)</span></div>
+                            <a class="more clf" href="javascript:;">
+                                <span class="fl">more</span>
+                                <div class="more-icon fl">
+                                    <span></span>
+                                    <span></span>
                                 </div>
-                                <div class="percent">21%</div>
-                            </div>
-                            <div class="sales-chart-list">
-                                <div class="type">戒指</div>
-                                <div class="bar-box">
-                                    <div class="bar">35</div>
-                                </div>
-                                <div class="percent">21%</div>
-                            </div>
-                            <div class="sales-chart-list">
-                                <div class="type">项链</div>
-                                <div class="bar-box">
-                                    <div class="bar">21</div>
-                                </div>
-                                <div class="percent">20%</div>
-                            </div>
-                            <div class="sales-chart-list">
-                                <div class="type">吊坠</div>
-                                <div class="bar-box">
-                                    <div class="bar">35</div>
-                                </div>
-                                <div class="percent">28%</div>
-                            </div>
-                            <div class="sales-chart-list">
-                                <div class="type">耳饰</div>
-                                <div class="bar-box">
-                                    <div class="bar">14</div>
-                                </div>
-                                <div class="percent">21%</div>
-                            </div>
-                            <div class="sales-chart-list">
-                                <div class="type">手链</div>
-                                <div class="bar-box">
-                                    <div class="bar"></div>
-                                </div>
-                                <div class="percent"></div>
-                            </div>
-                            <div class="sales-chart-list">
-                                <div class="type">手镯</div>
-                                <div class="bar-box">
-                                    <div class="bar">14</div>
-                                </div>
-                                <div class="percent">12%</div>
-                            </div>
-                            <div class="sales-chart-list">
-                                <div class="type">脚链</div>
-                                <div class="bar-box">
-                                    <div class="bar">32</div>
-                                </div>
-                                <div class="percent">28%</div>
-                            </div>
-                            <div class="sales-chart-list">
-                                <div class="type">手串</div>
-                                <div class="bar-box">
-                                    <div class="bar">35</div>
-                                </div>
-                                <div class="percent">21%</div>
-                            </div>
-                            <div class="sales-chart-list">
-                                <div class="type">总计</div>
-                                <div class="bar-box">
-                                    <div class="bar">35</div>
-                                </div>
-                                <div class="percent">21%</div>
-                            </div>
+                            </a>
                         </div>
-
-                        <div class="line-a"></div>
-                        <div class="line-b"></div>
-                    </div>
-                </div>
-
-                <div class="sales-volume-list fl">
-                    <div class="sales-volume-list-head">
-                        <div class="BDD">京东<span class="color">(总数量：<i>100</i>件)</span></div>
-
-                        <a class="more clf" href="javascript:;">
-                            <span class="fl">more</span>
-                            <div class="more-icon fl">
-                                <span></span>
-                                <span></span>
+                        <div class="sales-chart">
+                            <div class="sales-chart-box">
+                                <?php foreach ($cateSale as $cate => $num) { ?>
+                                    <div class="sales-chart-list">
+                                        <div class="type"><?= $cate == '' ? "未知" : $cate; ?></div>
+                                        <div class="bar-box">
+                                            <div class="bar"><?= $num ?? 0; ?></div>
+                                        </div>
+                                        <div class="percent">21%</div>
+                                    </div>
+                                <?php } ?>
                             </div>
-                        </a>
-                    </div>
-
-                    <div class="sales-chart">
-                        <div class="sales-chart-box">
-                            <div class="sales-chart-list">
-                                <div class="type">戒指</div>
-                                <div class="bar-box">
-                                    <div class="bar">35</div>
-                                </div>
-                                <div class="percent">21%</div>
-                            </div>
-                            <div class="sales-chart-list">
-                                <div class="type">戒指</div>
-                                <div class="bar-box">
-                                    <div class="bar">35</div>
-                                </div>
-                                <div class="percent">21%</div>
-                            </div>
-                            <div class="sales-chart-list">
-                                <div class="type">项链</div>
-                                <div class="bar-box">
-                                    <div class="bar">21</div>
-                                </div>
-                                <div class="percent">20%</div>
-                            </div>
-                            <div class="sales-chart-list">
-                                <div class="type">吊坠</div>
-                                <div class="bar-box">
-                                    <div class="bar">35</div>
-                                </div>
-                                <div class="percent">28%</div>
-                            </div>
-                            <div class="sales-chart-list">
-                                <div class="type">耳饰</div>
-                                <div class="bar-box">
-                                    <div class="bar">14</div>
-                                </div>
-                                <div class="percent">21%</div>
-                            </div>
-                            <div class="sales-chart-list">
-                                <div class="type">手链</div>
-                                <div class="bar-box">
-                                    <div class="bar"></div>
-                                </div>
-                                <div class="percent"></div>
-                            </div>
-                            <div class="sales-chart-list">
-                                <div class="type">手镯</div>
-                                <div class="bar-box">
-                                    <div class="bar">14</div>
-                                </div>
-                                <div class="percent">12%</div>
-                            </div>
-                            <div class="sales-chart-list">
-                                <div class="type">脚链</div>
-                                <div class="bar-box">
-                                    <div class="bar">32</div>
-                                </div>
-                                <div class="percent">28%</div>
-                            </div>
-                            <div class="sales-chart-list">
-                                <div class="type">手串</div>
-                                <div class="bar-box">
-                                    <div class="bar">35</div>
-                                </div>
-                                <div class="percent">21%</div>
-                            </div>
-                            <div class="sales-chart-list">
-                                <div class="type">总计</div>
-                                <div class="bar-box">
-                                    <div class="bar">35</div>
-                                </div>
-                                <div class="percent">21%</div>
-                            </div>
+                            <div class="line-a"></div>
+                            <div class="line-b"></div>
                         </div>
-
-                        <div class="line-a"></div>
-                        <div class="line-b"></div>
                     </div>
-                </div>
-
-                <div class="sales-volume-list fl">
-                    <div class="sales-volume-list-head">
-                        <div class="BDD">淘宝<span class="color">(总数量：<i>100</i>件)</span></div>
-
-                        <a class="more clf" href="javascript:;">
-                            <span class="fl">more</span>
-                            <div class="more-icon fl">
-                                <span></span>
-                                <span></span>
-                            </div>
-                        </a>
-                    </div>
-
-                    <div class="sales-chart">
-                        <div class="sales-chart-box">
-                            <div class="sales-chart-list">
-                                <div class="type">戒指</div>
-                                <div class="bar-box">
-                                    <div class="bar">35</div>
-                                </div>
-                                <div class="percent">21%</div>
-                            </div>
-                            <div class="sales-chart-list">
-                                <div class="type">戒指</div>
-                                <div class="bar-box">
-                                    <div class="bar">35</div>
-                                </div>
-                                <div class="percent">21%</div>
-                            </div>
-                            <div class="sales-chart-list">
-                                <div class="type">项链</div>
-                                <div class="bar-box">
-                                    <div class="bar">21</div>
-                                </div>
-                                <div class="percent">20%</div>
-                            </div>
-                            <div class="sales-chart-list">
-                                <div class="type">吊坠</div>
-                                <div class="bar-box">
-                                    <div class="bar">35</div>
-                                </div>
-                                <div class="percent">28%</div>
-                            </div>
-                            <div class="sales-chart-list">
-                                <div class="type">耳饰</div>
-                                <div class="bar-box">
-                                    <div class="bar">14</div>
-                                </div>
-                                <div class="percent">21%</div>
-                            </div>
-                            <div class="sales-chart-list">
-                                <div class="type">手链</div>
-                                <div class="bar-box">
-                                    <div class="bar"></div>
-                                </div>
-                                <div class="percent"></div>
-                            </div>
-                            <div class="sales-chart-list">
-                                <div class="type">手镯</div>
-                                <div class="bar-box">
-                                    <div class="bar">14</div>
-                                </div>
-                                <div class="percent">12%</div>
-                            </div>
-                            <div class="sales-chart-list">
-                                <div class="type">脚链</div>
-                                <div class="bar-box">
-                                    <div class="bar">32</div>
-                                </div>
-                                <div class="percent">28%</div>
-                            </div>
-                            <div class="sales-chart-list">
-                                <div class="type">手串</div>
-                                <div class="bar-box">
-                                    <div class="bar">35</div>
-                                </div>
-                                <div class="percent">21%</div>
-                            </div>
-                            <div class="sales-chart-list">
-                                <div class="type">总计</div>
-                                <div class="bar-box">
-                                    <div class="bar">35</div>
-                                </div>
-                                <div class="percent">21%</div>
-                            </div>
-                        </div>
-
-                        <div class="line-a"></div>
-                        <div class="line-b"></div>
-                    </div>
-                </div>
-
-                <div class="sales-volume-list fl">
-                    <div class="sales-volume-list-head">
-                        <div class="BDD">拼多多<span class="color">(总数量：<i>100</i>件)</span></div>
-
-                        <a class="more clf" href="javascript:;">
-                            <span class="fl">more</span>
-                            <div class="more-icon fl">
-                                <span></span>
-                                <span></span>
-                            </div>
-                        </a>
-                    </div>
-
-                    <div class="sales-chart">
-                        <div class="sales-chart-box">
-                            <div class="sales-chart-list">
-                                <div class="type">戒指</div>
-                                <div class="bar-box">
-                                    <div class="bar">35</div>
-                                </div>
-                                <div class="percent">21%</div>
-                            </div>
-                            <div class="sales-chart-list">
-                                <div class="type">戒指</div>
-                                <div class="bar-box">
-                                    <div class="bar">35</div>
-                                </div>
-                                <div class="percent">21%</div>
-                            </div>
-                            <div class="sales-chart-list">
-                                <div class="type">项链</div>
-                                <div class="bar-box">
-                                    <div class="bar">21</div>
-                                </div>
-                                <div class="percent">20%</div>
-                            </div>
-                            <div class="sales-chart-list">
-                                <div class="type">吊坠</div>
-                                <div class="bar-box">
-                                    <div class="bar">35</div>
-                                </div>
-                                <div class="percent">28%</div>
-                            </div>
-                            <div class="sales-chart-list">
-                                <div class="type">耳饰</div>
-                                <div class="bar-box">
-                                    <div class="bar">14</div>
-                                </div>
-                                <div class="percent">21%</div>
-                            </div>
-                            <div class="sales-chart-list">
-                                <div class="type">手链</div>
-                                <div class="bar-box">
-                                    <div class="bar"></div>
-                                </div>
-                                <div class="percent"></div>
-                            </div>
-                            <div class="sales-chart-list">
-                                <div class="type">手镯</div>
-                                <div class="bar-box">
-                                    <div class="bar">14</div>
-                                </div>
-                                <div class="percent">12%</div>
-                            </div>
-                            <div class="sales-chart-list">
-                                <div class="type">脚链</div>
-                                <div class="bar-box">
-                                    <div class="bar">32</div>
-                                </div>
-                                <div class="percent">28%</div>
-                            </div>
-                            <div class="sales-chart-list">
-                                <div class="type">手串</div>
-                                <div class="bar-box">
-                                    <div class="bar">35</div>
-                                </div>
-                                <div class="percent">21%</div>
-                            </div>
-                            <div class="sales-chart-list">
-                                <div class="type">总计</div>
-                                <div class="bar-box">
-                                    <div class="bar">35</div>
-                                </div>
-                                <div class="percent">21%</div>
-                            </div>
-                        </div>
-
-                        <div class="line-a"></div>
-                        <div class="line-b"></div>
-                    </div>
-                </div>
+                <?php } ?>
             </div>
         </div>
     </div>

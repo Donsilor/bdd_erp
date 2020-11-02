@@ -22,7 +22,7 @@ class MainController extends BaseController
      */
     public function actionIndex()
     {
-        if(preg_match("/:\/\/work/is",Yii::$app->getRequest()->absoluteUrl)) {
+        if (preg_match("/:\/\/work/is", Yii::$app->getRequest()->absoluteUrl)) {
             return Yii::$app->getResponse()->redirect('/base/member-works/works');
         }
         return $this->renderPartial($this->action->id, [
@@ -41,7 +41,7 @@ class MainController extends BaseController
         return $this->render($this->action->id, [
             'pend' => \Yii::$app->services->backendMember->getPendListByUid($user_id),//待处理
             'quick' => \Yii::$app->services->quick->getQuickInByUid($user_id),//快捷入口
-            'cateSales' => \Yii::$app->reportService->cateSales->getCateSalesReport($user_id),//产品销量
+            'cateSales' => \Yii::$app->reportService->cateSales->getCateSalesReport($user_id, ['1', '2', '6', '14', '15']),//产品销量
         ]);
     }
 
